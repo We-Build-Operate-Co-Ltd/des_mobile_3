@@ -256,6 +256,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         MaterialPageRoute(
           builder: (_) => DetailPage(
             slug: 'news',
+            model: model,
           ),
         ),
       ),
@@ -268,7 +269,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: CachedNetworkImage(
-                imageUrl: model['imageUrl'],
+                imageUrl: '${model['imageUrl']}',
                 fit: BoxFit.fill,
                 height: 92,
                 width: screenSize,
@@ -277,7 +278,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             SizedBox(
               width: screenSize,
               child: Text(
-                model['title'],
+                '${model['title']}',
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
