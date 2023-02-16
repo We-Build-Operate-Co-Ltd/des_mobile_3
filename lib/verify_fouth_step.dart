@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:camera/camera.dart';
 import 'package:des/menu.dart';
+import 'package:des/verify_last_step_page.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -299,7 +300,16 @@ class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
         Regula.ImageType.LIVE,
       );
       await updateSaveBase64(imageFile);
-      _register();
+      // ------------- test
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => VerifyLastStepPage(
+            model: widget.model,
+          ),
+        ),
+      );
+      // ------------- test
+      // _register();
     });
   }
 
@@ -334,20 +344,19 @@ class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
 
   _register() async {
     Dio dio = Dio();
-    var response = await dio.post(
-        'http://122.155.223.63/td-des-api/m/Register/create/admin',
-        data: {
-          'firstName': widget.model['fullName'].split(' ')[0],
-          'lastName': widget.model['fullName'].split(' ')[1],
-          'fullName': widget.model['fullName'],
-          'age': widget.model['age'],
-          'idcard': widget.model['idcard'],
-          'birthDay': widget.model['birthday'],
-          'imageUrl': image,
-          'category': "face",
-          'status': "N",
-          'platform': Platform.operatingSystem.toString(),
-        });
+    var response = await dio
+        .post('http://122.155.223.63/td-des-api/m/Register/update', data: {
+      'firstName': widget.model['fullName'].split(' ')[0],
+      'lastName': widget.model['fullName'].split(' ')[1],
+      'fullName': widget.model['fullName'],
+      'age': widget.model['age'],
+      'idcard': widget.model['idcard'],
+      'birthDay': widget.model['birthday'],
+      'imageUrl': image,
+      // 'category': "face",
+      'status': "N",
+      'platform': Platform.operatingSystem.toString(),
+    });
 
     if (response.statusCode == 200) {
       setState(() {

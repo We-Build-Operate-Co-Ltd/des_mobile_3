@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
@@ -268,16 +269,15 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                               'laser': txtLaserId.text,
                             };
 
-                            // print(model.toString());
+                            // _callLaser(model);
 
-                            _callLaser(model);
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (_) =>
-                            //         VerifyThirdStepPage(model: model),
-                            //   ),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    VerifyThirdStepPage(model: model),
+                              ),
+                            );
                           }
                         },
                         child: Container(
@@ -585,11 +585,6 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
             loading = false;
             result = response.data['desc'];
           });
-
-          // Fluttertoast.showToast(
-          //   msg: response.data['desc'],
-          //   gravity: ToastGravity.CENTER,
-          // );
         } else {
           loading = false;
           Navigator.push(
@@ -600,13 +595,12 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
           );
         }
       });
-      // print(response.data['token'].toString());
     } else {
       setState(() {
         loading = false;
         result = response.data['desc'];
       });
-      // Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }
 }
