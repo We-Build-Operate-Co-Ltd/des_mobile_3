@@ -59,8 +59,10 @@ const mockDataObject2 = {
 const List<dynamic> mockDataClassFavoriteList = [];
 const dynamic mockDataClassFavorite = {
   'title': 'เกษตร D.I.YOnline by Onsite เกษตรยุค New Normal',
-  'description':'เกษตร D.I.YOnline by Onsite เกษตรยุค New Normal เกษตร D.I.YOnline by Onsite เกษตรยุค New Normal เกษตร D.I.YOnline by Onsite เกษตรยุค New Normal',
-}
+  'imageUrl': '',
+  'description':
+      'เกษตร D.I.YOnline by Onsite เกษตรยุค New Normal เกษตร D.I.YOnline by Onsite เกษตรยุค New Normal เกษตร D.I.YOnline by Onsite เกษตรยุค New Normal',
+};
 
 mockCreateProfileData() {
   ManageStorage.createProfile(
