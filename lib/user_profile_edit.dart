@@ -24,9 +24,6 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
   String _imageUrl = '';
   String? _code;
 
-  final _formKey = GlobalKey<FormState>();
-
-  List<String> _prefixNames = ['นาย', 'นาง', 'นางสาว']; // Option 2
   String? _selectedPrefixName;
 
   final txtEmail = TextEditingController();

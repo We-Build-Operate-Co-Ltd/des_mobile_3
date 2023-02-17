@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
 const kTranslucentBlackColor = const Color(0x66000000);

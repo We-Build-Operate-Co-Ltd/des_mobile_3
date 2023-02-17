@@ -60,7 +60,6 @@ class _VersionPageState extends State<VersionPage> {
   }
 
   _callRead() async {
-    debugPrint('111');
     Dio dio = Dio();
     String platform = Platform.isAndroid ? 'Android' : 'Ios';
     Response<dynamic> result = await dio.post(

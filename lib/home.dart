@@ -8,8 +8,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'models/mock_data.dart';
-
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
   HomePage({super.key, this.changePage});
