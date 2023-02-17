@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 // ignore: must_be_immutable
 class DetailPage extends StatefulWidget {
@@ -22,9 +21,6 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
-
   dynamic modelData = {
     'title': 'เกษตรยุคใหม่ ผันตัวสู่นักธุรกิจเต็มรูปแบบ',
     'imageUrl':
@@ -229,10 +225,5 @@ class _DetailPageState extends State<DetailPage> {
     setState(() {
       _gallery = listImage;
     });
-  }
-
-  void _onLoading() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
-    _refreshController.loadComplete();
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 // ignore: must_be_immutable
 class NewsServiceReservationsPage extends StatefulWidget {
@@ -24,9 +23,6 @@ class NewsServiceReservationsPage extends StatefulWidget {
 }
 
 class _NewsServiceReservationsState extends State<NewsServiceReservationsPage> {
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
-
   dynamic modelData = {
     'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน',
     'imageUrl': '',
@@ -160,13 +156,5 @@ class _NewsServiceReservationsState extends State<NewsServiceReservationsPage> {
         ),
       ],
     );
-  }
-
-  void _onLoading() async {
-    setState(() {});
-    await Future.delayed(const Duration(milliseconds: 1000));
-
-    // });
-    _refreshController.loadComplete();
   }
 }

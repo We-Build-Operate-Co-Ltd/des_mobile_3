@@ -21,16 +21,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  AppLifecycleState? _notification;
-
   final storage = const FlutterSecureStorage();
   DateTime? currentBackPressTime;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  Future<dynamic>? _futureProfile;
-  Future<dynamic>? _futureMainPopUp;
-  Future<dynamic>? _futureNewsAndEvent;
   dynamic futureNotificationTire;
   List<dynamic>? dataCharts1;
   int? notificationCount = 0;

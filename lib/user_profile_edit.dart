@@ -99,7 +99,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(60),
-                        child: _imageUrl != null && _imageUrl != ''
+                        child: _imageUrl != ''
                             ? CachedNetworkImage(
                                 imageUrl: _imageUrl,
                                 fit: BoxFit.cover,

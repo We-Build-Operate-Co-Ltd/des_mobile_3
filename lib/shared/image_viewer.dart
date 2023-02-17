@@ -64,9 +64,9 @@ class _ImageViewerState extends State<ImageViewer>
     super.dispose();
   }
 
-  void _onScaleStateChanged(PhotoViewScaleState scaleState) {
-    setState(() => _isLocked = scaleState != PhotoViewScaleState.initial);
-  }
+  // void _onScaleStateChanged(PhotoViewScaleState scaleState) {
+  //   setState(() => _isLocked = scaleState != PhotoViewScaleState.initial);
+  // }
 
   void _onPageChanged(int index) {
     setState(() => _currentPageIndex =

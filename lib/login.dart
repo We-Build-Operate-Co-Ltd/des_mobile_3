@@ -4,9 +4,7 @@ import 'package:des/menu.dart';
 import 'package:des/register.dart';
 import 'package:des/shared/google_firebase.dart';
 import 'package:des/shared/secure_storage.dart';
-import 'package:des/shared/apple_firebase.dart';
 import 'package:des/shared/facebook_firebase.dart';
-import 'package:des/shared/line.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -684,39 +682,6 @@ class _LoginPageState extends State<LoginPage>
     }
   }
 
-  void _callLoginApple() async {
-    var obj = await signInWithApple();
-
-    var model = {
-      "username": obj.user!.email ?? obj.user!.uid,
-      "email": obj.user!.email ?? '',
-      "imageUrl": '',
-      "firstName": obj.user!.email,
-      "lastName": '',
-      "appleID": obj.user!.uid
-    };
-
-    Dio dio = new Dio();
-    var response = await dio.post(
-      'http://122.155.223.63/td-des-api/m/v2/register/apple/login',
-      data: model,
-    );
-
-    ManageStorage.createProfile(
-      value: response.data['objectData'],
-      key: 'apple',
-    );
-
-    if (obj != null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Menu(),
-        ),
-      );
-    }
-  }
-
   void _callLoginFacebook() async {
     var obj = await signInWithFacebook();
     if (obj != null) {
@@ -797,55 +762,88 @@ class _LoginPageState extends State<LoginPage>
     }
   }
 
-  void _callLoginLine() async {
-    var obj = await loginLine();
+  // void _callLoginLine() async {
+  //   var obj = await loginLine();
 
-    final idToken = obj.accessToken.idToken;
-    final userEmail = (idToken != null)
-        ? idToken['email'] != null
-            ? idToken['email']
-            : ''
-        : '';
+  //   final idToken = obj.accessToken.idToken;
+  //   final userEmail = (idToken != null)
+  //       ? idToken['email'] != null
+  //           ? idToken['email']
+  //           : ''
+  //       : '';
 
-    if (obj != null) {
-      var model = {
-        "username": (userEmail != '' && userEmail != null)
-            ? userEmail
-            : obj.userProfile!.userId,
-        "email": userEmail,
-        "imageUrl": (obj.userProfile!.pictureUrl != '' &&
-                obj.userProfile!.pictureUrl != null)
-            ? obj.userProfile!.pictureUrl
-            : '',
-        "firstName": obj.userProfile!.displayName,
-        "lastName": '',
-        "lineID": obj.userProfile!.userId
-      };
+  //   if (obj != null) {
+  //     var model = {
+  //       "username": (userEmail != '' && userEmail != null)
+  //           ? userEmail
+  //           : obj.userProfile!.userId,
+  //       "email": userEmail,
+  //       "imageUrl": (obj.userProfile!.pictureUrl != '' &&
+  //               obj.userProfile!.pictureUrl != null)
+  //           ? obj.userProfile!.pictureUrl
+  //           : '',
+  //       "firstName": obj.userProfile!.displayName,
+  //       "lastName": '',
+  //       "lineID": obj.userProfile!.userId
+  //     };
 
-      Dio dio = new Dio();
-      var response = await dio.post(
-        'http://122.155.223.63/td-des-api/m/v2/register/line/login',
-        data: model,
-      );
+  //     Dio dio = new Dio();
+  //     var response = await dio.post(
+  //       'http://122.155.223.63/td-des-api/m/v2/register/line/login',
+  //       data: model,
+  //     );
 
-      await ManageStorage.createSecureStorage(
-        key: 'imageUrlSocial',
-        value: model['imageUrl'],
-      );
+  //     await ManageStorage.createSecureStorage(
+  //       key: 'imageUrlSocial',
+  //       value: model['imageUrl'],
+  //     );
 
-      ManageStorage.createProfile(
-        value: response.data['objectData'],
-        key: 'line',
-      );
+  //     ManageStorage.createProfile(
+  //       value: response.data['objectData'],
+  //       key: 'line',
+  //     );
 
-      if (obj != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Menu(),
-          ),
-        );
-      }
-    }
-  }
+  //     if (obj != null) {
+  //       Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (context) => Menu(),
+  //         ),
+  //       );
+  //     }
+  //   }
+  // }
+
+  // void _callLoginApple() async {
+  //   var obj = await signInWithApple();
+
+  //   var model = {
+  //     "username": obj.user!.email ?? obj.user!.uid,
+  //     "email": obj.user!.email ?? '',
+  //     "imageUrl": '',
+  //     "firstName": obj.user!.email,
+  //     "lastName": '',
+  //     "appleID": obj.user!.uid
+  //   };
+
+  //   Dio dio = new Dio();
+  //   var response = await dio.post(
+  //     'http://122.155.223.63/td-des-api/m/v2/register/apple/login',
+  //     data: model,
+  //   );
+
+  //   ManageStorage.createProfile(
+  //     value: response.data['objectData'],
+  //     key: 'apple',
+  //   );
+
+  //   if (obj != null) {
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => Menu(),
+  //       ),
+  //     );
+  //   }
+  // }
 }
