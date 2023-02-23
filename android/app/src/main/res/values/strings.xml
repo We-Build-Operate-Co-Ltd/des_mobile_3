@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DES ดิจิตอลชุมชน</string>
+    <string name="facebook_app_id">765446618029822</string>
+    <string name="facebook_client_token">ee1ee427dde4e9522960c88cb9f33f86</string>
+    <string name="fb_login_protocol_scheme">fb765446618029822</string>
+    <string name="line_channel_id">1657641390</string>
+    <!-- <integer name="request_code_login">20000904</integer> -->
+</resources>

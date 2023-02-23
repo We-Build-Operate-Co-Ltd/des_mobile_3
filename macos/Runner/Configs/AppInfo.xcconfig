@@ -8,7 +8,7 @@
 PRODUCT_NAME = des
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.des
+PRODUCT_BUNDLE_IDENTIFIER = td.webuild.des
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.

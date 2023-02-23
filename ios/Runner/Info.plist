@@ -20,9 +20,94 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>GOOGLELoginAPI</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>line3rdp.$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+				<string>fb765446618029822</string>
+				<string>com.googleusercontent.apps.949874182161-5jgngor16524p76qlckqhdk4l8hkgvih</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FacebookAppID</key>
+	<string>765446618029822</string>
+	<key>FacebookClientToken</key>
+	<string>ee1ee427dde4e9522960c88cb9f33f86</string>
+	<key>FacebookDisplayName</key>
+	<string>DES ดิจิตอลชุมชน</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+		<string>lineauth2</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>LineSDKConfig</key>
+	<dict>
+		<key>ChannelID</key>
+		<string>1657641390</string>
+	</dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>DES ดิจิตอลชุมชน Music Usage</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>DES ดิจิตอลชุมชน Bluetool Usage</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>DES ดิจิตอลชุมชน BluetoothPeripheral</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>DES ดิจิตอลชุมชน Calendar Usage</string>
+	<key>NSCameraUsageDescription</key>
+	<string>เพื่อแสดงรูปภาพโปรไฟล์ของคุณ</string>
+	<key>NSContactsUsageDescription</key>
+	<string>DES ดิจิตอลชุมชน ต้องการเข้าถึงข้อมูลการติดต่อของคุณ</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>DES ดิจิตอลชุมชน FaceID Usage</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>เพื่อแสดงตำแหน่งปัจจุบันของคุณ และแนะนำสถานที่น่าสนใจให้กับคุณ</string>
+	<key>NSLocationUsageDescription</key>
+	<string>เพื่อแสดงตำแหน่งปัจจุบันของคุณ และแนะนำสถานที่น่าสนใจให้กับคุณ</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>เพื่อแสดงตำแหน่งปัจจุบันของคุณ และแนะนำสถานที่น่าสนใจให้กับคุณ</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>DES ดิจิตอลชุมชน Microphone Usage</string>
+	<key>NSMotionUsageDescription</key>
+	<string>DES ดิจิตอลชุมชน Motion Usage</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>เพื่อแสดงรูปภาพโปรไฟล์ของคุณ</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>เพื่อแสดงรูปภาพโปรไฟล์ของคุณ</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>DES ดิจิตอลชุมชน Reminder Usage</string>
+	<key>NSSiriUsageDescription</key>
+	<string>DES ดิจิตอลชุมชน Siri Usage</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>DES ดิจิตอลชุมชน Speech Recognition Usage</string>
+	<key>NSVideoSubscriberAccountUsageDescription</key>
+	<string>DES ดิจิตอลชุมชน Video Subscribe Usage</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
+	<key>UIRequiresFullScreen</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
@@ -47,5 +132,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+	<key>kTCCServiceMediaLibrary</key>
+	<string>DES ดิจิตอลชุมชน MediaLibrary Usage</string>
 </dict>
 </plist>

@@ -725,6 +725,9 @@ class _LoginPageState extends State<LoginPage>
 
   void _callLoginGoogle() async {
     var obj = await signInWithGoogle();
+
+    print('---signInWithGoogle---' + obj.toString());
+
     if (obj != null) {
       var model = {
         "username": obj.user!.email,

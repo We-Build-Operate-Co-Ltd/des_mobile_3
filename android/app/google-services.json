@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "949874182161",
+    "project_id": "des-digital",
+    "storage_bucket": "des-digital.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:949874182161:android:18618dae983224986a89b0",
+        "android_client_info": {
+          "package_name": "td.webuild.des"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "949874182161-s4mjd80i46mknl2hscdj1fslmop82kf9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6GnP7p8_KdS29l8qfgYEc-y8gwybnCR4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "949874182161-s4mjd80i46mknl2hscdj1fslmop82kf9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "949874182161-5jgngor16524p76qlckqhdk4l8hkgvih.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "td.webuild.des"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

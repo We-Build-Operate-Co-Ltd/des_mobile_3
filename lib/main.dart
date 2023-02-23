@@ -16,6 +16,7 @@ Future<void> main() async {
   LineSDK.instance.setup('1657641390').then((_) {
     print('LineSDK Prepared');
   });
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(const MyApp());
