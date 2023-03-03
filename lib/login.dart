@@ -231,8 +231,9 @@ class _LoginPageState extends State<LoginPage>
                               child: _buildButtonLogin(
                                 'assets/images/line_circle.png',
                                 'เข้าใช้ผ่าน Line',
-                                color: Color(0xFF06C755),
-                                colorTitle: Color(0xFFFFFFFF),
+                                // color: Color(0xFF06C755),
+                                // colorTitle: Color(0xFFFFFFFF),
+                                colorBorder: Color(0xFFE4E4E4),
                               ),
                             ),
                             if (_username!.isEmpty) ...[
