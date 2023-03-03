@@ -21,19 +21,7 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  dynamic modelData = {
-    'title': 'เกษตรยุคใหม่ ผันตัวสู่นักธุรกิจเต็มรูปแบบ',
-    'imageUrl':
-        'http://122.155.223.63/td-doc/images/personal/personal_220309322.jpg',
-    'createBy': 'เจ้าหน้าที่ศูนย์ดิติทัลชุมชน',
-    'description':
-        '''ปัจจุบันเป็นโลกแห่ง เกษตรยุคใหม่ ด้วยความก้าวหน้าของโลกดิจิตอลทำให้ผู้ที่ประกอบ อาชีพเกษตรกร ก้าวเข้าสู่การเป็น smart farmer หรือเกษตรกรอัจฉริยะ ด้วยการใช้ เทคโนโลยีต่างๆ เข้ามาช่วยให้ชีวิตแบบ เกษตร 4.0  ง่ายขึ้น และผันตัวจากการเป็นผู้ผลิต มาเป็นผู้ผลิตพร้อมทั้งแปรรูปและจัดจำหน่าย กลายเป็นนักธุรกิจเต็มตัว  เพราะในปัจจุบันเกษตรกรสามารถค้าขายผ่านระบบออนไลน์บนเครื่องโทรศัพท์มือถือได้อย่างสะดวกสบาย เชื่อมโยงให้เกิดการสั่งซื้อผ่าน Application ต่างๆ การรับโอนเงินผ่านระบบออนไลน์แบงก์กิ้ง และการส่งของด้วยบริษัทเอกชนที่รวดเร็ว  ซึ่งทำให้ตัดเรื่องการสูญเสียผลกำไรบางส่วนให้แก่พ่อค้าคนกลาง ขอเพียงแค่เราสามารถต่อเชื่อมอินเตอร์เน็ตทุกอย่างก็ง่ายดายขึ้น
-
-แนวทางที่เกษตรกรสามารถนำมาใช้ได้ในทันที คือการถ่ายรูปสินค้าการเกษตรของงตนเอง เริ่มตั้งแต่ขั้นตอนการปลูก ไปจนถึงการเก็บเกี่ยว แล้วนำไปเผยแพร่ผ่านช่องทางสื่อสังคมออนไลน์ เพื่อยืนยันการมีตัวตนของเรา และหาเวลาโพสต์ความเคลื่อนไหวเป็นระยะ ขณะเดียวกันควรถ่ายรูปผลิตภัณฑ์ของเรา เพื่อนำไปลงทะเบียนเปิดร้านใน แพลทฟอร์มอีคอมเมิร์ซ ที่เราไม่ต้องเสียเงินค่าสมัครใดๆ ทั้งสิ้น แค่นี้ก็จะทำให้เรามีร้านค้าออนไลน์เป็นของตนเอง และสามารถขายผลผลิตของเราไปยังลูกค้าโดยตรงได้ ด้วยวิธีการที่ เกษตรยุคใหม่ นำมาใช้ ทำให้เกิดรายได้เต็มเม็ดเต็มหน่วยกันเลยทีเดียว''',
-  };
-
   List<String> _gallery = [];
-
   String _imageSelected = '';
 
   @override
@@ -117,37 +105,38 @@ class _DetailPageState extends State<DetailPage> {
             ),
           ),
         ),
-        SizedBox(
-          height: 120,
-          child: ListView.separated(
-            itemCount: [model['imageUrl'], ..._gallery].length,
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.all(10),
-            separatorBuilder: (_, __) => const SizedBox(width: 10),
-            itemBuilder: (_, __) => Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(
-                    color: Colors.black.withOpacity(0.2),
-                    width: 0.5,
-                  )),
-              child: GestureDetector(
-                onTap: () => setState(() {
-                  _imageSelected = [model['imageUrl'], ..._gallery][__];
-                }),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: CachedNetworkImage(
-                    imageUrl: [model['imageUrl'], ..._gallery][__],
-                    height: 100,
-                    width: 100,
-                    fit: BoxFit.cover,
+        if (_gallery.isNotEmpty)
+          SizedBox(
+            height: 120,
+            child: ListView.separated(
+              itemCount: [model['imageUrl'], ..._gallery].length,
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.all(10),
+              separatorBuilder: (_, __) => const SizedBox(width: 10),
+              itemBuilder: (_, __) => Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(
+                      color: Colors.black.withOpacity(0.2),
+                      width: 0.5,
+                    )),
+                child: GestureDetector(
+                  onTap: () => setState(() {
+                    _imageSelected = [model['imageUrl'], ..._gallery][__];
+                  }),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: CachedNetworkImage(
+                      imageUrl: [model['imageUrl'], ..._gallery][__],
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -207,7 +196,9 @@ class _DetailPageState extends State<DetailPage> {
   void initState() {
     super.initState();
     _imageSelected = widget.model['imageUrl'];
-    _galleryRead();
+    if (widget.slug != 'mock') {
+      _galleryRead();
+    }
   }
 
   _galleryRead() async {

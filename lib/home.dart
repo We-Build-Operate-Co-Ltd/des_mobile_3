@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/detail.dart';
+import 'package:des/models/mock_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -252,13 +253,24 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                containerStudy('สกัดสมุนไพร เพื่อผลิตภัณฑ์เสริมความงาม', 50,
-                    'assets/images/01.png', 'class1'),
-                const SizedBox(height: 10),
-                containerStudy('ผลิตยาหม่องมณีพฤกษา ง่ายๆ ด้วยตัวเอง', 80,
-                    'assets/images/02.png', 'class2'),
-                const SizedBox(height: 24),
+                FutureBuilder(
+                  future: Future.value(mockDataList),
+                  builder: (_, snapshot) {
+                    if (snapshot.hasData) {
+                      return Column(
+                        children: [
+                          const SizedBox(height: 10),
+                          containerStudy(snapshot.data![0], 50),
+                          const SizedBox(height: 10),
+                          containerStudy(snapshot.data![1], 80),
+                          const SizedBox(height: 24),
+                        ],
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -386,10 +398,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget containerStudy(String title, double study, String image, String code) {
+  Widget containerStudy(dynamic model, double study) {
     return GestureDetector(
       onTap: () {
-        // _callOpenPage(code);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => DetailPage(slug: 'mock', model: model),
+          ),
+        );
       },
       child: SizedBox(
         height: 95,
@@ -398,8 +415,8 @@ class _HomePageState extends State<HomePage> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                image,
+              child: CachedNetworkImage(
+                imageUrl: model['imageUrl'] ?? '',
                 fit: BoxFit.fill,
                 height: 95,
                 width: 169,
@@ -412,7 +429,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Expanded(
                     child: Text(
-                      title,
+                      model!['title'] ?? '',
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w500,

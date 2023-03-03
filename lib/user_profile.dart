@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/history_of_service_reservations.dart';
 import 'package:des/detail.dart';
+import 'package:des/models/mock_data.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/user_profile_edit.dart';
 import 'package:des/user_profile_setting.dart';
@@ -73,14 +74,21 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildMyClass('สกัดสมุนไพร เพื่อผลิตภัณฑ์เสริมความงาม', 50,
-                    'assets/images/01.png', 'class1'),
-                _buildMyClass('ผลิตยาหม่องมณีพฤกษา ง่ายๆ ด้วยตัวเอง', 80,
-                    'assets/images/02.png', 'class2'),
-              ],
+            FutureBuilder(
+              future: Future.value(mockDataList),
+              builder: (_, snapshot) {
+                if (snapshot.hasData) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildMyClass(snapshot.data![0], 50),
+                      _buildMyClass(snapshot.data![1], 80),
+                    ],
+                  );
+                } else {
+                  return Container();
+                }
+              },
             ),
             const SizedBox(height: 20),
             Row(
@@ -292,12 +300,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
     );
   }
 
-  Widget _buildMyClass(String title, double study, String image, String code) {
+  Widget _buildMyClass(dynamic model, double study) {
     var screenSize = (45.07 * MediaQuery.of(context).size.width) / 100;
     return InkWell(
       onTap: () {
-        if (code == 'class1') {
-        } else if (code == 'class2') {}
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => DetailPage(slug: 'mock', model: model),
+          ),
+        );
       },
       child: SizedBox(
         height: screenSize,
@@ -307,8 +319,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                image,
+              child: CachedNetworkImage(
+                imageUrl: model['imageUrl'],
                 fit: BoxFit.fill,
                 height: 95,
                 width: screenSize,
@@ -317,7 +329,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             SizedBox(
               width: 170,
               child: Text(
-                title,
+                model['title'],
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
