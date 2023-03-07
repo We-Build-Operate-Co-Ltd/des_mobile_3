@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:des/login.dart';
+import 'package:des/login_first.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +104,7 @@ class _SplashPageState extends State<SplashPage> {
       } else {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (context) => const LoginPage(),
+            builder: (context) => const LoginFirstPage(),
           ),
           (Route<dynamic> route) => false,
         );

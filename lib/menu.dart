@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/learning.dart';
-import 'package:des/login.dart';
+import 'package:des/login_first.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/service_reservations.dart';
 import 'package:des/user_profile.dart';
@@ -84,7 +84,7 @@ class _MenuState extends State<Menu> {
       if (_profileCode.isEmpty) {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (context) => const LoginPage(),
+            builder: (context) => const LoginFirstPage(),
           ),
           (Route<dynamic> route) => false,
         );
@@ -254,7 +254,7 @@ class _MenuState extends State<Menu> {
         //   pages[2] = CustomerServicePage();
         // }
       } else {
-        // pages[3] = const LoginPage();
+        // pages[3] = const LoginFirstPage();
       }
     });
   }

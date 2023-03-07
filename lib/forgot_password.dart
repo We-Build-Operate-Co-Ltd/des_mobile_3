@@ -2,7 +2,7 @@ import 'package:des/otp_email_forgot_password.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'login.dart';
+import 'package:des/login_first.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   @override
@@ -18,7 +18,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/images/des/bg_login_page.png"),
+          image: AssetImage("assets/images/bg_login_page.png"),
           fit: BoxFit.cover,
         ),
       ),
@@ -236,7 +236,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => LoginPage(),
+        builder: (context) => LoginFirstPage(),
       ),
     );
   }

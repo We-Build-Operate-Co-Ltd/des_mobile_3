@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:des/login.dart';
+import 'package:des/login_first.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/user_profile_edit.dart';
 import 'package:des/verify_first_step.dart';
@@ -299,7 +299,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => LoginPage(),
+        builder: (context) => LoginFirstPage(),
       ),
     );
   }
