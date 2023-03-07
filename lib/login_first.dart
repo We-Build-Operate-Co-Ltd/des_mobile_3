@@ -65,7 +65,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                 right: 0,
                 child: SingleChildScrollView(
                   child: Container(
-                    height: 500,
+                    height: 535,
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -78,17 +78,18 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                         padding: EdgeInsets.zero,
                         physics: ClampingScrollPhysics(),
                         children: [
-                          Image.asset(
-                            'assets/images/logo.png',
-                            height: 35,
-                            alignment: Alignment.centerLeft,
-                          ),
+                          // Image.asset(
+                          //   'assets/images/logo.png',
+                          //   height: 35,
+                          //   alignment: Alignment.centerLeft,
+                          // ),
                           Text(
                             'เข้าสู่ระบบ',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
                             ),
+                            textAlign: TextAlign.center,
                           ),
                           SizedBox(height: 10),
                           TextFormField(
@@ -130,12 +131,13 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                             ),
                           ),
                           InkWell(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ForgotPasswordPage(),
-                              ),
-                            ),
+                            onTap: () {
+                              final form = _formKey.currentState;
+                              if (form!.validate()) {
+                                form.save();
+                                _callUser();
+                              }
+                            },
                             child: _buildButtonLogin(
                               '',
                               'ดำเนินการต่อ',
