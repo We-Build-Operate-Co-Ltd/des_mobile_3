@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:des/booking_service.dart';
 import 'package:des/detail.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:dio/dio.dart';
@@ -496,7 +497,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           GestureDetector(
             onTap: () {
-              // _callOpenPage(code);
+              _callOpenPage(code);
             },
             child: type == 'serviceforyou'
                 ? Image.asset(image, height: 45, width: 45)
@@ -605,4 +606,18 @@ class _HomePageState extends State<HomePage> {
   //     );
   //   }
   // }
+
+  _callOpenPage(param) {
+    if (param == 'btn1') {
+    } else if (param == 'btn2') {
+    } else if (param == 'btn3') {
+    } else if (param == 'btn4') {
+    } else if (param == 'btn5') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => BookingServicePage(),
+        ),
+      );
+    }
+  }
 }
