@@ -1,3 +1,4 @@
+import 'package:des/booking_service_search_result.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -31,6 +32,8 @@ class _BookingServicePageState extends State<BookingServicePage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        extendBody: true,
         backgroundColor: Colors.white,
         body: Stack(
           children: [
@@ -133,19 +136,28 @@ class _BookingServicePageState extends State<BookingServicePage> {
                           SizedBox(height: 15),
                           if (_currentPage == 0) ..._pageOne(),
                           if (_currentPage == 1) ..._pageTwo(),
-                          Container(
-                            height: 45,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF7A4CB1),
-                              borderRadius: BorderRadius.circular(25),
+                          GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    BookingServiceSearchResultPage(),
+                              ),
                             ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              'ค้นหา',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
+                            child: Container(
+                              height: 45,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF7A4CB1),
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                'ค้นหา',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                           )
@@ -202,7 +214,7 @@ class _BookingServicePageState extends State<BookingServicePage> {
                       },
                     ),
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 5),
                   Expanded(
                     child: FutureBuilder<dynamic>(
                       future: _readData(),
@@ -345,7 +357,7 @@ class _BookingServicePageState extends State<BookingServicePage> {
                                             ),
                                             SizedBox(width: 20),
                                             Text(
-                                              _setDifferentDate(snapshot
+                                              _setDifferentTime(snapshot
                                                   .data[__]['dateTime']),
                                               style: TextStyle(
                                                 color: Color(0xFF53327A),
@@ -453,11 +465,11 @@ class _BookingServicePageState extends State<BookingServicePage> {
                   ),
                   decoration: _decorationTime(
                     context,
-                    hintText: 'เวลาเริ่ม',
+                    hintText: 'เวลาเลิก',
                   ),
                   validator: (model) {
                     if (model!.isEmpty) {
-                      return 'กรุณาเลือกเวลาเริ่ม';
+                      return 'กรุณาเลือกเวลาเลิก';
                     }
                     return null;
                   },
@@ -531,19 +543,6 @@ class _BookingServicePageState extends State<BookingServicePage> {
       ),
       SizedBox(height: 50),
     ];
-  }
-
-  Widget _backButton(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Image.asset(
-        'assets/images/back.png',
-        height: 40,
-        width: 40,
-      ),
-    );
   }
 
   static InputDecoration _decorationSearch(context, {String hintText = ''}) =>
@@ -655,6 +654,28 @@ class _BookingServicePageState extends State<BookingServicePage> {
         ),
       );
 
+  DatePickerTheme datepickerTheme = DatePickerTheme(
+    containerHeight: 210.0,
+    itemStyle: TextStyle(
+      fontSize: 16.0,
+      color: Color(0xFF53327A),
+      fontWeight: FontWeight.normal,
+      fontFamily: 'Kanit',
+    ),
+    doneStyle: TextStyle(
+      fontSize: 16.0,
+      color: Color(0xFF53327A),
+      fontWeight: FontWeight.normal,
+      fontFamily: 'Kanit',
+    ),
+    cancelStyle: TextStyle(
+      fontSize: 16.0,
+      color: Color(0xFF53327A),
+      fontWeight: FontWeight.normal,
+      fontFamily: 'Kanit',
+    ),
+  );
+
   @override
   void initState() {
     _readData();
@@ -673,8 +694,8 @@ class _BookingServicePageState extends State<BookingServicePage> {
       context,
       theme: datepickerTheme,
       showTitleActions: true,
-      minTime: DateTime(2400, 1, 1),
-      maxTime: DateTime(year, month, day),
+      minTime: DateTime(2560, 1, 1),
+      maxTime: DateTime(year + 1, month, day),
       onConfirm: (date) {
         setState(
           () {
@@ -722,14 +743,14 @@ class _BookingServicePageState extends State<BookingServicePage> {
     );
   }
 
-  _readData() async {
+  Future<List<Map<String, Object>>> _readData() async {
     var result = await mockBookingData
         .where((e) => e['category'] == _selectedCategory)
         .toList();
     return Future.value(result);
   }
 
-  _setDate(String? date) {
+  String _setDate(String? date) {
     if (date!.isEmpty) return '';
     String year = date.substring(0, 4);
     int yearIntTh = int.parse(year) + 543;
@@ -738,14 +759,14 @@ class _BookingServicePageState extends State<BookingServicePage> {
     return day + '/' + month + '/' + yearIntTh.toString().substring(2, 4);
   }
 
-  _setTime(String? date) {
+  String _setTime(String? date) {
     if (date!.isEmpty) return '';
     var hr = date.substring(8, 10);
     var minute = date.substring(10, 12);
     return hr + ':' + minute + ' น.';
   }
 
-  _setDifferentDate(String? dateStr) {
+  String _setDifferentTime(String? dateStr) {
     if (dateStr!.isNotEmpty) {
       int year = int.parse(dateStr.substring(0, 4));
       int month = int.parse(dateStr.substring(4, 6));
@@ -764,7 +785,7 @@ class _BookingServicePageState extends State<BookingServicePage> {
     return '';
   }
 
-  _checkCurrentDate(String? dateStr) {
+  bool _checkCurrentDate(String? dateStr) {
     if (dateStr!.isNotEmpty) {
       int year = int.parse(dateStr.substring(0, 4));
       int month = int.parse(dateStr.substring(4, 6));
@@ -778,26 +799,4 @@ class _BookingServicePageState extends State<BookingServicePage> {
     }
     return false;
   }
-
-  DatePickerTheme datepickerTheme = DatePickerTheme(
-    containerHeight: 210.0,
-    itemStyle: TextStyle(
-      fontSize: 16.0,
-      color: Color(0xFF53327A),
-      fontWeight: FontWeight.normal,
-      fontFamily: 'Kanit',
-    ),
-    doneStyle: TextStyle(
-      fontSize: 16.0,
-      color: Color(0xFF53327A),
-      fontWeight: FontWeight.normal,
-      fontFamily: 'Kanit',
-    ),
-    cancelStyle: TextStyle(
-      fontSize: 16.0,
-      color: Color(0xFF53327A),
-      fontWeight: FontWeight.normal,
-      fontFamily: 'Kanit',
-    ),
-  );
 }
