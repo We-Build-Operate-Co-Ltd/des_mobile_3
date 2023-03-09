@@ -1,5 +1,6 @@
 import 'package:des/booking_service_detail.dart';
 import 'package:des/models/mock_data.dart';
+import 'package:des/shared/secure_storage.dart';
 import 'package:flutter/material.dart';
 
 class BookingServiceSearchResultPage extends StatefulWidget {
@@ -12,6 +13,7 @@ class BookingServiceSearchResultPage extends StatefulWidget {
 
 class _BookingServiceSearchResultPageState
     extends State<BookingServiceSearchResultPage> {
+  dynamic modelCenter;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +45,7 @@ class _BookingServiceSearchResultPageState
         ),
       ),
       body: FutureBuilder<List<dynamic>>(
-        future: Future.value(mockBookingServiceData),
+        future: Future.value(modelCenter),
         builder: (_, snapshot) {
           if (snapshot.hasData) {
             return ListView.separated(
@@ -77,7 +79,7 @@ class _BookingServiceSearchResultPageState
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => BookingServiceDetailPage(model: model),
+          builder: (_) => BookingServiceDetailPage(code: model['code']),
         ),
       ),
       child: Row(
@@ -137,5 +139,11 @@ class _BookingServiceSearchResultPageState
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    modelCenter = MockBookingData.center();
   }
 }

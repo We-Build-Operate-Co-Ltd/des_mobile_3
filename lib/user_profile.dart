@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:des/booking_service.dart';
-import 'package:des/history_of_service_reservations.dart';
 import 'package:des/detail.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/shared/secure_storage.dart';

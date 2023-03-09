@@ -1,5 +1,10 @@
+import 'dart:developer';
+
+import 'package:des/booking_service_detail.dart';
 import 'package:des/booking_service_search_result.dart';
 import 'package:des/models/mock_data.dart';
+import 'package:des/shared/secure_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
@@ -24,6 +29,9 @@ class _BookingServicePageState extends State<BookingServicePage> {
   TextEditingController txtStartTime = TextEditingController();
   TextEditingController txtEndTime = TextEditingController();
   int _currentPage = 0;
+  dynamic modelCenter;
+  dynamic modelBooking;
+  dynamic modelCategory;
 
   String _selectedCategory = '0';
 
@@ -169,42 +177,16 @@ class _BookingServicePageState extends State<BookingServicePage> {
                   SizedBox(height: 25),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: FutureBuilder(
-                      future: Future.value(mockBookingCategory),
+                    child: FutureBuilder<dynamic>(
+                      future: Future.value(modelCategory),
                       builder: (_, snapshot) {
                         if (snapshot.hasData) {
                           return SizedBox(
                             height: 25,
                             child: ListView.separated(
                               scrollDirection: Axis.horizontal,
-                              itemBuilder: (_, __) => GestureDetector(
-                                onTap: () => setState(() {
-                                  _selectedCategory =
-                                      snapshot.data![__]['code'].toString();
-                                }),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.symmetric(horizontal: 15),
-                                  decoration: BoxDecoration(
-                                    color: _selectedCategory ==
-                                            snapshot.data![__]['code']
-                                        ? Color(0xFFB325F8)
-                                        : Color(0xFFB325F8).withOpacity(.1),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Text(
-                                    '${snapshot.data![__]['title']}',
-                                    style: TextStyle(
-                                      color: _selectedCategory ==
-                                              snapshot.data![__]['code']
-                                          ? Colors.white
-                                          : Color(0xFFB325F8).withOpacity(.4),
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              itemBuilder: (_, __) =>
+                                  _itemCategory(snapshot.data[__]),
                               separatorBuilder: (_, __) => SizedBox(width: 10),
                               itemCount: snapshot.data!.length,
                             ),
@@ -229,157 +211,8 @@ class _BookingServicePageState extends State<BookingServicePage> {
                             ),
                             itemCount: snapshot.data!.length,
                             separatorBuilder: (_, __) => SizedBox(height: 15),
-                            itemBuilder: (_, __) => Container(
-                              child: Row(
-                                children: [
-                                  Container(
-                                    height: 35,
-                                    width: 35,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Color(0xFFB325F8).withOpacity(.1),
-                                    ),
-                                    child: Image.asset(
-                                      'assets/images/computer.png',
-                                      width: 17,
-                                      color: Color(0xFF53327A),
-                                    ),
-                                  ),
-                                  SizedBox(width: 15),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${snapshot.data![__]['title']}',
-                                          style: TextStyle(
-                                            color: Color(0xFF7A4CB1),
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        SizedBox(height: 10),
-                                        if (_checkCurrentDate(snapshot.data[__]
-                                                ['dateTime']) &&
-                                            snapshot.data[__]['category'] ==
-                                                '0')
-                                          Container(
-                                            height: 30,
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 15,
-                                              vertical: 4,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: Color(0xFF7A4CB1),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                            ),
-                                            child: Text(
-                                              'เช็คอิน',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                        if (snapshot.data[__]['category'] ==
-                                                '1' &&
-                                            snapshot.data[__]['checkIn'])
-                                          Container(
-                                            height: 30,
-                                            width: 120,
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 15,
-                                              vertical: 4,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: Color(0xFF7A4CB1),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.check_circle,
-                                                  color: Colors.white,
-                                                  size: 15,
-                                                ),
-                                                SizedBox(width: 5),
-                                                Text(
-                                                  'เช็คอินแล้ว',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        SizedBox(height: 25),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.calendar_month_rounded,
-                                              color: Color(0xFF53327A),
-                                              size: 15,
-                                            ),
-                                            SizedBox(width: 5),
-                                            Text(
-                                              _setDate(snapshot.data[__]
-                                                  ['dateTime']),
-                                              style: TextStyle(
-                                                color: Color(0xFF53327A),
-                                                fontSize: 9,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                            SizedBox(width: 20),
-                                            Icon(
-                                              Icons.access_time_rounded,
-                                              color: Color(0xFF53327A),
-                                              size: 15,
-                                            ),
-                                            SizedBox(width: 5),
-                                            Text(
-                                              _setTime(snapshot.data[__]
-                                                  ['dateTime']),
-                                              style: TextStyle(
-                                                color: Color(0xFF53327A),
-                                                fontSize: 9,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                            SizedBox(width: 20),
-                                            Text(
-                                              _setDifferentTime(snapshot
-                                                  .data[__]['dateTime']),
-                                              style: TextStyle(
-                                                color: Color(0xFF53327A),
-                                                fontSize: 9,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 10),
-                                        Container(
-                                          height: 1,
-                                          width: double.infinity,
-                                          color:
-                                              Color(0xFF707070).withOpacity(.5),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                            itemBuilder: (_, __) =>
+                                _itemBooking(snapshot.data[__]),
                           );
                         }
                         return SizedBox();
@@ -545,6 +378,216 @@ class _BookingServicePageState extends State<BookingServicePage> {
     ];
   }
 
+  Widget _itemCategory(model) {
+    return GestureDetector(
+      onTap: () => setState(() {
+        _selectedCategory = model['code'].toString();
+      }),
+      child: Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(horizontal: 15),
+        decoration: BoxDecoration(
+          color: _selectedCategory == model['code']
+              ? Color(0xFFB325F8)
+              : Color(0xFFB325F8).withOpacity(.1),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Text(
+          '${model['title']}',
+          style: TextStyle(
+            color: _selectedCategory == model['code']
+                ? Colors.white
+                : Color(0xFFB325F8).withOpacity(.4),
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _itemBooking(model) {
+    return GestureDetector(
+      onTap: () {
+        if (_selectedCategory == '1' && model['checkIn']) {
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (_) => BookingServiceDetailPage(
+          //       code: model['center'],
+          //       repeat: true,
+          //     ),
+          //   ),
+          // );
+        }
+        if (_selectedCategory == '0' && !model['checkIn']) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => BookingServiceDetailPage(
+                code: model['center'],
+                edit: true,
+              ),
+            ),
+          );
+        }
+      },
+      child: Container(
+        child: Row(
+          children: [
+            Container(
+              height: 35,
+              width: 35,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Color(0xFFB325F8).withOpacity(.1),
+              ),
+              child: Image.asset(
+                'assets/images/computer.png',
+                width: 17,
+                color: Color(0xFF53327A),
+              ),
+            ),
+            SizedBox(width: 15),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '${model['title']}',
+                          style: TextStyle(
+                            color: Color(0xFF7A4CB1),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 14,
+                        color: Color(0xFF7A4CB1),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  if (_checkCurrentDate(model['dateTime']) == 0)
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        height: 30,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Color(0xFF7A4CB1),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Text(
+                          'เช็คอิน',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (model['checkIn'] && _selectedCategory == '1')
+                    Container(
+                      height: 30,
+                      width: 120,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF7A4CB1),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.check_circle,
+                            color: Colors.white,
+                            size: 15,
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            'เช็คอินแล้ว',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  SizedBox(height: 25),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_month_rounded,
+                        color: Color(0xFF53327A),
+                        size: 15,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        _setDate(model['dateTime']),
+                        style: TextStyle(
+                          color: Color(0xFF53327A),
+                          fontSize: 9,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      Icon(
+                        Icons.access_time_rounded,
+                        color: Color(0xFF53327A),
+                        size: 15,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        _setTime(model['dateTime']),
+                        style: TextStyle(
+                          color: Color(0xFF53327A),
+                          fontSize: 9,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      Text(
+                        _setDifferentTime(model['dateTime']),
+                        style: TextStyle(
+                          color: Color(0xFF53327A),
+                          fontSize: 9,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    height: 1,
+                    width: double.infinity,
+                    color: Color(0xFF707070).withOpacity(.5),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   static InputDecoration _decorationSearch(context, {String hintText = ''}) =>
       InputDecoration(
         label: Text(hintText),
@@ -676,19 +719,6 @@ class _BookingServicePageState extends State<BookingServicePage> {
     ),
   );
 
-  @override
-  void initState() {
-    _readData();
-    super.initState();
-    var now = DateTime.now();
-    year = now.year + 543;
-    month = now.month;
-    day = now.day;
-    _selectedYear = now.year + 543;
-    _selectedMonth = now.month;
-    _selectedDay = now.day;
-  }
-
   dynamic dialogOpenPickerDate() {
     DatePicker.showDatePicker(
       context,
@@ -703,7 +733,7 @@ class _BookingServicePageState extends State<BookingServicePage> {
             _selectedMonth = date.month;
             _selectedDay = date.day;
             txtDate.value = TextEditingValue(
-              text: DateFormat("dd-MM-yyyy").format(date),
+              text: DateFormat("dd / MM / yyyy").format(date),
             );
           },
         );
@@ -743,10 +773,34 @@ class _BookingServicePageState extends State<BookingServicePage> {
     );
   }
 
-  Future<List<Map<String, Object>>> _readData() async {
-    var result = await mockBookingData
-        .where((e) => e['category'] == _selectedCategory)
-        .toList();
+  @override
+  void initState() {
+    super.initState();
+    modelCategory = MockBookingData.category();
+    modelBooking = MockBookingData.booking();
+    modelCenter = MockBookingData.center();
+    _readData();
+    var now = DateTime.now();
+    year = now.year + 543;
+    month = now.month;
+    day = now.day;
+    _selectedYear = now.year + 543;
+    _selectedMonth = now.month;
+    _selectedDay = now.day;
+  }
+
+  Future<List<dynamic>> _readData() async {
+    bool morethan = int.parse(_selectedCategory) == 0;
+    var result;
+    if (morethan) {
+      result = await modelBooking
+          .where((dynamic e) => _checkCurrentDate(e['dateTime']!) >= 0)
+          .toList();
+    } else {
+      result = await modelBooking
+          .where((dynamic e) => _checkCurrentDate(e['dateTime']!) < 0)
+          .toList();
+    }
     return Future.value(result);
   }
 
@@ -771,32 +825,43 @@ class _BookingServicePageState extends State<BookingServicePage> {
       int year = int.parse(dateStr.substring(0, 4));
       int month = int.parse(dateStr.substring(4, 6));
       int day = int.parse(dateStr.substring(6, 8));
+      int hour = int.parse(dateStr.substring(8, 10));
+      int minute = int.parse(dateStr.substring(10, 12));
       final date = DateTime(year, month, day);
-      final currentDate = DateTime.now();
-      final difDate = currentDate.difference(date).inDays;
+      final now = DateTime.now();
+      final currentDate = DateTime(now.year, now.month, now.day);
+      final difDate = currentDate.compareTo(date);
       if (difDate == 0) {
-        if (int.parse(dateStr.substring(8, 10)) > DateTime.now().hour) {
-          return (int.parse(dateStr.substring(8, 10)) - DateTime.now().hour)
-                  .toString() +
-              ' ชั่วโมง';
+        if (hour > DateTime.now().hour) {
+          if (hour == DateTime.now().hour + 1 &&
+              (minute + 60) > DateTime.now().minute)
+            return ((minute + 60) - DateTime.now().minute).toString() + ' นาที';
+          return (hour - DateTime.now().hour).toString() + ' ชั่วโมง';
+        } else if (hour == DateTime.now().hour) {
+          return (minute - DateTime.now().minute).toString() + ' นาที';
         }
       }
     }
     return '';
   }
 
-  bool _checkCurrentDate(String? dateStr) {
+  int _checkCurrentDate(String? dateStr) {
     if (dateStr!.isNotEmpty) {
       int year = int.parse(dateStr.substring(0, 4));
       int month = int.parse(dateStr.substring(4, 6));
       int day = int.parse(dateStr.substring(6, 8));
-      final date = DateTime(year, month, day);
-      final currentDate = DateTime.now();
-      final difDate = currentDate.difference(date).inDays;
+      int hour = int.parse(dateStr.substring(8, 10));
+      int minute = int.parse(dateStr.substring(10, 12));
+      final date = DateTime(year, month, day, hour);
+      final now = DateTime.now();
+      final currentDate = DateTime(now.year, now.month, now.day, hour);
+      final difDate = date.compareTo(currentDate);
       if (difDate == 0) {
-        return true;
+        return 0;
+      } else if (difDate > 0) {
+        return 1;
       }
     }
-    return false;
+    return -1;
   }
 }

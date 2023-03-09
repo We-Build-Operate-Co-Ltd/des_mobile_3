@@ -412,7 +412,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
           _selectedMonth = date.month;
           _selectedDay = date.day;
           txtDate.value = TextEditingValue(
-            text: DateFormat("dd-MM-yyyy").format(date),
+            text: DateFormat("dd / MM / yyyy").format(date),
           );
           print('object');
           print(now!.year);
@@ -544,7 +544,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
           _selectedYear = todayDate.year;
           _selectedMonth = todayDate.month;
           _selectedDay = todayDate.day;
-          txtDate.text = DateFormat("dd-MM-yyyy").format(todayDate);
+          txtDate.text = DateFormat("dd / MM / yyyy").format(todayDate);
         });
       }
 
@@ -693,7 +693,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
           _selectedYear = todayDate.year;
           _selectedMonth = todayDate.month;
           _selectedDay = todayDate.day;
-          txtDate.text = DateFormat("dd-MM-yyyy").format(todayDate);
+          txtDate.text = DateFormat("dd / MM / yyyy").format(todayDate);
         });
       }
       readUser();

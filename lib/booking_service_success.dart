@@ -3,8 +3,6 @@ import 'package:des/detail.dart';
 import 'package:des/menu.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class BookingServiceSuccessPage extends StatefulWidget {

@@ -1,13 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/booking_service_confirm.dart';
+import 'package:des/models/mock_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
 class BookingServiceDetailPage extends StatefulWidget {
-  const BookingServiceDetailPage({super.key, required this.model});
+  const BookingServiceDetailPage({
+    super.key,
+    required this.code,
+    this.repeat = false,
+    this.edit = false,
+  });
 
-  final dynamic model;
+  final String code;
+  final bool repeat;
+  final bool edit;
 
   @override
   State<BookingServiceDetailPage> createState() =>
@@ -26,6 +34,8 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
   TextEditingController txtDate = TextEditingController();
   TextEditingController txtStartTime = TextEditingController();
   TextEditingController txtEndTime = TextEditingController();
+
+  dynamic model;
 
   @override
   Widget build(BuildContext context) {
@@ -80,11 +90,11 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child:
-                        CachedNetworkImage(imageUrl: widget.model['imageUrl']),
+                        CachedNetworkImage(imageUrl: model['imageUrl'] ?? ''),
                   ),
                   SizedBox(height: 15),
                   Text(
-                    '${widget.model['title']}',
+                    '${model['title']}',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
@@ -98,7 +108,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Text(
-                      '${widget.model['count']} เครื่อง',
+                      '${model['count']} เครื่อง',
                       style: TextStyle(
                         color: Color(0xFFB325F8),
                         fontSize: 9,
@@ -247,7 +257,8 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => BookingServiceConfirmPage(),
+                        builder: (_) =>
+                            BookingServiceConfirmPage(edit: widget.edit),
                       ),
                     ),
                     child: Container(
@@ -258,7 +269,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        'จองใช้บริการ',
+                        widget.edit ? 'แก้ไขการจอง' : 'จองใช้บริการ',
                         style: TextStyle(
                           fontSize: 15,
                           color: Colors.white,
@@ -425,7 +436,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
             _selectedMonth = date.month;
             _selectedDay = date.day;
             txtDate.value = TextEditingValue(
-              text: DateFormat("dd-MM-yyyy").format(date),
+              text: DateFormat("dd / MM / yyyy").format(date),
             );
           },
         );
@@ -468,6 +479,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
   @override
   void initState() {
     super.initState();
+    _callRead();
     var now = DateTime.now();
     year = now.year + 543;
     month = now.month;
@@ -475,5 +487,13 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
     _selectedYear = now.year + 543;
     _selectedMonth = now.month;
     _selectedDay = now.day;
+  }
+
+  _callRead() {
+    List<dynamic> listData = MockBookingData.center();
+    dynamic result = listData.firstWhere((e) => e['code'] == widget.code);
+    setState(() {
+      model = result;
+    });
   }
 }
