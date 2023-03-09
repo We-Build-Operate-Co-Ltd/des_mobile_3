@@ -54,7 +54,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
               _backButton(context),
               Expanded(
                 child: Text(
-                  'รายละเอียด',
+                  widget.repeat ? 'ประวัติ' : 'รายละเอียด',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
@@ -101,21 +101,50 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: Color(0xFFB325F8).withOpacity(.1),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Text(
-                      '${model['count']} เครื่อง',
-                      style: TextStyle(
-                        color: Color(0xFFB325F8),
-                        fontSize: 9,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
+                  widget.repeat
+                      ? Container(
+                          width: 153,
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: Color(0xFFEEEEEE),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.calendar_month_rounded,
+                                color: Color(0xFF707070),
+                                size: 15,
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                'ใช้บริการล่าสุดเมื่อ 15/01/66',
+                                style: TextStyle(
+                                  color: Color(0xFF707070),
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: Color(0xFFB325F8).withOpacity(.1),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Text(
+                            '${model['count']} เครื่อง',
+                            style: TextStyle(
+                              color: Color(0xFFB325F8),
+                              fontSize: 9,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
                   SizedBox(height: 20),
                   Text(
                     'การติดต่อ',
@@ -126,16 +155,17 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                   ),
                   SizedBox(height: 25),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _itemContact(
                         image: 'assets/images/vector.png',
                         title: 'แสดงแผนที่',
                       ),
+                      SizedBox(width: 50),
                       _itemContact(
                         image: 'assets/images/call_phone.png',
                         title: 'เบอร์ติดต่อ',
                       ),
+                      SizedBox(width: 50),
                       _itemContact(
                         image: 'assets/images/facebook.png',
                         title: 'Facebook',

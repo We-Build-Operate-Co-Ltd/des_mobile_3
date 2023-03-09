@@ -406,15 +406,15 @@ class _BookingServicePageState extends State<BookingServicePage> {
     return GestureDetector(
       onTap: () {
         if (_selectedCategory == '1' && model['checkIn']) {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (_) => BookingServiceDetailPage(
-          //       code: model['center'],
-          //       repeat: true,
-          //     ),
-          //   ),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => BookingServiceDetailPage(
+                code: model['center'],
+                repeat: true,
+              ),
+            ),
+          );
         }
         if (_selectedCategory == '0' && !model['checkIn']) {
           Navigator.push(
