@@ -1,3 +1,5 @@
+import 'package:des/booking_service_search_result.dart';
+import 'package:des/models/mock_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
@@ -19,18 +21,24 @@ class _BookingServicePageState extends State<BookingServicePage> {
   int day = 0;
   int age = 0;
   TextEditingController txtDate = TextEditingController();
+  TextEditingController txtStartTime = TextEditingController();
+  TextEditingController txtEndTime = TextEditingController();
   int _currentPage = 0;
+
+  String _selectedCategory = '0';
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        extendBody: true,
         backgroundColor: Colors.white,
         body: Stack(
           children: [
             Positioned(
-              top: -30,
+              top: -42,
               right: 0,
               child: Image.asset(
                 'assets/images/logo_2o.png',
@@ -40,29 +48,20 @@ class _BookingServicePageState extends State<BookingServicePage> {
               ),
             ),
             Positioned.fill(
-              child: ListView(
+              child: Column(
                 children: [
-                  SizedBox(height: 20),
-                  Row(
-                    children: [
-                      SizedBox(width: 20),
-                      _backButton(context),
-                      Expanded(
-                        child: Text(
-                          'จองบริการ',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(width: 60),
-                    ],
+                  SizedBox(height: 20 + MediaQuery.of(context).padding.top),
+                  Text(
+                    'จองบริการ',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 25),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
                     child: Container(
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -137,24 +136,254 @@ class _BookingServicePageState extends State<BookingServicePage> {
                           SizedBox(height: 15),
                           if (_currentPage == 0) ..._pageOne(),
                           if (_currentPage == 1) ..._pageTwo(),
-                          Container(
-                            height: 45,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF7A4CB1),
-                              borderRadius: BorderRadius.circular(25),
+                          GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    BookingServiceSearchResultPage(),
+                              ),
                             ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              'ค้นหา',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
+                            child: Container(
+                              height: 45,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF7A4CB1),
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                'ค้นหา',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                           )
                         ],
                       ),
+                    ),
+                  ),
+                  // history
+                  SizedBox(height: 25),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: FutureBuilder(
+                      future: Future.value(mockBookingCategory),
+                      builder: (_, snapshot) {
+                        if (snapshot.hasData) {
+                          return SizedBox(
+                            height: 25,
+                            child: ListView.separated(
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (_, __) => GestureDetector(
+                                onTap: () => setState(() {
+                                  _selectedCategory =
+                                      snapshot.data![__]['code'].toString();
+                                }),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(horizontal: 15),
+                                  decoration: BoxDecoration(
+                                    color: _selectedCategory ==
+                                            snapshot.data![__]['code']
+                                        ? Color(0xFFB325F8)
+                                        : Color(0xFFB325F8).withOpacity(.1),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Text(
+                                    '${snapshot.data![__]['title']}',
+                                    style: TextStyle(
+                                      color: _selectedCategory ==
+                                              snapshot.data![__]['code']
+                                          ? Colors.white
+                                          : Color(0xFFB325F8).withOpacity(.4),
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              separatorBuilder: (_, __) => SizedBox(width: 10),
+                              itemCount: snapshot.data!.length,
+                            ),
+                          );
+                        }
+                        return SizedBox(height: 25);
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Expanded(
+                    child: FutureBuilder<dynamic>(
+                      future: _readData(),
+                      builder: (_, snapshot) {
+                        if (snapshot.hasData) {
+                          return ListView.separated(
+                            padding: EdgeInsets.only(
+                              left: 15,
+                              right: 15,
+                              bottom:
+                                  MediaQuery.of(context).padding.bottom + 20,
+                            ),
+                            itemCount: snapshot.data!.length,
+                            separatorBuilder: (_, __) => SizedBox(height: 15),
+                            itemBuilder: (_, __) => Container(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 35,
+                                    width: 35,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Color(0xFFB325F8).withOpacity(.1),
+                                    ),
+                                    child: Image.asset(
+                                      'assets/images/computer.png',
+                                      width: 17,
+                                      color: Color(0xFF53327A),
+                                    ),
+                                  ),
+                                  SizedBox(width: 15),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${snapshot.data![__]['title']}',
+                                          style: TextStyle(
+                                            color: Color(0xFF7A4CB1),
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        SizedBox(height: 10),
+                                        if (_checkCurrentDate(snapshot.data[__]
+                                                ['dateTime']) &&
+                                            snapshot.data[__]['category'] ==
+                                                '0')
+                                          Container(
+                                            height: 30,
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 15,
+                                              vertical: 4,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFF7A4CB1),
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                            child: Text(
+                                              'เช็คอิน',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        if (snapshot.data[__]['category'] ==
+                                                '1' &&
+                                            snapshot.data[__]['checkIn'])
+                                          Container(
+                                            height: 30,
+                                            width: 120,
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 15,
+                                              vertical: 4,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFF7A4CB1),
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.check_circle,
+                                                  color: Colors.white,
+                                                  size: 15,
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text(
+                                                  'เช็คอินแล้ว',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        SizedBox(height: 25),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.calendar_month_rounded,
+                                              color: Color(0xFF53327A),
+                                              size: 15,
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text(
+                                              _setDate(snapshot.data[__]
+                                                  ['dateTime']),
+                                              style: TextStyle(
+                                                color: Color(0xFF53327A),
+                                                fontSize: 9,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            SizedBox(width: 20),
+                                            Icon(
+                                              Icons.access_time_rounded,
+                                              color: Color(0xFF53327A),
+                                              size: 15,
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text(
+                                              _setTime(snapshot.data[__]
+                                                  ['dateTime']),
+                                              style: TextStyle(
+                                                color: Color(0xFF53327A),
+                                                fontSize: 9,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            SizedBox(width: 20),
+                                            Text(
+                                              _setDifferentTime(snapshot
+                                                  .data[__]['dateTime']),
+                                              style: TextStyle(
+                                                color: Color(0xFF53327A),
+                                                fontSize: 9,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 10),
+                                        Container(
+                                          height: 1,
+                                          width: double.infinity,
+                                          color:
+                                              Color(0xFF707070).withOpacity(.5),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                        return SizedBox();
+                      },
                     ),
                   )
                 ],
@@ -197,10 +426,10 @@ class _BookingServicePageState extends State<BookingServicePage> {
         children: [
           Expanded(
             child: GestureDetector(
-              onTap: () => dialogOpenPickerDate(),
+              onTap: () => dialogOpenPickerTime('start'),
               child: AbsorbPointer(
                 child: TextFormField(
-                  controller: txtDate,
+                  controller: txtStartTime,
                   style: const TextStyle(
                     color: Color(0xFF7A4CB1),
                     fontWeight: FontWeight.normal,
@@ -224,10 +453,10 @@ class _BookingServicePageState extends State<BookingServicePage> {
           SizedBox(width: 15),
           Expanded(
             child: GestureDetector(
-              onTap: () => dialogOpenPickerDate(),
+              onTap: () => dialogOpenPickerTime('end'),
               child: AbsorbPointer(
                 child: TextFormField(
-                  controller: txtDate,
+                  controller: txtEndTime,
                   style: const TextStyle(
                     color: Color(0xFF7A4CB1),
                     fontWeight: FontWeight.normal,
@@ -236,11 +465,11 @@ class _BookingServicePageState extends State<BookingServicePage> {
                   ),
                   decoration: _decorationTime(
                     context,
-                    hintText: 'เวลาเริ่ม',
+                    hintText: 'เวลาเลิก',
                   ),
                   validator: (model) {
                     if (model!.isEmpty) {
-                      return 'กรุณาเลือกเวลาเริ่ม';
+                      return 'กรุณาเลือกเวลาเลิก';
                     }
                     return null;
                   },
@@ -314,19 +543,6 @@ class _BookingServicePageState extends State<BookingServicePage> {
       ),
       SizedBox(height: 50),
     ];
-  }
-
-  Widget _backButton(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Image.asset(
-        'assets/images/back.png',
-        height: 40,
-        width: 40,
-      ),
-    );
   }
 
   static InputDecoration _decorationSearch(context, {String hintText = ''}) =>
@@ -438,8 +654,31 @@ class _BookingServicePageState extends State<BookingServicePage> {
         ),
       );
 
+  DatePickerTheme datepickerTheme = DatePickerTheme(
+    containerHeight: 210.0,
+    itemStyle: TextStyle(
+      fontSize: 16.0,
+      color: Color(0xFF53327A),
+      fontWeight: FontWeight.normal,
+      fontFamily: 'Kanit',
+    ),
+    doneStyle: TextStyle(
+      fontSize: 16.0,
+      color: Color(0xFF53327A),
+      fontWeight: FontWeight.normal,
+      fontFamily: 'Kanit',
+    ),
+    cancelStyle: TextStyle(
+      fontSize: 16.0,
+      color: Color(0xFF53327A),
+      fontWeight: FontWeight.normal,
+      fontFamily: 'Kanit',
+    ),
+  );
+
   @override
   void initState() {
+    _readData();
     super.initState();
     var now = DateTime.now();
     year = now.year + 543;
@@ -453,30 +692,10 @@ class _BookingServicePageState extends State<BookingServicePage> {
   dynamic dialogOpenPickerDate() {
     DatePicker.showDatePicker(
       context,
-      theme: const DatePickerTheme(
-        containerHeight: 210.0,
-        itemStyle: TextStyle(
-          fontSize: 16.0,
-          color: Color(0xFF53327A),
-          fontWeight: FontWeight.normal,
-          fontFamily: 'Kanit',
-        ),
-        doneStyle: TextStyle(
-          fontSize: 16.0,
-          color: Color(0xFF53327A),
-          fontWeight: FontWeight.normal,
-          fontFamily: 'Kanit',
-        ),
-        cancelStyle: TextStyle(
-          fontSize: 16.0,
-          color: Color(0xFF53327A),
-          fontWeight: FontWeight.normal,
-          fontFamily: 'Kanit',
-        ),
-      ),
+      theme: datepickerTheme,
       showTitleActions: true,
-      minTime: DateTime(2400, 1, 1),
-      maxTime: DateTime(year, month, day),
+      minTime: DateTime(2560, 1, 1),
+      maxTime: DateTime(year + 1, month, day),
       onConfirm: (date) {
         setState(
           () {
@@ -496,5 +715,88 @@ class _BookingServicePageState extends State<BookingServicePage> {
       ),
       locale: LocaleType.th,
     );
+  }
+
+  dynamic dialogOpenPickerTime(String type) {
+    DatePicker.showTimePicker(
+      context,
+      theme: datepickerTheme,
+      showTitleActions: true,
+      onChanged: (date) {},
+      onConfirm: (date) {
+        setState(
+          () {
+            if (type == 'start') {
+              txtStartTime.value = TextEditingValue(
+                text: DateFormat("HH:mm").format(date),
+              );
+            } else {
+              txtEndTime.value = TextEditingValue(
+                text: DateFormat("HH:mm").format(date),
+              );
+            }
+          },
+        );
+      },
+      currentTime: DateTime.now(),
+      locale: LocaleType.th,
+    );
+  }
+
+  Future<List<Map<String, Object>>> _readData() async {
+    var result = await mockBookingData
+        .where((e) => e['category'] == _selectedCategory)
+        .toList();
+    return Future.value(result);
+  }
+
+  String _setDate(String? date) {
+    if (date!.isEmpty) return '';
+    String year = date.substring(0, 4);
+    int yearIntTh = int.parse(year) + 543;
+    var month = date.substring(4, 6);
+    var day = date.substring(6, 8);
+    return day + '/' + month + '/' + yearIntTh.toString().substring(2, 4);
+  }
+
+  String _setTime(String? date) {
+    if (date!.isEmpty) return '';
+    var hr = date.substring(8, 10);
+    var minute = date.substring(10, 12);
+    return hr + ':' + minute + ' น.';
+  }
+
+  String _setDifferentTime(String? dateStr) {
+    if (dateStr!.isNotEmpty) {
+      int year = int.parse(dateStr.substring(0, 4));
+      int month = int.parse(dateStr.substring(4, 6));
+      int day = int.parse(dateStr.substring(6, 8));
+      final date = DateTime(year, month, day);
+      final currentDate = DateTime.now();
+      final difDate = currentDate.difference(date).inDays;
+      if (difDate == 0) {
+        if (int.parse(dateStr.substring(8, 10)) > DateTime.now().hour) {
+          return (int.parse(dateStr.substring(8, 10)) - DateTime.now().hour)
+                  .toString() +
+              ' ชั่วโมง';
+        }
+      }
+    }
+    return '';
+  }
+
+  bool _checkCurrentDate(String? dateStr) {
+    if (dateStr!.isNotEmpty) {
+      int year = int.parse(dateStr.substring(0, 4));
+      int month = int.parse(dateStr.substring(4, 6));
+      int day = int.parse(dateStr.substring(6, 8));
+      final date = DateTime(year, month, day);
+      final currentDate = DateTime.now();
+      final difDate = currentDate.difference(date).inDays;
+      if (difDate == 0) {
+        return true;
+      }
+    }
+    return false;
   }
 }

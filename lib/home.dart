@@ -613,11 +613,7 @@ class _HomePageState extends State<HomePage> {
     } else if (param == 'btn3') {
     } else if (param == 'btn4') {
     } else if (param == 'btn5') {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => BookingServicePage(),
-        ),
-      );
+      widget.changePage!(1);
     }
   }
 }

@@ -76,3 +76,73 @@ mockCreateProfileData() {
     key: 'guest',
   );
 }
+
+// ------- mock Booking -----------------------------------------------------------------------------
+
+const mockBookingCategory = [
+  {'code': '0', 'title': 'กำลังจะมาถึง'},
+  {'code': '1', 'title': 'ประวัติการจอง'},
+];
+
+const imageBooking =
+    'https://vetweb.we-builds.com/vet-document/images/aboutUs/0b6f4ef5-90b5-4359-b5e5-fe3714639cfe/02.png';
+
+const mockBookingData = [
+  {
+    'category': '0',
+    'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+    'dateTime': '20230410104954',
+    'checkIn': false,
+  },
+  {
+    'category': '0',
+    'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+    'dateTime': '20230324104954',
+    'checkIn': false,
+  },
+  {
+    'category': '0',
+    'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+    'dateTime': '20230308204954',
+    'checkIn': false,
+  },
+  {
+    'category': '1',
+    'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+    'dateTime': '20230214104954',
+    'checkIn': true,
+  },
+  {
+    'category': '1',
+    'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+    'dateTime': '20230125104954',
+    'checkIn': false,
+  },
+];
+
+const mockBookingServiceData = [
+  {
+    'code': '0',
+    'imageUrl': imageBooking,
+    'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+    'count': 4,
+  },
+  {
+    'code': '1',
+    'imageUrl': imageBooking,
+    'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+    'count': 3,
+  },
+  {
+    'code': '2',
+    'imageUrl': imageBooking,
+    'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+    'count': 2,
+  },
+  {
+    'code': '3',
+    'imageUrl': imageBooking,
+    'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+    'count': 14,
+  },
+];

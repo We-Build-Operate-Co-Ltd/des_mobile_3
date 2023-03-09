@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:des/booking_service.dart';
 import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
 import 'package:des/shared/secure_storage.dart';
-import 'package:des/service_reservations.dart';
 import 'package:des/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:des/home.dart';
@@ -22,7 +22,6 @@ class Menu extends StatefulWidget {
 
 class _MenuState extends State<Menu> {
   DateTime? currentBackPressTime;
-  UserProfilePage profile = UserProfilePage();
   dynamic futureNotificationTire;
   int addBadger = 0;
   int _currentPage = 0;
@@ -35,7 +34,8 @@ class _MenuState extends State<Menu> {
     'title': '',
     'imageUrl': '',
   };
-  var home;
+  var homePage;
+  var profilePage;
 
   @override
   Widget build(BuildContext context) {
@@ -75,12 +75,9 @@ class _MenuState extends State<Menu> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       var pf = await ManageStorage.read('profileCode') ?? '';
       var im = await ManageStorage.read('profileImageUrl') ?? '';
+      _profileCode = pf;
+      _imageUrl = im;
 
-      setState(() {
-        _profileCode = pf;
-        _imageUrl = im;
-      });
-      // debugPrint('_profileCode --> $_profileCode');
       if (_profileCode.isEmpty) {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
@@ -91,13 +88,15 @@ class _MenuState extends State<Menu> {
       }
     });
 
-    home = HomePage(changePage: _changePage);
+    homePage = HomePage(changePage: _changePage);
+    profilePage = UserProfilePage(changePage: _changePage);
+
     _callRead();
     pages = <Widget>[
-      home,
-      ServiceReservationsPage(),
+      homePage,
+      BookingServicePage(),
       const LearningPage(),
-      const UserProfilePage(),
+      profilePage,
     ];
     super.initState();
   }
@@ -127,7 +126,7 @@ class _MenuState extends State<Menu> {
     setState(() {
       if (index == 0 && _currentPage == 0) {
         _callRead();
-        // home.getState().onRefresh();
+        // homePage.getState().onRefresh();
       }
       _currentPage = index;
     });
@@ -247,14 +246,7 @@ class _MenuState extends State<Menu> {
 
     setState(() {
       if (_profileCode != '') {
-        // pages[2] = UserProfilePage();
-        pages[3] = const UserProfilePage();
-        // if (userModel != null) if (userModel['rubberAppNo'] != '' &&
-        //     userModel['rubberAppNo'] != null) {
-        //   pages[2] = CustomerServicePage();
-        // }
-      } else {
-        // pages[3] = const LoginFirstPage();
+        pages[3] = profilePage;
       }
     });
   }
