@@ -1,4 +1,5 @@
 import 'package:des/verify_third_step.dart';
+import 'package:des/verify_third_step_old.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,6 +24,8 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
   TextEditingController txtDate = TextEditingController();
   TextEditingController txtAge = TextEditingController();
   TextEditingController txtLaserId = TextEditingController();
+  TextEditingController txtPhone = TextEditingController();
+  TextEditingController txtAddress = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
   int _selectedDay = 0;
@@ -41,6 +44,9 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
 
   String result = '';
 
+  List<String> _genderList = ['ชาย', 'หญิง', 'อื่น ๆ'];
+  String _gender = 'ชาย';
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -55,12 +61,13 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
           automaticallyImplyLeading: false,
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: Form(
             key: _formKey,
             child: Stack(
               children: [
-                Column(
+                ListView(
+                  physics: const BouncingScrollPhysics(),
                   children: [
                     TextFormField(
                       controller: txtIdCard,
@@ -96,7 +103,7 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                         }
                       },
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
                         Expanded(
@@ -183,7 +190,7 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 10),
                     TextFormField(
                       controller: txtLaserId,
                       // inputFormatters: InputFormatTemple.laserid(),
@@ -230,6 +237,74 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                         )
                       ],
                     ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'เพศ',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(height: 6),
+                    SizedBox(
+                      height: 20,
+                      width: double.infinity,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        padding: EdgeInsets.zero,
+                        separatorBuilder: (_, __) => SizedBox(width: 25),
+                        itemBuilder: (_, index) =>
+                            _radioGender(_genderList[index]),
+                        itemCount: _genderList.length,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'การติดต่อ',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'กรุณากรอกข้อมูลเบอร์ติดต่อและอีเมล เพื่อทำการรับรหัสยืนยัน OTP ต่อไป',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: txtPhone,
+                      // inputFormatters: InputFormatTemple.laserid(),
+                      keyboardType: TextInputType.name,
+                      decoration: _decorationRegisterMember(
+                        context,
+                        hintText: 'หมายเลขโทรศัพท์',
+                      ),
+                      validator: (model) {
+                        if (model!.isEmpty) {
+                          return 'กรุณากรอกหมายเลขโทรศัพท์';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: txtAddress,
+                      // inputFormatters: InputFormatTemple.laserid(),
+                      keyboardType: TextInputType.name,
+                      decoration: _decorationRegisterMember(
+                        context,
+                        hintText: 'ที่อยู่ของท่าน',
+                      ),
+                      validator: (model) {
+                        if (model!.isEmpty) {
+                          return 'กรุณากรอกที่อยู่ของท่าน';
+                        }
+                        return null;
+                      },
+                    ),
                     SizedBox(
                       height: 20,
                       child: Center(
@@ -267,17 +342,15 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                               'firstName': txtFirstName.text,
                               'lastName': txtLastName.text,
                               'laser': txtLaserId.text,
+                              'phone': txtPhone.text,
+                              'address': txtAddress.text,
+                              'sex' : _gender,
                             };
 
                             // _callLaser(model);
 
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    VerifyThirdStepPage(model: model),
-                              ),
-                            );
+                         
+                            _requestOTP(model);
                           }
                         },
                         child: Container(
@@ -505,6 +578,44 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
     );
   }
 
+  Widget _radioGender(String value) {
+    Color border = _gender == value ? Color(0xFFA924F0) : Colors.grey;
+    Color active = _gender == value ? Color(0xFFA924F0) : Colors.white;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _gender = value;
+        });
+      },
+      child: Row(
+        children: [
+          Container(
+            height: 20,
+            width: 20,
+            decoration: BoxDecoration(
+              border: Border.all(width: 1, color: border),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Container(
+              margin: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: active,
+              ),
+            ),
+          ),
+          SizedBox(width: 6),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 13,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   void initState() {
     Intl.defaultLocale = "th";
@@ -600,6 +711,37 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
         loading = false;
         result = response.data['desc'];
       });
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+    }
+  }
+
+    _requestOTP(dynamic model) async {
+    Dio dio = Dio();
+    dio.options.contentType = Headers.formUrlEncodedContentType;
+    dio.options.headers["api_key"] = "db88c29e14b65c9db353c9385f6e5f28";
+    dio.options.headers["secret_key"] = "XpM2EfFk7DKcyJzt";
+    var response =
+        await dio.post('https://portal-otp.smsmkt.com/api/otp-send', data: {
+      "project_key": "XcvVbGHhAi",
+      "phone": model['phone'].replaceAll('-', '').trim(),
+      "ref_code": "xxx123"
+    });
+
+
+    var otp = response.data['result'];
+    if (otp['token'] != null) {
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => VerifyThirdStepPage(
+            token: otp['token'],
+            refCode: otp['ref_code'],
+            model: model,
+          ),
+        ),
+      );
+    } else {
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }

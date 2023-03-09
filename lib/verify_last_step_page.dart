@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:des/menu.dart';
+import 'package:des/shared/secure_storage.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class VerifyLastStepPage extends StatefulWidget {
@@ -23,12 +27,9 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
           SizedBox(height: 20),
           _box(),
           GestureDetector(
-            onTap: () => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Menu(),
-              ),
-            ),
+            onTap: () {
+              _save();
+            },
             child: Container(
               height: 50,
               alignment: Alignment.center,
@@ -93,6 +94,7 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
   Widget _box() {
     return Expanded(
       child: ListView(
+        physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(horizontal: 15),
         children: [
           Container(
@@ -124,7 +126,8 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
                     'วันเดือนปีเกิด',
                     _dateStringToDateSlashBuddhistShort(
                         widget.model['birthday'])),
-                _text('อายุ', widget.model['age']),
+                _text('อีเมล', widget.model['email']),
+                _text('เพศ', widget.model['sex']),
               ],
             ),
           ),
@@ -163,6 +166,33 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
   initState() {
     super.initState();
     print(widget.model);
+  }
+
+  _save() async {
+    var value = await ManageStorage.read('profileData') ?? '';
+    var user = json.decode(value);
+
+    user['firstName'] = widget.model['firstName'];
+    user['lastName'] = widget.model['lastName'];
+    user['email'] = widget.model['email'];
+    user['phone'] = widget.model['phone'];
+    user['sex'] = widget.model['sex'];
+    user['address'] = widget.model['address'];
+    user['status'] = "A";
+    user['isActive'] = true;
+
+    final response = await Dio()
+        .post('http://122.155.223.63/td-des-api/m/Register/update', data: user);
+
+    var result = response.data;
+    if (result['status'] == 'S') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Menu(),
+        ),
+      );
+    }
   }
 
   _dateStringToDateSlashBuddhistShort(String date) {
