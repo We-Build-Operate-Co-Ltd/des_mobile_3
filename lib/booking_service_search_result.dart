@@ -1,6 +1,5 @@
 import 'package:des/booking_service_detail.dart';
 import 'package:des/models/mock_data.dart';
-import 'package:des/shared/secure_storage.dart';
 import 'package:flutter/material.dart';
 
 class BookingServiceSearchResultPage extends StatefulWidget {

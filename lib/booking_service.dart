@@ -1,10 +1,6 @@
-import 'dart:developer';
-
 import 'package:des/booking_service_detail.dart';
 import 'package:des/booking_service_search_result.dart';
 import 'package:des/models/mock_data.dart';
-import 'package:des/shared/secure_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
@@ -851,7 +847,7 @@ class _BookingServicePageState extends State<BookingServicePage> {
       int month = int.parse(dateStr.substring(4, 6));
       int day = int.parse(dateStr.substring(6, 8));
       int hour = int.parse(dateStr.substring(8, 10));
-      int minute = int.parse(dateStr.substring(10, 12));
+      // int minute = int.parse(dateStr.substring(10, 12));
       final date = DateTime(year, month, day, hour);
       final now = DateTime.now();
       final currentDate = DateTime(now.year, now.month, now.day, hour);
