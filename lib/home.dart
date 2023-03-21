@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/detail.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/notification_list.dart';
+import 'package:des/report_problem.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -201,11 +202,22 @@ class _HomePageState extends State<HomePage> {
                             'ดูแลผู้สูงอายุ',
                             code: 'btn3',
                           ),
-                          columnButton(
+                          InkWell(
+                            onTap: () {
+                               Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const ReportProblem(),
+                              ),
+                              
+                            );
+                            },
+                            child: columnButton(
                             'assets/images/more.png',
                             'เพิ่มเติม',
                             code: 'btn4',
                           ),
+                          ),
+                          
                         ],
                       ),
                       const SizedBox(height: 5),
