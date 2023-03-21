@@ -2,10 +2,14 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/detail.dart';
 import 'package:des/models/mock_data.dart';
+import 'package:des/poi.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -45,6 +49,8 @@ class _HomePageState extends State<HomePage> {
   bool moreThen = false;
 
   String dateNow = DateFormat('dd/MM/yyyy').format(DateTime.now());
+  LatLng? latLng;
+  String? currentLocation = 'ตำแหน่งปัจจุบัน';
 
   @override
   Widget build(BuildContext context) {
@@ -197,12 +203,38 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                const Text(
-                  'บริการสำหรับคุณ',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'บริการสำหรับคุณ',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => PoiPage(),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Image.asset('assets/images/vector.png', height: 10),
+                          const SizedBox(width: 3),
+                          Text(
+                            '${currentLocation}',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 15),
                 Row(
@@ -210,13 +242,13 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     columnButton(
                       'assets/images/reserve_service.png',
-                      'จองใช้\nบริการ',
+                      'จองใช้บริการ',
                       type: 'serviceforyou',
                       code: 'btn5',
                     ),
                     columnButton(
                       'assets/images/service_near_me.png',
-                      'ศูนย์ฯ\nใกล้ฉัน',
+                      'ศูนย์ฯใกล้ฉัน',
                       type: 'serviceforyou',
                       code: 'btn6',
                     ),
@@ -543,6 +575,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      var data = await _determinePosition();
+      print(data);
+    });
+    _getLocation();
     _callRead();
   }
 
@@ -606,7 +643,7 @@ class _HomePageState extends State<HomePage> {
   //   }
   // }
 
-  _callOpenPage(param) {
+  void _callOpenPage(param) {
     if (param == 'btn1') {
     } else if (param == 'btn2') {
     } else if (param == 'btn3') {
@@ -614,5 +651,38 @@ class _HomePageState extends State<HomePage> {
     } else if (param == 'btn5') {
       widget.changePage!(1);
     }
+  }
+
+  _determinePosition() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.deniedForever) {
+        setState(() {
+          currentLocation = 'กรุณาเปิดการเข้าถึงตำแหน่ง';
+        });
+        return Future.error('Location Not Available');
+      }
+    } else if (permission == LocationPermission.always) {
+    } else if (permission == LocationPermission.whileInUse) {
+    } else if (permission == LocationPermission.unableToDetermine) {
+    } else {
+      throw Exception('Error');
+    }
+    return await Geolocator.getCurrentPosition();
+  }
+
+  void _getLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude, position.longitude,
+        localeIdentifier: 'th');
+
+    setState(() {
+      latLng = LatLng(position.latitude, position.longitude);
+      currentLocation = placemarks.first.administrativeArea;
+    });
   }
 }
