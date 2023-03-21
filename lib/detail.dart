@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:des/shared/extension.dart';
 import 'package:des/shared/image_viewer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,11 +11,13 @@ class DetailPage extends StatefulWidget {
   const DetailPage({
     Key? key,
     required this.slug,
+    this.checkNotiPage = false,
     this.model,
   }) : super(key: key);
 
   final String slug;
   final dynamic model;
+  final bool checkNotiPage;
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -23,6 +26,7 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   List<String> _gallery = [];
   String _imageSelected = '';
+  Future<dynamic>? _futureModel;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,36 @@ class _DetailPageState extends State<DetailPage> {
         children: [
           Stack(
             children: [
-              _buildContent(widget.model),
+              widget.checkNotiPage != true
+                  ? _buildContent(widget.model)
+                  : widget.slug != 'mainPage'
+                      ? FutureBuilder(
+                          future: _futureModel,
+                          builder: (_, snapshot) {
+                            if (snapshot.hasData) {
+                              return _buildContent(snapshot.data);
+                            } else if (snapshot.hasError) {
+                              return Container(
+                                alignment: Alignment.center,
+                                height: 200,
+                                width: double.infinity,
+                                child: Text(
+                                  'Network ขัดข้อง',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: 'Kanit',
+                                    color: Color.fromRGBO(0, 0, 0, 0.6),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          },
+                        )
+                      : _buildContentMainPage(widget.model),
               Positioned(
                 right: 0,
                 child: MaterialButton(
@@ -147,11 +180,19 @@ class _DetailPageState extends State<DetailPage> {
               ),
               child: Row(
                 children: [
-                  const CircleAvatar(
-                    backgroundImage: AssetImage(
-                      'assets/images/modern_farmer.png',
-                    ),
-                  ),
+                  model['imageUrlCreateBy'] != '' &&
+                          model['imageUrlCreateBy'] != null
+                      ? CachedNetworkImage(
+                          imageUrl: '${model['imageUrlCreateBy']}',
+                          height: 30,
+                          width: 30,
+                          fit: BoxFit.cover,
+                        )
+                      : CircleAvatar(
+                          backgroundImage: AssetImage(
+                            'assets/images/modern_farmer.png',
+                          ),
+                        ),
                   Container(
                     padding: const EdgeInsets.all(10),
                     child: Column(
@@ -165,7 +206,92 @@ class _DetailPageState extends State<DetailPage> {
                           ),
                         ),
                         Text(
-                          '26 ธ.ค. 65 | เข้าชม 9,999 ครั้ง',
+                          model['createDate'] != '' &&
+                                  model['createDate'] != null
+                              ? '${dateStringToDateStringFormatV2(model['createDate'])} | เข้าชม ${model['view']} ครั้ง'
+                              : '26 ธ.ค. 65 | เข้าชม 9,999 ครั้ง',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontFamily: 'Kanit',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 10),
+        Padding(
+            padding: const EdgeInsets.only(
+              right: 10,
+              left: 10,
+            ),
+            child: Html(
+              data: model['description'],
+            )),
+      ],
+    );
+  }
+
+  _buildContentMainPage(dynamic model) {
+    return ListView(
+      shrinkWrap: true, // 1st add
+      physics: const ClampingScrollPhysics(), // 2nd
+      children: [
+        Container(
+          padding: const EdgeInsets.only(
+            right: 10.0,
+            left: 10.0,
+          ),
+          margin: const EdgeInsets.only(right: 50.0, top: 10.0),
+          child: Text(
+            model['title'],
+            style: const TextStyle(
+              fontSize: 20,
+              fontFamily: 'Kanit',
+            ),
+          ),
+        ),
+        Container(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                right: 10,
+                left: 10,
+              ),
+              child: Row(
+                children: [
+                  model['imageUrlCreateBy'] != ''
+                      ? CachedNetworkImage(
+                          imageUrl: '${model['imageUrlCreateBy']}',
+                          height: 30,
+                          width: 30,
+                          fit: BoxFit.cover,
+                        )
+                      : const CircleAvatar(
+                          backgroundImage: AssetImage(
+                            'assets/images/modern_farmer.png',
+                          ),
+                        ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${model['createBy'] ?? ''}',
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'Kanit',
+                          ),
+                        ),
+                        Text(
+                          '${dateStringToDateStringFormatV2(model['createDate'])}',
                           style: TextStyle(
                             fontSize: 10,
                             fontFamily: 'Kanit',
@@ -194,19 +320,44 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   void initState() {
-    super.initState();
     _imageSelected = widget.model['imageUrl'];
-    if (widget.slug != 'mock') {
+    if (widget.slug != 'mainPage' && widget.slug != 'mock') {
+      _read();
       _galleryRead();
     }
+    super.initState();
+  }
+
+  _read() async {
+    Response<dynamic> result = await Dio()
+        .post('http://122.155.223.63/td-des-api/m/${widget.slug}/read', data: {
+      'code': widget.checkNotiPage
+          ? widget.model['reference']
+          : widget.model['code']
+    });
+    var model;
+    if (result.statusCode == 200) {
+      if (result.data['status'] == 'S') {
+        model = result.data['objectData'][0];
+        _futureModel = Future.value(model);
+        setState(() {
+          _imageSelected = model['imageUrl'];
+        });
+      }
+    }
+    setState(() {});
   }
 
   _galleryRead() async {
     Response<dynamic> response;
     try {
       response = await Dio().post(
-          'http://122.155.223.63/td-des-api/m/eventcalendar/gallery/read',
-          data: {'code': widget.model['code']});
+          'http://122.155.223.63/td-des-api/m/${widget.slug}/gallery/read',
+          data: {
+            'code': widget.checkNotiPage
+                ? widget.model['reference']
+                : widget.model['code']
+          });
     } catch (ex) {
       throw Exception();
     }
