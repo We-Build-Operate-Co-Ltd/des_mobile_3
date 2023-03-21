@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/detail.dart';
 import 'package:des/models/mock_data.dart';
+import 'package:des/notification_list.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -89,8 +89,14 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(width: 10),
                           GestureDetector(
                             onTap: () {
-                              Fluttertoast.showToast(
-                                  msg: '''ยังไม่เปิดให้ใช้บริการ''');
+                              // Fluttertoast.showToast(
+                              //     msg: '''ยังไม่เปิดให้ใช้บริการ''');
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NotificationListPage(),
+                                ),
+                              );
                             },
                             child: Image.asset(
                               'assets/images/notification.png',
@@ -325,7 +331,7 @@ class _HomePageState extends State<HomePage> {
           context,
           MaterialPageRoute(
             builder: (context) => DetailPage(
-              slug: 'news',
+              slug: 'eventcalendar',
               model: model,
             ),
           ),
