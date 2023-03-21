@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/detail.dart';
 import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
@@ -54,6 +55,7 @@ class _PoiPage extends State<PoiPage> {
   ];
   bool showLoadingItem = true;
   bool _linearLoading = false;
+  bool showProgress = false;
 
   @override
   void dispose() {
@@ -378,19 +380,6 @@ class _PoiPage extends State<PoiPage> {
                 ),
                 height: 4,
               ),
-              // child: AnimatedOpacity(
-              //   opacity: positionScroll < 0.9 ? 1.0 : 0.0,
-              //   duration: Duration(milliseconds: 300),
-              //   child: Container(
-              //     margin: EdgeInsets.only(top: 10),
-              //     width: 40,
-              //     decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(5),
-              //       color: Colors.grey,
-              //     ),
-              //     height: 4,
-              //   ),
-              // ),
             ),
             Container(
               height: 35,
@@ -404,16 +393,12 @@ class _PoiPage extends State<PoiPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              // child: Icon(
-              //   Icons.arrow_circle_up,
-              //   color: Theme.of(context).primaryColor,
-              // ),
             ),
-            // : Container(),
+            if (_linearLoading) LinearProgressIndicator(),
             SizedBox(
               height: 5,
             ),
-            _gridViewItem()
+            _listSlide()
           ],
         ),
       ),
@@ -468,17 +453,18 @@ class _PoiPage extends State<PoiPage> {
       future: _futureModel, // function where you call your api
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          if (showLoadingItem) {
-            return Center(child: CircularProgressIndicator());
-          } else {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              setState(() {
-                _linearLoading = true;
-              });
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            setState(() {
+              _linearLoading = true;
             });
-            return Center(child: CircularProgressIndicator());
-          }
+          });
+          return CircularProgressIndicator();
         } else if (snapshot.hasData) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            setState(() {
+              _linearLoading = false;
+            });
+          });
           if (snapshot.data.length == 0) {
             return Container(
               alignment: Alignment.center,
@@ -493,13 +479,6 @@ class _PoiPage extends State<PoiPage> {
               ),
             );
           } else {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              setState(() {
-                _linearLoading = false;
-                showLoadingItem = false;
-                listTemp = snapshot.data;
-              });
-            });
             return refreshList(snapshot.data);
           }
         } else if (snapshot.hasError) {
@@ -664,12 +643,25 @@ class _PoiPage extends State<PoiPage> {
   }
 // end show content
 
-  Widget _gridViewItem() {
+  Widget _listSlide() {
     return FutureBuilder<dynamic>(
       future: _futureModel, // function where you call your api
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         // AsyncSnapshot<Your object type>
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            setState(() {
+              showProgress = true;
+            });
+          });
+        }
         if (snapshot.hasData) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            setState(() {
+              showProgress = false;
+            });
+          });
           if (snapshot.data.length == 0) {
             return Container(
               height: 200,
@@ -690,7 +682,7 @@ class _PoiPage extends State<PoiPage> {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: MediaQuery.of(context).size.width /
-                      (MediaQuery.of(context).size.height / 1.5),
+                      (MediaQuery.of(context).size.height / 1.85),
                 ),
                 physics: ClampingScrollPhysics(),
                 shrinkWrap: true,
@@ -709,11 +701,8 @@ class _PoiPage extends State<PoiPage> {
                       );
                     },
                     child: Container(
-                      margin: index == 0
-                          ? EdgeInsets.only(left: 10.0, right: 5.0)
-                          : index == snapshot.data.length - 1
-                              ? EdgeInsets.only(left: 5.0, right: 15.0)
-                              : EdgeInsets.symmetric(horizontal: 5.0),
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 5.0, vertical: 7),
                       decoration: BoxDecoration(
                         borderRadius: new BorderRadius.circular(5),
                         color: Colors.transparent,
@@ -722,76 +711,64 @@ class _PoiPage extends State<PoiPage> {
                       child: Stack(
                         alignment: Alignment.topCenter,
                         children: [
-                          Container(
-                            height: 170.0,
-                            width: 170.0,
-                            decoration: BoxDecoration(
-                              borderRadius: new BorderRadius.only(
-                                topLeft: const Radius.circular(5.0),
-                                topRight: const Radius.circular(5.0),
+                          Positioned.fill(
+                            child: Container(
+                              height: 170.0,
+                              width: double.infinity,
+                              padding: EdgeInsets.only(bottom: 45),
+                              decoration: BoxDecoration(
+                                borderRadius: new BorderRadius.circular(5),
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 2,
+                                    color: Color(0xFFcfcfcf),
+                                    offset: Offset(0, 0.75),
+                                  )
+                                ],
+                                color: Colors.white,
                               ),
-                              color: Colors.white.withAlpha(220),
-                              image: DecorationImage(
-                                //fit:BoxFit.cover,
-                                fit: snapshot.data[index]['typeImage'] ==
-                                        'cover'
-                                    ? BoxFit.cover
-                                    : snapshot.data[index]['typeImage'] ==
-                                            'fill'
-                                        ? BoxFit.fill
-                                        : snapshot.data[index]['typeImage'] ==
-                                                'contain'
-                                            ? BoxFit.contain
-                                            : BoxFit.cover,
-                                image: NetworkImage(
-                                  snapshot.data[index]['imageUrl'],
-                                ),
+                              alignment: Alignment.center,
+                              child: CachedNetworkImage(
+                                imageUrl: snapshot.data[index]['imageUrl'],
+                                fit: BoxFit.contain,
+                                errorWidget: (context, url, error) =>
+                                    Image.asset('assets/images/logo.png'),
                               ),
                             ),
                           ),
-                          Container(
-                            margin: EdgeInsets.only(top: 150.0),
-                            padding: EdgeInsets.all(5),
-                            alignment: Alignment.topLeft,
-                            height: 40.0,
-                            decoration: BoxDecoration(
-                              borderRadius: new BorderRadius.only(
-                                bottomLeft: const Radius.circular(5.0),
-                                bottomRight: const Radius.circular(5.0),
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              padding: EdgeInsets.all(5),
+                              alignment: Alignment.topLeft,
+                              height: 45.0,
+                              decoration: BoxDecoration(
+                                borderRadius: new BorderRadius.only(
+                                  bottomLeft: const Radius.circular(5.0),
+                                  bottomRight: const Radius.circular(5.0),
+                                ),
+                                color: Color(0xFF7A4CB1),
                               ),
-                              color: Color(0xFFDFC6C6),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  snapshot.data[index]['title'],
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 10,
-                                    color: Colors.black.withAlpha(150),
-                                    fontFamily: 'Kanit',
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    snapshot.data[index]['title'],
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                      fontFamily: 'Kanit',
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
                                   ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                                Text(
-                                  snapshot.data[index]['distance'] == null
-                                      ? "ระยะทาง - กิโลเมตร"
-                                      : "ระยะทาง " +
-                                          snapshot.data[index]['distance']
-                                              .toStringAsFixed(2) +
-                                          " กิโลเมตร",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 8,
-                                    fontFamily: 'Kanit',
-                                    color: Colors.black.withAlpha(150),
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              ],
+                                  _textDistance(
+                                      snapshot.data[index]['distance']),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -803,7 +780,11 @@ class _PoiPage extends State<PoiPage> {
             );
           }
         } else {
-          return Container();
+          return Container(
+            height: 100,
+            alignment: Alignment.center,
+            child: CircularProgressIndicator(),
+          );
         }
       },
     );
@@ -859,5 +840,25 @@ class _PoiPage extends State<PoiPage> {
     var day = date.substring(6, 8);
     DateTime todayDate = DateTime.parse(year + '-' + month + '-' + day);
     return day + '-' + month + '-' + year;
+  }
+
+  _textDistance(dynamic value) {
+    var distance;
+    if (value == 0) {
+      distance = "N/A";
+    } else {
+      distance = value.toStringAsFixed(2);
+    }
+    return Text(
+      "ระยะทาง " + distance + " กิโลเมตร",
+      style: TextStyle(
+        fontWeight: FontWeight.normal,
+        fontSize: 8,
+        fontFamily: 'Kanit',
+        color: Colors.white,
+      ),
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+    );
   }
 }
