@@ -409,7 +409,9 @@ class _LoginFirstPageState extends State<LoginFirstPage>
 
       debugPrint('---> ${response.statusCode}');
 
-      _loading = false;
+      setState(() {
+        _loading = false;
+      });
       if (response.data['status'] == 'S') {
         List<dynamic> result = response.data['objectData'];
         if (result.length > 0) {
