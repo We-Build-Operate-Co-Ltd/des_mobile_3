@@ -101,7 +101,7 @@ class _ReportProblemState extends State<ReportProblem> {
                             'ออนไลน์',
                             style: TextStyle(
                               fontSize: 11,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
