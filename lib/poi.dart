@@ -58,76 +58,6 @@ class _PoiPage extends State<PoiPage> {
   bool showProgress = false;
 
   @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    txtDescription.dispose();
-    _refreshController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _determinePosition();
-      await _getLocation();
-    });
-    _readCatgeory();
-  }
-
-  _determinePosition() async {
-    LocationPermission permission;
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.deniedForever) {
-        return Future.error('Location Not Available');
-      }
-    } else if (permission == LocationPermission.always) {
-    } else if (permission == LocationPermission.whileInUse) {
-    } else if (permission == LocationPermission.unableToDetermine) {
-    } else {
-      throw Exception('Error');
-    }
-    return await Geolocator.getCurrentPosition();
-  }
-
-  _getLocation() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best);
-
-    setState(() {
-      latLng = LatLng(position.latitude, position.longitude);
-      initLatLngBounds = LatLngBounds(
-          southwest: LatLng(position.latitude - 0.2, position.longitude - 0.15),
-          northeast: LatLng(position.latitude + 0.1, position.longitude + 0.1));
-    });
-    _read();
-  }
-
-  void _onLoading() async {
-    setState(() {
-      _limit = _limit + 10;
-    });
-    _read();
-    await Future.delayed(Duration(milliseconds: 1000));
-
-    _refreshController.loadComplete();
-    _refreshPanelController.loadComplete();
-  }
-
-  void changeTab() async {
-    // Navigator.pop(context, false);
-    setState(() {
-      showMap = !showMap;
-    });
-  }
-
-  void goBack() async {
-    Navigator.pop(context, false);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -136,7 +66,7 @@ class _PoiPage extends State<PoiPage> {
     );
   }
 
-  _header() {
+  AppBar _header() {
     return AppBar(
       centerTitle: true,
       flexibleSpace: Container(
@@ -628,19 +558,6 @@ class _PoiPage extends State<PoiPage> {
     );
   }
 
-  setData(String categoryCode, String keySearkch) {
-    setState(
-      () {
-        if (keySearch != "") {
-          showLoadingItem = true;
-        }
-        categorySelected = categoryCode;
-        keySearch = keySearkch;
-        _limit = 10;
-      },
-    );
-    _read();
-  }
 // end show content
 
   Widget _listSlide() {
@@ -790,6 +707,26 @@ class _PoiPage extends State<PoiPage> {
     );
   }
 
+  Widget _textDistance(dynamic value) {
+    var distance;
+    if (value == 0) {
+      distance = "N/A";
+    } else {
+      distance = value.toStringAsFixed(2);
+    }
+    return Text(
+      "ระยะทาง " + distance + " กิโลเมตร",
+      style: TextStyle(
+        fontWeight: FontWeight.normal,
+        fontSize: 8,
+        fontFamily: 'Kanit',
+        color: Colors.white,
+      ),
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+    );
+  }
+
   Future<List<dynamic>> _read() async {
     Dio dio = Dio();
     Response<dynamic> response;
@@ -834,7 +771,21 @@ class _PoiPage extends State<PoiPage> {
     return [];
   }
 
-  _dateStringToDate(String date) {
+  void setData(String categoryCode, String keySearkch) {
+    setState(
+      () {
+        if (keySearch != "") {
+          showLoadingItem = true;
+        }
+        categorySelected = categoryCode;
+        keySearch = keySearkch;
+        _limit = 10;
+      },
+    );
+    _read();
+  }
+
+  String _dateStringToDate(String date) {
     var year = date.substring(0, 4);
     var month = date.substring(4, 6);
     var day = date.substring(6, 8);
@@ -842,23 +793,73 @@ class _PoiPage extends State<PoiPage> {
     return day + '-' + month + '-' + year;
   }
 
-  _textDistance(dynamic value) {
-    var distance;
-    if (value == 0) {
-      distance = "N/A";
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _determinePosition();
+      await _getLocation();
+    });
+    _readCatgeory();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    txtDescription.dispose();
+    _refreshController.dispose();
+    super.dispose();
+  }
+
+  _determinePosition() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.deniedForever) {
+        return Future.error('Location Not Available');
+      }
+    } else if (permission == LocationPermission.always) {
+    } else if (permission == LocationPermission.whileInUse) {
+    } else if (permission == LocationPermission.unableToDetermine) {
     } else {
-      distance = value.toStringAsFixed(2);
+      throw Exception('Error');
     }
-    return Text(
-      "ระยะทาง " + distance + " กิโลเมตร",
-      style: TextStyle(
-        fontWeight: FontWeight.normal,
-        fontSize: 8,
-        fontFamily: 'Kanit',
-        color: Colors.white,
-      ),
-      overflow: TextOverflow.ellipsis,
-      maxLines: 1,
-    );
+    return await Geolocator.getCurrentPosition();
+  }
+
+  _getLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
+
+    setState(() {
+      latLng = LatLng(position.latitude, position.longitude);
+      initLatLngBounds = LatLngBounds(
+          southwest: LatLng(position.latitude - 0.2, position.longitude - 0.15),
+          northeast: LatLng(position.latitude + 0.1, position.longitude + 0.1));
+    });
+    _read();
+  }
+
+  void _onLoading() async {
+    setState(() {
+      _limit = _limit + 10;
+    });
+    _read();
+    await Future.delayed(Duration(milliseconds: 1000));
+
+    _refreshController.loadComplete();
+    _refreshPanelController.loadComplete();
+  }
+
+  void changeTab() async {
+    // Navigator.pop(context, false);
+    setState(() {
+      showMap = !showMap;
+    });
+  }
+
+  void goBack() async {
+    Navigator.pop(context, false);
   }
 }
