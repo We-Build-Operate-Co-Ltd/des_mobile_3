@@ -26,9 +26,10 @@ class _ReportProblemState extends State<ReportProblem> {
           elevation: 0,
           backgroundColor: Colors.white,
           automaticallyImplyLeading: false,
-          toolbarHeight: 0,
+          toolbarHeight: 10,
         ),
         body: SafeArea(
+          top: false,
           child: GestureDetector(
               onTap: () {
                 FocusScope.of(context).requestFocus(new FocusNode());
