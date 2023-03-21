@@ -227,7 +227,7 @@ class _HomePageState extends State<HomePage> {
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => PoiPage(),
+                          builder: (_) => PoiPage(latLng: latLng!),
                         ),
                       ),
                       child: Row(
