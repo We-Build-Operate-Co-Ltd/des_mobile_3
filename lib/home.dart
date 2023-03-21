@@ -202,22 +202,11 @@ class _HomePageState extends State<HomePage> {
                             'ดูแลผู้สูงอายุ',
                             code: 'btn3',
                           ),
-                          InkWell(
-                            onTap: () {
-                               Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const ReportProblem(),
-                              ),
-                              
-                            );
-                            },
-                            child: columnButton(
+                          columnButton(
                             'assets/images/more.png',
                             'เพิ่มเติม',
                             code: 'btn4',
-                          ),
-                          ),
-                          
+                          ), 
                         ],
                       ),
                       const SizedBox(height: 5),
