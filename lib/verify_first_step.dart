@@ -107,6 +107,42 @@ class VerifyFirstStepPage extends StatelessWidget {
             Row(
               children: [
                 Image.asset(
+                  'assets/images/icon_email.png',
+                  height: 30,
+                  width: 30,
+                ),
+                const SizedBox(width: 15),
+                const Text(
+                  'OTP ผ่านอีเมล',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Image.asset(
+                  'assets/images/icon_phone.png',
+                  height: 30,
+                  width: 30,
+                ),
+                const SizedBox(width: 15),
+                const Text(
+                  'OTP เบอร์โทรศัพท์',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Image.asset(
                   'assets/images/scan_icon.png',
                   height: 30,
                   width: 30,
@@ -121,7 +157,8 @@ class VerifyFirstStepPage extends StatelessWidget {
                 )
               ],
             ),
-            const SizedBox(height: 30),
+            
+              const SizedBox(height: 30),
             const Text(
               'ประโยชน์ที่ได้รับ',
               style: TextStyle(

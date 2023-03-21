@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/forgot_password.dart';
 import 'package:des/menu.dart';
@@ -833,36 +835,36 @@ class _LoginSecondPageState extends State<LoginSecondPage>
     }
   }
 
-  void _callLoginApple() async {
-    var obj = await signInWithApple();
+  // void _callLoginApple() async {
+  //   var obj = await signInWithApple();
 
-    var model = {
-      "username": obj.user!.email ?? obj.user!.uid,
-      "email": obj.user!.email ?? '',
-      "imageUrl": '',
-      "firstName": obj.user!.email,
-      "lastName": '',
-      "appleID": obj.user!.uid
-    };
+  //   var model = {
+  //     "username": obj.user!.email ?? obj.user!.uid,
+  //     "email": obj.user!.email ?? '',
+  //     "imageUrl": '',
+  //     "firstName": obj.user!.email,
+  //     "lastName": '',
+  //     "appleID": obj.user!.uid
+  //   };
 
-    Dio dio = new Dio();
-    var response = await dio.post(
-      'http://122.155.223.63/td-des-api/m/v2/register/apple/login',
-      data: model,
-    );
+  //   Dio dio = new Dio();
+  //   var response = await dio.post(
+  //     'http://122.155.223.63/td-des-api/m/v2/register/apple/login',
+  //     data: model,
+  //   );
 
-    ManageStorage.createProfile(
-      value: response.data['objectData'],
-      key: 'apple',
-    );
+  //   ManageStorage.createProfile(
+  //     value: response.data['objectData'],
+  //     key: 'apple',
+  //   );
 
-    if (obj != null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Menu(),
-        ),
-      );
-    }
-  }
+  //   if (obj != null) {
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => Menu(),
+  //       ),
+  //     );
+  //   }
+  // }
 }

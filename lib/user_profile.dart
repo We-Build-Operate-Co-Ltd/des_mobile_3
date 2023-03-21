@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:des/history_of_service_reservations.dart';
 import 'package:des/detail.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/shared/secure_storage.dart';
@@ -12,12 +11,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+// ignore: must_be_immutable
 class UserProfilePage extends StatefulWidget {
-  const UserProfilePage({
+  UserProfilePage({
     Key? key,
+    this.changePage,
   }) : super(key: key);
+  late _UserProfilePageState userProfilePageState;
+  Function? changePage;
+
   @override
   State<UserProfilePage> createState() => _UserProfilePageState();
+
+  getState() => userProfilePageState;
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
@@ -132,12 +138,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   ),
                 ),
                 InkWell(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => HistoryOfServiceReservationsPage(),
-                    ),
-                  ),
+                  onTap: () => widget.changePage!(1),
                   child: Text(
                     'ดูทั้งหมด',
                     style: TextStyle(

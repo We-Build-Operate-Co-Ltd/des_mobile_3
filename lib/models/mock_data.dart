@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:des/shared/secure_storage.dart';
+import 'package:intl/intl.dart';
 
 const List<dynamic> mockDataList = [
   mockDataObject1,
@@ -75,4 +78,91 @@ mockCreateProfileData() {
     },
     key: 'guest',
   );
+}
+
+// ------- mock Booking -----------------------------------------------------------------------------
+
+class MockBookingData {
+  static category() => [
+        {'code': '0', 'title': 'กำลังจะมาถึง'},
+        {'code': '1', 'title': 'ประวัติการจอง'},
+      ];
+  static booking() {
+    final _random = new Random();
+    var now = DateTime.now();
+    var now1 = DateTime(now.year, now.month, now.day, now.hour + 1);
+    var now3 = DateTime(now.year, now.month, now.day, now.hour + 3);
+
+    List<dynamic> mockBookingData = [
+      {
+        'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+        'dateTime': DateFormat('yyyyMMddHHmmss').format(now1),
+        'center': '0',
+        'checkIn': false,
+      },
+      {
+        'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+        'dateTime': DateFormat('yyyyMMddHHmmss').format(now3),
+        'center': '0',
+        'checkIn': false,
+      },
+    ];
+    List<DateTime> listRandom = [
+      DateTime(now.year, now.month + 1, _random.nextInt(28), 10, now.minute),
+      DateTime(now.year, now.month + 1, _random.nextInt(28), 10, now.minute),
+      DateTime(now.year, now.month, _random.nextInt(28), 9, now.minute),
+      DateTime(now.year, now.month, _random.nextInt(28), 10, now.minute),
+      DateTime(now.year, now.month, _random.nextInt(28), 12, now.minute),
+      DateTime(now.year, now.month, _random.nextInt(28), 16, now.minute),
+      DateTime(now.year, now.month, _random.nextInt(28), 18, now.minute),
+      DateTime(now.year, now.month, _random.nextInt(28), 20, now.minute),
+      DateTime(now.year, now.month - 1, _random.nextInt(28), 12, now.minute),
+      DateTime(now.year, now.month - 1, _random.nextInt(28), 12, now.minute),
+    ];
+    for (var i = 0; i < 10; i++) {
+      var element = listRandom[_random.nextInt(listRandom.length)];
+      mockBookingData = [
+        {
+          'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+          'dateTime': DateFormat('yyyyMMddHHmmss').format(element),
+          'center': _random.nextInt(3).toString(),
+          'checkIn': element.compareTo(now) >= 0 ? false : _random.nextBool(),
+        },
+        ...mockBookingData,
+      ];
+    }
+    mockBookingData.sort((a, b) => a['dateTime'].compareTo(b['dateTime']));
+    return mockBookingData;
+  }
+
+  static center() {
+    const imageBooking =
+        'https://vetweb.we-builds.com/vet-document/images/aboutUs/0b6f4ef5-90b5-4359-b5e5-fe3714639cfe/02.png';
+    return [
+      {
+        'code': '0',
+        'imageUrl': imageBooking,
+        'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+        'count': 4,
+      },
+      {
+        'code': '1',
+        'imageUrl': imageBooking,
+        'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+        'count': 3,
+      },
+      {
+        'code': '2',
+        'imageUrl': imageBooking,
+        'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+        'count': 2,
+      },
+      {
+        'code': '3',
+        'imageUrl': imageBooking,
+        'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+        'count': 14,
+      },
+    ];
+  }
 }

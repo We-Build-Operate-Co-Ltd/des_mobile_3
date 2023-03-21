@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:des/forgot_password.dart';
 import 'package:des/login_second.dart';
 import 'package:des/menu.dart';
@@ -270,70 +272,6 @@ class _LoginFirstPageState extends State<LoginFirstPage>
     );
   }
 
-  Widget _buildButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        InkWell(
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ForgotPasswordPage(),
-            ),
-          ),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Color(0x807A4CB1),
-              ),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Text(
-              'ลืมรหัสผ่าน',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-                color: Color(0x807A4CB1),
-              ),
-            ),
-          ),
-        ),
-        SizedBox(width: 10),
-        InkWell(
-          onTap: () {
-            final form = _formKey.currentState;
-            if (form!.validate()) {
-              form.save();
-              _callUser();
-              // if (_username!.isEmpty) {
-              //   _callUser();
-              // } else {
-              //   _callLoginGuest();
-              // }
-            }
-            ;
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: Color(0xFF7A4CB1),
-            ),
-            child: Text(
-              'ดำเนินการต่อ',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFFFFFFFF),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildOR() {
     return Row(
       children: [
@@ -372,54 +310,6 @@ class _LoginFirstPageState extends State<LoginFirstPage>
           color: Color(0xFF707070),
         ),
         // hintText: hintText,
-        filled: true,
-        fillColor: Colors.transparent,
-        contentPadding: const EdgeInsets.fromLTRB(15.0, 5.0, 5.0, 5.0),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(
-            color: Colors.black.withOpacity(0.2),
-          ),
-        ),
-        errorStyle: const TextStyle(
-          fontWeight: FontWeight.normal,
-          fontSize: 10.0,
-        ),
-      );
-
-  static InputDecoration _decorationPasswordMember(
-    context, {
-    String labelText = '',
-    String hintText = '',
-    bool visibility = false,
-    Function? suffixTap,
-  }) =>
-      InputDecoration(
-        label: Text(labelText),
-        labelStyle: const TextStyle(
-          color: Color(0xFF707070),
-        ),
-        hintText: hintText,
-        hintStyle: const TextStyle(
-          color: Color(0xFF707070),
-          fontSize: 8,
-        ),
-        suffixIcon: GestureDetector(
-          onTap: () {
-            suffixTap!();
-          },
-          child: visibility
-              ? const Icon(Icons.visibility_off)
-              : const Icon(Icons.visibility),
-        ),
         filled: true,
         fillColor: Colors.transparent,
         contentPadding: const EdgeInsets.fromLTRB(15.0, 5.0, 5.0, 5.0),
@@ -575,69 +465,6 @@ class _LoginFirstPageState extends State<LoginFirstPage>
       } else {
         Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
-    }
-  }
-
-  void _callLoginGuest() async {
-    _loading = true;
-    var response = await Dio().post(
-      'http://122.155.223.63/td-des-api/m/register/login',
-      data: {
-        'username': _username,
-        'password': txtPassword.text.toString(),
-      },
-    );
-    _loading = false;
-    if (response.data['status'] == 'S') {
-      FocusScope.of(context).unfocus();
-
-      await ManageStorage.createProfile(
-        value: response.data['objectData'],
-        key: 'guest',
-      );
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Menu(),
-        ),
-      );
-    } else {
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (BuildContext context) => new CupertinoAlertDialog(
-          title: new Text(
-            'รหัสผ่านไม่ถูกต้อง \nกรุณากรอกรหัสใหม่',
-            style: TextStyle(
-              fontSize: 16,
-              fontFamily: 'Kanit',
-              color: Colors.black,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-          content: Text(" "),
-          actions: [
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              child: new Text(
-                "ตกลง",
-                style: TextStyle(
-                  fontSize: 13,
-                  fontFamily: 'Kanit',
-                  color: Color(0xFF000070),
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onPressed: () {
-                FocusScope.of(context).unfocus();
-                new TextEditingController().clear();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ),
-      );
     }
   }
 

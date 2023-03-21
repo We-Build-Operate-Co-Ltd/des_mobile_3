@@ -14,19 +14,17 @@ import 'package:flutter_face_api/face_api.dart' as Regula;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 
-class VerifyThirdStepPage extends StatefulWidget {
-  const VerifyThirdStepPage(
-      {Key? key, @required this.token, @required this.refCode, this.model})
-      : super(key: key);
-  final String? token;
-  final String? refCode;
+class VerifyFifthStepPage extends StatefulWidget {
+  const VerifyFifthStepPage({Key? key, this.model}) : super(key: key);
+  // final String? token;
+  // final String? refCode;
   final dynamic model;
 
   @override
-  State<VerifyThirdStepPage> createState() => _VerifyThirdStepPageState();
+  State<VerifyFifthStepPage> createState() => _VerifyFifthStepPageState();
 }
 
-class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
+class _VerifyFifthStepPageState extends State<VerifyFifthStepPage> {
   final txtNumber1 = TextEditingController();
   final txtNumber2 = TextEditingController();
   final txtNumber3 = TextEditingController();
@@ -73,14 +71,14 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
             children: [
               const SizedBox(height: 30),
               const Text(
-                'กรุณากรอกรหัสที่ท่านได้รับผ่านเบอร์โทรศัพท์',
+                'กรุณากรอกรหัสที่ท่านได้รับผ่านอีเมล์',
                 style: TextStyle(fontSize: 15),
               ),
               const SizedBox(height: 30),
               Container(
                 alignment: Alignment.center,
                 child: Image.asset(
-                  'assets/images/noti_phone.png',
+                  'assets/images/noti_email.png',
                   height: 100,
                   width: 100,
                 ),
@@ -89,12 +87,12 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _textFieldOTP(txtNumber1, first: true),
-                  _textFieldOTP(txtNumber2),
-                  _textFieldOTP(txtNumber3),
-                  _textFieldOTP(txtNumber4),
-                  _textFieldOTP(txtNumber5),
-                  _textFieldOTP(txtNumber6, last: true),
+                  _textFieldOTP(txtEmailNumber1, first: true),
+                  _textFieldOTP(txtEmailNumber2),
+                  _textFieldOTP(txtEmailNumber3),
+                  _textFieldOTP(txtEmailNumber4),
+                  _textFieldOTP(txtEmailNumber5),
+                  _textFieldOTP(txtEmailNumber6, last: true),
                 ],
               ),
               const SizedBox(height: 20),
@@ -113,9 +111,13 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
               const SizedBox(height: 30),
               const Expanded(child: SizedBox()),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   if (_checkEmpty()) {
-                    _validateOTP();
+                    if (await _validateOTP()) {
+                      _faceRecognition();
+                    } else {
+                      Fluttertoast.showToast(msg: 'OTP ไม่ถูกต้อง');
+                    }
                   } else {
                     Fluttertoast.showToast(msg: 'OTP ไม่ครบ');
                   }
@@ -202,14 +204,7 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
           if (last && value.isNotEmpty) {
             FocusScope.of(context).unfocus();
             if (await _validateOTP()) {
-              // _faceRecognition();
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => VerifyFourthStepPage(
-                    model: widget.model,
-                  ),
-                ),
-              );
+              _faceRecognition();
             } else {
               Fluttertoast.showToast(msg: 'OTP ไม่ถูกต้อง');
             }
@@ -239,38 +234,19 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
   }
 
   _checkEmpty() {
-    if (txtNumber1.text != '' &&
-        txtNumber2.text != '' &&
-        txtNumber3.text != '' &&
-        txtNumber4.text != '' &&
-        txtNumber5.text != '' &&
-        txtNumber6.text != '') {
+    if (txtEmailNumber1.text != '' &&
+        txtEmailNumber2.text != '' &&
+        txtEmailNumber3.text != '' &&
+        txtEmailNumber4.text != '' &&
+        txtEmailNumber5.text != '' &&
+        txtEmailNumber6.text != '') {
       return true;
     }
     return false;
   }
 
   _validateOTP() async {
-    debugPrint('otp phone');
-    Dio dio = Dio();
-    dio.options.contentType = Headers.formUrlEncodedContentType;
-    dio.options.headers["api_key"] = "db88c29e14b65c9db353c9385f6e5f28";
-    dio.options.headers["secret_key"] = "XpM2EfFk7DKcyJzt";
-    var response =
-        await dio.post('https://portal-otp.smsmkt.com/api/otp-validate', data: {
-      "token": widget.token,
-      "otp_code":
-          '${txtNumber1.text}${txtNumber2.text}${txtNumber3.text}${txtNumber4.text}${txtNumber5.text}${txtNumber6.text}',
-      "refCode": widget.refCode
-    });
-    var validate = response.data['result'];
-    if (validate != null && validate['status']) {
-      debugPrint(validate['status'].toString());
-      return true;
-    } else {
-      debugPrint(validate['status'].toString());
-      return false;
-    }
+    return true;
   }
 
   _faceRecognition() {
@@ -291,7 +267,7 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
       // ------------- test
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => VerifyFourthStepPage(
+          builder: (context) => VerifyLastStepPage(
             model: widget.model,
           ),
         ),

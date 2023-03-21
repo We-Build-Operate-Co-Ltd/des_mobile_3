@@ -13,8 +13,8 @@ import 'package:flutter_face_api/face_api.dart' as Regula;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 
-class VerifyFourthStepPage extends StatefulWidget {
-  const VerifyFourthStepPage(
+class VerifyFouthStepOldPage extends StatefulWidget {
+  const VerifyFouthStepOldPage(
       {Key? key, @required this.token, @required this.refCode, this.model})
       : super(key: key);
   final String? token;
@@ -22,10 +22,10 @@ class VerifyFourthStepPage extends StatefulWidget {
   final dynamic model;
 
   @override
-  State<VerifyFourthStepPage> createState() => _VerifyFourthStepPageState();
+  State<VerifyFouthStepOldPage> createState() => _VerifyFouthStepOldPageState();
 }
 
-class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
+class _VerifyFouthStepOldPageState extends State<VerifyFouthStepOldPage> {
   final txtNumber1 = TextEditingController();
   final txtNumber2 = TextEditingController();
   final txtNumber3 = TextEditingController();
