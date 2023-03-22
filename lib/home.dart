@@ -89,11 +89,11 @@ class _HomePageState extends State<HomePage> {
                           ),
                           const SizedBox(width: 5),
                           const Expanded(child: SizedBox()),
-                          Image.asset(
-                            'assets/images/scale_font_size.png',
-                            height: 36,
-                            width: 35,
-                          ),
+                          // Image.asset(
+                          //   'assets/images/scale_font_size.png',
+                          //   height: 36,
+                          //   width: 35,
+                          // ),
                           const SizedBox(width: 10),
                           GestureDetector(
                             onTap: () {
