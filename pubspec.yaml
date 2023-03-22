@@ -60,7 +60,7 @@ dependencies:
   flutter_slidable: ^2.0.0
   flutter_svg: ^0.23.0+1
   fw_ticket: ^0.1.1
-  # geocoder: ^0.2.1
+  geocoding: ^2.1.0
   geolocator: ^9.0.2
   google_maps_flutter: ^2.1.1
   google_sign_in: ^5.4.2
@@ -70,7 +70,7 @@ dependencies:
   json_annotation: ^4.4.0
   loading: ^1.0.2
   location: ^4.3.0
-  modal_bottom_sheet: ^2.0.0
+  modal_bottom_sheet: 3.0.0-pre
   numeric_keyboard: ^1.1.0
   package_info: ^2.0.2
   path_provider: ^2.0.8
@@ -88,6 +88,7 @@ dependencies:
   fluttertoast: ^8.1.3
   url_launcher: ^6.1.6
   flutter_face_api: ^4.1.1
+  fading_edge_scrollview: ^3.0.0
 
 dev_dependencies:
   flutter_test:

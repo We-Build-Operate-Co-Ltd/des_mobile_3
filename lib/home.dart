@@ -1,11 +1,17 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:des/build_modal_connection_in_progress.dart';
 import 'package:des/detail.dart';
 import 'package:des/models/mock_data.dart';
+import 'package:des/notification_list.dart';
+import 'package:des/report_problem.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:des/poi.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -45,6 +51,8 @@ class _HomePageState extends State<HomePage> {
   bool moreThen = false;
 
   String dateNow = DateFormat('dd/MM/yyyy').format(DateTime.now());
+  LatLng? latLng;
+  String? currentLocation = 'ตำแหน่งปัจจุบัน';
 
   @override
   Widget build(BuildContext context) {
@@ -89,8 +97,14 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(width: 10),
                           GestureDetector(
                             onTap: () {
-                              Fluttertoast.showToast(
-                                  msg: '''ยังไม่เปิดให้ใช้บริการ''');
+                              // Fluttertoast.showToast(
+                              //     msg: '''ยังไม่เปิดให้ใช้บริการ''');
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NotificationListPage(),
+                                ),
+                              );
                             },
                             child: Image.asset(
                               'assets/images/notification.png',
@@ -197,42 +211,86 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                const Text(
-                  'บริการสำหรับคุณ',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    columnButton(
-                      'assets/images/reserve_service.png',
-                      'จองใช้\nบริการ',
-                      type: 'serviceforyou',
-                      code: 'btn5',
+                    const Text(
+                      'บริการสำหรับคุณ',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                    columnButton(
-                      'assets/images/service_near_me.png',
-                      'ศูนย์ฯ\nใกล้ฉัน',
-                      type: 'serviceforyou',
-                      code: 'btn6',
-                    ),
-                    columnButton(
-                      'assets/images/find_job.png',
-                      'หางาน',
-                      type: 'serviceforyou',
-                      code: 'btn7',
-                    ),
-                    columnButton(
-                      'assets/images/report_problem.png',
-                      'แจ้งปัญหา',
-                      type: 'serviceforyou',
-                      code: 'btn8',
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => PoiPage(latLng: latLng!),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Image.asset('assets/images/vector.png', height: 10),
+                          const SizedBox(width: 3),
+                          Text(
+                            '${currentLocation}',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
+                ),
+                const SizedBox(height: 15),
+                Container(
+                  height: 100,
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(),
+                    children: [
+                      columnButton(
+                        'assets/images/reserve_service.png',
+                        'จองใช้บริการ',
+                        type: 'serviceforyou',
+                        code: 'btn5',
+                      ),
+                      columnButton(
+                        'assets/images/find_job.png',
+                        'หางาน',
+                        type: 'serviceforyou',
+                        code: 'btn6',
+                      ),
+                      columnButton(
+                        'assets/images/funding_source.png',
+                        'หาแหล่งทุน',
+                        type: 'serviceforyou',
+                        code: 'btn7',
+                      ),
+                      columnButton(
+                        'assets/images/reskill.png',
+                        'ส่งเสริมทักษะ',
+                        type: 'serviceforyou',
+                        code: 'btn8',
+                      ),
+                      columnButton(
+                        'assets/images/data_warehouse.png',
+                        'คลังข้อมูล',
+                        type: 'serviceforyou',
+                        code: 'btn9',
+                      ),
+                      columnButton(
+                        'assets/images/report_problem.png',
+                        'แจ้งปัญหา',
+                        type: 'serviceforyou',
+                        code: 'btn10',
+                      ),
+                    ],
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -325,7 +383,7 @@ class _HomePageState extends State<HomePage> {
           context,
           MaterialPageRoute(
             builder: (context) => DetailPage(
-              slug: 'news',
+              slug: 'eventcalendar',
               model: model,
             ),
           ),
@@ -543,6 +601,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      var data = await _determinePosition();
+      print(data);
+    });
+    _getLocation();
     _callRead();
   }
 
@@ -606,13 +669,64 @@ class _HomePageState extends State<HomePage> {
   //   }
   // }
 
-  _callOpenPage(param) {
+  void _callOpenPage(param) {
     if (param == 'btn1') {
+      buildModalConnectionInProgress(context);
     } else if (param == 'btn2') {
+      buildModalConnectionInProgress(context);
     } else if (param == 'btn3') {
+      buildModalConnectionInProgress(context);
     } else if (param == 'btn4') {
+      buildModalConnectionInProgress(context);
     } else if (param == 'btn5') {
       widget.changePage!(1);
+    } else if (param == 'btn6') {
+      buildModalConnectionInProgress(context);
+    } else if (param == 'btn7') {
+      buildModalConnectionInProgress(context);
+    } else if (param == 'btn8') {
+      buildModalConnectionInProgress(context);
+    } else if (param == 'btn9') {
+      buildModalConnectionInProgress(context);
+    } else if (param == 'btn10') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ReportProblem(),
+        ),
+      );
     }
+  }
+
+  _determinePosition() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.deniedForever) {
+        setState(() {
+          currentLocation = 'กรุณาเปิดการเข้าถึงตำแหน่ง';
+        });
+        return Future.error('Location Not Available');
+      }
+    } else if (permission == LocationPermission.always) {
+    } else if (permission == LocationPermission.whileInUse) {
+    } else if (permission == LocationPermission.unableToDetermine) {
+    } else {
+      throw Exception('Error');
+    }
+    return await Geolocator.getCurrentPosition();
+  }
+
+  void _getLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude, position.longitude,
+        localeIdentifier: 'th');
+
+    setState(() {
+      latLng = LatLng(position.latitude, position.longitude);
+      currentLocation = placemarks.first.administrativeArea;
+    });
   }
 }
