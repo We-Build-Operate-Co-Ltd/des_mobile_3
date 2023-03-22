@@ -203,7 +203,7 @@ class _HomePageState extends State<HomePage> {
                             'assets/images/more.png',
                             'เพิ่มเติม',
                             code: 'btn4',
-                          ), 
+                          ),
                         ],
                       ),
                       const SizedBox(height: 5),
@@ -688,7 +688,13 @@ class _HomePageState extends State<HomePage> {
       buildModalConnectionInProgress(context);
     } else if (param == 'btn9') {
       buildModalConnectionInProgress(context);
-    } else if (param == 'btn10') {}
+    } else if (param == 'btn10') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ReportProblem(),
+        ),
+      );
+    }
   }
 
   _determinePosition() async {
