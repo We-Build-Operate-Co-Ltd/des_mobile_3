@@ -134,6 +134,8 @@ class _DetailPageState extends State<DetailPage> {
                 imageUrl: _imageSelected,
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
+                errorWidget: (context, url, error) =>
+                    Image.asset('assets/images/logo.png'),
               ),
             ),
           ),
@@ -164,6 +166,8 @@ class _DetailPageState extends State<DetailPage> {
                       height: 100,
                       width: 100,
                       fit: BoxFit.cover,
+                      errorWidget: (context, url, error) =>
+                          Image.asset('assets/images/logo.png'),
                     ),
                   ),
                 ),
@@ -180,19 +184,14 @@ class _DetailPageState extends State<DetailPage> {
               ),
               child: Row(
                 children: [
-                  model['imageUrlCreateBy'] != '' &&
-                          model['imageUrlCreateBy'] != null
-                      ? CachedNetworkImage(
-                          imageUrl: '${model['imageUrlCreateBy']}',
-                          height: 30,
-                          width: 30,
-                          fit: BoxFit.cover,
-                        )
-                      : CircleAvatar(
-                          backgroundImage: AssetImage(
-                            'assets/images/modern_farmer.png',
-                          ),
-                        ),
+                  CachedNetworkImage(
+                    imageUrl: '${model['imageUrlCreateBy']}',
+                    height: 30,
+                    width: 30,
+                    fit: BoxFit.cover,
+                    errorWidget: (context, url, error) =>
+                        Image.asset('assets/images/logo.png'),
+                  ),
                   Container(
                     padding: const EdgeInsets.all(10),
                     child: Column(
@@ -209,7 +208,7 @@ class _DetailPageState extends State<DetailPage> {
                           model['createDate'] != '' &&
                                   model['createDate'] != null
                               ? '${dateStringToDateStringFormatV2(model['createDate'])} | เข้าชม ${model['view']} ครั้ง'
-                              : '26 ธ.ค. 65 | เข้าชม 9,999 ครั้ง',
+                              : '26 ธ.ค. 65 | เข้าชม ${model['view']} ครั้ง',
                           style: TextStyle(
                             fontSize: 10,
                             fontFamily: 'Kanit',
@@ -266,18 +265,14 @@ class _DetailPageState extends State<DetailPage> {
               ),
               child: Row(
                 children: [
-                  model['imageUrlCreateBy'] != ''
-                      ? CachedNetworkImage(
-                          imageUrl: '${model['imageUrlCreateBy']}',
-                          height: 30,
-                          width: 30,
-                          fit: BoxFit.cover,
-                        )
-                      : const CircleAvatar(
-                          backgroundImage: AssetImage(
-                            'assets/images/modern_farmer.png',
-                          ),
-                        ),
+                  CachedNetworkImage(
+                    imageUrl: '${model['imageUrlCreateBy']}',
+                    height: 30,
+                    width: 30,
+                    fit: BoxFit.cover,
+                    errorWidget: (context, url, error) =>
+                        Image.asset('assets/images/logo.png'),
+                  ),
                   Container(
                     padding: const EdgeInsets.all(10),
                     child: Column(

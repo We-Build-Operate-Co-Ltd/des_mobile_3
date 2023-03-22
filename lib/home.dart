@@ -4,6 +4,7 @@ import 'package:des/build_modal_connection_in_progress.dart';
 import 'package:des/detail.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/notification_list.dart';
+import 'package:des/report_problem.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -202,7 +203,7 @@ class _HomePageState extends State<HomePage> {
                             'assets/images/more.png',
                             'เพิ่มเติม',
                             code: 'btn4',
-                          ),
+                          ), 
                         ],
                       ),
                       const SizedBox(height: 5),
@@ -224,7 +225,7 @@ class _HomePageState extends State<HomePage> {
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => PoiPage(),
+                          builder: (_) => PoiPage(latLng: latLng!),
                         ),
                       ),
                       child: Row(
