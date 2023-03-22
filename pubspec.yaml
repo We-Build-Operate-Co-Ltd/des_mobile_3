@@ -70,7 +70,7 @@ dependencies:
   json_annotation: ^4.4.0
   loading: ^1.0.2
   location: ^4.3.0
-  modal_bottom_sheet: ^2.0.0
+  modal_bottom_sheet: 3.0.0-pre
   numeric_keyboard: ^1.1.0
   package_info: ^2.0.2
   path_provider: ^2.0.8

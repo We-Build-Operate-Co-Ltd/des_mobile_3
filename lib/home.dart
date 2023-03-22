@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:des/build_modal_connection_in_progress.dart';
 import 'package:des/detail.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/notification_list.dart';
@@ -7,10 +8,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:des/poi.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -247,34 +244,52 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 const SizedBox(height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    columnButton(
-                      'assets/images/reserve_service.png',
-                      'จองใช้บริการ',
-                      type: 'serviceforyou',
-                      code: 'btn5',
-                    ),
-                    columnButton(
-                      'assets/images/service_near_me.png',
-                      'ศูนย์ฯใกล้ฉัน',
-                      type: 'serviceforyou',
-                      code: 'btn6',
-                    ),
-                    columnButton(
-                      'assets/images/find_job.png',
-                      'หางาน',
-                      type: 'serviceforyou',
-                      code: 'btn7',
-                    ),
-                    columnButton(
-                      'assets/images/report_problem.png',
-                      'แจ้งปัญหา',
-                      type: 'serviceforyou',
-                      code: 'btn8',
-                    ),
-                  ],
+                Container(
+                  height: 100,
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(),
+                    children: [
+                      columnButton(
+                        'assets/images/reserve_service.png',
+                        'จองใช้บริการ',
+                        type: 'serviceforyou',
+                        code: 'btn5',
+                      ),
+                      columnButton(
+                        'assets/images/find_job.png',
+                        'หางาน',
+                        type: 'serviceforyou',
+                        code: 'btn6',
+                      ),
+                      columnButton(
+                        'assets/images/funding_source.png',
+                        'หาแหล่งทุน',
+                        type: 'serviceforyou',
+                        code: 'btn7',
+                      ),
+                      columnButton(
+                        'assets/images/reskill.png',
+                        'ส่งเสริมทักษะ',
+                        type: 'serviceforyou',
+                        code: 'btn8',
+                      ),
+                      columnButton(
+                        'assets/images/data_warehouse.png',
+                        'คลังข้อมูล',
+                        type: 'serviceforyou',
+                        code: 'btn9',
+                      ),
+                      columnButton(
+                        'assets/images/report_problem.png',
+                        'แจ้งปัญหา',
+                        type: 'serviceforyou',
+                        code: 'btn10',
+                      ),
+                    ],
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -655,12 +670,24 @@ class _HomePageState extends State<HomePage> {
 
   void _callOpenPage(param) {
     if (param == 'btn1') {
+      buildModalConnectionInProgress(context);
     } else if (param == 'btn2') {
+      buildModalConnectionInProgress(context);
     } else if (param == 'btn3') {
+      buildModalConnectionInProgress(context);
     } else if (param == 'btn4') {
+      buildModalConnectionInProgress(context);
     } else if (param == 'btn5') {
       widget.changePage!(1);
-    }
+    } else if (param == 'btn6') {
+      buildModalConnectionInProgress(context);
+    } else if (param == 'btn7') {
+      buildModalConnectionInProgress(context);
+    } else if (param == 'btn8') {
+      buildModalConnectionInProgress(context);
+    } else if (param == 'btn9') {
+      buildModalConnectionInProgress(context);
+    } else if (param == 'btn10') {}
   }
 
   _determinePosition() async {
