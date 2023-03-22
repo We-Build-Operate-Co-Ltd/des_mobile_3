@@ -222,12 +222,15 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => PoiPage(latLng: latLng!),
-                        ),
-                      ),
+                      onTap: () {
+                        if (latLng != null)
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => PoiPage(latLng: latLng!),
+                            ),
+                          );
+                      },
                       child: Row(
                         children: [
                           Image.asset('assets/images/vector.png', height: 10),
@@ -602,10 +605,9 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      var data = await _determinePosition();
-      print(data);
+      await _determinePosition();
+      await _getLocation();
     });
-    _getLocation();
     _callRead();
   }
 
@@ -616,6 +618,9 @@ class _HomePageState extends State<HomePage> {
 
   void _callRead() async {
     _readNews();
+    if (currentLocation == '' || currentLocation == 'ตำแหน่งปัจจุบัน') {
+      _getLocation();
+    }
   }
 
   Future<List<dynamic>> _readNews() async {
@@ -714,10 +719,10 @@ class _HomePageState extends State<HomePage> {
     } else {
       throw Exception('Error');
     }
-    return await Geolocator.getCurrentPosition();
+    // return await Geolocator.getCurrentPosition();
   }
 
-  void _getLocation() async {
+  _getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best);
     List<Placemark> placemarks = await placemarkFromCoordinates(
