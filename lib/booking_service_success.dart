@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/detail.dart';
 import 'package:des/menu.dart';
@@ -15,6 +17,7 @@ class BookingServiceSuccessPage extends StatefulWidget {
 
 class _BookingServiceSuccessPageState extends State<BookingServiceSuccessPage> {
   DateTime? currentBackPressTime;
+  late int random;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +47,8 @@ class _BookingServiceSuccessPageState extends State<BookingServiceSuccessPage> {
                   child: Column(
                     children: [
                       SizedBox(height: 150),
-                      ..._buildSuccess(),
+                      if (random == 0) ..._buildSuccess(),
+                      if (random == 1) ..._buildFail(),
                       SizedBox(height: 45),
                       Align(
                         alignment: Alignment.centerLeft,
@@ -178,12 +182,13 @@ class _BookingServiceSuccessPageState extends State<BookingServiceSuccessPage> {
         ),
       ),
       Text(
-        'ขออภัยการจองใช้ไม่สำเร็จ โปรดติดต่อเจ้าหน้าที่ หรือทำการจองใหม่ การเรียนรู้สามารถทำได้ตลอดชีวิต เราจะรอท่านมาใช้บริการ',
+        'ขออภัยการจองใช้ไม่สำเร็จ โปรดติดต่อเจ้าหน้าที่\nหรือทำการจองใหม่ การเรียนรู้สามารถทำได้ตลอดชีวิต\nเราจะรอท่านมาใช้บริการ',
         style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w400,
           color: Color(0xFF707070),
         ),
+        textAlign: TextAlign.center,
       ),
     ];
   }
@@ -283,6 +288,7 @@ class _BookingServiceSuccessPageState extends State<BookingServiceSuccessPage> {
 
   @override
   void initState() {
+    random = Random().nextInt(2);
     super.initState();
   }
 
