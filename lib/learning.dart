@@ -1,6 +1,7 @@
 import 'package:des/models/mock_data.dart';
 import 'package:flutter/material.dart';
 
+import 'build_modal_connection_in_progress.dart';
 import 'models/user.dart';
 import 'detail.dart';
 
