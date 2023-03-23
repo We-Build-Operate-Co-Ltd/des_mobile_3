@@ -44,35 +44,7 @@ class _BookingServiceSuccessPageState extends State<BookingServiceSuccessPage> {
                   child: Column(
                     children: [
                       SizedBox(height: 150),
-                      Container(
-                        height: 100,
-                        width: 100,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF19AA6A),
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: Image.asset(
-                          'assets/images/check_success.png',
-                          height: 60,
-                        ),
-                      ),
-                      SizedBox(height: 17),
-                      Text(
-                        'จองสำเร็จ',
-                        style: TextStyle(
-                          color: Color(0xFF19AA6A),
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        'การเรียนรู้สามารถทำได้ตลอดชีวิต เราจะรอท่านมาใช้บริการ ',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
+                      ..._buildSuccess(),
                       SizedBox(height: 45),
                       Align(
                         alignment: Alignment.centerLeft,
@@ -145,6 +117,75 @@ class _BookingServiceSuccessPageState extends State<BookingServiceSuccessPage> {
         ),
       ),
     );
+  }
+
+  List<Widget> _buildSuccess() {
+    return <Widget>[
+      Container(
+        height: 100,
+        width: 100,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Color(0xFF19AA6A),
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Image.asset(
+          'assets/images/check_success.png',
+          height: 60,
+        ),
+      ),
+      SizedBox(height: 17),
+      Text(
+        'จองสำเร็จ',
+        style: TextStyle(
+          color: Color(0xFF19AA6A),
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      Text(
+        'การเรียนรู้สามารถทำได้ตลอดชีวิต เราจะรอท่านมาใช้บริการ ',
+        style: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> _buildFail() {
+    return <Widget>[
+      Container(
+        height: 100,
+        width: 100,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Color(0xFFF7D930),
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Image.asset(
+          'assets/images/alert_fail.png',
+          height: 60,
+        ),
+      ),
+      SizedBox(height: 17),
+      Text(
+        'จองไม่สำเร็จ',
+        style: TextStyle(
+          color: Color(0xFF707070),
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      Text(
+        'ขออภัยการจองใช้ไม่สำเร็จ โปรดติดต่อเจ้าหน้าที่ หรือทำการจองใหม่ การเรียนรู้สามารถทำได้ตลอดชีวิต เราจะรอท่านมาใช้บริการ',
+        style: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.w400,
+          color: Color(0xFF707070),
+        ),
+      ),
+    ];
   }
 
   Future<bool> confirmExit() {

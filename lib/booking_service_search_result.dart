@@ -3,7 +3,16 @@ import 'package:des/models/mock_data.dart';
 import 'package:flutter/material.dart';
 
 class BookingServiceSearchResultPage extends StatefulWidget {
-  const BookingServiceSearchResultPage({super.key});
+  const BookingServiceSearchResultPage({
+    super.key,
+    required this.date,
+    required this.startTime,
+    required this.endTime,
+  });
+
+  final String date;
+  final String startTime;
+  final String endTime;
 
   @override
   State<BookingServiceSearchResultPage> createState() =>
@@ -78,7 +87,12 @@ class _BookingServiceSearchResultPageState
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => BookingServiceDetailPage(code: model['code']),
+          builder: (_) => BookingServiceDetailPage(
+            code: model['code'],
+            date: widget.date,
+            startTime: widget.startTime,
+            endTime: widget.endTime,
+          ),
         ),
       ),
       child: Row(
