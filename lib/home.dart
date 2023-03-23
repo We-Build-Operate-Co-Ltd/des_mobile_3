@@ -223,13 +223,14 @@ class _HomePageState extends State<HomePage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        if (latLng != null)
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => PoiPage(latLng: latLng!),
-                            ),
-                          );
+                        // ปิดก่อน ios เด้ง
+                        // if (latLng != null)
+                        //   Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (_) => PoiPage(latLng: latLng!),
+                        //     ),
+                        //   );
                       },
                       child: Row(
                         children: [

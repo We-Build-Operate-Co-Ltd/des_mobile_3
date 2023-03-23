@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'build_modal_connection_in_progress.dart';
 import 'models/user.dart';
 import 'detail.dart';
 
@@ -56,11 +57,7 @@ class _LearningPageState extends State<LearningPage> {
     // String title, String title2, int hour, String date, String time
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => DetailPage(slug: 'news', model: model),
-          ),
-        );
+        buildModalConnectionInProgress(context);
       },
       child: Column(
         children: [
