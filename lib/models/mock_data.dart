@@ -92,14 +92,20 @@ class MockBookingData {
     var now1 = DateTime(now.year, now.month, now.day, now.hour + 1);
     var now3 = DateTime(now.year, now.month, now.day, now.hour + 3);
 
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+
     List<dynamic> mockBookingData = [
       {
+        'code': '23powjfskdlv',
         'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
         'dateTime': DateFormat('yyyyMMddHHmmss').format(now1),
         'center': '0',
         'checkIn': false,
       },
       {
+        'code': 'wefjwep',
         'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
         'dateTime': DateFormat('yyyyMMddHHmmss').format(now3),
         'center': '0',
@@ -118,10 +124,14 @@ class MockBookingData {
       DateTime(now.year, now.month - 1, _random.nextInt(28), 12, now.minute),
       DateTime(now.year, now.month - 1, _random.nextInt(28), 12, now.minute),
     ];
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < _random.nextInt(5) + 10; i++) {
       var element = listRandom[_random.nextInt(listRandom.length)];
+      String ranCode = String.fromCharCodes(Iterable.generate(
+          12, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+
       mockBookingData = [
         {
+          'code': ranCode,
           'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
           'dateTime': DateFormat('yyyyMMddHHmmss').format(element),
           'center': _random.nextInt(3).toString(),
@@ -130,7 +140,26 @@ class MockBookingData {
         ...mockBookingData,
       ];
     }
-    mockBookingData.sort((a, b) => a['dateTime'].compareTo(b['dateTime']));
+    mockBookingData = [
+      {
+        'code': 'wwwwwwwwwwwwww',
+        'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+        'dateTime': DateFormat('yyyyMMddHHmmss')
+            .format(DateTime(now.year, now.month, now.day, 05, now.minute)),
+        'center': '1',
+        'checkIn': false,
+      },
+      {
+        'code': 'xxxxxxx',
+        'title': 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน อำเภอบางใหญ่ นนทบุรี',
+        'dateTime': DateFormat('yyyyMMddHHmmss')
+            .format(DateTime(now.year, now.month, now.day, 06, now.minute)),
+        'center': '1',
+        'checkIn': true,
+      },
+      ...mockBookingData
+    ];
+    mockBookingData.sort((a, b) => b['dateTime'].compareTo(a['dateTime']));
     return mockBookingData;
   }
 

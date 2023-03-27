@@ -3,7 +3,9 @@ import 'package:des/booking_service_search_result.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class BookingServicePage extends StatefulWidget {
   const BookingServicePage({super.key});
@@ -13,7 +15,10 @@ class BookingServicePage extends StatefulWidget {
 }
 
 class _BookingServicePageState extends State<BookingServicePage> {
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   DateTime selectedDate = DateTime.now();
+  Future<dynamic>? _futureModel;
   int _selectedDay = 0;
   int _selectedMonth = 0;
   int _selectedYear = 0;
@@ -52,176 +57,189 @@ class _BookingServicePageState extends State<BookingServicePage> {
               ),
             ),
             Positioned.fill(
-              child: Column(
-                children: [
-                  SizedBox(height: 20 + MediaQuery.of(context).padding.top),
-                  Text(
-                    'จองบริการ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 25),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: Container(
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.4),
-                            blurRadius: 6,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
+              child: SmartRefresher(
+                enablePullDown: true,
+                enablePullUp: false,
+                controller: _refreshController,
+                onRefresh: onRefresh,
+                onLoading: _onLoading,
+                child: ListView(
+                  physics: ClampingScrollPhysics(),
+                  children: [
+                    SizedBox(height: 20 + MediaQuery.of(context).padding.top),
+                    Text(
+                      'จองบริการ',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () => setState(() {
-                                    _currentPage = 0;
-                                  }),
-                                  child: Container(
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: _currentPage == 0
-                                          ? Color(0xFF7A4CB1)
-                                          : Color(0xFFDDDDDD),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      'จองใช้บริการ',
-                                      style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 15),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () => setState(() {
-                                    _currentPage = 1;
-                                  }),
-                                  child: Container(
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: _currentPage == 1
-                                          ? Color(0xFF7A4CB1)
-                                          : Color(0xFFDDDDDD),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      'เลือกศูนย์ฯ',
-                                      style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 15),
-                          if (_currentPage == 0) ..._pageOne(),
-                          if (_currentPage == 1) ..._pageTwo(),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) =>
-                                      BookingServiceSearchResultPage(
-                                    date: txtDate.text,
-                                    startTime: txtStartTime.text,
-                                    endTime: txtEndTime.text,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              height: 45,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF7A4CB1),
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                'ค้นหา',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 25),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.4),
+                              blurRadius: 6,
+                              offset: Offset(0, 3),
                             ),
-                          )
-                        ],
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () => setState(() {
+                                      _currentPage = 0;
+                                    }),
+                                    child: Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: _currentPage == 0
+                                            ? Color(0xFF7A4CB1)
+                                            : Color(0xFFDDDDDD),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'จองใช้บริการ',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 15),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () => setState(() {
+                                      _currentPage = 1;
+                                    }),
+                                    child: Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: _currentPage == 1
+                                            ? Color(0xFF7A4CB1)
+                                            : Color(0xFFDDDDDD),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'เลือกศูนย์ฯ',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15),
+                            if (_currentPage == 0) ..._pageOne(),
+                            if (_currentPage == 1) ..._pageTwo(),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        BookingServiceSearchResultPage(
+                                      date: txtDate.text,
+                                      startTime: txtStartTime.text,
+                                      endTime: txtEndTime.text,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                height: 45,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFF7A4CB1),
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  'ค้นหา',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  // history
-                  SizedBox(height: 25),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: FutureBuilder<dynamic>(
-                      future: Future.value(modelCategory),
-                      builder: (_, snapshot) {
-                        if (snapshot.hasData) {
-                          return SizedBox(
-                            height: 25,
-                            child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (_, __) =>
-                                  _itemCategory(snapshot.data[__]),
-                              separatorBuilder: (_, __) => SizedBox(width: 10),
+                    // history
+                    SizedBox(height: 20),
+                    Container(
+                      color: Colors.white,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      child: FutureBuilder<dynamic>(
+                        future: Future.value(modelCategory),
+                        builder: (_, snapshot) {
+                          if (snapshot.hasData) {
+                            return SizedBox(
+                              height: 25,
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (_, __) =>
+                                    _itemCategory(snapshot.data[__]),
+                                separatorBuilder: (_, __) =>
+                                    SizedBox(width: 10),
+                                itemCount: snapshot.data!.length,
+                              ),
+                            );
+                          }
+                          return SizedBox(height: 25);
+                        },
+                      ),
+                    ),
+                    Container(
+                      color: Colors.white,
+                      child: FutureBuilder<dynamic>(
+                        future: _futureModel,
+                        builder: (_, snapshot) {
+                          if (snapshot.hasData) {
+                            return ListView.separated(
+                              shrinkWrap: true,
+                              physics: ClampingScrollPhysics(),
+                              padding: EdgeInsets.only(
+                                left: 15,
+                                right: 15,
+                                bottom:
+                                    MediaQuery.of(context).padding.bottom + 20,
+                              ),
                               itemCount: snapshot.data!.length,
-                            ),
-                          );
-                        }
-                        return SizedBox(height: 25);
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Expanded(
-                    child: FutureBuilder<dynamic>(
-                      future: _readData(),
-                      builder: (_, snapshot) {
-                        if (snapshot.hasData) {
-                          return ListView.separated(
-                            padding: EdgeInsets.only(
-                              left: 15,
-                              right: 15,
-                              bottom:
-                                  MediaQuery.of(context).padding.bottom + 20,
-                            ),
-                            itemCount: snapshot.data!.length,
-                            separatorBuilder: (_, __) => SizedBox(height: 15),
-                            itemBuilder: (_, __) =>
-                                _itemBooking(snapshot.data[__]),
-                          );
-                        }
-                        return SizedBox();
-                      },
-                    ),
-                  )
-                ],
+                              separatorBuilder: (_, __) => SizedBox(height: 15),
+                              itemBuilder: (_, __) =>
+                                  _itemBooking(snapshot.data[__]),
+                            );
+                          }
+                          return SizedBox();
+                        },
+                      ),
+                    )
+                  ],
+                ),
               ),
             )
           ],
@@ -384,6 +402,7 @@ class _BookingServicePageState extends State<BookingServicePage> {
     return GestureDetector(
       onTap: () => setState(() {
         _selectedCategory = model['code'].toString();
+        _callRead();
       }),
       child: Container(
         alignment: Alignment.center,
@@ -411,36 +430,35 @@ class _BookingServicePageState extends State<BookingServicePage> {
   Widget _itemBooking(model) {
     return GestureDetector(
       onTap: () {
-        if (_selectedCategory == '1' && model['checkIn']) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => BookingServiceDetailPage(
-                code: model['center'],
-                repeat: true,
-                date: txtDate.text,
-                startTime: txtStartTime.text,
-                endTime: txtEndTime.text,
-              ),
-            ),
-          );
+        //
+        bool edit = false;
+        bool repeat = false;
+        bool repeatCurrentDay = false;
+        if (_checkedCurrent(model)) {
+          repeatCurrentDay = true;
+        } else if (_selectedCategory == '1') {
+          //  && model['checkIn']
+          repeat = true;
+        } else if (_selectedCategory == '0') {
+          edit = true;
         }
-        if (_selectedCategory == '0' && !model['checkIn']) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => BookingServiceDetailPage(
-                code: model['center'],
-                edit: true,
-                date: txtDate.text,
-                startTime: txtStartTime.text,
-                endTime: txtEndTime.text,
-              ),
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => BookingServiceDetailPage(
+              code: model['center'],
+              edit: edit,
+              repeat: repeat,
+              repeatCurrentDay: repeatCurrentDay,
+              date: txtDate.text,
+              startTime: txtStartTime.text,
+              endTime: txtEndTime.text,
             ),
-          );
-        }
+          ),
+        );
       },
       child: Container(
+        color: Colors.white,
         child: Row(
           children: [
             Container(
@@ -484,9 +502,12 @@ class _BookingServicePageState extends State<BookingServicePage> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  if (_checkCurrentDate(model['dateTime']) == 0)
+                  if (_checkCurrentDate(model['dateTime']) == 0 &&
+                      model['checkIn'] == false)
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        // check in = true;
+                      },
                       child: Container(
                         height: 30,
                         padding: EdgeInsets.symmetric(
@@ -507,7 +528,7 @@ class _BookingServicePageState extends State<BookingServicePage> {
                         ),
                       ),
                     ),
-                  if (model['checkIn'] && _selectedCategory == '1')
+                  if (_checkedCurrent(model))
                     Container(
                       height: 30,
                       width: 120,
@@ -728,13 +749,32 @@ class _BookingServicePageState extends State<BookingServicePage> {
   );
 
   dynamic dialogOpenPickerDate() {
+    var now = DateTime.now();
     DatePicker.showDatePicker(
       context,
       theme: datepickerTheme,
       showTitleActions: true,
-      minTime: DateTime(2560, 1, 1),
+      minTime:
+          DateTime(now.year + 543, now.month, now.day, now.hour, now.minute),
       maxTime: DateTime(year + 1, month, day),
+      onChanged: (time) {},
       onConfirm: (date) {
+        int difDate = DateTime(now.year + 543, now.month, now.day)
+            .compareTo(DateTime(date.year, date.month, date.day));
+
+        TimeOfDay timeStart = TimeOfDay(hour: 00, minute: 00);
+        if (txtStartTime.text.isNotEmpty) {
+          timeStart = TimeOfDay(
+            hour: int.parse(txtStartTime.text.substring(0, 2)),
+            minute: int.parse(txtStartTime.text.substring(3, 5)),
+          );
+        }
+        bool timeSelectMoreThenCurrent = true;
+        timeSelectMoreThenCurrent = _getTime(
+          TimeOfDay(hour: now.hour, minute: now.minute),
+          TimeOfDay(hour: timeStart.hour, minute: timeStart.minute),
+        );
+
         setState(
           () {
             _selectedYear = date.year;
@@ -743,6 +783,11 @@ class _BookingServicePageState extends State<BookingServicePage> {
             txtDate.value = TextEditingValue(
               text: DateFormat("dd / MM / yyyy").format(date),
             );
+            // reset time if time selected less then current time.
+            if (!timeSelectMoreThenCurrent && difDate == 0) {
+              txtStartTime.value = TextEditingValue(text: '');
+              txtEndTime.value = TextEditingValue(text: '');
+            }
           },
         );
       },
@@ -756,27 +801,89 @@ class _BookingServicePageState extends State<BookingServicePage> {
   }
 
   dynamic dialogOpenPickerTime(String type) {
+    var now = DateTime.now();
+
+    TimeOfDay timeStart;
+    late TimeOfDay timeEnd;
+
+    DateTime initCurrentTime = DateTime.now();
     DatePicker.showTimePicker(
       context,
       theme: datepickerTheme,
       showTitleActions: true,
       onChanged: (date) {},
       onConfirm: (date) {
-        setState(
-          () {
-            if (type == 'start') {
-              txtStartTime.value = TextEditingValue(
-                text: DateFormat("HH:mm").format(date),
-              );
-            } else {
-              txtEndTime.value = TextEditingValue(
-                text: DateFormat("HH:mm").format(date),
-              );
-            }
-          },
-        );
+        // ----> ตรวจสอบวันที่เลือกเป็นเวลาปัจจุบันหรือไม่.
+        DateTime dateSet =
+            DateTime(_selectedYear, _selectedMonth, _selectedDay);
+        DateTime selectedDate = DateTime(date.year + 543, date.month, date.day);
+        int diffDate = -1;
+        var difDate = dateSet.compareTo(selectedDate);
+        if (difDate == 0) {
+          diffDate = 0;
+        } else if (difDate > 0) {
+          diffDate = 1;
+        }
+        // <----
+
+        // ตรวจสอบวันที่เลือกเป็นเวลาปัจจุบันหรือไม่.
+        if (diffDate >= 0) {
+          // ตรวจสอบเวลาที่เลือกไม่น้อยกว่าเวลาปัจจุบัน.
+          //  + เพิ่ม 1 ซม ไหม.
+          bool timeSelectMoreThenCurrent = true;
+          if (diffDate == 0)
+            timeSelectMoreThenCurrent = _getTime(
+              TimeOfDay(hour: now.hour, minute: now.minute),
+              TimeOfDay(hour: date.hour, minute: date.minute),
+            );
+          setState(
+            () {
+              bool endMoreThenStart = false;
+              if (type == 'start' && timeSelectMoreThenCurrent) {
+                timeStart = TimeOfDay(hour: date.hour, minute: date.minute);
+                if (txtEndTime.text.isNotEmpty) {
+                  timeEnd = TimeOfDay(
+                    hour: int.parse(txtEndTime.text.substring(0, 2)),
+                    minute: int.parse(txtEndTime.text.substring(3, 5)),
+                  );
+                  endMoreThenStart = _getTime(timeStart, timeEnd);
+                  if (endMoreThenStart == false) {
+                    txtEndTime.value = TextEditingValue(
+                      text: '',
+                    );
+                  }
+                }
+                txtStartTime.value = TextEditingValue(
+                  text: DateFormat("HH:mm").format(date),
+                );
+              } else if (type == 'end' && timeSelectMoreThenCurrent) {
+                timeEnd = TimeOfDay(hour: date.hour, minute: date.minute);
+                if (txtStartTime.text.isNotEmpty) {
+                  timeStart = TimeOfDay(
+                    hour: int.parse(txtStartTime.text.substring(0, 2)),
+                    minute: int.parse(txtStartTime.text.substring(3, 5)),
+                  );
+                  endMoreThenStart = _getTime(timeStart, timeEnd);
+                  if (endMoreThenStart == false) {
+                    txtStartTime.value = TextEditingValue(
+                      text: '',
+                    );
+                  }
+                }
+                txtEndTime.value = TextEditingValue(
+                  text: DateFormat("HH:mm").format(date),
+                );
+              } else {
+                Fluttertoast.showToast(msg: 'เวลาไม่ถูกต้อง');
+              }
+            },
+          );
+        } else {
+          Fluttertoast.showToast(msg: 'เวลาไม่ถูกต้อง');
+        }
       },
-      currentTime: DateTime.now(),
+      currentTime: initCurrentTime,
+      showSecondsColumn: false,
       locale: LocaleType.th,
     );
   }
@@ -787,7 +894,6 @@ class _BookingServicePageState extends State<BookingServicePage> {
     modelCategory = MockBookingData.category();
     modelBooking = MockBookingData.booking();
     modelCenter = MockBookingData.center();
-    _readData();
     var now = DateTime.now();
     year = now.year + 543;
     month = now.month;
@@ -795,9 +901,10 @@ class _BookingServicePageState extends State<BookingServicePage> {
     _selectedYear = now.year + 543;
     _selectedMonth = now.month;
     _selectedDay = now.day;
+    _callRead();
   }
 
-  Future<List<dynamic>> _readData() async {
+  void _callRead() async {
     bool morethan = int.parse(_selectedCategory) == 0;
     var result;
     if (morethan) {
@@ -809,7 +916,20 @@ class _BookingServicePageState extends State<BookingServicePage> {
           .where((dynamic e) => _checkCurrentDate(e['dateTime']!) < 0)
           .toList();
     }
-    return Future.value(result);
+    setState(() {
+      _futureModel = Future.value(result);
+    });
+  }
+
+  void onRefresh() async {
+    _callRead();
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async {
+    await Future.delayed(const Duration(milliseconds: 1000));
+    _refreshController.loadComplete();
   }
 
   String _setDate(String? date) {
@@ -859,10 +979,10 @@ class _BookingServicePageState extends State<BookingServicePage> {
       int month = int.parse(dateStr.substring(4, 6));
       int day = int.parse(dateStr.substring(6, 8));
       int hour = int.parse(dateStr.substring(8, 10));
-      // int minute = int.parse(dateStr.substring(10, 12));
+      int minute = int.parse(dateStr.substring(10, 12));
       final date = DateTime(year, month, day, hour);
       final now = DateTime.now();
-      final currentDate = DateTime(now.year, now.month, now.day, hour);
+      final currentDate = DateTime(now.year, now.month, now.day, hour, minute);
       final difDate = date.compareTo(currentDate);
       if (difDate == 0) {
         return 0;
@@ -871,5 +991,46 @@ class _BookingServicePageState extends State<BookingServicePage> {
       }
     }
     return -1;
+  }
+
+  bool _checkedCurrent(model) {
+    String dateStr = model['dateTime'] ?? '';
+    var result = -1;
+    if (dateStr.isNotEmpty) {
+      int year = int.parse(dateStr.substring(0, 4));
+      int month = int.parse(dateStr.substring(4, 6));
+      int day = int.parse(dateStr.substring(6, 8));
+      int hour = int.parse(dateStr.substring(8, 10));
+      final date = DateTime(year, month, day, hour);
+      final now = DateTime.now();
+      final currentDate = DateTime(now.year, now.month, now.day);
+      final difDate = date.compareTo(currentDate);
+      if (difDate == 0) {
+        result = 0;
+      } else if (difDate > 0) {
+        result = 1;
+      }
+    }
+    // check current day morethen;
+    bool currentDay = result == 1 ? true : false;
+
+    // วันปัจจุบัน และ เช็คอินแล้ว และ อยู่ในประวัติการจอง
+    if (model['checkIn'] && _selectedCategory == '1' && currentDay) {
+      return true;
+    }
+    return false;
+  }
+
+  _getTime(TimeOfDay startTime, TimeOfDay endTime) {
+    bool result = false;
+    int startTimeInt = (startTime.hour * 60 + startTime.minute) * 60;
+    int EndTimeInt = (endTime.hour * 60 + endTime.minute) * 60;
+
+    if (EndTimeInt > startTimeInt) {
+      result = true;
+    } else {
+      result = false;
+    }
+    return result;
   }
 }

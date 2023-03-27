@@ -2,7 +2,6 @@ import 'package:des/booking_service_success.dart';
 import 'package:des/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:intl/intl.dart';
 
 class BookingServiceConfirmPage extends StatefulWidget {
   const BookingServiceConfirmPage({
@@ -28,9 +27,6 @@ class BookingServiceConfirmPage extends StatefulWidget {
 
 class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
   DateTime selectedDate = DateTime.now();
-  int _selectedDay = 0;
-  int _selectedMonth = 0;
-  int _selectedYear = 0;
   int year = 0;
   int month = 0;
   int day = 0;
@@ -38,6 +34,8 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
   TextEditingController txtDate = TextEditingController();
   TextEditingController txtStartTime = TextEditingController();
   TextEditingController txtEndTime = TextEditingController();
+
+  String title = 'ยืนยันข้อมูล';
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +54,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
               _backButton(context),
               Expanded(
                 child: Text(
-                  widget.edit ? 'ข้อมูลการจอง' : 'ยืนยันข้อมูล',
+                  title,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
@@ -77,9 +75,9 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
               children: [
                 Expanded(
                   child: GestureDetector(
+                    onTap: () {},
                     child: AbsorbPointer(
                       child: TextFormField(
-                        enabled: false,
                         controller: txtStartTime,
                         style: const TextStyle(
                           color: Color(0xFF7A4CB1),
@@ -104,9 +102,9 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
                 SizedBox(width: 15),
                 Expanded(
                   child: GestureDetector(
+                    onTap: () {},
                     child: AbsorbPointer(
                       child: TextFormField(
-                        enabled: false,
                         controller: txtEndTime,
                         style: const TextStyle(
                           color: Color(0xFF7A4CB1),
@@ -132,9 +130,9 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
             ),
             SizedBox(height: 15),
             GestureDetector(
+              onTap: () {},
               child: AbsorbPointer(
                 child: TextFormField(
-                  enabled: false,
                   controller: txtDate,
                   style: const TextStyle(
                     color: Color(0xFF7A4CB1),
@@ -503,72 +501,17 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
     ),
   );
 
-  dynamic dialogOpenPickerDate() {
-    DatePicker.showDatePicker(
-      context,
-      theme: datepickerTheme,
-      showTitleActions: true,
-      minTime: DateTime(2560, 1, 1),
-      maxTime: DateTime(year + 1, month, day),
-      onConfirm: (date) {
-        setState(
-          () {
-            _selectedYear = date.year;
-            _selectedMonth = date.month;
-            _selectedDay = date.day;
-            txtDate.value = TextEditingValue(
-              text: DateFormat("dd / MM / yyyy").format(date),
-            );
-          },
-        );
-      },
-      currentTime: DateTime(
-        _selectedYear,
-        _selectedMonth,
-        _selectedDay,
-      ),
-      locale: LocaleType.th,
-    );
-  }
-
-  dynamic dialogOpenPickerTime(String type) {
-    DatePicker.showTimePicker(
-      context,
-      theme: datepickerTheme,
-      showTitleActions: true,
-      onChanged: (date) {},
-      onConfirm: (date) {
-        setState(
-          () {
-            if (type == 'start') {
-              txtStartTime.value = TextEditingValue(
-                text: DateFormat("HH:mm").format(date),
-              );
-            } else {
-              txtEndTime.value = TextEditingValue(
-                text: DateFormat("HH:mm").format(date),
-              );
-            }
-          },
-        );
-      },
-      currentTime: DateTime.now(),
-      locale: LocaleType.th,
-    );
-  }
-
   @override
   void initState() {
+    title = widget.edit ? 'ข้อมูลการจอง' : title;
+
     txtDate.text = widget.date;
     txtStartTime.text = widget.startTime;
     txtEndTime.text = widget.endTime;
-    super.initState();
     var now = DateTime.now();
     year = now.year + 543;
     month = now.month;
     day = now.day;
-    _selectedYear = now.year + 543;
-    _selectedMonth = now.month;
-    _selectedDay = now.day;
+    super.initState();
   }
 }

@@ -750,7 +750,6 @@ class _PoiPage extends State<PoiPage> {
     var year = date.substring(0, 4);
     var month = date.substring(4, 6);
     var day = date.substring(6, 8);
-    DateTime todayDate = DateTime.parse(year + '-' + month + '-' + day);
     return day + '-' + month + '-' + year;
   }
 
