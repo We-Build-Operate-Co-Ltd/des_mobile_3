@@ -11,11 +11,18 @@ class BookingServiceDetailPage extends StatefulWidget {
     required this.code,
     this.repeat = false,
     this.edit = false,
+    required this.date,
+    required this.startTime,
+    required this.endTime,
   });
 
   final String code;
   final bool repeat;
   final bool edit;
+
+  final String date;
+  final String startTime;
+  final String endTime;
 
   @override
   State<BookingServiceDetailPage> createState() =>
@@ -89,8 +96,16 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(15),
-                    child:
-                        CachedNetworkImage(imageUrl: model['imageUrl'] ?? ''),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 194,
+                      child: CachedNetworkImage(
+                        imageUrl: model['imageUrl'] ?? '',
+                        fit: BoxFit.cover,
+                        errorWidget: (context, url, error) =>
+                            Image.asset('assets/images/logo.png'),
+                      ),
+                    ),
                   ),
                   SizedBox(height: 15),
                   Text(
@@ -287,8 +302,12 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) =>
-                            BookingServiceConfirmPage(edit: widget.edit),
+                        builder: (_) => BookingServiceConfirmPage(
+                          edit: widget.edit,
+                          date: txtDate.text,
+                          startTime: txtStartTime.text,
+                          endTime: txtEndTime.text,
+                        ),
                       ),
                     ),
                     child: Container(
@@ -508,6 +527,9 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
 
   @override
   void initState() {
+    txtDate.text = widget.date;
+    txtStartTime.text = widget.startTime;
+    txtEndTime.text = widget.endTime;
     super.initState();
     _callRead();
     var now = DateTime.now();

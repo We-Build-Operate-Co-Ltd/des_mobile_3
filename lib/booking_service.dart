@@ -141,13 +141,19 @@ class _BookingServicePageState extends State<BookingServicePage> {
                           if (_currentPage == 0) ..._pageOne(),
                           if (_currentPage == 1) ..._pageTwo(),
                           GestureDetector(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    BookingServiceSearchResultPage(),
-                              ),
-                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      BookingServiceSearchResultPage(
+                                    date: txtDate.text,
+                                    startTime: txtStartTime.text,
+                                    endTime: txtEndTime.text,
+                                  ),
+                                ),
+                              );
+                            },
                             child: Container(
                               height: 45,
                               decoration: BoxDecoration(
@@ -412,6 +418,9 @@ class _BookingServicePageState extends State<BookingServicePage> {
               builder: (_) => BookingServiceDetailPage(
                 code: model['center'],
                 repeat: true,
+                date: txtDate.text,
+                startTime: txtStartTime.text,
+                endTime: txtEndTime.text,
               ),
             ),
           );
@@ -423,6 +432,9 @@ class _BookingServicePageState extends State<BookingServicePage> {
               builder: (_) => BookingServiceDetailPage(
                 code: model['center'],
                 edit: true,
+                date: txtDate.text,
+                startTime: txtStartTime.text,
+                endTime: txtEndTime.text,
               ),
             ),
           );

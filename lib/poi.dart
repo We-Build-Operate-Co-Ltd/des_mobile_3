@@ -296,7 +296,7 @@ class _PoiPage extends State<PoiPage> {
           ),
         ),
         controller: _refreshPanelController,
-        onLoading: _onLoading,
+        onLoading: _onLoadingPanel,
         child: ListView(
           controller: sc,
           children: <Widget>[
@@ -342,35 +342,12 @@ class _PoiPage extends State<PoiPage> {
   Widget _buildList() {
     return Column(
       children: [
-        if (_linearLoading)
-          LinearProgressIndicator(
-            color: Color(0xFFF58A33).withOpacity(0.8),
-            backgroundColor: Color(0xFFF58A33).withOpacity(0.3),
-          ),
-        // SizedBox(
-        //   height: 40,
-        //   child: ListView.separated(
-        //     scrollDirection: Axis.horizontal,
-        //     itemBuilder: (_, __) => GestureDetector(
-        //       onTap: () {
-        //         setState(() {
-        //           categorySelected = categoryList[__]['code'];
-        //           showLoadingItem = true;
-        //         });
-        //       },
-        //       child: Container(
-        //         alignment: Alignment.center,
-        //         padding: EdgeInsets.symmetric(horizontal: 10),
-        //         decoration: BoxDecoration(),
-        //         child: Text(
-        //           categoryList[__]['title'],
-        //         ),
-        //       ),
-        //     ),
-        //     separatorBuilder: (_, __) => SizedBox(width: 10),
-        //     itemCount: categoryList.length,
-        //   ),
-        // ),
+        Stack(
+          children: [
+            _buildCategory(),
+            if (showProgress) LinearProgressIndicator(),
+          ],
+        ),
         Expanded(
           child: buildList(),
         )
@@ -385,14 +362,14 @@ class _PoiPage extends State<PoiPage> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             setState(() {
-              _linearLoading = true;
+              showProgress = true;
             });
           });
-          return CircularProgressIndicator();
-        } else if (snapshot.hasData) {
+        }
+        if (snapshot.hasData) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             setState(() {
-              _linearLoading = false;
+              showProgress = false;
             });
           });
           if (snapshot.data.length == 0) {
@@ -412,12 +389,10 @@ class _PoiPage extends State<PoiPage> {
             return refreshList(snapshot.data);
           }
         } else if (snapshot.hasError) {
-          // return dialogFail(context);
           return InkWell(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onTap: () {
-              _readCatgeory();
               _read();
             },
             child: Column(
@@ -506,9 +481,11 @@ class _PoiPage extends State<PoiPage> {
                           topLeft: const Radius.circular(5.0),
                           topRight: const Radius.circular(5.0),
                         ),
-                        child: Image.network(
-                          '${model['imageUrl']}',
+                        child: CachedNetworkImage(
+                          imageUrl: '${model['imageUrl']}',
                           fit: BoxFit.contain,
+                          errorWidget: (context, url, error) =>
+                              Image.asset('assets/images/logo.png'),
                         ))
                     : Container(
                         height: 200,
@@ -558,6 +535,48 @@ class _PoiPage extends State<PoiPage> {
     );
   }
 
+  Widget _buildCategory() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+      height: 40,
+      child: ListView.separated(
+        itemCount: categoryList.length,
+        separatorBuilder: (_, __) => SizedBox(width: 10),
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (_, __) => GestureDetector(
+          onTap: () {
+            setState(() {
+              categorySelected = categoryList[__]['code'];
+              _limit = 10;
+            });
+            _read();
+          },
+          child: Container(
+            alignment: Alignment.center,
+            decoration: new BoxDecoration(
+              borderRadius: new BorderRadius.circular(40),
+              color: categoryList[__]['code'] == categorySelected
+                  ? Color(0xFFB325F8)
+                  : Color(0xFFB325F8).withOpacity(0.1),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            child: Text(
+              categoryList[__]['title'],
+              style: TextStyle(
+                color: categoryList[__]['code'] == categorySelected
+                    ? Color(0xFFFFFFFF)
+                    : Color(0xFFB325F8).withOpacity(0.1),
+                fontSize: 14.0,
+                fontWeight: FontWeight.normal,
+                letterSpacing: 1.2,
+                fontFamily: 'Kanit',
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 // end show content
 
   Widget _listSlide() {
@@ -727,11 +746,37 @@ class _PoiPage extends State<PoiPage> {
     );
   }
 
+  String _dateStringToDate(String date) {
+    var year = date.substring(0, 4);
+    var month = date.substring(4, 6);
+    var day = date.substring(6, 8);
+    DateTime todayDate = DateTime.parse(year + '-' + month + '-' + day);
+    return day + '-' + month + '-' + year;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _determinePosition();
+      await _getLocation();
+    });
+    _readCategory();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    txtDescription.dispose();
+    _refreshController.dispose();
+    super.dispose();
+  }
+
   Future<List<dynamic>> _read() async {
+    print('----> call function read');
     Dio dio = Dio();
     Response<dynamic> response;
     try {
-      print('object');
       response =
           await dio.post('http://122.155.223.63/td-des-api/m/poi/read', data: {
         'skip': 0,
@@ -748,67 +793,6 @@ class _PoiPage extends State<PoiPage> {
       }
     } catch (e) {}
     return [];
-  }
-
-  Future<List<dynamic>> _readCatgeory() async {
-    Dio dio = Dio();
-    Response<dynamic> response;
-    try {
-      print('object');
-      response = await dio
-          .post('http://122.155.223.63/td-des-api/m/poi/category/read', data: {
-        'skip': 0,
-        'limit': 200,
-      });
-      if (response.statusCode == 200) {
-        if (response.data['status'] == 'S') {
-          setState(() {
-            categoryList = response.data['objectData'];
-          });
-        }
-      }
-    } catch (e) {}
-    return [];
-  }
-
-  void setData(String categoryCode, String keySearkch) {
-    setState(
-      () {
-        if (keySearch != "") {
-          showLoadingItem = true;
-        }
-        categorySelected = categoryCode;
-        keySearch = keySearkch;
-        _limit = 10;
-      },
-    );
-    _read();
-  }
-
-  String _dateStringToDate(String date) {
-    var year = date.substring(0, 4);
-    var month = date.substring(4, 6);
-    var day = date.substring(6, 8);
-    DateTime todayDate = DateTime.parse(year + '-' + month + '-' + day);
-    return day + '-' + month + '-' + year;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _determinePosition();
-      await _getLocation();
-    });
-    _readCatgeory();
-  }
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    txtDescription.dispose();
-    _refreshController.dispose();
-    super.dispose();
   }
 
   _determinePosition() async {
@@ -847,8 +831,15 @@ class _PoiPage extends State<PoiPage> {
     });
     _read();
     await Future.delayed(Duration(milliseconds: 1000));
-
     _refreshController.loadComplete();
+  }
+
+  void _onLoadingPanel() async {
+    setState(() {
+      _limit = _limit + 10;
+    });
+    _read();
+    await Future.delayed(Duration(milliseconds: 1000));
     _refreshPanelController.loadComplete();
   }
 
@@ -861,5 +852,30 @@ class _PoiPage extends State<PoiPage> {
 
   void goBack() async {
     Navigator.pop(context, false);
+  }
+
+  Future<dynamic> _readCategory() async {
+    Response<dynamic> response;
+    try {
+      response = await Dio().post(
+          'http://122.155.223.63/td-des-api/m/poi/category/read',
+          data: {});
+      if (response.statusCode == 200) {
+        if (response.data['status'] == 'S') {
+          var data = response.data['objectData'];
+          List<dynamic> list = [
+            {'code': "", 'title': 'ทั้งหมด'}
+          ];
+          list = [...list, ...data];
+          print(list);
+          setState(() {
+            categoryList = list;
+          });
+        }
+      }
+    } catch (e) {
+      print('false');
+    }
+    return [];
   }
 }

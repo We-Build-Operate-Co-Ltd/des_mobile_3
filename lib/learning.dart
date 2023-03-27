@@ -1,5 +1,7 @@
+import 'package:des/models/mock_data.dart';
 import 'package:flutter/material.dart';
 
+import 'build_modal_connection_in_progress.dart';
 import 'models/user.dart';
 import 'detail.dart';
 
@@ -58,7 +60,8 @@ class _LearningPageState extends State<LearningPage> {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => DetailPage(slug: 'news', model: model),
+            builder: (context) =>
+                DetailPage(slug: 'mock', model: mockDataObject1),
           ),
         );
       },

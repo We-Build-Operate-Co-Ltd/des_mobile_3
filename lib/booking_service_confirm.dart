@@ -9,10 +9,17 @@ class BookingServiceConfirmPage extends StatefulWidget {
     super.key,
     this.repeat = false,
     this.edit = false,
+    required this.date,
+    required this.startTime,
+    required this.endTime,
   });
 
   final bool repeat;
   final bool edit;
+
+  final String date;
+  final String startTime;
+  final String endTime;
 
   @override
   State<BookingServiceConfirmPage> createState() =>
@@ -70,9 +77,9 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => dialogOpenPickerTime('start'),
                     child: AbsorbPointer(
                       child: TextFormField(
+                        enabled: false,
                         controller: txtStartTime,
                         style: const TextStyle(
                           color: Color(0xFF7A4CB1),
@@ -97,9 +104,9 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
                 SizedBox(width: 15),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => dialogOpenPickerTime('end'),
                     child: AbsorbPointer(
                       child: TextFormField(
+                        enabled: false,
                         controller: txtEndTime,
                         style: const TextStyle(
                           color: Color(0xFF7A4CB1),
@@ -125,9 +132,9 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
             ),
             SizedBox(height: 15),
             GestureDetector(
-              onTap: () => dialogOpenPickerDate(),
               child: AbsorbPointer(
                 child: TextFormField(
+                  enabled: false,
                   controller: txtDate,
                   style: const TextStyle(
                     color: Color(0xFF7A4CB1),
@@ -552,6 +559,9 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
 
   @override
   void initState() {
+    txtDate.text = widget.date;
+    txtStartTime.text = widget.startTime;
+    txtEndTime.text = widget.endTime;
     super.initState();
     var now = DateTime.now();
     year = now.year + 543;
