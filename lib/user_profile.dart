@@ -27,7 +27,7 @@ class UserProfilePage extends StatefulWidget {
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
-  final storage = const FlutterSecureStorage();
+  final storage = FlutterSecureStorage();
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
@@ -47,7 +47,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         onRefresh: _onRefresh,
         onLoading: _onLoading,
         child: ListView(
-          physics: const BouncingScrollPhysics(),
+          physics: BouncingScrollPhysics(),
           padding: EdgeInsets.only(
             top: MediaQuery.of(context).padding.top + 15,
             bottom: MediaQuery.of(context).padding.bottom + 25,
@@ -56,12 +56,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ),
           children: [
             _buildUserDetail(),
-            const SizedBox(height: 15),
+            SizedBox(height: 15),
             _buildVerifyYourIdentity(),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
                   'คลาสเรียนของฉัน',
                   style: TextStyle(
@@ -96,10 +96,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 }
               },
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
                   'คลาสที่ชอบ',
                   style: TextStyle(
@@ -151,14 +151,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 ),
               ],
             ),
-            const SizedBox(height: 5),
+            SizedBox(height: 5),
             _buildHistoryOfServiceReservations(
                 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน',
                 'อำเภอบางใหญ่ นนทบุรี',
                 3,
                 _dateStringToDateSlashBuddhistShort('20220911'),
                 '11.00'),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             _buildHistoryOfServiceReservations(
                 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน',
                 'อำเภอบางใหญ่ นนทบุรี',
@@ -175,9 +175,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
       String title, String title2, int hour, String date, String time) {
     return Container(
       height: 80,
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: const Color(0xFFFEF7FF),
+        color: Color(0xFFFEF7FF),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -189,7 +189,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                   ),
@@ -198,14 +198,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 ),
                 Text(
                   title2,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(height: 7),
+                SizedBox(height: 7),
                 Row(
                   children: [
                     Image.asset(
@@ -213,25 +213,25 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       height: 10,
                       width: 10,
                     ),
-                    const SizedBox(width: 5),
+                    SizedBox(width: 5),
                     Text(
                       date,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 7,
                         fontWeight: FontWeight.w400,
                         color: Color(0xFF53327A),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Image.asset(
                       'assets/images/time_user_profile_page.png',
                       height: 10,
                       width: 10,
                     ),
-                    const SizedBox(width: 5),
+                    SizedBox(width: 5),
                     Text(
                       '$time น.',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 7,
                         fontWeight: FontWeight.w400,
                         color: Color(0xFF53327A),
@@ -242,10 +242,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ],
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Text(
             '$hour ชั่วโมง',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w500,
               color: Color(0xFFB325F8),
@@ -287,7 +287,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               width: screenSize,
               child: Text(
                 '${model['title']}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                 ),
@@ -331,7 +331,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               width: 170,
               child: Text(
                 model['title'],
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                 ),
@@ -339,7 +339,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 maxLines: 4,
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             Stack(
               children: [
                 Container(
@@ -348,7 +348,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(19),
                     border: Border.all(
-                      color: const Color(0x80B325F8),
+                      color: Color(0x80B325F8),
                     ),
                   ),
                 ),
@@ -357,9 +357,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   height: 9,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(19),
-                    color: const Color(0xFFB325F8),
+                    color: Color(0xFFB325F8),
                     border: Border.all(
-                      color: const Color(0xFFB325F8),
+                      color: Color(0xFFB325F8),
                     ),
                   ),
                 ),
@@ -367,7 +367,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             Text(
               'เรียนแล้ว $study%',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 9,
                 fontWeight: FontWeight.w300,
               ),
@@ -401,7 +401,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       ),
                     )
                   : Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: EdgeInsets.all(10.0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(50),
                         child: Image.asset(
@@ -412,7 +412,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     ),
             ),
           ),
-          const SizedBox(width: 15),
+          SizedBox(width: 15),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -424,15 +424,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       children: [
                         Text(
                           _firstName ?? '',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        const Text(' '),
+                        Text(' '),
                         Text(
                           _lastName ?? '',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w400,
                           ),
@@ -446,8 +446,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                const UserProfileSettingPage(),
+                            builder: (context) => UserProfileSettingPage(),
                           ),
                         );
                       },
@@ -464,24 +463,24 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     ),
                   ],
                 ),
-                const Text(
+                Text(
                   'แก้ไขข้อมูล',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                const SizedBox(height: 5),
+                SizedBox(height: 5),
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 10),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                       decoration: BoxDecoration(
-                        color: const Color(0xffFEF7FF),
+                        color: Color(0xffFEF7FF),
                         borderRadius: BorderRadius.circular(13),
                       ),
-                      child: const Text(
+                      child: Text(
                         'รอยืนยันตัวตน',
                         style: TextStyle(
                           fontSize: 9,
@@ -502,59 +501,71 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   Widget _buildVerifyYourIdentity() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12.5),
-      height: 120,
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12.5),
+      height: 130,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: const Color(0xFFFAE2FD),
+        color: Color(0xFFFAE2FD),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset('assets/images/check_rounded.png', height: 60, width: 60),
-          const SizedBox(width: 15),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'กรุณายืนยันตัวตน',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const Text(
-                'เพื่อเข้าใช้งานคลาสเรียน จองใช้บริการ',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (builder) => const VerifyFirstStepPage()),
-                ),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFFFFF),
-                    borderRadius: BorderRadius.circular(17),
+          Image.asset('assets/images/load_user_profile.png',
+              height: 55, width: 55),
+          SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'กรุณายืนยันตัวตน',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
                   ),
-                  child: const Text(
-                    'รอยืนยันตัวตน',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFFB325F8),
+                ),
+                Text(
+                  'เพื่อเข้าใช้งานคลาสเรียน จองใช้บริการ และบริการอื่นๆ',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(height: 8),
+                GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (builder) => VerifyFirstStepPage()),
+                  ),
+                  child: Container(
+                    width: 125,
+                    height: 32, alignment: Alignment.center,
+                    // padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF7A4CB1),
+                      borderRadius: BorderRadius.circular(94),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/images/check_user_profile.png',
+                            height: 16, width: 16),
+                        SizedBox(width: 5),
+                        Text(
+                          'ยืนยันตัวตน',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFFFFFFFF),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           )
         ],
       ),
@@ -604,7 +615,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   void _onLoading() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
+    await Future.delayed(Duration(milliseconds: 1000));
     _refreshController.loadComplete();
   }
 
