@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:des/build_modal_connection_in_progress.dart';
 import 'package:des/detail.dart';
 import 'package:des/models/mock_data.dart';
@@ -223,6 +224,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     GestureDetector(
                       onTap: () {
+                        _determinePosition();
                         // ปิดก่อน ios เด้ง
                         // if (latLng != null)
                         //   Navigator.push(
@@ -710,7 +712,7 @@ class _HomePageState extends State<HomePage> {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.deniedForever) {
         setState(() {
-          currentLocation = 'กรุณาเปิดการเข้าถึงตำแหน่ง';
+          currentLocation = 'เปิดการเข้าถึงตำแหน่งเพื่อใช้บริการ';
         });
         return Future.error('Location Not Available');
       }
@@ -720,19 +722,22 @@ class _HomePageState extends State<HomePage> {
     } else {
       throw Exception('Error');
     }
+    _getLocation();
     // return await Geolocator.getCurrentPosition();
   }
 
   _getLocation() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best);
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-        position.latitude, position.longitude,
-        localeIdentifier: 'th');
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          position.latitude, position.longitude,
+          localeIdentifier: 'th');
 
-    setState(() {
-      latLng = LatLng(position.latitude, position.longitude);
-      currentLocation = placemarks.first.administrativeArea;
-    });
+      setState(() {
+        latLng = LatLng(position.latitude, position.longitude);
+        currentLocation = placemarks.first.administrativeArea;
+      });
+    } catch (e) {}
   }
 }

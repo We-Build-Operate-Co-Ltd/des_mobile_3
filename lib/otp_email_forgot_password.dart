@@ -117,7 +117,7 @@ class _OtpEmailForgotPasswordPageState
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/images/des/bg_login_page.png"),
+          image: AssetImage("assets/images/bg_login_page.png"),
           fit: BoxFit.cover,
         ),
       ),
@@ -143,12 +143,28 @@ class _OtpEmailForgotPasswordPageState
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                            'กรอกรหัส',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'ลืมรหัสผ่าน',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Image.asset(
+                                  'assets/images/close_noti_list.png',
+                                  height: 18.52,
+                                  width: 18.52,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
                           ),
                           Text(
                             'กรุณากรอกรหัสที่ท่านได้รับผ่านอีเมล',

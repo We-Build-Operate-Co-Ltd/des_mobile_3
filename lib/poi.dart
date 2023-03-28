@@ -772,7 +772,6 @@ class _PoiPage extends State<PoiPage> {
   }
 
   Future<List<dynamic>> _read() async {
-    print('----> call function read');
     Dio dio = Dio();
     Response<dynamic> response;
     try {

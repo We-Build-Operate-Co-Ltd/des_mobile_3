@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/forgot_password.dart';
 import 'package:des/menu.dart';
 import 'package:des/register.dart';
-import 'package:des/shared/apple_firebase.dart';
 import 'package:des/shared/google_firebase.dart';
 import 'package:des/shared/line.dart';
 import 'package:des/shared/secure_storage.dart';
@@ -40,6 +39,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
   bool passwordVisibility = true;
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
+  bool openLine = false;
 
   @override
   Widget build(BuildContext context) {
@@ -82,16 +82,32 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Image.asset(
-                              'assets/images/logo.png',
-                              height: 35,
-                            ),
-                            Text(
-                              'เข้าสู่ระบบ',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                              ),
+                            // Image.asset(
+                            //   'assets/images/logo.png',
+                            //   height: 35,
+                            // ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'กรอกรหัสผ่าน',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Image.asset(
+                                    'assets/images/close_noti_list.png',
+                                    height: 18.52,
+                                    width: 18.52,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
                             ),
                             SizedBox(height: 10),
                             if (_username!.isEmpty)
@@ -159,31 +175,6 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                                       ],
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 7),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                          color:
-                                              Color.fromARGB(255, 255, 46, 46),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      child: Text(
-                                        'เปลี่ยน',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color:
-                                              Color.fromARGB(255, 255, 46, 46),
-                                        ),
-                                      ),
-                                    ),
-                                  )
                                 ],
                               ),
                               SizedBox(height: 10),
@@ -212,7 +203,13 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                             _buildOR(),
                             SizedBox(height: 25),
                             InkWell(
-                              onTap: () => _callLoginLine(),
+                              onTap: () {
+                                if (!openLine) {
+                                  openLine = true;
+                                  _callLoginLine();
+                                }
+                                ;
+                              },
                               child: _buildButtonLogin(
                                 'assets/images/line_circle.png',
                                 'เข้าใช้ผ่าน Line',
@@ -239,39 +236,36 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                                 colorBorder: Color(0xFFE4E4E4),
                               ),
                             ),
-                            if (_username!.isEmpty) ...[
-                              SizedBox(height: 35),
-                              InkWell(
-                                onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (builder) => RegisterPage(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'ท่านเป็นผู้ใช้ใหม่',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'ท่านเป็นผู้ใช้ใหม่',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w400,
-                                      ),
+                                SizedBox(width: 8),
+                                GestureDetector(
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (builder) => RegisterPage(),
                                     ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      'ต้องการสมัครสมาชิก',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w400,
-                                        color: Color(0xFFB325F8),
-                                        decoration: TextDecoration.underline,
-                                      ),
+                                  ),
+                                  child: Text(
+                                    'ต้องการสมัครสมาชิก',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFB325F8),
+                                      decoration: TextDecoration.underline,
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -583,8 +577,6 @@ class _LoginSecondPageState extends State<LoginSecondPage>
         return null;
       }
 
-      debugPrint('---> ${response.statusCode}');
-
       _loading = false;
       if (response.data['status'] == 'S') {
         List<dynamic> result = response.data['objectData'];
@@ -786,14 +778,13 @@ class _LoginSecondPageState extends State<LoginSecondPage>
   void _callLoginLine() async {
     var obj = await loginLine();
 
-    final idToken = obj.accessToken.idToken;
-    final userEmail = (idToken != null)
-        ? idToken['email'] != null
-            ? idToken['email']
-            : ''
-        : '';
-
     if (obj != null) {
+      final idToken = obj.accessToken.idToken;
+      final userEmail = (idToken != null)
+          ? idToken['email'] != null
+              ? idToken['email']
+              : ''
+          : '';
       var model = {
         "username": (userEmail != '' && userEmail != null)
             ? userEmail

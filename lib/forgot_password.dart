@@ -37,19 +37,35 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 ),
                 elevation: 5,
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 25, horizontal: 20),
+                  padding: EdgeInsets.all(20),
                   child: Form(
                     key: _formKey,
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                            'ลืมรหัสผ่าน',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'ลืมรหัสผ่าน',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Image.asset(
+                                  'assets/images/close_noti_list.png',
+                                  height: 18.52,
+                                  width: 18.52,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
                           ),
                           Text(
                             'กรุณากรอกอีเมลเพื่อทำการรับรหัสเพื่อรีเซ็ตข้อมูลใหม่',

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +25,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final txtPhone = TextEditingController();
   final txtEmail = TextEditingController();
   final txtPrefixName = TextEditingController();
+
+  late ScrollController _scrollController;
 
   List<String> _genderList = ['ชาย', 'หญิง', 'อื่น ๆ'];
   List<String> _ageRangeList = [
@@ -56,34 +59,61 @@ class _RegisterPageState extends State<RegisterPage> {
               fit: BoxFit.cover,
             ),
           ),
-          child: ListView(
-            children: [
-              Container(
-                padding: EdgeInsets.all(10),
-                child: Card(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  elevation: 5,
-                  child: Container(
-                    padding: EdgeInsets.only(
-                        top: 25, left: 20, right: 25, bottom: 20),
-                    decoration: BoxDecoration(
-                      color: Color(0xFFFFFFFF),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+          child: Container(
+            padding: EdgeInsets.all(10),
+            alignment: Alignment.center,
+            child: Card(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              elevation: 5,
+              child: Container(
+                padding:
+                    EdgeInsets.only(top: 25, left: 20, right: 25, bottom: 20),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFFFF),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: SizedBox(
+                    height: 559,
+                    child: FadingEdgeScrollView.fromScrollView(
+                      gradientFractionOnEnd: 1.0,
+                      gradientFractionOnStart: 0.3,
+                      child: ListView(
+                        controller: _scrollController,
+                        padding: EdgeInsets.zero,
+                        // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'สมัครสมาชิก',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'สมัครสมาชิก',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  height: 25,
+                                  width: 25,
+                                  alignment: Alignment.center,
+                                  child: Image.asset(
+                                    'assets/images/close_noti_list.png',
+                                    height: 18.52,
+                                    width: 18.52,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           Text(
                             'กรุณากรอกข้อมูลด้านล่างให้ครบเพื่อสมัครสมาชิก',
@@ -265,7 +295,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -572,6 +602,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   void initState() {
+    _scrollController = ScrollController();
     super.initState();
   }
 

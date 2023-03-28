@@ -33,6 +33,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
   bool passwordVisibility = true;
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
+  bool openLine = false;
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +152,12 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                           _buildOR(),
                           SizedBox(height: 25),
                           InkWell(
-                            onTap: () => _callLoginLine(),
+                            onTap: () {
+                              if (!openLine) {
+                                openLine = true;
+                                _callLoginLine();
+                              }
+                            },
                             child: _buildButtonLogin(
                               'assets/images/line_circle.png',
                               'เข้าใช้ผ่าน Line',
@@ -179,25 +185,25 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                             ),
                           ),
                           SizedBox(height: 35),
-                          InkWell(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (builder) => RegisterPage(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'ท่านเป็นผู้ใช้ใหม่',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'ท่านเป็นผู้ใช้ใหม่',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
+                              SizedBox(width: 8),
+                              GestureDetector(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (builder) => RegisterPage(),
                                   ),
                                 ),
-                                SizedBox(width: 8),
-                                Text(
+                                child: Text(
                                   'ต้องการสมัครสมาชิก',
                                   style: TextStyle(
                                     fontSize: 15,
@@ -206,8 +212,8 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -407,8 +413,6 @@ class _LoginFirstPageState extends State<LoginFirstPage>
         return null;
       }
 
-      debugPrint('---> ${response.statusCode}');
-
       setState(() {
         _loading = false;
       });
@@ -555,15 +559,15 @@ class _LoginFirstPageState extends State<LoginFirstPage>
 
   void _callLoginLine() async {
     var obj = await loginLine();
-
-    final idToken = obj.accessToken.idToken;
-    final userEmail = (idToken != null)
-        ? idToken['email'] != null
-            ? idToken['email']
-            : ''
-        : '';
+    openLine = false;
 
     if (obj != null) {
+      final idToken = obj!.accessToken.idToken;
+      final userEmail = (idToken != null)
+          ? idToken['email'] != null
+              ? idToken['email']
+              : ''
+          : '';
       var model = {
         "username": (userEmail != '' && userEmail != null)
             ? userEmail
