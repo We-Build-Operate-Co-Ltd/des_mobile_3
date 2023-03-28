@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/detail.dart';
+import 'package:des/favorite_class_all.dart';
+import 'package:des/history_of_service_reservations.dart';
 import 'package:des/models/mock_data.dart';
+import 'package:des/my_class_all.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/user_profile_edit.dart';
 import 'package:des/user_profile_setting.dart';
@@ -56,7 +59,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ),
           children: [
             _buildUserDetail(),
-            SizedBox(height: 15),
+            SizedBox(height: 20),
             _buildVerifyYourIdentity(),
             SizedBox(height: 20),
             Row(
@@ -69,13 +72,21 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                Text(
-                  'ดูทั้งหมด',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFF53327A),
-                    decoration: TextDecoration.underline,
+                InkWell(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => MyClassAllPage(model: mockDataList),
+                    ),
+                  ),
+                  child: Text(
+                    'ดูทั้งหมด',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xFF53327A),
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
               ],
@@ -107,19 +118,27 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                Text(
-                  'ดูทั้งหมด',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFF53327A),
-                    decoration: TextDecoration.underline,
+                InkWell(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => FavoriteClassAllPage(),
+                    ),
+                  ),
+                  child: Text(
+                    'ดูทั้งหมด',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xFF53327A),
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
               ],
             ),
             FutureBuilder(
-              future: _readNews(),
+              future: _readEventcalendar(),
               builder: (context, snapshot) => Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: snapshot.data!
@@ -138,7 +157,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   ),
                 ),
                 InkWell(
-                  onTap: () => widget.changePage!(1),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => HistoryOfServiceReservationsPage(),
+                    ),
+                  ),
                   child: Text(
                     'ดูทั้งหมด',
                     style: TextStyle(
@@ -263,7 +287,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         context,
         MaterialPageRoute(
           builder: (_) => DetailPage(
-            slug: 'news',
+            slug: 'eventcalendar',
             model: model,
           ),
         ),
@@ -420,24 +444,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          _firstName ?? '',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
+                    Expanded(
+                      child: Text(
+                        '${_firstName} ${_lastName}',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
                         ),
-                        Text(' '),
-                        Text(
-                          _lastName ?? '',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     InkWell(
                       splashColor: Colors.transparent,
@@ -456,8 +471,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         alignment: Alignment.topRight,
                         child: Image.asset(
                           "assets/images/settings.png",
-                          height: 16,
-                          width: 16,
+                          color: Color(0xFF000000),
+                          height: 18,
+                          width: 17,
                         ),
                       ),
                     ),
@@ -474,11 +490,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 Row(
                   children: [
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      alignment: Alignment.center,
+                      width: 73,
+                      height: 19,
                       decoration: BoxDecoration(
                         color: Color(0xffFEF7FF),
-                        borderRadius: BorderRadius.circular(13),
+                        borderRadius: BorderRadius.circular(12.5),
                       ),
                       child: Text(
                         'รอยืนยันตัวตน',
@@ -500,48 +517,47 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   Widget _buildVerifyYourIdentity() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12.5),
-      height: 130,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Color(0xFFFAE2FD),
+    return InkWell(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (builder) => VerifyFirstStepPage()),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image.asset('assets/images/load_user_profile.png',
-              height: 55, width: 55),
-          SizedBox(width: 20),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'กรุณายืนยันตัวตน',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12.5),
+        height: 130,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Color(0xFFFAE2FD),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset('assets/images/announce_user_profile.png',
+                height: 55, width: 55),
+            SizedBox(width: 20),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'กรุณายืนยันตัวตน',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                Text(
-                  'เพื่อเข้าใช้งานคลาสเรียน จองใช้บริการ และบริการอื่นๆ',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
+                  Text(
+                    'เพื่อเข้าใช้งานคลาสเรียน จองใช้บริการ และบริการอื่นๆ',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-                SizedBox(height: 8),
-                GestureDetector(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (builder) => VerifyFirstStepPage()),
-                  ),
-                  child: Container(
+                  SizedBox(height: 8),
+                  Container(
                     width: 125,
-                    height: 32, alignment: Alignment.center,
-                    // padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                    height: 32,
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: Color(0xFF7A4CB1),
                       borderRadius: BorderRadius.circular(94),
@@ -549,25 +565,25 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/images/check_user_profile.png',
+                        Image.asset('assets/images/next_user_profile.png',
                             height: 16, width: 16),
                         SizedBox(width: 5),
                         Text(
                           'ยืนยันตัวตน',
                           style: TextStyle(
                             fontSize: 15,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w400,
                             color: Color(0xFFFFFFFF),
                           ),
                         ),
                       ],
                     ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -591,7 +607,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     super.dispose();
   }
 
-  Future<List<dynamic>> _readNews() async {
+  Future<List<dynamic>> _readEventcalendar() async {
     Dio dio = Dio();
     Response<dynamic> response;
     try {
@@ -610,7 +626,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   void _onRefresh() async {
-    _readNews();
+    _readEventcalendar();
     _refreshController.refreshCompleted();
   }
 
