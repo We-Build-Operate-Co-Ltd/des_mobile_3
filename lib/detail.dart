@@ -33,63 +33,66 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        shrinkWrap: true,
-        children: [
-          Stack(
-            children: [
-              widget.checkNotiPage != true
-                  ? _buildContent(widget.model)
-                  : widget.slug != 'mainPage'
-                      ? FutureBuilder(
-                          future: _futureModel,
-                          builder: (_, snapshot) {
-                            if (snapshot.hasData) {
-                              return _buildContent(snapshot.data);
-                            } else if (snapshot.hasError) {
-                              return Container(
-                                alignment: Alignment.center,
-                                height: 200,
-                                width: double.infinity,
-                                child: Text(
-                                  'Network ขัดข้อง',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontFamily: 'Kanit',
-                                    color: Color.fromRGBO(0, 0, 0, 0.6),
-                                  ),
-                                ),
-                              );
-                            } else {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                          },
-                        )
-                      : _buildContentMainPage(widget.model),
-              Positioned(
-                right: 0,
-                child: MaterialButton(
-                  minWidth: 29,
-                  onPressed: () => Navigator.pop(context),
-                  color: const Color(0xFF53327A),
-                  textColor: Colors.white,
-                  shape: const CircleBorder(),
-                  child: const Icon(
-                    Icons.close,
-                    size: 29,
-                  ),
+      body: widget.slug == 'bookingPage'
+          ? _buildContentBookingPage(widget.model)
+          : ListView(
+              shrinkWrap: true,
+              children: [
+                Stack(
+                  children: [
+                    widget.checkNotiPage != true
+                        ? _buildContent(widget.model)
+                        : widget.slug != 'mainPage' &&
+                                widget.slug != 'bookingPage'
+                            ? FutureBuilder(
+                                future: _futureModel,
+                                builder: (_, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return _buildContent(snapshot.data);
+                                  } else if (snapshot.hasError) {
+                                    return Container(
+                                      alignment: Alignment.center,
+                                      height: 200,
+                                      width: double.infinity,
+                                      child: Text(
+                                        'Network ขัดข้อง',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontFamily: 'Kanit',
+                                          color: Color.fromRGBO(0, 0, 0, 0.6),
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                },
+                              )
+                            : _buildContentMainPage(widget.model),
+                    Positioned(
+                      right: 0,
+                      child: MaterialButton(
+                        minWidth: 29,
+                        onPressed: () => Navigator.pop(context),
+                        color: const Color(0xFF53327A),
+                        textColor: Colors.white,
+                        shape: const CircleBorder(),
+                        child: const Icon(
+                          Icons.close,
+                          size: 29,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-        ],
-      ),
+              ],
+            ),
     );
   }
 
-  _buildContent(dynamic model) {
+  Widget _buildContent(dynamic model) {
     return ListView(
       shrinkWrap: true, // 1st add
       physics: const ClampingScrollPhysics(), // 2nd
@@ -514,7 +517,7 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  ListView _buildContentMainPage(dynamic model) {
+  Widget _buildContentMainPage(dynamic model) {
     return ListView(
       shrinkWrap: true, // 1st add
       physics: const ClampingScrollPhysics(), // 2nd
@@ -598,10 +601,100 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
+  Widget _buildContentBookingPage(dynamic model) {
+    return ListView(
+      shrinkWrap: true, // 1st add
+      physics: ClampingScrollPhysics(), // 2nd
+      children: [
+        _buildHead(),
+        SizedBox(height: 20),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: Text(
+            model['title'],
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        SizedBox(height: 10),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: Row(
+            children: [
+              Image.asset('assets/images/event_detail.png',
+                  height: 10, width: 10),
+              SizedBox(width: 5),
+              Text(
+                '${timeString(model['docTime'])} น.',
+                style: TextStyle(
+                  fontSize: 9,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFFB325F8),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 40),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: Html(
+            data: model['description'],
+            style: {
+              "body": Style(
+                  // maxLines: 4,
+                  // textOverflow: TextOverflow.ellipsis,
+                  ),
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHead() {
+    return Container(
+      padding: EdgeInsets.only(right: 15, left: 15, top: 15),
+      child: Stack(
+        children: [
+          Container(
+            height: 40,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'รายละเอียด',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            left: 0,
+            child: InkWell(
+              onTap: () => Navigator.pop(context),
+              child:
+                  Image.asset('assets/images/back.png', height: 40, width: 40),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void initState() {
-    _imageSelected = widget.model['imageUrl'];
-    if (widget.slug != 'mainPage' && widget.slug != 'mock') {
+    if (widget.slug != 'mainPage' &&
+        widget.slug != 'mock' &&
+        widget.slug != 'bookingPage') {
+      _imageSelected = widget.model['imageUrl'];
       _read();
       _galleryRead();
     }
