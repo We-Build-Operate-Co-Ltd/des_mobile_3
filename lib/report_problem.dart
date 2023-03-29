@@ -1,390 +1,208 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
-class ReportProblem extends StatefulWidget {
-  const ReportProblem({super.key});
+import 'models/mock_data.dart';
 
-  @override
-  State<ReportProblem> createState() => _ReportProblemState();
-}
-
-class _ReportProblemState extends State<ReportProblem> {
-  TextEditingController chatController = TextEditingController();
+class ReportProblemPage extends StatelessWidget {
+  const ReportProblemPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onHorizontalDragUpdate: (details) {
-        // Note: Sensitivity is integer used when you don't want to mess up vertical drag
-        if (details.delta.dx > 10) {
-          // Right Swipe
-          Navigator.pop(context);
-        }
-      },
-      child: Scaffold(
-        backgroundColor: Color(0xFFFFFFFF),
-        // appBar: AppBar(
-        //   elevation: 0,
-        //   backgroundColor: Colors.white,
-        //   automaticallyImplyLeading: false,
-        //   toolbarHeight: 10,
-        // ),
-        body: SafeArea(
-          // top: false,
-          child: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).requestFocus(new FocusNode());
-              },
-              child: _header()),
-        ),
-      ),
-    );
-  }
-
-  _header() {
-    return Container(
-      color: Color(0xFFfef7ff),
-      child: Column(
-        // crossAxisAlignment: CrossAxisAlignment.center,
+    return Scaffold(
+      body: Stack(
         children: [
-          Container(
-            margin: EdgeInsets.only(bottom: 10),
-            padding: EdgeInsets.only(top: 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              // borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xFFDADADA),
-                  blurRadius: 6,
-                  offset: Offset(4, 4), // Shadow position
-                ),
-              ],
+          Positioned(
+            top: -42,
+            right: 0,
+            child: Image.asset(
+              'assets/images/logo_2o.png',
+              fit: BoxFit.fitWidth,
+              width: 290,
+              alignment: Alignment.topRight,
             ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        height: 70,
-                        width: 70,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF7F34EE),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
+          ),
+          Positioned.fill(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).padding.top + 5,
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Image.asset(
+                      'assets/images/back.png',
+                      height: 40,
+                      width: 40,
+                    ),
+                  ),
+                ),
+                Image.asset(
+                  'assets/images/report_icon.png',
+                  height: 190,
+                  width: 225.8,
+                ),
+                SizedBox(height: 5),
+                Text(
+                  'แจ้งปัญหา',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color(0xFF7A4CB1),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  'ท่านมีความสงสัยการใช้งานศูนย์ฯ\nหรือพบปัญหาจากการใช้สามารถแจ้งให้เราทราบได้เลย\nเราพร้อมช่วยเหลือท่านเสมอ',
+                  style: TextStyle(
+                    color: Colors.black.withOpacity(0.5),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 25),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                          height: 45,
+                          width: 45,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Color(0xFF7A4CB1),
+                            borderRadius: BorderRadius.circular(22.5),
+                          ),
                           child: Image.asset(
-                            'assets/chat.png',
-                            height: 26,
-                            width: 26,
+                            'assets/images/chat.png',
+                            width: 22.41,
+                            height: 22.41,
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            'แชทบอท',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'แชท',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
                           ),
-                          // Expanded(child: SizedBox(),),
-                          Text(
-                            'ออนไลน์',
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w500,
-                            ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(width: 36),
+                    Column(
+                      children: [
+                        Container(
+                          height: 45,
+                          width: 45,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Color(0xFF7A4CB1),
+                            borderRadius: BorderRadius.circular(22.5),
                           ),
-                        ],
+                          child: Image.asset(
+                            'assets/images/phone.png',
+                            width: 25.5,
+                            height: 25.5,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'เบอร์ติดต่อ',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: 25),
+                Container(
+                  height: 45,
+                  width: 300,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Color(0x807A4CB1),
+                    ),
+                    borderRadius: BorderRadius.circular(22.5),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/plus_circle.png',
+                        height: 15.43,
+                        width: 15.43,
+                      ),
+                      const SizedBox(width: 10.23),
+                      Text(
+                        'แจ้งปัญหาการใช้งาน',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF7A4CB1),
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),
-                  InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(
-                        Icons.close,
-                        size: 35,
-                        color: Color(0xFFF7A4CB1),
-                      )),
-                ],
-              ),
+                ),
+                SizedBox(height: 25),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'หัวข้อปัญหาที่พบบ่อย',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 5),
+                Column(
+                  children: mockFAQ
+                      .map<Widget>(
+                        (dynamic e) => Container(
+                          height: 45,
+                          width: double.infinity,
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          decoration: BoxDecoration(
+                            border: Border.symmetric(
+                              horizontal: BorderSide(
+                                width: 1,
+                                color: Color(0xFFF7F7F7),
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                e['title'],
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                size: 12,
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                      .toList(),
+                )
+              ],
             ),
-          ),
-          // SizedBox(height: 10),
-          Expanded(child: _body())
+          )
         ],
       ),
     );
-  }
-
-  _body() {
-    return SafeArea(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          flex: 10,
-          child: Container(
-            height: 20,
-            width: MediaQuery.of(context).size.width,
-            color: Color(0xFFFEF7FF),
-            child: ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 70,
-                        width: 70,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF7F34EE),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Image.asset(
-                            'assets/chat.png',
-                            height: 26,
-                            width: 26,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        // height: 70,
-                        // width: 70,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(20),
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(10),
-                          ),
-                          color: Color(0xFF7F34EE).withOpacity(0.15),
-                          // shape: BoxShape.circle,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            'สวัสดีค่ะ ท่านต้องการความช่วยเหลือ\nด้านไหนสามารถเลือกหัวข้อได้ หรือ\nจะส่งเป็นข้อความก็ได้ค่ะ',
-                            style: TextStyle(
-                              fontSize: 11,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      child: Container(
-                        // height: 70,
-                        // width: 70,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(30),
-                            ),
-                            border: Border.all(
-                                color: Color(0xFF7F34EE),
-                                width: 1,
-                                style: BorderStyle.solid),
-                            color: Colors.white
-                            // shape: BoxShape.circle,
-                            ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            'การจองใช้บริการ',
-                            style: TextStyle(
-                              fontSize: 11,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      child: Container(
-                        // height: 70,
-                        // width: 70,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(30),
-                            ),
-                            border: Border.all(
-                                color: Color(0xFF7F34EE),
-                                width: 1,
-                                style: BorderStyle.solid),
-                            color: Colors.white
-                            // shape: BoxShape.circle,
-                            ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            'การยืนยันตัวตน',
-                            style: TextStyle(
-                              fontSize: 11,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      child: Container(
-                        // height: 70,
-                        // width: 70,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(30),
-                            ),
-                            border: Border.all(
-                                color: Color(0xFF7F34EE),
-                                width: 1,
-                                style: BorderStyle.solid),
-                            color: Colors.white
-                            // shape: BoxShape.circle,
-                            ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            'สมัครสมาชิก',
-                            style: TextStyle(
-                              fontSize: 11,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              
-              ],
-            ),
-          ),
-        ),
-        Flexible(
-          flex: 2,
-            child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-                // height: 20,
-                width: MediaQuery.of(context).size.width,
-                color: Colors.white,
-                child: 
-                
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                   Expanded(
-                    flex: 10,
-                     child: TextFormField(
-                               // obscureText: showTxtPasswordOld,
-                               style: TextStyle(
-                                 color: Colors.black,
-                                 fontWeight: FontWeight.normal,
-                                 fontFamily: 'Kanit',
-                                 fontSize: 15.0,
-                               ),
-                               decoration: InputDecoration(
-                                 
-                                 filled: true,
-                                 fillColor: Colors.white,
-                                 contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                                 hintText: 'รหัสผ่านปัจจุบัน',
-                                 border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10.0),
-                                   borderSide: BorderSide.none,
-                                 ),
-                                 errorStyle: TextStyle(
-                                   fontWeight: FontWeight.normal,
-                                   fontFamily: 'Kanit',
-                                   fontSize: 10.0,
-                                 ),
-                               ),
-                               // validator: (model) {
-                               //   if (model.isEmpty) {
-                               //     return 'กรุณากรอกรหัสผ่านปัจจุบัน.';
-                               //   }
-                               // },
-                               controller: chatController,
-                               enabled: true,
-                             ),
-                   ),
-          
-                    // Text('ความต้องการของท่าน'),
-                    Flexible(
-                      flex: 1,
-                      child: Image.asset(
-                        'assets/send.png',
-                        height: 26,
-                        width: 26,
-                      ),
-                    ),
-                  ],
-                )
-                ))
-      ],
-    )
-
-        // Container(
-        //   height: MediaQuery.of(context).size.longestSide,
-        //   width: MediaQuery.of(context).size.longestSide,
-        //   decoration: BoxDecoration(
-        //     image: DecorationImage(
-        //       image: AssetImage(
-        //         'assets/report_mock.png',
-        //       ),
-        //       fit: BoxFit.fill,
-        //     ),
-        //   ),
-        //   // child: SizedBox(),
-        //   // ),
-        //   // Expanded(child: SizedBox())
-        //   // ],
-        // ),
-
-        );
   }
 }

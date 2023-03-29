@@ -88,6 +88,25 @@ mockCreateProfileData() {
 
 // ------- mock Booking -----------------------------------------------------------------------------
 
+const mockFAQ = [
+  {
+    'code': '01',
+    'title': 'FAQ หัวข้อที่ 1',
+  },
+  {
+    'code': '02',
+    'title': 'FAQ หัวข้อที่ 2',
+  },
+  {
+    'code': '03',
+    'title': 'FAQ หัวข้อที่ 3',
+  },
+  {
+    'code': '04',
+    'title': 'FAQ หัวข้อที่ 4',
+  },
+];
+
 class MockBookingData {
   static category() => [
         {'code': '0', 'title': 'กำลังจะมาถึง'},

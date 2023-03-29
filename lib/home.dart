@@ -5,6 +5,7 @@ import 'package:des/build_modal_connection_in_progress.dart';
 import 'package:des/detail.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/notification_list.dart';
+import 'package:des/chat.dart';
 import 'package:des/report_problem.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -226,13 +227,13 @@ class _HomePageState extends State<HomePage> {
                       onTap: () {
                         _determinePosition();
                         // ปิดก่อน ios เด้ง
-                        if (latLng != null)
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => PoiPage(latLng: latLng!),
-                            ),
-                          );
+                        // if (latLng != null)
+                        //   Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (_) => PoiPage(latLng: latLng!),
+                        //     ),
+                        //   );
                       },
                       child: Row(
                         children: [
@@ -256,44 +257,43 @@ class _HomePageState extends State<HomePage> {
                   child: ListView(
                     padding: EdgeInsets.zero,
                     scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
                     physics: const ClampingScrollPhysics(),
                     children: [
                       columnButton(
                         'assets/images/reserve_service.png',
                         'จองใช้บริการ',
                         type: 'serviceforyou',
-                        code: 'btn5',
+                        code: 'booking',
                       ),
                       columnButton(
                         'assets/images/find_job.png',
                         'หางาน',
                         type: 'serviceforyou',
-                        code: 'btn6',
+                        code: 'job',
                       ),
                       columnButton(
                         'assets/images/funding_source.png',
                         'หาแหล่งทุน',
                         type: 'serviceforyou',
-                        code: 'btn7',
+                        code: 'fund',
                       ),
                       columnButton(
                         'assets/images/reskill.png',
                         'ส่งเสริมทักษะ',
                         type: 'serviceforyou',
-                        code: 'btn8',
+                        code: 'skill',
                       ),
                       columnButton(
                         'assets/images/data_warehouse.png',
                         'คลังข้อมูล',
                         type: 'serviceforyou',
-                        code: 'btn9',
+                        code: 'knowledge',
                       ),
                       columnButton(
                         'assets/images/report_problem.png',
                         'แจ้งปัญหา',
                         type: 'serviceforyou',
-                        code: 'btn10',
+                        code: 'report',
                       ),
                     ],
                   ),
@@ -339,7 +339,7 @@ class _HomePageState extends State<HomePage> {
                   height: 180,
                   child: CarouselSlider(
                     options: CarouselOptions(
-                      aspectRatio: 20 / 9,
+                      aspectRatio: 4,
                       enlargeCenterPage: true,
                       scrollDirection: Axis.horizontal,
                       viewportFraction: 0.9,
@@ -348,14 +348,17 @@ class _HomePageState extends State<HomePage> {
                       enlargeStrategy: CenterPageEnlargeStrategy.zoom,
                     ),
                     items: mockBannerList
-                        .map((item) => ClipRRect(
+                        .map(
+                          (item) => ClipRRect(
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                             child: CachedNetworkImage(
                               imageUrl: item,
                               fit: BoxFit.cover,
                               width: double.infinity,
                               height: double.infinity,
-                            )))
+                            ),
+                          ),
+                        )
                         .toList(),
                   ),
                 ),
@@ -710,20 +713,20 @@ class _HomePageState extends State<HomePage> {
       buildModalConnectionInProgress(context);
     } else if (param == 'btn4') {
       buildModalConnectionInProgress(context);
-    } else if (param == 'btn5') {
+    } else if (param == 'booking') {
       widget.changePage!(1);
-    } else if (param == 'btn6') {
+    } else if (param == 'job') {
       buildModalConnectionInProgress(context);
-    } else if (param == 'btn7') {
+    } else if (param == 'fund') {
       buildModalConnectionInProgress(context);
-    } else if (param == 'btn8') {
+    } else if (param == 'skill') {
       buildModalConnectionInProgress(context);
-    } else if (param == 'btn9') {
+    } else if (param == 'knowledge') {
       buildModalConnectionInProgress(context);
-    } else if (param == 'btn10') {
+    } else if (param == 'report') {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => ReportProblem(),
+          builder: (context) => ReportProblemPage(),
         ),
       );
     }
