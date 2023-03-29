@@ -67,7 +67,7 @@ const dynamic mockDataClassFavorite = {
 };
 
 final List<String> mockBannerList = [
-  'https://raot.we-builds.com/raot-document/images/poi/poi_231453545.png',
+  'https://raot.we-builds.com/raot-document/images/event/event_230009649.png',
   'https://raot.we-builds.com/raot-document/images/event/event_231013260.jpg',
   'https://raot.we-builds.com/raot-document/images/event/event_230539141.jpg',
   'https://raot.we-builds.com/raot-document/images/event/event_235223817.png',

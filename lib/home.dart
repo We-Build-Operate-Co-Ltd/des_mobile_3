@@ -55,6 +55,7 @@ class _HomePageState extends State<HomePage> {
   String dateNow = DateFormat('dd/MM/yyyy').format(DateTime.now());
   LatLng? latLng;
   String? currentLocation = 'ตำแหน่งปัจจุบัน';
+  int? _currentBanner = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -335,32 +336,64 @@ class _HomePageState extends State<HomePage> {
                     }
                   },
                 ),
-                Container(
-                  height: 180,
-                  child: CarouselSlider(
-                    options: CarouselOptions(
-                      aspectRatio: 4,
-                      enlargeCenterPage: true,
-                      scrollDirection: Axis.horizontal,
-                      viewportFraction: 0.9,
-                      autoPlay: true,
-                      enlargeFactor: 0.4,
-                      enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                Stack(
+                  children: [
+                    Container(
+                      height: 180,
+                      child: CarouselSlider(
+                        options: CarouselOptions(
+                          aspectRatio: 4,
+                          enlargeCenterPage: true,
+                          scrollDirection: Axis.horizontal,
+                          viewportFraction: 0.9,
+                          autoPlay: true,
+                          enlargeFactor: 0.4,
+                          enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _currentBanner = index;
+                            });
+                          },
+                        ),
+                        items: mockBannerList.map(
+                          (item) {
+                            int index = mockBannerList.indexOf(item);
+                            return ClipRRect(
+                              borderRadius: _currentBanner == index
+                                  ? BorderRadius.all(Radius.circular(20))
+                                  : BorderRadius.circular(0),
+                              child: CachedNetworkImage(
+                                imageUrl: item,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                              ),
+                            );
+                          },
+                        ).toList(),
+                      ),
                     ),
-                    items: mockBannerList
-                        .map(
-                          (item) => ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            child: CachedNetworkImage(
-                              imageUrl: item,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: double.infinity,
+                    Positioned(
+                      bottom: 10,
+                      left: 0,
+                      right: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: mockBannerList.map<Widget>((url) {
+                          int index = mockBannerList.indexOf(url);
+                          return Container(
+                            width: _currentBanner == index ? 17.5 : 7.0,
+                            height: 7.0,
+                            margin: EdgeInsets.all(2.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.white,
                             ),
-                          ),
-                        )
-                        .toList(),
-                  ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -380,20 +413,19 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.length > 0) {
-                        return SizedBox(
-                          height: 240,
-                          width: double.infinity,
-                          child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            physics: const ClampingScrollPhysics(),
-                            itemCount: snapshot.data!.length,
-                            separatorBuilder: (_, __) =>
-                                const SizedBox(width: 15),
-                            itemBuilder: (context, index) =>
-                                containerRecommendedClass(
-                                    snapshot.data![index]),
+                        return GridView.builder(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 9 / 12,
+                            crossAxisSpacing: 5,
                           ),
+                          physics: const ClampingScrollPhysics(),
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) =>
+                              containerRecommendedClass(snapshot.data![index]),
                         );
                       }
                     }
@@ -422,68 +454,63 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       },
-      child: Container(
-        width: 165,
-        margin: EdgeInsets.only(bottom: 20),
-        decoration: BoxDecoration(
-          color: const Color(0xFFFFFFFF),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Color(0x19000000),
-              blurRadius: 10,
-              offset: Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-              ),
-              child: CachedNetworkImage(
-                imageUrl: model['imageUrl'],
-                height: 93,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-            ),
-            const SizedBox(height: 9),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  model['title'],
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+      child: Card(
+        elevation: 4,
+        color: Colors.white,
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFFFFF),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: model['imageUrl'],
+                  height: 93,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                children: [
-                  Image.asset('assets/images/time_home_page.png',
-                      height: 24, width: 24),
-                  const SizedBox(width: 8),
-                  const Text(
-                    '3 ชั่วโมง',
-                    style: TextStyle(
-                      fontSize: 9,
+              const SizedBox(height: 9),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    model['title'],
+                    style: const TextStyle(
+                      fontSize: 13,
                       fontWeight: FontWeight.w400,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ],
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-          ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  children: [
+                    Image.asset('assets/images/time_home_page.png',
+                        height: 24, width: 24),
+                    const SizedBox(width: 8),
+                    const Text(
+                      '3 ชั่วโมง',
+                      style: TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
