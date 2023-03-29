@@ -21,6 +21,7 @@ class _BookingServiceSuccessPageState extends State<BookingServiceSuccessPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: WillPopScope(

@@ -187,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           columnButton(
                             'assets/images/modern_farmer.png',
-                            'เกษตรกร\nสมัยใหม่',
+                            'เกษตรกรสมัยใหม่',
                             code: 'btn1',
                           ),
                           columnButton(
@@ -578,8 +578,11 @@ class _HomePageState extends State<HomePage> {
   Widget columnButton(String image, String title,
       {String type = '', String code = ''}) {
     //serviceforyou ใช้สำหรับ บริการสำหรับคุณ
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 20 / 100,
+    return Container(
+      constraints: type == 'serviceforyou'
+          ? BoxConstraints(minWidth: 80, maxWidth: 90)
+          : null,
+      padding: EdgeInsets.symmetric(horizontal: 4),
       child: Column(
         children: [
           GestureDetector(

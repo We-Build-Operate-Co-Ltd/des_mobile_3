@@ -14,7 +14,8 @@ class BookingServicePage extends StatefulWidget {
   State<BookingServicePage> createState() => _BookingServicePageState();
 }
 
-class _BookingServicePageState extends State<BookingServicePage> {
+class _BookingServicePageState extends State<BookingServicePage>
+    with SingleTickerProviderStateMixin {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   DateTime selectedDate = DateTime.now();
@@ -36,6 +37,11 @@ class _BookingServicePageState extends State<BookingServicePage> {
 
   String _selectedCategory = '0';
 
+  late ScrollController _scrollController;
+  bool lastStatus = true;
+
+  late AnimationController _animationController;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -44,208 +50,347 @@ class _BookingServicePageState extends State<BookingServicePage> {
         resizeToAvoidBottomInset: false,
         extendBody: true,
         backgroundColor: Colors.white,
-        body: Stack(
-          children: [
-            Positioned(
-              top: -42,
-              right: 0,
-              child: Image.asset(
-                'assets/images/logo_2o.png',
-                fit: BoxFit.fitWidth,
-                width: 290,
-                alignment: Alignment.topRight,
-              ),
-            ),
-            Positioned.fill(
-              child: SmartRefresher(
-                enablePullDown: true,
-                enablePullUp: false,
-                controller: _refreshController,
-                onRefresh: onRefresh,
-                onLoading: _onLoading,
-                child: ListView(
-                  physics: ClampingScrollPhysics(),
-                  children: [
-                    SizedBox(height: 20 + MediaQuery.of(context).padding.top),
-                    Text(
-                      'จองบริการ',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 25),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Container(
-                        padding: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.4),
-                              blurRadius: 6,
-                              offset: Offset(0, 3),
+        body: SmartRefresher(
+            enablePullDown: true,
+            enablePullUp: false,
+            controller: _refreshController,
+            onRefresh: onRefresh,
+            onLoading: _onLoading,
+            child: CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                SliverAppBar(
+                  pinned: true,
+                  stretch: true,
+                  foregroundColor: Colors.red,
+                  expandedHeight: 450.0,
+                  collapsedHeight: 145,
+                  toolbarHeight: 145,
+                  backgroundColor: Colors.white,
+                  titleSpacing: 0.0,
+                  flexibleSpace: FlexibleSpaceBar(
+                    titlePadding: EdgeInsets.zero,
+                    expandedTitleScale: 1,
+                    title: Stack(
+                      children: [
+                        Positioned(
+                          top: -42,
+                          right: 0,
+                          child: AnimatedOpacity(
+                            duration: _animationController.duration!,
+                            curve: Curves.fastOutSlowIn,
+                            opacity: _isShrink ? 0.0 : 1,
+                            child: Image.asset(
+                              'assets/images/logo_2o.png',
+                              fit: BoxFit.fitWidth,
+                              width: 290,
+                              alignment: Alignment.topRight,
                             ),
-                          ],
+                          ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () => setState(() {
-                                      _currentPage = 0;
-                                    }),
-                                    child: Container(
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: _currentPage == 0
-                                            ? Color(0xFF7A4CB1)
-                                            : Color(0xFFDDDDDD),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'จองใช้บริการ',
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
+                        Positioned.fill(
+                          child: !_isShrink
+                              ? AnimatedOpacity(
+                                  duration: _animationController.duration!,
+                                  curve: Curves.easeIn,
+                                  opacity: _isShrink ? 0.0 : 1,
+                                  child: ListView(
+                                    physics: ClampingScrollPhysics(),
+                                    padding: EdgeInsets.zero,
+                                    children: _criteriaExpanded(),
                                   ),
-                                ),
-                                SizedBox(width: 15),
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () => setState(() {
-                                      _currentPage = 1;
-                                    }),
-                                    child: Container(
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: _currentPage == 1
-                                            ? Color(0xFF7A4CB1)
-                                            : Color(0xFFDDDDDD),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'เลือกศูนย์ฯ',
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 15),
-                            if (_currentPage == 0) ..._pageOne(),
-                            if (_currentPage == 1) ..._pageTwo(),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) =>
-                                        BookingServiceSearchResultPage(
-                                      date: txtDate.text,
-                                      startTime: txtStartTime.text,
-                                      endTime: txtEndTime.text,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                height: 45,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFF7A4CB1),
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'ค้นหา',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
+                                )
+                              : _criteriaCollapse(),
                         ),
-                      ),
+                      ],
                     ),
-                    // history
-                    SizedBox(height: 20),
-                    Container(
-                      color: Colors.white,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      child: FutureBuilder<dynamic>(
-                        future: Future.value(modelCategory),
-                        builder: (_, snapshot) {
-                          if (snapshot.hasData) {
-                            return SizedBox(
-                              height: 25,
-                              child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (_, __) =>
-                                    _itemCategory(snapshot.data[__]),
-                                separatorBuilder: (_, __) =>
-                                    SizedBox(width: 10),
-                                itemCount: snapshot.data!.length,
-                              ),
-                            );
-                          }
-                          return SizedBox(height: 25);
-                        },
-                      ),
-                    ),
-                    Container(
-                      color: Colors.white,
-                      child: FutureBuilder<dynamic>(
-                        future: _futureModel,
-                        builder: (_, snapshot) {
-                          if (snapshot.hasData) {
-                            return ListView.separated(
-                              shrinkWrap: true,
-                              physics: ClampingScrollPhysics(),
-                              padding: EdgeInsets.only(
-                                left: 15,
-                                right: 15,
-                                bottom:
-                                    MediaQuery.of(context).padding.bottom + 20,
-                              ),
-                              itemCount: snapshot.data!.length,
-                              separatorBuilder: (_, __) => SizedBox(height: 15),
-                              itemBuilder: (_, __) =>
-                                  _itemBooking(snapshot.data[__]),
-                            );
-                          }
-                          return SizedBox();
-                        },
-                      ),
-                    )
-                  ],
+                  ),
                 ),
+                SliverList(
+                    delegate: SliverChildListDelegate([
+                  ..._history(),
+                ]))
+              ],
+            )),
+      ),
+    );
+  }
+
+  _criteriaCollapse() {
+    return GestureDetector(
+      onTap: () {
+        _scrollController.animateTo(0,
+            duration: const Duration(milliseconds: 400), curve: Curves.linear);
+      },
+      child: Container(
+        color: Color(0xFFFEF7FF),
+        padding: EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 20 + MediaQuery.of(context).padding.top,
+            ),
+            Text(
+              'จองบริการ',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
               ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => dialogOpenPickerDate(),
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: txtDate,
+                        style: const TextStyle(
+                          color: Color(0xFF7A4CB1),
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Kanit',
+                          fontSize: 15.0,
+                        ),
+                        decoration: _decorationDate(
+                          context,
+                          hintText: 'วันใช้บริการ',
+                        ),
+                        validator: (model) {
+                          if (model!.isEmpty) {
+                            return 'กรุณากรอกวันเดือนปีเกิด.';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 15),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BookingServiceSearchResultPage(
+                            date: txtDate.text,
+                            startTime: txtStartTime.text,
+                            endTime: txtEndTime.text,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF7A4CB1),
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'ค้นหา',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             )
           ],
         ),
       ),
     );
+  }
+
+  List<Widget> _criteriaExpanded() {
+    return <Widget>[
+      SizedBox(
+        height: 20 + MediaQuery.of(context).padding.top,
+      ),
+      Text(
+        'จองบริการ',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
+          color: Colors.black,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      SizedBox(
+        height: 25,
+      ),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15),
+        child: Container(
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.4),
+                blurRadius: 6,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => setState(() {
+                        _currentPage = 0;
+                      }),
+                      child: Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: _currentPage == 0
+                              ? Color(0xFF7A4CB1)
+                              : Color(0xFFDDDDDD),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'จองใช้บริการ',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => setState(() {
+                        _currentPage = 1;
+                      }),
+                      child: Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: _currentPage == 1
+                              ? Color(0xFF7A4CB1)
+                              : Color(0xFFDDDDDD),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'เลือกศูนย์ฯ',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              if (_currentPage == 0) ..._pageOne(),
+              if (_currentPage == 1) ..._pageTwo(),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BookingServiceSearchResultPage(
+                        date: txtDate.text,
+                        startTime: txtStartTime.text,
+                        endTime: txtEndTime.text,
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  height: 45,
+                  decoration: BoxDecoration(
+                    color: Color(0xFF7A4CB1),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    'ค้นหา',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> _history() {
+    return <Widget>[
+      SizedBox(
+        height: 20,
+      ),
+      Container(
+        color: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+        child: FutureBuilder<dynamic>(
+          future: Future.value(modelCategory),
+          builder: (_, snapshot) {
+            if (snapshot.hasData) {
+              return SizedBox(
+                height: 25,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (_, __) => _itemCategory(snapshot.data[__]),
+                  separatorBuilder: (_, __) => SizedBox(width: 10),
+                  itemCount: snapshot.data!.length,
+                ),
+              );
+            }
+            return SizedBox(height: 25);
+          },
+        ),
+      ),
+      Container(
+        color: Colors.white,
+        child: FutureBuilder<dynamic>(
+          future: _futureModel,
+          builder: (_, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.separated(
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                padding: EdgeInsets.only(
+                  left: 15,
+                  right: 15,
+                  bottom: MediaQuery.of(context).padding.bottom + 20,
+                ),
+                itemCount: snapshot.data!.length,
+                separatorBuilder: (_, __) => SizedBox(height: 15),
+                itemBuilder: (_, __) => _itemBooking(snapshot.data[__]),
+              );
+            }
+            return SizedBox();
+          },
+        ),
+      ),
+    ];
   }
 
   List<Widget> _pageOne() {
@@ -363,6 +508,7 @@ class _BookingServicePageState extends State<BookingServicePage> {
         style: TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w500,
+          color: Colors.black,
         ),
         textAlign: TextAlign.left,
       ),
@@ -376,6 +522,7 @@ class _BookingServicePageState extends State<BookingServicePage> {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w400,
+              color: Colors.black,
             ),
           ),
         ],
@@ -390,6 +537,7 @@ class _BookingServicePageState extends State<BookingServicePage> {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w400,
+              color: Colors.black,
             ),
           ),
         ],
@@ -668,8 +816,8 @@ class _BookingServicePageState extends State<BookingServicePage> {
         ),
         // hintText: hintText,
         filled: true,
-        fillColor: Colors.transparent,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+        fillColor: Colors.white,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
         suffixIcon: const Icon(Icons.calendar_today, size: 17),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
@@ -901,7 +1049,17 @@ class _BookingServicePageState extends State<BookingServicePage> {
     _selectedYear = now.year + 543;
     _selectedMonth = now.month;
     _selectedDay = now.day;
+    _scrollController = ScrollController()..addListener(_scrollListener);
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
     _callRead();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void _callRead() async {
@@ -1032,5 +1190,17 @@ class _BookingServicePageState extends State<BookingServicePage> {
       result = false;
     }
     return result;
+  }
+
+  void _scrollListener() {
+    if (_isShrink != lastStatus) {
+      setState(() {
+        lastStatus = _isShrink;
+      });
+    }
+  }
+
+  bool get _isShrink {
+    return _scrollController.hasClients && _scrollController.offset > (291);
   }
 }

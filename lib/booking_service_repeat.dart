@@ -39,7 +39,9 @@ class _BookingServiceRepeatPageState extends State<BookingServiceRepeatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         flexibleSpace: Container(
           width: double.infinity,
