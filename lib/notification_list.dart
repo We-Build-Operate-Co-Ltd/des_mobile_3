@@ -75,164 +75,6 @@ class _NotificationListState extends State<NotificationListPage> {
     },
   ];
 
-  textNotiEmpty(String categoryDay) {
-    switch (categoryDay) {
-      case '1':
-        {
-          return "ท่านไม่มีข้อมูลการแจ้งเตือน\nสำหรับวันนี้";
-        }
-      case '2':
-        {
-          return "ท่านไม่มีข้อมูลการแจ้งเตือน\nสำหรับเมื่อวาน";
-        }
-      case '3':
-        {
-          return "ท่านไม่มีข้อมูลการแจ้งเตือน\nเมื่อ 7 วันก่อน";
-        }
-      case '4':
-        {
-          return "ท่านไม่มีข้อมูลการแจ้งเตือน\nที่เก่ากว่า 7 วัน";
-        }
-      case '5':
-        {
-          return "ท่านไม่มีข้อมูลการแจ้งเตือน\nที่ยังไม่อ่าน";
-        }
-      default:
-        {
-          return "ท่านไม่มีข้อมูลการแจ้งเตือน\nทั้งหมด";
-        }
-    }
-  }
-
-  textDialogDelete(
-    String categoryDay,
-  ) {
-    switch (categoryDay) {
-      case '1':
-        {
-          return "ลบรายการทั้งหมดของวันนี้ออกจากการแจ้งเตือนใช่หรือไม่";
-        }
-      case '2':
-        {
-          return "ลบรายการทั้งหมดของเมื่อวานออกจากการแจ้งเตือนใช่หรือไม่";
-        }
-      case '3':
-        {
-          return "ลบรายการทั้งหมดของเมื่อ 7 วันก่อนออกจากการแจ้งเตือนใช่หรือไม่";
-        }
-      case '4':
-        {
-          return "ลบรายการทั้งหมดที่เก่ากว่า 7 วันก่อนออกจากการแจ้งเตือนใช่หรือไม่";
-        }
-      default:
-        {
-          return "ลบรายการทั้งหมด ออกจากแจ้งเตือนใช่หรือไม่";
-        }
-    }
-  }
-
-  textDialogUpdate(
-    String categoryDay,
-  ) {
-    switch (categoryDay) {
-      case '1':
-        {
-          return "เปลี่ยนรายการทั้งหมดของวันนี้เป็นอ่านแล้วใช่หรือไม่";
-        }
-      case '2':
-        {
-          return "เปลี่ยนรายการทั้งหมดของเมื่อวานเป็นอ่านแล้วใช่หรือไม่";
-        }
-      case '3':
-        {
-          return "เปลี่ยนรายการทั้งหมดของเมื่อ 7 วันก่อนเป็นอ่านแล้วใช่หรือไม่";
-        }
-      case '4':
-        {
-          return "เปลี่ยนรายการทั้งหมดที่เก่ากว่า 7 วันก่อนเป็นอ่านแล้วใช่หรือไม่";
-        }
-      default:
-        {
-          return "เปลี่ยนรายการทั้งหมด เป็นอ่านแล้วใช่หรือไม่";
-        }
-    }
-  }
-
-  checkNavigationPage(String page, dynamic model) {
-    switch (page) {
-      case 'eventPage':
-        {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DetailPage(
-                slug: 'eventcalendar',
-                model: model,
-                checkNotiPage: true,
-              ),
-            ),
-          );
-        }
-        break;
-
-      case 'mainPage':
-        {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DetailPage(
-                slug: page,
-                model: model,
-                checkNotiPage: true,
-              ),
-            ),
-          );
-        }
-        break;
-
-      // case 'privilegePage':
-      //   {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //         builder: (context) => PrivilegeForm(
-      //           code: model['reference'],
-      //           model: model,
-      //         ),
-      //       ),
-      //     ).then((value) => {_loading()});
-      //   }
-      //   break;
-
-      default:
-        {
-          Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-        }
-        break;
-    }
-  }
-
-  checkCategoryName(String page, dynamic model) {
-    switch (page) {
-      case 'eventPage':
-        {
-          return "ข่าวและกิจกรรม";
-        }
-      case 'privilegePage':
-        {
-          return "สิทธิประโยชน์";
-        }
-      case 'mainPage':
-        {
-          return "กำหนดเอง";
-        }
-      default:
-        {
-          return "";
-        }
-    }
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -251,6 +93,92 @@ class _NotificationListState extends State<NotificationListPage> {
     });
     _loading();
     super.initState();
+  }
+
+  void _loading() async {
+    _readNotiCount();
+    if (_readNotiCount != []) {
+      modelNotiCount = await _readNotiCount();
+      setState(() {
+        notiCount = modelNotiCount['total'];
+      });
+    }
+    selectedCategoryDays = "";
+    Response<dynamic> result = await dio
+        .post('http://122.155.223.63/td-des-api/m/v2/notification/read', data: {
+      'skip': 0,
+      'limit': 999,
+      'profileCode': profileCode,
+      'category': categorySelected,
+    });
+
+    List<dynamic> list = [
+      {
+        "category": "bookingPage",
+        "title":
+            "ถึงท่านสมาชิก การจองเครื่องสำหรับการเรียนรู้ ระบบได้ทำการจองให้ท่านเป็นที่เรียบร้อย ท่านสามารถเข้าใช้ได้ในวันที่ 31/03/66",
+        "totalDays": 0,
+        "status": "N",
+        "docTime": "09:31:00",
+        "createDate": "20230210093100",
+        "imageUrlCreateBy":
+            "https://raot.we-builds.com/raot-document/images/member/member_234043642.png",
+        "createBy": "admincms",
+        "description":
+            "<font face=\"Kanit\">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</font>",
+      },
+    ];
+    var listModel = [];
+    if (result.statusCode == 200) {
+      if (result.data['status'] == 'S') {
+        if (categorySelected == '' || categorySelected == 'bookingPage') {
+          setState(() {
+            listModel = [...list, ...result.data['objectData']];
+          });
+        } else {
+          setState(() {
+            listModel = result.data['objectData'];
+          });
+        }
+        setState(() {
+          _futureModel = Future.value(listModel);
+        });
+      }
+    }
+    listModel = await _futureModel;
+
+    setState(() {
+      listData = [];
+      listResultData = [];
+      if (listModel.length > 0) {
+        for (var i = 0; i < listModel.length; i++) {
+          var categoryDays = listModel[i]['totalDays'] == 0
+              ? "1"
+              : listModel[i]['totalDays'] == 1
+                  ? "2"
+                  : listModel[i]['totalDays'] <= 7 &&
+                          listModel[i]['totalDays'] > 0
+                      ? "3"
+                      : listModel[i]['totalDays'] > 7
+                          ? "4"
+                          : "";
+          listModel[i]['categoryDays'] = categoryDays;
+          listModel[i]['isSelected'] = false;
+          listData.add(listModel[i]);
+        }
+      }
+      listResultData = listData;
+      _futureModel = Future.value(listData);
+      chkListCount = listResultData.length > 0 ? true : false;
+      chkListActive =
+          listData.where((x) => x['status'] != "A").toList().length > 0
+              ? true
+              : false;
+      totalSelected = 0;
+    });
+    await Future.delayed(Duration(milliseconds: 1000));
+
+    _refreshController.loadComplete();
   }
 
   void _holdClick(dynamic model) {
@@ -299,63 +227,14 @@ class _NotificationListState extends State<NotificationListPage> {
     });
   }
 
-  _loading() async {
-    _readNotiCount();
-    if (_readNotiCount != []) {
-      modelNotiCount = await _readNotiCount();
-      setState(() {
-        notiCount = modelNotiCount['total'];
-      });
-    }
-    selectedCategoryDays = "";
-    Response<dynamic> result = await dio
-        .post('http://122.155.223.63/td-des-api/m/v2/notification/read', data: {
-      'skip': 0,
-      'limit': 999,
-      'profileCode': profileCode,
-      'category': categorySelected,
-    });
-
-    if (result.statusCode == 200) {
-      if (result.data['status'] == 'S') {
-        setState(() {
-          _futureModel = Future.value(result.data['objectData']);
-        });
-      }
-    }
-    var listModel = await _futureModel;
-
+  void unSelectall() {
     setState(() {
-      listData = [];
-      listResultData = [];
-      if (listModel.length > 0) {
-        for (var i = 0; i < listModel.length; i++) {
-          var categoryDays = listModel[i]['totalDays'] == 0
-              ? "1"
-              : listModel[i]['totalDays'] == 1
-                  ? "2"
-                  : listModel[i]['totalDays'] <= 7 &&
-                          listModel[i]['totalDays'] > 0
-                      ? "3"
-                      : listModel[i]['totalDays'] > 7
-                          ? "4"
-                          : "";
-          listModel[i]['categoryDays'] = categoryDays;
-          listModel[i]['isSelected'] = false;
-          listData.add(listModel[i]);
-        }
+      for (var i = 0; i < listData.length; i++) {
+        listData[i]['isSelected'] = false;
       }
-      listResultData = listData;
-      chkListCount = listResultData.length > 0 ? true : false;
-      chkListActive =
-          listData.where((x) => x['status'] != "A").toList().length > 0
-              ? true
-              : false;
       totalSelected = 0;
+      isCheckSelect = false;
     });
-    await Future.delayed(Duration(milliseconds: 1000));
-
-    _refreshController.loadComplete();
   }
 
   Future<dynamic> _readNotiCount() async {
@@ -379,16 +258,6 @@ class _NotificationListState extends State<NotificationListPage> {
     return [];
   }
 
-  unSelectall() {
-    setState(() {
-      for (var i = 0; i < listData.length; i++) {
-        listData[i]['isSelected'] = false;
-      }
-      totalSelected = 0;
-      isCheckSelect = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -408,7 +277,7 @@ class _NotificationListState extends State<NotificationListPage> {
           },
           child: GestureDetector(
             onTap: () {
-              FocusScope.of(context).requestFocus(new FocusNode());
+              FocusScope.of(context).requestFocus(FocusNode());
             },
             child: Column(
               children: [
@@ -441,7 +310,7 @@ class _NotificationListState extends State<NotificationListPage> {
                     ),
                     controller: _refreshController,
                     onLoading: _loading,
-                    child: new Stack(
+                    child: Stack(
                       children: <Widget>[
                         selectedCategoryDays == ""
                             ? FutureBuilder(
@@ -482,7 +351,7 @@ class _NotificationListState extends State<NotificationListPage> {
                                         ),
                                       );
                                     } else {
-                                      return new Container(
+                                      return Container(
                                         child:
                                             FadingEdgeScrollView.fromScrollView(
                                           child: ListView.builder(
@@ -499,21 +368,6 @@ class _NotificationListState extends State<NotificationListPage> {
                                           ),
                                         ),
                                       );
-                                      // Container(
-                                      //     child: FadingEdgeScrollView.fromScrollView(
-                                      //       child: ListView(
-                                      //         // shrinkWrap: true,
-                                      //         controller: _controllerBuildCategory,
-                                      //         physics: ClampingScrollPhysics(), // 2nd
-                                      //         children: <Widget>[
-                                      //           for (int i = 0;
-                                      //               i < listCategoryDays.length;
-                                      //               i++)
-                                      //             _buildCategory(listCategoryDays[i]),
-                                      //         ],
-                                      //       ),
-                                      //     ),
-                                      //   )
                                     }
                                   } else if (snapshot.hasError) {
                                     return Container(
@@ -537,7 +391,7 @@ class _NotificationListState extends State<NotificationListPage> {
                                 },
                               )
                             : listResultData.length > 0
-                                ? new Container(
+                                ? Container(
                                     child: FadingEdgeScrollView.fromScrollView(
                                       child: ListView(
                                         padding: EdgeInsets.zero,
@@ -560,14 +414,14 @@ class _NotificationListState extends State<NotificationListPage> {
                                           for (int i = 0;
                                               i < listResultData.length;
                                               i++)
-                                            new Container(
+                                            Container(
                                                 child: cardV2(context,
                                                     listResultData[i])),
                                         ],
                                       ),
                                     ),
                                   )
-                                : new Container(
+                                : Container(
                                     height: MediaQuery.of(context).size.height,
                                     width: (MediaQuery.of(context).size.width),
                                     margin:
@@ -597,7 +451,7 @@ class _NotificationListState extends State<NotificationListPage> {
                                     ),
                                   ),
                         isCheckSelect
-                            ? new Positioned(
+                            ? Positioned(
                                 top: -10.0,
                                 right: 0.0,
                                 child: Padding(
@@ -672,6 +526,303 @@ class _NotificationListState extends State<NotificationListPage> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHead() {
+    return Container(
+      padding: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top, right: 15, left: 15),
+      color: Color(0xFFFFFFFF),
+      child: Column(
+        children: [
+          SizedBox(height: 13),
+          Row(
+            children: [
+              InkWell(
+                onTap: () => Navigator.pop(context),
+                child: Image.asset('assets/images/back.png',
+                    height: 40, width: 40),
+              ),
+              // SizedBox(width: 34),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'แจ้งเตือน',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(width: 15),
+                    _buildNotiCount(),
+                  ],
+                ),
+              ),
+              InkWell(
+                child: Image.asset('assets/images/noti_list.png',
+                    height: 25, width: 25),
+                onTap: _handleClickMe,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildButton(
+      String titleI, String titleE, Color color, Function onTapFunction) {
+    return InkWell(
+      onTap: () {
+        onTapFunction();
+      },
+      child: Container(
+        alignment: Alignment.center,
+        width: 145,
+        height: 40,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(73), color: color),
+        child: Text(
+          totalSelected > 0 ? titleI : titleE,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 15,
+            color: Color(0xFFFFFFFF),
+            fontWeight: FontWeight.w400,
+            fontFamily: 'Kanit',
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNotiCount() {
+    return FutureBuilder<dynamic>(
+      future: _readNotiCount(), // function where you call your api
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.length == 0) {
+            return Container();
+          } else {
+            return Container(
+              height: 22,
+              width: 22,
+              decoration: BoxDecoration(
+                color: Color(0xFFDD2A00),
+                borderRadius: BorderRadius.circular(11),
+              ),
+              child: Text(
+                notiCount.toString(),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFFFFFFFF),
+                ),
+              ),
+            );
+          }
+        } else if (snapshot.hasError) {
+          return Container(
+            alignment: Alignment.center,
+            height: 200,
+            width: double.infinity,
+            child: Text(
+              'Network ขัดข้อง',
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: 'Kanit',
+                color: Color.fromRGBO(0, 0, 0, 0.6),
+              ),
+            ),
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _buildCategory(dynamic model) {
+    if (isNoActive) {
+      listResultData = listData
+          .where(
+              (x) => x['categoryDays'] == model['code'] && x['status'] != "A")
+          .toList();
+    } else {
+      listResultData =
+          listData.where((x) => x['categoryDays'] == model['code']).toList();
+    }
+
+    return listResultData.length > 0
+        ? Container(
+            // margin: EdgeInsets.only(top: height * 1.5 / 100, left: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(left: 30),
+                  child: Text(
+                    '${model['title']}',
+                    style: TextStyle(
+                      color: Color(0xFF7A4CB1),
+                      fontFamily: 'Kanit',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
+                ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: listResultData.length,
+                  itemBuilder: (context, index) => FutureBuilder(
+                    future: _futureModel,
+                    builder: (_, snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data.length == 0) {
+                          return Container();
+                        } else {
+                          return cardV2(context, listResultData[index]);
+                        }
+                      } else if (snapshot.hasError) {
+                        return Container(
+                          alignment: Alignment.center,
+                          height: 200,
+                          width: double.infinity,
+                          child: Text(
+                            'Network ขัดข้อง',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Kanit',
+                              color: Color.fromRGBO(0, 0, 0, 0.6),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  ),
+                  shrinkWrap: true,
+                  controller: _controllerCardV2,
+                  physics: ClampingScrollPhysics(), // 2nd
+                ),
+                SizedBox(height: 34),
+              ],
+            ),
+          )
+        : Container();
+  }
+
+  Widget cardV2(BuildContext context, dynamic model) {
+    return InkWell(
+      onLongPress: () {
+        _holdClick(model);
+      },
+      onTap: isCheckSelect
+          ? () {
+              _singleClick(model);
+            }
+          : () async {
+              await dio.post(
+                'http://122.155.223.63/td-des-api/m/v2/notification/update',
+                data: {
+                  'category': '${model['category']}',
+                  "code": '${model['code']}'
+                },
+              );
+              checkNavigationPage(model['category'], model);
+            },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 20),
+        padding: EdgeInsets.symmetric(horizontal: 15),
+        color: model['isSelected'] ? Color(0x1AB325F8) : Colors.transparent,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: 5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: model['status'] == 'A'
+                    ? Colors.transparent
+                    : Color(0xFFF44336),
+              ),
+              height: 10,
+              width: 10,
+            ),
+            SizedBox(width: 5),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Text(
+                      checkCategoryName(model['category'], model),
+                      style: TextStyle(
+                        color: Color(0xFFB325F8),
+                        fontFamily: 'Kanit',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Container(
+                    child: Text(
+                      '${model['title']}',
+                      style: TextStyle(
+                        color: Color(0xFF000000),
+                        fontFamily: 'Arial',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 13,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              children: [
+                Text(
+                  model['categoryDays'] == "1"
+                      ? '${timeString(model['docTime'])} น.'
+                      : '${dateStringToDateStringFormatV2(model['createDate'])}',
+                  style: TextStyle(
+                    color: Color(0xFFB7B7B7),
+                    fontFamily: 'Arial',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                model['isSelected']
+                    ? Container(
+                        child: Image.asset(
+                          'assets/images/check.png',
+                          fit: BoxFit.contain,
+                          color: Color(0xFF7A4CB1),
+                        ),
+                        height: 20,
+                        width: 20,
+                      )
+                    : Container(),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -981,283 +1132,10 @@ class _NotificationListState extends State<NotificationListPage> {
     );
   }
 
-  Widget _buildHead() {
-    return Container(
-      padding: EdgeInsets.only(
-          top: MediaQuery.of(context).padding.top, right: 15, left: 15),
-      color: Color(0xFFFFFFFF),
-      child: Column(
-        children: [
-          SizedBox(height: 13),
-          Row(
-            children: [
-              InkWell(
-                onTap: () => Navigator.pop(context),
-                child: Image.asset('assets/images/back.png',
-                    height: 40, width: 40),
-              ),
-              // SizedBox(width: 34),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'แจ้งเตือน',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(width: 15),
-                    _buildNotiCount(),
-                  ],
-                ),
-              ),
-              InkWell(
-                child: Image.asset('assets/images/noti_list.png',
-                    height: 25, width: 25),
-                onTap: _handleClickMe,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildButton(
-      String titleI, String titleE, Color color, Function onTapFunction) {
-    return InkWell(
-      onTap: () {
-        onTapFunction();
-      },
-      child: Container(
-        alignment: Alignment.center,
-        width: 145,
-        height: 40,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(73), color: color),
-        child: Text(
-          totalSelected > 0 ? titleI : titleE,
-          textAlign: TextAlign.center,
-          style: new TextStyle(
-            fontSize: 15,
-            color: Color(0xFFFFFFFF),
-            fontWeight: FontWeight.w400,
-            fontFamily: 'Kanit',
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNotiCount() {
-    return FutureBuilder<dynamic>(
-      future: _readNotiCount(), // function where you call your api
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.length == 0) {
-            return Container();
-          } else {
-            return Container(
-              height: 22,
-              width: 22,
-              decoration: BoxDecoration(
-                color: Color(0xFFDD2A00),
-                borderRadius: BorderRadius.circular(11),
-              ),
-              child: Text(
-                notiCount.toString(),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFFFFFFFF),
-                ),
-              ),
-            );
-          }
-        } else if (snapshot.hasError) {
-          return Container(
-            alignment: Alignment.center,
-            height: 200,
-            width: double.infinity,
-            child: Text(
-              'Network ขัดข้อง',
-              style: TextStyle(
-                fontSize: 18,
-                fontFamily: 'Kanit',
-                color: Color.fromRGBO(0, 0, 0, 0.6),
-              ),
-            ),
-          );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
-  }
-
-  Widget _buildCategory(dynamic model) {
-    if (isNoActive) {
-      listResultData = listData
-          .where(
-              (x) => x['categoryDays'] == model['code'] && x['status'] != "A")
-          .toList();
-    } else {
-      listResultData =
-          listData.where((x) => x['categoryDays'] == model['code']).toList();
-    }
-
-    return listResultData.length > 0
-        ? Container(
-            // margin: EdgeInsets.only(top: height * 1.5 / 100, left: 10),
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(left: 30),
-                  child: Text(
-                    '${model['title']}',
-                    style: TextStyle(
-                      color: Color(0xFF7A4CB1),
-                      fontFamily: 'Kanit',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                // for (int i = 0; i < listResultData.length; i++)
-                //   cardV2(context, listResultData[i]),
-                ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: listResultData.length,
-                  itemBuilder: (context, index) =>
-                      cardV2(context, listResultData[index]),
-                  shrinkWrap: true,
-                  controller: _controllerCardV2,
-                  physics: ClampingScrollPhysics(), // 2nd
-                ),
-                SizedBox(height: 34),
-              ],
-            ),
-          )
-        : Container();
-  }
-
-  Widget cardV2(BuildContext context, dynamic model) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    return InkWell(
-      onLongPress: () {
-        _holdClick(model);
-      },
-      onTap: isCheckSelect
-          ? () {
-              _singleClick(model);
-            }
-          : () async {
-              await dio.post(
-                'http://122.155.223.63/td-des-api/m/v2/notification/update',
-                data: {
-                  'category': '${model['category']}',
-                  "code": '${model['code']}'
-                },
-              );
-              checkNavigationPage(model['category'], model);
-            },
-      child: Container(
-        margin: EdgeInsets.only(bottom: 20),
-        padding: EdgeInsets.symmetric(horizontal: 15),
-        color: model['isSelected'] ? Color(0x1AB325F8) : Colors.transparent,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.only(top: 5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: model['status'] == 'A'
-                    ? Colors.transparent
-                    : Color(0xFFF44336),
-              ),
-              height: 10,
-              width: 10,
-            ),
-            SizedBox(width: 5),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    child: Text(
-                      checkCategoryName(model['category'], model),
-                      style: TextStyle(
-                        color: Color(0xFFB325F8),
-                        fontFamily: 'Kanit',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Container(
-                    child: Text(
-                      '${model['title']}',
-                      style: TextStyle(
-                        color: Color(0xFF000000),
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 13,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Column(
-              children: [
-                Text(
-                  model['categoryDays'] == "1"
-                      ? '${timeString(model['docTime'])} น.'
-                      : '${dateStringToDateStringFormatV2(model['createDate'])}',
-                  style: TextStyle(
-                    color: Color(0xFFB7B7B7),
-                    fontFamily: 'Arial',
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                model['isSelected']
-                    ? Container(
-                        child: Image.asset(
-                          'assets/images/check.png',
-                          fit: BoxFit.contain,
-                          color: Color(0xFF7A4CB1),
-                        ),
-                        height: 20,
-                        width: 20,
-                      )
-                    : Container(),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Future<void> _DialogUpdate() {
     return showDialog(
       context: context,
-      builder: (BuildContext context) => new AlertDialog(
+      builder: (BuildContext context) => AlertDialog(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15.0))),
         backgroundColor: Color(0xFFFFFFFF),
@@ -1381,9 +1259,9 @@ class _NotificationListState extends State<NotificationListPage> {
                         });
                       }
                     },
-                    child: new Text(
+                    child: Text(
                       'ใช่',
-                      style: new TextStyle(
+                      style: TextStyle(
                         fontSize: 17.0,
                         color: Color(0xFFFFFFFF),
                         fontWeight: FontWeight.w500,
@@ -1400,10 +1278,10 @@ class _NotificationListState extends State<NotificationListPage> {
     );
   }
 
-  _DialogDelete() {
+  Future<void> _DialogDelete() {
     return showDialog(
       context: context,
-      builder: (BuildContext context) => new AlertDialog(
+      builder: (BuildContext context) => AlertDialog(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15.0))),
         backgroundColor: Color(0xFFFFFFFF),
@@ -1525,9 +1403,9 @@ class _NotificationListState extends State<NotificationListPage> {
                         });
                       }
                     },
-                    child: new Text(
+                    child: Text(
                       'ใช่',
-                      style: new TextStyle(
+                      style: TextStyle(
                         fontSize: 17.0,
                         color: Color(0xFFFFFFFF),
                         fontWeight: FontWeight.w500,
@@ -1542,6 +1420,183 @@ class _NotificationListState extends State<NotificationListPage> {
         ],
       ),
     );
+  }
+
+  textNotiEmpty(String categoryDay) {
+    switch (categoryDay) {
+      case '1':
+        {
+          return "ท่านไม่มีข้อมูลการแจ้งเตือน\nสำหรับวันนี้";
+        }
+      case '2':
+        {
+          return "ท่านไม่มีข้อมูลการแจ้งเตือน\nสำหรับเมื่อวาน";
+        }
+      case '3':
+        {
+          return "ท่านไม่มีข้อมูลการแจ้งเตือน\nเมื่อ 7 วันก่อน";
+        }
+      case '4':
+        {
+          return "ท่านไม่มีข้อมูลการแจ้งเตือน\nที่เก่ากว่า 7 วัน";
+        }
+      case '5':
+        {
+          return "ท่านไม่มีข้อมูลการแจ้งเตือน\nที่ยังไม่อ่าน";
+        }
+      default:
+        {
+          return "ท่านไม่มีข้อมูลการแจ้งเตือน\nทั้งหมด";
+        }
+    }
+  }
+
+  textDialogDelete(
+    String categoryDay,
+  ) {
+    switch (categoryDay) {
+      case '1':
+        {
+          return "ลบรายการทั้งหมดของวันนี้ออกจากการแจ้งเตือนใช่หรือไม่";
+        }
+      case '2':
+        {
+          return "ลบรายการทั้งหมดของเมื่อวานออกจากการแจ้งเตือนใช่หรือไม่";
+        }
+      case '3':
+        {
+          return "ลบรายการทั้งหมดของเมื่อ 7 วันก่อนออกจากการแจ้งเตือนใช่หรือไม่";
+        }
+      case '4':
+        {
+          return "ลบรายการทั้งหมดที่เก่ากว่า 7 วันก่อนออกจากการแจ้งเตือนใช่หรือไม่";
+        }
+      default:
+        {
+          return "ลบรายการทั้งหมด ออกจากแจ้งเตือนใช่หรือไม่";
+        }
+    }
+  }
+
+  textDialogUpdate(
+    String categoryDay,
+  ) {
+    switch (categoryDay) {
+      case '1':
+        {
+          return "เปลี่ยนรายการทั้งหมดของวันนี้เป็นอ่านแล้วใช่หรือไม่";
+        }
+      case '2':
+        {
+          return "เปลี่ยนรายการทั้งหมดของเมื่อวานเป็นอ่านแล้วใช่หรือไม่";
+        }
+      case '3':
+        {
+          return "เปลี่ยนรายการทั้งหมดของเมื่อ 7 วันก่อนเป็นอ่านแล้วใช่หรือไม่";
+        }
+      case '4':
+        {
+          return "เปลี่ยนรายการทั้งหมดที่เก่ากว่า 7 วันก่อนเป็นอ่านแล้วใช่หรือไม่";
+        }
+      default:
+        {
+          return "เปลี่ยนรายการทั้งหมด เป็นอ่านแล้วใช่หรือไม่";
+        }
+    }
+  }
+
+  checkNavigationPage(String page, dynamic model) {
+    switch (page) {
+      case 'eventPage':
+        {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DetailPage(
+                slug: 'eventcalendar',
+                model: model,
+                checkNotiPage: true,
+              ),
+            ),
+          );
+        }
+        break;
+
+      case 'mainPage':
+        {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DetailPage(
+                slug: 'mainPage',
+                model: model,
+                checkNotiPage: true,
+              ),
+            ),
+          );
+        }
+        break;
+
+      case 'bookingPage':
+        {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DetailPage(
+                slug: 'bookingPage',
+                model: model,
+                checkNotiPage: true,
+              ),
+            ),
+          );
+        }
+        break;
+
+      // case 'privilegePage':
+      //   {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (context) => PrivilegeForm(
+      //           code: model['reference'],
+      //           model: model,
+      //         ),
+      //       ),
+      //     ).then((value) => {_loading()});
+      //   }
+      //   break;
+
+      default:
+        {
+          Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+        }
+        break;
+    }
+  }
+
+  checkCategoryName(String page, dynamic model) {
+    switch (page) {
+      case 'eventPage':
+        {
+          return "ข่าวและกิจกรรม";
+        }
+      case 'privilegePage':
+        {
+          return "สิทธิประโยชน์";
+        }
+      case 'mainPage':
+        {
+          return "กำหนดเอง";
+        }
+      case 'bookingPage':
+        {
+          return "จองใช้บริการ";
+        }
+      default:
+        {
+          return "";
+        }
+    }
   }
 
 //

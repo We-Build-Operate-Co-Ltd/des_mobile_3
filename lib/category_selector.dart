@@ -6,7 +6,7 @@ class CategorySelector extends StatefulWidget {
     Key? key,
     required this.onChange,
   }) : super(key: key);
-  Function(String, String) onChange;
+  final Function(String, String) onChange;
 
   @override
   _CategorySelectorState createState() => _CategorySelectorState();
@@ -33,7 +33,8 @@ class _CategorySelectorState extends State<CategorySelector> {
         if (response.data['status'] == 'S') {
           var data = response.data['objectData'];
           List<dynamic> list = [
-            {'value': "", 'display': 'ทั้งหมด'}
+            {'value': "", 'display': 'ทั้งหมด'},
+            {'value': "bookingPage", 'display': 'จองใช้บริการ'}
           ];
           list = [...list, ...data];
           return Future.value(list);
