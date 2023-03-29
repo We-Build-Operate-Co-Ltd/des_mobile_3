@@ -208,7 +208,6 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                                   openLine = true;
                                   _callLoginLine();
                                 }
-                                ;
                               },
                               child: _buildButtonLogin(
                                 'assets/images/line_circle.png',
@@ -777,6 +776,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
 
   void _callLoginLine() async {
     var obj = await loginLine();
+    openLine = false;
 
     if (obj != null) {
       final idToken = obj.accessToken.idToken;

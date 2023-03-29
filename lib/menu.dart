@@ -1,13 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/booking_service.dart';
 import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/user_profile.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:des/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class Menu extends StatefulWidget {
   const Menu({
@@ -70,13 +73,84 @@ class _MenuState extends State<Menu> {
     return Future.value(true);
   }
 
+  // _buildMainPopUp() async {
+  //   try {
+  //     var response = await Dio()
+  //         .post('http://122.155.223.63/td-des-api/m/MainPopup/read', data: {});
+  //     var result = response.data;
+  //     if (result['status'] == 'S') {
+  //       var valueStorage = await ManageStorage.read('mainPopup');
+  //       var dataValue = json.decode(valueStorage) ?? null;
+
+  //       var now = new DateTime.now();
+  //       DateTime date = new DateTime(now.year, now.month, now.day);
+
+  //       if (dataValue != null) {
+  //         var index = dataValue.indexWhere(
+  //           (c) =>
+  //               // c['username'] == userData.username &&
+  //               c['date'].toString() ==
+  //                   DateFormat("ddMMyyyy").format(date).toString() &&
+  //               c['boolean'] == "true",
+  //         );
+
+  //         if (index == -1) {
+  //           this.setState(() {
+  //             hiddenMainPopUp = false;
+  //           });
+  //           return showDialog(
+  //             barrierDismissible: false, // close outside
+  //             context: context,
+  //             builder: (_) {
+  //               return WillPopScope(
+  //                 onWillPop: () {
+  //                   return Future.value(false);
+  //                 },
+  //                 child: MainPopupDialog(
+  //                   model: _futureMainPopUp,
+  //                   type: 'mainPopup',
+  //                 ),
+  //               );
+  //             },
+  //           );
+  //         } else {
+  //           this.setState(() {
+  //             hiddenMainPopUp = true;
+  //           });
+  //         }
+  //       } else {
+  //         this.setState(() {
+  //           hiddenMainPopUp = false;
+  //         });
+  //         return showDialog(
+  //           barrierDismissible: false, // close outside
+  //           context: context,
+  //           builder: (_) {
+  //             return WillPopScope(
+  //               onWillPop: () {
+  //                 return Future.value(false);
+  //               },
+  //               child: MainPopupDialog(
+  //                 model: _futureMainPopUp,
+  //                 type: 'mainPopup',
+  //               ),
+  //             );
+  //           },
+  //         );
+  //       }
+  //     }
+  //   } catch (ex) {}
+  // }
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       var pf = await ManageStorage.read('profileCode') ?? '';
       var im = await ManageStorage.read('profileImageUrl') ?? '';
       _profileCode = pf;
-      _imageUrl = im;
+      setState(() {
+        _imageUrl = im;
+      });
 
       if (_profileCode.isEmpty) {
         Navigator.of(context).pushAndRemoveUntil(

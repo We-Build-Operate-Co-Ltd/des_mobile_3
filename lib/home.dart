@@ -226,13 +226,13 @@ class _HomePageState extends State<HomePage> {
                       onTap: () {
                         _determinePosition();
                         // ปิดก่อน ios เด้ง
-                        // if (latLng != null)
-                        //   Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (_) => PoiPage(latLng: latLng!),
-                        //     ),
-                        //   );
+                        if (latLng != null)
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => PoiPage(latLng: latLng!),
+                            ),
+                          );
                       },
                       child: Row(
                         children: [
@@ -334,6 +334,30 @@ class _HomePageState extends State<HomePage> {
                       return Container();
                     }
                   },
+                ),
+                Container(
+                  height: 180,
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      aspectRatio: 20 / 9,
+                      enlargeCenterPage: true,
+                      scrollDirection: Axis.horizontal,
+                      viewportFraction: 0.9,
+                      autoPlay: true,
+                      enlargeFactor: 0.4,
+                      enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                    ),
+                    items: mockBannerList
+                        .map((item) => ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            child: CachedNetworkImage(
+                              imageUrl: item,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                            )))
+                        .toList(),
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -609,7 +633,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _determinePosition();
-      await _getLocation();
     });
     _callRead();
   }
@@ -621,9 +644,6 @@ class _HomePageState extends State<HomePage> {
 
   void _callRead() async {
     _readNews();
-    if (currentLocation == '' || currentLocation == 'ตำแหน่งปัจจุบัน') {
-      _getLocation();
-    }
   }
 
   Future<List<dynamic>> _readNews() async {
@@ -643,6 +663,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void onRefresh() async {
+    _determinePosition();
     _callRead();
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();

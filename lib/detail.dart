@@ -5,6 +5,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:html/parser.dart' show parse;
+import 'dart:ui' as ui show ImageFilter;
 
 // ignore: must_be_immutable
 class DetailPage extends StatefulWidget {
@@ -32,7 +34,6 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        physics: const BouncingScrollPhysics(),
         shrinkWrap: true,
         children: [
           Stack(
@@ -222,20 +223,298 @@ class _DetailPageState extends State<DetailPage> {
             ),
           ],
         ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 9,
+                  vertical: 3,
+                ),
+                decoration: BoxDecoration(
+                  color: Color(0xFF7A4CB1),
+                  borderRadius: BorderRadius.circular(12.5),
+                ),
+                child: Row(
+                  children: const [
+                    Icon(
+                      Icons.access_time_outlined,
+                      size: 10,
+                      color: Colors.white,
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      '3 ชั่วโมง',
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 5),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 9,
+                  vertical: 3,
+                ),
+                decoration: BoxDecoration(
+                  color: Color(0xFF7A4CB1),
+                  borderRadius: BorderRadius.circular(12.5),
+                ),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/book.png',
+                      height: 10,
+                      width: 8.41,
+                    ),
+                    const SizedBox(width: 5),
+                    const Text(
+                      '4 บทเรียน',
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Expanded(child: SizedBox()),
+              Container(
+                height: 30,
+                width: 30,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Color(0xFF7A4CB1),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Image.asset(
+                  'assets/images/share.png',
+                  width: 14.83,
+                  height: 13.38,
+                ),
+              ),
+            ],
+          ),
+        ),
         SizedBox(height: 10),
         Padding(
-            padding: const EdgeInsets.only(
-              right: 10,
-              left: 10,
+          padding: const EdgeInsets.only(
+            right: 10,
+            left: 10,
+          ),
+          child: const Text(
+            'รายละเอียด',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
             ),
-            child: Html(
-              data: model['description'],
-            )),
+          ),
+        ),
+        SizedBox(height: 5),
+        Padding(
+          padding: const EdgeInsets.only(
+            right: 10,
+            left: 10,
+          ),
+          child: Text(
+            '${parseHtmlString(model['description'])}',
+            style: TextStyle(
+              fontSize: 13,
+              color: Color(0xFF707070),
+              overflow: TextOverflow.ellipsis,
+            ),
+            maxLines: 4,
+          ),
+        ),
+        SizedBox(height: 5),
+        Padding(
+          padding: const EdgeInsets.only(
+            right: 10,
+            left: 10,
+          ),
+          child: GestureDetector(
+            onTap: () => showDialog(
+              context: context,
+              useSafeArea: false,
+              barrierColor: Colors.transparent,
+              builder: (_) => Material(
+                color: Color.fromARGB(0, 255, 255, 255),
+                child: BackdropFilter(
+                  filter: ui.ImageFilter.blur(
+                    sigmaX: 5.0,
+                    sigmaY: 5.0,
+                  ),
+                  child: Container(
+                    color: Color(0xD953327A),
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top + 10,
+                      right: 10,
+                      bottom: 5,
+                      left: 10,
+                    ),
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      children: [
+                        SizedBox(height: 40),
+                        Center(
+                          child: Text(
+                            'รายละเอียด',
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFFEEEEEE),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Html(
+                          data: model['description'],
+                          style: {
+                            'body': Style(
+                              color: Color(0xFFEEEEEE),
+                            ),
+                          },
+                        ),
+                        const SizedBox(height: 40),
+                        Center(
+                          child: GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF7A4CB1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Image.asset(
+                                'assets/images/close_noti_list.png',
+                                color: Colors.white,
+                                height: 23.15,
+                                width: 23.15,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            child: const Text(
+              'อ่านทั้งหมด',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 30),
+        const Center(
+          child: Text(
+            'แชร์ไปยัง',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 30,
+              width: 30,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Color(0xFF7A4CB1),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Image.asset(
+                'assets/images/share.png',
+                width: 17,
+                height: 17,
+              ),
+            ),
+            const SizedBox(width: 15),
+            Container(
+              height: 30,
+              width: 30,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Color(0xFF7A4CB1),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Image.asset(
+                'assets/images/facebook_circle.png',
+                width: 17,
+                height: 17,
+              ),
+            ),
+            const SizedBox(width: 15),
+            Container(
+              height: 30,
+              width: 30,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Color(0xFF7A4CB1),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Image.asset(
+                'assets/images/line_circle.png',
+                width: 17,
+                height: 17,
+              ),
+            ),
+            const SizedBox(width: 15),
+            Container(
+              height: 30,
+              width: 30,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Color(0xFF7A4CB1),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Image.asset(
+                'assets/images/copy.png',
+                width: 17,
+                height: 17,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 85),
+        Container(
+          height: 45,
+          alignment: Alignment.center,
+          margin: EdgeInsets.symmetric(horizontal: 15),
+          decoration: BoxDecoration(
+            color: Color(0xFF7A4CB1),
+            borderRadius: BorderRadius.circular(22.5),
+          ),
+          child: Text(
+            'เริ่มเรียน',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        const SizedBox(height: 50),
       ],
     );
   }
 
-  _buildContentMainPage(dynamic model) {
+  ListView _buildContentMainPage(dynamic model) {
     return ListView(
       shrinkWrap: true, // 1st add
       physics: const ClampingScrollPhysics(), // 2nd
@@ -308,6 +587,12 @@ class _DetailPageState extends State<DetailPage> {
             ),
             child: Html(
               data: model['description'],
+              style: {
+                "body": Style(
+                  maxLines: 4,
+                  textOverflow: TextOverflow.ellipsis,
+                ),
+              },
             )),
       ],
     );
@@ -323,7 +608,7 @@ class _DetailPageState extends State<DetailPage> {
     super.initState();
   }
 
-  _read() async {
+  void _read() async {
     Response<dynamic> result = await Dio()
         .post('http://122.155.223.63/td-des-api/m/${widget.slug}/read', data: {
       'code': widget.checkNotiPage
@@ -343,7 +628,7 @@ class _DetailPageState extends State<DetailPage> {
     setState(() {});
   }
 
-  _galleryRead() async {
+  void _galleryRead() async {
     Response<dynamic> response;
     try {
       response = await Dio().post(
@@ -362,5 +647,13 @@ class _DetailPageState extends State<DetailPage> {
     setState(() {
       _gallery = listImage;
     });
+  }
+
+  String parseHtmlString(String htmlString) {
+    final document = parse(htmlString);
+    final String parsedString =
+        parse(document.body!.text).documentElement!.text;
+
+    return parsedString;
   }
 }
