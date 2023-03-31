@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:des/about_us.dart';
 import 'package:des/login_first.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/user_profile_edit.dart';
@@ -87,7 +88,14 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
         const SizedBox(height: 10),
         _buildRow('ศูนย์ช่วยเหลือ'),
         const SizedBox(height: 10),
-        _buildRow('เกี่ยวกับ'),
+        InkWell(
+          child: _buildRow('เกี่ยวกับ'),
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => AboutUsPage(),
+            ),
+          ),
+        ),
         const SizedBox(height: 10),
         _buildRow('นโยบาย'),
       ],
