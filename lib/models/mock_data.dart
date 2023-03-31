@@ -116,21 +116,21 @@ class MockContact {
         'title': 'เบอร์ศูนย์ทั่วประเทศ',
         'imageUrl': img,
         'description': 'ศูนยฯ์ใหญ่,ศูนย์ฯกทม.,ศูนย์ฯนนทบุรี,...',
-        'total': '20',
+        'total': '7',
       },
       {
         'code': '01',
         'title': 'เบอร์ติดต่อทั่วไป',
         'imageUrl': img,
         'description': 'กระทรวงดิจิตอลฯ,สำนักงานดิจิทัลเพื่อเศรษฐกิจ',
-        'total': '5',
+        'total': '2',
       },
       {
         'code': '02',
         'title': 'เบอร์ฉุกเฉิน',
         'imageUrl': img,
         'description': 'เจ็บป่วยฉุกเฉิน,สายด่วนการแพทย์,...',
-        'total': '4',
+        'total': '2',
       },
     ];
     return data;

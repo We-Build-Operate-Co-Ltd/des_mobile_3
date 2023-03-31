@@ -160,6 +160,7 @@ class _ContactCategoryPageState extends State<ContactCategoryPage> {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
+                  const SizedBox(height: 5),
                   Text(
                     model['description'],
                     style: TextStyle(

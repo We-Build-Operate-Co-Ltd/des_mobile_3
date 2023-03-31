@@ -82,8 +82,8 @@ class _MenuState extends State<Menu> {
                       boxShadow: [
                         BoxShadow(
                           blurRadius: 3,
-                          color: Color(0xFFEEEEEE),
-                          offset: Offset(0, -3),
+                          color: Color(0xFFC5C5C5),
+                          offset: Offset(0, -2),
                         ),
                       ],
                     ),
