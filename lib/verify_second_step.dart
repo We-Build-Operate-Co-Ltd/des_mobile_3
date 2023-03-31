@@ -52,7 +52,6 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -344,12 +343,11 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                               'laser': txtLaserId.text,
                               'phone': txtPhone.text,
                               'address': txtAddress.text,
-                              'sex' : _gender,
+                              'sex': _gender,
                             };
 
                             // _callLaser(model);
 
-                         
                             _requestOTP(model);
                           }
                         },
@@ -715,7 +713,7 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
     }
   }
 
-    _requestOTP(dynamic model) async {
+  _requestOTP(dynamic model) async {
     Dio dio = Dio();
     dio.options.contentType = Headers.formUrlEncodedContentType;
     dio.options.headers["api_key"] = "db88c29e14b65c9db353c9385f6e5f28";
@@ -726,7 +724,6 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
       "phone": model['phone'].replaceAll('-', '').trim(),
       "ref_code": "xxx123"
     });
-
 
     var otp = response.data['result'];
     if (otp['token'] != null) {

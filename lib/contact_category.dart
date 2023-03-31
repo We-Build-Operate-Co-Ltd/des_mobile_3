@@ -252,6 +252,12 @@ class _ContactCategoryPageState extends State<ContactCategoryPage> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   void _callRead() async {
     List<dynamic> data = await MockContact.mockContactCategoryList();
     var result = data;

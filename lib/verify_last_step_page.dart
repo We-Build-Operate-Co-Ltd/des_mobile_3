@@ -120,14 +120,14 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
                   height: 1,
                 ),
                 SizedBox(height: 7),
-                _text('ชื่อสกุล', widget.model['fullName']),
-                _text('เลขบัตรประชาชน', widget.model['idcard']),
+                _text('ชื่อสกุล', widget.model['fullName'] ?? ''),
+                _text('เลขบัตรประชาชน', widget.model['idcard'] ?? ''),
                 _text(
                     'วันเดือนปีเกิด',
                     _dateStringToDateSlashBuddhistShort(
-                        widget.model['birthday'])),
-                _text('อีเมล', widget.model['email']),
-                _text('เพศ', widget.model['sex']),
+                        widget.model['birthday'] ?? '')),
+                _text('อีเมล', widget.model['email'] ?? ''),
+                _text('เพศ', widget.model['sex'] ?? ''),
               ],
             ),
           ),
@@ -151,7 +151,7 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
             ),
           ),
           Text(
-            value,
+            '${value}',
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w400,

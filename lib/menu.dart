@@ -6,6 +6,7 @@ import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/user_profile.dart';
+import 'package:des/verify_first_step.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:des/home.dart';
@@ -32,6 +33,8 @@ class _MenuState extends State<Menu> {
   String _imageUrl = '';
   bool hiddenMainPopUp = false;
   List<Widget> pages = <Widget>[];
+  late TextEditingController _emailController;
+  bool _verified = false;
 
   var loadingModel = {
     'title': '',
@@ -50,9 +53,105 @@ class _MenuState extends State<Menu> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: WillPopScope(
           onWillPop: confirmExit,
-          child: IndexedStack(
-            index: _currentPage,
-            children: pages,
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Expanded(
+                    child: IndexedStack(
+                      index: _currentPage,
+                      children: pages,
+                    ),
+                  ),
+                  if (!_verified) const SizedBox(height: 250),
+                ],
+              ),
+              if (!_verified)
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: 270,
+                    padding: EdgeInsets.symmetric(horizontal: 35),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 3,
+                          color: Color(0xFFEEEEEE),
+                          offset: Offset(0, -3),
+                        ),
+                      ],
+                    ),
+                    child: ListView(
+                      padding: EdgeInsets.only(top: 20),
+                      children: [
+                        Text(
+                          'อีเมลของท่าน',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          'กรุณาระบุอีเมลของท่านเพื่อให้เราแนะนำคลาสเรียนที่เหมาะกับท่านในอนาคต',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        TextField(
+                          controller: _emailController,
+                          decoration:
+                              _decorationBase(context, hintText: 'อีเมล'),
+                        ),
+                        const SizedBox(height: 10),
+                        GestureDetector(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => VerifyFirstStepPage(),
+                            ),
+                          ),
+                          child: Container(
+                            height: 45,
+                            decoration: BoxDecoration(
+                              color: Color(0xFF7A4CB1),
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            alignment: Alignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/more_2.png',
+                                  width: 14.88,
+                                  height: 14.88,
+                                ),
+                                const SizedBox(width: 10),
+                                Text(
+                                  'ดำเนินการต่อ',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
+                )
+            ],
           ),
         ),
       ),
@@ -142,71 +241,7 @@ class _MenuState extends State<Menu> {
   //   } catch (ex) {}
   // }
 
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      var pf = await ManageStorage.read('profileCode') ?? '';
-      var im = await ManageStorage.read('profileImageUrl') ?? '';
-      _profileCode = pf;
-      setState(() {
-        _imageUrl = im;
-      });
-
-      if (_profileCode.isEmpty) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => const LoginFirstPage(),
-          ),
-          (Route<dynamic> route) => false,
-        );
-      }
-    });
-
-    homePage = HomePage(changePage: _changePage);
-    profilePage = UserProfilePage(changePage: _changePage);
-
-    _callRead();
-    pages = <Widget>[
-      homePage,
-      BookingServicePage(),
-      const LearningPage(),
-      profilePage,
-    ];
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  _changePage(index) {
-    setState(() {
-      _currentPage = index;
-    });
-
-    if (index == 0) {
-      _callRead();
-    }
-  }
-
-  onSetPage() {
-    setState(() {
-      _currentPage = widget.pageIndex ?? 0;
-    });
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      if (index == 0 && _currentPage == 0) {
-        _callRead();
-        // homePage.getState().onRefresh();
-      }
-      _currentPage = index;
-    });
-  }
-
-  _buildBottomNavBar() {
+  Widget _buildBottomNavBar() {
     return Container(
       height: 55 + MediaQuery.of(context).padding.bottom,
       decoration: BoxDecoration(
@@ -232,7 +267,7 @@ class _MenuState extends State<Menu> {
     );
   }
 
-  _buildTap(
+  Widget _buildTap(
     int index,
     String title,
     String pathImage, {
@@ -310,6 +345,116 @@ class _MenuState extends State<Menu> {
         ),
       ),
     );
+  }
+
+  static InputDecoration _decorationBase(context, {String hintText = ''}) =>
+      InputDecoration(
+        label: Text(hintText),
+        labelStyle: TextStyle(
+          color: Color(0xFF707070),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+        hintStyle: TextStyle(
+          color: Color(0xFF707070),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+        // hintText: hintText,
+        filled: true,
+        fillColor: Colors.transparent,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(color: Color(0xFFE6B82C)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(color: Color(0xFFE6B82C)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(
+            color: Colors.black.withOpacity(0.2),
+          ),
+        ),
+        errorStyle: const TextStyle(
+          fontWeight: FontWeight.w300,
+          fontSize: 10.0,
+        ),
+      );
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      var pf = await ManageStorage.read('profileCode') ?? '';
+      var im = await ManageStorage.read('profileImageUrl') ?? '';
+      var value = await ManageStorage.read('profileData') ?? '';
+      var profileData = json.decode(value);
+
+      setState(() {
+        _profileCode = pf;
+        _imageUrl = im;
+        _verified = profileData['email'] != null && profileData['email'] != ''
+            ? true
+            : false;
+      });
+
+      if (_profileCode.isEmpty) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const LoginFirstPage(),
+          ),
+          (Route<dynamic> route) => false,
+        );
+      }
+    });
+
+    _emailController = TextEditingController(text: '');
+
+    homePage = HomePage(changePage: _changePage);
+    profilePage = UserProfilePage(changePage: _changePage);
+
+    _callRead();
+    pages = <Widget>[
+      homePage,
+      BookingServicePage(),
+      const LearningPage(),
+      profilePage,
+    ];
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  _changePage(index) {
+    setState(() {
+      _currentPage = index;
+    });
+
+    if (index == 0) {
+      _callRead();
+    }
+  }
+
+  onSetPage() {
+    setState(() {
+      _currentPage = widget.pageIndex ?? 0;
+    });
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      if (index == 0 && _currentPage == 0) {
+        _callRead();
+        // homePage.getState().onRefresh();
+      }
+      _currentPage = index;
+    });
   }
 
   _callRead() async {
