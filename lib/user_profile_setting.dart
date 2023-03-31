@@ -44,26 +44,33 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
           _buildRowHelp(),
           const SizedBox(height: 50),
           Center(
-            child: InkWell(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              focusColor: Colors.transparent,
+            child: GestureDetector(
               onTap: () => logout(),
               child: Container(
-                width: 116,
                 height: 32,
-                alignment: Alignment.center,
+                width: 145,
                 decoration: BoxDecoration(
                   color: const Color(0xFFFEF7FF),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Text(
-                  'ออกจากระบบ',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFFB325F8),
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/logout.png',
+                      height: 18.75,
+                      width: 15,
+                    ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      'ออกจากระบบ',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFFB325F8),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

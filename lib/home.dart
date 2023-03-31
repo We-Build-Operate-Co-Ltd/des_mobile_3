@@ -91,6 +91,14 @@ class _HomePageState extends State<HomePage> {
                             width: 48,
                           ),
                           const SizedBox(width: 5),
+                          const Text(
+                            'ดิจิทัลชุมชน',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Color(0xFF7A4CB1),
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
                           const Expanded(child: SizedBox()),
                           // Image.asset(
                           //   'assets/images/scale_font_size.png',
