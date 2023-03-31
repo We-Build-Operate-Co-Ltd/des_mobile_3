@@ -107,12 +107,119 @@ const mockFAQ = [
   },
 ];
 
+class MockContact {
+  static mockContactCategoryList() {
+    String img = 'http://122.155.223.63/td-doc/images/des/des_hall.png';
+    dynamic data = [
+      {
+        'code': '',
+        'title': 'เบอร์ศูนย์ทั่วประเทศ',
+        'imageUrl': img,
+        'description': 'ศูนยฯ์ใหญ่,ศูนย์ฯกทม.,ศูนย์ฯนนทบุรี,...',
+        'total': '20',
+      },
+      {
+        'code': '01',
+        'title': 'เบอร์ติดต่อทั่วไป',
+        'imageUrl': img,
+        'description': 'กระทรวงดิจิตอลฯ,สำนักงานดิจิทัลเพื่อเศรษฐกิจ',
+        'total': '5',
+      },
+      {
+        'code': '02',
+        'title': 'เบอร์ฉุกเฉิน',
+        'imageUrl': img,
+        'description': 'เจ็บป่วยฉุกเฉิน,สายด่วนการแพทย์,...',
+        'total': '4',
+      },
+    ];
+    return data;
+  }
+
+  static mockContactList() {
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+    String ranCode = String.fromCharCodes(Iterable.generate(
+        12, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+    String img = 'http://122.155.223.63/td-doc/images/des/des_hall.png';
+    List<dynamic> cat01 = [
+      {
+        'code': ranCode,
+        'title': 'ศูนย์ฯใหญ่',
+        'phone': '02 123 4568',
+        'imageUrl': img,
+        'category': '',
+        'description': '',
+      },
+      {
+        'code': ranCode,
+        'title': 'ศูนย์ฯกทม.',
+        'phone': '02 123 4568',
+        'imageUrl': img,
+        'category': '',
+        'description': '',
+      },
+      {
+        'code': ranCode,
+        'title': 'ศูนย์ฯนนทบุรี',
+        'phone': '02 123 4568',
+        'imageUrl': img,
+        'category': '',
+        'description': '',
+      },
+    ];
+
+    List<dynamic> cat02 = [
+      {
+        'code': ranCode,
+        'title': 'กระทรวงดิจิตอลฯ',
+        'phone': '02 123 4568',
+        'imageUrl': img,
+        'category': '01',
+        'description': '',
+      },
+      {
+        'code': ranCode,
+        'title': 'สำนักงานดิจิทัลเพื่อเศรษฐกิจ.',
+        'phone': '02 123 4568',
+        'imageUrl': img,
+        'category': '01',
+        'description': '',
+      },
+    ];
+    List<dynamic> cat03 = [
+      {
+        'code': ranCode,
+        'title': 'เจ็บป่วยฉุกเฉิน',
+        'phone': '02 123 4568',
+        'imageUrl': img,
+        'category': '02',
+        'description': '',
+      },
+      {
+        'code': ranCode,
+        'title': 'สายด่วนการแพทย์.',
+        'phone': '02 123 4568',
+        'imageUrl': img,
+        'category': '02',
+        'description': '',
+      },
+    ];
+
+    cat01.addAll(cat02);
+    cat01.addAll(cat03);
+
+    return cat01;
+  }
+}
+
 class MockBookingData {
-  static category() => [
+  static List<dynamic> category() => [
         {'code': '0', 'title': 'กำลังจะมาถึง'},
         {'code': '1', 'title': 'ประวัติการจอง'},
       ];
-  static booking() {
+  static List<dynamic> booking() {
     final _random = new Random();
     var now = DateTime.now();
     var now1 = DateTime(now.year, now.month, now.day, now.hour + 1);

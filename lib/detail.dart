@@ -318,105 +318,110 @@ class _DetailPageState extends State<DetailPage> {
           ),
         ),
         SizedBox(height: 5),
-        Padding(
-          padding: const EdgeInsets.only(
-            right: 10,
-            left: 10,
-          ),
-          child: Text(
-            '${parseHtmlString(model['description'])}',
-            style: TextStyle(
-              fontSize: 13,
-              color: Color(0xFF707070),
-              overflow: TextOverflow.ellipsis,
-            ),
-            maxLines: 4,
-          ),
-        ),
-        SizedBox(height: 5),
-        Padding(
-          padding: const EdgeInsets.only(
-            right: 10,
-            left: 10,
-          ),
-          child: GestureDetector(
-            onTap: () => showDialog(
-              context: context,
-              useSafeArea: false,
-              barrierColor: Colors.transparent,
-              builder: (_) => Material(
-                color: Color.fromARGB(0, 255, 255, 255),
-                child: BackdropFilter(
-                  filter: ui.ImageFilter.blur(
-                    sigmaX: 5.0,
-                    sigmaY: 5.0,
+        GestureDetector(
+          onTap: () => showDialog(
+            context: context,
+            useSafeArea: false,
+            barrierColor: Colors.transparent,
+            builder: (_) => Material(
+              color: Color.fromARGB(0, 255, 255, 255),
+              child: BackdropFilter(
+                filter: ui.ImageFilter.blur(
+                  sigmaX: 5.0,
+                  sigmaY: 5.0,
+                ),
+                child: Container(
+                  color: Color(0xD953327A),
+                  padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).padding.top + 10,
+                    right: 10,
+                    bottom: 5,
+                    left: 10,
                   ),
-                  child: Container(
-                    color: Color(0xD953327A),
-                    padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).padding.top + 10,
-                      right: 10,
-                      bottom: 5,
-                      left: 10,
-                    ),
-                    child: ListView(
-                      padding: EdgeInsets.zero,
-                      children: [
-                        SizedBox(height: 40),
-                        Center(
-                          child: Text(
-                            'รายละเอียด',
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFFEEEEEE),
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      SizedBox(height: 40),
+                      Center(
+                        child: Text(
+                          'รายละเอียด',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFFEEEEEE),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Html(
+                        data: model['description'],
+                        style: {
+                          'body': Style(
+                            color: Color(0xFFEEEEEE),
+                          ),
+                        },
+                      ),
+                      const SizedBox(height: 40),
+                      Center(
+                        child: GestureDetector(
+                          onTap: () => Navigator.pop(context),
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Color(0xFF7A4CB1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Image.asset(
+                              'assets/images/close_noti_list.png',
+                              color: Colors.white,
+                              height: 23.15,
+                              width: 23.15,
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
-                        Html(
-                          data: model['description'],
-                          style: {
-                            'body': Style(
-                              color: Color(0xFFEEEEEE),
-                            ),
-                          },
-                        ),
-                        const SizedBox(height: 40),
-                        Center(
-                          child: GestureDetector(
-                            onTap: () => Navigator.pop(context),
-                            child: Container(
-                              height: 40,
-                              width: 40,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF7A4CB1),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Image.asset(
-                                'assets/images/close_noti_list.png',
-                                color: Colors.white,
-                                height: 23.15,
-                                width: 23.15,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 40),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 40),
+                    ],
                   ),
                 ),
               ),
             ),
-            child: const Text(
-              'อ่านทั้งหมด',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  right: 10,
+                  left: 10,
+                ),
+                child: Text(
+                  '${parseHtmlString(model['description'])}',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF707070),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  maxLines: 4,
+                ),
               ),
-            ),
+              SizedBox(height: 5),
+              Padding(
+                padding: const EdgeInsets.only(
+                  right: 10,
+                  left: 10,
+                ),
+                child: const Text(
+                  'อ่านทั้งหมด',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 30),
@@ -691,10 +696,10 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   void initState() {
+    _imageSelected = widget.model['imageUrl'] ?? '';
     if (widget.slug != 'mainPage' &&
         widget.slug != 'mock' &&
         widget.slug != 'bookingPage') {
-      _imageSelected = widget.model['imageUrl'];
       _read();
       _galleryRead();
     }

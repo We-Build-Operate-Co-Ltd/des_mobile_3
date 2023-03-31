@@ -790,7 +790,9 @@ class _HomePageState extends State<HomePage> {
 
       setState(() {
         latLng = LatLng(position.latitude, position.longitude);
-        currentLocation = placemarks.first.administrativeArea;
+        currentLocation = (placemarks.first.subLocality ?? '') +
+            ((placemarks.first.subLocality ?? '').isNotEmpty ? ', ' : '') +
+            (placemarks.first.administrativeArea ?? '');
       });
     } catch (e) {}
   }

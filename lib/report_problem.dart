@@ -1,3 +1,6 @@
+import 'package:des/chat.dart';
+import 'package:des/contact.dart';
+import 'package:des/contact_category.dart';
 import 'package:flutter/material.dart';
 
 import 'models/mock_data.dart';
@@ -63,58 +66,74 @@ class ReportProblemPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Column(
-                      children: [
-                        Container(
-                          height: 45,
-                          width: 45,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF7A4CB1),
-                            borderRadius: BorderRadius.circular(22.5),
-                          ),
-                          child: Image.asset(
-                            'assets/images/chat.png',
-                            width: 22.41,
-                            height: 22.41,
-                          ),
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ChatPage(),
                         ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'แชท',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 45,
+                            width: 45,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Color(0xFF7A4CB1),
+                              borderRadius: BorderRadius.circular(22.5),
+                            ),
+                            child: Image.asset(
+                              'assets/images/chat.png',
+                              width: 22.41,
+                              height: 22.41,
+                            ),
                           ),
-                        )
-                      ],
+                          const SizedBox(height: 10),
+                          Text(
+                            'แชท',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                     const SizedBox(width: 36),
-                    Column(
-                      children: [
-                        Container(
-                          height: 45,
-                          width: 45,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF7A4CB1),
-                            borderRadius: BorderRadius.circular(22.5),
-                          ),
-                          child: Image.asset(
-                            'assets/images/phone.png',
-                            width: 25.5,
-                            height: 25.5,
-                          ),
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ContactCategoryPage(),
                         ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'เบอร์ติดต่อ',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 45,
+                            width: 45,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Color(0xFF7A4CB1),
+                              borderRadius: BorderRadius.circular(22.5),
+                            ),
+                            child: Image.asset(
+                              'assets/images/phone.png',
+                              width: 25.5,
+                              height: 25.5,
+                            ),
                           ),
-                        )
-                      ],
+                          const SizedBox(height: 10),
+                          Text(
+                            'เบอร์ติดต่อ',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ],
                 ),

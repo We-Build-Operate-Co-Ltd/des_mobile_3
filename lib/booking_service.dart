@@ -68,6 +68,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                   toolbarHeight: 145,
                   backgroundColor: Colors.white,
                   titleSpacing: 0.0,
+                  automaticallyImplyLeading: false,
                   flexibleSpace: FlexibleSpaceBar(
                     titlePadding: EdgeInsets.zero,
                     expandedTitleScale: 1,
