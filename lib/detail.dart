@@ -5,8 +5,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:html/parser.dart' show parse;
 import 'dart:ui' as ui show ImageFilter;
+
+import 'build_modal_connection_in_progress.dart';
 
 // ignore: must_be_immutable
 class DetailPage extends StatefulWidget {
@@ -137,7 +140,7 @@ class _DetailPageState extends State<DetailPage> {
               child: CachedNetworkImage(
                 imageUrl: _imageSelected,
                 width: MediaQuery.of(context).size.width,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
                 errorWidget: (context, url, error) =>
                     Image.asset('assets/images/logo.png'),
               ),
@@ -286,18 +289,21 @@ class _DetailPageState extends State<DetailPage> {
                 ),
               ),
               const Expanded(child: SizedBox()),
-              Container(
-                height: 30,
-                width: 30,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Color(0xFF7A4CB1),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Image.asset(
-                  'assets/images/share.png',
-                  width: 14.83,
-                  height: 13.38,
+              InkWell(
+                onTap: () => _callShare(model),
+                child: Container(
+                  height: 30,
+                  width: 30,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Color(0xFF7A4CB1),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Image.asset(
+                    'assets/images/share.png',
+                    width: 14.83,
+                    height: 13.38,
+                  ),
                 ),
               ),
             ],
@@ -425,95 +431,101 @@ class _DetailPageState extends State<DetailPage> {
           ),
         ),
         const SizedBox(height: 30),
-        const Center(
-          child: Text(
-            'แชร์ไปยัง',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        const SizedBox(height: 15),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              height: 30,
-              width: 30,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Color(0xFF7A4CB1),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Image.asset(
-                'assets/images/share.png',
-                width: 17,
-                height: 17,
-              ),
-            ),
-            const SizedBox(width: 15),
-            Container(
-              height: 30,
-              width: 30,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Color(0xFF7A4CB1),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Image.asset(
-                'assets/images/facebook_circle.png',
-                width: 17,
-                height: 17,
-              ),
-            ),
-            const SizedBox(width: 15),
-            Container(
-              height: 30,
-              width: 30,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Color(0xFF7A4CB1),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Image.asset(
-                'assets/images/line_circle.png',
-                width: 17,
-                height: 17,
-              ),
-            ),
-            const SizedBox(width: 15),
-            Container(
-              height: 30,
-              width: 30,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Color(0xFF7A4CB1),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Image.asset(
-                'assets/images/copy.png',
-                width: 17,
-                height: 17,
-              ),
-            ),
-          ],
-        ),
+        // const Center(
+        //   child: Text(
+        //     'แชร์ไปยัง',
+        //     style: TextStyle(
+        //       fontSize: 15,
+        //       fontWeight: FontWeight.w500,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 15),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     Container(
+        //       height: 30,
+        //       width: 30,
+        //       alignment: Alignment.center,
+        //       decoration: BoxDecoration(
+        //         color: Color(0xFF7A4CB1),
+        //         borderRadius: BorderRadius.circular(15),
+        //       ),
+        //       child: Image.asset(
+        //         'assets/images/share.png',
+        //         width: 17,
+        //         height: 17,
+        //       ),
+        //     ),
+        //     const SizedBox(width: 15),
+        //     Container(
+        //       height: 30,
+        //       width: 30,
+        //       alignment: Alignment.center,
+        //       decoration: BoxDecoration(
+        //         color: Color(0xFF7A4CB1),
+        //         borderRadius: BorderRadius.circular(15),
+        //       ),
+        //       child: Image.asset(
+        //         'assets/images/facebook_circle.png',
+        //         width: 17,
+        //         height: 17,
+        //       ),
+        //     ),
+        //     const SizedBox(width: 15),
+        //     Container(
+        //       height: 30,
+        //       width: 30,
+        //       alignment: Alignment.center,
+        //       decoration: BoxDecoration(
+        //         color: Color(0xFF7A4CB1),
+        //         borderRadius: BorderRadius.circular(15),
+        //       ),
+        //       child: Image.asset(
+        //         'assets/images/line_circle.png',
+        //         width: 17,
+        //         height: 17,
+        //       ),
+        //     ),
+        //     const SizedBox(width: 15),
+        //     Container(
+        //       height: 30,
+        //       width: 30,
+        //       alignment: Alignment.center,
+        //       decoration: BoxDecoration(
+        //         color: Color(0xFF7A4CB1),
+        //         borderRadius: BorderRadius.circular(15),
+        //       ),
+        //       child: Image.asset(
+        //         'assets/images/copy.png',
+        //         width: 17,
+        //         height: 17,
+        //       ),
+        //     ),
+        //   ],
+        // ),
+
         const SizedBox(height: 85),
-        Container(
-          height: 45,
-          alignment: Alignment.center,
-          margin: EdgeInsets.symmetric(horizontal: 15),
-          decoration: BoxDecoration(
-            color: Color(0xFF7A4CB1),
-            borderRadius: BorderRadius.circular(22.5),
-          ),
-          child: Text(
-            'เริ่มเรียน',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
+        InkWell(
+          onTap: () {
+            buildModalConnectionInProgress(context);
+          },
+          child: Container(
+            height: 45,
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(horizontal: 15),
+            decoration: BoxDecoration(
+              color: Color(0xFF7A4CB1),
+              borderRadius: BorderRadius.circular(22.5),
+            ),
+            child: Text(
+              'เริ่มเรียน',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ),
@@ -753,5 +765,15 @@ class _DetailPageState extends State<DetailPage> {
         parse(document.body!.text).documentElement!.text;
 
     return parsedString;
+  }
+
+  Future<void> _callShare(param) async {
+    await FlutterShare.share(
+        title: 'DES ดิจิทัลชุมชน',
+        text: '''ขอเชิญชวนร่วม คลาสเรียน
+${param['title']}
+${param['description'].toString().substring(0, 100)}...''',
+        linkUrl: param['imageUrl'],
+        chooserTitle: 'Example Chooser Title');
   }
 }

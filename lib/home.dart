@@ -293,6 +293,12 @@ class _HomePageState extends State<HomePage> {
                         code: 'skill',
                       ),
                       columnButton(
+                        'assets/images/chat2.png',
+                        'สนทนา',
+                        type: 'serviceforyou',
+                        code: 'chat',
+                      ),
+                      columnButton(
                         'assets/images/data_warehouse.png',
                         'คลังข้อมูล',
                         type: 'serviceforyou',
@@ -628,7 +634,11 @@ class _HomePageState extends State<HomePage> {
               _callOpenPage(code);
             },
             child: type == 'serviceforyou'
-                ? Image.asset(image, height: 45, width: 45)
+                ? Image.asset(
+                    image,
+                    height: 45,
+                    width: 45,
+                  )
                 : Image.asset(image, height: 30, width: 30),
           ),
           SizedBox(height: type == 'serviceforyou' ? 7 : 5),
@@ -762,6 +772,12 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => ReportProblemPage(),
+        ),
+      );
+    } else if (param == 'chat') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ChatPage(),
         ),
       );
     }

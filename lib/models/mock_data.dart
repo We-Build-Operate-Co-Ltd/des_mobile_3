@@ -9,7 +9,7 @@ const List<dynamic> mockDataList = [
 ];
 const dynamic mockDataObject1 = {
   'title': 'สกัดสมุนไพร เพื่อผลิตภัณฑ์เสริมความงาม',
-  'imageUrl': 'http://122.155.223.63/td-doc/images/des/des_mock1.png',
+  'imageUrl': 'http://122.155.223.63/td-doc/images/des/des_mock2.png',
   'createBy': 'เจ้าหน้าที่ศูนย์ดิติทัลชุมชน',
   'view': 5,
   'description':
@@ -46,7 +46,7 @@ const dynamic mockDataObject1 = {
 };
 const mockDataObject2 = {
   'title': 'ผลิตยาหม่องมณีพฤกษา ง่ายๆ ด้วยตัวเอง',
-  'imageUrl': 'http://122.155.223.63/td-doc/images/des/des_mock2.png',
+  'imageUrl': 'http://122.155.223.63/td-doc/images/des/des_mock1.png',
   'createBy': 'เจ้าหน้าที่ศูนย์ดิติทัลชุมชน',
   'view': 500,
   'description':
