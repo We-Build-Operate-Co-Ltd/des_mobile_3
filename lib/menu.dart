@@ -76,7 +76,7 @@ class _MenuState extends State<Menu> {
                   child: Form(
                     key: _formKey,
                     child: Container(
-                      height: 300,
+                      height: 280,
                       padding: EdgeInsets.only(
                         left: 35,
                         right: 35,
