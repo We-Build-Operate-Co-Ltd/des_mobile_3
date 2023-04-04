@@ -409,6 +409,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
+                SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -421,7 +422,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 FutureBuilder(
                   future: _readNews(),
                   builder: (context, snapshot) {

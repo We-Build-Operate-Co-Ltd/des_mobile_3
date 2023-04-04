@@ -310,7 +310,7 @@ class _ChatPageState extends State<ChatPage> {
                           fillColor: Colors.white,
                           contentPadding:
                               EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                          hintText: 'รหัสผ่านปัจจุบัน',
+                          hintText: 'ความต้องการของท่าน',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             borderSide: BorderSide.none,

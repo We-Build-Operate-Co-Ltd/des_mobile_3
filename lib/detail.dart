@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/image_viewer.dart';
 import 'package:dio/dio.dart';
+import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -32,15 +33,34 @@ class _DetailPageState extends State<DetailPage> {
   List<String> _gallery = [];
   String _imageSelected = '';
   Future<dynamic>? _futureModel;
+  final _scController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        flexibleSpace: Container(
+          width: double.infinity,
+          color: Colors.white,
+          padding: EdgeInsets.only(
+            top: MediaQuery.of(context).padding.top + 20,
+            left: 15,
+            right: 15,
+          ),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: _backButton(context),
+          ),
+        ),
+      ),
       body: widget.slug == 'bookingPage'
           ? _buildContentBookingPage(widget.model)
           : ListView(
               shrinkWrap: true,
               children: [
+                SizedBox(height: 10),
                 Stack(
                   children: [
                     widget.checkNotiPage != true
@@ -74,20 +94,6 @@ class _DetailPageState extends State<DetailPage> {
                                 },
                               )
                             : _buildContentMainPage(widget.model),
-                    Positioned(
-                      right: 0,
-                      child: MaterialButton(
-                        minWidth: 29,
-                        onPressed: () => Navigator.pop(context),
-                        color: const Color(0xFF53327A),
-                        textColor: Colors.white,
-                        shape: const CircleBorder(),
-                        child: const Icon(
-                          Icons.close,
-                          size: 29,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ],
@@ -100,23 +106,6 @@ class _DetailPageState extends State<DetailPage> {
       shrinkWrap: true, // 1st add
       physics: const ClampingScrollPhysics(), // 2nd
       children: [
-        Container(
-          padding: const EdgeInsets.only(
-            right: 10.0,
-            left: 10.0,
-          ),
-          margin: const EdgeInsets.only(right: 50.0, top: 10.0),
-          child: Text(
-            model['title'],
-            style: const TextStyle(
-              fontSize: 20,
-              fontFamily: 'Kanit',
-            ),
-          ),
-        ),
-        Container(
-          height: 10,
-        ),
         InkWell(
           onTap: () {
             int index =
@@ -134,101 +123,118 @@ class _DetailPageState extends State<DetailPage> {
             );
           },
           child: Container(
-            height: 300,
+            height: 194,
             width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: 15),
             child: ClipRRect(
+              borderRadius: BorderRadius.circular(17.5),
               child: CachedNetworkImage(
                 imageUrl: _imageSelected,
                 width: MediaQuery.of(context).size.width,
-                fit: BoxFit.contain,
+                fit: BoxFit.cover,
                 errorWidget: (context, url, error) =>
                     Image.asset('assets/images/logo.png'),
               ),
             ),
           ),
         ),
-        if (_gallery.isNotEmpty)
-          SizedBox(
-            height: 120,
-            child: ListView.separated(
-              itemCount: [model['imageUrl'], ..._gallery].length,
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.all(10),
-              separatorBuilder: (_, __) => const SizedBox(width: 10),
-              itemBuilder: (_, __) => Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(
-                      color: Colors.black.withOpacity(0.2),
-                      width: 0.5,
-                    )),
-                child: GestureDetector(
-                  onTap: () => setState(() {
-                    _imageSelected = [model['imageUrl'], ..._gallery][__];
-                  }),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: CachedNetworkImage(
-                      imageUrl: [model['imageUrl'], ..._gallery][__],
-                      height: 100,
-                      width: 100,
-                      fit: BoxFit.cover,
-                      errorWidget: (context, url, error) =>
-                          Image.asset('assets/images/logo.png'),
-                    ),
-                  ),
-                ),
-              ),
+        // if (_gallery.isNotEmpty)
+        //   SizedBox(
+        //     height: 120,
+        //     child: ListView.separated(
+        //       itemCount: [model['imageUrl'], ..._gallery].length,
+        //       scrollDirection: Axis.horizontal,
+        //       padding: EdgeInsets.all(10),
+        //       separatorBuilder: (_, __) => const SizedBox(width: 10),
+        //       itemBuilder: (_, __) => Container(
+        //         decoration: BoxDecoration(
+        //             borderRadius: BorderRadius.circular(4),
+        //             border: Border.all(
+        //               color: Colors.black.withOpacity(0.2),
+        //               width: 0.5,
+        //             )),
+        //         child: GestureDetector(
+        //           onTap: () => setState(() {
+        //             _imageSelected = [model['imageUrl'], ..._gallery][__];
+        //           }),
+        //           child: ClipRRect(
+        //             borderRadius: BorderRadius.circular(4),
+        //             child: CachedNetworkImage(
+        //               imageUrl: [model['imageUrl'], ..._gallery][__],
+        //               height: 100,
+        //               width: 100,
+        //               fit: BoxFit.cover,
+        //               errorWidget: (context, url, error) =>
+        //                   Image.asset('assets/images/logo.png'),
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        Container(
+          padding: const EdgeInsets.only(
+            right: 10.0,
+            left: 10.0,
+          ),
+          margin: const EdgeInsets.only(right: 50.0, top: 10.0),
+          child: Text(
+            model['title'],
+            style: const TextStyle(
+              fontSize: 20,
+              fontFamily: 'Kanit',
             ),
           ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                right: 10,
-                left: 10,
-              ),
-              child: Row(
-                children: [
-                  CachedNetworkImage(
-                    imageUrl: '${model['imageUrlCreateBy']}',
-                    height: 30,
-                    width: 30,
-                    fit: BoxFit.cover,
-                    errorWidget: (context, url, error) =>
-                        Image.asset('assets/images/logo.png'),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${model['createBy'] ?? ''}',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontFamily: 'Kanit',
-                          ),
-                        ),
-                        Text(
-                          model['createDate'] != '' &&
-                                  model['createDate'] != null
-                              ? '${dateStringToDateStringFormatV2(model['createDate'])} | เข้าชม ${model['view']} ครั้ง'
-                              : '26 ธ.ค. 65 | เข้าชม ${model['view']} ครั้ง',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontFamily: 'Kanit',
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+        //     Padding(
+        //       padding: const EdgeInsets.only(
+        //         right: 10,
+        //         left: 10,
+        //       ),
+        //       child: Row(
+        //         children: [
+        //           CachedNetworkImage(
+        //             imageUrl: '${model['imageUrlCreateBy']}',
+        //             height: 30,
+        //             width: 30,
+        //             fit: BoxFit.cover,
+        //             errorWidget: (context, url, error) =>
+        //                 Image.asset('assets/images/logo.png'),
+        //           ),
+        //           Container(
+        //             padding: const EdgeInsets.all(10),
+        //             child: Column(
+        //               crossAxisAlignment: CrossAxisAlignment.start,
+        //               children: [
+        //                 Text(
+        //                   '${model['createBy'] ?? ''}',
+        //                   style: const TextStyle(
+        //                     fontSize: 15,
+        //                     fontFamily: 'Kanit',
+        //                   ),
+        //                 ),
+        //                 Text(
+        //                   model['createDate'] != '' &&
+        //                           model['createDate'] != null
+        //                       ? '${dateStringToDateStringFormatV2(model['createDate'])} | เข้าชม ${model['view']} ครั้ง'
+        //                       : '26 ธ.ค. 65 | เข้าชม ${model['view']} ครั้ง',
+        //                   style: TextStyle(
+        //                     fontSize: 10,
+        //                     fontFamily: 'Kanit',
+        //                   ),
+        //                 ),
+        //               ],
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ],
+        // ),
+        SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
@@ -344,30 +350,40 @@ class _DetailPageState extends State<DetailPage> {
                     bottom: 5,
                     left: 10,
                   ),
-                  child: ListView(
-                    padding: EdgeInsets.zero,
+                  child: Column(
                     children: [
-                      SizedBox(height: 40),
-                      Center(
-                        child: Text(
-                          'รายละเอียด',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFFEEEEEE),
+                      Expanded(
+                        child: FadingEdgeScrollView.fromScrollView(
+                          child: ListView(
+                            controller: _scController,
+                            padding: EdgeInsets.zero,
+                            children: [
+                              SizedBox(height: 40),
+                              Center(
+                                child: Text(
+                                  'รายละเอียด',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFFEEEEEE),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Html(
+                                data:
+                                    model['description'] + model['description'],
+                                style: {
+                                  'body': Style(
+                                    color: Color(0xFFEEEEEE),
+                                  ),
+                                },
+                              ),
+                              const SizedBox(height: 40),
+                            ],
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Html(
-                        data: model['description'],
-                        style: {
-                          'body': Style(
-                            color: Color(0xFFEEEEEE),
-                          ),
-                        },
-                      ),
-                      const SizedBox(height: 40),
                       Center(
                         child: GestureDetector(
                           onTap: () => Navigator.pop(context),
@@ -388,7 +404,7 @@ class _DetailPageState extends State<DetailPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 38),
                     ],
                   ),
                 ),
@@ -615,6 +631,19 @@ class _DetailPageState extends State<DetailPage> {
               },
             )),
       ],
+    );
+  }
+
+  Widget _backButton(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.pop(context);
+      },
+      child: Image.asset(
+        'assets/images/back.png',
+        height: 40,
+        width: 40,
+      ),
     );
   }
 

@@ -527,7 +527,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         height: 130,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Color(0xFFFAE2FD),
+          color: Color(0x1AB325F8),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -590,16 +590,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   @override
   void initState() {
+    _getUser();
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      var data = await ManageStorage.read('profileData') ?? '';
-      var result = json.decode(data);
-      setState(() {
-        _imageUrl = result['imageUrl'];
-        _firstName = result['firstName'];
-        _lastName = result['lastName'];
-      });
-    });
   }
 
   @override
@@ -626,8 +618,19 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   void _onRefresh() async {
+    _getUser();
     _readEventcalendar();
     _refreshController.refreshCompleted();
+  }
+
+  void _getUser() async {
+    var data = await ManageStorage.read('profileData') ?? '';
+    var result = json.decode(data);
+    setState(() {
+      _imageUrl = result['imageUrl'];
+      _firstName = result['firstName'];
+      _lastName = result['lastName'];
+    });
   }
 
   void _onLoading() async {
