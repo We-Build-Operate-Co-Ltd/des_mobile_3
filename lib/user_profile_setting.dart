@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/about_us.dart';
 import 'package:des/login_first.dart';
+import 'package:des/shared/facebook_firebase.dart';
+import 'package:des/shared/google_firebase.dart';
+import 'package:des/shared/line.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/user_profile_edit.dart';
 import 'package:des/verify_first_step.dart';
@@ -310,12 +313,27 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
   }
 
   void logout() async {
+    String profileCategory = await ManageStorage.read('profileCategory') ?? '';
+    print('profileCategory');
+    print(profileCategory);
+    switch (profileCategory) {
+      case 'facebook':
+        logoutFacebook();
+        break;
+      case 'google':
+        logoutGoogle();
+        break;
+      case 'line':
+        logoutLine();
+        break;
+      default:
+    }
     await ManageStorage.deleteStorageAll();
-    Navigator.pushReplacement(
-      context,
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (context) => LoginFirstPage(),
+        builder: (context) => const LoginFirstPage(),
       ),
+      (Route<dynamic> route) => false,
     );
   }
 }

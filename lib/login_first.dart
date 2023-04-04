@@ -34,6 +34,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
   bool openLine = false;
+  DateTime? currentBackPressTime;
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +47,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
           FocusScope.of(context).unfocus();
         },
         child: WillPopScope(
-          onWillPop: () {
-            _controller!.forward();
-            return Future.value(false);
-          },
+          onWillPop: () => confirmExit(),
           child: Stack(
             children: [
               Container(
@@ -237,6 +235,19 @@ class _LoginFirstPageState extends State<LoginFirstPage>
         ),
       ),
     );
+  }
+
+  Future<bool> confirmExit() {
+    DateTime now = DateTime.now();
+    debugPrint('current ${currentBackPressTime.toString()}');
+    debugPrint('now ${now.toString()}');
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Fluttertoast.showToast(msg: 'กดอีกครั้งเพื่อออก');
+      return Future.value(false);
+    }
+    return Future.value(true);
   }
 
   Widget _buildButtonLogin(
@@ -488,30 +499,35 @@ class _LoginFirstPageState extends State<LoginFirstPage>
       };
 
       Dio dio = new Dio();
-      var response = await dio.post(
-        'http://122.155.223.63/td-des-api/m/v2/register/facebook/login',
-        data: model,
-      );
+      try {
+        var response = await dio.post(
+          'http://122.155.223.63/td-des-api/m/v2/register/facebook/login',
+          data: model,
+        );
 
-      await ManageStorage.createSecureStorage(
-        key: 'imageUrlSocial',
-        value:
-            obj.user.photoURL != null ? obj.user.photoURL + "?width=9999" : '',
-      );
+        await ManageStorage.createSecureStorage(
+          key: 'imageUrlSocial',
+          value: obj.user.photoURL != null
+              ? obj.user.photoURL + "?width=9999"
+              : '',
+        );
 
-      ManageStorage.createProfile(
-        value: response.data['objectData'],
-        key: 'facebook',
-      );
+        await ManageStorage.createProfile(
+          value: response.data['objectData'],
+          key: 'facebook',
+        );
 
-      if (obj != null) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => Menu(),
           ),
         );
+      } catch (e) {
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
+    } else {
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }
 
@@ -531,29 +547,33 @@ class _LoginFirstPageState extends State<LoginFirstPage>
       };
 
       Dio dio = new Dio();
-      var response = await dio.post(
-        'http://122.155.223.63/td-des-api/m/v2/register/google/login',
-        data: model,
-      );
+      try {
+        var response = await dio.post(
+          'http://122.155.223.63/td-des-api/m/v2/register/google/login',
+          data: model,
+        );
 
-      await ManageStorage.createSecureStorage(
-        key: 'imageUrlSocial',
-        value: obj.user!.photoURL != null ? obj.user!.photoURL : '',
-      );
+        await ManageStorage.createSecureStorage(
+          key: 'imageUrlSocial',
+          value: obj.user!.photoURL != null ? obj.user!.photoURL : '',
+        );
 
-      ManageStorage.createProfile(
-        value: response.data['objectData'],
-        key: 'google',
-      );
+        ManageStorage.createProfile(
+          value: response.data['objectData'],
+          key: 'google',
+        );
 
-      if (obj != null) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => Menu(),
           ),
         );
+      } catch (e) {
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
+    } else {
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }
 
@@ -562,7 +582,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
     openLine = false;
 
     if (obj != null) {
-      final idToken = obj!.accessToken.idToken;
+      final idToken = obj.accessToken.idToken;
       final userEmail = (idToken != null)
           ? idToken['email'] != null
               ? idToken['email']
@@ -583,29 +603,33 @@ class _LoginFirstPageState extends State<LoginFirstPage>
       };
 
       Dio dio = new Dio();
-      var response = await dio.post(
-        'http://122.155.223.63/td-des-api/m/v2/register/line/login',
-        data: model,
-      );
+      try {
+        var response = await dio.post(
+          'http://122.155.223.63/td-des-api/m/v2/register/line/login',
+          data: model,
+        );
 
-      await ManageStorage.createSecureStorage(
-        key: 'imageUrlSocial',
-        value: model['imageUrl'],
-      );
+        await ManageStorage.createSecureStorage(
+          key: 'imageUrlSocial',
+          value: model['imageUrl'],
+        );
 
-      ManageStorage.createProfile(
-        value: response.data['objectData'],
-        key: 'line',
-      );
+        await ManageStorage.createProfile(
+          value: response.data['objectData'],
+          key: 'line',
+        );
 
-      if (obj != null) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => Menu(),
           ),
         );
+      } catch (e) {
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
+    } else {
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }
 

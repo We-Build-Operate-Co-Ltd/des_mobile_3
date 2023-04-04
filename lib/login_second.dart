@@ -51,237 +51,230 @@ class _LoginSecondPageState extends State<LoginSecondPage>
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: WillPopScope(
-          onWillPop: () {
-            _controller!.forward();
-            return Future.value(false);
-          },
-          child: SingleChildScrollView(
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              padding: EdgeInsets.symmetric(horizontal: 14),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/bg_login_page.png"),
-                  fit: BoxFit.cover,
-                ),
+        child: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            padding: EdgeInsets.symmetric(horizontal: 14),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/bg_login_page.png"),
+                fit: BoxFit.cover,
               ),
-              child: SingleChildScrollView(
-                child: Stack(
-                  children: [
-                    Container(
-                      height: 490,
-                      padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Image.asset(
-                            //   'assets/images/logo.png',
-                            //   height: 35,
-                            // ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'กรอกรหัสผ่าน',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+            ),
+            child: SingleChildScrollView(
+              child: Stack(
+                children: [
+                  Container(
+                    height: 490,
+                    padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Image.asset(
+                          //   'assets/images/logo.png',
+                          //   height: 35,
+                          // ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'กรอกรหัสผ่าน',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Image.asset(
-                                    'assets/images/close_noti_list.png',
-                                    height: 18.52,
-                                    width: 18.52,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            if (_username!.isEmpty)
-                              TextFormField(
-                                controller: txtEmail,
-                                decoration: _decorationRegisterMember(
-                                  context,
-                                  hintText: 'อีเมล',
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'กรอกอีเมล';
-                                  }
-                                  return null;
-                                },
                               ),
-                            if (_username!.isNotEmpty) ...[
-                              Row(
-                                children: [
-                                  Stack(
-                                    children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Image.asset(
+                                  'assets/images/close_noti_list.png',
+                                  height: 18.52,
+                                  width: 18.52,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          if (_username!.isEmpty)
+                            TextFormField(
+                              controller: txtEmail,
+                              decoration: _decorationRegisterMember(
+                                context,
+                                hintText: 'อีเมล',
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'กรอกอีเมล';
+                                }
+                                return null;
+                              },
+                            ),
+                          if (_username!.isNotEmpty) ...[
+                            Row(
+                              children: [
+                                Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(25),
+                                      child: Image.asset(
+                                        'assets/images/bg_profile_login.png',
+                                        width: 45,
+                                        height: 45,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    if (_imageUrl!.isNotEmpty)
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(25),
-                                        child: Image.asset(
-                                          'assets/images/bg_profile_login.png',
+                                        child: CachedNetworkImage(
+                                          imageUrl: _imageUrl!,
                                           width: 45,
                                           height: 45,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
-                                      if (_imageUrl!.isNotEmpty)
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                          child: CachedNetworkImage(
-                                            imageUrl: _imageUrl!,
-                                            width: 45,
-                                            height: 45,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                  SizedBox(width: 10),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          _username!,
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        Text(
-                                          'สมาชิก',
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w400,
-                                            color: Color(0xFF707070),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                              TextFormField(
-                                controller: txtPassword,
-                                obscureText: passwordVisibility,
-                                decoration: _decorationPasswordMember(context,
-                                    hintText: 'รหัสผ่าน',
-                                    visibility: passwordVisibility,
-                                    suffixTap: () {
-                                  setState(() {
-                                    passwordVisibility = !passwordVisibility;
-                                  });
-                                }),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'กรอกรหัสผ่าน';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ],
-                            SizedBox(height: 10),
-                            _buildButton(),
-                            SizedBox(height: 30),
-                            _buildOR(),
-                            SizedBox(height: 25),
-                            InkWell(
-                              onTap: () {
-                                if (!openLine) {
-                                  openLine = true;
-                                  _callLoginLine();
-                                }
-                              },
-                              child: _buildButtonLogin(
-                                'assets/images/line_circle.png',
-                                'เข้าใช้ผ่าน Line',
-                                color: Color(0xFF06C755),
-                                colorTitle: Color(0xFFFFFFFF),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            InkWell(
-                              onTap: () => _callLoginFacebook(),
-                              child: _buildButtonLogin(
-                                'assets/images/logo_facebook_login_page.png',
-                                'เข้าใช้ผ่าน Facebook',
-                                color: Color(0xFF227BEF),
-                                colorTitle: Color(0xFFFFFFFF),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            InkWell(
-                              onTap: () => _callLoginGoogle(),
-                              child: _buildButtonLogin(
-                                'assets/images/logo_google_login_page.png',
-                                'เข้าใช้ผ่าน Google',
-                                colorBorder: Color(0xFFE4E4E4),
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'ท่านเป็นผู้ใช้ใหม่',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                                  ],
                                 ),
-                                SizedBox(width: 8),
-                                GestureDetector(
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (builder) => RegisterPage(),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'ต้องการสมัครสมาชิก',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xFFB325F8),
-                                      decoration: TextDecoration.underline,
-                                    ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        _username!,
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      Text(
+                                        'สมาชิก',
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400,
+                                          color: Color(0xFF707070),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
+                            SizedBox(height: 10),
+                            TextFormField(
+                              controller: txtPassword,
+                              obscureText: passwordVisibility,
+                              decoration: _decorationPasswordMember(context,
+                                  hintText: 'รหัสผ่าน',
+                                  visibility: passwordVisibility,
+                                  suffixTap: () {
+                                setState(() {
+                                  passwordVisibility = !passwordVisibility;
+                                });
+                              }),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'กรอกรหัสผ่าน';
+                                }
+                                return null;
+                              },
+                            ),
                           ],
-                        ),
+                          SizedBox(height: 10),
+                          _buildButton(),
+                          SizedBox(height: 30),
+                          _buildOR(),
+                          SizedBox(height: 25),
+                          InkWell(
+                            onTap: () {
+                              if (!openLine) {
+                                openLine = true;
+                                _callLoginLine();
+                              }
+                            },
+                            child: _buildButtonLogin(
+                              'assets/images/line_circle.png',
+                              'เข้าใช้ผ่าน Line',
+                              color: Color(0xFF06C755),
+                              colorTitle: Color(0xFFFFFFFF),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          InkWell(
+                            onTap: () => _callLoginFacebook(),
+                            child: _buildButtonLogin(
+                              'assets/images/logo_facebook_login_page.png',
+                              'เข้าใช้ผ่าน Facebook',
+                              color: Color(0xFF227BEF),
+                              colorTitle: Color(0xFFFFFFFF),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          InkWell(
+                            onTap: () => _callLoginGoogle(),
+                            child: _buildButtonLogin(
+                              'assets/images/logo_google_login_page.png',
+                              'เข้าใช้ผ่าน Google',
+                              colorBorder: Color(0xFFE4E4E4),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'ท่านเป็นผู้ใช้ใหม่',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              GestureDetector(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (builder) => RegisterPage(),
+                                  ),
+                                ),
+                                child: Text(
+                                  'ต้องการสมัครสมาชิก',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xFFB325F8),
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    if (_loading)
-                      Positioned.fill(
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.4),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: CircularProgressIndicator(),
+                  ),
+                  if (_loading)
+                    Positioned.fill(
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.4),
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                      )
-                  ],
-                ),
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                ],
               ),
             ),
           ),
@@ -705,30 +698,35 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       };
 
       Dio dio = new Dio();
-      var response = await dio.post(
-        'http://122.155.223.63/td-des-api/m/v2/register/facebook/login',
-        data: model,
-      );
+      try {
+        var response = await dio.post(
+          'http://122.155.223.63/td-des-api/m/v2/register/facebook/login',
+          data: model,
+        );
 
-      await ManageStorage.createSecureStorage(
-        key: 'imageUrlSocial',
-        value:
-            obj.user.photoURL != null ? obj.user.photoURL + "?width=9999" : '',
-      );
+        await ManageStorage.createSecureStorage(
+          key: 'imageUrlSocial',
+          value: obj.user.photoURL != null
+              ? obj.user.photoURL + "?width=9999"
+              : '',
+        );
 
-      ManageStorage.createProfile(
-        value: response.data['objectData'],
-        key: 'facebook',
-      );
+        await ManageStorage.createProfile(
+          value: response.data['objectData'],
+          key: 'facebook',
+        );
 
-      if (obj != null) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => Menu(),
           ),
         );
+      } catch (e) {
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
+    } else {
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }
 
@@ -748,29 +746,33 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       };
 
       Dio dio = new Dio();
-      var response = await dio.post(
-        'http://122.155.223.63/td-des-api/m/v2/register/google/login',
-        data: model,
-      );
+      try {
+        var response = await dio.post(
+          'http://122.155.223.63/td-des-api/m/v2/register/google/login',
+          data: model,
+        );
 
-      await ManageStorage.createSecureStorage(
-        key: 'imageUrlSocial',
-        value: obj.user!.photoURL != null ? obj.user!.photoURL : '',
-      );
+        await ManageStorage.createSecureStorage(
+          key: 'imageUrlSocial',
+          value: obj.user!.photoURL != null ? obj.user!.photoURL : '',
+        );
 
-      ManageStorage.createProfile(
-        value: response.data['objectData'],
-        key: 'google',
-      );
+        ManageStorage.createProfile(
+          value: response.data['objectData'],
+          key: 'google',
+        );
 
-      if (obj != null) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => Menu(),
           ),
         );
+      } catch (e) {
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
+    } else {
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }
 
@@ -800,29 +802,33 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       };
 
       Dio dio = new Dio();
-      var response = await dio.post(
-        'http://122.155.223.63/td-des-api/m/v2/register/line/login',
-        data: model,
-      );
+      try {
+        var response = await dio.post(
+          'http://122.155.223.63/td-des-api/m/v2/register/line/login',
+          data: model,
+        );
 
-      await ManageStorage.createSecureStorage(
-        key: 'imageUrlSocial',
-        value: model['imageUrl'],
-      );
+        await ManageStorage.createSecureStorage(
+          key: 'imageUrlSocial',
+          value: model['imageUrl'],
+        );
 
-      ManageStorage.createProfile(
-        value: response.data['objectData'],
-        key: 'line',
-      );
+        await ManageStorage.createProfile(
+          value: response.data['objectData'],
+          key: 'line',
+        );
 
-      if (obj != null) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => Menu(),
           ),
         );
+      } catch (e) {
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
+    } else {
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }
 

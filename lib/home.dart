@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFBFDF8),
+      backgroundColor: Colors.white,
       body: SmartRefresher(
         enablePullDown: true,
         enablePullUp: false,

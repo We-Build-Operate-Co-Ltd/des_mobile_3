@@ -218,67 +218,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                 itemCount: _genderList.length,
               ),
             ),
-            SizedBox(height: 35),
-            Text(
-              'โซเชียลมีเดีย',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Image.asset('assets/images/facebook_purple.png', height: 30),
-                SizedBox(width: 10),
-                Text(
-                  'Yudthalert',
-                  style: TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-                Expanded(child: SizedBox()),
-                Container(
-                  width: 46,
-                  height: 20,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFB325F8),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    'View',
-                    style: TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Image.asset('assets/images/line_purple.png', height: 30),
-                SizedBox(width: 10),
-                Text(
-                  'Yudthalert',
-                  style: TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-                Expanded(child: SizedBox()),
-                Container(
-                  width: 46,
-                  height: 20,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFB325F8),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    'View',
-                    style: TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                )
-              ],
-            ),
+            SizedBox(height: 40),
             GestureDetector(
               onTap: () => submitUpdateUser(),
               child: Container(
