@@ -38,20 +38,38 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         flexibleSpace: Container(
           width: double.infinity,
+          height: 60 + MediaQuery.of(context).padding.top,
           color: Colors.white,
           padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top + 20,
+            top: MediaQuery.of(context).padding.top,
             left: 15,
             right: 15,
           ),
           child: Align(
             alignment: Alignment.centerLeft,
-            child: _backButton(context),
+            child: Row(
+              children: [
+                _backButton(context),
+                if (widget.slug == 'bookingPage')
+                  Expanded(
+                    child: Text(
+                      'รายละเอียด',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                const SizedBox(width: 40),
+              ],
+            ),
           ),
         ),
       ),
@@ -371,8 +389,7 @@ class _DetailPageState extends State<DetailPage> {
                               ),
                               SizedBox(height: 10),
                               Html(
-                                data:
-                                    model['description'] + model['description'],
+                                data: model['description'],
                                 style: {
                                   'body': Style(
                                     color: Color(0xFFEEEEEE),
@@ -652,7 +669,6 @@ class _DetailPageState extends State<DetailPage> {
       shrinkWrap: true, // 1st add
       physics: ClampingScrollPhysics(), // 2nd
       children: [
-        _buildHead(),
         SizedBox(height: 20),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 15),
@@ -720,14 +736,6 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                 ),
               ],
-            ),
-          ),
-          Positioned(
-            left: 0,
-            child: InkWell(
-              onTap: () => Navigator.pop(context),
-              child:
-                  Image.asset('assets/images/back.png', height: 40, width: 40),
             ),
           ),
         ],
