@@ -354,8 +354,6 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
           txtDate.value = TextEditingValue(
             text: DateFormat("dd / MM / yyyy").format(date),
           );
-          print('object');
-          print(now!.year);
           txtAge.text = (now!.year - date.year).toString();
         },
       );
@@ -521,7 +519,6 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
         .post('http://122.155.223.63/td-des-api/m/Register/update', data: user);
     var result = response.data;
     if (result['status'] == 'S') {
-      debugPrint(result['objectData']['category']);
       await ManageStorage.createProfile(
         key: result['objectData']['category'],
         value: result['objectData'],

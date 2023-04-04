@@ -186,8 +186,6 @@ class _MenuState extends State<Menu> {
 
   Future<bool> confirmExit() {
     DateTime now = DateTime.now();
-    debugPrint('current ${currentBackPressTime.toString()}');
-    debugPrint('now ${now.toString()}');
     if (currentBackPressTime == null ||
         now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
       currentBackPressTime = now;

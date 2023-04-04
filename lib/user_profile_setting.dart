@@ -314,8 +314,6 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
 
   void logout() async {
     String profileCategory = await ManageStorage.read('profileCategory') ?? '';
-    print('profileCategory');
-    print(profileCategory);
     switch (profileCategory) {
       case 'facebook':
         logoutFacebook();
