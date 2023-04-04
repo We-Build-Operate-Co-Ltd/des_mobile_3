@@ -314,7 +314,6 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                         ),
                       ),
                     ),
-                    const Expanded(child: SizedBox()),
                     Padding(
                       padding: const EdgeInsets.all(15),
                       child: GestureDetector(
