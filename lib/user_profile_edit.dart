@@ -605,7 +605,6 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
   readStorage() async {
     var value = await ManageStorage.read('profileData') ?? '';
     var user = json.decode(value);
-    debugPrint('user --> $user');
 
     if (user['code'] != '') {
       setState(() {
