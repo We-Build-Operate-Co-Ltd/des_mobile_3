@@ -16,6 +16,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
@@ -56,6 +57,9 @@ class _HomePageState extends State<HomePage> {
   LatLng? latLng;
   String? currentLocation = 'ตำแหน่งปัจจุบัน';
   int? _currentBanner = 0;
+
+  Future<dynamic>? _futureNews;
+  Future<dynamic>? _futureBanner;
 
   @override
   Widget build(BuildContext context) {
@@ -350,64 +354,124 @@ class _HomePageState extends State<HomePage> {
                     }
                   },
                 ),
-                Stack(
-                  children: [
-                    Container(
-                      height: 180,
-                      child: CarouselSlider(
-                        options: CarouselOptions(
-                          aspectRatio: 4,
-                          enlargeCenterPage: true,
-                          scrollDirection: Axis.horizontal,
-                          viewportFraction: 0.9,
-                          autoPlay: true,
-                          enlargeFactor: 0.4,
-                          enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _currentBanner = index;
-                            });
-                          },
-                        ),
-                        items: mockBannerList.map(
-                          (item) {
-                            int index = mockBannerList.indexOf(item);
-                            return ClipRRect(
-                              borderRadius: _currentBanner == index
-                                  ? BorderRadius.all(Radius.circular(20))
-                                  : BorderRadius.circular(0),
-                              child: CachedNetworkImage(
-                                imageUrl: item,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
+                FutureBuilder(
+                  future: _futureBanner,
+                  builder: (_, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data.length == 0) return const SizedBox();
+                      return Stack(
+                        children: [
+                          SizedBox(
+                            height: 180,
+                            child: CarouselSlider(
+                              options: CarouselOptions(
+                                aspectRatio: 4,
+                                enlargeCenterPage: true,
+                                scrollDirection: Axis.horizontal,
+                                viewportFraction: 0.9,
+                                autoPlay: true,
+                                enlargeFactor: 0.4,
+                                enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                                onPageChanged: (index, reason) {
+                                  setState(() {
+                                    _currentBanner = index;
+                                  });
+                                },
                               ),
-                            );
-                          },
-                        ).toList(),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 10,
-                      left: 0,
-                      right: 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: mockBannerList.map<Widget>((url) {
-                          int index = mockBannerList.indexOf(url);
-                          return Container(
-                            width: _currentBanner == index ? 17.5 : 7.0,
-                            height: 7.0,
-                            margin: EdgeInsets.all(2.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: Colors.white,
+                              items: snapshot.data.map<Widget>(
+                                (item) {
+                                  int index = snapshot.data.indexOf(item);
+                                  return GestureDetector(
+                                    onTap: () {
+                                      if (snapshot.data[_currentBanner]
+                                              ['action'] ==
+                                          'out') {
+                                        if (snapshot.data[_currentBanner]
+                                            ['isPostHeader']) {
+                                          var path = snapshot
+                                              .data[_currentBanner]['linkUrl'];
+                                          if (profileCode != '') {
+                                            var splitCheck =
+                                                path.split('').reversed.join();
+                                            if (splitCheck[0] != "/") {
+                                              path = path + "/";
+                                            }
+                                            var codeReplae = "B" +
+                                                profileCode!
+                                                    .replaceAll('-', '') +
+                                                snapshot.data[_currentBanner]
+                                                        ['code']
+                                                    .replaceAll('-', '');
+                                            launchUrl(
+                                                Uri.parse('$path$codeReplae'),
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          }
+                                        } else
+                                          launchUrl(
+                                              Uri.parse(
+                                                  snapshot.data[_currentBanner]
+                                                      ['linkUrl']),
+                                              mode: LaunchMode
+                                                  .externalApplication);
+                                      } else if (snapshot.data[_currentBanner]
+                                              ['action'] ==
+                                          'in') {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => DetailPage(
+                                              slug: 'mock',
+                                              model:
+                                                  snapshot.data[_currentBanner],
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    child: ClipRRect(
+                                      borderRadius: _currentBanner == index
+                                          ? BorderRadius.all(
+                                              Radius.circular(20))
+                                          : BorderRadius.circular(0),
+                                      child: CachedNetworkImage(
+                                        imageUrl: item['imageUrl'],
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ).toList(),
                             ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ],
+                          ),
+                          Positioned(
+                            bottom: 10,
+                            left: 0,
+                            right: 0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: mockBannerList.map<Widget>((url) {
+                                int index = mockBannerList.indexOf(url);
+                                return Container(
+                                  width: _currentBanner == index ? 17.5 : 7.0,
+                                  height: 7.0,
+                                  margin: EdgeInsets.all(2.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.white,
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
                 ),
                 SizedBox(height: 20),
                 Row(
@@ -424,7 +488,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 10),
                 FutureBuilder(
-                  future: _readNews(),
+                  future: _futureNews,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.length > 0) {
@@ -695,7 +759,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _callRead() async {
-    _readNews();
+    setState(() {
+      _futureBanner = _readBanner();
+      _futureNews = _readNews();
+    });
   }
 
   Future<List<dynamic>> _readNews() async {
@@ -705,6 +772,22 @@ class _HomePageState extends State<HomePage> {
       response = await dio.post(
           'http://122.155.223.63/td-des-api/m/eventcalendar/read',
           data: {'skip': 0, 'limit': 2});
+      if (response.statusCode == 200) {
+        if (response.data['status'] == 'S') {
+          return response.data['objectData'];
+        }
+      }
+    } catch (e) {}
+    return [];
+  }
+
+  Future<List<dynamic>> _readBanner() async {
+    Dio dio = Dio();
+    Response<dynamic> response;
+    try {
+      response = await dio.post(
+          'http://122.155.223.63/td-des-api/m/Banner/main/read',
+          data: {});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
           return response.data['objectData'];

@@ -133,10 +133,16 @@ class _DetailPageState extends State<DetailPage> {
               builder: (context) {
                 return ImageViewer(
                   initialIndex: index,
-                  imageProviders: [widget.model['imageUrl'], ..._gallery]
+                  imageProviders: [widget.model['imageUrl']]
                       .map<ImageProvider<Object>>((e) => NetworkImage(e))
                       .toList(),
                 );
+                // return ImageViewer(
+                //   initialIndex: index,
+                //   imageProviders: [widget.model['imageUrl'], ..._gallery]
+                //       .map<ImageProvider<Object>>((e) => NetworkImage(e))
+                //       .toList(),
+                // );
               },
             );
           },
