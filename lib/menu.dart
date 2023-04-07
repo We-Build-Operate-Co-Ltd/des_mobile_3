@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:des/booking_service.dart';
+import 'package:des/detail.dart';
 import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
 import 'package:des/shared/extension.dart';
@@ -13,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:des/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Menu extends StatefulWidget {
   const Menu({
@@ -37,6 +40,8 @@ class _MenuState extends State<Menu> {
   late TextEditingController _emailController;
   bool _verified = false;
   final _formKey = GlobalKey<FormState>();
+  bool notShowOnDay = false;
+  int _currentBanner = 0;
 
   var loadingModel = {
     'title': '',
@@ -184,6 +189,201 @@ class _MenuState extends State<Menu> {
     );
   }
 
+  _buildMainPopUp() async {
+    var result = await _readMainPopup();
+    if (result.length > 0) {
+      String valueStorage = await ManageStorage.read('mainPopupDE') ?? '';
+      var dataValue;
+      if (valueStorage.isNotEmpty) {
+        dataValue = json.decode(valueStorage);
+      } else {
+        dataValue = null;
+      }
+
+      var now = new DateTime.now();
+      DateTime date = new DateTime(now.year, now.month, now.day);
+
+      if (dataValue != null) {
+        var index = dataValue.indexWhere(
+          (c) =>
+              // c['username'] == userData.username &&
+              c['date'].toString() ==
+                  DateFormat("ddMMyyyy").format(date).toString() &&
+              c['boolean'] == "true",
+        );
+
+        if (index != -1) {
+          this.setState(() {
+            hiddenMainPopUp = true;
+          });
+        }
+      }
+
+      if (!hiddenMainPopUp)
+        return showDialog(
+          barrierDismissible: true, // close outside
+          context: context,
+          barrierColor: Colors.black.withOpacity(0.6),
+          builder: (_) {
+            return StatefulBuilder(builder: (context, setStateMainPopUp) {
+              return Dialog(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                child: Container(
+                  height: 420,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          onTap: () => Navigator.pop(context),
+                          child: Image.asset(
+                            'assets/images/close_noti_list.png',
+                            height: 40,
+                            width: 40,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        height: 300,
+                        child: CarouselSlider(
+                          options: CarouselOptions(
+                            aspectRatio: 1,
+                            enlargeCenterPage: true,
+                            scrollDirection: Axis.horizontal,
+                            viewportFraction: 1,
+                            autoPlay: true,
+                            // enlargeFactor: 0.4,
+                            // enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                            onPageChanged: (index, reason) {
+                              setStateMainPopUp(() {
+                                _currentBanner = index;
+                              });
+                            },
+                          ),
+                          items: result.map<Widget>(
+                            (item) {
+                              int index = result.indexOf(item);
+                              return GestureDetector(
+                                onTap: () {
+                                  if (result[_currentBanner]['action'] ==
+                                      'out') {
+                                    if (result[_currentBanner]
+                                        ['isPostHeader']) {
+                                      var path =
+                                          result[_currentBanner]['linkUrl'];
+                                      if (_profileCode != '') {
+                                        var splitCheck =
+                                            path.split('').reversed.join();
+                                        if (splitCheck[0] != "/") {
+                                          path = path + "/";
+                                        }
+                                        var codeReplae = "B" +
+                                            _profileCode.replaceAll('-', '') +
+                                            result[_currentBanner]['code']
+                                                .replaceAll('-', '');
+                                        launchUrl(Uri.parse('$path$codeReplae'),
+                                            mode:
+                                                LaunchMode.externalApplication);
+                                      }
+                                    } else
+                                      launchUrl(
+                                          Uri.parse(result[_currentBanner]
+                                              ['linkUrl']),
+                                          mode: LaunchMode.externalApplication);
+                                  } else if (result[_currentBanner]['action'] ==
+                                      'in') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailPage(
+                                          slug: 'mock',
+                                          model: result[_currentBanner],
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: ClipRRect(
+                                  borderRadius: _currentBanner == index
+                                      ? BorderRadius.all(Radius.circular(10))
+                                      : BorderRadius.circular(0),
+                                  child: CachedNetworkImage(
+                                    imageUrl: item['imageUrl'],
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                  ),
+                                ),
+                              );
+                            },
+                          ).toList(),
+                        ),
+                      ),
+                      // ClipRRect(
+                      //   borderRadius: BorderRadius.circular(15),
+                      //   child: CachedNetworkImage(
+                      //     imageUrl: result[0]['imageUrl'],
+                      //   ),
+                      // ),
+                      const SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(
+                                left: 5.0, top: 10.0, bottom: 10.0),
+                            child: InkWell(
+                              onTap: () => {
+                                setStateMainPopUp(() {
+                                  notShowOnDay = !notShowOnDay;
+                                }),
+                                setHiddenMainPopup(),
+                              },
+                              child: new Icon(
+                                !notShowOnDay
+                                    ? Icons.check_box_outline_blank
+                                    : Icons.check_box,
+                                color: Colors.lightGreenAccent,
+                                size: 40.0,
+                              ),
+                            ),
+                            alignment: Alignment.topLeft,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.only(
+                                left: 10.0, top: 10.0, bottom: 10.0),
+                            child: InkWell(
+                              onTap: () => {setHiddenMainPopup()},
+                              child: Text(
+                                'ไม่ต้องแสดงเนื้อหาอีกภายในวันนี้',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: 'Kanit',
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              );
+            });
+          },
+        );
+    }
+  }
+
   Future<bool> confirmExit() {
     DateTime now = DateTime.now();
     if (currentBackPressTime == null ||
@@ -194,75 +394,6 @@ class _MenuState extends State<Menu> {
     }
     return Future.value(true);
   }
-
-  // _buildMainPopUp() async {
-  //   try {
-  //     var response = await Dio()
-  //         .post('http://122.155.223.63/td-des-api/m/MainPopup/read', data: {});
-  //     var result = response.data;
-  //     if (result['status'] == 'S') {
-  //       var valueStorage = await ManageStorage.read('mainPopup');
-  //       var dataValue = json.decode(valueStorage) ?? null;
-
-  //       var now = new DateTime.now();
-  //       DateTime date = new DateTime(now.year, now.month, now.day);
-
-  //       if (dataValue != null) {
-  //         var index = dataValue.indexWhere(
-  //           (c) =>
-  //               // c['username'] == userData.username &&
-  //               c['date'].toString() ==
-  //                   DateFormat("ddMMyyyy").format(date).toString() &&
-  //               c['boolean'] == "true",
-  //         );
-
-  //         if (index == -1) {
-  //           this.setState(() {
-  //             hiddenMainPopUp = false;
-  //           });
-  //           return showDialog(
-  //             barrierDismissible: false, // close outside
-  //             context: context,
-  //             builder: (_) {
-  //               return WillPopScope(
-  //                 onWillPop: () {
-  //                   return Future.value(false);
-  //                 },
-  //                 child: MainPopupDialog(
-  //                   model: _futureMainPopUp,
-  //                   type: 'mainPopup',
-  //                 ),
-  //               );
-  //             },
-  //           );
-  //         } else {
-  //           this.setState(() {
-  //             hiddenMainPopUp = true;
-  //           });
-  //         }
-  //       } else {
-  //         this.setState(() {
-  //           hiddenMainPopUp = false;
-  //         });
-  //         return showDialog(
-  //           barrierDismissible: false, // close outside
-  //           context: context,
-  //           builder: (_) {
-  //             return WillPopScope(
-  //               onWillPop: () {
-  //                 return Future.value(false);
-  //               },
-  //               child: MainPopupDialog(
-  //                 model: _futureMainPopUp,
-  //                 type: 'mainPopup',
-  //               ),
-  //             );
-  //           },
-  //         );
-  //       }
-  //     }
-  //   } catch (ex) {}
-  // }
 
   Widget _buildBottomNavBar() {
     return Container(
@@ -438,7 +569,8 @@ class _MenuState extends State<Menu> {
 
     homePage = HomePage(changePage: _changePage);
     profilePage = UserProfilePage(changePage: _changePage);
-
+    // _futureMainPopup = _readMainPopup();
+    _buildMainPopUp();
     _callRead();
     pages = <Widget>[
       homePage,
@@ -453,6 +585,21 @@ class _MenuState extends State<Menu> {
   void dispose() {
     _emailController.dispose();
     super.dispose();
+  }
+
+  Future<List<dynamic>> _readMainPopup() async {
+    Dio dio = Dio();
+    Response<dynamic> response;
+    try {
+      response = await dio
+          .post('http://122.155.223.63/td-des-api/m/MainPopup/read', data: {});
+      if (response.statusCode == 200) {
+        if (response.data['status'] == 'S') {
+          return response.data['objectData'];
+        }
+      }
+    } catch (e) {}
+    return [];
   }
 
   _changePage(index) {
@@ -475,6 +622,7 @@ class _MenuState extends State<Menu> {
     setState(() {
       if (index == 0 && _currentPage == 0) {
         _callRead();
+        _buildMainPopUp();
         // homePage.getState().onRefresh();
       }
       _currentPage = index;
@@ -492,5 +640,45 @@ class _MenuState extends State<Menu> {
         pages[3] = profilePage;
       }
     });
+  }
+
+  void setHiddenMainPopup() async {
+    String name = 'mainPopupDE';
+
+    var value = await ManageStorage.read(name);
+    var dataValue = value != '' ? json.decode(value) : null;
+
+    var now = new DateTime.now();
+    DateTime date = new DateTime(now.year, now.month, now.day);
+
+    if (dataValue != null) {
+      var index = dataValue.indexWhere((c) => c['profileCode'] == _profileCode);
+
+      if (index == -1) {
+        dataValue.add({
+          'boolean': notShowOnDay.toString(),
+          'profileCode': _profileCode,
+          'date': DateFormat("ddMMyyyy").format(date).toString(),
+        });
+      } else {
+        dataValue[index]['boolean'] = notShowOnDay.toString();
+        dataValue[index]['profileCode'] = _profileCode;
+        dataValue[index]['date'] =
+            DateFormat("ddMMyyyy").format(date).toString();
+      }
+    } else {
+      dataValue = [
+        {
+          'boolean': notShowOnDay.toString(),
+          'profileCode': _profileCode,
+          'date': DateFormat("ddMMyyyy").format(date).toString(),
+        },
+      ];
+    }
+    await ManageStorage.createSecureStorage(
+      key: name,
+      value: jsonEncode(dataValue),
+    );
+    print(dataValue);
   }
 }
