@@ -218,67 +218,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                 itemCount: _genderList.length,
               ),
             ),
-            SizedBox(height: 35),
-            Text(
-              'โซเชียลมีเดีย',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Image.asset('assets/images/facebook_purple.png', height: 30),
-                SizedBox(width: 10),
-                Text(
-                  'Yudthalert',
-                  style: TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-                Expanded(child: SizedBox()),
-                Container(
-                  width: 46,
-                  height: 20,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFB325F8),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    'View',
-                    style: TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Image.asset('assets/images/line_purple.png', height: 30),
-                SizedBox(width: 10),
-                Text(
-                  'Yudthalert',
-                  style: TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-                Expanded(child: SizedBox()),
-                Container(
-                  width: 46,
-                  height: 20,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFB325F8),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    'View',
-                    style: TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                )
-              ],
-            ),
+            SizedBox(height: 40),
             GestureDetector(
               onTap: () => submitUpdateUser(),
               child: Container(
@@ -414,8 +354,6 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
           txtDate.value = TextEditingValue(
             text: DateFormat("dd / MM / yyyy").format(date),
           );
-          print('object');
-          print(now!.year);
           txtAge.text = (now!.year - date.year).toString();
         },
       );
@@ -581,7 +519,6 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
         .post('http://122.155.223.63/td-des-api/m/Register/update', data: user);
     var result = response.data;
     if (result['status'] == 'S') {
-      debugPrint(result['objectData']['category']);
       await ManageStorage.createProfile(
         key: result['objectData']['category'],
         value: result['objectData'],
@@ -668,7 +605,6 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
   readStorage() async {
     var value = await ManageStorage.read('profileData') ?? '';
     var user = json.decode(value);
-    debugPrint('user --> $user');
 
     if (user['code'] != '') {
       setState(() {

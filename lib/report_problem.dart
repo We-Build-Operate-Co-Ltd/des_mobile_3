@@ -14,10 +14,10 @@ class ReportProblemPage extends StatelessWidget {
       body: Stack(
         children: [
           Positioned(
-            top: -42,
+            top: 0,
             right: 0,
             child: Image.asset(
-              'assets/images/logo_2o.png',
+              'assets/images/bg_about_us.png',
               fit: BoxFit.fitWidth,
               width: 290,
               alignment: Alignment.topRight,
@@ -54,6 +54,7 @@ class ReportProblemPage extends StatelessWidget {
                     color: Color(0xFF7A4CB1),
                     fontWeight: FontWeight.w500,
                   ),
+                  textAlign: TextAlign.center,
                 ),
                 Text(
                   'ท่านมีความสงสัยการใช้งานศูนย์ฯ\nหรือพบปัญหาจากการใช้สามารถแจ้งให้เราทราบได้เลย\nเราพร้อมช่วยเหลือท่านเสมอ',

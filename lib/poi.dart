@@ -865,7 +865,6 @@ class _PoiPage extends State<PoiPage> {
             {'code': "", 'title': 'ทั้งหมด'}
           ];
           list = [...list, ...data];
-          print(list);
           setState(() {
             categoryList = list;
           });
