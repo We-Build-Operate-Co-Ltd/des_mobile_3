@@ -1,5 +1,7 @@
+import 'package:des/shared/theme_data.dart';
 import 'package:des/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
@@ -26,24 +28,42 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  static final ValueNotifier<ThemeModeThird> themeNotifier =
+      ValueNotifier(ThemeModeThird.light);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'DES ดิจิทัลชุมชน',
-      home: const SplashPage(),
-      theme: ThemeData(
-        useMaterial3: true,
-        fontFamily: 'Kanit',
-      ),
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-          child: child!,
+    _portraitModeOnly();
+    return ValueListenableBuilder<ThemeModeThird>(
+      valueListenable: themeNotifier,
+      builder: (_, ThemeModeThird currentMode, __) {
+        return MaterialApp(
+          title: 'DES ดิจิทัลชุมชน',
+          debugShowCheckedModeBanner: false,
+          theme: FlexThemeData.light(
+            colors: FlexSchemeColor.from(
+              primary: const Color(0xFF7A4CB1),
+              brightness: Brightness.light,
+            ),
+          ),
+          home: const SplashPage(),
+          builder: (context, child) {
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: child!,
+            );
+          },
         );
       },
     );
   }
+}
+
+/// blocks rotation; sets orientation to: portrait
+void _portraitModeOnly() {
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 }
