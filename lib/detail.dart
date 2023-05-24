@@ -813,9 +813,9 @@ class _DetailPageState extends State<DetailPage> {
   Future<void> _callShare(param) async {
     await FlutterShare.share(
         title: 'DES ดิจิทัลชุมชน',
-        text: '''ขอเชิญชวนร่วม คลาสเรียน
-${param['title']}
-${param['description'].toString().substring(0, 100)}...''',
+        text: '''📚🔖ขอเชิญชวนร่วม คลาสเรียนเพื่อการเรียนรู้ ดิจิทัลชุมชน หัวข้อ
+"${param['title']}"
+🚩🚩 🚩🚩''',
         linkUrl: param['imageUrl'],
         chooserTitle: 'Example Chooser Title');
   }
