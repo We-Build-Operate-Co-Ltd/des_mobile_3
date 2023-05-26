@@ -31,6 +31,7 @@ class VerifyFirstStepPage extends StatelessWidget {
       right: 0,
       bottom: 0,
       child: Container(
+        width: double.infinity,
         padding: const EdgeInsets.symmetric(
           horizontal: 30,
           vertical: 15,
@@ -76,11 +77,13 @@ class VerifyFirstStepPage extends StatelessWidget {
                   width: 30,
                 ),
                 const SizedBox(width: 15),
-                const Text(
-                  'สมัครใช้แอปฯ “DES ดิจิทัลชุมชน”',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
+                Expanded(
+                  child: const Text(
+                    'สมัครใช้แอปฯ “DES ดิจิทัลชุมชน”',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 )
               ],
@@ -94,11 +97,13 @@ class VerifyFirstStepPage extends StatelessWidget {
                   width: 30,
                 ),
                 const SizedBox(width: 15),
-                const Text(
-                  'กรอกข้อมูลบัตรประชาชน',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
+                Expanded(
+                  child: const Text(
+                    'กรอกข้อมูลบัตรประชาชน',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 )
               ],
@@ -157,8 +162,7 @@ class VerifyFirstStepPage extends StatelessWidget {
                 )
               ],
             ),
-            
-              const SizedBox(height: 30),
+            const SizedBox(height: 30),
             const Text(
               'ประโยชน์ที่ได้รับ',
               style: TextStyle(
@@ -179,11 +183,13 @@ class VerifyFirstStepPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 5),
-                const Text(
-                  'เพิ่มความปลอดภัยในการใช้บริการ',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
+                Expanded(
+                  child: const Text(
+                    'เพิ่มความปลอดภัยในการใช้บริการ',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 )
               ],
@@ -200,16 +206,18 @@ class VerifyFirstStepPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 5),
-                const Text(
-                  'อำนวยความสะดวกเมื่อเข้าใช้บริการที่ศูนย์ฯ',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
+                Expanded(
+                  child: const Text(
+                    'อำนวยความสะดวกเมื่อเข้าใช้บริการที่ศูนย์ฯ',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 )
               ],
             ),
-            const SizedBox(height: 60),
+            const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.all(15),
               child: GestureDetector(

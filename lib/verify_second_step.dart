@@ -214,25 +214,27 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                           width: 100,
                         ),
                         const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              'คำแนะนำ',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text(
+                                'คำแนะนำ',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'เลข Laser ID จะอยู่ด้านหลังของบัตรประชาชน',
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: Color(0xFF707070),
-                                fontWeight: FontWeight.w400,
-                              ),
-                            )
-                          ],
+                              Text(
+                                'เลข Laser ID จะอยู่ด้านหลังของบัตรประชาชน',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: Color(0xFF707070),
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              )
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -246,7 +248,7 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                     ),
                     SizedBox(height: 6),
                     SizedBox(
-                      height: 20,
+                      height: 30,
                       width: double.infinity,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,

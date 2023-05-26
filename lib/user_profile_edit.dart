@@ -116,7 +116,11 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                                     color: Color(0xFFA924F0),
                                   ),
                                 ),
-                                child: Text('เพิ่มรูปภาพ +'),
+                                child: Text(
+                                  'เพิ่มรูปภาพ +',
+                                  style: TextStyle(),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                       ),
                       Positioned(
@@ -194,9 +198,6 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             SizedBox(height: 10),
             TextFormField(
               controller: txtEmail,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z.]')),
-              ],
               decoration: _decorationBase(context, hintText: 'อีเมล'),
             ),
             SizedBox(height: 20),
@@ -208,7 +209,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             ),
             SizedBox(height: 4),
             SizedBox(
-              height: 20,
+              height: 30,
               width: double.infinity,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,

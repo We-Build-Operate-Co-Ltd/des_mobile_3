@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 unfocus(context) {
   FocusScopeNode currentFocus = FocusScope.of(context);
@@ -170,6 +172,24 @@ extension EmailValidator on String {
             r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
         .hasMatch(this);
   }
+}
+
+launchURL(String url) async {
+  launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+}
+
+logD(dynamic model) {
+  var logger = Logger(
+    printer: PrettyPrinter(),
+  );
+  return logger.d(model);
+}
+
+logE(dynamic model) {
+  var logger = Logger(
+    printer: PrettyPrinter(),
+  );
+  return logger.e(model);
 }
 
 // List<Identity> toListModel(List<dynamic> model) {

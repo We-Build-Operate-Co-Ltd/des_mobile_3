@@ -592,6 +592,22 @@ class _BookingServicePageState extends State<BookingServicePage>
         } else if (_selectedCategory == '0') {
           edit = true;
         }
+        if (!model['checkIn']) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => BookingServiceDetailPage(
+                code: model['center'],
+                edit: edit,
+                repeat: repeat,
+                repeatCurrentDay: repeatCurrentDay,
+                date: txtDate.text,
+                startTime: txtStartTime.text,
+                endTime: txtEndTime.text,
+              ),
+            ),
+          );
+        }
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -656,7 +672,18 @@ class _BookingServicePageState extends State<BookingServicePage>
                       model['checkIn'] == false)
                     GestureDetector(
                       onTap: () {
-                        // check in = true;
+                        setState(() {
+                          model['checkIn'] == true;
+                          modelBooking
+                              .map((e) => {
+                                    if (e['code'] == model['code'])
+                                      {
+                                        e['checkIn'] = true,
+                                      }
+                                  })
+                              .toList();
+                        });
+                        _callRead();
                       },
                       child: Container(
                         height: 30,
@@ -675,6 +702,27 @@ class _BookingServicePageState extends State<BookingServicePage>
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
                           ),
+                        ),
+                      ),
+                    ),
+                  if (_checkCurrentDate(model['dateTime']) == 0 &&
+                      model['checkIn'])
+                    Container(
+                      height: 30,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF7A4CB1),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Text(
+                        'เช็คอินแล้ว',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
