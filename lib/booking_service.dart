@@ -1,6 +1,7 @@
 import 'package:des/booking_service_detail.dart';
 import 'package:des/booking_service_search_result.dart';
 import 'package:des/models/mock_data.dart';
+import 'package:des/shared/theme_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -49,7 +50,7 @@ class _BookingServicePageState extends State<BookingServicePage>
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         extendBody: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).custom.second,
         body: SmartRefresher(
             enablePullDown: true,
             enablePullUp: false,

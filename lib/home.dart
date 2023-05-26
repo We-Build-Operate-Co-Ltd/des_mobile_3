@@ -7,6 +7,7 @@ import 'package:des/models/mock_data.dart';
 import 'package:des/notification_list.dart';
 import 'package:des/chat.dart';
 import 'package:des/report_problem.dart';
+import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -15,8 +16,12 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:ui' as ui show ImageFilter;
+
+import 'main.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
@@ -48,11 +53,16 @@ class _HomePageState extends State<HomePage> {
   String? userCode = '';
   String? $imageUrl = '';
   String? priceToday = '';
+  String? selectedSize = "";
 
   bool hiddenMainPopUp = false;
   String percentPrice = '';
   bool moreThen = false;
-
+  List<dynamic> _listSwitchColors = [
+    {'code': '1', 'title': 'ปกติ', 'isSelected': true},
+    {'code': '2', 'title': 'ขาวดำ', 'isSelected': false},
+    {'code': '3', 'title': 'ดำเหลือง', 'isSelected': false},
+  ];
   String dateNow = DateFormat('dd/MM/yyyy').format(DateTime.now());
   LatLng? latLng;
   String? currentLocation = 'ตำแหน่งปัจจุบัน';
@@ -64,7 +74,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).custom.primary,
       body: SmartRefresher(
         enablePullDown: true,
         enablePullUp: false,
@@ -104,11 +114,17 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           const Expanded(child: SizedBox()),
-                          // Image.asset(
-                          //   'assets/images/scale_font_size.png',
-                          //   height: 36,
-                          //   width: 35,
-                          // ),
+                          const SizedBox(width: 10),
+                          GestureDetector(
+                            onTap: () {
+                              buildModalSwitch(context);
+                            },
+                            child: Image.asset(
+                              'assets/images/icon_blind.png',
+                              height: 35,
+                              width: 35,
+                            ),
+                          ),
                           const SizedBox(width: 10),
                           GestureDetector(
                             onTap: () {
@@ -145,9 +161,11 @@ class _HomePageState extends State<HomePage> {
                         offset: Offset(0, 3), // changes position of shadow
                       ),
                     ],
-                    image: const DecorationImage(
+                    image: DecorationImage(
                       image: AssetImage(
-                        'assets/images/card_purple.png',
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? 'assets/images/card_purple.png'
+                            : 'assets/images/card_black.png',
                       ),
                     ),
                   ),
@@ -200,22 +218,42 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           columnButton(
-                            'assets/images/modern_farmer.png',
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/modern_farmer.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/modern_farmer_d.png'
+                                    : 'assets/images/modern_farmer_d.png',
                             'เกษตรกรสมัยใหม่',
                             code: 'btn1',
                           ),
                           columnButton(
-                            'assets/images/community_business.png',
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/community_business.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/community_business_d.png'
+                                    : 'assets/images/community_business_d.png',
                             'ธุรกิจชุมชน',
                             code: 'btn2',
                           ),
                           columnButton(
-                            'assets/images/care_old.png',
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/care_old.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/care_old_d.png'
+                                    : 'assets/images/care_old_d.png',
                             'ดูแลผู้สูงอายุ',
                             code: 'btn3',
                           ),
                           columnButton(
-                            'assets/images/more.png',
+                               MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/more.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/more_d.png'
+                                    : 'assets/images/more_d.png',
                             'เพิ่มเติม',
                             code: 'btn4',
                           ),
@@ -229,11 +267,12 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       'บริการสำหรับคุณ',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
+                        color: Theme.of(context).custom.second,
                       ),
                     ),
                     GestureDetector(
@@ -257,6 +296,7 @@ class _HomePageState extends State<HomePage> {
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w400,
+                              color: Theme.of(context).custom.second,
                             ),
                           ),
                         ],
@@ -319,12 +359,13 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Text(
                       'คลาสกำลังเรียน',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
+                        color: Theme.of(context).custom.second,
                       ),
                     ),
                     // Text(
@@ -535,11 +576,14 @@ class _HomePageState extends State<HomePage> {
       },
       child: Card(
         elevation: 4,
-        color: Colors.white,
+        color: Theme.of(context).custom.primary,
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFFFFFFF),
-            borderRadius: BorderRadius.circular(10),
+            color: Theme.of(context).custom.primary,
+            border: Border.all(
+              color: Theme.of(context).custom.second,
+            ),
+            borderRadius: BorderRadius.circular(15),
           ),
           child: Column(
             children: [
@@ -561,9 +605,10 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
                     model['title'],
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
+                      color: Theme.of(context).custom.second,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -577,11 +622,12 @@ class _HomePageState extends State<HomePage> {
                     Image.asset('assets/images/time_home_page.png',
                         height: 24, width: 24),
                     const SizedBox(width: 8),
-                    const Text(
+                    Text(
                       '3 ชั่วโมง',
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w400,
+                        color: Theme.of(context).custom.second,
                       ),
                     ),
                   ],
@@ -627,9 +673,10 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: Text(
                       model!['title'] ?? '',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
+                        color: Theme.of(context).custom.second,
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 4,
@@ -647,7 +694,7 @@ class _HomePageState extends State<HomePage> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(19),
                                 border: Border.all(
-                                  color: const Color(0x80B325F8),
+                                  color: Theme.of(context).custom.second,
                                 ),
                               ),
                             ),
@@ -656,9 +703,9 @@ class _HomePageState extends State<HomePage> {
                               height: 9,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(19),
-                                color: const Color(0xFFB325F8),
+                                color: Theme.of(context).custom.second,
                                 border: Border.all(
-                                  color: const Color(0xFFB325F8),
+                                  color: Theme.of(context).custom.second,
                                 ),
                               ),
                             ),
@@ -667,9 +714,10 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(width: 4),
                         Text(
                           'เรียนแล้ว $study%',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 9,
                             fontWeight: FontWeight.w300,
+                            color: Theme.of(context).custom.second,
                           ),
                         ),
                       ],
@@ -712,10 +760,11 @@ class _HomePageState extends State<HomePage> {
                   height: 40,
                   child: Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
                       height: 1,
+                      color: Theme.of(context).custom.second,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -763,6 +812,8 @@ class _HomePageState extends State<HomePage> {
       _futureBanner = _readBanner();
       _futureNews = _readNews();
     });
+    var sizeName = await storage.read(key: 'switchSize');
+    selectedSize = sizeName;
   }
 
   Future<List<dynamic>> _readNews() async {
@@ -903,5 +954,239 @@ class _HomePageState extends State<HomePage> {
             (placemarks.first.administrativeArea ?? '');
       });
     } catch (e) {}
+  }
+
+  buildModalSwitch(
+    BuildContext context,
+  ) {
+    return showCupertinoModalBottomSheet(
+        expand: false,
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return Material(
+            type: MaterialType.transparency,
+            child: BackdropFilter(
+              filter: ui.ImageFilter.blur(
+                sigmaX: 5.0,
+                sigmaY: 5.0,
+              ),
+              child: Container(
+                height: 500,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFFFF),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(10),
+                  ),
+                ),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'ขนาดตัวหนังสือ',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Color(0xFF000000),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      contentCard(context, "ปกติ", "1", "size"),
+                      SizedBox(height: 10),
+                      contentCard(context, "ปานกลาง", "2", "size"),
+                      SizedBox(height: 10),
+                      contentCard(context, "ใหญ่", "3", "size"),
+                      SizedBox(height: 20),
+                      Text(
+                        'ความตัดกันของสี',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Color(0xFF000000),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      // contentCard(context, "ปกติ", "1", "color"),
+                      // SizedBox(height: 10),
+                      // contentCard(context, "ขาวดำ", "2", "color"),
+                      // SizedBox(height: 10),
+                      // contentCard(context, "ดำเหลือง", "3", "color"),
+                      contentCardV2(context),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  contentCard(BuildContext context, String title, String size, String type) {
+    return InkWell(
+      onTap: () {
+        setState(
+          (() async {
+            await storage.write(
+              key: 'switchColor',
+              value: title,
+            );
+            setState(
+              () {
+                if (title == "ปกติ") {
+                  MyApp.themeNotifier.value = ThemeModeThird.light;
+                } else if (title == "ขาวดำ") {
+                  MyApp.themeNotifier.value = ThemeModeThird.dark;
+                } else {
+                  MyApp.themeNotifier.value = ThemeModeThird.blindness;
+                }
+              },
+            );
+          }),
+        );
+      },
+      child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          alignment: Alignment.center,
+          height: 45,
+          // width: 145,
+          decoration: BoxDecoration(
+            color: title == "ปกติ" ? Color(0xFF7A4CB1) : Color(0xFFFFFFFF),
+            borderRadius: BorderRadius.circular(73),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  type == "color"
+                      ? Image.asset(
+                          title == "ปกติ"
+                              ? 'assets/images/icon_rp.png'
+                              : title == "ขาวดำ"
+                                  ? 'assets/images/icon_wb.png'
+                                  : "assets/images/icon_yb.png",
+                          height: 35,
+                          // width: 35,
+                        )
+                      : Container(),
+                  SizedBox(width: 5),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: title == "ปกติ"
+                          ? Color(0xFFFFFFFF)
+                          : Color(0xFF000000),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+              Image.asset(
+                title == "ปกติ"
+                    ? 'assets/images/icon_check.png'
+                    : "assets/images/icon_nocheck.png",
+                height: 35,
+                width: 35,
+              )
+            ],
+          )),
+    );
+  }
+
+  contentCardV2(BuildContext context) {
+    return Container(
+      child: Wrap(
+          children: _listSwitchColors
+              .map((item) => GestureDetector(
+                    onTap: () {
+                      setState(
+                        (() async {
+                          await storage.write(
+                            key: 'switchColor',
+                            value: item['title'],
+                          );
+                          setState(
+                            () {
+                              if (item['title'] == "ปกติ") {
+                                MyApp.themeNotifier.value =
+                                    ThemeModeThird.light;
+                              } else if (item['title'] == "ขาวดำ") {
+                                MyApp.themeNotifier.value = ThemeModeThird.dark;
+                              } else {
+                                MyApp.themeNotifier.value =
+                                    ThemeModeThird.blindness;
+                              }
+                              for (int i = 0;
+                                  i < _listSwitchColors.length;
+                                  i++) {
+                                if (_listSwitchColors[i]['code'] ==
+                                    item['code']) {
+                                  item['isSelected'] = !item['isSelected'];
+                                } else {
+                                  _listSwitchColors[i]['isSelected'] = false;
+                                }
+                              }
+                            },
+                          );
+                        }),
+                      );
+                      _callRead();
+                    },
+                    child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        alignment: Alignment.center,
+                        height: 45,
+                        // width: 145,
+                        decoration: BoxDecoration(
+                          color: item['isSelected'] == true
+                              ? Color(0xFF7A4CB1)
+                              : Color(0xFFFFFFFF),
+                          borderRadius: BorderRadius.circular(73),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Image.asset(
+                                  item['code'] == '1'
+                                      ? 'assets/images/icon_rp.png'
+                                      : item['code'] == '2'
+                                          ? 'assets/images/icon_wb.png'
+                                          : "assets/images/icon_yb.png",
+                                  height: 35,
+                                  // width: 35,
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  item['title'],
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    color: item['isSelected'] == true
+                                        ? Color(0xFFFFFFFF)
+                                        : Color(0xFF000000),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Image.asset(
+                              item['isSelected'] == true
+                                  ? 'assets/images/icon_check.png'
+                                  : "assets/images/icon_nocheck.png",
+                              height: 35,
+                              width: 35,
+                            )
+                          ],
+                        )),
+                  ))
+              .toList()),
+    );
   }
 }

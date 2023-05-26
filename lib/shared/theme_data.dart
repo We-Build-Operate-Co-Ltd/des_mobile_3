@@ -36,15 +36,15 @@ extension CustomThemeData on ThemeData {
 }
 
 final themeLight = ThemeColorData(
-  primary: Color(0xFF7A4CB1),
-  second: Color(0xFF7A4CB1),
+  primary: Color(0xFFFFFFFF),
+  second: Color(0xFF000000),
 );
 final themeDark = ThemeColorData(
-  primary: Color(0xFF7A4CB1),
-  second: Colors.green,
+  primary: Color(0xFF000000),
+  second: Color(0xFFFFFFFF),
 );
 final themeBlindness = ThemeColorData(
-  primary: Colors.yellow,
+  primary: Color(0xFF000000),
   second: Colors.yellow,
 );
 

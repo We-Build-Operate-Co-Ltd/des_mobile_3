@@ -1,4 +1,5 @@
 import 'package:des/models/mock_data.dart';
+import 'package:des/shared/theme_data.dart';
 import 'package:flutter/material.dart';
 
 import 'build_modal_connection_in_progress.dart';
@@ -27,7 +28,7 @@ class _LearningPageState extends State<LearningPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).custom.second,
       body: ListView(
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.only(
@@ -172,7 +173,7 @@ class _LearningPageState extends State<LearningPage> {
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).padding.top,
       ),
-      color: Colors.white,
+      color: Theme.of(context).custom.second,
       child: const Center(
         child: Text(
           'การเรียน',

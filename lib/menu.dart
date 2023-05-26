@@ -8,6 +8,7 @@ import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
+import 'package:des/shared/theme_data.dart';
 import 'package:des/user_profile.dart';
 import 'package:des/verify_first_step.dart';
 import 'package:dio/dio.dart';
@@ -399,7 +400,7 @@ class _MenuState extends State<Menu> {
     return Container(
       height: 55 + MediaQuery.of(context).padding.bottom,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).custom.primary,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
         boxShadow: [
           BoxShadow(
@@ -430,7 +431,7 @@ class _MenuState extends State<Menu> {
   }) {
     Color color = _currentPage == index
         ? const Color(0xFF7A4CB1)
-        : const Color(0xFF707070);
+        : Theme.of(context).custom.second;
     return Flexible(
       key: key,
       flex: 1,
