@@ -198,7 +198,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Widget _buildHistoryOfServiceReservations(
       String title, String title2, int hour, String date, String time) {
     return Container(
-      height: 80,
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Color(0xFFFEF7FF),
@@ -337,7 +336,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         );
       },
       child: SizedBox(
-        height: screenSize,
+        // height: screenSize,
         width: screenSize,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -524,7 +523,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
       ),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12.5),
-        height: 130,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Color(0x1AB325F8),
@@ -555,9 +553,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   ),
                   SizedBox(height: 8),
                   Container(
-                    width: 125,
                     height: 32,
-                    alignment: Alignment.center,
+                    width: 160,
                     decoration: BoxDecoration(
                       color: Color(0xFF7A4CB1),
                       borderRadius: BorderRadius.circular(94),

@@ -6,6 +6,7 @@ import 'package:des/booking_service.dart';
 import 'package:des/detail.dart';
 import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
+import 'package:des/policy.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
@@ -564,6 +565,7 @@ class _MenuState extends State<Menu> {
           (Route<dynamic> route) => false,
         );
       }
+      _callReadPolicy(pf);
     });
 
     _emailController = TextEditingController(text: '');
@@ -641,6 +643,44 @@ class _MenuState extends State<Menu> {
         pages[3] = profilePage;
       }
     });
+  }
+
+  Future<Null> _callReadPolicy(pf) async {
+    Dio dio = Dio();
+    Response<dynamic> response;
+    dynamic policy = [];
+    try {
+      response = await dio
+          .post('http://122.155.223.63/td-des-api/m/policy/read', data: {
+        "category": "application",
+        "profileCode": pf,
+      });
+      if (response.statusCode == 200) {
+        if (response.data['status'] == 'S') {
+          policy = response.data['objectData'];
+        } else {}
+      }
+    } catch (e) {
+      print(e);
+    }
+    if (policy.length > 0) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => PolicyPage(
+            category: 'application',
+            navTo: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => Menu(),
+                ),
+                (Route<dynamic> route) => false,
+              );
+            },
+          ),
+        ),
+        (Route<dynamic> route) => false,
+      );
+    }
   }
 
   void setHiddenMainPopup() async {

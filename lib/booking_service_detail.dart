@@ -181,17 +181,16 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                 ),
                 SizedBox(height: 25),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _itemContact(
                       image: 'assets/images/vector.png',
                       title: 'แสดงแผนที่',
                     ),
-                    SizedBox(width: 50),
                     _itemContact(
                       image: 'assets/images/call_phone.png',
                       title: 'เบอร์ติดต่อ',
                     ),
-                    SizedBox(width: 50),
                     _itemContact(
                       image: 'assets/images/facebook.png',
                       title: 'Facebook',
