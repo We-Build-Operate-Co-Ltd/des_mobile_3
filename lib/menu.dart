@@ -19,6 +19,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'main.dart';
+
 class Menu extends StatefulWidget {
   const Menu({
     Key? key,
@@ -430,9 +432,24 @@ class _MenuState extends State<Menu> {
     bool isNetwork = false,
     Key? key,
   }) {
-    Color color = _currentPage == index
-        ? const Color(0xFF7A4CB1)
-        : Theme.of(context).custom.second;
+    Color color;
+    if (_currentPage == index) {
+      if ((MyApp.themeNotifier.value == ThemeModeThird.light) ||
+          (MyApp.themeNotifier.value == ThemeModeThird.dark)) {
+        color = const Color(0xFF7A4CB1);
+      } else {
+        color = Theme.of(context).custom.second;
+      }
+    } else {
+      if (MyApp.themeNotifier.value == ThemeModeThird.light) {
+        color = Color(0xFF707070);
+      } else {
+        color = Colors.white;
+      }
+    }
+    // Color color = _currentPage == index
+    //     ? const Color(0xFF7A4CB1)
+    //     : Theme.of(context).custom.second;
     return Flexible(
       key: key,
       flex: 1,

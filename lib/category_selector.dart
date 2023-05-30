@@ -1,5 +1,8 @@
+import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+
+import 'main.dart';
 
 class CategorySelector extends StatefulWidget {
   CategorySelector({
@@ -69,23 +72,82 @@ class _CategorySelectorState extends State<CategorySelector> {
                           selectedTitleIndex = c['display'];
                         });
                       },
-                      child: Container(
+                      child: c['value'] == selectedIndex ?
+                      Container(
                         alignment: Alignment.center,
                         margin: EdgeInsets.only(right: 15),
                         decoration: new BoxDecoration(
                           borderRadius: new BorderRadius.circular(40),
-                          color: c['value'] == selectedIndex
-                              ? Color(0xFFB325F8)
-                              : Color(0xFFB325F8).withOpacity(0.1),
+                          color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Color(0xFFB325F8)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                          // c['value'] == selectedIndex
+                          //     ? Color(0xFFB325F8)
+                          //     : Color(0xFFB325F8).withOpacity(0.1),
                         ),
                         padding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                         child: Text(
                           c['display'],
                           style: TextStyle(
-                            color: c['value'] == selectedIndex
-                                ? Color(0xFFFFFFFF)
-                                : Color(0xFFB325F8).withOpacity(0.1),
+                            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Colors.white
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.black
+                                    : Colors.black,
+                            // c['value'] == selectedIndex
+                            //     ? Color(0xFFFFFFFF)
+                            //     : Color(0xFFB325F8).withOpacity(0.1),
+                            // decoration: index == selectedIndex
+                            //     ? TextDecoration.underline
+                            //     : null,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.normal,
+                            letterSpacing: 1.2,
+                            fontFamily: 'Kanit',
+                          ),
+                        ),
+                      )
+                      : Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(right: 15),
+                        decoration: new BoxDecoration(
+                          borderRadius: new BorderRadius.circular(40),
+                          border: Border.all(
+                            width: 1,
+                            style: BorderStyle.solid,
+                            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Color(0xFFB325F8).withOpacity(0.1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                          ),
+                          color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Color(0xFFB325F8).withOpacity(0.2)
+                                : Colors.black,
+                          // c['value'] == selectedIndex
+                          //     ? Color(0xFFB325F8)
+                          //     : Color(0xFFB325F8).withOpacity(0.1),
+                        ),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        child: Text(
+                          c['display'],
+                          style: TextStyle(
+                            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Colors.white
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                            // c['value'] == selectedIndex
+                            //     ? Color(0xFFFFFFFF)
+                            //     : Color(0xFFB325F8).withOpacity(0.1),
                             // decoration: index == selectedIndex
                             //     ? TextDecoration.underline
                             //     : null,
@@ -96,6 +158,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                           ),
                         ),
                       ),
+                    
                     ),
                   )
                   .toList(),

@@ -3,11 +3,14 @@ import 'package:des/category_selector.dart';
 import 'package:des/detail.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
+import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import 'main.dart';
 
 class NotificationListPage extends StatefulWidget {
   NotificationListPage({
@@ -269,7 +272,9 @@ class _NotificationListState extends State<NotificationListPage> {
         }
       },
       child: Scaffold(
-        backgroundColor: Color(0xFFFFFFFF),
+        backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Colors.white
+                                : Colors.black,
         body: NotificationListener<OverscrollIndicatorNotification>(
           onNotification: (OverscrollIndicatorNotification overScroll) {
             overScroll.disallowGlow();
@@ -350,6 +355,7 @@ class _NotificationListState extends State<NotificationListPage> {
                                           ],
                                         ),
                                       );
+                                    
                                     } else {
                                       return Container(
                                         child:
@@ -475,19 +481,22 @@ class _NotificationListState extends State<NotificationListPage> {
                     ),
                   ),
                 ),
+                
                 Container(
                   height: 80,
                   decoration: BoxDecoration(
                     boxShadow: const [
                       BoxShadow(
-                        color: Color(0x1A000000),
+                        color: Color.fromARGB(26, 255, 255, 255),
                         blurRadius: 4,
-                        offset: Offset(0, -3), // changes position of shadow/
+                        offset: Offset(5, -5), // changes position of shadow/
                       ),
                     ],
                   ),
                   child: Container(
-                    color: Color(0xFFFFFFFF),
+                    // color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    //             ? Colors.white
+                    //             : Color(0xFF292929),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -535,7 +544,9 @@ class _NotificationListState extends State<NotificationListPage> {
     return Container(
       padding: EdgeInsets.only(
           top: MediaQuery.of(context).padding.top, right: 15, left: 15),
-      color: Color(0xFFFFFFFF),
+      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Colors.white
+                                : Colors.black,
       child: Column(
         children: [
           SizedBox(height: 13),
@@ -543,8 +554,28 @@ class _NotificationListState extends State<NotificationListPage> {
             children: [
               InkWell(
                 onTap: () => Navigator.pop(context),
-                child: Image.asset('assets/images/back.png',
-                    height: 40, width: 40),
+                child: Container(
+              height: 40,
+              width: 40,
+              padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFF7A4CB1)
+                      : Colors.black,
+                  border: Border.all(
+                    width: 1,
+                    style: BorderStyle.solid,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF7A4CB1)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  )),
+              child: Image.asset(
+                'assets/images/back_arrow.png',
+              ),
+            ),
               ),
               // SizedBox(width: 34),
               Expanded(
@@ -556,7 +587,14 @@ class _NotificationListState extends State<NotificationListPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 20,
+                        fontFamily: 'Kanit',
                         fontWeight: FontWeight.w500,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                       ),
                     ),
                     SizedBox(width: 15),
@@ -566,7 +604,14 @@ class _NotificationListState extends State<NotificationListPage> {
               ),
               InkWell(
                 child: Image.asset('assets/images/noti_list.png',
-                    height: 25, width: 25),
+                    height: 25, width: 25,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                    ),
                 onTap: _handleClickMe,
               ),
             ],
@@ -611,11 +656,13 @@ class _NotificationListState extends State<NotificationListPage> {
             return Container();
           } else {
             return Container(
-              height: 22,
+              // height: 22,
               width: 22,
+              padding: EdgeInsets.all(5),
               decoration: BoxDecoration(
                 color: Color(0xFFDD2A00),
-                borderRadius: BorderRadius.circular(11),
+                shape: BoxShape.circle
+                // borderRadius: BorderRadius.circular(11),
               ),
               child: Text(
                 notiCount.toString(),
@@ -673,7 +720,12 @@ class _NotificationListState extends State<NotificationListPage> {
                   child: Text(
                     '${model['title']}',
                     style: TextStyle(
-                      color: Color(0xFF7A4CB1),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                       fontFamily: 'Kanit',
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
