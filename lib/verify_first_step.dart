@@ -1,5 +1,8 @@
+import 'package:des/shared/theme_data.dart';
 import 'package:des/verify_second_step.dart';
 import 'package:flutter/material.dart';
+
+import 'main.dart';
 
 class VerifyFirstStepPage extends StatelessWidget {
   const VerifyFirstStepPage({Key? key}) : super(key: key);
@@ -7,15 +10,23 @@ class VerifyFirstStepPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+          ? Colors.white
+          : Colors.black,
       body: Stack(
         children: [
           SizedBox(
             height: double.infinity,
             width: double.infinity,
-            child: Image.asset(
-              'assets/images/bg_id_register.png',
-              fit: BoxFit.fitWidth,
+            child: Container(
+              padding: EdgeInsets.only(top: 40),
+              child: Image.asset(
+                MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? 'assets/images/bg_id_register_1.png'
+                    : 'assets/images/bg_id_register-d.png',
+                alignment: Alignment.topCenter,
+                fit: BoxFit.fitWidth,
+              ),
             ),
           ),
           _center(context),
@@ -38,7 +49,9 @@ class VerifyFirstStepPage extends StatelessWidget {
         ),
         constraints: const BoxConstraints(minHeight: 500),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Colors.white
+              : Color(0xFF292929),
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(20),
           ),
@@ -53,36 +66,78 @@ class VerifyFirstStepPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'ยืนยันตัวตน',
               style: TextStyle(
                 fontSize: 25,
-                color: Color(0xFF53327A),
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFF53327A)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const Text(
+            Text(
               'เพียงทำ 3 ขั้นตอน',
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
               ),
             ),
             const SizedBox(height: 25),
             Row(
               children: [
-                Image.asset(
-                  'assets/images/check_purple.png',
-                  height: 30,
-                  width: 30,
-                ),
+                Container(
+                    height: 30,
+                    width: 30,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFFB325F8)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                      child: Icon(
+                        Icons.check,
+                        size: 15,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFFB325F8)
+                          : Colors.white,
+                      ),
+                    )
+                    // Image.asset(
+                    //   'assets/images/check_purple.png',
+                    //   height: 30,
+                    //   width: 30,
+                    // ),
+                    ),
                 const SizedBox(width: 15),
                 Expanded(
-                  child: const Text(
+                  child: Text(
                     'สมัครใช้แอปฯ “DES ดิจิทัลชุมชน”',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                   ),
                 )
@@ -91,18 +146,24 @@ class VerifyFirstStepPage extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                Image.asset(
-                  'assets/images/id_icon.png',
-                  height: 30,
-                  width: 30,
-                ),
+                iconStep('assets/images/id_icon.png'),
+                // Image.asset(
+                //   'assets/images/id_icon.png',
+                //   height: 30,
+                //   width: 30,
+                // ),
                 const SizedBox(width: 15),
                 Expanded(
-                  child: const Text(
+                  child: Text(
                     'กรอกข้อมูลบัตรประชาชน',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                   ),
                 )
@@ -111,17 +172,23 @@ class VerifyFirstStepPage extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                Image.asset(
-                  'assets/images/icon_email.png',
-                  height: 30,
-                  width: 30,
-                ),
+                iconStep('assets/images/icon_email.png'),
+                // Image.asset(
+                //   'assets/images/icon_email.png',
+                //   height: 30,
+                //   width: 30,
+                // ),
                 const SizedBox(width: 15),
-                const Text(
+                Text(
                   'OTP ผ่านอีเมล',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                 )
               ],
@@ -129,17 +196,23 @@ class VerifyFirstStepPage extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                Image.asset(
-                  'assets/images/icon_phone.png',
-                  height: 30,
-                  width: 30,
-                ),
+                iconStep('assets/images/icon_phone.png'),
+                // Image.asset(
+                //   'assets/images/icon_phone.png',
+                //   height: 30,
+                //   width: 30,
+                // ),
                 const SizedBox(width: 15),
-                const Text(
+                Text(
                   'OTP เบอร์โทรศัพท์',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                 )
               ],
@@ -147,27 +220,37 @@ class VerifyFirstStepPage extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                Image.asset(
-                  'assets/images/scan_icon.png',
-                  height: 30,
-                  width: 30,
-                ),
+                iconStep('assets/images/scan_icon.png'),
+                // Image.asset(
+                //   'assets/images/scan_icon.png',
+                //   height: 30,
+                //   width: 30,
+                // ),
                 const SizedBox(width: 15),
-                const Text(
+                Text(
                   'สแกนใบหน้า',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                 )
               ],
             ),
             const SizedBox(height: 30),
-            const Text(
+            Text(
               'ประโยชน์ที่ได้รับ',
               style: TextStyle(
                 fontSize: 25,
-                color: Color(0xFF53327A),
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFF53327A)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -178,17 +261,24 @@ class VerifyFirstStepPage extends StatelessWidget {
                   height: 5,
                   width: 5,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF53327A),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF53327A)
+                        : Color(0xFF707070),
                     borderRadius: BorderRadius.circular(2.5),
                   ),
                 ),
                 const SizedBox(width: 5),
                 Expanded(
-                  child: const Text(
+                  child: Text(
                     'เพิ่มความปลอดภัยในการใช้บริการ',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                   ),
                 )
@@ -201,17 +291,24 @@ class VerifyFirstStepPage extends StatelessWidget {
                   height: 5,
                   width: 5,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF53327A),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF53327A)
+                        : Color(0xFF707070),
                     borderRadius: BorderRadius.circular(2.5),
                   ),
                 ),
                 const SizedBox(width: 5),
                 Expanded(
-                  child: const Text(
+                  child: Text(
                     'อำนวยความสะดวกเมื่อเข้าใช้บริการที่ศูนย์ฯ',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                   ),
                 )
@@ -231,14 +328,20 @@ class VerifyFirstStepPage extends StatelessWidget {
                   height: 50,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: const Color(0xFF7A4CB1),
+                    borderRadius: BorderRadius.circular(22.5),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF7A4CB1)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
-                  child: const Text(
+                  child: Text(
                     'ดำเนินการต่อ',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.white,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.white
+                          : Colors.black,
                     ),
                   ),
                 ),
@@ -259,11 +362,60 @@ class VerifyFirstStepPage extends StatelessWidget {
         onTap: () {
           Navigator.pop(context);
         },
-        child: Image.asset(
-          'assets/images/back.png',
+        child: Container(
           height: 40,
           width: 40,
+          padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFF7A4CB1)
+                  : Colors.black,
+              border: Border.all(
+                width: 1,
+                style: BorderStyle.solid,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFF7A4CB1)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              )),
+          child: Image.asset(
+            'assets/images/back_arrow.png',
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget iconStep(String asset) {
+    return Container(
+      height: 30,
+      width: 30,
+      padding: EdgeInsets.all(6),
+      decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFFEEEEEE)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Color(0xFF121212)
+                  : Color(0xFF121212),
+          border: Border.all(
+            width: 1,
+            style: BorderStyle.solid,
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFFEEEEEE)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          )),
+      child: Image.asset(
+        asset,
+        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : Colors.white,
+        // height: 30,
+        // width: 30,
       ),
     );
   }

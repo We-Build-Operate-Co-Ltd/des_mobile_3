@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:des/menu.dart';
 import 'package:des/shared/secure_storage.dart';
+import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+
+import 'main.dart';
 
 class VerifyLastStepPage extends StatefulWidget {
   const VerifyLastStepPage({
@@ -20,7 +23,9 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+          ? Colors.white
+          : Colors.black,
       body: Column(
         children: [
           _buildHead(),
@@ -31,21 +36,30 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
               _save();
             },
             child: Container(
-              height: 50,
-              alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: 15),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Color(0xFF7A4CB1),
-              ),
-              child: Text(
-                'ส่งข้อมูล',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
+                  height: 50,
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.symmetric(horizontal: 15),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(22.5),
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                  ),
+                  child: Text(
+                    'ส่งข้อมูล',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.white
+                                    : Colors.black,
+                    ),
+                  ),
                 ),
-              ),
-            ),
           ),
           SizedBox(height: 70),
         ],
@@ -59,7 +73,9 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
         height: 60,
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.symmetric(horizontal: 15),
-        color: Colors.white,
+        color: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Colors.white
+            : Colors.black,
         child: Stack(
           children: [
             // Container(
@@ -72,17 +88,42 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
                 onTap: () {
                   Navigator.pop(context);
                 },
-                child: Image.asset(
-                  'assets/images/arrow_back.png',
+                child: Container(
                   height: 40,
                   width: 40,
+                  padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF7A4CB1)
+                          : Colors.black,
+                      border: Border.all(
+                        width: 1,
+                        style: BorderStyle.solid,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                      )),
+                  child: Image.asset(
+                    'assets/images/back_arrow.png',
+                  ),
                 ),
               ),
             ),
             Center(
               child: Text(
                 'ตรวจสอบข้อมูล',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.black
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                ),
               ),
             ),
           ],
@@ -102,7 +143,14 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(width: 1, color: Color(0xFFF6E6FE)),
+              border: Border.all(
+                width: 1,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFFF6E6FE)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,15 +159,24 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
                   'ข้อมูลบัตรประชาชน',
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w500,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                 ),
-                SizedBox(height: 7),
+                SizedBox(height: 15),
                 Container(
-                  color: Colors.grey.withOpacity(0.4),
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black.withOpacity(0.5)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   height: 1,
                 ),
-                SizedBox(height: 7),
+                SizedBox(height: 17),
                 _text('ชื่อสกุล', widget.model['fullName'] ?? ''),
                 _text('เลขบัตรประชาชน', widget.model['idcard'] ?? ''),
                 _text(
@@ -153,8 +210,13 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
           Text(
             '${value}',
             style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
             ),
           ),
         ],

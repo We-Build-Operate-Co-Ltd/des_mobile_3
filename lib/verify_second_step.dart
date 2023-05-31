@@ -1,3 +1,4 @@
+import 'package:des/shared/theme_data.dart';
 import 'package:des/verify_third_step.dart';
 import 'package:des/verify_third_step_old.dart';
 import 'package:dio/dio.dart';
@@ -7,6 +8,8 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+
+import 'main.dart';
 
 class VerifySecondStepPage extends StatefulWidget with WidgetsBindingObserver {
   const VerifySecondStepPage({Key? key}) : super(key: key);
@@ -52,9 +55,13 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Colors.white
+            : Colors.black,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Colors.white
+              : Colors.black,
           elevation: 0,
           flexibleSpace: _buildHead(),
           automaticallyImplyLeading: false,
@@ -69,6 +76,20 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                   physics: const BouncingScrollPhysics(),
                   children: [
                     TextFormField(
+                      style: TextStyle(
+                        fontFamily: 'Kanit',
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.black
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                      ),
+                      cursorColor:
+                          MyApp.themeNotifier.value == ThemeModeThird.light
+                              ? Color(0xFF7A4CB1)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
                       controller: txtIdCard,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
@@ -113,6 +134,23 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                               context,
                               hintText: 'ชื่อ',
                             ),
+                            style: TextStyle(
+                              fontFamily: 'Kanit',
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                            ),
+                            cursorColor: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                             validator: (model) {
                               if (model!.isEmpty) {
                                 return 'กรุณากรอกชื่อ';
@@ -131,6 +169,20 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                               context,
                               hintText: 'นามสกุล',
                             ),
+                            style: TextStyle(
+                      fontFamily: 'Kanit',
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                    ),
+                    cursorColor:
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                             validator: (model) {
                               if (model!.isEmpty) {
                                 return 'กรุณากรอกนามสกุล.';
@@ -151,8 +203,14 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                             child: AbsorbPointer(
                               child: TextFormField(
                                 controller: txtDate,
-                                style: const TextStyle(
-                                  color: Color(0xFF7A4CB1),
+                                style: TextStyle(
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Colors.black
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                                   fontWeight: FontWeight.normal,
                                   fontFamily: 'Kanit',
                                   fontSize: 15.0,
@@ -179,6 +237,20 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                               context,
                               hintText: 'อายุ',
                             ),
+                            style: TextStyle(
+                      fontFamily: 'Kanit',
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                    ),
+                    cursorColor:
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                             validator: (model) {
                               if (model!.isEmpty) {
                                 return 'กรุณากรอกอายุ.';
@@ -198,6 +270,20 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                         context,
                         hintText: 'เลข Laser ID',
                       ),
+                      style: TextStyle(
+                      fontFamily: 'Kanit',
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                    ),
+                    cursorColor:
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       validator: (model) {
                         if (model!.isEmpty) {
                           return 'กรุณากรอกเลข Laser ID.';
@@ -217,19 +303,32 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 'คำแนะนำ',
                                 style: TextStyle(
                                   fontSize: 13,
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: FontWeight.w500,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Colors.black
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                                 ),
                               ),
                               Text(
                                 'เลข Laser ID จะอยู่ด้านหลังของบัตรประชาชน',
                                 style: TextStyle(
                                   fontSize: 11,
-                                  color: Color(0xFF707070),
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Color(0xFF707070)
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Color(0xFF707070)
+                                          : Color(0xFFFFFD57),
                                   fontWeight: FontWeight.w400,
                                 ),
                               )
@@ -242,8 +341,13 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                     Text(
                       'เพศ',
                       style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.black
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       ),
                     ),
                     SizedBox(height: 6),
@@ -264,7 +368,12 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                       'การติดต่อ',
                       style: TextStyle(
                         fontSize: 15,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.black
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       ),
                     ),
                     Text(
@@ -272,6 +381,11 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.black
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -283,6 +397,20 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                         context,
                         hintText: 'หมายเลขโทรศัพท์',
                       ),
+                      style: TextStyle(
+                      fontFamily: 'Kanit',
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                    ),
+                    cursorColor:
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       validator: (model) {
                         if (model!.isEmpty) {
                           return 'กรุณากรอกหมายเลขโทรศัพท์';
@@ -299,6 +427,20 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                         context,
                         hintText: 'ที่อยู่ของท่าน',
                       ),
+                      style: TextStyle(
+                      fontFamily: 'Kanit',
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                    ),
+                    cursorColor:
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       validator: (model) {
                         if (model!.isEmpty) {
                           return 'กรุณากรอกที่อยู่ของท่าน';
@@ -356,15 +498,23 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                           height: 50,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: const Color(0xFF7A4CB1),
+                            borderRadius: BorderRadius.circular(22.5),
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                           ),
-                          child: const Text(
+                          child: Text(
                             'ดำเนินการต่อ',
                             style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
+                                fontSize: 16,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.white
+                                    : Colors.black),
                           ),
                         ),
                       ),
@@ -395,7 +545,9 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
         right: 15,
         top: MediaQuery.of(context).padding.top,
       ),
-      color: Colors.white,
+      color: MyApp.themeNotifier.value == ThemeModeThird.light
+          ? Colors.white
+          : Colors.black,
       child: Stack(
         children: [
           const SizedBox(
@@ -423,17 +575,42 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                 // );
                 // print(response.data.toString());
               },
-              child: Image.asset(
-                'assets/images/arrow_back.png',
+              child: Container(
                 height: 40,
                 width: 40,
+                padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF7A4CB1)
+                        : Colors.black,
+                    border: Border.all(
+                      width: 1,
+                      style: BorderStyle.solid,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF7A4CB1)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                    )),
+                child: Image.asset(
+                  'assets/images/back_arrow.png',
+                ),
               ),
             ),
           ),
-          const Center(
+          Center(
             child: Text(
               'ข้อมูลบัตรประชาชน',
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+              ),
             ),
           )
         ],
@@ -445,8 +622,23 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
           {String hintText = ''}) =>
       InputDecoration(
         label: Text(hintText),
-        labelStyle: const TextStyle(
-          color: Color(0xFF707070),
+        labelStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          // fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+        hintStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
         ),
         // hintText: hintText,
         filled: true,
@@ -457,13 +649,23 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
           borderSide: BorderSide(color: Theme.of(context).primaryColor),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(
-            color: Colors.black.withOpacity(0.2),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black.withOpacity(0.2)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Color(0xFF707070)
+                    : Color(0xFFFFFD57),
           ),
         ),
         errorStyle: const TextStyle(
@@ -475,12 +677,16 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
   static InputDecoration _decorationDate(context, {String hintText = ''}) =>
       InputDecoration(
         label: Text(hintText),
-        labelStyle: const TextStyle(
-          color: Color(0xFF707070),
-          fontSize: 12,
+        labelStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          // fontSize: 12,
           fontWeight: FontWeight.normal,
         ),
-        hintStyle: const TextStyle(
+        hintStyle: TextStyle(
           color: Color(0xFF707070),
           fontSize: 12,
           fontWeight: FontWeight.normal,
@@ -489,19 +695,34 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
         filled: true,
         fillColor: Colors.transparent,
         contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
-        suffixIcon: const Icon(Icons.calendar_today),
+        suffixIcon: Icon(Icons.calendar_today),
+        suffixIconColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Colors.black
+            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                ? Colors.white
+                : Color(0xFFFFFD57),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
-          borderSide: const BorderSide(color: Color(0xFFE6B82C)),
+          borderSide: BorderSide(color: Color(0xFFE6B82C)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
-          borderSide: const BorderSide(color: Color(0xFFE6B82C)),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(
-            color: Colors.black.withOpacity(0.2),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black.withOpacity(0.2)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Color(0xFF707070)
+                    : Color(0xFFFFFD57),
           ),
         ),
         errorStyle: const TextStyle(
@@ -513,26 +734,41 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
   dynamic dialogOpenPickerDate() {
     DatePicker.showDatePicker(
       context,
-      theme: const DatePickerTheme(
+      theme: DatePickerTheme(
+        backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Colors.white
+              : Color(0xFF292929),
         containerHeight: 210.0,
         itemStyle: TextStyle(
-          fontSize: 16.0,
-          color: Color(0xFF53327A),
-          fontWeight: FontWeight.normal,
-          fontFamily: 'Kanit',
-        ),
+            fontSize: 16.0,
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+            fontWeight: FontWeight.normal,
+            fontFamily: 'Kanit',
+          ),
         doneStyle: TextStyle(
-          fontSize: 16.0,
-          color: Color(0xFF53327A),
-          fontWeight: FontWeight.normal,
-          fontFamily: 'Kanit',
-        ),
-        cancelStyle: TextStyle(
-          fontSize: 16.0,
-          color: Color(0xFF53327A),
-          fontWeight: FontWeight.normal,
-          fontFamily: 'Kanit',
-        ),
+            fontSize: 16.0,
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+            fontWeight: FontWeight.normal,
+            fontFamily: 'Kanit',
+          ),
+          cancelStyle: TextStyle(
+            fontSize: 16.0,
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+            fontWeight: FontWeight.normal,
+            fontFamily: 'Kanit',
+          ),
       ),
       showTitleActions: true,
       minTime: DateTime(2400, 1, 1),
@@ -578,8 +814,33 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
   }
 
   Widget _radioGender(String value) {
-    Color border = _gender == value ? Color(0xFFA924F0) : Colors.grey;
-    Color active = _gender == value ? Color(0xFFA924F0) : Colors.white;
+    // Color border = _gender == value ? Color(0xFFA924F0) : Colors.grey;
+    // Color active = _gender == value ? Color(0xFFA924F0) : Colors.white;
+    Color border;
+    Color active;
+    if (_gender == value) {
+      if (MyApp.themeNotifier.value == ThemeModeThird.light) {
+        border = Color(0xFFB325F8);
+        active = Color(0xFFB325F8);
+      } else if (MyApp.themeNotifier.value == ThemeModeThird.dark) {
+        border = Colors.white;
+        active = Colors.white;
+      } else {
+        border = Color(0xFFFFFD57);
+        active = Color(0xFFFFFD57);
+      }
+    } else {
+      if (MyApp.themeNotifier.value == ThemeModeThird.light) {
+        border = Color(0xFFB325F8);
+        active = Colors.white;
+      } else if (MyApp.themeNotifier.value == ThemeModeThird.dark) {
+        border = Colors.white;
+        active = Colors.black;
+      } else {
+        border = Color(0xFFFFFD57);
+        active = Colors.black;
+      }
+    }
     return GestureDetector(
       onTap: () {
         setState(() {
