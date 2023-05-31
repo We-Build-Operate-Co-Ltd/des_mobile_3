@@ -30,6 +30,8 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   static final ValueNotifier<ThemeModeThird> themeNotifier =
       ValueNotifier(ThemeModeThird.light);
+  static final ValueNotifier<FontKanit> fontKanit =
+      ValueNotifier(FontKanit.small);
 
   // This widget is the root of your application.
   @override
@@ -42,6 +44,7 @@ class MyApp extends StatelessWidget {
           title: 'DES ดิจิทัลชุมชน',
           debugShowCheckedModeBanner: false,
           theme: FlexThemeData.light(
+            fontFamily: 'kanit',
             colors: FlexSchemeColor.from(
               primary: const Color(0xFF7A4CB1),
               brightness: Brightness.light,
@@ -49,14 +52,25 @@ class MyApp extends StatelessWidget {
           ),
           home: const SplashPage(),
           builder: (context, child) {
-            return MediaQuery(
-              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            return ValueListenableBuilder<FontKanit>(
+      valueListenable: fontKanit,
+      builder: (_, FontKanit currentMode, __) {
+       return MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                textScaleFactor: 
+                currentMode == FontKanit.small ? 1.0 : 
+                currentMode == FontKanit.medium ? 1.5 : 
+                2.0
+              ),
               child: child!,
             );
           },
         );
       },
     );
+            
+          },
+        );
   }
 }
 
