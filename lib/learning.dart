@@ -3,6 +3,7 @@ import 'package:des/shared/theme_data.dart';
 import 'package:flutter/material.dart';
 
 import 'build_modal_connection_in_progress.dart';
+import 'main.dart';
 import 'models/user.dart';
 import 'detail.dart';
 
@@ -28,7 +29,9 @@ class _LearningPageState extends State<LearningPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).custom.second,
+      backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Colors.white
+            : Colors.black,
       body: ListView(
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.only(
@@ -85,20 +88,32 @@ class _LearningPageState extends State<LearningPage> {
                   children: [
                     Text(
                       '${model['title']}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF7A4CB1),
+                        color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
                     Text(
                       '${model['description']}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
-                        color: Color(0xFF707070),
+                        color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF707070)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
@@ -115,37 +130,69 @@ class _LearningPageState extends State<LearningPage> {
               Image.asset(
                 'assets/images/calendar_check.png',
                 width: 10,
+                color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF53327A)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
               ),
               const SizedBox(width: 5),
               Text(
                 _dateStringToDateSlashBuddhistShort(model['date']),
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
-                  color: Color(0xFF53327A),
+                  color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF53327A)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                 ),
               ),
               const SizedBox(width: 10),
               Image.asset(
                 'assets/images/time_user_profile_page.png',
                 width: 10,
+                color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF53327A)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
               ),
               const SizedBox(width: 5),
               Text(
                 '${model['time']} น.',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
-                  color: Color(0xFF53327A),
+                  color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF53327A)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                 ),
               ),
               const SizedBox(width: 10),
               Text(
                 '${model['timeOfUse']} ชั่วโมง',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
-                  color: Color(0xFF53327A),
+                  color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF53327A)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                 ),
               ),
             ],
@@ -157,7 +204,14 @@ class _LearningPageState extends State<LearningPage> {
               Expanded(
                 child: Container(
                   height: 1,
-                  color: const Color(0xFF707070),
+                  color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF707070)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                  // color:  Color(0xFF707070),
                 ),
               ),
             ],
@@ -173,13 +227,22 @@ class _LearningPageState extends State<LearningPage> {
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).padding.top,
       ),
-      color: Theme.of(context).custom.second,
-      child: const Center(
+      color: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Colors.white
+            : Colors.black,
+      child: Center(
         child: Text(
           'การเรียน',
           style: TextStyle(
             fontSize: 20,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w500,
+            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
           ),
         ),
       ),
