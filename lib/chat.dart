@@ -1,4 +1,7 @@
+import 'package:des/shared/theme_data.dart';
 import 'package:flutter/material.dart';
+
+import 'main.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -13,7 +16,9 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Colors.white
+            : Color(0xFF292929),
       body: SafeArea(
         child: GestureDetector(
             onTap: () {
@@ -26,7 +31,9 @@ class _ChatPageState extends State<ChatPage> {
 
   _header() {
     return Container(
-      color: Color(0xFFfef7ff),
+      color: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Color(0xFFfef7ff)
+            : Colors.black,
       child: Column(
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -34,11 +41,15 @@ class _ChatPageState extends State<ChatPage> {
             margin: EdgeInsets.only(bottom: 10),
             padding: EdgeInsets.only(top: 10),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Colors.white
+            : Color(0xFF292929),
               // borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Color(0xFFDADADA),
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Color(0xFFDADADA)
+            : Color(0xFF292929).withOpacity(1),
                   blurRadius: 6,
                   offset: Offset(4, 4), // Shadow position
                 ),
@@ -56,8 +67,22 @@ class _ChatPageState extends State<ChatPage> {
                         height: 70,
                         width: 70,
                         decoration: BoxDecoration(
-                          color: Color(0xFF7F34EE),
+                          color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7F34EE)
+                                : Colors.black,
                           shape: BoxShape.circle,
+                          border: Border.all(
+                            width: 1,
+                            style: BorderStyle.solid,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.black
+                                    : Color(0xFFFFFD57),
+                          )
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),
@@ -65,6 +90,7 @@ class _ChatPageState extends State<ChatPage> {
                             'assets/chat.png',
                             height: 26,
                             width: 26,
+                            color: Colors.white
                           ),
                         ),
                       ),
@@ -79,7 +105,14 @@ class _ChatPageState extends State<ChatPage> {
                             'แชทบอท',
                             style: TextStyle(
                               fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w500,
+                              color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                             ),
                           ),
                           // Expanded(child: SizedBox(),),
@@ -87,7 +120,14 @@ class _ChatPageState extends State<ChatPage> {
                             'ออนไลน์',
                             style: TextStyle(
                               fontSize: 11,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w400,
+                              color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                             ),
                           ),
                         ],
@@ -101,7 +141,13 @@ class _ChatPageState extends State<ChatPage> {
                       child: Icon(
                         Icons.close,
                         size: 35,
-                        color: Color(0xFFF7A4CB1),
+                        color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                       )),
                 ],
               ),
@@ -124,7 +170,9 @@ class _ChatPageState extends State<ChatPage> {
           child: Container(
             height: 20,
             width: MediaQuery.of(context).size.width,
-            color: Color(0xFFFEF7FF),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Color(0xFFFEF7FF)
+            : Colors.black,
             child: ListView(
               children: [
                 Padding(
@@ -132,11 +180,25 @@ class _ChatPageState extends State<ChatPage> {
                   child: Row(
                     children: [
                       Container(
-                        height: 70,
-                        width: 70,
+                        height: 60,
+                        width: 60,
                         decoration: BoxDecoration(
-                          color: Color(0xFF7F34EE),
+                          color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7F34EE)
+                                : Colors.black,
                           shape: BoxShape.circle,
+                          border: Border.all(
+                            width: 1,
+                            style: BorderStyle.solid,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.black
+                                    : Color(0xFFFFFD57),
+                          )
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),
@@ -144,31 +206,34 @@ class _ChatPageState extends State<ChatPage> {
                             'assets/chat.png',
                             height: 26,
                             width: 26,
+                            color: Colors.white,
                           ),
                         ),
                       ),
                       SizedBox(
                         width: 10,
                       ),
-                      Container(
-                        // height: 70,
-                        // width: 70,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(20),
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(10),
+                      Expanded(
+                        child: Container(
+                          // height: 70,
+                          // width: 70,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(20),
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(10),
+                            ),
+                            color: Color(0xFF7F34EE).withOpacity(0.15),
+                            // shape: BoxShape.circle,
                           ),
-                          color: Color(0xFF7F34EE).withOpacity(0.15),
-                          // shape: BoxShape.circle,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            'สวัสดีค่ะ ท่านต้องการความช่วยเหลือ\nด้านไหนสามารถเลือกหัวข้อได้ หรือ\nจะส่งเป็นข้อความก็ได้ค่ะ',
-                            style: TextStyle(
-                              fontSize: 11,
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(
+                              'สวัสดีค่ะ ท่านต้องการความช่วยเหลือ\nด้านไหนสามารถเลือกหัวข้อได้ หรือ\nจะส่งเป็นข้อความก็ได้ค่ะ',
+                              style: TextStyle(
+                                fontSize: 11,
+                              ),
                             ),
                           ),
                         ),

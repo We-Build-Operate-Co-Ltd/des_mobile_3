@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'detail.dart';
+import 'main.dart';
 
 class FavoriteClassAllPage extends StatefulWidget {
   FavoriteClassAllPage({
@@ -60,7 +62,9 @@ class _FavoriteClassAllState extends State<FavoriteClassAllPage> {
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Colors.white
+              : Colors.black,
         body: ListView(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).padding.bottom + 25,
@@ -112,6 +116,11 @@ class _FavoriteClassAllState extends State<FavoriteClassAllPage> {
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 3,
@@ -170,7 +179,9 @@ class _FavoriteClassAllState extends State<FavoriteClassAllPage> {
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).padding.top,
       ),
-      color: Colors.white,
+      color: MyApp.themeNotifier.value == ThemeModeThird.light
+          ? Colors.white
+          : Colors.black,
       child: Column(
         children: [
           SizedBox(height: 13),
@@ -178,16 +189,40 @@ class _FavoriteClassAllState extends State<FavoriteClassAllPage> {
             children: [
               InkWell(
                 onTap: () => Navigator.pop(context),
-                child: Image.asset('assets/images/back.png',
-                    height: 40, width: 40),
-              ),
+                child: Container(
+                height: 40,
+                width: 40,
+                padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF7A4CB1)
+                        : Colors.black,
+                    border: Border.all(
+                      width: 1,
+                      style: BorderStyle.solid,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF7A4CB1)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                    )),
+                child: Image.asset(
+                  'assets/images/back_arrow.png',
+                ),
+              ),),
               SizedBox(width: 34),
               Text(
                 '',
                 style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                ),
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+              ),
               ),
             ],
           ),

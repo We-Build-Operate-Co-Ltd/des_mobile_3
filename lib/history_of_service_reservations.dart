@@ -1,4 +1,7 @@
+import 'package:des/shared/theme_data.dart';
 import 'package:flutter/material.dart';
+
+import 'main.dart';
 
 class HistoryOfServiceReservationsPage extends StatefulWidget {
   HistoryOfServiceReservationsPage({
@@ -32,7 +35,9 @@ class _HistoryOfServiceReservationsState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Colors.white
+              : Colors.black,
       body: ListView(
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).padding.bottom + 25,
@@ -50,7 +55,13 @@ class _HistoryOfServiceReservationsState
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF53327A),
+                  color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF53327A)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                 ),
               ),
               Row(
@@ -60,13 +71,26 @@ class _HistoryOfServiceReservationsState
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
-                      color: Color(0xFFB325F8),
+                      color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFB325F8)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                     ),
                   ),
                   SizedBox(width: 6),
                   Image.asset(
                     'assets/images/arrow_down.png',
                     width: 11,
+                    color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFB325F8)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                   ),
                 ],
               ),
@@ -97,10 +121,32 @@ class _HistoryOfServiceReservationsState
         children: [
           Row(
             children: [
-              Image.asset(
-                'assets/images/notebook_rounded.png',
-                width: 35,
+              Container(
+              height: 35,
+              width: 35,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFB325F8).withOpacity(.1)
+                      : Colors.black,
+                  border: Border.all(
+                    width: 1,
+                    style: BorderStyle.solid,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFB325F8).withOpacity(.1)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  )),
+              child: Image.asset(
+                'assets/images/computer.png',
+                width: 17,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFF53327A)
+                    : Colors.white,
               ),
+            ),
               SizedBox(width: 15),
               Expanded(
                 child: Column(
@@ -111,7 +157,13 @@ class _HistoryOfServiceReservationsState
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF7A4CB1),
+                        color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
@@ -121,7 +173,13 @@ class _HistoryOfServiceReservationsState
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
-                        color: Color(0xFF707070),
+                        color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF707070)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
@@ -138,6 +196,11 @@ class _HistoryOfServiceReservationsState
               Image.asset(
                 'assets/images/calendar_check.png',
                 width: 10,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF53327A)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
               ),
               SizedBox(width: 5),
               Text(
@@ -145,13 +208,26 @@ class _HistoryOfServiceReservationsState
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
-                  color: Color(0xFF53327A),
+                  color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF53327A)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                 ),
               ),
               SizedBox(width: 10),
               Image.asset(
                 'assets/images/time_user_profile_page.png',
                 width: 10,
+                color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF53327A)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
               ),
               SizedBox(width: 5),
               Text(
@@ -159,7 +235,13 @@ class _HistoryOfServiceReservationsState
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
-                  color: Color(0xFF53327A),
+                  color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF53327A)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                 ),
               ),
               SizedBox(width: 10),
@@ -168,7 +250,13 @@ class _HistoryOfServiceReservationsState
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
-                  color: Color(0xFF53327A),
+                  color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF53327A)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                 ),
               ),
             ],
@@ -180,7 +268,13 @@ class _HistoryOfServiceReservationsState
               Expanded(
                 child: Container(
                   height: 1,
-                  color: Color(0xFF707070),
+                  color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF707070).withOpacity(0.50)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57)
                 ),
               ),
             ],
@@ -191,36 +285,104 @@ class _HistoryOfServiceReservationsState
     );
   }
 
+  // Widget _buildHead() {
+  //   return Container(
+  //     padding: EdgeInsets.only(
+  //       top: MediaQuery.of(context).padding.top,
+  //     ),
+  //     color: Colors.white,
+  //     child: Column(
+  //       children: [
+  //         SizedBox(height: 13),
+  //         Row(
+  //           children: [
+  //             InkWell(
+  //               onTap: () => Navigator.pop(context),
+  //               child: Image.asset('assets/images/back.png',
+  //                   height: 40, width: 40),
+  //             ),
+  //             SizedBox(width: 34),
+  //             Text(
+  //               'ประวัติการจองใช้บริการ',
+  //               style: TextStyle(
+  //                 fontSize: 20,
+  //                 fontWeight: FontWeight.w400,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
   Widget _buildHead() {
     return Container(
+      height: 60 + MediaQuery.of(context).padding.top,
+      alignment: Alignment.centerLeft,
       padding: EdgeInsets.only(
+        left: 15,
+        right: 15,
         top: MediaQuery.of(context).padding.top,
       ),
-      color: Colors.white,
-      child: Column(
+      color: MyApp.themeNotifier.value == ThemeModeThird.light
+          ? Colors.white
+          : Colors.black,
+      child: Stack(
         children: [
-          SizedBox(height: 13),
-          Row(
-            children: [
-              InkWell(
-                onTap: () => Navigator.pop(context),
-                child: Image.asset('assets/images/back.png',
-                    height: 40, width: 40),
-              ),
-              SizedBox(width: 34),
-              Text(
-                'ประวัติการจองใช้บริการ',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
+          const SizedBox(
+            height: double.infinity,
+            width: double.infinity,
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: InkWell(
+              onTap: () async {
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: 40,
+                width: 40,
+                padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF7A4CB1)
+                        : Colors.black,
+                    border: Border.all(
+                      width: 1,
+                      style: BorderStyle.solid,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF7A4CB1)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                    )),
+                child: Image.asset(
+                  'assets/images/back_arrow.png',
                 ),
               ),
-            ],
+            ),
           ),
+          Center(
+            child: Text(
+              'ประวัติการจองใช้บริการ',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+              ),
+            ),
+          )
         ],
       ),
     );
   }
+
 
   _dateStringToDateSlashBuddhistShort(String date) {
     if (date.isEmpty) return '';
