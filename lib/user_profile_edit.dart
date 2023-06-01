@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/menu.dart';
 import 'package:des/shared/secure_storage.dart';
+import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,8 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+
+import 'main.dart';
 
 class UserProfileEditPage extends StatefulWidget {
   UserProfileEditPage({Key? key}) : super(key: key);
@@ -72,12 +75,16 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        // backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+        //     ? Colors.white
+        //     : Colors.black,
         elevation: 0,
         flexibleSpace: _buildHead(),
         automaticallyImplyLeading: false,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+          ? Colors.white
+          : Colors.black,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: ListView(
@@ -124,29 +131,82 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                               ),
                       ),
                       Positioned(
-                        bottom: 5,
-                        right: 5,
-                        child: Image.asset(
-                          'assets/images/camera_circle_purple.png',
-                          height: 25,
-                        ),
-                      ),
+                          bottom: 5,
+                          right: 5,
+                          child: Container(
+                            height: 25,
+                            padding: EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF7A4CB1)
+                                    : Colors.black,
+                                border: Border.all(
+                                  width: 1,
+                                  style: BorderStyle.solid,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Color(0xFF7A4CB1)
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
+                                )),
+                            child: Image.asset(
+                              'assets/images/camera.png',
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.white
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                              // height: 25,
+                            ),
+                          )),
                     ],
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 25),
+            SizedBox(height: 32),
             TextFormField(
               controller: txtFirstName,
               decoration: _decorationBase(context, hintText: 'ชื่อ'),
+              style: TextStyle(
+                fontFamily: 'Kanit',
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+              cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFF7A4CB1)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 15),
             TextFormField(
               controller: txtLastName,
               decoration: _decorationBase(context, hintText: 'สกุล'),
+              style: TextStyle(
+                fontFamily: 'Kanit',
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+              cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFF7A4CB1)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 15),
             Row(
               children: [
                 Expanded(
@@ -156,7 +216,12 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                       child: TextFormField(
                         controller: txtDate,
                         style: TextStyle(
-                          color: Color(0xFF7A4CB1),
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Kanit',
                           fontSize: 15.0,
@@ -182,11 +247,39 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                           RegExp(r'[0-9a-zA-Z.]')),
                     ],
                     decoration: _decorationBase(context, hintText: 'อายุ'),
+                    style: TextStyle(
+                      fontFamily: 'Kanit',
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                    ),
+                    cursorColor:
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                   ),
                 ),
               ],
             ),
             SizedBox(height: 30),
+            Text(
+              'การติดต่อ',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Kanit',
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+            ),
+            SizedBox(height: 10),
             TextFormField(
               controller: txtPhone,
               inputFormatters: [
@@ -194,17 +287,50 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                 LengthLimitingTextInputFormatter(10),
               ],
               decoration: _decorationBase(context, hintText: 'เบอร์ติดต่อ'),
+              style: TextStyle(
+                fontFamily: 'Kanit',
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+              cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFF7A4CB1)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 15),
             TextFormField(
               controller: txtEmail,
               decoration: _decorationBase(context, hintText: 'อีเมล'),
+              style: TextStyle(
+                fontFamily: 'Kanit',
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+              cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFF7A4CB1)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 30),
             Text(
               'เพศ',
               style: TextStyle(
                 fontSize: 15,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Kanit',
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
               ),
             ),
             SizedBox(height: 4),
@@ -227,13 +353,20 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                 height: 50,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Color(0xff7A4CB1),
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFF7A4CB1)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
                   'บันทึกข้อมูล',
                   style: TextStyle(
-                    color: Colors.white,
+                    fontFamily: 'Kanit',
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.white
+                        : Colors.black,
                     fontSize: 16,
                   ),
                 ),
@@ -254,7 +387,9 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
         right: 15,
         top: MediaQuery.of(context).padding.top,
       ),
-      color: Colors.white,
+      color: MyApp.themeNotifier.value == ThemeModeThird.light
+          ? Colors.white
+          : Colors.black,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -262,10 +397,27 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             onTap: () {
               Navigator.pop(context);
             },
-            child: Image.asset(
-              'assets/images/arrow_back.png',
+            child: Container(
               height: 40,
               width: 40,
+              padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFF7A4CB1)
+                      : Colors.black,
+                  border: Border.all(
+                    width: 1,
+                    style: BorderStyle.solid,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF7A4CB1)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  )),
+              child: Image.asset(
+                'assets/images/back_arrow.png',
+              ),
             ),
           ),
           // GestureDetector(
@@ -284,8 +436,33 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
   }
 
   Widget _radioGender(String value) {
-    Color border = _gender == value ? Color(0xFFA924F0) : Colors.grey;
-    Color active = _gender == value ? Color(0xFFA924F0) : Colors.white;
+    Color border;
+    Color active;
+    if (_gender == value) {
+      if (MyApp.themeNotifier.value == ThemeModeThird.light) {
+        border = Color(0xFFB325F8);
+        active = Color(0xFFB325F8);
+      } else if (MyApp.themeNotifier.value == ThemeModeThird.dark) {
+        border = Colors.white;
+        active = Colors.white;
+      } else {
+        border = Color(0xFFFFFD57);
+        active = Color(0xFFFFFD57);
+      }
+    } else {
+      if (MyApp.themeNotifier.value == ThemeModeThird.light) {
+        border = Color(0xFFB325F8);
+        active = Colors.white;
+      } else if (MyApp.themeNotifier.value == ThemeModeThird.dark) {
+        border = Colors.white;
+        active = Colors.black;
+      } else {
+        border = Color(0xFFFFFD57);
+        active = Colors.black;
+      }
+    }
+    // border = _gender == value ? Color(0xFFA924F0) : Colors.grey;
+    // active = _gender == value ? Color(0xFFA924F0) : Colors.white;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -314,6 +491,12 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             value,
             style: TextStyle(
               fontSize: 13,
+              fontFamily: 'Kanit',
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFF7A4CB1)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
             ),
           )
         ],
@@ -324,22 +507,37 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
   dialogOpenPickerDate() {
     DatePicker.showDatePicker(context,
         theme: DatePickerTheme(
+          backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Colors.white
+              : Color(0xFF292929),
           containerHeight: 210.0,
           itemStyle: TextStyle(
             fontSize: 16.0,
-            color: Color(0xFF53327A),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
             fontWeight: FontWeight.normal,
             fontFamily: 'Kanit',
           ),
           doneStyle: TextStyle(
             fontSize: 16.0,
-            color: Color(0xFF53327A),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
             fontWeight: FontWeight.normal,
             fontFamily: 'Kanit',
           ),
           cancelStyle: TextStyle(
             fontSize: 16.0,
-            color: Color(0xFF53327A),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
             fontWeight: FontWeight.normal,
             fontFamily: 'Kanit',
           ),
@@ -371,12 +569,20 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
       InputDecoration(
         label: Text(hintText),
         labelStyle: TextStyle(
-          color: Color(0xFF707070),
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
           fontSize: 12,
           fontWeight: FontWeight.normal,
         ),
         hintStyle: TextStyle(
-          color: Color(0xFF707070),
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
           fontSize: 12,
           fontWeight: FontWeight.normal,
         ),
@@ -390,12 +596,22 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
-          borderSide: BorderSide(color: Color(0xFFE6B82C)),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(
-            color: Colors.black.withOpacity(0.2),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black.withOpacity(0.2)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Color(0xFF707070)
+                    : Color(0xFFFFFD57),
           ),
         ),
         errorStyle: const TextStyle(
@@ -408,7 +624,11 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
       InputDecoration(
         label: Text(hintText),
         labelStyle: TextStyle(
-          color: Color(0xFF707070),
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
           fontSize: 12,
           fontWeight: FontWeight.normal,
         ),
@@ -422,18 +642,33 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
         fillColor: Colors.transparent,
         contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
         suffixIcon: Icon(Icons.calendar_today),
+        suffixIconColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Colors.black
+            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                ? Colors.white
+                : Color(0xFFFFFD57),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(color: Color(0xFFE6B82C)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
-          borderSide: BorderSide(color: Color(0xFFE6B82C)),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(
-            color: Colors.black.withOpacity(0.2),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black.withOpacity(0.2)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Color(0xFF707070)
+                    : Color(0xFFFFFD57),
           ),
         ),
         errorStyle: const TextStyle(

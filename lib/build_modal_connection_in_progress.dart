@@ -1,6 +1,9 @@
+import 'package:des/shared/theme_data.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'dart:ui' as ui show ImageFilter;
+
+import 'main.dart';
 
 buildModalConnectionInProgress(
   BuildContext context,
@@ -21,7 +24,9 @@ buildModalConnectionInProgress(
               height: 487,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Color(0xCCFFFFFF),
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Color(0xCCFFFFFF)
+            : Color(0xFF292929),
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(10),
                 ),
@@ -30,6 +35,7 @@ buildModalConnectionInProgress(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
                       child: Image.asset(
@@ -42,15 +48,28 @@ buildModalConnectionInProgress(
                       'อยู่ในระหว่างการเชื่อมต่อ',
                       style: TextStyle(
                         fontSize: 20,
-                        color: Color(0xFF707070),
+                        color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF707070)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     Text(
-                      'เรากำลังทำการเชื่อมต่อระบบอยู่ อดใจรออีกไม่นานเพราะเราให้ความสำคัญกับการเรียนรู้',
+                      'เรากำลังทำการเชื่อมต่อระบบอยู่ อดใจรออีกไม่นาน\nเพราะเราให้ความสำคัญกับการเรียนรู้',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 13,
-                        color: Color(0x80000000),
+                        color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.black.withOpacity(0.50)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white.withOpacity(0.50)
+                                    : Color(0xFFFFFD57),
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -62,14 +81,23 @@ buildModalConnectionInProgress(
                         height: 40,
                         width: 145,
                         decoration: BoxDecoration(
-                          color: Color(0xFF7A4CB1),
+                          color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                           borderRadius: BorderRadius.circular(73),
                         ),
                         child: Text(
                           'ตกลง',
                           style: TextStyle(
                             fontSize: 17,
-                            color: Color(0xFFFFFFFF),
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.white
+                                : Colors.black,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

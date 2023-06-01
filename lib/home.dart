@@ -70,6 +70,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<dynamic>? _futureNews;
   Future<dynamic>? _futureBanner;
+  String? fontStorageValue;
 
   @override
   Widget build(BuildContext context) {
@@ -109,12 +110,13 @@ class _HomePageState extends State<HomePage> {
                             'ดิจิทัลชุมชน',
                             style: TextStyle(
                               fontSize: 15,
-                              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFF7A4CB1)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -126,11 +128,11 @@ class _HomePageState extends State<HomePage> {
                             },
                             child: Image.asset(
                               MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? 'assets/images/icon_blind.png'
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? 'assets/images/icon_blind_d.png'
-                                    : 'assets/images/icon_blind_d-y.png',
+                                  ? 'assets/images/icon_blind.png'
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? 'assets/images/icon_blind_d.png'
+                                      : 'assets/images/icon_blind_d-y.png',
                               height: 35,
                               width: 35,
                             ),
@@ -149,11 +151,11 @@ class _HomePageState extends State<HomePage> {
                             },
                             child: Image.asset(
                               MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? 'assets/images/notification.png'
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? 'assets/images/notification_d.png'
-                                    : 'assets/images/notification_d-y.png',
+                                  ? 'assets/images/notification.png'
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? 'assets/images/notification_d.png'
+                                      : 'assets/images/notification_d-y.png',
                               height: 35,
                               width: 35,
                             ),
@@ -172,7 +174,9 @@ class _HomePageState extends State<HomePage> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light ? Color(0xFF53327A).withOpacity(.25) : Colors.black,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF53327A).withOpacity(.25)
+                            : Colors.black,
                         blurRadius: 10,
                         offset: Offset(0, 5), // changes position of shadow
                       ),
@@ -202,11 +206,13 @@ class _HomePageState extends State<HomePage> {
                           height: 35,
                           // width: MediaQuery.of(context).size.width - 100,
                           decoration: BoxDecoration(
-                            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
                                 ? Colors.white
                                 : MyApp.themeNotifier.value ==
                                         ThemeModeThird.dark
-                                    ? Colors.white : Colors.black,
+                                    ? Colors.white
+                                    : Colors.black,
                             borderRadius: BorderRadius.circular(46),
                           ),
                           child: Row(
@@ -216,12 +222,13 @@ class _HomePageState extends State<HomePage> {
                                 'assets/images/search.png',
                                 height: 16,
                                 width: 16,
-                                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.black
-                                    : Color(0xFFFFFD57),
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF7A4CB1)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.black
+                                        : Color(0xFFFFFD57),
                               ),
                               const SizedBox(width: 15),
                               Expanded(
@@ -229,12 +236,13 @@ class _HomePageState extends State<HomePage> {
                                   'ค้นหาคลาสเรียน',
                                   style: TextStyle(
                                     fontSize: 13,
-                                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.black
-                                    : Color(0xFFFFFD57),
+                                    color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Color(0xFF7A4CB1)
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.black
+                                            : Color(0xFFFFFD57),
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
@@ -279,7 +287,7 @@ class _HomePageState extends State<HomePage> {
                             code: 'btn3',
                           ),
                           columnButton(
-                               MyApp.themeNotifier.value == ThemeModeThird.light
+                            MyApp.themeNotifier.value == ThemeModeThird.light
                                 ? 'assets/images/more.png'
                                 : MyApp.themeNotifier.value ==
                                         ThemeModeThird.dark
@@ -345,71 +353,70 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       columnButton(
                         MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? 'assets/images/reserve_service.png'
-                                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                    ? 'assets/images/reserve_service_d.png'
-                                    : 'assets/images/reserve_service_d-y.png',
-
+                            ? 'assets/images/reserve_service.png'
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? 'assets/images/reserve_service_d.png'
+                                : 'assets/images/reserve_service_d-y.png',
                         'จองใช้บริการ',
                         type: 'serviceforyou',
                         code: 'booking',
                       ),
                       columnButton(
                         MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? 'assets/images/find_job.png'
-                                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                    ? 'assets/images/find_job_d.png'
-                                    : 'assets/images/find_job_d-y.png',
+                            ? 'assets/images/find_job.png'
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? 'assets/images/find_job_d.png'
+                                : 'assets/images/find_job_d-y.png',
                         'หางาน',
                         type: 'serviceforyou',
                         code: 'job',
                       ),
                       columnButton(
                         MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? 'assets/images/funding_source.png'
-                                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                    ? 'assets/images/funding_source_d.png'
-                                    : 'assets/images/funding_source_d-y.png',
+                            ? 'assets/images/funding_source.png'
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? 'assets/images/funding_source_d.png'
+                                : 'assets/images/funding_source_d-y.png',
                         'หาแหล่งทุน',
                         type: 'serviceforyou',
                         code: 'fund',
                       ),
                       columnButton(
                         MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? 'assets/images/reskill.png'
-                                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                    ? 'assets/images/reskill_d.png'
-                                    : 'assets/images/reskill_d-y.png',
+                            ? 'assets/images/reskill.png'
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? 'assets/images/reskill_d.png'
+                                : 'assets/images/reskill_d-y.png',
                         'ส่งเสริมทักษะ',
                         type: 'serviceforyou',
                         code: 'skill',
                       ),
                       columnButton(
                         MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? 'assets/images/chat2.png'
-                                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                    ? 'assets/images/chat2_d.png'
-                                    : 'assets/images/chat2_d-y.png',
+                            ? 'assets/images/chat2.png'
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? 'assets/images/chat2_d.png'
+                                : 'assets/images/chat2_d-y.png',
                         'สนทนา',
                         type: 'serviceforyou',
                         code: 'chat',
                       ),
                       columnButton(
                         MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? 'assets/images/data_warehouse.png'
-                                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                    ? 'assets/images/data_warehouse_d.png'
-                                    : 'assets/images/data_warehouse_d-y.png',
+                            ? 'assets/images/data_warehouse.png'
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? 'assets/images/data_warehouse_d.png'
+                                : 'assets/images/data_warehouse_d-y.png',
                         'คลังข้อมูล',
                         type: 'serviceforyou',
                         code: 'knowledge',
                       ),
                       columnButton(
                         MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? 'assets/images/report_problem.png'
-                                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                    ? 'assets/images/report_problem_d.png'
-                                    : 'assets/images/report_problem_d-y.png',
+                            ? 'assets/images/report_problem.png'
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? 'assets/images/report_problem_d.png'
+                                : 'assets/images/report_problem_d-y.png',
                         'แจ้งปัญหา',
                         type: 'serviceforyou',
                         code: 'report',
@@ -824,7 +831,12 @@ class _HomePageState extends State<HomePage> {
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
                       height: 1,
-                      color: Theme.of(context).custom.second,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                      // Theme.of(context).custom.second,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -839,7 +851,12 @@ class _HomePageState extends State<HomePage> {
                       title,
                       style: TextStyle(
                         fontSize: 13,
-                        color: Theme.of(context).custom.second,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.white
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                        // Theme.of(context).custom.second,
                         fontWeight: FontWeight.w400,
                         height: 1,
                       ),
@@ -1035,7 +1052,9 @@ class _HomePageState extends State<HomePage> {
                 height: 500,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
+                      : Color(0xFF121212),
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(10),
                   ),
@@ -1051,7 +1070,12 @@ class _HomePageState extends State<HomePage> {
                         'ขนาดตัวหนังสือ',
                         style: TextStyle(
                           fontSize: 20,
-                          color: Color(0xFF000000),
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -1066,7 +1090,12 @@ class _HomePageState extends State<HomePage> {
                         'ความตัดกันของสี',
                         style: TextStyle(
                           fontSize: 20,
-                          color: Color(0xFF000000),
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -1087,23 +1116,37 @@ class _HomePageState extends State<HomePage> {
   }
 
   contentCard(BuildContext context, String title, String size, String type) {
+    var a = storage.read(key: 'switchSizeFont');
+    a.then((value) async => {
+          setState(() {
+            fontStorageValue = value;
+          })
+        });
+ 
     return InkWell(
       onTap: () {
         setState(
-          (() async {
-            await storage.write(
-              key: 'switchColor',
+          (() {
+            storage.write(
+              key: 'switchSizeFont',
               value: title,
             );
             setState(
               () {
                 if (title == "ปกติ") {
-                  MyApp.themeNotifier.value = ThemeModeThird.light;
-                } else if (title == "ขาวดำ") {
-                  MyApp.themeNotifier.value = ThemeModeThird.dark;
+                  // MyApp.themeNotifier.value = ThemeModeThird.light;
+                  MyApp.fontKanit.value = FontKanit.small;
+                } else if (title == "ปานกลาง") {
+                  MyApp.fontKanit.value = FontKanit.medium;
                 } else {
-                  MyApp.themeNotifier.value = ThemeModeThird.blindness;
+                  MyApp.fontKanit.value = FontKanit.large;
                 }
+                var a = storage.read(key: 'switchSizeFont');
+                a.then((value) => {
+                      setState(() {
+                        fontStorageValue = value;
+                      })
+                    });
               },
             );
           }),
@@ -1115,7 +1158,28 @@ class _HomePageState extends State<HomePage> {
           height: 45,
           // width: 145,
           decoration: BoxDecoration(
-            color: title == "ปกติ" ? Color(0xFF7A4CB1) : Color(0xFFFFFFFF),
+            // border: Border.all(
+            //   width: 1,
+            //   style: BorderStyle.solid,
+            //   color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //       ? (title == fontStorageValue ? Colors.white : Colors.black)
+            //       : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //           ? (title == fontStorageValue
+            //               ? Colors.black
+            //               : Colors.white)
+            //           : (title == fontStorageValue
+            //               ? Colors.black
+            //               : Color(0xFFFFFD57)),
+            // ),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? (title == fontStorageValue ? Color(0xFF7A4CB1) : Colors.white)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? (title == fontStorageValue
+                        ? Colors.white
+                        : Color(0xFF121212))
+                    : (title == fontStorageValue
+                        ? Color(0xFFFFFD57)
+                        : Color(0xFF121212)),
             borderRadius: BorderRadius.circular(73),
           ),
           child: Row(
@@ -1139,21 +1203,97 @@ class _HomePageState extends State<HomePage> {
                     title,
                     style: TextStyle(
                       fontSize: 17,
-                      color: title == "ปกติ"
-                          ? Color(0xFFFFFFFF)
-                          : Color(0xFF000000),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? (title == fontStorageValue
+                              ? Colors.white
+                              : Colors.black)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? (title == fontStorageValue
+                                  ? Colors.black
+                                  : Colors.white)
+                              : (title == fontStorageValue
+                                  ? Colors.black
+                                  : Color(0xFFFFFD57)),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
-              Image.asset(
-                title == "ปกติ"
-                    ? 'assets/images/icon_check.png'
-                    : "assets/images/icon_nocheck.png",
-                height: 35,
-                width: 35,
-              )
+              Container(
+                height: 25,
+                width: 25,
+                padding: EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 1,
+                    style: BorderStyle.solid,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? (title == fontStorageValue
+                            ? Colors.white
+                            : Color(0xFFDDDDDD))
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? (title == fontStorageValue
+                                ? Colors.black
+                                : Colors.white)
+                            : (title == fontStorageValue
+                                ? Colors.black
+                                : Color(0xFFFFFD57)),
+                  ),
+                  shape: BoxShape.circle,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? (title == fontStorageValue
+                          ? Colors.white
+                          : Color(0xFFDDDDDD))
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? (title == fontStorageValue
+                              ? Colors.black
+                              : Color(0xFF1E1E1E))
+                          : (title == fontStorageValue
+                              ? Colors.black
+                              : Colors.black),
+                ),
+                child: Container(
+                  // height: 15,
+                  // width: 15,
+                  // padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? (title == fontStorageValue
+                            ? Color(0xFF7A4CB1)
+                            : Color(0xFFDDDDDD))
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? (title == fontStorageValue
+                                ? Colors.white
+                                : Color(0xFF1E1E1E))
+                            : (title == fontStorageValue
+                                ? Color(0xFFFFFD57)
+                                : Colors.black),
+                  ),
+                  child: Icon(
+                    Icons.check,
+                    size: 12,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? (title == fontStorageValue
+                            ? Colors.white
+                            : Color(0xFFDDDDDD))
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? (title == fontStorageValue
+                                ? Colors.black
+                                : Color(0xFF1E1E1E))
+                            : (title == fontStorageValue
+                                ? Colors.black
+                                : Colors.black),
+                  ),
+                ),
+                //   child:
+                //   Image.asset(
+                //   item['isSelected'] == true
+                //       ? 'assets/images/icon_check.png'
+                //       : "assets/images/icon_nocheck.png",
+
+                // )
+              ),
             ],
           )),
     );
@@ -1163,89 +1303,206 @@ class _HomePageState extends State<HomePage> {
     return Container(
       child: Wrap(
           children: _listSwitchColors
-              .map((item) => GestureDetector(
-                    onTap: () {
-                      setState(
-                        (() async {
-                          await storage.write(
-                            key: 'switchColor',
-                            value: item['title'],
-                          );
-                          setState(
-                            () {
-                              if (item['title'] == "ปกติ") {
-                                MyApp.themeNotifier.value =
-                                    ThemeModeThird.light;
-                              } else if (item['title'] == "ขาวดำ") {
-                                MyApp.themeNotifier.value = ThemeModeThird.dark;
+              .map(
+                (item) => GestureDetector(
+                  onTap: () {
+                    setState(
+                      (() async {
+                        await storage.write(
+                          key: 'switchColor',
+                          value: item['title'],
+                        );
+                        setState(
+                          () {
+                            if (item['title'] == "ปกติ") {
+                              MyApp.themeNotifier.value = ThemeModeThird.light;
+                            } else if (item['title'] == "ขาวดำ") {
+                              MyApp.themeNotifier.value = ThemeModeThird.dark;
+                            } else {
+                              MyApp.themeNotifier.value =
+                                  ThemeModeThird.blindness;
+                            }
+                            for (int i = 0; i < _listSwitchColors.length; i++) {
+                              if (_listSwitchColors[i]['code'] ==
+                                  item['code']) {
+                                item['isSelected'] = !item['isSelected'];
                               } else {
-                                MyApp.themeNotifier.value =
-                                    ThemeModeThird.blindness;
+                                _listSwitchColors[i]['isSelected'] = false;
                               }
-                              for (int i = 0;
-                                  i < _listSwitchColors.length;
-                                  i++) {
-                                if (_listSwitchColors[i]['code'] ==
-                                    item['code']) {
-                                  item['isSelected'] = !item['isSelected'];
-                                } else {
-                                  _listSwitchColors[i]['isSelected'] = false;
-                                }
-                              }
-                            },
-                          );
-                        }),
-                      );
-                      _callRead();
-                    },
-                    child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        alignment: Alignment.center,
-                        height: 45,
-                        // width: 145,
-                        decoration: BoxDecoration(
-                          color: item['isSelected'] == true
-                              ? Color(0xFF7A4CB1)
-                              : Color(0xFFFFFFFF),
-                          borderRadius: BorderRadius.circular(73),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Image.asset(
-                                  item['code'] == '1'
-                                      ? 'assets/images/icon_rp.png'
-                                      : item['code'] == '2'
-                                          ? 'assets/images/icon_wb.png'
-                                          : "assets/images/icon_yb.png",
-                                  height: 35,
-                                  // width: 35,
+                            }
+                          },
+                        );
+                      }),
+                    );
+                    _callRead();
+                  },
+                  child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      margin: EdgeInsets.only(bottom: 10),
+                      alignment: Alignment.center,
+                      height: 45,
+                      // width: 145,
+                      decoration: BoxDecoration(
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? (item['isSelected'] == true
+                                ? Color(0xFF7A4CB1)
+                                : Colors.white)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? (item['isSelected'] == true
+                                    ? Colors.white
+                                    : Color(0xFF121212))
+                                : (item['isSelected'] == true
+                                    ? Color(0xFFFFFD57)
+                                    : Color(0xFF121212)),
+                        // item['isSelected'] == true
+                        //     ? Color(0xFF7A4CB1)
+                        //     : Color(0xFFFFFFFF),
+                        borderRadius: BorderRadius.circular(73),
+                        // border: Border.all(
+                        //   width: 1,
+                        //   style: BorderStyle.solid,
+                        //   color: MyApp.themeNotifier.value ==
+                        //           ThemeModeThird.light
+                        //       ? (item['isSelected'] == true
+                        //           ? Color(0xFF7A4CB1)
+                        //           : Colors.white)
+                        //       : MyApp.themeNotifier.value ==
+                        //               ThemeModeThird.dark
+                        //           ? (item['isSelected'] == true
+                        //               ? Colors.white
+                        //               : Color(0xFF292929))
+                        //           : (item['isSelected'] == true
+                        //               ? Color(0xFFFFFD57)
+                        //               : Color(0xFF292929)),
+                        // )
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Image.asset(
+                                item['code'] == '1'
+                                    ? 'assets/images/icon_rp.png'
+                                    : item['code'] == '2'
+                                        ? 'assets/images/icon_wb.png'
+                                        : "assets/images/icon_yb.png",
+                                height: 35,
+                                // width: 35,
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                item['title'],
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? (item['isSelected'] == true
+                                          ? Colors.white
+                                          : Colors.black)
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? (item['isSelected'] == true
+                                              ? Colors.black
+                                              : Colors.white)
+                                          : (item['isSelected'] == true
+                                              ? Colors.black
+                                              : Color(0xFFFFFD57)),
+                                  // color: item['isSelected'] == true
+                                  //     ? Color(0xFFFFFFFF)
+                                  //     : Color(0xFF000000),
+                                  fontWeight: FontWeight.w500,
                                 ),
-                                SizedBox(width: 5),
-                                Text(
-                                  item['title'],
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    color: item['isSelected'] == true
-                                        ? Color(0xFFFFFFFF)
-                                        : Color(0xFF000000),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
+                              ),
+                            ],
+                          ),
+                          Container(
+                            height: 25,
+                            width: 25,
+                            padding: EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 1,
+                                style: BorderStyle.solid,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? (item['isSelected'] == true
+                                        ? Colors.white
+                                        : Color(0xFFDDDDDD))
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? (item['isSelected'] == true
+                                            ? Colors.black
+                                            : Colors.white)
+                                        : (item['isSelected'] == true
+                                            ? Colors.black
+                                            : Color(0xFFFFFD57)),
+                              ),
+                              shape: BoxShape.circle,
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? (item['isSelected'] == true
+                                      ? Colors.white
+                                      : Color(0xFFDDDDDD))
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? (item['isSelected'] == true
+                                          ? Colors.black
+                                          : Color(0xFF1E1E1E))
+                                      : (item['isSelected'] == true
+                                          ? Colors.black
+                                          : Colors.black),
                             ),
-                            Image.asset(
-                              item['isSelected'] == true
-                                  ? 'assets/images/icon_check.png'
-                                  : "assets/images/icon_nocheck.png",
-                              height: 35,
-                              width: 35,
-                            )
-                          ],
-                        )),
-                  ))
+                            child: Container(
+                              // height: 15,
+                              // width: 15,
+                              // padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? (item['isSelected'] == true
+                                        ? Color(0xFF7A4CB1)
+                                        : Color(0xFFDDDDDD))
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? (item['isSelected'] == true
+                                            ? Colors.white
+                                            : Color(0xFF1E1E1E))
+                                        : (item['isSelected'] == true
+                                            ? Color(0xFFFFFD57)
+                                            : Colors.black),
+                              ),
+                              child: Icon(
+                                Icons.check,
+                                size: 12,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? (item['isSelected'] == true
+                                        ? Colors.white
+                                        : Color(0xFFDDDDDD))
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? (item['isSelected'] == true
+                                            ? Colors.black
+                                            : Color(0xFF1E1E1E))
+                                        : (item['isSelected'] == true
+                                            ? Colors.black
+                                            : Colors.black),
+                              ),
+                            ),
+                            //   child:
+                            //   Image.asset(
+                            //   item['isSelected'] == true
+                            //       ? 'assets/images/icon_check.png'
+                            //       : "assets/images/icon_nocheck.png",
+
+                            // )
+                          ),
+                        ],
+                      )),
+                ),
+              )
               .toList()),
     );
   }

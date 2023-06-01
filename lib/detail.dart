@@ -1,15 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:des/main.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/image_viewer.dart';
+import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:html/parser.dart' show parse;
 import 'dart:ui' as ui show ImageFilter;
-
 import 'build_modal_connection_in_progress.dart';
 
 // ignore: must_be_immutable
@@ -32,20 +34,25 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   List<String> _gallery = [];
   String _imageSelected = '';
+  Color colorTheme = Colors.transparent;
+  Color backgroundTheme = Colors.transparent;
+  Color buttonTheme = Colors.transparent;
+  Color textTheme = Colors.transparent;
   Future<dynamic>? _futureModel;
   final _scController = ScrollController();
+  final storage = const FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: backgroundTheme,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: backgroundTheme,
         automaticallyImplyLeading: false,
         flexibleSpace: Container(
           width: double.infinity,
           height: 60 + MediaQuery.of(context).padding.top,
-          color: Colors.white,
+          color: backgroundTheme,
           padding: EdgeInsets.only(
             top: MediaQuery.of(context).padding.top,
             left: 15,
@@ -62,6 +69,7 @@ class _DetailPageState extends State<DetailPage> {
                       'รายละเอียด',
                       textAlign: TextAlign.center,
                       style: TextStyle(
+                        color: textTheme,
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
@@ -137,12 +145,6 @@ class _DetailPageState extends State<DetailPage> {
                       .map<ImageProvider<Object>>((e) => NetworkImage(e))
                       .toList(),
                 );
-                // return ImageViewer(
-                //   initialIndex: index,
-                //   imageProviders: [widget.model['imageUrl'], ..._gallery]
-                //       .map<ImageProvider<Object>>((e) => NetworkImage(e))
-                //       .toList(),
-                // );
               },
             );
           },
@@ -162,115 +164,29 @@ class _DetailPageState extends State<DetailPage> {
             ),
           ),
         ),
-        // if (_gallery.isNotEmpty)
-        //   SizedBox(
-        //     height: 120,
-        //     child: ListView.separated(
-        //       itemCount: [model['imageUrl'], ..._gallery].length,
-        //       scrollDirection: Axis.horizontal,
-        //       padding: EdgeInsets.all(10),
-        //       separatorBuilder: (_, __) => const SizedBox(width: 10),
-        //       itemBuilder: (_, __) => Container(
-        //         decoration: BoxDecoration(
-        //             borderRadius: BorderRadius.circular(4),
-        //             border: Border.all(
-        //               color: Colors.black.withOpacity(0.2),
-        //               width: 0.5,
-        //             )),
-        //         child: GestureDetector(
-        //           onTap: () => setState(() {
-        //             _imageSelected = [model['imageUrl'], ..._gallery][__];
-        //           }),
-        //           child: ClipRRect(
-        //             borderRadius: BorderRadius.circular(4),
-        //             child: CachedNetworkImage(
-        //               imageUrl: [model['imageUrl'], ..._gallery][__],
-        //               height: 100,
-        //               width: 100,
-        //               fit: BoxFit.cover,
-        //               errorWidget: (context, url, error) =>
-        //                   Image.asset('assets/images/logo.png'),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
         Container(
-          padding: const EdgeInsets.only(
-            right: 10.0,
-            left: 10.0,
-          ),
-          margin: const EdgeInsets.only(right: 50.0, top: 10.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          margin: const EdgeInsets.only(right: 50, top: 10),
           child: Text(
             model['title'],
-            style: const TextStyle(
+            style: TextStyle(
+              color: textTheme,
               fontSize: 20,
               fontFamily: 'Kanit',
             ),
           ),
         ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   children: [
-        //     Padding(
-        //       padding: const EdgeInsets.only(
-        //         right: 10,
-        //         left: 10,
-        //       ),
-        //       child: Row(
-        //         children: [
-        //           CachedNetworkImage(
-        //             imageUrl: '${model['imageUrlCreateBy']}',
-        //             height: 30,
-        //             width: 30,
-        //             fit: BoxFit.cover,
-        //             errorWidget: (context, url, error) =>
-        //                 Image.asset('assets/images/logo.png'),
-        //           ),
-        //           Container(
-        //             padding: const EdgeInsets.all(10),
-        //             child: Column(
-        //               crossAxisAlignment: CrossAxisAlignment.start,
-        //               children: [
-        //                 Text(
-        //                   '${model['createBy'] ?? ''}',
-        //                   style: const TextStyle(
-        //                     fontSize: 15,
-        //                     fontFamily: 'Kanit',
-        //                   ),
-        //                 ),
-        //                 Text(
-        //                   model['createDate'] != '' &&
-        //                           model['createDate'] != null
-        //                       ? '${dateStringToDateStringFormatV2(model['createDate'])} | เข้าชม ${model['view']} ครั้ง'
-        //                       : '26 ธ.ค. 65 | เข้าชม ${model['view']} ครั้ง',
-        //                   style: TextStyle(
-        //                     fontSize: 10,
-        //                     fontFamily: 'Kanit',
-        //                   ),
-        //                 ),
-        //               ],
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //   ],
-        // ),
         SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             children: [
               Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 9,
-                  vertical: 3,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                 decoration: BoxDecoration(
-                  color: Color(0xFF7A4CB1),
+                  color: buttonTheme,
                   borderRadius: BorderRadius.circular(12.5),
+                  border: Border.all(color: colorTheme),
                 ),
                 child: Row(
                   children: const [
@@ -297,8 +213,9 @@ class _DetailPageState extends State<DetailPage> {
                   vertical: 3,
                 ),
                 decoration: BoxDecoration(
-                  color: Color(0xFF7A4CB1),
+                  color: buttonTheme,
                   borderRadius: BorderRadius.circular(12.5),
+                  border: Border.all(color: colorTheme),
                 ),
                 child: Row(
                   children: [
@@ -326,8 +243,9 @@ class _DetailPageState extends State<DetailPage> {
                   width: 30,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: Color(0xFF7A4CB1),
+                    color: buttonTheme,
                     borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: colorTheme),
                   ),
                   child: Image.asset(
                     'assets/images/share.png',
@@ -345,9 +263,10 @@ class _DetailPageState extends State<DetailPage> {
             right: 10,
             left: 10,
           ),
-          child: const Text(
+          child: Text(
             'รายละเอียด',
             style: TextStyle(
+              color: textTheme,
               fontSize: 15,
               fontWeight: FontWeight.w500,
             ),
@@ -367,7 +286,9 @@ class _DetailPageState extends State<DetailPage> {
                   sigmaY: 5.0,
                 ),
                 child: Container(
-                  color: Color(0xD953327A),
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xD953327A)
+                      : Colors.black,
                   padding: EdgeInsets.only(
                     top: MediaQuery.of(context).padding.top + 10,
                     right: 10,
@@ -389,7 +310,10 @@ class _DetailPageState extends State<DetailPage> {
                                   style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w500,
-                                    color: Color(0xFFEEEEEE),
+                                    color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Colors.white
+                                        : textTheme,
                                   ),
                                 ),
                               ),
@@ -398,7 +322,10 @@ class _DetailPageState extends State<DetailPage> {
                                 data: model['description'],
                                 style: {
                                   'body': Style(
-                                    color: Color(0xFFEEEEEE),
+                                    color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Colors.white
+                                        : textTheme,
                                   ),
                                 },
                               ),
@@ -415,8 +342,9 @@ class _DetailPageState extends State<DetailPage> {
                             width: 40,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: Color(0xFF7A4CB1),
+                              color: buttonTheme,
                               borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: colorTheme),
                             ),
                             child: Image.asset(
                               'assets/images/close_noti_list.png',
@@ -446,7 +374,7 @@ class _DetailPageState extends State<DetailPage> {
                   '${parseHtmlString(model['description'])}',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Color(0xFF707070),
+                    color: colorTheme,
                     overflow: TextOverflow.ellipsis,
                   ),
                   maxLines: 4,
@@ -458,9 +386,10 @@ class _DetailPageState extends State<DetailPage> {
                   right: 10,
                   left: 10,
                 ),
-                child: const Text(
+                child: Text(
                   'อ่านทั้งหมด',
                   style: TextStyle(
+                    color: textTheme,
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
                   ),
@@ -470,81 +399,6 @@ class _DetailPageState extends State<DetailPage> {
           ),
         ),
         const SizedBox(height: 30),
-        // const Center(
-        //   child: Text(
-        //     'แชร์ไปยัง',
-        //     style: TextStyle(
-        //       fontSize: 15,
-        //       fontWeight: FontWeight.w500,
-        //     ),
-        //   ),
-        // ),
-        // const SizedBox(height: 15),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     Container(
-        //       height: 30,
-        //       width: 30,
-        //       alignment: Alignment.center,
-        //       decoration: BoxDecoration(
-        //         color: Color(0xFF7A4CB1),
-        //         borderRadius: BorderRadius.circular(15),
-        //       ),
-        //       child: Image.asset(
-        //         'assets/images/share.png',
-        //         width: 17,
-        //         height: 17,
-        //       ),
-        //     ),
-        //     const SizedBox(width: 15),
-        //     Container(
-        //       height: 30,
-        //       width: 30,
-        //       alignment: Alignment.center,
-        //       decoration: BoxDecoration(
-        //         color: Color(0xFF7A4CB1),
-        //         borderRadius: BorderRadius.circular(15),
-        //       ),
-        //       child: Image.asset(
-        //         'assets/images/facebook_circle.png',
-        //         width: 17,
-        //         height: 17,
-        //       ),
-        //     ),
-        //     const SizedBox(width: 15),
-        //     Container(
-        //       height: 30,
-        //       width: 30,
-        //       alignment: Alignment.center,
-        //       decoration: BoxDecoration(
-        //         color: Color(0xFF7A4CB1),
-        //         borderRadius: BorderRadius.circular(15),
-        //       ),
-        //       child: Image.asset(
-        //         'assets/images/line_circle.png',
-        //         width: 17,
-        //         height: 17,
-        //       ),
-        //     ),
-        //     const SizedBox(width: 15),
-        //     Container(
-        //       height: 30,
-        //       width: 30,
-        //       alignment: Alignment.center,
-        //       decoration: BoxDecoration(
-        //         color: Color(0xFF7A4CB1),
-        //         borderRadius: BorderRadius.circular(15),
-        //       ),
-        //       child: Image.asset(
-        //         'assets/images/copy.png',
-        //         width: 17,
-        //         height: 17,
-        //       ),
-        //     ),
-        //   ],
-        // ),
-
         const SizedBox(height: 85),
         InkWell(
           onTap: () {
@@ -555,8 +409,9 @@ class _DetailPageState extends State<DetailPage> {
             alignment: Alignment.center,
             margin: EdgeInsets.symmetric(horizontal: 15),
             decoration: BoxDecoration(
-              color: Color(0xFF7A4CB1),
+              color: buttonTheme,
               borderRadius: BorderRadius.circular(22.5),
+              border: Border.all(color: colorTheme),
             ),
             child: Text(
               'เริ่มเรียน',
@@ -575,18 +430,16 @@ class _DetailPageState extends State<DetailPage> {
 
   Widget _buildContentMainPage(dynamic model) {
     return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       shrinkWrap: true, // 1st add
       physics: const ClampingScrollPhysics(), // 2nd
       children: [
         Container(
-          padding: const EdgeInsets.only(
-            right: 10.0,
-            left: 10.0,
-          ),
-          margin: const EdgeInsets.only(right: 50.0, top: 10.0),
+          margin: const EdgeInsets.only(right: 50, top: 10),
           child: Text(
             model['title'],
-            style: const TextStyle(
+            style: TextStyle(
+              color: textTheme,
               fontSize: 20,
               fontFamily: 'Kanit',
             ),
@@ -594,43 +447,34 @@ class _DetailPageState extends State<DetailPage> {
         ),
         Container(height: 10),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                right: 10,
-                left: 10,
-              ),
-              child: Row(
+            CachedNetworkImage(
+              imageUrl: '${model['imageUrlCreateBy']}',
+              height: 30,
+              width: 30,
+              fit: BoxFit.cover,
+              errorWidget: (context, url, error) =>
+                  Image.asset('assets/images/logo.png'),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CachedNetworkImage(
-                    imageUrl: '${model['imageUrlCreateBy']}',
-                    height: 30,
-                    width: 30,
-                    fit: BoxFit.cover,
-                    errorWidget: (context, url, error) =>
-                        Image.asset('assets/images/logo.png'),
+                  Text(
+                    '${model['createBy'] ?? ''}',
+                    style: TextStyle(
+                      color: textTheme,
+                      fontSize: 15,
+                      fontFamily: 'Kanit',
+                    ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${model['createBy'] ?? ''}',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontFamily: 'Kanit',
-                          ),
-                        ),
-                        Text(
-                          '${dateStringToDateStringFormatV2(model['createDate'])}',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontFamily: 'Kanit',
-                          ),
-                        ),
-                      ],
+                  Text(
+                    '${dateStringToDateStringFormatV2(model['createDate'])}',
+                    style: TextStyle(
+                      color: textTheme,
+                      fontSize: 10,
+                      fontFamily: 'Kanit',
                     ),
                   ),
                 ],
@@ -639,33 +483,35 @@ class _DetailPageState extends State<DetailPage> {
           ],
         ),
         SizedBox(height: 10),
-        Padding(
-            padding: const EdgeInsets.only(
-              right: 10,
-              left: 10,
+        Html(
+          data: model['description'],
+          style: {
+            "body": Style(
+              color: textTheme,
+              maxLines: 4,
+              textOverflow: TextOverflow.ellipsis,
             ),
-            child: Html(
-              data: model['description'],
-              style: {
-                "body": Style(
-                  maxLines: 4,
-                  textOverflow: TextOverflow.ellipsis,
-                ),
-              },
-            )),
+          },
+        ),
       ],
     );
   }
 
   Widget _backButton(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Image.asset(
-        'assets/images/back.png',
+      onTap: () => Navigator.pop(context),
+      child: Container(
         height: 40,
         width: 40,
+        padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: buttonTheme,
+          border: Border.all(color: colorTheme),
+        ),
+        child: Image.asset(
+          'assets/images/back_arrow.png',
+        ),
       ),
     );
   }
@@ -681,6 +527,7 @@ class _DetailPageState extends State<DetailPage> {
           child: Text(
             model['title'],
             style: TextStyle(
+              color: textTheme,
               fontSize: 15,
               fontWeight: FontWeight.w500,
             ),
@@ -691,15 +538,23 @@ class _DetailPageState extends State<DetailPage> {
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: Row(
             children: [
-              Image.asset('assets/images/event_detail.png',
-                  height: 10, width: 10),
+              Image.asset(
+                'assets/images/event_detail.png',
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFFB325F8)
+                    : textTheme,
+                height: 10,
+                width: 10,
+              ),
               SizedBox(width: 5),
               Text(
                 '${timeString(model['docTime'])} น.',
                 style: TextStyle(
                   fontSize: 9,
                   fontWeight: FontWeight.w400,
-                  color: Color(0xFFB325F8),
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFB325F8)
+                      : textTheme,
                 ),
               ),
             ],
@@ -712,9 +567,10 @@ class _DetailPageState extends State<DetailPage> {
             data: model['description'],
             style: {
               "body": Style(
-                  // maxLines: 4,
-                  // textOverflow: TextOverflow.ellipsis,
-                  ),
+                color: textTheme,
+                // maxLines: 4,
+                // textOverflow: TextOverflow.ellipsis,
+              ),
             },
           ),
         ),
@@ -722,35 +578,26 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  Widget _buildHead() {
-    return Container(
-      padding: EdgeInsets.only(right: 15, left: 15, top: 15),
-      child: Stack(
-        children: [
-          Container(
-            height: 40,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'รายละเอียด',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   void initState() {
+    //  themeColor
+    if (MyApp.themeNotifier.value == ThemeModeThird.light) {
+      backgroundTheme = Colors.white;
+      colorTheme = Color(0xFF7A4CB1);
+      buttonTheme = Color(0xFF7A4CB1);
+      textTheme = Colors.black;
+    } else if (MyApp.themeNotifier.value == ThemeModeThird.dark) {
+      backgroundTheme = Colors.black;
+      colorTheme = Colors.white;
+      buttonTheme = Colors.black;
+      textTheme = Colors.white;
+    } else {
+      backgroundTheme = Colors.black;
+      colorTheme = Color(0xFFFFFD57);
+      buttonTheme = Colors.black;
+      textTheme = Color(0xFFFFFD57);
+    }
+    //  themeColor
     _imageSelected = widget.model['imageUrl'] ?? '';
     if (widget.slug != 'mainPage' &&
         widget.slug != 'mock' &&

@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:camera/camera.dart';
 import 'package:des/menu.dart';
+import 'package:des/shared/theme_data.dart';
 import 'package:des/verify_fourth_step.dart';
 import 'package:des/verify_last_step_page.dart';
 import 'package:dio/dio.dart';
@@ -14,6 +15,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_face_api/face_api.dart' as Regula;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
+
+import 'main.dart';
 
 class VerifyThirdStepPage extends StatefulWidget {
   const VerifyThirdStepPage(
@@ -60,9 +63,13 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
+        backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Colors.white
+            : Colors.black,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Colors.white
+              : Colors.black,
           elevation: 0,
           flexibleSpace: _buildHead(),
           automaticallyImplyLeading: false,
@@ -73,18 +80,48 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 30),
-              const Text(
+              Text(
                 'กรุณากรอกรหัสที่ท่านได้รับผ่านเบอร์โทรศัพท์',
-                style: TextStyle(fontSize: 15),
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.black
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                ),
               ),
               const SizedBox(height: 30),
-              Container(
-                alignment: Alignment.center,
-                child: Image.asset(
-                  'assets/images/noti_phone.png',
-                  height: 100,
-                  width: 100,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 100,
+                    width: 100,
+                    padding: EdgeInsets.all(20),
+                    // alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : Colors.black,
+                        border: Border.all(
+                          width: 1,
+                          style: BorderStyle.solid,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFF7A4CB1)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        )),
+                    child: Image.asset(
+                      'assets/images/icon_phone.png',
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 30),
               Row(
@@ -102,11 +139,17 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
               Center(
                 child: GestureDetector(
                   onTap: () {},
-                  child: const Text(
+                  child: Text(
                     'ท่านต้องการรับรหัสใหม่',
                     style: TextStyle(
                       fontSize: 13,
                       decoration: TextDecoration.underline,
+                      color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
                     ),
                   ),
                 ),
@@ -126,14 +169,23 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
                   alignment: Alignment.center,
                   margin: const EdgeInsets.symmetric(horizontal: 15),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: const Color(0xFF7A4CB1),
+                    borderRadius: BorderRadius.circular(22.5),
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                   ),
-                  child: const Text(
+                  child: Text(
                     'ดำเนินการต่อ',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.white,
+                      color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.white
+                                    : Colors.black,
                     ),
                   ),
                 ),
@@ -155,7 +207,9 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
         right: 15,
         top: MediaQuery.of(context).padding.top,
       ),
-      color: Colors.white,
+      color: MyApp.themeNotifier.value == ThemeModeThird.light
+          ? Colors.white
+          : Colors.black,
       child: Stack(
         children: [
           const SizedBox(
@@ -168,17 +222,42 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
               onTap: () {
                 Navigator.pop(context);
               },
-              child: Image.asset(
-                'assets/images/back.png',
+              child: Container(
                 height: 40,
                 width: 40,
+                padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF7A4CB1)
+                        : Colors.black,
+                    border: Border.all(
+                      width: 1,
+                      style: BorderStyle.solid,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF7A4CB1)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                    )),
+                child: Image.asset(
+                  'assets/images/back_arrow.png',
+                ),
               ),
             ),
           ),
-          const Center(
+          Center(
             child: Text(
               'กรอกรหัส OTP',
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
             ),
           )
         ],
@@ -216,13 +295,25 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
             }
           }
         },
+        style: TextStyle(
+          height: 0.8,
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Kanit',
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Colors.black
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+        ),
+        cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Color(0xFF7A4CB1)
+            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                ? Colors.white
+                : Color(0xFFFFFD57),
         showCursor: false,
         readOnly: false,
         textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
         // keyboardType: TextInputType.number,
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -232,10 +323,24 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
         decoration: InputDecoration(
           counter: const Offstage(),
           enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(width: 2, color: Colors.black12),
+              borderSide: BorderSide(
+                width: 1,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFFEEEEEE)
+                    : Color(0xFF707070),
+              ),
               borderRadius: BorderRadius.circular(12)),
+          fillColor: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFFEEEEEE)
+              : Color(0xFF707070),
           focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(width: 2, color: Color(0xFFA924F0)),
+              borderSide: BorderSide(
+                  width: 2,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFA924F0)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57)),
               borderRadius: BorderRadius.circular(12)),
         ),
         controller: model,

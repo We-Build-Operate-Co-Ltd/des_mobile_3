@@ -3,11 +3,14 @@ import 'package:des/category_selector.dart';
 import 'package:des/detail.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
+import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import 'main.dart';
 
 class NotificationListPage extends StatefulWidget {
   NotificationListPage({
@@ -269,7 +272,9 @@ class _NotificationListState extends State<NotificationListPage> {
         }
       },
       child: Scaffold(
-        backgroundColor: Color(0xFFFFFFFF),
+        backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Colors.white
+            : Colors.black,
         body: NotificationListener<OverscrollIndicatorNotification>(
           onNotification: (OverscrollIndicatorNotification overScroll) {
             overScroll.disallowGlow();
@@ -480,14 +485,16 @@ class _NotificationListState extends State<NotificationListPage> {
                   decoration: BoxDecoration(
                     boxShadow: const [
                       BoxShadow(
-                        color: Color(0x1A000000),
+                        color: Color.fromARGB(26, 255, 255, 255),
                         blurRadius: 4,
-                        offset: Offset(0, -3), // changes position of shadow/
+                        offset: Offset(5, -5), // changes position of shadow/
                       ),
                     ],
                   ),
                   child: Container(
-                    color: Color(0xFFFFFFFF),
+                    // color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    //             ? Colors.white
+                    //             : Color(0xFF292929),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -496,12 +503,37 @@ class _NotificationListState extends State<NotificationListPage> {
                             ? _buildButton(
                                 'อ่านแล้ว  (${totalSelected.toString()})',
                                 'อ่านทั้งหมด',
-                                const Color(0xFF7A4CB1),
+
+                                // color
+                                MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF7A4CB1)
+                                    : Colors.black,
+
+                                // borderColor
+                                MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF7A4CB1)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+
+                                // fontColor
+                                MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.white
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
                                 () => _DialogUpdate(),
                               )
                             : _buildButton(
                                 'อ่านทั้งหมด',
                                 'อ่านทั้งหมด',
+                                const Color(0xFFDDDDDD),
+                                const Color(0xFFDDDDDD),
                                 const Color(0xFFDDDDDD),
                                 () => null,
                               ),
@@ -510,12 +542,36 @@ class _NotificationListState extends State<NotificationListPage> {
                             ? _buildButton(
                                 'ลบรายการ  (${totalSelected.toString()})',
                                 'ลบทั้งหมด',
-                                const Color(0xFF7A4CB1),
+                                // color
+                                MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF7A4CB1)
+                                    : Colors.black,
+
+                                // borderColor
+                                MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF7A4CB1)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+
+                                // fontColor
+                                MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.white
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
                                 () => _DialogDelete(),
                               )
                             : _buildButton(
                                 'ลบทั้งหมด',
                                 'ลบทั้งหมด',
+                                const Color(0xFFDDDDDD),
+                                const Color(0xFFDDDDDD),
                                 const Color(0xFFDDDDDD),
                                 () => null,
                               ),
@@ -535,7 +591,9 @@ class _NotificationListState extends State<NotificationListPage> {
     return Container(
       padding: EdgeInsets.only(
           top: MediaQuery.of(context).padding.top, right: 15, left: 15),
-      color: Color(0xFFFFFFFF),
+      color: MyApp.themeNotifier.value == ThemeModeThird.light
+          ? Colors.white
+          : Colors.black,
       child: Column(
         children: [
           SizedBox(height: 13),
@@ -543,8 +601,28 @@ class _NotificationListState extends State<NotificationListPage> {
             children: [
               InkWell(
                 onTap: () => Navigator.pop(context),
-                child: Image.asset('assets/images/back.png',
-                    height: 40, width: 40),
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF7A4CB1)
+                          : Colors.black,
+                      border: Border.all(
+                        width: 1,
+                        style: BorderStyle.solid,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                      )),
+                  child: Image.asset(
+                    'assets/images/back_arrow.png',
+                  ),
+                ),
               ),
               // SizedBox(width: 34),
               Expanded(
@@ -556,7 +634,13 @@ class _NotificationListState extends State<NotificationListPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 20,
+                        fontFamily: 'Kanit',
                         fontWeight: FontWeight.w500,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.black
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       ),
                     ),
                     SizedBox(width: 15),
@@ -565,8 +649,16 @@ class _NotificationListState extends State<NotificationListPage> {
                 ),
               ),
               InkWell(
-                child: Image.asset('assets/images/noti_list.png',
-                    height: 25, width: 25),
+                child: Image.asset(
+                  'assets/images/noti_list.png',
+                  height: 25,
+                  width: 25,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.black
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                ),
                 onTap: _handleClickMe,
               ),
             ],
@@ -576,8 +668,8 @@ class _NotificationListState extends State<NotificationListPage> {
     );
   }
 
-  Widget _buildButton(
-      String titleI, String titleE, Color color, Function onTapFunction) {
+  Widget _buildButton(String titleI, String titleE, Color color,
+      Color borderColor, Color fontColor, Function onTapFunction) {
     return InkWell(
       onTap: () {
         onTapFunction();
@@ -587,13 +679,16 @@ class _NotificationListState extends State<NotificationListPage> {
         width: 145,
         height: 40,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(73), color: color),
+            border: Border.all(
+                width: 1, style: BorderStyle.solid, color: borderColor),
+            borderRadius: BorderRadius.circular(73),
+            color: color),
         child: Text(
           totalSelected > 0 ? titleI : titleE,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 15,
-            color: Color(0xFFFFFFFF),
+            color: fontColor,
             fontWeight: FontWeight.w400,
             fontFamily: 'Kanit',
           ),
@@ -611,12 +706,13 @@ class _NotificationListState extends State<NotificationListPage> {
             return Container();
           } else {
             return Container(
-              height: 22,
+              // height: 22,
               width: 22,
-              decoration: BoxDecoration(
-                color: Color(0xFFDD2A00),
-                borderRadius: BorderRadius.circular(11),
-              ),
+              padding: EdgeInsets.all(5),
+              decoration:
+                  BoxDecoration(color: Color(0xFFDD2A00), shape: BoxShape.circle
+                      // borderRadius: BorderRadius.circular(11),
+                      ),
               child: Text(
                 notiCount.toString(),
                 textAlign: TextAlign.center,
@@ -673,7 +769,11 @@ class _NotificationListState extends State<NotificationListPage> {
                   child: Text(
                     '${model['title']}',
                     style: TextStyle(
-                      color: Color(0xFF7A4CB1),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF7A4CB1)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                       fontFamily: 'Kanit',
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
@@ -770,7 +870,11 @@ class _NotificationListState extends State<NotificationListPage> {
                     child: Text(
                       checkCategoryName(model['category'], model),
                       style: TextStyle(
-                        color: Color(0xFFB325F8),
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFFB325F8)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                         fontFamily: 'Kanit',
                         fontWeight: FontWeight.w500,
                         fontSize: 15,
@@ -784,7 +888,11 @@ class _NotificationListState extends State<NotificationListPage> {
                     child: Text(
                       '${model['title']}',
                       style: TextStyle(
-                        color: Color(0xFF000000),
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF000000)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                         fontFamily: 'Arial',
                         fontWeight: FontWeight.w400,
                         fontSize: 13,
@@ -803,7 +911,11 @@ class _NotificationListState extends State<NotificationListPage> {
                       ? '${timeString(model['docTime'])} น.'
                       : '${dateStringToDateStringFormatV2(model['createDate'])}',
                   style: TextStyle(
-                    color: Color(0xFFB7B7B7),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                     fontFamily: 'Arial',
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
@@ -833,7 +945,9 @@ class _NotificationListState extends State<NotificationListPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color(0xFFFFFFFF),
+          backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Colors.white
+              : Color(0xFF292929),
           titlePadding: EdgeInsets.all(0),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -849,7 +963,13 @@ class _NotificationListState extends State<NotificationListPage> {
                         'เลือกแสดงผล',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: Color(0xFF000000),
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                             fontSize: 25,
                             fontWeight: FontWeight.w500),
                       ),
@@ -860,6 +980,11 @@ class _NotificationListState extends State<NotificationListPage> {
                         'assets/images/close_noti_list.png',
                         width: 23,
                         height: 23,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       ),
                     ),
                   ],
@@ -894,7 +1019,11 @@ class _NotificationListState extends State<NotificationListPage> {
                       fontSize: 18.0,
                       fontFamily: 'Kanit',
                       fontWeight: FontWeight.normal,
-                      color: Color(0xFF707070),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF707070)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                   ),
                 ),
@@ -906,7 +1035,11 @@ class _NotificationListState extends State<NotificationListPage> {
                 border: Border(
                   bottom: BorderSide(
                     width: 1.5,
-                    color: Color(0xFF707070),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF707070)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                 ),
               ),
@@ -934,7 +1067,11 @@ class _NotificationListState extends State<NotificationListPage> {
                       fontSize: 18.0,
                       fontFamily: 'Kanit',
                       fontWeight: FontWeight.normal,
-                      color: Color(0xFF707070),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF707070)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                   ),
                 ),
@@ -946,7 +1083,11 @@ class _NotificationListState extends State<NotificationListPage> {
                 border: Border(
                   bottom: BorderSide(
                     width: 1.5,
-                    color: Color(0xFF707070),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF707070)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                 ),
               ),
@@ -980,7 +1121,11 @@ class _NotificationListState extends State<NotificationListPage> {
                       fontSize: 18.0,
                       fontFamily: 'Kanit',
                       fontWeight: FontWeight.normal,
-                      color: Color(0xFF707070),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF707070)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                   ),
                 ),
@@ -992,7 +1137,11 @@ class _NotificationListState extends State<NotificationListPage> {
                 border: Border(
                   bottom: BorderSide(
                     width: 1.5,
-                    color: Color(0xFF707070),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF707070)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                 ),
               ),
@@ -1027,7 +1176,11 @@ class _NotificationListState extends State<NotificationListPage> {
                       fontSize: 18.0,
                       fontFamily: 'Kanit',
                       fontWeight: FontWeight.normal,
-                      color: Color(0xFF707070),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF707070)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                   ),
                 ),
@@ -1039,7 +1192,11 @@ class _NotificationListState extends State<NotificationListPage> {
                 border: Border(
                   bottom: BorderSide(
                     width: 1.5,
-                    color: Color(0xFF707070),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF707070)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                 ),
               ),
@@ -1073,7 +1230,11 @@ class _NotificationListState extends State<NotificationListPage> {
                       fontSize: 18.0,
                       fontFamily: 'Kanit',
                       fontWeight: FontWeight.normal,
-                      color: Color(0xFF707070),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF707070)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                   ),
                 ),
@@ -1085,7 +1246,11 @@ class _NotificationListState extends State<NotificationListPage> {
                 border: Border(
                   bottom: BorderSide(
                     width: 1.5,
-                    color: Color(0xFF707070),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF707070)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                 ),
               ),
@@ -1119,7 +1284,11 @@ class _NotificationListState extends State<NotificationListPage> {
                       fontSize: 18.0,
                       fontFamily: 'Kanit',
                       fontWeight: FontWeight.normal,
-                      color: Color(0xFF707070),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF707070)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                   ),
                 ),

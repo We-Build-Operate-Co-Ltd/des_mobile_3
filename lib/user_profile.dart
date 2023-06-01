@@ -6,6 +6,7 @@ import 'package:des/history_of_service_reservations.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/my_class_all.dart';
 import 'package:des/shared/secure_storage.dart';
+import 'package:des/shared/theme_data.dart';
 import 'package:des/user_profile_edit.dart';
 import 'package:des/user_profile_setting.dart';
 import 'package:des/verify_first_step.dart';
@@ -13,6 +14,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import 'main.dart';
 
 // ignore: must_be_immutable
 class UserProfilePage extends StatefulWidget {
@@ -42,7 +45,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).custom.primary,
       body: SmartRefresher(
         enablePullDown: true,
         enablePullUp: false,
@@ -70,6 +73,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                 ),
                 InkWell(
@@ -84,13 +92,18 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
-                      color: Color(0xFF53327A),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF7A4CB1)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                       decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
               ],
             ),
+            SizedBox(height: 15),
             FutureBuilder(
               future: Future.value(mockDataList),
               builder: (_, snapshot) {
@@ -107,7 +120,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 }
               },
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 33),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -116,6 +129,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                   ),
                 ),
                 InkWell(
@@ -130,13 +149,19 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
-                      color: Color(0xFF53327A),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                       decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
               ],
             ),
+            SizedBox(height: 10),
             FutureBuilder(
               future: _readEventcalendar(),
               builder: (context, snapshot) => Row(
@@ -146,6 +171,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     .toList(),
               ),
             ),
+            SizedBox(height: 33),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -154,6 +180,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                   ),
                 ),
                 InkWell(
@@ -168,14 +200,19 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
-                      color: Color(0xFF53327A),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                       decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 10),
             _buildHistoryOfServiceReservations(
                 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน',
                 'อำเภอบางใหญ่ นนทบุรี',
@@ -198,9 +235,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Widget _buildHistoryOfServiceReservations(
       String title, String title2, int hour, String date, String time) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: Color(0xFFFEF7FF),
+        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Color(0xFFB325F8).withOpacity(0.10)
+                                : Color(0xFF292929),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -215,6 +254,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
@@ -224,17 +269,29 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                SizedBox(height: 7),
+                SizedBox(height: 11),
                 Row(
                   children: [
                     Image.asset(
-                      'assets/images/calendar_check.png',
+                      'assets/images/calendar.png',
                       height: 10,
                       width: 10,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                     ),
                     SizedBox(width: 5),
                     Text(
@@ -242,14 +299,25 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       style: TextStyle(
                         fontSize: 7,
                         fontWeight: FontWeight.w400,
-                        color: Color(0xFF53327A),
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    SizedBox(width: 20),
                     Image.asset(
-                      'assets/images/time_user_profile_page.png',
+                      'assets/images/clock.png',
                       height: 10,
                       width: 10,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                     ),
                     SizedBox(width: 5),
                     Text(
@@ -257,7 +325,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       style: TextStyle(
                         fontSize: 7,
                         fontWeight: FontWeight.w400,
-                        color: Color(0xFF53327A),
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                       ),
                     ),
                   ],
@@ -271,7 +344,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w500,
-              color: Color(0xFFB325F8),
+              color:  MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Color(0xFFB325F8)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
             ),
           ),
         ],
@@ -292,7 +370,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         ),
       ),
       child: SizedBox(
-        height: screenSize,
+        // height: screenSize,
         width: screenSize,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -306,6 +384,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 width: screenSize,
               ),
             ),
+            SizedBox(height: 10),
             SizedBox(
               width: screenSize,
               child: Text(
@@ -313,6 +392,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
@@ -350,6 +435,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 width: screenSize,
               ),
             ),
+            SizedBox(height: 10),
             SizedBox(
               width: 170,
               child: Text(
@@ -357,44 +443,77 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.black
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 4,
               ),
             ),
-            SizedBox(height: 10),
-            Stack(
+            SizedBox(height: 23),
+            Row(
               children: [
-                Container(
-                  width: 80,
-                  height: 9,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(19),
-                    border: Border.all(
-                      color: Color(0x80B325F8),
-                    ),
+                Flexible(
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: 80,
+                        height: 9,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(19),
+                          border: Border.all(
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0x80B325F8).withOpacity(0.47)
+                                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 80 * study / 100,
+                        height: 9,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(19),
+                          color: MyApp.themeNotifier.value == ThemeModeThird.light
+                              ? Color(0xFFB325F8)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                          // border: Border.all(
+                          //   color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          //             ? Color(0xFFB325F8)
+                          //             : MyApp.themeNotifier.value ==
+                          //                     ThemeModeThird.dark
+                          //                 ? Colors.white
+                          //                 : Color(0xFFFFFD57),
+                          // ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Container(
-                  width: 80 * study / 100,
-                  height: 9,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(19),
-                    color: Color(0xFFB325F8),
-                    border: Border.all(
-                      color: Color(0xFFB325F8),
+                SizedBox(width: 5),
+                Flexible(
+                  child: Text(
+                    'เรียนแล้ว $study%',
+                    style: TextStyle(
+                      fontSize: 9,
+                      fontWeight: FontWeight.w300,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.black
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
                     ),
                   ),
                 ),
               ],
-            ),
-            Text(
-              'เรียนแล้ว $study%',
-              style: TextStyle(
-                fontSize: 9,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
+            )
           ],
         ),
       ),
@@ -449,6 +568,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -470,7 +595,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         alignment: Alignment.topRight,
                         child: Image.asset(
                           "assets/images/settings.png",
-                          color: Color(0xFF000000),
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
                           height: 18,
                           width: 17,
                         ),
@@ -483,6 +613,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                 ),
                 SizedBox(height: 5),
@@ -493,7 +628,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       width: 73,
                       height: 19,
                       decoration: BoxDecoration(
-                        color: Color(0xffFEF7FF),
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFFB325F8).withOpacity(0.10)
+                            : Color(0xFF292929),
                         borderRadius: BorderRadius.circular(12.5),
                       ),
                       child: Text(
@@ -501,7 +638,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         style: TextStyle(
                           fontSize: 9,
                           fontWeight: FontWeight.w400,
-                          color: Color(0xffB325F8),
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFF7A4CB1)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
                         ),
                       ),
                     ),
@@ -524,14 +666,47 @@ class _UserProfilePageState extends State<UserProfilePage> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12.5),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Color(0x1AB325F8),
-        ),
+            borderRadius: BorderRadius.circular(10),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0x1AB325F8)
+                : Color(0xFF292929)
+
+            // Color(0x1AB325F8),
+            ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset('assets/images/announce_user_profile.png',
-                height: 55, width: 55),
+            // Image.asset('assets/images/announce_user_profile.png',
+            //     height: 55, width: 55,
+            //     ),
+
+            Container(
+              height: 55,
+              width: 55,
+              padding: EdgeInsets.all(11),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFFF7D930)
+                    : Colors.black,
+                border: Border.all(
+                  width: 1,
+                  style: BorderStyle.solid,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFF7D930)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                ),
+              ),
+              child: Image.asset(
+                'assets/images/announce.png',
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : Colors.white,
+              ),
+            ),
+            // announce.png
             SizedBox(width: 20),
             Expanded(
               child: Column(
@@ -542,6 +717,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                   ),
                   Text(
@@ -549,6 +729,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                   ),
                   SizedBox(height: 8),
@@ -556,21 +741,47 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     height: 32,
                     width: 160,
                     decoration: BoxDecoration(
-                      color: Color(0xFF7A4CB1),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF7A4CB1)
+                          : Colors.black,
+                      border: Border.all(
+                        width: 1,
+                        style: BorderStyle.solid,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                      ),
                       borderRadius: BorderRadius.circular(94),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/images/next_user_profile.png',
-                            height: 16, width: 16),
+                        Image.asset(
+                          'assets/images/next_user_profile.png',
+                          height: 16,
+                          width: 16,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.white
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        ),
                         SizedBox(width: 5),
                         Text(
                           'ยืนยันตัวตน',
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w400,
-                            color: Color(0xFFFFFFFF),
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.white
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                           ),
                         ),
                       ],
