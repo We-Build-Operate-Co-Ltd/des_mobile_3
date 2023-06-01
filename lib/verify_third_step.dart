@@ -9,6 +9,7 @@ import 'package:des/verify_last_step_page.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // ignore: library_prefixes
 import 'package:flutter_face_api/face_api.dart' as Regula;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -222,7 +223,11 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
-        keyboardType: TextInputType.number,
+        // keyboardType: TextInputType.number,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          // LengthLimitingTextInputFormatter(13),
+        ],
         maxLength: 1,
         decoration: InputDecoration(
           counter: const Offstage(),

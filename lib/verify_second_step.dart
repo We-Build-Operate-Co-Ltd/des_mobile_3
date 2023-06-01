@@ -70,7 +70,7 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                   children: [
                     TextFormField(
                       controller: txtIdCard,
-                      keyboardType: TextInputType.number,
+                      // keyboardType: TextInputType.number,
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                         LengthLimitingTextInputFormatter(13),
@@ -635,7 +635,7 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    txtIdCard.dispose();
+    // txtIdCard.dispose();
     txtFullName.dispose();
     txtDate.dispose();
     txtAge.dispose();

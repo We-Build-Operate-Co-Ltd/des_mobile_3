@@ -86,7 +86,7 @@ class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
                     alignment: Alignment.center,
                     margin: const EdgeInsets.symmetric(horizontal: 15),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(25),
                       color: const Color(0xFF7A4CB1),
                     ),
                     child: const Text(
