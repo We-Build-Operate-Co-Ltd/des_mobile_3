@@ -161,12 +161,7 @@ class _MenuState extends State<Menu> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Image.asset(
-                                    'assets/images/more_2.png',
-                                    width: 14.88,
-                                    height: 14.88,
-                                  ),
-                                  const SizedBox(width: 10),
+                               
                                   Text(
                                     'ดำเนินการต่อ',
                                     style: TextStyle(

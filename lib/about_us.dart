@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:des/main.dart';
+import 'package:des/shared/theme_data.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -16,21 +18,48 @@ class AboutUsPage extends StatefulWidget {
 class _AboutUsPageState extends State<AboutUsPage> {
   Completer<GoogleMapController> _mapController = Completer();
 
+  Color colorTheme = Colors.transparent;
+  Color backgroundTheme = Colors.transparent;
+  Color buttonTheme = Colors.transparent;
+  Color textTheme = Colors.transparent;
+
+  @override
+  void initState() {
+    //  themeColor
+    if (MyApp.themeNotifier.value == ThemeModeThird.light) {
+      backgroundTheme = Colors.white;
+      colorTheme = Color(0xFF7A4CB1);
+      buttonTheme = Color(0xFF7A4CB1);
+      textTheme = Colors.black;
+    } else if (MyApp.themeNotifier.value == ThemeModeThird.dark) {
+      backgroundTheme = Colors.black;
+      colorTheme = Colors.white;
+      buttonTheme = Colors.black;
+      textTheme = Colors.white;
+    } else {
+      backgroundTheme = Colors.black;
+      colorTheme = Color(0xFFFFFD57);
+      buttonTheme = Colors.black;
+      textTheme = Color(0xFFFFFD57);
+    }
+    //  themeColor
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundTheme,
       body: Stack(
         children: [
           Positioned(
             top: 0,
             right: 0,
-            child: Container(
-              child: Image.asset(
-                'assets/images/bg_about_us.png',
-                width: 290,
-                height: 186,
-                alignment: Alignment.centerRight,
-              ),
+            child: Image.asset(
+              'assets/images/bg_logo_about_us.png',
+              width: 290,
+              height: 186,
+              alignment: Alignment.centerRight,
             ),
           ),
           Positioned.fill(
@@ -42,14 +71,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: Image.asset(
-                      'assets/images/back.png',
-                      height: 40,
-                      width: 40,
-                    ),
-                  ),
+                  child: _backButton(context),
                 ),
                 Image.asset(
                   'assets/images/logo_about_us.png',
@@ -62,32 +84,40 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20,
-                    color: Color(0xFF7A4CB1),
+                    color: colorTheme,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 SizedBox(height: 8),
                 Center(
                   child: Container(
-                    height: 19,
-                    width: 164,
+                    height: 20,
+                    width: 170,
                     padding: EdgeInsets.all(3),
                     decoration: BoxDecoration(
-                      color: Color(0xFFFEF7FF),
-                      borderRadius: BorderRadius.circular(12.5),
-                    ),
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFFFEF7FF)
+                            : Colors.black,
+                        borderRadius: BorderRadius.circular(12.5),
+                        border: Border.all(
+                          color:
+                              MyApp.themeNotifier.value == ThemeModeThird.light
+                                  ? Color(0xFFFEF7FF)
+                                  : colorTheme,
+                        )),
                     child: Row(
                       children: [
                         Image.asset(
                           'assets/images/pin_about_us.png',
                           height: 11,
                           width: 11,
+                          color: textTheme,
                         ),
                         SizedBox(width: 5),
                         Text(
                           '120 หมู่ 3 เขตหลักสี่ กรุงเทพ 10210',
                           style: TextStyle(
-                            color: Color(0xFF000000),
+                            color: textTheme,
                             fontSize: 9,
                             fontWeight: FontWeight.w400,
                           ),
@@ -104,6 +134,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
+                      color: textTheme,
                     ),
                   ),
                 ),
@@ -141,6 +172,25 @@ class _AboutUsPageState extends State<AboutUsPage> {
     );
   }
 
+  Widget _backButton(BuildContext context) {
+    return InkWell(
+      onTap: () => Navigator.pop(context),
+      child: Container(
+        height: 40,
+        width: 40,
+        padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: buttonTheme,
+          border: Border.all(color: colorTheme),
+        ),
+        child: Image.asset(
+          'assets/images/back_arrow.png',
+        ),
+      ),
+    );
+  }
+
   Widget googleMap(double lat, double lng) {
     return GoogleMap(
       myLocationEnabled: true,
@@ -173,10 +223,16 @@ class _AboutUsPageState extends State<AboutUsPage> {
   Widget rowContactInformation(String title, String title2, String image) {
     return Row(
       children: [
-        Image.asset(
-          image,
+        Container(
+          padding: EdgeInsets.all(7),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(45),
+            border: Border.all(color: colorTheme),
+            color: buttonTheme,
+          ),
           height: 45,
           width: 45,
+          child: Image.asset(image),
         ),
         SizedBox(width: 15),
         Expanded(
@@ -189,6 +245,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
+                  color: textTheme,
                 ),
               ),
               Text(
@@ -196,16 +253,37 @@ class _AboutUsPageState extends State<AboutUsPage> {
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
+                  color: textTheme,
                 ),
               )
             ],
           ),
         ),
         SizedBox(width: 15),
-        Image.asset(
-          'assets/images/next_arrow_about_us.png',
-          height: 50,
-          width: 50,
+        Container(
+          height: 45,
+          width: 45,
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: backgroundTheme,
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Colors.transparent
+                  : colorTheme,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.15),
+                blurRadius: 4,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Image.asset(
+            'assets/images/next_arrow_about_us.png',
+            color: colorTheme,
+          ),
         ),
       ],
     );
