@@ -113,21 +113,25 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                           //   height: 35,
                           //   alignment: Alignment.centerLeft,
                           // ),
-                          GestureDetector(
-                            onTap: () {
-                              buildModalSwitch(context);
-                            },
-                            child: Image.asset(
-                              MyApp.themeNotifier.value == ThemeModeThird.light
-                                  ? 'assets/images/icon_blind.png'
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? 'assets/images/icon_blind_d.png'
-                                      : 'assets/images/icon_blind_d-y.png',
-                              height: 35,
-                              width: 35,
-                            ),
-                          ),
+
+
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     buildModalSwitch(context);
+                          //   },
+                          //   child: Image.asset(
+                          //     MyApp.themeNotifier.value == ThemeModeThird.light
+                          //         ? 'assets/images/icon_blind.png'
+                          //         : MyApp.themeNotifier.value ==
+                          //                 ThemeModeThird.dark
+                          //             ? 'assets/images/icon_blind_d.png'
+                          //             : 'assets/images/icon_blind_d-y.png',
+                          //     height: 35,
+                          //     width: 35,
+                          //   ),
+                          // ),
+
+                          
                           Text(
                             'เข้าสู่ระบบ',
                             style: TextStyle(
