@@ -1,7 +1,10 @@
+import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:des/login_first.dart';
+
+import 'main.dart';
 
 class OtpEmailForgotPasswordPage extends StatefulWidget {
   @override
@@ -117,22 +120,29 @@ class _OtpEmailForgotPasswordPageState
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/images/bg_login_page.png"),
+          image: AssetImage(
+            MyApp.themeNotifier.value == ThemeModeThird.light
+                ? "assets/images/bg_login_page.png"
+                : "assets/images/bg_login_page-dark.png",
+          ),
           fit: BoxFit.cover,
         ),
       ),
       child: Scaffold(
         // appBar: header(context, goBack),
         backgroundColor: Colors.transparent,
-        body: ListView(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: 120),
+            // SizedBox(height: 120),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Card(
-                color: Colors.white,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.white
+                    : Colors.black,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
                 elevation: 5,
                 child: Container(
@@ -151,6 +161,13 @@ class _OtpEmailForgotPasswordPageState
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w500,
+                                  color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Colors.black
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
                                 ),
                               ),
                               GestureDetector(
@@ -161,7 +178,13 @@ class _OtpEmailForgotPasswordPageState
                                   'assets/images/close_noti_list.png',
                                   height: 18.52,
                                   width: 18.52,
-                                  color: Colors.black,
+                                  color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Colors.black
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
                                 ),
                               ),
                             ],
@@ -171,6 +194,13 @@ class _OtpEmailForgotPasswordPageState
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
+                              color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Colors.black
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
                             ),
                           ),
                           SizedBox(height: 10),
@@ -197,6 +227,13 @@ class _OtpEmailForgotPasswordPageState
                                 fontSize: 13,
                                 fontWeight: FontWeight.w400,
                                 decoration: TextDecoration.underline,
+                                color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Colors.black
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
                               ),
                             ),
                           ),
@@ -215,13 +252,22 @@ class _OtpEmailForgotPasswordPageState
                               width: double.infinity,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(23),
-                                color: Color(0xFF7A4CB1),
+                                color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Color(0xFF7A4CB1)
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                               ),
                               child: Text(
                                 "ดำเนินการต่อ",
                                 style: TextStyle(
                                   fontSize: 15,
-                                  color: Color(0xFFFFFFFF),
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Colors.white
+                                      : Colors.black,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),

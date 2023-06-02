@@ -17,8 +17,8 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
-            ? Colors.white
-            : Color(0xFF292929),
+          ? Colors.white
+          : Colors.black,
       body: SafeArea(
         child: GestureDetector(
             onTap: () {
@@ -32,8 +32,8 @@ class _ChatPageState extends State<ChatPage> {
   _header() {
     return Container(
       color: MyApp.themeNotifier.value == ThemeModeThird.light
-            ? Color(0xFFfef7ff)
-            : Colors.black,
+          ? Color(0xFFfef7ff)
+          : Colors.black,
       child: Column(
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -42,14 +42,14 @@ class _ChatPageState extends State<ChatPage> {
             padding: EdgeInsets.only(top: 10),
             decoration: BoxDecoration(
               color: MyApp.themeNotifier.value == ThemeModeThird.light
-            ? Colors.white
-            : Color(0xFF292929),
+                  ? Colors.white
+                  : Colors.black,
               // borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
                   color: MyApp.themeNotifier.value == ThemeModeThird.light
-            ? Color(0xFFDADADA)
-            : Color(0xFF292929).withOpacity(1),
+                      ? Color(0xFFDADADA)
+                      : Colors.black,
                   blurRadius: 6,
                   offset: Offset(4, 4), // Shadow position
                 ),
@@ -67,31 +67,27 @@ class _ChatPageState extends State<ChatPage> {
                         height: 70,
                         width: 70,
                         decoration: BoxDecoration(
-                          color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF7F34EE)
-                                : Colors.black,
+                          color:
+                              MyApp.themeNotifier.value == ThemeModeThird.light
+                                  ? Color(0xFF7F34EE)
+                                  : Color(0xFF7D7D7D),
                           shape: BoxShape.circle,
-                          border: Border.all(
-                            width: 1,
-                            style: BorderStyle.solid,
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.black
-                                    : Color(0xFFFFFD57),
-                          )
+                          // border: Border.all(
+                          //   width: 1,
+                          //   style: BorderStyle.solid,
+                          //   color: MyApp.themeNotifier.value ==
+                          //           ThemeModeThird.light
+                          //       ? Color(0xFF7A4CB1)
+                          //       : MyApp.themeNotifier.value ==
+                          //               ThemeModeThird.dark
+                          //           ? Colors.black
+                          //           : Color(0xFFFFFD57),
+                          // )
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),
-                          child: Image.asset(
-                            'assets/chat.png',
-                            height: 26,
-                            width: 26,
-                            color: Colors.white
-                          ),
+                          child: Image.asset('assets/chat.png',
+                              height: 26, width: 26, color: Colors.white),
                         ),
                       ),
                       SizedBox(
@@ -107,12 +103,12 @@ class _ChatPageState extends State<ChatPage> {
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
                               color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                           ),
                           // Expanded(child: SizedBox(),),
@@ -122,12 +118,12 @@ class _ChatPageState extends State<ChatPage> {
                               fontSize: 11,
                               fontWeight: FontWeight.w400,
                               color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                           ),
                         ],
@@ -141,13 +137,11 @@ class _ChatPageState extends State<ChatPage> {
                       child: Icon(
                         Icons.close,
                         size: 35,
-                        color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       )),
                 ],
               ),
@@ -171,8 +165,8 @@ class _ChatPageState extends State<ChatPage> {
             height: 20,
             width: MediaQuery.of(context).size.width,
             color: MyApp.themeNotifier.value == ThemeModeThird.light
-            ? Color(0xFFFEF7FF)
-            : Colors.black,
+                ? Color(0xFFFEF7FF)
+                : Color(0xFF2F2F2F),
             child: ListView(
               children: [
                 Padding(
@@ -183,22 +177,22 @@ class _ChatPageState extends State<ChatPage> {
                         height: 60,
                         width: 60,
                         decoration: BoxDecoration(
-                          color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF7F34EE)
-                                : Colors.black,
+                          color:
+                              MyApp.themeNotifier.value == ThemeModeThird.light
+                                  ? Color(0xFF7F34EE)
+                                  : Color(0xFF7D7D7D),
                           shape: BoxShape.circle,
-                          border: Border.all(
-                            width: 1,
-                            style: BorderStyle.solid,
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.black
-                                    : Color(0xFFFFFD57),
-                          )
+                          // border: Border.all(
+                          //   width: 1,
+                          //   style: BorderStyle.solid,
+                          //   color: MyApp.themeNotifier.value ==
+                          //           ThemeModeThird.light
+                          //       ? Color(0xFF7A4CB1)
+                          //       : MyApp.themeNotifier.value ==
+                          //               ThemeModeThird.dark
+                          //           ? Colors.black
+                          //           : Color(0xFFFFFD57),
+                          // )
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),
@@ -224,7 +218,10 @@ class _ChatPageState extends State<ChatPage> {
                               bottomLeft: Radius.circular(20),
                               bottomRight: Radius.circular(10),
                             ),
-                            color: Color(0xFF7F34EE).withOpacity(0.15),
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7F34EE).withOpacity(0.15)
+                                : Color(0xFF7D7D7D),
                             // shape: BoxShape.circle,
                           ),
                           child: Padding(
@@ -233,6 +230,13 @@ class _ChatPageState extends State<ChatPage> {
                               'สวัสดีค่ะ ท่านต้องการความช่วยเหลือ\nด้านไหนสามารถเลือกหัวข้อได้ หรือ\nจะส่งเป็นข้อความก็ได้ค่ะ',
                               style: TextStyle(
                                 fontSize: 11,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.black
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
                               ),
                             ),
                           ),
@@ -257,10 +261,19 @@ class _ChatPageState extends State<ChatPage> {
                               Radius.circular(30),
                             ),
                             border: Border.all(
-                                color: Color(0xFF7F34EE),
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF7F34EE)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
                                 width: 1,
                                 style: BorderStyle.solid),
-                            color: Colors.white
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.white
+                                : Colors.black
                             // shape: BoxShape.circle,
                             ),
                         child: Padding(
@@ -269,6 +282,13 @@ class _ChatPageState extends State<ChatPage> {
                             'การจองใช้บริการ',
                             style: TextStyle(
                               fontSize: 11,
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                           ),
                         ),
@@ -292,10 +312,19 @@ class _ChatPageState extends State<ChatPage> {
                               Radius.circular(30),
                             ),
                             border: Border.all(
-                                color: Color(0xFF7F34EE),
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF7F34EE)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
                                 width: 1,
                                 style: BorderStyle.solid),
-                            color: Colors.white
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.white
+                                : Colors.black
                             // shape: BoxShape.circle,
                             ),
                         child: Padding(
@@ -304,6 +333,13 @@ class _ChatPageState extends State<ChatPage> {
                             'การยืนยันตัวตน',
                             style: TextStyle(
                               fontSize: 11,
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                           ),
                         ),
@@ -327,10 +363,19 @@ class _ChatPageState extends State<ChatPage> {
                               Radius.circular(30),
                             ),
                             border: Border.all(
-                                color: Color(0xFF7F34EE),
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF7F34EE)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
                                 width: 1,
                                 style: BorderStyle.solid),
-                            color: Colors.white
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.white
+                                : Colors.black
                             // shape: BoxShape.circle,
                             ),
                         child: Padding(
@@ -339,6 +384,13 @@ class _ChatPageState extends State<ChatPage> {
                             'สมัครสมาชิก',
                             style: TextStyle(
                               fontSize: 11,
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                           ),
                         ),
@@ -351,12 +403,14 @@ class _ChatPageState extends State<ChatPage> {
           ),
         ),
         Flexible(
-            flex: 2,
+            flex: 1,
             child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 // height: 20,
                 width: MediaQuery.of(context).size.width,
-                color: Colors.white,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.white
+                    : Colors.black,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -365,14 +419,44 @@ class _ChatPageState extends State<ChatPage> {
                       child: TextFormField(
                         // obscureText: showTxtPasswordOld,
                         style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontFamily: 'Kanit',
-                          fontSize: 15.0,
-                        ),
+                fontFamily: 'Kanit',
+                fontSize: 15,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+              cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFF7A4CB1)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
                         decoration: InputDecoration(
+                          labelStyle: TextStyle(
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF707070)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal,
+                          ),
+                          hintStyle: TextStyle(
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF707070)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal,
+                          ),
                           filled: true,
-                          fillColor: Colors.white,
+                          fillColor: Colors.transparent,
                           contentPadding:
                               EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
                           hintText: 'ความต้องการของท่าน',
@@ -403,6 +487,13 @@ class _ChatPageState extends State<ChatPage> {
                         'assets/send.png',
                         height: 26,
                         width: 26,
+                        color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF707070)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                       ),
                     ),
                   ],

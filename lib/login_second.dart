@@ -8,10 +8,13 @@ import 'package:des/shared/google_firebase.dart';
 import 'package:des/shared/line.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/facebook_firebase.dart';
+import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import 'main.dart';
 
 class LoginSecondPage extends StatefulWidget {
   const LoginSecondPage({
@@ -58,7 +61,11 @@ class _LoginSecondPageState extends State<LoginSecondPage>
             alignment: Alignment.center,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/bg_login_page.png"),
+                image: AssetImage(
+                  MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? "assets/images/bg_login_page.png"
+                      : "assets/images/bg_login_page-dark.png",
+                ),
                 fit: BoxFit.cover,
               ),
             ),
@@ -69,7 +76,9 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                     height: 490,
                     padding: EdgeInsets.only(left: 20, right: 20, top: 10),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.white
+                          : Colors.black,
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Form(
@@ -89,6 +98,13 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w500,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Colors.black
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                                 ),
                               ),
                               GestureDetector(
@@ -99,7 +115,13 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                                   'assets/images/close_noti_list.png',
                                   height: 18.52,
                                   width: 18.52,
-                                  color: Colors.black,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Colors.black
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                                 ),
                               ),
                             ],
@@ -112,6 +134,23 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                                 context,
                                 hintText: 'อีเมล',
                               ),
+                              style: TextStyle(
+                                fontFamily: 'Kanit',
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.black
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                              ),
+                              cursorColor: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFF7A4CB1)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'กรอกอีเมล';
@@ -156,6 +195,13 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                                         style: TextStyle(
                                           fontSize: 17,
                                           fontWeight: FontWeight.w400,
+                                          color: MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.light
+                                              ? Colors.black
+                                              : MyApp.themeNotifier.value ==
+                                                      ThemeModeThird.dark
+                                                  ? Colors.white
+                                                  : Color(0xFFFFFD57),
                                         ),
                                       ),
                                       Text(
@@ -163,7 +209,13 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                                         style: TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w400,
-                                          color: Color(0xFF707070),
+                                          color: MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.light
+                                              ? Color(0xFF707070)
+                                              : MyApp.themeNotifier.value ==
+                                                      ThemeModeThird.dark
+                                                  ? Colors.white
+                                                  : Color(0xFFFFFD57),
                                         ),
                                       ),
                                     ],
@@ -183,6 +235,23 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                                   passwordVisibility = !passwordVisibility;
                                 });
                               }),
+                              style: TextStyle(
+                                fontFamily: 'Kanit',
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.black
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                              ),
+                              cursorColor: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFF7A4CB1)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'กรอกรหัสผ่าน';
@@ -206,8 +275,24 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                             child: _buildButtonLogin(
                               'assets/images/line_circle.png',
                               'เข้าใช้ผ่าน Line',
-                              color: Color(0xFF06C755),
-                              colorTitle: Color(0xFFFFFFFF),
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFF06C755)
+                                  : Colors.black,
+                              colorTitle: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.white
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                              colorBorder: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFF06C755)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                           ),
                           SizedBox(height: 10),
@@ -216,8 +301,24 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                             child: _buildButtonLogin(
                               'assets/images/logo_facebook_login_page.png',
                               'เข้าใช้ผ่าน Facebook',
-                              color: Color(0xFF227BEF),
-                              colorTitle: Color(0xFFFFFFFF),
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFF227BEF)
+                                  : Colors.black,
+                              colorTitle: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.white
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                              colorBorder: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFF227BEF)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                           ),
                           SizedBox(height: 10),
@@ -226,7 +327,20 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                             child: _buildButtonLogin(
                               'assets/images/logo_google_login_page.png',
                               'เข้าใช้ผ่าน Google',
-                              colorBorder: Color(0xFFE4E4E4),
+                              colorTitle: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                              colorBorder: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFFE4E4E4)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                           ),
                           Row(
@@ -237,6 +351,13 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Colors.black
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                                 ),
                               ),
                               SizedBox(width: 8),
@@ -252,7 +373,13 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
-                                    color: Color(0xFFB325F8),
+                                    color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Color(0xFFB325F8)
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),
@@ -336,7 +463,11 @@ class _LoginSecondPageState extends State<LoginSecondPage>
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             decoration: BoxDecoration(
               border: Border.all(
-                color: Color(0x807A4CB1),
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0x807A4CB1)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
               ),
               borderRadius: BorderRadius.circular(15),
             ),
@@ -345,7 +476,11 @@ class _LoginSecondPageState extends State<LoginSecondPage>
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
-                color: Color(0x807A4CB1),
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0x807A4CB1)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
               ),
             ),
           ),
@@ -368,14 +503,20 @@ class _LoginSecondPageState extends State<LoginSecondPage>
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: Color(0xFF7A4CB1),
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0x807A4CB1)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
             ),
             child: Text(
               'ดำเนินการต่อ',
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
-                color: Color(0xFFFFFFFF),
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.white
+                    : Colors.black,
               ),
             ),
           ),
@@ -390,7 +531,11 @@ class _LoginSecondPageState extends State<LoginSecondPage>
         Expanded(
           child: Container(
             height: 1,
-            color: Color(0x4D707070),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0x4D707070)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
           ),
         ),
         Padding(
@@ -400,14 +545,22 @@ class _LoginSecondPageState extends State<LoginSecondPage>
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w300,
-              color: Color(0xFF707070),
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFF707070)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
             ),
           ),
         ),
         Expanded(
           child: Container(
             height: 1,
-            color: Color(0x4D707070),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0x4D707070)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
           ),
         ),
       ],
@@ -418,25 +571,50 @@ class _LoginSecondPageState extends State<LoginSecondPage>
           {String hintText = ''}) =>
       InputDecoration(
         label: Text(hintText),
-        labelStyle: const TextStyle(
-          color: Color(0xFF707070),
+        labelStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+        hintStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
         ),
         // hintText: hintText,
         filled: true,
         fillColor: Colors.transparent,
         contentPadding: const EdgeInsets.fromLTRB(15.0, 5.0, 5.0, 5.0),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(color: Color(0xFFE6B82C)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(
-            color: Colors.black.withOpacity(0.2),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black.withOpacity(0.2)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Color(0xFF707070)
+                    : Color(0xFFFFFD57),
           ),
         ),
         errorStyle: const TextStyle(
@@ -454,14 +632,25 @@ class _LoginSecondPageState extends State<LoginSecondPage>
   }) =>
       InputDecoration(
         label: Text(labelText),
-        labelStyle: const TextStyle(
-          color: Color(0xFF707070),
+        labelStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+        hintStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
         ),
         hintText: hintText,
-        hintStyle: const TextStyle(
-          color: Color(0xFF707070),
-          fontSize: 8,
-        ),
         suffixIcon: GestureDetector(
           onTap: () {
             suffixTap!();
@@ -470,21 +659,36 @@ class _LoginSecondPageState extends State<LoginSecondPage>
               ? const Icon(Icons.visibility_off)
               : const Icon(Icons.visibility),
         ),
+        suffixIconColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Color(0xFF7A4CB1)
+            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                ? Colors.white
+                : Color(0xFFFFFD57),
         filled: true,
         fillColor: Colors.transparent,
         contentPadding: const EdgeInsets.fromLTRB(15.0, 5.0, 5.0, 5.0),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(color: Color(0xFFE6B82C)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(
-            color: Colors.black.withOpacity(0.2),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black.withOpacity(0.2)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Color(0xFF707070)
+                    : Color(0xFFFFFD57),
           ),
         ),
         errorStyle: const TextStyle(

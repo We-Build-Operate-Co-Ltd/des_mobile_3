@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'main.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({
@@ -55,7 +58,11 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/images/bg_login_page.png"),
+              image: AssetImage(
+                MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? "assets/images/bg_login_page.png"
+                    : "assets/images/bg_login_page-dark.png",
+              ),
               fit: BoxFit.cover,
             ),
           ),
@@ -63,7 +70,9 @@ class _RegisterPageState extends State<RegisterPage> {
             padding: EdgeInsets.all(10),
             alignment: Alignment.center,
             child: Card(
-              color: Colors.white,
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Colors.white
+                  : Colors.black,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -72,7 +81,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 padding:
                     EdgeInsets.only(top: 25, left: 20, right: 25, bottom: 20),
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
+                      : Colors.black,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Form(
@@ -95,6 +106,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w500,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Colors.black
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                                 ),
                               ),
                               GestureDetector(
@@ -109,7 +127,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                     'assets/images/close_noti_list.png',
                                     height: 18.52,
                                     width: 18.52,
-                                    color: Colors.black,
+                                    color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Colors.black
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
                                   ),
                                 ),
                               ),
@@ -120,6 +144,13 @@ class _RegisterPageState extends State<RegisterPage> {
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                           ),
                           SizedBox(height: 10),
@@ -133,6 +164,23 @@ class _RegisterPageState extends State<RegisterPage> {
                               context,
                               hintText: 'อีเมล',
                             ),
+                            style: TextStyle(
+                              fontFamily: 'Kanit',
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                            ),
+                            cursorColor: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                             validator: (model) {
                               String pattern =
                                   r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -160,6 +208,23 @@ class _RegisterPageState extends State<RegisterPage> {
                               suffixTap: () => setState(() =>
                                   passwordVisibility = !passwordVisibility),
                             ),
+                            style: TextStyle(
+                              fontFamily: 'Kanit',
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                            ),
+                            cursorColor: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                             validator: (model) {
                               if (model!.isEmpty) {
                                 return 'กรุณากรอกรหัสผ่าน.';
@@ -185,6 +250,23 @@ class _RegisterPageState extends State<RegisterPage> {
                                   confirmPasswordVisibility =
                                       !confirmPasswordVisibility),
                             ),
+                            style: TextStyle(
+                              fontFamily: 'Kanit',
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                            ),
+                            cursorColor: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                             validator: (model) {
                               if (model!.isEmpty) {
                                 return 'กรุณากรอกยืนยันรหัสผ่าน.';
@@ -207,6 +289,23 @@ class _RegisterPageState extends State<RegisterPage> {
                               context,
                               hintText: 'หมายเลขโทรศัพท์',
                             ),
+                            style: TextStyle(
+                              fontFamily: 'Kanit',
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                            ),
+                            cursorColor: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                             validator: (model) {
                               String pattern = r'(^(?:[+0]9)?[0-9]{9,10}$)';
                               RegExp regex = new RegExp(pattern);
@@ -223,6 +322,23 @@ class _RegisterPageState extends State<RegisterPage> {
                               context,
                               hintText: 'ชื่อ',
                             ),
+                            style: TextStyle(
+                              fontFamily: 'Kanit',
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                            ),
+                            cursorColor: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                             validator: (model) {
                               if (model!.isEmpty) {
                                 return 'กรุณากรอกชื่อ.';
@@ -237,6 +353,23 @@ class _RegisterPageState extends State<RegisterPage> {
                               context,
                               hintText: 'นามสกุล',
                             ),
+                            style: TextStyle(
+                              fontFamily: 'Kanit',
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                            ),
+                            cursorColor: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                             validator: (model) {
                               if (model!.isEmpty) {
                                 return 'กรุณากรอกนามสกุล.';
@@ -249,7 +382,14 @@ class _RegisterPageState extends State<RegisterPage> {
                             'เพศ',
                             style: TextStyle(
                               fontSize: 13,
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w500,
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                           ),
                           SizedBox(height: 6),
@@ -265,19 +405,26 @@ class _RegisterPageState extends State<RegisterPage> {
                               itemCount: _genderList.length,
                             ),
                           ),
-                          SizedBox(height: 10),
+                          SizedBox(height: 20),
                           Text(
                             'ช่วงอายุ',
                             style: TextStyle(
                               fontSize: 13,
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w500,
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                           ),
                           SizedBox(height: 6),
-                          SizedBox(
-                            height: 20,
-                            width: double.infinity,
-                          ),
+                          // SizedBox(
+                          //   height: 20,
+                          //   width: double.infinity,
+                          // ),
                           SizedBox(
                             width: double.infinity,
                             child: Wrap(
@@ -317,13 +464,19 @@ class _RegisterPageState extends State<RegisterPage> {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(23),
-          color: Color(0xFF7A4CB1),
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF7A4CB1)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
         ),
         child: Text(
           'สมัครสมาชิก',
           style: TextStyle(
             fontSize: 15,
-            color: Color(0xFFFFFFFF),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.white
+                : Colors.black,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -332,8 +485,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _radioGender(String value) {
-    Color border = _gender == value ? Color(0xFFA924F0) : Colors.grey;
-    Color active = _gender == value ? Color(0xFFA924F0) : Colors.white;
+    // Color border = _gender == value ? Color(0xFFA924F0) : Colors.grey;
+    // Color active = _gender == value ? Color(0xFFA924F0) : Colors.white;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -346,14 +499,24 @@ class _RegisterPageState extends State<RegisterPage> {
             height: 20,
             width: 20,
             decoration: BoxDecoration(
-              border: Border.all(width: 1, color: border),
+              border: Border.all(
+                  width: 1,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? (_gender == value ? Color(0xFFA924F0) : Colors.grey)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57)),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Container(
               margin: EdgeInsets.all(4),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: active,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? (_gender == value ? Color(0xFFA924F0) : Colors.grey)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? (_gender == value ? Colors.white : Colors.black)
+                        : (_gender == value ? Color(0xFFFFFD57) : Colors.black),
               ),
             ),
           ),
@@ -362,6 +525,11 @@ class _RegisterPageState extends State<RegisterPage> {
             value,
             style: TextStyle(
               fontSize: 13,
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Colors.black
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
             ),
           )
         ],
@@ -370,8 +538,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _radioAgeRange(String value) {
-    Color border = _ageRange == value ? Color(0xFFA924F0) : Colors.grey;
-    Color active = _ageRange == value ? Color(0xFFA924F0) : Colors.white;
+    // Color border = _ageRange == value ? Color(0xFFA924F0) : Colors.grey;
+    // Color active = _ageRange == value ? Color(0xFFA924F0) : Colors.white;
     return SizedBox(
       width: 100,
       child: GestureDetector(
@@ -386,14 +554,26 @@ class _RegisterPageState extends State<RegisterPage> {
               height: 20,
               width: 20,
               decoration: BoxDecoration(
-                border: Border.all(width: 1, color: border),
+                border: Border.all(
+                    width: 1,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? (_ageRange == value ? Color(0xFFA924F0) : Colors.grey)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57)),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Container(
                 margin: EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: active,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? (_ageRange == value ? Color(0xFFA924F0) : Colors.grey)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? (_ageRange == value ? Colors.white : Colors.black)
+                          : (_ageRange == value
+                              ? Color(0xFFFFFD57)
+                              : Colors.black),
                 ),
               ),
             ),
@@ -402,6 +582,11 @@ class _RegisterPageState extends State<RegisterPage> {
               value,
               style: TextStyle(
                 fontSize: 13,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
               ),
             )
           ],
@@ -525,25 +710,50 @@ class _RegisterPageState extends State<RegisterPage> {
           {String hintText = ''}) =>
       InputDecoration(
         label: Text(hintText),
-        labelStyle: const TextStyle(
-          color: Color(0xFF707070),
+        labelStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+        hintStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
         ),
         // hintText: hintText,
         filled: true,
         fillColor: Colors.transparent,
         contentPadding: const EdgeInsets.fromLTRB(15.0, 5.0, 5.0, 5.0),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(color: Color(0xFFE6B82C)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(
-            color: Colors.black.withOpacity(0.2),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black.withOpacity(0.2)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Color(0xFF707070)
+                    : Color(0xFFFFFD57),
           ),
         ),
         errorStyle: const TextStyle(
@@ -561,14 +771,25 @@ class _RegisterPageState extends State<RegisterPage> {
   }) =>
       InputDecoration(
         label: Text(labelText),
-        labelStyle: const TextStyle(
-          color: Color(0xFF707070),
+        labelStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+        hintStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontSize: 8,
+          fontWeight: FontWeight.normal,
         ),
         hintText: hintText,
-        hintStyle: const TextStyle(
-          color: Color(0xFF707070),
-          fontSize: 8,
-        ),
         suffixIcon: GestureDetector(
           onTap: () {
             suffixTap!();
@@ -581,17 +802,27 @@ class _RegisterPageState extends State<RegisterPage> {
         fillColor: Colors.transparent,
         contentPadding: const EdgeInsets.fromLTRB(15.0, 5.0, 5.0, 5.0),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(color: Color(0xFFE6B82C)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(
-            color: Colors.black.withOpacity(0.2),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black.withOpacity(0.2)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Color(0xFF707070)
+                    : Color(0xFFFFFD57),
           ),
         ),
         errorStyle: const TextStyle(

@@ -9,10 +9,16 @@ import 'package:des/shared/google_firebase.dart';
 import 'package:des/shared/line.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/facebook_firebase.dart';
+import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
+import 'main.dart';
+import 'dart:ui' as ui show ImageFilter;
 
 class LoginFirstPage extends StatefulWidget {
   const LoginFirstPage({Key? key}) : super(key: key);
@@ -35,9 +41,18 @@ class _LoginFirstPageState extends State<LoginFirstPage>
   bool _loading = false;
   bool openLine = false;
   DateTime? currentBackPressTime;
+  final storage = const FlutterSecureStorage();
+  String? fontStorageValue;
+  List<dynamic> _listSwitchColors = [
+    {'code': '1', 'title': 'ปกติ', 'isSelected': true},
+    {'code': '2', 'title': 'ขาวดำ', 'isSelected': false},
+    {'code': '3', 'title': 'ดำเหลือง', 'isSelected': false},
+  ];
 
   @override
   Widget build(BuildContext context) {
+    double deviceWidth = MediaQuery.of(context).size.width;
+    double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
@@ -51,12 +66,18 @@ class _LoginFirstPageState extends State<LoginFirstPage>
           child: Stack(
             children: [
               Container(
-                height: MediaQuery.of(context).size.height,
-                alignment: Alignment.center,
+                height: 1000,
+                // height: 300,
+                // alignment: Alignment.topCenter,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage("assets/images/bg_login_page.png"),
-                    fit: BoxFit.cover,
+                    image: AssetImage(
+                      MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? "assets/images/bg_login_first_page.png"
+                          : "assets/images/bg_login_first_page-dark.png",
+                    ),
+                    alignment: Alignment.topCenter,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
@@ -66,10 +87,18 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                 right: 0,
                 child: SingleChildScrollView(
                   child: Container(
-                    height: 535,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    alignment: Alignment.bottomCenter,
+                    // height:  MediaQuery.of(context).size.height * .650,
+                    height: (deviceHeight >= 500 && deviceHeight < 800)
+                        ? 400
+                        : (deviceHeight >= 800)
+                            ? 600
+                            : deviceHeight * 0.2,
+                    padding: EdgeInsets.only(top: 20, left: 20, right: 20),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.white
+                          : Colors.black,
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(20)),
                     ),
@@ -84,11 +113,33 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                           //   height: 35,
                           //   alignment: Alignment.centerLeft,
                           // ),
+                          GestureDetector(
+                            onTap: () {
+                              buildModalSwitch(context);
+                            },
+                            child: Image.asset(
+                              MyApp.themeNotifier.value == ThemeModeThird.light
+                                  ? 'assets/images/icon_blind.png'
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? 'assets/images/icon_blind_d.png'
+                                      : 'assets/images/icon_blind_d-y.png',
+                              height: 35,
+                              width: 35,
+                            ),
+                          ),
                           Text(
                             'เข้าสู่ระบบ',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -99,6 +150,23 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                               context,
                               hintText: 'อีเมล',
                             ),
+                            style: TextStyle(
+                              fontFamily: 'Kanit',
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                            ),
+                            cursorColor: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'กรอกอีเมล';
@@ -124,7 +192,13 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w400,
-                                  color: Color(0xFF7A4CB1),
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Color(0xFF7A4CB1)
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                                   decoration: TextDecoration.underline,
                                 ),
                                 textAlign: TextAlign.right,
@@ -142,8 +216,24 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                             child: _buildButtonLogin(
                               '',
                               'ดำเนินการต่อ',
-                              color: Color(0xFF7A4CB1),
-                              colorTitle: Color(0xFFFFFFFF),
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFF7A4CB1)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.black
+                                      : Color(0xFFFFFD57),
+                              colorTitle: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFFFFFFFF)
+                                  : Colors.black,
+                              colorBorder: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFF7A4CB1)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                           ),
                           SizedBox(height: 30),
@@ -159,8 +249,24 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                             child: _buildButtonLogin(
                               'assets/images/line_circle.png',
                               'เข้าใช้ผ่าน Line',
-                              color: Color(0xFF06C755),
-                              colorTitle: Color(0xFFFFFFFF),
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFF06C755)
+                                  : Colors.black,
+                              colorTitle: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.white
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                              colorBorder: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFF06C755)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                           ),
                           SizedBox(height: 10),
@@ -169,8 +275,24 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                             child: _buildButtonLogin(
                               'assets/images/logo_facebook_login_page.png',
                               'เข้าใช้ผ่าน Facebook',
-                              color: Color(0xFF227BEF),
-                              colorTitle: Color(0xFFFFFFFF),
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFF227BEF)
+                                  : Colors.black,
+                              colorTitle: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.white
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                              colorBorder: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFF227BEF)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                           ),
                           SizedBox(height: 10),
@@ -179,7 +301,20 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                             child: _buildButtonLogin(
                               'assets/images/logo_google_login_page.png',
                               'เข้าใช้ผ่าน Google',
-                              colorBorder: Color(0xFFE4E4E4),
+                              colorTitle: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                              colorBorder: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFFE4E4E4)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                           ),
                           SizedBox(height: 35),
@@ -191,6 +326,13 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Colors.black
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                                 ),
                               ),
                               SizedBox(width: 8),
@@ -206,7 +348,13 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
-                                    color: Color(0xFFB325F8),
+                                    color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Color(0xFFB325F8)
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),
@@ -227,13 +375,495 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                       color: Colors.white.withOpacity(0.4),
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(
+                      color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Color(0xFFB325F8)
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
+                    ),
                   ),
                 )
             ],
           ),
         ),
       ),
+    );
+  }
+
+  buildModalSwitch(
+    BuildContext context,
+  ) {
+    return showCupertinoModalBottomSheet(
+        expand: false,
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return Material(
+            type: MaterialType.transparency,
+            child: BackdropFilter(
+              filter: ui.ImageFilter.blur(
+                sigmaX: 5.0,
+                sigmaY: 5.0,
+              ),
+              child: Container(
+                height: 500,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
+                      : Color(0xFF121212),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(10),
+                  ),
+                ),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'ขนาดตัวหนังสือ',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      contentCard(context, "ปกติ", "1", "size"),
+                      SizedBox(height: 10),
+                      contentCard(context, "ปานกลาง", "2", "size"),
+                      SizedBox(height: 10),
+                      contentCard(context, "ใหญ่", "3", "size"),
+                      SizedBox(height: 20),
+                      Text(
+                        'ความตัดกันของสี',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      // contentCard(context, "ปกติ", "1", "color"),
+                      // SizedBox(height: 10),
+                      // contentCard(context, "ขาวดำ", "2", "color"),
+                      // SizedBox(height: 10),
+                      // contentCard(context, "ดำเหลือง", "3", "color"),
+                      contentCardV2(context),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  contentCard(BuildContext context, String title, String size, String type) {
+    var a = storage.read(key: 'switchSizeFont');
+    a.then((value) async => {
+          setState(() {
+            fontStorageValue = value;
+          })
+        });
+
+    return InkWell(
+      onTap: () {
+        setState(
+          (() {
+            storage.write(
+              key: 'switchSizeFont',
+              value: title,
+            );
+            setState(
+              () {
+                if (title == "ปกติ") {
+                  // MyApp.themeNotifier.value = ThemeModeThird.light;
+                  MyApp.fontKanit.value = FontKanit.small;
+                } else if (title == "ปานกลาง") {
+                  MyApp.fontKanit.value = FontKanit.medium;
+                } else {
+                  MyApp.fontKanit.value = FontKanit.large;
+                }
+                var a = storage.read(key: 'switchSizeFont');
+                a.then((value) => {
+                      setState(() {
+                        fontStorageValue = value;
+                      })
+                    });
+              },
+            );
+          }),
+        );
+      },
+      child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          alignment: Alignment.center,
+          height: 45,
+          // width: 145,
+          decoration: BoxDecoration(
+            // border: Border.all(
+            //   width: 1,
+            //   style: BorderStyle.solid,
+            //   color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //       ? (title == fontStorageValue ? Colors.white : Colors.black)
+            //       : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //           ? (title == fontStorageValue
+            //               ? Colors.black
+            //               : Colors.white)
+            //           : (title == fontStorageValue
+            //               ? Colors.black
+            //               : Color(0xFFFFFD57)),
+            // ),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? (title == fontStorageValue ? Color(0xFF7A4CB1) : Colors.white)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? (title == fontStorageValue
+                        ? Colors.white
+                        : Color(0xFF121212))
+                    : (title == fontStorageValue
+                        ? Color(0xFFFFFD57)
+                        : Color(0xFF121212)),
+            borderRadius: BorderRadius.circular(73),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  type == "color"
+                      ? Image.asset(
+                          title == "ปกติ"
+                              ? 'assets/images/icon_rp.png'
+                              : title == "ขาวดำ"
+                                  ? 'assets/images/icon_wb.png'
+                                  : "assets/images/icon_yb.png",
+                          height: 35,
+                          // width: 35,
+                        )
+                      : Container(),
+                  SizedBox(width: 5),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? (title == fontStorageValue
+                              ? Colors.white
+                              : Colors.black)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? (title == fontStorageValue
+                                  ? Colors.black
+                                  : Colors.white)
+                              : (title == fontStorageValue
+                                  ? Colors.black
+                                  : Color(0xFFFFFD57)),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                height: 25,
+                width: 25,
+                padding: EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 1,
+                    style: BorderStyle.solid,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? (title == fontStorageValue
+                            ? Colors.white
+                            : Color(0xFFDDDDDD))
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? (title == fontStorageValue
+                                ? Colors.black
+                                : Colors.white)
+                            : (title == fontStorageValue
+                                ? Colors.black
+                                : Color(0xFFFFFD57)),
+                  ),
+                  shape: BoxShape.circle,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? (title == fontStorageValue
+                          ? Colors.white
+                          : Color(0xFFDDDDDD))
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? (title == fontStorageValue
+                              ? Colors.black
+                              : Color(0xFF1E1E1E))
+                          : (title == fontStorageValue
+                              ? Colors.black
+                              : Colors.black),
+                ),
+                child: Container(
+                  // height: 15,
+                  // width: 15,
+                  // padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? (title == fontStorageValue
+                            ? Color(0xFF7A4CB1)
+                            : Color(0xFFDDDDDD))
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? (title == fontStorageValue
+                                ? Colors.white
+                                : Color(0xFF1E1E1E))
+                            : (title == fontStorageValue
+                                ? Color(0xFFFFFD57)
+                                : Colors.black),
+                  ),
+                  child: Icon(
+                    Icons.check,
+                    size: 12,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? (title == fontStorageValue
+                            ? Colors.white
+                            : Color(0xFFDDDDDD))
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? (title == fontStorageValue
+                                ? Colors.black
+                                : Color(0xFF1E1E1E))
+                            : (title == fontStorageValue
+                                ? Colors.black
+                                : Colors.black),
+                  ),
+                ),
+                //   child:
+                //   Image.asset(
+                //   item['isSelected'] == true
+                //       ? 'assets/images/icon_check.png'
+                //       : "assets/images/icon_nocheck.png",
+
+                // )
+              ),
+            ],
+          )),
+    );
+  }
+
+  contentCardV2(BuildContext context) {
+    return Container(
+      child: Wrap(
+          children: _listSwitchColors
+              .map(
+                (item) => GestureDetector(
+                  onTap: () {
+                    setState(
+                      (() async {
+                        await storage.write(
+                          key: 'switchColor',
+                          value: item['title'],
+                        );
+                        setState(
+                          () {
+                            if (item['title'] == "ปกติ") {
+                              MyApp.themeNotifier.value = ThemeModeThird.light;
+                            } else if (item['title'] == "ขาวดำ") {
+                              MyApp.themeNotifier.value = ThemeModeThird.dark;
+                            } else {
+                              MyApp.themeNotifier.value =
+                                  ThemeModeThird.blindness;
+                            }
+                            for (int i = 0; i < _listSwitchColors.length; i++) {
+                              if (_listSwitchColors[i]['code'] ==
+                                  item['code']) {
+                                item['isSelected'] = !item['isSelected'];
+                              } else {
+                                _listSwitchColors[i]['isSelected'] = false;
+                              }
+                            }
+                          },
+                        );
+                      }),
+                    );
+                    // _callRead();
+                  },
+                  child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      margin: EdgeInsets.only(bottom: 10),
+                      alignment: Alignment.center,
+                      height: 45,
+                      // width: 145,
+                      decoration: BoxDecoration(
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? (item['isSelected'] == true
+                                ? Color(0xFF7A4CB1)
+                                : Colors.white)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? (item['isSelected'] == true
+                                    ? Colors.white
+                                    : Color(0xFF121212))
+                                : (item['isSelected'] == true
+                                    ? Color(0xFFFFFD57)
+                                    : Color(0xFF121212)),
+                        // item['isSelected'] == true
+                        //     ? Color(0xFF7A4CB1)
+                        //     : Color(0xFFFFFFFF),
+                        borderRadius: BorderRadius.circular(73),
+                        // border: Border.all(
+                        //   width: 1,
+                        //   style: BorderStyle.solid,
+                        //   color: MyApp.themeNotifier.value ==
+                        //           ThemeModeThird.light
+                        //       ? (item['isSelected'] == true
+                        //           ? Color(0xFF7A4CB1)
+                        //           : Colors.white)
+                        //       : MyApp.themeNotifier.value ==
+                        //               ThemeModeThird.dark
+                        //           ? (item['isSelected'] == true
+                        //               ? Colors.white
+                        //               : Color(0xFF292929))
+                        //           : (item['isSelected'] == true
+                        //               ? Color(0xFFFFFD57)
+                        //               : Color(0xFF292929)),
+                        // )
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Image.asset(
+                                item['code'] == '1'
+                                    ? 'assets/images/icon_rp.png'
+                                    : item['code'] == '2'
+                                        ? 'assets/images/icon_wb.png'
+                                        : "assets/images/icon_yb.png",
+                                height: 35,
+                                // width: 35,
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                item['title'],
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? (item['isSelected'] == true
+                                          ? Colors.white
+                                          : Colors.black)
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? (item['isSelected'] == true
+                                              ? Colors.black
+                                              : Colors.white)
+                                          : (item['isSelected'] == true
+                                              ? Colors.black
+                                              : Color(0xFFFFFD57)),
+                                  // color: item['isSelected'] == true
+                                  //     ? Color(0xFFFFFFFF)
+                                  //     : Color(0xFF000000),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            height: 25,
+                            width: 25,
+                            padding: EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 1,
+                                style: BorderStyle.solid,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? (item['isSelected'] == true
+                                        ? Colors.white
+                                        : Color(0xFFDDDDDD))
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? (item['isSelected'] == true
+                                            ? Colors.black
+                                            : Colors.white)
+                                        : (item['isSelected'] == true
+                                            ? Colors.black
+                                            : Color(0xFFFFFD57)),
+                              ),
+                              shape: BoxShape.circle,
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? (item['isSelected'] == true
+                                      ? Colors.white
+                                      : Color(0xFFDDDDDD))
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? (item['isSelected'] == true
+                                          ? Colors.black
+                                          : Color(0xFF1E1E1E))
+                                      : (item['isSelected'] == true
+                                          ? Colors.black
+                                          : Colors.black),
+                            ),
+                            child: Container(
+                              // height: 15,
+                              // width: 15,
+                              // padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? (item['isSelected'] == true
+                                        ? Color(0xFF7A4CB1)
+                                        : Color(0xFFDDDDDD))
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? (item['isSelected'] == true
+                                            ? Colors.white
+                                            : Color(0xFF1E1E1E))
+                                        : (item['isSelected'] == true
+                                            ? Color(0xFFFFFD57)
+                                            : Colors.black),
+                              ),
+                              child: Icon(
+                                Icons.check,
+                                size: 12,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? (item['isSelected'] == true
+                                        ? Colors.white
+                                        : Color(0xFFDDDDDD))
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? (item['isSelected'] == true
+                                            ? Colors.black
+                                            : Color(0xFF1E1E1E))
+                                        : (item['isSelected'] == true
+                                            ? Colors.black
+                                            : Colors.black),
+                              ),
+                            ),
+                            //   child:
+                            //   Image.asset(
+                            //   item['isSelected'] == true
+                            //       ? 'assets/images/icon_check.png'
+                            //       : "assets/images/icon_nocheck.png",
+
+                            // )
+                          ),
+                        ],
+                      )),
+                ),
+              )
+              .toList()),
     );
   }
 
@@ -293,7 +923,11 @@ class _LoginFirstPageState extends State<LoginFirstPage>
         Expanded(
           child: Container(
             height: 1,
-            color: Color(0x4D707070),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0x4D707070)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
           ),
         ),
         Padding(
@@ -303,14 +937,22 @@ class _LoginFirstPageState extends State<LoginFirstPage>
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w300,
-              color: Color(0xFF707070),
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFF707070)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
             ),
           ),
         ),
         Expanded(
           child: Container(
             height: 1,
-            color: Color(0x4D707070),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0x4D707070)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
           ),
         ),
       ],
@@ -321,25 +963,50 @@ class _LoginFirstPageState extends State<LoginFirstPage>
           {String hintText = ''}) =>
       InputDecoration(
         label: Text(hintText),
-        labelStyle: const TextStyle(
-          color: Color(0xFF707070),
+        labelStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+        hintStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
         ),
         // hintText: hintText,
         filled: true,
         fillColor: Colors.transparent,
         contentPadding: const EdgeInsets.fromLTRB(15.0, 5.0, 5.0, 5.0),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(color: Color(0xFFE6B82C)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(
-            color: Colors.black.withOpacity(0.2),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black.withOpacity(0.2)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Color(0xFF707070)
+                    : Color(0xFFFFFD57),
           ),
         ),
         errorStyle: const TextStyle(
