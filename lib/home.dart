@@ -7,8 +7,10 @@ import 'package:des/models/mock_data.dart';
 import 'package:des/notification_list.dart';
 import 'package:des/chat.dart';
 import 'package:des/report_problem.dart';
+import 'package:des/shared/notification_bloc.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:des/poi.dart';
@@ -22,6 +24,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui show ImageFilter;
 
 import 'main.dart';
+import 'shared/notification_service.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
@@ -54,6 +57,7 @@ class _HomePageState extends State<HomePage> {
   String? $imageUrl = '';
   String? priceToday = '';
   String? selectedSize = "";
+  late StreamSubscription<Map> _notificationSubscription;
 
   bool hiddenMainPopUp = false;
   String percentPrice = '';
@@ -872,11 +876,19 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    super.initState();
+    NotificationService.instance.start(context);
+
+    // _notificationSubscription = NotificationsBloc.instance.notificationStream
+    //     .listen(_performActionOnNotification);
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _determinePosition();
     });
+   
     _callRead();
+
+        super.initState();
+
   }
 
   @override
@@ -885,6 +897,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _callRead() async {
+
+     FirebaseMessaging.instance.getToken().then((token) async {
+      print('token: $token');
+    });
+
     setState(() {
       _futureBanner = _readBanner();
       _futureNews = _readNews();
@@ -1504,6 +1521,16 @@ class _HomePageState extends State<HomePage> {
                 ),
               )
               .toList()),
+    );
+  }
+
+   _performActionOnNotification(Map<String, dynamic> message) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NotificationListPage(
+        ),
+      ),
     );
   }
 

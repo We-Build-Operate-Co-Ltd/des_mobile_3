@@ -878,7 +878,7 @@ class _ChatPageState extends State<ChatPage> {
     return Container(
       margin: EdgeInsets.symmetric(
         // vertical: 5.0,
-        horizontal: 50.0,
+        horizontal: 20.0,
       ),
       child: CheckboxListTile(
         controlAffinity: ListTileControlAffinity.leading,
