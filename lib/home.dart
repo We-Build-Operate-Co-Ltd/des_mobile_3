@@ -7,8 +7,11 @@ import 'package:des/models/mock_data.dart';
 import 'package:des/notification_list.dart';
 import 'package:des/chat.dart';
 import 'package:des/report_problem.dart';
+import 'package:des/shared/extension.dart';
+import 'package:des/shared/notification_bloc.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:des/poi.dart';
@@ -22,6 +25,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui show ImageFilter;
 
 import 'main.dart';
+import 'shared/notification_service.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
@@ -54,6 +58,7 @@ class _HomePageState extends State<HomePage> {
   String? $imageUrl = '';
   String? priceToday = '';
   String? selectedSize = "";
+  late StreamSubscription<Map> _notificationSubscription;
 
   bool hiddenMainPopUp = false;
   String percentPrice = '';
@@ -71,6 +76,7 @@ class _HomePageState extends State<HomePage> {
   Future<dynamic>? _futureNews;
   Future<dynamic>? _futureBanner;
   String? fontStorageValue;
+  String? colorStorageValue;
 
   @override
   Widget build(BuildContext context) {
@@ -311,7 +317,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
-                        color: Theme.of(context).custom.second,
+                        color: Theme.of(context).custom.bwy,
                       ),
                     ),
                     GestureDetector(
@@ -335,7 +341,7 @@ class _HomePageState extends State<HomePage> {
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w400,
-                              color: Theme.of(context).custom.second,
+                              color: Theme.of(context).custom.bwy,
                             ),
                           ),
                         ],
@@ -432,7 +438,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
-                        color: Theme.of(context).custom.second,
+                        color: Theme.of(context).custom.bwy,
                       ),
                     ),
                     // Text(
@@ -648,7 +654,7 @@ class _HomePageState extends State<HomePage> {
           decoration: BoxDecoration(
             color: Theme.of(context).custom.primary,
             border: Border.all(
-              color: Theme.of(context).custom.second,
+              color: Theme.of(context).custom.bwy,
             ),
             borderRadius: BorderRadius.circular(15),
           ),
@@ -675,7 +681,7 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
-                      color: Theme.of(context).custom.second,
+                      color: Theme.of(context).custom.bwy,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -694,7 +700,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w400,
-                        color: Theme.of(context).custom.second,
+                        color: Theme.of(context).custom.bwy,
                       ),
                     ),
                   ],
@@ -743,7 +749,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
-                        color: Theme.of(context).custom.second,
+                        color: Theme.of(context).custom.bwy,
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 4,
@@ -761,7 +767,7 @@ class _HomePageState extends State<HomePage> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(19),
                                 border: Border.all(
-                                  color: Theme.of(context).custom.second,
+                                  color: Theme.of(context).custom.bwy,
                                 ),
                               ),
                             ),
@@ -770,9 +776,9 @@ class _HomePageState extends State<HomePage> {
                               height: 9,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(19),
-                                color: Theme.of(context).custom.second,
+                                color: Theme.of(context).custom.bwy,
                                 border: Border.all(
-                                  color: Theme.of(context).custom.second,
+                                  color: Theme.of(context).custom.bwy,
                                 ),
                               ),
                             ),
@@ -784,7 +790,7 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(
                             fontSize: 9,
                             fontWeight: FontWeight.w300,
-                            color: Theme.of(context).custom.second,
+                            color: Theme.of(context).custom.bwy,
                           ),
                         ),
                       ],
@@ -836,7 +842,7 @@ class _HomePageState extends State<HomePage> {
                           : MyApp.themeNotifier.value == ThemeModeThird.dark
                               ? Colors.white
                               : Color(0xFFFFFD57),
-                      // Theme.of(context).custom.second,
+                      // Theme.of(context).custom.bwy,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -856,7 +862,7 @@ class _HomePageState extends State<HomePage> {
                             : MyApp.themeNotifier.value == ThemeModeThird.dark
                                 ? Colors.white
                                 : Color(0xFFFFFD57),
-                        // Theme.of(context).custom.second,
+                        // Theme.of(context).custom.bwy,
                         fontWeight: FontWeight.w400,
                         height: 1,
                       ),
@@ -872,11 +878,18 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    super.initState();
+    NotificationService.instance.start(context);
+
+    // _notificationSubscription = NotificationsBloc.instance.notificationStream
+    //     .listen(_performActionOnNotification);
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _determinePosition();
     });
+
     _callRead();
+
+    super.initState();
   }
 
   @override
@@ -885,6 +898,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _callRead() async {
+    fontStorageValue = await storage.read(key: 'switchSizeFont') ?? 'ปกติ';
+    colorStorageValue = await storage.read(key: 'switchColor') ?? 'ปกติ';
+    logD('fontStorageValue WidgetsBinding ----> $fontStorageValue');
+    FirebaseMessaging.instance.getToken().then((token) async {
+      print('token: $token');
+    });
+
     setState(() {
       _futureBanner = _readBanner();
       _futureNews = _readNews();
@@ -1051,6 +1071,8 @@ class _HomePageState extends State<HomePage> {
               child: Container(
                 height: 500,
                 width: double.infinity,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
                 decoration: BoxDecoration(
                   color: MyApp.themeNotifier.value == ThemeModeThird.light
                       ? Colors.white
@@ -1059,55 +1081,48 @@ class _HomePageState extends State<HomePage> {
                     top: Radius.circular(10),
                   ),
                 ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'ขนาดตัวหนังสือ',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: MyApp.themeNotifier.value ==
-                                  ThemeModeThird.light
-                              ? Colors.black
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? Colors.white
-                                  : Color(0xFFFFFD57),
-                          fontWeight: FontWeight.w500,
-                        ),
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    Text(
+                      'ขนาดตัวหนังสือ',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.black
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                        fontWeight: FontWeight.w500,
                       ),
-                      SizedBox(height: 20),
-                      contentCard(context, "ปกติ", "1", "size"),
-                      SizedBox(height: 10),
-                      contentCard(context, "ปานกลาง", "2", "size"),
-                      SizedBox(height: 10),
-                      contentCard(context, "ใหญ่", "3", "size"),
-                      SizedBox(height: 20),
-                      Text(
-                        'ความตัดกันของสี',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: MyApp.themeNotifier.value ==
-                                  ThemeModeThird.light
-                              ? Colors.black
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? Colors.white
-                                  : Color(0xFFFFFD57),
-                          fontWeight: FontWeight.w500,
-                        ),
+                    ),
+                    SizedBox(height: 20),
+                    contentCard(context, "ปกติ", "1", "size"),
+                    SizedBox(height: 10),
+                    contentCard(context, "ปานกลาง", "2", "size"),
+                    SizedBox(height: 10),
+                    contentCard(context, "ใหญ่", "3", "size"),
+                    SizedBox(height: 20),
+                    Text(
+                      'ความตัดกันของสี',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.black
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                        fontWeight: FontWeight.w500,
                       ),
-                      SizedBox(height: 20),
-                      // contentCard(context, "ปกติ", "1", "color"),
-                      // SizedBox(height: 10),
-                      // contentCard(context, "ขาวดำ", "2", "color"),
-                      // SizedBox(height: 10),
-                      // contentCard(context, "ดำเหลือง", "3", "color"),
-                      contentCardV2(context),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: 20),
+                    // contentCard(context, "ปกติ", "1", "color"),
+                    // SizedBox(height: 10),
+                    // contentCard(context, "ขาวดำ", "2", "color"),
+                    // SizedBox(height: 10),
+                    // contentCard(context, "ดำเหลือง", "3", "color"),
+                    contentCardV2(context),
+                  ],
                 ),
               ),
             ),
@@ -1116,14 +1131,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   contentCard(BuildContext context, String title, String size, String type) {
-    var a = storage.read(key: 'switchSizeFont');
-    a.then((value) async => {
-          setState(() {
-            fontStorageValue = value;
-          })
-        });
- 
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         setState(
           (() {
@@ -1131,6 +1139,7 @@ class _HomePageState extends State<HomePage> {
               key: 'switchSizeFont',
               value: title,
             );
+            fontStorageValue = title;
             setState(
               () {
                 if (title == "ปกติ") {
@@ -1141,12 +1150,6 @@ class _HomePageState extends State<HomePage> {
                 } else {
                   MyApp.fontKanit.value = FontKanit.large;
                 }
-                var a = storage.read(key: 'switchSizeFont');
-                a.then((value) => {
-                      setState(() {
-                        fontStorageValue = value;
-                      })
-                    });
               },
             );
           }),
@@ -1288,7 +1291,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 //   child:
                 //   Image.asset(
-                //   item['isSelected'] == true
+                //   item['title'] == colorStorageValue
                 //       ? 'assets/images/icon_check.png'
                 //       : "assets/images/icon_nocheck.png",
 
@@ -1312,6 +1315,7 @@ class _HomePageState extends State<HomePage> {
                           key: 'switchColor',
                           value: item['title'],
                         );
+                        colorStorageValue = item['title'];
                         setState(
                           () {
                             if (item['title'] == "ปกติ") {
@@ -1321,14 +1325,6 @@ class _HomePageState extends State<HomePage> {
                             } else {
                               MyApp.themeNotifier.value =
                                   ThemeModeThird.blindness;
-                            }
-                            for (int i = 0; i < _listSwitchColors.length; i++) {
-                              if (_listSwitchColors[i]['code'] ==
-                                  item['code']) {
-                                item['isSelected'] = !item['isSelected'];
-                              } else {
-                                _listSwitchColors[i]['isSelected'] = false;
-                              }
                             }
                           },
                         );
@@ -1344,17 +1340,17 @@ class _HomePageState extends State<HomePage> {
                       // width: 145,
                       decoration: BoxDecoration(
                         color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? (item['isSelected'] == true
+                            ? (item['title'] == colorStorageValue
                                 ? Color(0xFF7A4CB1)
                                 : Colors.white)
                             : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? (item['isSelected'] == true
+                                ? (item['title'] == colorStorageValue
                                     ? Colors.white
                                     : Color(0xFF121212))
-                                : (item['isSelected'] == true
+                                : (item['title'] == colorStorageValue
                                     ? Color(0xFFFFFD57)
                                     : Color(0xFF121212)),
-                        // item['isSelected'] == true
+                        // item['title'] == colorStorageValue
                         //     ? Color(0xFF7A4CB1)
                         //     : Color(0xFFFFFFFF),
                         borderRadius: BorderRadius.circular(73),
@@ -1363,15 +1359,15 @@ class _HomePageState extends State<HomePage> {
                         //   style: BorderStyle.solid,
                         //   color: MyApp.themeNotifier.value ==
                         //           ThemeModeThird.light
-                        //       ? (item['isSelected'] == true
+                        //       ? (item['title'] == colorStorageValue
                         //           ? Color(0xFF7A4CB1)
                         //           : Colors.white)
                         //       : MyApp.themeNotifier.value ==
                         //               ThemeModeThird.dark
-                        //           ? (item['isSelected'] == true
+                        //           ? (item['title'] == colorStorageValue
                         //               ? Colors.white
                         //               : Color(0xFF292929))
-                        //           : (item['isSelected'] == true
+                        //           : (item['title'] == colorStorageValue
                         //               ? Color(0xFFFFFD57)
                         //               : Color(0xFF292929)),
                         // )
@@ -1397,18 +1393,18 @@ class _HomePageState extends State<HomePage> {
                                   fontSize: 17,
                                   color: MyApp.themeNotifier.value ==
                                           ThemeModeThird.light
-                                      ? (item['isSelected'] == true
+                                      ? (item['title'] == colorStorageValue
                                           ? Colors.white
                                           : Colors.black)
                                       : MyApp.themeNotifier.value ==
                                               ThemeModeThird.dark
-                                          ? (item['isSelected'] == true
+                                          ? (item['title'] == colorStorageValue
                                               ? Colors.black
                                               : Colors.white)
-                                          : (item['isSelected'] == true
+                                          : (item['title'] == colorStorageValue
                                               ? Colors.black
                                               : Color(0xFFFFFD57)),
-                                  // color: item['isSelected'] == true
+                                  // color: item['title'] == colorStorageValue
                                   //     ? Color(0xFFFFFFFF)
                                   //     : Color(0xFF000000),
                                   fontWeight: FontWeight.w500,
@@ -1426,30 +1422,30 @@ class _HomePageState extends State<HomePage> {
                                 style: BorderStyle.solid,
                                 color: MyApp.themeNotifier.value ==
                                         ThemeModeThird.light
-                                    ? (item['isSelected'] == true
+                                    ? (item['title'] == colorStorageValue
                                         ? Colors.white
                                         : Color(0xFFDDDDDD))
                                     : MyApp.themeNotifier.value ==
                                             ThemeModeThird.dark
-                                        ? (item['isSelected'] == true
+                                        ? (item['title'] == colorStorageValue
                                             ? Colors.black
                                             : Colors.white)
-                                        : (item['isSelected'] == true
+                                        : (item['title'] == colorStorageValue
                                             ? Colors.black
                                             : Color(0xFFFFFD57)),
                               ),
                               shape: BoxShape.circle,
                               color: MyApp.themeNotifier.value ==
                                       ThemeModeThird.light
-                                  ? (item['isSelected'] == true
+                                  ? (item['title'] == colorStorageValue
                                       ? Colors.white
                                       : Color(0xFFDDDDDD))
                                   : MyApp.themeNotifier.value ==
                                           ThemeModeThird.dark
-                                      ? (item['isSelected'] == true
+                                      ? (item['title'] == colorStorageValue
                                           ? Colors.black
                                           : Color(0xFF1E1E1E))
-                                      : (item['isSelected'] == true
+                                      : (item['title'] == colorStorageValue
                                           ? Colors.black
                                           : Colors.black),
                             ),
@@ -1461,15 +1457,15 @@ class _HomePageState extends State<HomePage> {
                                 shape: BoxShape.circle,
                                 color: MyApp.themeNotifier.value ==
                                         ThemeModeThird.light
-                                    ? (item['isSelected'] == true
+                                    ? (item['title'] == colorStorageValue
                                         ? Color(0xFF7A4CB1)
                                         : Color(0xFFDDDDDD))
                                     : MyApp.themeNotifier.value ==
                                             ThemeModeThird.dark
-                                        ? (item['isSelected'] == true
+                                        ? (item['title'] == colorStorageValue
                                             ? Colors.white
                                             : Color(0xFF1E1E1E))
-                                        : (item['isSelected'] == true
+                                        : (item['title'] == colorStorageValue
                                             ? Color(0xFFFFFD57)
                                             : Colors.black),
                               ),
@@ -1478,22 +1474,22 @@ class _HomePageState extends State<HomePage> {
                                 size: 12,
                                 color: MyApp.themeNotifier.value ==
                                         ThemeModeThird.light
-                                    ? (item['isSelected'] == true
+                                    ? (item['title'] == colorStorageValue
                                         ? Colors.white
                                         : Color(0xFFDDDDDD))
                                     : MyApp.themeNotifier.value ==
                                             ThemeModeThird.dark
-                                        ? (item['isSelected'] == true
+                                        ? (item['title'] == colorStorageValue
                                             ? Colors.black
                                             : Color(0xFF1E1E1E))
-                                        : (item['isSelected'] == true
+                                        : (item['title'] == colorStorageValue
                                             ? Colors.black
                                             : Colors.black),
                               ),
                             ),
                             //   child:
                             //   Image.asset(
-                            //   item['isSelected'] == true
+                            //   item['title'] == colorStorageValue
                             //       ? 'assets/images/icon_check.png'
                             //       : "assets/images/icon_nocheck.png",
 
@@ -1507,4 +1503,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  _performActionOnNotification(Map<String, dynamic> message) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NotificationListPage(),
+      ),
+    );
+  }
 }

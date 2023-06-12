@@ -1,16 +1,38 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import '../main.dart';
 
 class ThemeColorData {
   Color primary;
-  Color second;
+  Color bwy;
+  Color f70f70y;
+  Color wwy;
 
   ThemeColorData({
     required this.primary,
-    required this.second,
+    required this.bwy,
+    required this.f70f70y,
+    required this.wwy,
   });
 }
+
+final themeLight = ThemeColorData(
+  primary: Color(0xFFFFFFFF),
+  bwy: Color(0xFF000000),
+  f70f70y: Color(0xFF707070),
+  wwy: Color(0xFFFFFFFF),
+);
+final themeDark = ThemeColorData(
+  primary: Color(0xFF000000),
+  bwy: Color(0xFFFFFFFF),
+  f70f70y: Color(0xFF707070),
+  wwy: Color(0xFFFFFFFF),
+);
+final themeBlindness = ThemeColorData(
+  primary: Color(0xFF000000),
+  bwy: Colors.yellow,
+  f70f70y: Colors.yellow,
+  wwy: Colors.yellow,
+);
 
 ThemeData customLight({
   final Iterable<ThemeExtension<dynamic>>? extensions,
@@ -18,7 +40,7 @@ ThemeData customLight({
     ThemeData();
 
 // ref: https://stackoverflow.com/questions/54139924/flutter-how-do-i-change-theme-brightness-at-runtime
-// use it with "Theme.of(context).myCustomColor"
+// use it with "Theme.of(context).custom"
 extension CustomThemeData on ThemeData {
   static ThemeData customLight({
     final Iterable<ThemeExtension<dynamic>>? extensions,
@@ -34,19 +56,6 @@ extension CustomThemeData on ThemeData {
     }
   }
 }
-
-final themeLight = ThemeColorData(
-  primary: Color(0xFFFFFFFF),
-  second: Color(0xFF000000),
-);
-final themeDark = ThemeColorData(
-  primary: Color(0xFF000000),
-  second: Color(0xFFFFFFFF),
-);
-final themeBlindness = ThemeColorData(
-  primary: Color(0xFF000000),
-  second: Colors.yellow,
-);
 
 enum ThemeModeThird {
   system,

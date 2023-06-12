@@ -8,6 +8,7 @@ import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
 import 'package:des/policy.dart';
 import 'package:des/shared/extension.dart';
+import 'package:des/shared/notification_service.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/user_profile.dart';
@@ -92,7 +93,7 @@ class _MenuState extends State<Menu> {
                         bottom: MediaQuery.of(context).padding.bottom,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).custom.primary,
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(20),
                         ),
@@ -112,6 +113,7 @@ class _MenuState extends State<Menu> {
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
+                              color: Theme.of(context).custom.bwy,
                             ),
                           ),
                           Text(
@@ -119,6 +121,7 @@ class _MenuState extends State<Menu> {
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w400,
+                              color: Theme.of(context).custom.bwy,
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -161,12 +164,11 @@ class _MenuState extends State<Menu> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                               
                                   Text(
                                     'ดำเนินการต่อ',
                                     style: TextStyle(
                                       fontSize: 15,
-                                      color: Colors.white,
+                                      color: Theme.of(context).custom.wwy,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -395,27 +397,30 @@ class _MenuState extends State<Menu> {
   }
 
   Widget _buildBottomNavBar() {
-    return Container(
-      height: 55 + MediaQuery.of(context).padding.bottom,
-      decoration: BoxDecoration(
-        color: Theme.of(context).custom.primary,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFFD8D8D8).withOpacity(0.29),
-            spreadRadius: 0,
-            blurRadius: 6,
-            offset: const Offset(0, -3), // changes position of shadow
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          _buildTap(0, 'หน้าหลัก', 'assets/images/home.png'),
-          _buildTap(1, 'จองบริการ', 'assets/images/computer.png'),
-          _buildTap(2, 'การเรียน', 'assets/images/learning.png'),
-          _buildTap(3, 'สมาชิก', _imageUrl, isNetwork: true),
-        ],
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+      child: Container(
+        height: 55 + MediaQuery.of(context).padding.bottom,
+        decoration: BoxDecoration(
+          color: Theme.of(context).custom.primary,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFFD8D8D8).withOpacity(0.29),
+              spreadRadius: 0,
+              blurRadius: 6,
+              offset: const Offset(0, -3), // changes position of shadow
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            _buildTap(0, 'หน้าหลัก', 'assets/images/home.png'),
+            _buildTap(1, 'จองบริการ', 'assets/images/computer.png'),
+            _buildTap(2, 'การเรียน', 'assets/images/learning.png'),
+            _buildTap(3, 'สมาชิก', _imageUrl, isNetwork: true),
+          ],
+        ),
       ),
     );
   }
@@ -433,18 +438,18 @@ class _MenuState extends State<Menu> {
           (MyApp.themeNotifier.value == ThemeModeThird.dark)) {
         color = const Color(0xFF7A4CB1);
       } else {
-        color = Theme.of(context).custom.second;
+        color = Theme.of(context).custom.bwy;
       }
     } else {
       if (MyApp.themeNotifier.value == ThemeModeThird.light) {
-        color = Color(0xFF707070);
+        color = Theme.of(context).custom.f70f70y;
       } else {
         color = Colors.white;
       }
     }
     // Color color = _currentPage == index
     //     ? const Color(0xFF7A4CB1)
-    //     : Theme.of(context).custom.second;
+    //     : Theme.of(context).custom.bwy;
     return Flexible(
       key: key,
       flex: 1,
@@ -519,12 +524,12 @@ class _MenuState extends State<Menu> {
       InputDecoration(
         label: Text(hintText),
         labelStyle: TextStyle(
-          color: Color(0xFF707070),
+          color: Theme.of(context).custom.f70f70y,
           fontSize: 12,
           fontWeight: FontWeight.normal,
         ),
         hintStyle: TextStyle(
-          color: Color(0xFF707070),
+          color: Theme.of(context).custom.f70f70y,
           fontSize: 12,
           fontWeight: FontWeight.normal,
         ),
@@ -544,7 +549,7 @@ class _MenuState extends State<Menu> {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(
-            color: Colors.black.withOpacity(0.2),
+            color: Theme.of(context).custom.f70f70y,
           ),
         ),
         errorStyle: const TextStyle(
@@ -560,6 +565,27 @@ class _MenuState extends State<Menu> {
       var im = await ManageStorage.read('profileImageUrl') ?? '';
       var value = await ManageStorage.read('profileData') ?? '';
       var profileData = json.decode(value);
+
+      //set color init.
+      var colorStorage = await storage.read(key: 'switchColor') ?? 'ปกติ';
+      if (colorStorage == "ปกติ") {
+        MyApp.themeNotifier.value = ThemeModeThird.light;
+      } else if (colorStorage == "ขาวดำ") {
+        MyApp.themeNotifier.value = ThemeModeThird.dark;
+      } else {
+        MyApp.themeNotifier.value = ThemeModeThird.blindness;
+      }
+
+      //set font size init.
+      var fontStorageValue =
+          await storage.read(key: 'switchSizeFont') ?? 'ปกติ';
+      if (fontStorageValue == "ปกติ") {
+        MyApp.fontKanit.value = FontKanit.small;
+      } else if (fontStorageValue == "ปานกลาง") {
+        MyApp.fontKanit.value = FontKanit.medium;
+      } else {
+        MyApp.fontKanit.value = FontKanit.large;
+      }
 
       setState(() {
         _profileCode = pf;
@@ -590,7 +616,7 @@ class _MenuState extends State<Menu> {
     pages = <Widget>[
       homePage,
       BookingServicePage(),
-      const LearningPage(),
+      LearningPage(),
       profilePage,
     ];
     super.initState();
