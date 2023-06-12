@@ -1,3 +1,4 @@
+import 'package:des/shared/notification_service.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -53,24 +54,23 @@ class MyApp extends StatelessWidget {
           home: const SplashPage(),
           builder: (context, child) {
             return ValueListenableBuilder<FontKanit>(
-      valueListenable: fontKanit,
-      builder: (_, FontKanit currentMode, __) {
-       return MediaQuery(
-              data: MediaQuery.of(context).copyWith(
-                textScaleFactor: 
-                currentMode == FontKanit.small ? 1.0 : 
-                currentMode == FontKanit.medium ? 1.5 : 
-                2.0
-              ),
-              child: child!,
+              valueListenable: fontKanit,
+              builder: (_, FontKanit currentMode, __) {
+                return MediaQuery(
+                  data: MediaQuery.of(context).copyWith(
+                      textScaleFactor: currentMode == FontKanit.small
+                          ? 1.0
+                          : currentMode == FontKanit.medium
+                              ? 1.5
+                              : 2.0),
+                  child: child!,
+                );
+              },
             );
           },
         );
       },
     );
-            
-          },
-        );
   }
 }
 
