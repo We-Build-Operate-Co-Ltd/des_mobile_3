@@ -464,7 +464,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
             decoration: BoxDecoration(
               border: Border.all(
                 color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0x807A4CB1)
+                    ? Color(0xFF7A4CB1).withOpacity(.50)
                     : MyApp.themeNotifier.value == ThemeModeThird.dark
                         ? Colors.white
                         : Color(0xFFFFFD57),
@@ -476,11 +476,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0x807A4CB1)
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
+                color: Theme.of(context).custom.A4CB1_w_fffd57,
               ),
             ),
           ),
@@ -503,20 +499,14 @@ class _LoginSecondPageState extends State<LoginSecondPage>
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Color(0x807A4CB1)
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
+              color: Theme.of(context).custom.A4CB1_w_fffd57,
             ),
             child: Text(
               'ดำเนินการต่อ',
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Colors.white
-                    : Colors.black,
+                color: Theme.of(context).custom.w_b_b,
               ),
             ),
           ),

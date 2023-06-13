@@ -113,7 +113,7 @@ class _MenuState extends State<Menu> {
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
-                              color: Theme.of(context).custom.bwy,
+                              color: Theme.of(context).custom.b_w_y,
                             ),
                           ),
                           Text(
@@ -121,7 +121,7 @@ class _MenuState extends State<Menu> {
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w400,
-                              color: Theme.of(context).custom.bwy,
+                              color: Theme.of(context).custom.b_w_y,
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -168,7 +168,7 @@ class _MenuState extends State<Menu> {
                                     'ดำเนินการต่อ',
                                     style: TextStyle(
                                       fontSize: 15,
-                                      color: Theme.of(context).custom.wwy,
+                                      color: Theme.of(context).custom.w_w_y,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -438,11 +438,11 @@ class _MenuState extends State<Menu> {
           (MyApp.themeNotifier.value == ThemeModeThird.dark)) {
         color = const Color(0xFF7A4CB1);
       } else {
-        color = Theme.of(context).custom.bwy;
+        color = Theme.of(context).custom.b_w_y;
       }
     } else {
       if (MyApp.themeNotifier.value == ThemeModeThird.light) {
-        color = Theme.of(context).custom.f70f70y;
+        color = Theme.of(context).custom.f70f70_y;
       } else {
         color = Colors.white;
       }
@@ -524,12 +524,12 @@ class _MenuState extends State<Menu> {
       InputDecoration(
         label: Text(hintText),
         labelStyle: TextStyle(
-          color: Theme.of(context).custom.f70f70y,
+          color: Theme.of(context).custom.f70f70_y,
           fontSize: 12,
           fontWeight: FontWeight.normal,
         ),
         hintStyle: TextStyle(
-          color: Theme.of(context).custom.f70f70y,
+          color: Theme.of(context).custom.f70f70_y,
           fontSize: 12,
           fontWeight: FontWeight.normal,
         ),
@@ -549,7 +549,7 @@ class _MenuState extends State<Menu> {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(
-            color: Theme.of(context).custom.f70f70y,
+            color: Theme.of(context).custom.f70f70_y,
           ),
         ),
         errorStyle: const TextStyle(

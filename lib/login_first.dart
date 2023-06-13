@@ -114,39 +114,76 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                           //   alignment: Alignment.centerLeft,
                           // ),
 
-
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     buildModalSwitch(context);
-                          //   },
-                          //   child: Image.asset(
-                          //     MyApp.themeNotifier.value == ThemeModeThird.light
-                          //         ? 'assets/images/icon_blind.png'
-                          //         : MyApp.themeNotifier.value ==
-                          //                 ThemeModeThird.dark
-                          //             ? 'assets/images/icon_blind_d.png'
-                          //             : 'assets/images/icon_blind_d-y.png',
-                          //     height: 35,
-                          //     width: 35,
-                          //   ),
-                          // ),
-
-                          
-                          Text(
-                            'เข้าสู่ระบบ',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.black
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
+                          Container(
+                            height: 40,
+                            // margin: const EdgeInsets.symmetric(vertical: 15),
+                            child: Stack(
+                              children: [
+                                Center(
+                                  child: Text(
+                                    'เข้าสู่ระบบ',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500,
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Colors.black
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Color(0xFFFFFD57),
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Positioned(
+                                   height: 35,
+                                   width: 35,
+                                  right: 0,
+                                  top: 0,
+                                  // bottom: 0,
+                                  // left: 0,
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        buildModalSwitch(context);
+                                      },
+                                      child: Container(
+                                          // height: 35,
+                                          // width: 35,
+                                          // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 7),
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(
+                                              width: 1,
+                                              style: BorderStyle.solid,
+                                              color: Theme.of(context).custom.b_w_y,
+                                            )
+                                          ),
+                                          child: Icon(
+                                            Icons.visibility_outlined,
+                                            color: Theme.of(context).custom.w_w_y,
+                                          ),
+                                        ),
+                                      
+                                //       // Image.asset(
+                                //       //   MyApp.themeNotifier.value ==
+                                //       //           ThemeModeThird.light
+                                //       //       ? 'assets/images/icon_blind.png'
+                                //       //       : MyApp.themeNotifier.value ==
+                                //       //               ThemeModeThird.dark
+                                //       //           ? 'assets/images/icon_blind_d.png'
+                                //       //           : 'assets/images/icon_blind_d-y.png',
+                                //       //   height: 55,
+                                //       //   width: 55,
+                                //       // ),
+                                      ),
+                                )
+                              
+                              ],
                             ),
-                            textAlign: TextAlign.center,
                           ),
+
                           SizedBox(height: 10),
                           TextFormField(
                             controller: txtEmail,
@@ -220,24 +257,9 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                             child: _buildButtonLogin(
                               '',
                               'ดำเนินการต่อ',
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Color(0xFF7A4CB1)
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.black
-                                      : Color(0xFFFFFD57),
-                              colorTitle: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Color(0xFFFFFFFF)
-                                  : Colors.black,
-                              colorBorder: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Color(0xFF7A4CB1)
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
+                              color: Theme.of(context).custom.A4CB1_w_fffd57,
+                              colorTitle: Theme.of(context).custom.w_b_b,
+                              colorBorder: Theme.of(context).custom.A4CB1_w_fffd57,
                             ),
                           ),
                           SizedBox(height: 30),
@@ -353,12 +375,12 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
                                     color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Color(0xFFB325F8)
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.white
-                                          : Color(0xFFFFFD57),
+                                            ThemeModeThird.light
+                                        ? Color(0xFFB325F8)
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),
@@ -380,13 +402,11 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: CircularProgressIndicator(
-                      color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Color(0xFFB325F8)
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.white
-                                          : Color(0xFFFFFD57),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFFB325F8)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                   ),
                 )

@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                     image: DecorationImage(
                       image: AssetImage(
                         MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? 'assets/images/card_purple.png'
+                            ? 'assets/images/card_purple_v2.png'
                             : 'assets/images/card_black.png',
                       ),
                     ),
@@ -317,7 +317,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
-                        color: Theme.of(context).custom.bwy,
+                        color: Theme.of(context).custom.b_w_y,
                       ),
                     ),
                     GestureDetector(
@@ -341,7 +341,7 @@ class _HomePageState extends State<HomePage> {
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w400,
-                              color: Theme.of(context).custom.bwy,
+                              color: Theme.of(context).custom.b_w_y,
                             ),
                           ),
                         ],
@@ -438,7 +438,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
-                        color: Theme.of(context).custom.bwy,
+                        color: Theme.of(context).custom.b_w_y,
                       ),
                     ),
                     // Text(
@@ -654,7 +654,7 @@ class _HomePageState extends State<HomePage> {
           decoration: BoxDecoration(
             color: Theme.of(context).custom.primary,
             border: Border.all(
-              color: Theme.of(context).custom.bwy,
+              color: Theme.of(context).custom.b_w_y,
             ),
             borderRadius: BorderRadius.circular(15),
           ),
@@ -681,7 +681,7 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
-                      color: Theme.of(context).custom.bwy,
+                      color: Theme.of(context).custom.b_w_y,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -700,7 +700,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w400,
-                        color: Theme.of(context).custom.bwy,
+                        color: Theme.of(context).custom.b_w_y,
                       ),
                     ),
                   ],
@@ -749,7 +749,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
-                        color: Theme.of(context).custom.bwy,
+                        color: Theme.of(context).custom.b_w_y,
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 4,
@@ -767,7 +767,7 @@ class _HomePageState extends State<HomePage> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(19),
                                 border: Border.all(
-                                  color: Theme.of(context).custom.bwy,
+                                  color: Theme.of(context).custom.b_w_y,
                                 ),
                               ),
                             ),
@@ -776,9 +776,9 @@ class _HomePageState extends State<HomePage> {
                               height: 9,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(19),
-                                color: Theme.of(context).custom.bwy,
+                                color: Theme.of(context).custom.b_w_y,
                                 border: Border.all(
-                                  color: Theme.of(context).custom.bwy,
+                                  color: Theme.of(context).custom.b_w_y,
                                 ),
                               ),
                             ),
@@ -790,7 +790,7 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(
                             fontSize: 9,
                             fontWeight: FontWeight.w300,
-                            color: Theme.of(context).custom.bwy,
+                            color: Theme.of(context).custom.b_w_y,
                           ),
                         ),
                       ],
@@ -1074,9 +1074,7 @@ class _HomePageState extends State<HomePage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
                 decoration: BoxDecoration(
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Colors.white
-                      : Color(0xFF121212),
+                  color: Theme.of(context).custom.w_b_b,
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(10),
                   ),
@@ -1088,11 +1086,7 @@ class _HomePageState extends State<HomePage> {
                       'ขนาดตัวหนังสือ',
                       style: TextStyle(
                         fontSize: 20,
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Colors.black
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? Colors.white
-                                : Color(0xFFFFFD57),
+                        color: Theme.of(context).custom.b_w_y,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -1107,11 +1101,7 @@ class _HomePageState extends State<HomePage> {
                       'ความตัดกันของสี',
                       style: TextStyle(
                         fontSize: 20,
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Colors.black
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? Colors.white
-                                : Color(0xFFFFFD57),
+                        color: Theme.of(context).custom.b_w_y,
                         fontWeight: FontWeight.w500,
                       ),
                     ),

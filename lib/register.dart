@@ -45,6 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool passwordVisibility = true;
   bool confirmPasswordVisibility = true;
+  bool chbAcceptPDPA = false;
 
   @override
   Widget build(BuildContext context) {
@@ -252,21 +253,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             style: TextStyle(
                               fontFamily: 'Kanit',
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.black
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
+                              color: Theme.of(context).custom.b_W_fffd57,
                             ),
-                            cursorColor: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                            cursorColor:
+                                Theme.of(context).custom.b325f8_w_fffd57,
                             validator: (model) {
                               if (model!.isEmpty) {
                                 return 'กรุณากรอกยืนยันรหัสผ่าน.';
@@ -291,21 +281,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             style: TextStyle(
                               fontFamily: 'Kanit',
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.black
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
+                              color: Theme.of(context).custom.b_W_fffd57,
                             ),
-                            cursorColor: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                            cursorColor:
+                                Theme.of(context).custom.b325f8_w_fffd57,
                             validator: (model) {
                               String pattern = r'(^(?:[+0]9)?[0-9]{9,10}$)';
                               RegExp regex = new RegExp(pattern);
@@ -324,21 +303,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             style: TextStyle(
                               fontFamily: 'Kanit',
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.black
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
+                              color: Theme.of(context).custom.b_W_fffd57,
                             ),
-                            cursorColor: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                            cursorColor:
+                                Theme.of(context).custom.b325f8_w_fffd57,
                             validator: (model) {
                               if (model!.isEmpty) {
                                 return 'กรุณากรอกชื่อ.';
@@ -355,21 +323,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             style: TextStyle(
                               fontFamily: 'Kanit',
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.black
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
+                              color: Theme.of(context).custom.b_W_fffd57,
                             ),
-                            cursorColor: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                            cursorColor:
+                                Theme.of(context).custom.b325f8_w_fffd57,
                             validator: (model) {
                               if (model!.isEmpty) {
                                 return 'กรุณากรอกนามสกุล.';
@@ -383,13 +340,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.black
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
+                              color: Theme.of(context).custom.b_W_fffd57,
                             ),
                           ),
                           SizedBox(height: 6),
@@ -411,13 +362,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.black
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
+                              color: Theme.of(context).custom.b_W_fffd57,
                             ),
                           ),
                           SizedBox(height: 6),
@@ -434,6 +379,39 @@ class _RegisterPageState extends State<RegisterPage> {
                                   .toList(),
                             ),
                           ),
+                          SizedBox(height: 20),
+                          CheckboxListTile(
+                              contentPadding: EdgeInsets.all(0),
+                              controlAffinity: ListTileControlAffinity.leading,
+                              title: Text(
+                                'ฉันยอมรับการให้ข้อมูล',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: Theme.of(context).custom.b_W_fffd57,
+                                ),
+                              ),
+                              subtitle: Text(
+                                'ยอมรับการให้ข้อมูลเพื่อสมัครสมาชิก เพื่อให้เป็นไปตามหลักข้อกำหนดในการเก็บข้อมูลส่วนบุคคล',
+                                style: TextStyle(
+                                  color: Theme.of(context).custom.f70f70_y,
+                                ),
+                              ),
+                              activeColor:
+                                  Theme.of(context).custom.b325f8_w_fffd57,
+                              side: BorderSide(
+                                color: Theme.of(context).custom.b325f8_w_fffd57,
+                              ),
+                              enabled: true,
+                              checkColor: Theme.of(context).custom.w_292929,
+                              checkboxShape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              value: chbAcceptPDPA,
+                              onChanged: (p0) => {
+                                    setState(() {
+                                      chbAcceptPDPA = p0!;
+                                    })
+                                  }),
                           SizedBox(height: 40),
                           _buildButtonRegister(),
                         ],
@@ -453,9 +431,12 @@ class _RegisterPageState extends State<RegisterPage> {
     return InkWell(
       onTap: () {
         final form = _formKey.currentState;
-        if (form!.validate()) {
-          form.save();
-          submitRegister();
+        if (chbAcceptPDPA) {
+          // print('object');
+          if (form!.validate()) {
+            form.save();
+            submitRegister();
+          }
         }
       },
       child: Container(
@@ -464,11 +445,9 @@ class _RegisterPageState extends State<RegisterPage> {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(23),
-          color: MyApp.themeNotifier.value == ThemeModeThird.light
-              ? Color(0xFF7A4CB1)
-              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                  ? Colors.white
-                  : Color(0xFFFFFD57),
+          color: chbAcceptPDPA ?
+           Theme.of(context).custom.A4CB1_w_fffd57:
+           Color(0xFF707070)
         ),
         child: Text(
           'สมัครสมาชิก',
@@ -500,24 +479,16 @@ class _RegisterPageState extends State<RegisterPage> {
             width: 20,
             decoration: BoxDecoration(
               border: Border.all(
-                  width: 1,
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? (_gender == value ? Color(0xFFA924F0) : Colors.grey)
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57)),
+                  width: 1, color: Theme.of(context).custom.b325f8_w_fffd57),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Container(
               margin: EdgeInsets.all(4),
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? (_gender == value ? Color(0xFFA924F0) : Colors.grey)
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? (_gender == value ? Colors.white : Colors.black)
-                        : (_gender == value ? Color(0xFFFFFD57) : Colors.black),
-              ),
+                  shape: BoxShape.circle,
+                  color: _gender == value
+                      ? Theme.of(context).custom.b325f8_w_fffd57
+                      : Theme.of(context).custom.w_b_b),
             ),
           ),
           SizedBox(width: 6),
@@ -525,11 +496,7 @@ class _RegisterPageState extends State<RegisterPage> {
             value,
             style: TextStyle(
               fontSize: 13,
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Colors.black
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
+              color: Theme.of(context).custom.b_W_fffd57,
             ),
           )
         ],
@@ -555,26 +522,26 @@ class _RegisterPageState extends State<RegisterPage> {
               width: 20,
               decoration: BoxDecoration(
                 border: Border.all(
-                    width: 1,
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? (_ageRange == value ? Color(0xFFA924F0) : Colors.grey)
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57)),
+                  width: 1,
+                  color: Theme.of(context).custom.b325f8_w_fffd57,
+                ),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Container(
                 margin: EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? (_ageRange == value ? Color(0xFFA924F0) : Colors.grey)
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? (_ageRange == value ? Colors.white : Colors.black)
-                          : (_ageRange == value
-                              ? Color(0xFFFFFD57)
-                              : Colors.black),
-                ),
+                    shape: BoxShape.circle,
+                    color: _ageRange == value
+                        ? Theme.of(context).custom.b325f8_w_fffd57
+                        : Theme.of(context).custom.w_b_b
+                    // MyApp.themeNotifier.value == ThemeModeThird.light
+                    //     ? (_ageRange == value ? Color(0xFFA924F0) : Colors.white)
+                    //     : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    //         ? (_ageRange == value ? Colors.white : Colors.black)
+                    //         : (_ageRange == value
+                    //             ? Color(0xFFFFFD57)
+                    //             : Colors.black),
+                    ),
               ),
             ),
             SizedBox(width: 6),
@@ -582,11 +549,7 @@ class _RegisterPageState extends State<RegisterPage> {
               value,
               style: TextStyle(
                 fontSize: 13,
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Colors.black
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
+                color: Theme.of(context).custom.b_W_fffd57,
               ),
             )
           ],
