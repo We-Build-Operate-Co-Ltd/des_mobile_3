@@ -443,7 +443,7 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
   _register() async {
     Dio dio = Dio();
     var response = await dio
-        .post('http://122.155.223.63/td-des-api/m/Register/update', data: {
+        .post('https://des.we-builds.com/de-api/m/Register/update', data: {
       'firstName': widget.model['fullName'].split(' ')[0],
       'lastName': widget.model['fullName'].split(' ')[1],
       'fullName': widget.model['fullName'],

@@ -633,7 +633,7 @@ class _MenuState extends State<Menu> {
     Response<dynamic> response;
     try {
       response = await dio
-          .post('http://122.155.223.63/td-des-api/m/MainPopup/read', data: {});
+          .post('https://des.we-builds.com/de-api/m/MainPopup/read', data: {});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
           return response.data['objectData'];
@@ -689,7 +689,7 @@ class _MenuState extends State<Menu> {
     dynamic policy = [];
     try {
       response = await dio
-          .post('http://122.155.223.63/td-des-api/m/policy/read', data: {
+          .post('https://des.we-builds.com/de-api/m/policy/read', data: {
         "category": "application",
         "profileCode": pf,
       });

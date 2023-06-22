@@ -560,7 +560,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<dynamic> submitRegister() async {
     final result = await Dio()
-        .post('http://122.155.223.63/td-des-api/m/Register/create', data: {
+        .post('https://des.we-builds.com/de-api/m/Register/create', data: {
       'email': txtEmail.text,
       'password': txtPassword.text,
       'phone': txtPhone.text,

@@ -63,7 +63,7 @@ class _VersionPageState extends State<VersionPage> {
     Dio dio = Dio();
     String platform = Platform.isAndroid ? 'Android' : 'Ios';
     Response<dynamic> result = await dio.post(
-        'http://122.155.223.63/td-des-api/m/v2/version/read',
+        'https://des.we-builds.com/de-api/m/v2/version/read',
         data: {'platform': platform});
 
     if (result.statusCode == 200) {

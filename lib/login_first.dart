@@ -1101,7 +1101,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
       Response<dynamic> response;
       try {
         response = await Dio()
-            .post('http://122.155.223.63/td-des-api/m/register/read', data: {
+            .post('https://des.we-builds.com/de-api/m/register/read', data: {
           'username': txtEmail.text.trim(),
           'category': _category.toString(),
         });
@@ -1190,7 +1190,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
       Dio dio = new Dio();
       try {
         var response = await dio.post(
-          'http://122.155.223.63/td-des-api/m/v2/register/facebook/login',
+          'https://des.we-builds.com/de-api/m/v2/register/facebook/login',
           data: model,
         );
 
@@ -1238,7 +1238,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
       Dio dio = new Dio();
       try {
         var response = await dio.post(
-          'http://122.155.223.63/td-des-api/m/v2/register/google/login',
+          'https://des.we-builds.com/de-api/m/v2/register/google/login',
           data: model,
         );
 
@@ -1294,7 +1294,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
       Dio dio = new Dio();
       try {
         var response = await dio.post(
-          'http://122.155.223.63/td-des-api/m/v2/register/line/login',
+          'https://des.we-builds.com/de-api/m/v2/register/line/login',
           data: model,
         );
 
@@ -1336,7 +1336,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
 
     Dio dio = new Dio();
     var response = await dio.post(
-      'http://122.155.223.63/td-des-api/m/v2/register/apple/login',
+      'https://des.we-builds.com/de-api/m/v2/register/apple/login',
       data: model,
     );
 

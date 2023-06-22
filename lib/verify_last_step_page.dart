@@ -244,7 +244,7 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
     user['isActive'] = true;
 
     final response = await Dio()
-        .post('http://122.155.223.63/td-des-api/m/Register/update', data: user);
+        .post('https://des.we-builds.com/de-api/m/Register/update', data: user);
 
     var result = response.data;
     if (result['status'] == 'S') {

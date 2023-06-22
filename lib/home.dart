@@ -918,7 +918,7 @@ class _HomePageState extends State<HomePage> {
     Response<dynamic> response;
     try {
       response = await dio.post(
-          'http://122.155.223.63/td-des-api/m/eventcalendar/read',
+          'https://des.we-builds.com/de-api/m/eventcalendar/read',
           data: {'skip': 0, 'limit': 2});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
@@ -934,7 +934,7 @@ class _HomePageState extends State<HomePage> {
     Response<dynamic> response;
     try {
       response = await dio.post(
-          'http://122.155.223.63/td-des-api/m/Banner/main/read',
+          'https://des.we-builds.com/de-api/m/Banner/main/read',
           data: {});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {

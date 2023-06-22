@@ -268,7 +268,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   Future<dynamic> submitForgotPassword() async {
-    Dio().post('http://122.155.223.63/td-des-api/m/Register/forgot/password',
+    Dio().post('https://des.we-builds.com/de-api/m/Register/forgot/password',
         data: {
           'email': txtEmail.text,
         });

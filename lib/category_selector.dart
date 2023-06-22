@@ -30,7 +30,7 @@ class _CategorySelectorState extends State<CategorySelector> {
     Response<dynamic> response;
     try {
       response = await dio.post(
-          'http://122.155.223.63/td-des-api/m/v2/notification/groupByCategory',
+          'https://des.we-builds.com/de-api/m/v2/notification/groupByCategory',
           data: {});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {

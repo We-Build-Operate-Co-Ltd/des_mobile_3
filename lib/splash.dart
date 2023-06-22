@@ -80,7 +80,7 @@ class _SplashPageState extends State<SplashPage> {
   _callRead() async {
     Dio dio = Dio();
     Response<dynamic> result = await dio
-        .post('http://122.155.223.63/td-des-api/m/splash/read', data: {});
+        .post('https://des.we-builds.com/de-api/m/splash/read', data: {});
 
     if (result.statusCode == 200) {
       if (result.data['status'] == 'S') {

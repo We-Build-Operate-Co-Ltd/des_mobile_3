@@ -35,7 +35,7 @@ class _FavoriteClassAllState extends State<FavoriteClassAllPage> {
 
   _loading() async {
     Response<dynamic> response = await dio.post(
-        'http://122.155.223.63/td-des-api/m/eventcalendar/read',
+        'https://des.we-builds.com/de-api/m/eventcalendar/read',
         data: {});
 
     if (response.statusCode == 200) {

@@ -82,7 +82,7 @@ class _PolicyPage extends State<PolicyPage> {
     Response<dynamic> response;
     try {
       response = await dio
-          .post('http://122.155.223.63/td-des-api/m/policy/read', data: {
+          .post('https://des.we-builds.com/de-api/m/policy/read', data: {
         "category": "application",
         "profileCode": _profileCode,
       });
@@ -965,7 +965,7 @@ class _PolicyPage extends State<PolicyPage> {
       });
       acceptPolicyList.forEach((e) {
         e['profileCode'] = _profileCode;
-        dio.post('http://122.155.223.63/td-des-api/m/policy/create', data: e);
+        dio.post('https://des.we-builds.com/de-api/m/policy/create', data: e);
       });
     } catch (e) {}
     return dialogConfirm();

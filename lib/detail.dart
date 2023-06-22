@@ -610,7 +610,7 @@ class _DetailPageState extends State<DetailPage> {
 
   void _read() async {
     Response<dynamic> result = await Dio()
-        .post('http://122.155.223.63/td-des-api/m/${widget.slug}/read', data: {
+        .post('https://des.we-builds.com/de-api/m/${widget.slug}/read', data: {
       'code': widget.checkNotiPage
           ? widget.model['reference']
           : widget.model['code']
@@ -632,7 +632,7 @@ class _DetailPageState extends State<DetailPage> {
     Response<dynamic> response;
     try {
       response = await Dio().post(
-          'http://122.155.223.63/td-des-api/m/${widget.slug}/gallery/read',
+          'https://des.we-builds.com/de-api/m/${widget.slug}/gallery/read',
           data: {
             'code': widget.checkNotiPage
                 ? widget.model['reference']

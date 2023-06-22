@@ -776,7 +776,7 @@ class _PoiPage extends State<PoiPage> {
     Response<dynamic> response;
     try {
       response =
-          await dio.post('http://122.155.223.63/td-des-api/m/poi/read', data: {
+          await dio.post('https://des.we-builds.com/de-api/m/poi/read', data: {
         'skip': 0,
         'limit': _limit,
         'latitude': latLng!.latitude,
@@ -856,7 +856,7 @@ class _PoiPage extends State<PoiPage> {
     Response<dynamic> response;
     try {
       response = await Dio().post(
-          'http://122.155.223.63/td-des-api/m/poi/category/read',
+          'https://des.we-builds.com/de-api/m/poi/category/read',
           data: {});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
