@@ -44,7 +44,7 @@ dependencies:
   dio: ^4.0.4
   fading_edge_scrollview: ^3.0.0
   firebase_auth: ^4.2.5
-  firebase_core: ^2.7.0
+  firebase_core: ^2.14.0
   firebase_core_platform_interface: ^4.5.1
   firebase_messaging: ^14.2.1
   flex_color_scheme: ^6.1.2
