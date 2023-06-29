@@ -332,7 +332,7 @@ class _VerifyFifthStepPageState extends State<VerifyFifthStepPage> {
       });
       Dio dio = Dio();
       var responseEmail = await dio.post(
-        'https://5fc1-125-24-83-177.ngrok-free.app/m/register/otp/request',
+        'https://des.we-builds.com/de-api/m/register/otp/request',
         data: {"email": widget.email},
       );
       var result = responseEmail.data;
@@ -357,7 +357,7 @@ class _VerifyFifthStepPageState extends State<VerifyFifthStepPage> {
       });
       Dio dio = Dio();
       var responseEmail = await dio.post(
-        'https://5fc1-125-24-83-177.ngrok-free.app/m/register/otp/validate',
+        'https://des.we-builds.com/de-api/m/register/otp/validate',
         data: {"email": widget.email, "title": txtNumber1.text},
       );
 

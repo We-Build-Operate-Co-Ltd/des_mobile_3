@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:des/build_modal_connection_in_progress.dart';
 import 'package:des/detail.dart';
+import 'package:des/find_job.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/notification_list.dart';
 import 'package:des/chat.dart';
@@ -992,7 +993,7 @@ class _HomePageState extends State<HomePage> {
     } else if (param == 'booking') {
       widget.changePage!(1);
     } else if (param == 'job') {
-      buildModalConnectionInProgress(context);
+      Navigator.push(context, MaterialPageRoute(builder: (_) => FindJobPage()));
     } else if (param == 'fund') {
       buildModalConnectionInProgress(context);
     } else if (param == 'skill') {
