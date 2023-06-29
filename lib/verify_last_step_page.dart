@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:des/menu.dart';
+import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'main.dart';
 
@@ -12,8 +14,12 @@ class VerifyLastStepPage extends StatefulWidget {
   const VerifyLastStepPage({
     Key? key,
     this.model,
+    required this.image,
+    required this.email,
   }) : super(key: key);
   final dynamic model;
+  final String image;
+  final String email;
 
   @override
   State<VerifyLastStepPage> createState() => _VerifyLastStepPageState();
@@ -36,30 +42,27 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
               _save();
             },
             child: Container(
-                  height: 50,
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.symmetric(horizontal: 15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(22.5),
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                  ),
-                  child: Text(
-                    'ส่งข้อมูล',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? Colors.white
-                                    : Colors.black,
-                    ),
-                  ),
+              height: 50,
+              alignment: Alignment.center,
+              margin: const EdgeInsets.symmetric(horizontal: 15),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(22.5),
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFF7A4CB1)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+              child: Text(
+                'ส่งข้อมูล',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
+                      : Colors.black,
                 ),
+              ),
+            ),
           ),
           SizedBox(height: 70),
         ],
@@ -170,10 +173,10 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
                 SizedBox(height: 15),
                 Container(
                   color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Colors.black.withOpacity(0.5)
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
+                      ? Colors.black.withOpacity(0.5)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
                   height: 1,
                 ),
                 SizedBox(height: 17),
@@ -183,7 +186,7 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
                     'วันเดือนปีเกิด',
                     _dateStringToDateSlashBuddhistShort(
                         widget.model['birthday'] ?? '')),
-                _text('อีเมล', widget.model['email'] ?? ''),
+                _text('อีเมล', widget.email),
                 _text('เพศ', widget.model['sex'] ?? ''),
               ],
             ),
@@ -213,10 +216,10 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
               fontSize: 15,
               fontWeight: FontWeight.w500,
               color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Colors.black
-                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                    ? Colors.white
-                    : Color(0xFFFFFD57),
+                  ? Colors.black
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
             ),
           ),
         ],
@@ -231,29 +234,41 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
   }
 
   _save() async {
-    var value = await ManageStorage.read('profileData') ?? '';
-    var user = json.decode(value);
+    try {
+      var value = await ManageStorage.read('profileData') ?? '';
+      var user = json.decode(value);
 
-    user['firstName'] = widget.model['firstName'];
-    user['lastName'] = widget.model['lastName'];
-    user['email'] = widget.model['email'];
-    user['phone'] = widget.model['phone'];
-    user['sex'] = widget.model['sex'];
-    user['address'] = widget.model['address'];
-    user['status'] = "A";
-    user['isActive'] = true;
+      user['firstName'] = widget.model['fullName'].split(' ')[0];
+      user['lastName'] = widget.model['fullName'].split(' ')[1];
+      user['fullName'] = widget.model['fullName'];
+      user['age'] = widget.model['age'];
+      user['age'] = widget.email;
+      user['idcard'] = widget.model['idcard'];
+      user['birthday'] = widget.model['birthday'];
+      user['imageUrl'] = widget.image;
+      user['category'] = "guest";
+      user['status'] = "A";
+      user['isActive'] = true;
 
-    final response = await Dio()
-        .post('https://des.we-builds.com/de-api/m/Register/update', data: user);
+      final response = await Dio().post(
+          'https://des.we-builds.com/de-api/m/Register/update',
+          data: user);
 
-    var result = response.data;
-    if (result['status'] == 'S') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Menu(),
-        ),
-      );
+      var result = response.data;
+      if (result['status'] == 'S') {
+        await ManageStorage.createProfile(
+          value: response.data['objectData'],
+          key: 'guest',
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Menu(),
+          ),
+        );
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Fail.');
     }
   }
 

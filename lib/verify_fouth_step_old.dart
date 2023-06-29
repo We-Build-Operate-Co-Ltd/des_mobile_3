@@ -208,7 +208,6 @@ class _VerifyFouthStepOldPageState extends State<VerifyFouthStepOldPage> {
           if (last && value.isNotEmpty) {
             FocusScope.of(context).unfocus();
             if (await _validateOTP()) {
-              _faceRecognition();
               // Navigator.push(
               //   context,
               //   MaterialPageRoute(
@@ -283,121 +282,5 @@ class _VerifyFouthStepOldPageState extends State<VerifyFouthStepOldPage> {
       debugPrint(validate['status'].toString());
       return false;
     }
-  }
-
-  _faceRecognition() {
-    Regula.FaceSDK.presentFaceCaptureActivityWithConfig(
-      {
-        "cameraId": Regula.CameraPosition.Front,
-      },
-    ).then((result) async {
-      Uint8List imageFile = await setImage(
-        true,
-        base64Decode(Regula.FaceCaptureResponse.fromJson(json.decode(result))!
-            .image!
-            .bitmap!
-            .replaceAll("\n", "")),
-        Regula.ImageType.LIVE,
-      );
-      await updateSaveBase64(imageFile);
-      // ------------- test
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => VerifyLastStepPage(
-            model: widget.model,
-          ),
-        ),
-      );
-      // ------------- test
-      // _register();
-    });
-  }
-
-  setImage(bool first, Uint8List imageFile, int type) {
-    image1.bitmap = base64Encode(imageFile);
-    image1.imageType = type;
-    setState(() {
-      img1 = Image.memory(imageFile);
-      _liveness = "nil";
-      loading = true;
-    });
-    return imageFile;
-  }
-
-  updateSaveBase64(Uint8List imageFile) async {
-    final tempDir = await getTemporaryDirectory();
-    Random random = Random();
-    final file =
-        await File('${tempDir.path}/${random.nextInt(10000).toString()}.jpg')
-            .create();
-    file.writeAsBytesSync(imageFile);
-    XFile xFile = XFile(file.path);
-
-    await uploadImageId(xFile, widget.model['idcard']).then((res) {
-      setState(() {
-        image = res;
-      });
-    }).catchError((err) {
-      debugPrint(err);
-    });
-  }
-
-  _register() async {
-    Dio dio = Dio();
-    var response = await dio
-        .post('https://des.we-builds.com/de-api/m/Register/update', data: {
-      'firstName': widget.model['fullName'].split(' ')[0],
-      'lastName': widget.model['fullName'].split(' ')[1],
-      'fullName': widget.model['fullName'],
-      'age': widget.model['age'],
-      'idcard': widget.model['idcard'],
-      'birthDay': widget.model['birthday'],
-      'imageUrl': image,
-      // 'category': "face",
-      'status': "N",
-      'platform': Platform.operatingSystem.toString(),
-    });
-
-    if (response.statusCode == 200) {
-      setState(() {
-        loading = false;
-      });
-      if (response.data['status'] == 'S') {
-        Fluttertoast.showToast(msg: 'สำเร็จ');
-        Future.delayed(const Duration(milliseconds: 1500), () {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const Menu(),
-            ),
-            (Route<dynamic> route) => false,
-          );
-        });
-      } else {
-        setState(() {
-          loading = false;
-        });
-        Fluttertoast.showToast(
-            msg: response.data['message'] ?? 'เกิดข้อผิดพลาด');
-      }
-    } else {
-      setState(() {
-        loading = false;
-      });
-      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-    }
-  }
-
-  Future<String> uploadImageId(XFile file, String id) async {
-    Dio dio = Dio();
-
-    String fileName = file.path.split('/').last;
-    FormData formData = FormData.fromMap({
-      "ImageCaption": id,
-      "Image": await MultipartFile.fromFile(file.path, filename: fileName),
-    });
-
-    var response = await dio
-        .post('https://raot.we-builds.com/des-document/upload', data: formData);
-    return response.data['imageUrl'];
   }
 }

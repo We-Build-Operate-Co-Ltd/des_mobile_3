@@ -13,6 +13,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import 'main.dart';
+import 'shared/extension.dart';
 
 class UserProfileEditPage extends StatefulWidget {
   UserProfileEditPage({Key? key}) : super(key: key);
@@ -693,12 +694,12 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
   }
 
   Future<dynamic> readUser() async {
-    final response = await Dio().post("m/Register/read", data: {
+    final response = await Dio()
+        .post("https://des.we-builds.com/de-api/m/Register/read", data: {
       'code': _code,
     });
 
     var result = response.data;
-
     if (result['status'] == 'S') {
       await storage.write(
         key: 'dataUserLoginSSO',
@@ -730,6 +731,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
         txtPhone.text = result['objectData'][0]['phone'] ?? '';
         _selectedPrefixName = result['objectData'][0]['prefixName'] ?? '';
         _code = result['objectData'][0]['code'] ?? '';
+        txtAge.text = result['objectData'][0]['age'];
       });
     }
   }

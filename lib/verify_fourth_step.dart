@@ -1,9 +1,9 @@
 import 'dart:convert';
 
+import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/verify_fifth_step.dart';
-import 'package:des/verify_fouth_step_old.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,6 +23,7 @@ class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
   TextEditingController? _phoneController;
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _loadindSubmit = false;
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +38,8 @@ class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
             : Colors.black,
         appBar: AppBar(
           backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
-            ? Colors.white
-            : Colors.black,
+              ? Colors.white
+              : Colors.black,
           elevation: 0,
           flexibleSpace: _buildHead(),
           automaticallyImplyLeading: false,
@@ -58,11 +59,11 @@ class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
                   style: TextStyle(
                     fontSize: 15,
                     color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Colors.black
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
-                    ),
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  ),
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
@@ -73,12 +74,13 @@ class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
                   ],
                   decoration: _decorationBase(context, hintText: 'อีเมล'),
                   style: TextStyle(
-                      fontFamily: 'Kanit',
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Colors.black
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),),
+                    fontFamily: 'Kanit',
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  ),
                   validator: (String? value) {
                     if (value!.isEmpty) {
                       return 'กรุณากรอกข้อมูล ';
@@ -94,39 +96,55 @@ class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
                 const Expanded(
                   child: SizedBox(),
                 ),
-                GestureDetector(
-                  onTap: () async {
-                    final form = _formKey.currentState;
-                    if (form!.validate()) {
-                      form.save();
-                      _requestOTP();
-                    }
-                  },
-                  child: Container(
-                    height: 50,
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.symmetric(horizontal: 15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(22.5),
+                Stack(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        final form = _formKey.currentState;
+                        if (form!.validate() && !_loadindSubmit) {
+                          form.save();
+                          _requestOTP();
+                        }
+                      },
+                      child: Container(
+                        height: 50,
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.symmetric(horizontal: 15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(22.5),
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFF7A4CB1)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        ),
+                        child: Text(
+                          'ดำเนินการต่อ',
+                          style: TextStyle(
+                            fontSize: 16,
                             color: MyApp.themeNotifier.value ==
                                     ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                    ),
-                    child: Text(
-                      'ดำเนินการต่อ',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? Colors.white
-                                    : Colors.black,
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    if (_loadindSubmit)
+                      Positioned.fill(
+                        left: 15,
+                        right: 15,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xFFEEEEEE).withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(22.5),
+                          ),
+                          alignment: Alignment.center,
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                  ],
                 ),
                 const SizedBox(height: 20),
               ],
@@ -147,8 +165,8 @@ class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
         top: MediaQuery.of(context).padding.top,
       ),
       color: MyApp.themeNotifier.value == ThemeModeThird.light
-            ? Colors.white
-            : Colors.black,
+          ? Colors.white
+          : Colors.black,
       child: Stack(
         children: [
           const SizedBox(
@@ -262,42 +280,46 @@ class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
   @override
   void initState() {
     _phoneController = TextEditingController();
+    _loadindSubmit = false;
     super.initState();
   }
 
   _requestOTP() async {
-    var value = await ManageStorage.read('profileData') ?? '';
-    var user = json.decode(value);
-
-    user['email'] = _emailController.text;
-    var response = await Dio()
-        .post('https://des.we-builds.com/de-api/m/Register/update', data: user);
-   
-    
-
-    Dio dioEmail = Dio();
-    var responseEmail = await dioEmail.post(
-      'https://core148.we-builds.com/email-api/Email/Create',
-      data: {
-        "email": [(_emailController.text)],
-        "title": "DES ดิจิทัลชุมชน",
-        "description": "รหัส OTP ของคุณคือ 234156",
-        "subject": "DES ดิจิทัลชุมชน รับรหัส OTP"
-      },
-    );
-
-    var result = responseEmail.data;
-    if (result['status'] == "S") {
-      widget.model['email'] = _emailController.text;
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => VerifyFifthStepPage(
-            model: widget.model,
-          ),
-        ),
+    try {
+      setState(() {
+        _loadindSubmit = true;
+      });
+      Dio dio = Dio();
+      var responseEmail = await dio.post(
+        'https://des.we-builds.com/de-api/m/register/otp/request',
+        data: {"email": _emailController.text},
       );
-    } else {
+
+      var result = responseEmail.data;
+      if (result['status'] == "S") {
+        _emailController.text;
+        setState(() {
+          _loadindSubmit = false;
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => VerifyFifthStepPage(
+              model: widget.model,
+              email: _emailController.text,
+            ),
+          ),
+        );
+      } else {
+        setState(() {
+          _loadindSubmit = false;
+        });
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      }
+    } catch (ex) {
+      setState(() {
+        _loadindSubmit = false;
+      });
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }

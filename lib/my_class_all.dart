@@ -65,8 +65,8 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
       },
       child: Scaffold(
         backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
-              ? Colors.white
-              : Colors.black,
+            ? Colors.white
+            : Colors.black,
         body: ListView(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).padding.bottom + 25,
@@ -119,10 +119,10 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
                     color: MyApp.themeNotifier.value == ThemeModeThird.light
-                              ? Colors.black
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? Colors.white
-                                  : Color(0xFFFFFD57),
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 3,
@@ -192,39 +192,40 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
               InkWell(
                 onTap: () => Navigator.pop(context),
                 child: Container(
-                height: 40,
-                width: 40,
-                padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Color(0xFF7A4CB1)
-                        : Colors.black,
-                    border: Border.all(
-                      width: 1,
-                      style: BorderStyle.solid,
+                  height: 40,
+                  width: 40,
+                  padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
                       color: MyApp.themeNotifier.value == ThemeModeThird.light
                           ? Color(0xFF7A4CB1)
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
-                    )),
-                child: Image.asset(
-                  'assets/images/back_arrow.png',
+                          : Colors.black,
+                      border: Border.all(
+                        width: 1,
+                        style: BorderStyle.solid,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                      )),
+                  child: Image.asset(
+                    'assets/images/back_arrow.png',
+                  ),
                 ),
-              ),),
+              ),
               SizedBox(width: 34),
               Text(
                 '',
                 style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Colors.black
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
-              ),
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.black
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                ),
               ),
             ],
           ),

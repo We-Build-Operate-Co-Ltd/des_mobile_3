@@ -130,11 +130,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
                     color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                 ),
                 InkWell(
@@ -150,11 +149,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                       color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                          ? Color(0xFF7A4CB1)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                       decoration: TextDecoration.underline,
                     ),
                   ),
@@ -181,11 +179,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
                     color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                        ? Color(0xFF7A4CB1)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                 ),
                 InkWell(
@@ -201,11 +198,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                       color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                          ? Color(0xFF7A4CB1)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                       decoration: TextDecoration.underline,
                     ),
                   ),
@@ -238,8 +234,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Color(0xFFB325F8).withOpacity(0.10)
-                                : Color(0xFF292929),
+            ? Color(0xFFB325F8).withOpacity(0.10)
+            : Color(0xFF292929),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -255,11 +251,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                     color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
@@ -270,11 +265,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                     color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
@@ -287,11 +281,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       height: 10,
                       width: 10,
                       color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                     SizedBox(width: 5),
                     Text(
@@ -300,11 +293,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         fontSize: 7,
                         fontWeight: FontWeight.w400,
                         color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                            ? Colors.black
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       ),
                     ),
                     SizedBox(width: 20),
@@ -313,11 +305,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       height: 10,
                       width: 10,
                       color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                     SizedBox(width: 5),
                     Text(
@@ -326,11 +317,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         fontSize: 7,
                         fontWeight: FontWeight.w400,
                         color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                            ? Colors.black
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       ),
                     ),
                   ],
@@ -344,12 +334,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w500,
-              color:  MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Color(0xFFB325F8)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFFB325F8)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
             ),
           ),
         ],
@@ -393,11 +382,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                   color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                      ? Colors.black
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
@@ -468,7 +456,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             color: MyApp.themeNotifier.value ==
                                     ThemeModeThird.light
                                 ? Color(0x80B325F8).withOpacity(0.47)
-                                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
                                     ? Colors.white
                                     : Color(0xFFFFFD57),
                           ),
@@ -479,7 +468,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         height: 9,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(19),
-                          color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
                               ? Color(0xFFB325F8)
                               : MyApp.themeNotifier.value == ThemeModeThird.dark
                                   ? Colors.white
@@ -505,10 +495,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       fontSize: 9,
                       fontWeight: FontWeight.w300,
                       color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Colors.black
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57),
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                   ),
                 ),

@@ -137,49 +137,49 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                                   ),
                                 ),
                                 Positioned(
-                                   height: 35,
-                                   width: 35,
+                                  height: 35,
+                                  width: 35,
                                   right: 0,
                                   top: 0,
                                   // bottom: 0,
                                   // left: 0,
                                   child: GestureDetector(
-                                      onTap: () {
-                                        buildModalSwitch(context);
-                                      },
-                                      child: Container(
-                                          // height: 35,
-                                          // width: 35,
-                                          // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 7),
-                                          decoration: BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius: BorderRadius.circular(10),
-                                            border: Border.all(
-                                              width: 1,
-                                              style: BorderStyle.solid,
-                                              color: Theme.of(context).custom.b_w_y,
-                                            )
-                                          ),
-                                          child: Icon(
-                                            Icons.visibility_outlined,
-                                            color: Theme.of(context).custom.w_w_y,
-                                          ),
-                                        ),
-                                      
-                                //       // Image.asset(
-                                //       //   MyApp.themeNotifier.value ==
-                                //       //           ThemeModeThird.light
-                                //       //       ? 'assets/images/icon_blind.png'
-                                //       //       : MyApp.themeNotifier.value ==
-                                //       //               ThemeModeThird.dark
-                                //       //           ? 'assets/images/icon_blind_d.png'
-                                //       //           : 'assets/images/icon_blind_d-y.png',
-                                //       //   height: 55,
-                                //       //   width: 55,
-                                //       // ),
+                                    onTap: () {
+                                      buildModalSwitch(context);
+                                    },
+                                    child: Container(
+                                      // height: 35,
+                                      // width: 35,
+                                      // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 7),
+                                      decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                            width: 1,
+                                            style: BorderStyle.solid,
+                                            color:
+                                                Theme.of(context).custom.b_w_y,
+                                          )),
+                                      child: Icon(
+                                        Icons.visibility_outlined,
+                                        color: Theme.of(context).custom.w_w_y,
                                       ),
+                                    ),
+
+                                    //       // Image.asset(
+                                    //       //   MyApp.themeNotifier.value ==
+                                    //       //           ThemeModeThird.light
+                                    //       //       ? 'assets/images/icon_blind.png'
+                                    //       //       : MyApp.themeNotifier.value ==
+                                    //       //               ThemeModeThird.dark
+                                    //       //           ? 'assets/images/icon_blind_d.png'
+                                    //       //           : 'assets/images/icon_blind_d-y.png',
+                                    //       //   height: 55,
+                                    //       //   width: 55,
+                                    //       // ),
+                                  ),
                                 )
-                              
                               ],
                             ),
                           ),
@@ -259,7 +259,8 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                               'ดำเนินการต่อ',
                               color: Theme.of(context).custom.A4CB1_w_fffd57,
                               colorTitle: Theme.of(context).custom.w_b_b,
-                              colorBorder: Theme.of(context).custom.A4CB1_w_fffd57,
+                              colorBorder:
+                                  Theme.of(context).custom.A4CB1_w_fffd57,
                             ),
                           ),
                           SizedBox(height: 30),

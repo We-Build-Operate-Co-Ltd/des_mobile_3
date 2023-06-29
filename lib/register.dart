@@ -444,11 +444,10 @@ class _RegisterPageState extends State<RegisterPage> {
         height: 45,
         width: double.infinity,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(23),
-          color: chbAcceptPDPA ?
-           Theme.of(context).custom.A4CB1_w_fffd57:
-           Color(0xFF707070)
-        ),
+            borderRadius: BorderRadius.circular(23),
+            color: chbAcceptPDPA
+                ? Theme.of(context).custom.A4CB1_w_fffd57
+                : Color(0xFF707070)),
         child: Text(
           'สมัครสมาชิก',
           style: TextStyle(

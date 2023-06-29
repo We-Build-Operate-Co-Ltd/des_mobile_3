@@ -900,7 +900,6 @@ class _HomePageState extends State<HomePage> {
   void _callRead() async {
     fontStorageValue = await storage.read(key: 'switchSizeFont') ?? 'ปกติ';
     colorStorageValue = await storage.read(key: 'switchColor') ?? 'ปกติ';
-    logD('fontStorageValue WidgetsBinding ----> $fontStorageValue');
     FirebaseMessaging.instance.getToken().then((token) async {
       print('token: $token');
     });

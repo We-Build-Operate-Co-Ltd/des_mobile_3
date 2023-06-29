@@ -1,29 +1,22 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
-
-import 'package:camera/camera.dart';
-import 'package:des/menu.dart';
+import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/verify_fourth_step.dart';
-import 'package:des/verify_last_step_page.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // ignore: library_prefixes
 import 'package:flutter_face_api/face_api.dart' as Regula;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'main.dart';
 
 class VerifyThirdStepPage extends StatefulWidget {
   const VerifyThirdStepPage(
-      {Key? key, @required this.token, @required this.refCode, this.model})
+      {Key? key, required this.token, required this.refCode, this.model})
       : super(key: key);
-  final String? token;
-  final String? refCode;
+  final String token;
+  final String refCode;
   final dynamic model;
 
   @override
@@ -32,20 +25,9 @@ class VerifyThirdStepPage extends StatefulWidget {
 
 class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
   final txtNumber1 = TextEditingController();
-  final txtNumber2 = TextEditingController();
-  final txtNumber3 = TextEditingController();
-  final txtNumber4 = TextEditingController();
-  final txtNumber5 = TextEditingController();
-  final txtNumber6 = TextEditingController();
-
-  final txtEmailNumber1 = TextEditingController();
-  final txtEmailNumber2 = TextEditingController();
-  final txtEmailNumber3 = TextEditingController();
-  final txtEmailNumber4 = TextEditingController();
-  final txtEmailNumber5 = TextEditingController();
-  final txtEmailNumber6 = TextEditingController();
   bool loading = false;
   String image = '';
+  final _formKey = GlobalKey<FormState>();
 
   // face recognition start
   var image1 = Regula.MatchFacesImage();
@@ -54,6 +36,15 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
   var img2 = Image.asset('logo.png');
   // ignore: unused_field
   String _liveness = "nil";
+  String _token = "";
+  String _refCode = "";
+
+  @override
+  void initState() {
+    _token = widget.token;
+    _refCode = widget.refCode;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,20 +94,20 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
                     padding: EdgeInsets.all(20),
                     // alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle,
+                      shape: BoxShape.circle,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF7A4CB1)
+                          : Colors.black,
+                      border: Border.all(
+                        width: 1,
+                        style: BorderStyle.solid,
                         color: MyApp.themeNotifier.value == ThemeModeThird.light
                             ? Color(0xFF7A4CB1)
-                            : Colors.black,
-                        border: Border.all(
-                          width: 1,
-                          style: BorderStyle.solid,
-                          color: MyApp.themeNotifier.value ==
-                                  ThemeModeThird.light
-                              ? Color(0xFF7A4CB1)
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? Colors.white
-                                  : Color(0xFFFFFD57),
-                        )),
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                      ),
+                    ),
                     child: Image.asset(
                       'assets/images/icon_phone.png',
                     ),
@@ -124,32 +115,91 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
                 ],
               ),
               const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _textFieldOTP(txtNumber1, first: true),
-                  _textFieldOTP(txtNumber2),
-                  _textFieldOTP(txtNumber3),
-                  _textFieldOTP(txtNumber4),
-                  _textFieldOTP(txtNumber5),
-                  _textFieldOTP(txtNumber6, last: true),
-                ],
+              Form(
+                key: _formKey,
+                child: PinCodeTextField(
+                  appContext: context,
+                  controller: txtNumber1,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  length: 6,
+                  obscureText: false,
+                  obscuringCharacter: '*',
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  blinkWhenObscuring: true,
+                  animationType: AnimationType.fade,
+                  validator: (v) {
+                    if (v!.length < 6) {
+                      return "";
+                    } else {
+                      return null;
+                    }
+                  },
+                  pinTheme: PinTheme(
+                    inactiveColor: Colors.transparent,
+                    activeColor: Colors.transparent,
+                    selectedColor: Theme.of(context).primaryColor,
+                    // disabledColor: Colors.white,
+                    selectedFillColor: Colors.white,
+                    inactiveFillColor: Color(0xFFEEEEEE),
+                    shape: PinCodeFieldShape.box,
+                    borderRadius: BorderRadius.circular(15),
+                    fieldHeight: 45.2,
+                    fieldWidth: 45.2,
+                    activeFillColor: Color(0xFFEEEEEE),
+                  ),
+                  backgroundColor: Colors.white,
+                  cursorColor: Colors.black,
+                  animationDuration: const Duration(milliseconds: 300),
+                  enableActiveFill: true,
+                  // errorAnimationController: errorController,
+                  // controller: textEditingController,
+                  keyboardType: TextInputType.number,
+                  onCompleted: (v) async {
+                    if (await _validateOTP()) {
+                      if (!mounted) return;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => VerifyFourthStepPage(
+                            model: widget.model,
+                          ),
+                        ),
+                      );
+                    } else {
+                      Fluttertoast.showToast(msg: 'OTP ไม่ถูกต้อง');
+                    }
+                  },
+                  // onTap: () {
+                  //   print("Pressed");
+                  // },
+                  onChanged: (value) {
+                    debugPrint(value);
+                    setState(() {
+                      // currentText = value;
+                    });
+                  },
+                  beforeTextPaste: (text) {
+                    debugPrint("Allowing to paste $text");
+                    //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                    //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                    return true;
+                  },
+                ),
               ),
               const SizedBox(height: 20),
               Center(
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () => _requestOTP(),
                   child: Text(
                     'ท่านต้องการรับรหัสใหม่',
                     style: TextStyle(
                       fontSize: 13,
                       decoration: TextDecoration.underline,
-                      color: MyApp.themeNotifier.value ==
-                                  ThemeModeThird.light
-                              ? Colors.black
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? Colors.white
-                                  : Color(0xFFFFFD57),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                   ),
                 ),
@@ -157,9 +207,19 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
               const SizedBox(height: 30),
               const Expanded(child: SizedBox()),
               GestureDetector(
-                onTap: () {
-                  if (_checkEmpty()) {
-                    _validateOTP();
+                onTap: () async {
+                  if (txtNumber1.text.isNotEmpty) {
+                    if (await _validateOTP()) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => VerifyFourthStepPage(
+                            model: widget.model,
+                          ),
+                        ),
+                      );
+                    } else {
+                      Fluttertoast.showToast(msg: 'OTP ไม่ถูกต้อง');
+                    }
                   } else {
                     Fluttertoast.showToast(msg: 'OTP ไม่ครบ');
                   }
@@ -170,22 +230,19 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
                   margin: const EdgeInsets.symmetric(horizontal: 15),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(22.5),
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF7A4CB1)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                   child: Text(
                     'ดำเนินการต่อ',
                     style: TextStyle(
                       fontSize: 16,
-                      color: MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? Colors.white
-                                    : Colors.black,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.white
+                          : Colors.black,
                     ),
                   ),
                 ),
@@ -265,237 +322,49 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
     );
   }
 
-  Widget _textFieldOTP(TextEditingController model,
-      {bool first = false, bool last = false}) {
-    return SizedBox(
-      height: 60,
-      width: 50,
-      child: TextField(
-        autofocus: true,
-        onChanged: (String value) async {
-          if (value.isNotEmpty && last == false) {
-            FocusScope.of(context).nextFocus();
-          }
-          if (value.isEmpty && first == false) {
-            FocusScope.of(context).previousFocus();
-          }
-          if (last && value.isNotEmpty) {
-            FocusScope.of(context).unfocus();
-            if (await _validateOTP()) {
-              // _faceRecognition();
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => VerifyFourthStepPage(
-                    model: widget.model,
-                  ),
-                ),
-              );
-            } else {
-              Fluttertoast.showToast(msg: 'OTP ไม่ถูกต้อง');
-            }
-          }
-        },
-        style: TextStyle(
-          height: 0.8,
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Kanit',
-          color: MyApp.themeNotifier.value == ThemeModeThird.light
-              ? Colors.black
-              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                  ? Colors.white
-                  : Color(0xFFFFFD57),
-        ),
-        cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
-            ? Color(0xFF7A4CB1)
-            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                ? Colors.white
-                : Color(0xFFFFFD57),
-        showCursor: false,
-        readOnly: false,
-        textAlign: TextAlign.center,
-        // keyboardType: TextInputType.number,
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-          // LengthLimitingTextInputFormatter(13),
-        ],
-        maxLength: 1,
-        decoration: InputDecoration(
-          counter: const Offstage(),
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                width: 1,
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFFEEEEEE)
-                    : Color(0xFF707070),
-              ),
-              borderRadius: BorderRadius.circular(12)),
-          fillColor: MyApp.themeNotifier.value == ThemeModeThird.light
-              ? Color(0xFFEEEEEE)
-              : Color(0xFF707070),
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 2,
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFFA924F0)
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57)),
-              borderRadius: BorderRadius.circular(12)),
-        ),
-        controller: model,
-      ),
-    );
-  }
-
-  _checkEmpty() {
-    if (txtNumber1.text != '' &&
-        txtNumber2.text != '' &&
-        txtNumber3.text != '' &&
-        txtNumber4.text != '' &&
-        txtNumber5.text != '' &&
-        txtNumber6.text != '') {
-      return true;
-    }
-    return false;
-  }
-
-  _validateOTP() async {
-    debugPrint('otp phone');
+  _requestOTP() async {
     Dio dio = Dio();
     dio.options.contentType = Headers.formUrlEncodedContentType;
     dio.options.headers["api_key"] = "db88c29e14b65c9db353c9385f6e5f28";
     dio.options.headers["secret_key"] = "XpM2EfFk7DKcyJzt";
     var response =
-        await dio.post('https://portal-otp.smsmkt.com/api/otp-validate', data: {
-      "token": widget.token,
-      "otp_code":
-          '${txtNumber1.text}${txtNumber2.text}${txtNumber3.text}${txtNumber4.text}${txtNumber5.text}${txtNumber6.text}',
-      "refCode": widget.refCode
+        await dio.post('https://portal-otp.smsmkt.com/api/otp-send', data: {
+      "project_key": "XcvVbGHhAi",
+      "phone": widget.model['phone'],
+      "ref_code": "xxx123"
     });
-    var validate = response.data['result'];
-    if (validate != null && validate['status']) {
-      debugPrint(validate['status'].toString());
-      return true;
+
+    var otp = response.data['result'];
+    if (otp['token'] != null) {
+      setState(() {
+        _token = otp['token'];
+        _refCode = otp['ref_code'];
+      });
     } else {
-      debugPrint(validate['status'].toString());
-      return false;
-    }
-  }
-
-  _faceRecognition() {
-    Regula.FaceSDK.presentFaceCaptureActivityWithConfig(
-      {
-        "cameraId": Regula.CameraPosition.Front,
-      },
-    ).then((result) async {
-      Uint8List imageFile = await setImage(
-        true,
-        base64Decode(Regula.FaceCaptureResponse.fromJson(json.decode(result))!
-            .image!
-            .bitmap!
-            .replaceAll("\n", "")),
-        Regula.ImageType.LIVE,
-      );
-      await updateSaveBase64(imageFile);
-      // ------------- test
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => VerifyFourthStepPage(
-            model: widget.model,
-          ),
-        ),
-      );
-      // ------------- test
-      // _register();
-    });
-  }
-
-  setImage(bool first, Uint8List imageFile, int type) {
-    image1.bitmap = base64Encode(imageFile);
-    image1.imageType = type;
-    setState(() {
-      img1 = Image.memory(imageFile);
-      _liveness = "nil";
-      loading = true;
-    });
-    return imageFile;
-  }
-
-  updateSaveBase64(Uint8List imageFile) async {
-    final tempDir = await getTemporaryDirectory();
-    Random random = Random();
-    final file =
-        await File('${tempDir.path}/${random.nextInt(10000).toString()}.jpg')
-            .create();
-    file.writeAsBytesSync(imageFile);
-    XFile xFile = XFile(file.path);
-
-    await uploadImageId(xFile, widget.model['idcard']).then((res) {
-      setState(() {
-        image = res;
-      });
-    }).catchError((err) {
-      debugPrint(err);
-    });
-  }
-
-  _register() async {
-    Dio dio = Dio();
-    var response = await dio
-        .post('https://des.we-builds.com/de-api/m/Register/update', data: {
-      'firstName': widget.model['fullName'].split(' ')[0],
-      'lastName': widget.model['fullName'].split(' ')[1],
-      'fullName': widget.model['fullName'],
-      'age': widget.model['age'],
-      'idcard': widget.model['idcard'],
-      'birthDay': widget.model['birthday'],
-      'imageUrl': image,
-      // 'category': "face",
-      'status': "N",
-      'platform': Platform.operatingSystem.toString(),
-    });
-
-    if (response.statusCode == 200) {
-      setState(() {
-        loading = false;
-      });
-      if (response.data['status'] == 'S') {
-        Fluttertoast.showToast(msg: 'สำเร็จ');
-        Future.delayed(const Duration(milliseconds: 1500), () {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const Menu(),
-            ),
-            (Route<dynamic> route) => false,
-          );
-        });
-      } else {
-        setState(() {
-          loading = false;
-        });
-        Fluttertoast.showToast(
-            msg: response.data['message'] ?? 'เกิดข้อผิดพลาด');
-      }
-    } else {
-      setState(() {
-        loading = false;
-      });
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }
 
-  Future<String> uploadImageId(XFile file, String id) async {
-    Dio dio = Dio();
-
-    String fileName = file.path.split('/').last;
-    FormData formData = FormData.fromMap({
-      "ImageCaption": id,
-      "Image": await MultipartFile.fromFile(file.path, filename: fileName),
-    });
-
-    var response = await dio
-        .post('https://raot.we-builds.com/des-document/upload', data: formData);
-    return response.data['imageUrl'];
+  _validateOTP() async {
+    try {
+      Dio dio = Dio();
+      dio.options.contentType = Headers.formUrlEncodedContentType;
+      dio.options.headers["api_key"] = "db88c29e14b65c9db353c9385f6e5f28";
+      dio.options.headers["secret_key"] = "XpM2EfFk7DKcyJzt";
+      var response = await dio
+          .post('https://portal-otp.smsmkt.com/api/otp-validate', data: {
+        "token": _token,
+        "otp_code": '${txtNumber1.text}',
+        "refCode": _refCode
+      });
+      var validate = response.data['result'];
+      if (validate != null && validate['status']) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (ex) {
+      return false;
+    }
   }
 }

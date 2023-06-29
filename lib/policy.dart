@@ -821,7 +821,7 @@ class _PolicyPage extends State<PolicyPage> {
   }
 
   Future<dynamic> dialogConfirm() async {
-    return  showDialog(
+    return showDialog(
       context: context,
       builder: (BuildContext context) {
         return WillPopScope(
@@ -830,108 +830,105 @@ class _PolicyPage extends State<PolicyPage> {
           },
           child: Dialog(
             backgroundColor: Theme.of(context).custom.w_292929,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20)
-            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             child: Container(
-                width: 220,
-               height: 155,
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  // border: Border.all(
-                  //   color: Theme.of(context).custom.w_w_fffd57,
-                  // ),
-                  color: Theme.of(context).custom.w_292929,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Theme.of(context).custom.g05_w01_w01,
-                      spreadRadius: 0,
-                      blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-                // decoration: BoxDecoration(
-                //   borderRadius: BorderRadius.circular(15),
-                //   color: Colors.white,
-                //   border: Border.all(
-                //     color: Theme.of(context).custom.w_w_fffd57,
-                //   )
+              width: 220,
+              height: 155,
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                // border: Border.all(
+                //   color: Theme.of(context).custom.w_w_fffd57,
                 // ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // SizedBox(height: 10),
-                    Text(
-                      'บันทึกเรียบร้อยแล้ว',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Kanit',
-                        color: Theme.of(context).custom.b_W_fffd57,
+                color: Theme.of(context).custom.w_292929,
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).custom.g05_w01_w01,
+                    spreadRadius: 0,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              // decoration: BoxDecoration(
+              //   borderRadius: BorderRadius.circular(15),
+              //   color: Colors.white,
+              //   border: Border.all(
+              //     color: Theme.of(context).custom.w_w_fffd57,
+              //   )
+              // ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // SizedBox(height: 10),
+                  Text(
+                    'บันทึกเรียบร้อยแล้ว',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'Kanit',
+                      color: Theme.of(context).custom.b_W_fffd57,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  // Text(
+                  //   'เราจะทำการส่งเรื่องของท่าน',
+                  //   style: TextStyle(
+                  //     fontSize: 13,
+                  //     fontFamily: 'Kanit',
+                  //   ),
+                  // ),
+                  // Text(
+                  //   'เพื่อทำการยืนยันต่อไป',
+                  //   style: TextStyle(
+                  //     fontSize: 13,
+                  //     fontFamily: 'Kanit',
+                  //   ),
+                  // ),
+                  // SizedBox(height: 15),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Menu(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 35,
+                      width: 160,
+                      alignment: Alignment.center,
+                      // margin: EdgeInsets.only(top: 20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Theme.of(context).custom.b325f8_w_fffd57,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'ตกลง',
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontFamily: 'Kanit',
+                                color: Theme.of(context).custom.w_b_b,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(height: 10),
-                    // Text(
-                    //   'เราจะทำการส่งเรื่องของท่าน',
-                    //   style: TextStyle(
-                    //     fontSize: 13,
-                    //     fontFamily: 'Kanit',
-                    //   ),
-                    // ),
-                    // Text(
-                    //   'เพื่อทำการยืนยันต่อไป',
-                    //   style: TextStyle(
-                    //     fontSize: 13,
-                    //     fontFamily: 'Kanit',
-                    //   ),
-                    // ),
-                    // SizedBox(height: 15),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Menu(),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        height: 35,
-                        width: 160,
-                        alignment: Alignment.center,
-                        // margin: EdgeInsets.only(top: 20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Theme.of(context).custom.b325f8_w_fffd57,
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'ตกลง',
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontFamily: 'Kanit',
-                                  color: Theme.of(context).custom.w_b_b,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
-              // child: //Contents here
-            
+            ),
+            // child: //Contents here
           ),
         );
       },
     );
-
   }
 
   nextIndex(dynamic model, bool accepted) {

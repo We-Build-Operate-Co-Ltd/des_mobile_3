@@ -4,24 +4,27 @@ import 'dart:math';
 
 import 'package:camera/camera.dart';
 import 'package:des/menu.dart';
+import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
-import 'package:des/verify_fourth_step.dart';
 import 'package:des/verify_last_step_page.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // ignore: library_prefixes
 import 'package:flutter_face_api/face_api.dart' as Regula;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'main.dart';
+import 'shared/secure_storage.dart';
 
 class VerifyFifthStepPage extends StatefulWidget {
-  const VerifyFifthStepPage({Key? key, this.model}) : super(key: key);
-  // final String? token;
-  // final String? refCode;
+  const VerifyFifthStepPage({Key? key, this.model, required this.email})
+      : super(key: key);
   final dynamic model;
+  final String email;
 
   @override
   State<VerifyFifthStepPage> createState() => _VerifyFifthStepPageState();
@@ -29,18 +32,8 @@ class VerifyFifthStepPage extends StatefulWidget {
 
 class _VerifyFifthStepPageState extends State<VerifyFifthStepPage> {
   final txtNumber1 = TextEditingController();
-  final txtNumber2 = TextEditingController();
-  final txtNumber3 = TextEditingController();
-  final txtNumber4 = TextEditingController();
-  final txtNumber5 = TextEditingController();
-  final txtNumber6 = TextEditingController();
-
-  final txtEmailNumber1 = TextEditingController();
-  final txtEmailNumber2 = TextEditingController();
-  final txtEmailNumber3 = TextEditingController();
-  final txtEmailNumber4 = TextEditingController();
-  final txtEmailNumber5 = TextEditingController();
-  final txtEmailNumber6 = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool _loadindSubmit = false;
   bool loading = false;
   String image = '';
 
@@ -128,75 +121,137 @@ class _VerifyFifthStepPageState extends State<VerifyFifthStepPage> {
               //   ),
               // ),
               const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _textFieldOTP(txtEmailNumber1, first: true),
-                  _textFieldOTP(txtEmailNumber2),
-                  _textFieldOTP(txtEmailNumber3),
-                  _textFieldOTP(txtEmailNumber4),
-                  _textFieldOTP(txtEmailNumber5),
-                  _textFieldOTP(txtEmailNumber6, last: true),
-                ],
+              Form(
+                key: _formKey,
+                child: PinCodeTextField(
+                  appContext: context,
+                  controller: txtNumber1,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  length: 6,
+                  obscureText: false,
+                  obscuringCharacter: '*',
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  blinkWhenObscuring: true,
+                  animationType: AnimationType.fade,
+                  validator: (v) {
+                    if (v!.length < 6) {
+                      return "";
+                    } else {
+                      return null;
+                    }
+                  },
+                  pinTheme: PinTheme(
+                    inactiveColor: Colors.transparent,
+                    activeColor: Colors.transparent,
+                    selectedColor: Theme.of(context).primaryColor,
+                    // disabledColor: Colors.white,
+                    selectedFillColor: Colors.white,
+                    inactiveFillColor: Color(0xFFEEEEEE),
+                    shape: PinCodeFieldShape.box,
+                    borderRadius: BorderRadius.circular(15),
+                    fieldHeight: 45.2,
+                    fieldWidth: 45.2,
+                    activeFillColor: Color(0xFFEEEEEE),
+                  ),
+                  backgroundColor: Colors.white,
+                  cursorColor: Colors.black,
+                  animationDuration: const Duration(milliseconds: 300),
+                  enableActiveFill: true,
+                  // errorAnimationController: errorController,
+                  // controller: textEditingController,
+                  keyboardType: TextInputType.number,
+                  onCompleted: (v) async {
+                    if (await _validateOTP()) {
+                      _faceRecognition();
+                    }
+                  },
+                  // onTap: () {
+                  //   print("Pressed");
+                  // },
+                  onChanged: (value) {
+                    debugPrint(value);
+                    setState(() {
+                      // currentText = value;
+                    });
+                  },
+                  beforeTextPaste: (text) {
+                    debugPrint("Allowing to paste $text");
+                    //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                    //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                    return true;
+                  },
+                ),
               ),
               const SizedBox(height: 20),
               Center(
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () => _requestOTP(),
                   child: Text(
                     'ท่านต้องการรับรหัสใหม่',
                     style: TextStyle(
                       fontSize: 13,
                       decoration: TextDecoration.underline,
-                      color: MyApp.themeNotifier.value ==
-                                  ThemeModeThird.light
-                              ? Colors.black
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? Colors.white
-                                  : Color(0xFFFFFD57),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                   ),
                 ),
               ),
               const SizedBox(height: 30),
               const Expanded(child: SizedBox()),
-              GestureDetector(
-                onTap: () async {
-                  if (_checkEmpty()) {
-                    if (await _validateOTP()) {
-                      _faceRecognition();
-                    } else {
-                      Fluttertoast.showToast(msg: 'OTP ไม่ถูกต้อง');
-                    }
-                  } else {
-                    Fluttertoast.showToast(msg: 'OTP ไม่ครบ');
-                  }
-                },
-                child: Container(
-                  height: 50,
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.symmetric(horizontal: 15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(22.5),
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                  ),
-                  child: Text(
-                    'ดำเนินการต่อ',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? Colors.white
-                                    : Colors.black,
+              Stack(
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      if (txtNumber1.text.length == 6) {
+                        if (await _validateOTP()) {
+                          _faceRecognition();
+                        }
+                      } else {
+                        Fluttertoast.showToast(msg: 'OTP ไม่ครบ');
+                      }
+                    },
+                    child: Container(
+                      height: 50,
+                      alignment: Alignment.center,
+                      margin: const EdgeInsets.symmetric(horizontal: 15),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22.5),
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                      ),
+                      child: Text(
+                        'ดำเนินการต่อ',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color:
+                              MyApp.themeNotifier.value == ThemeModeThird.light
+                                  ? Colors.white
+                                  : Colors.black,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  if (_loadindSubmit)
+                    Positioned.fill(
+                      left: 15,
+                      right: 15,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xFFEEEEEE).withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(22.5),
+                        ),
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                ],
               ),
               const SizedBox(height: 20),
             ],
@@ -273,93 +328,69 @@ class _VerifyFifthStepPageState extends State<VerifyFifthStepPage> {
     );
   }
 
-  Widget _textFieldOTP(TextEditingController model,
-      {bool first = false, bool last = false}) {
-    return SizedBox(
-      height: 60,
-      width: 50,
-      child: TextField(
-        autofocus: true,
-        onChanged: (String value) async {
-          if (value.isNotEmpty && last == false) {
-            FocusScope.of(context).nextFocus();
-          }
-          if (value.isEmpty && first == false) {
-            FocusScope.of(context).previousFocus();
-          }
-          if (last && value.isNotEmpty) {
-            FocusScope.of(context).unfocus();
-            if (await _validateOTP()) {
-              _faceRecognition();
-            } else {
-              Fluttertoast.showToast(msg: 'OTP ไม่ถูกต้อง');
-            }
-          }
-        },
-        showCursor: false,
-        readOnly: false,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          height: 0.8,
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Kanit',
-          color: MyApp.themeNotifier.value == ThemeModeThird.light
-              ? Colors.black
-              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                  ? Colors.white
-                  : Color(0xFFFFFD57),
-        ),
-        keyboardType: TextInputType.number,
-        maxLength: 1,
-        decoration: InputDecoration(
-          counter: const Offstage(),
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                width: 1,
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFFEEEEEE)
-                    : Color(0xFF707070),
-              ),
-              borderRadius: BorderRadius.circular(12)),
-          fillColor: MyApp.themeNotifier.value == ThemeModeThird.light
-              ? Color(0xFFEEEEEE)
-              : Color(0xFF707070),
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 2,
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFFA924F0)
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57)),
-              borderRadius: BorderRadius.circular(12)),
-        ),
-        controller: model,
-      ),
-    );
-  }
-
-  _checkEmpty() {
-    if (txtEmailNumber1.text != '' &&
-        txtEmailNumber2.text != '' &&
-        txtEmailNumber3.text != '' &&
-        txtEmailNumber4.text != '' &&
-        txtEmailNumber5.text != '' &&
-        txtEmailNumber6.text != '') {
-      return true;
+  _requestOTP() async {
+    try {
+      setState(() {
+        _loadindSubmit = true;
+      });
+      Dio dio = Dio();
+      var responseEmail = await dio.post(
+        'https://des.we-builds.com/de-api/m/register/otp/request',
+        data: {"email": widget.email},
+      );
+      var result = responseEmail.data;
+      setState(() {
+        _loadindSubmit = false;
+      });
+      if (result['status'] == "E") {
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      }
+    } catch (ex) {
+      setState(() {
+        _loadindSubmit = false;
+      });
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
-    return false;
   }
 
   _validateOTP() async {
-    return true;
+    try {
+      setState(() {
+        _loadindSubmit = true;
+      });
+      Dio dio = Dio();
+      var responseEmail = await dio.post(
+        'https://des.we-builds.com/de-api/m/register/otp/validate',
+        data: {"email": widget.email, "title": txtNumber1.text},
+      );
+
+      var result = responseEmail.data;
+      setState(() {
+        _loadindSubmit = false;
+      });
+      if (result['status'] == "S") {
+        // TO DO Success.
+        return true;
+      } else if (result['status'] == "E") {
+        Fluttertoast.showToast(msg: '${result['message']}');
+      } else {
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      }
+      return false;
+    } catch (e) {
+      setState(() {
+        _loadindSubmit = false;
+      });
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      return false;
+    }
   }
 
   _faceRecognition() {
     Regula.FaceSDK.presentFaceCaptureActivityWithConfig(
       {
         "cameraId": Regula.CameraPosition.Front,
+        "cameraSwitchEnabled": true,
       },
     ).then((result) async {
       Uint8List imageFile = await setImage(
@@ -376,6 +407,8 @@ class _VerifyFifthStepPageState extends State<VerifyFifthStepPage> {
         MaterialPageRoute(
           builder: (context) => VerifyLastStepPage(
             model: widget.model,
+            image: image,
+            email: widget.email,
           ),
         ),
       );
@@ -413,54 +446,8 @@ class _VerifyFifthStepPageState extends State<VerifyFifthStepPage> {
     });
   }
 
-  _register() async {
-    Dio dio = Dio();
-    var response = await dio
-        .post('https://des.we-builds.com/de-api/m/Register/update', data: {
-      'firstName': widget.model['fullName'].split(' ')[0],
-      'lastName': widget.model['fullName'].split(' ')[1],
-      'fullName': widget.model['fullName'],
-      'age': widget.model['age'],
-      'idcard': widget.model['idcard'],
-      'birthDay': widget.model['birthday'],
-      'imageUrl': image,
-      // 'category': "face",
-      'status': "N",
-      'platform': Platform.operatingSystem.toString(),
-    });
-
-    if (response.statusCode == 200) {
-      setState(() {
-        loading = false;
-      });
-      if (response.data['status'] == 'S') {
-        Fluttertoast.showToast(msg: 'สำเร็จ');
-        Future.delayed(const Duration(milliseconds: 1500), () {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const Menu(),
-            ),
-            (Route<dynamic> route) => false,
-          );
-        });
-      } else {
-        setState(() {
-          loading = false;
-        });
-        Fluttertoast.showToast(
-            msg: response.data['message'] ?? 'เกิดข้อผิดพลาด');
-      }
-    } else {
-      setState(() {
-        loading = false;
-      });
-      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-    }
-  }
-
   Future<String> uploadImageId(XFile file, String id) async {
     Dio dio = Dio();
-
     String fileName = file.path.split('/').last;
     FormData formData = FormData.fromMap({
       "ImageCaption": id,
@@ -468,7 +455,7 @@ class _VerifyFifthStepPageState extends State<VerifyFifthStepPage> {
     });
 
     var response = await dio
-        .post('https://raot.we-builds.com/des-document/upload', data: formData);
+        .post('https://des.we-builds.com/de-document/upload', data: formData);
     return response.data['imageUrl'];
   }
 }
