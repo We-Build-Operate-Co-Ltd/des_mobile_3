@@ -1148,21 +1148,7 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.symmetric(horizontal: 20),
           alignment: Alignment.center,
           height: 45,
-          // width: 145,
           decoration: BoxDecoration(
-            // border: Border.all(
-            //   width: 1,
-            //   style: BorderStyle.solid,
-            //   color: MyApp.themeNotifier.value == ThemeModeThird.light
-            //       ? (title == fontStorageValue ? Colors.white : Colors.black)
-            //       : MyApp.themeNotifier.value == ThemeModeThird.dark
-            //           ? (title == fontStorageValue
-            //               ? Colors.black
-            //               : Colors.white)
-            //           : (title == fontStorageValue
-            //               ? Colors.black
-            //               : Color(0xFFFFFD57)),
-            // ),
             color: MyApp.themeNotifier.value == ThemeModeThird.light
                 ? (title == fontStorageValue ? Color(0xFF7A4CB1) : Colors.white)
                 : MyApp.themeNotifier.value == ThemeModeThird.dark
@@ -1191,24 +1177,29 @@ class _HomePageState extends State<HomePage> {
                         )
                       : Container(),
                   SizedBox(width: 5),
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 17,
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? (title == fontStorageValue
-                              ? Colors.white
-                              : Colors.black)
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? (title == fontStorageValue
-                                  ? Colors.black
-                                  : Colors.white)
-                              : (title == fontStorageValue
-                                  ? Colors.black
-                                  : Color(0xFFFFFD57)),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  Image.asset(title == 'ใหญ่'
+                      ? 'assets/images/font-bigger.png'
+                      : title == 'ปานกลาง'
+                          ? 'assets/images/font-default.png'
+                          : 'assets/images/font-smaller.png'),
+                  // Text(
+                  //   title,
+                  //   style: TextStyle(
+                  //     fontSize: 17,
+                  //     color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  //         ? (title == fontStorageValue
+                  //             ? Colors.white
+                  //             : Colors.black)
+                  //         : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  //             ? (title == fontStorageValue
+                  //                 ? Colors.black
+                  //                 : Colors.white)
+                  //             : (title == fontStorageValue
+                  //                 ? Colors.black
+                  //                 : Color(0xFFFFFD57)),
+                  //     fontWeight: FontWeight.w500,
+                  //   ),
+                  // ),
                 ],
               ),
               Container(
@@ -1343,23 +1334,6 @@ class _HomePageState extends State<HomePage> {
                         //     ? Color(0xFF7A4CB1)
                         //     : Color(0xFFFFFFFF),
                         borderRadius: BorderRadius.circular(73),
-                        // border: Border.all(
-                        //   width: 1,
-                        //   style: BorderStyle.solid,
-                        //   color: MyApp.themeNotifier.value ==
-                        //           ThemeModeThird.light
-                        //       ? (item['title'] == colorStorageValue
-                        //           ? Color(0xFF7A4CB1)
-                        //           : Colors.white)
-                        //       : MyApp.themeNotifier.value ==
-                        //               ThemeModeThird.dark
-                        //           ? (item['title'] == colorStorageValue
-                        //               ? Colors.white
-                        //               : Color(0xFF292929))
-                        //           : (item['title'] == colorStorageValue
-                        //               ? Color(0xFFFFFD57)
-                        //               : Color(0xFF292929)),
-                        // )
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1368,37 +1342,37 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Image.asset(
                                 item['code'] == '1'
-                                    ? 'assets/images/icon_rp.png'
+                                    ? 'assets/images/color-default.png'
                                     : item['code'] == '2'
-                                        ? 'assets/images/icon_wb.png'
-                                        : "assets/images/icon_yb.png",
+                                        ? 'assets/images/color-blackwhite.png'
+                                        : "assets/images/color-blackyellow.png",
                                 height: 35,
                                 // width: 35,
                               ),
                               SizedBox(width: 5),
-                              Text(
-                                item['title'],
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? (item['title'] == colorStorageValue
-                                          ? Colors.white
-                                          : Colors.black)
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? (item['title'] == colorStorageValue
-                                              ? Colors.black
-                                              : Colors.white)
-                                          : (item['title'] == colorStorageValue
-                                              ? Colors.black
-                                              : Color(0xFFFFFD57)),
-                                  // color: item['title'] == colorStorageValue
-                                  //     ? Color(0xFFFFFFFF)
-                                  //     : Color(0xFF000000),
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                              // Text(
+                              //   item['title'],
+                              //   style: TextStyle(
+                              //     fontSize: 17,
+                              //     color: MyApp.themeNotifier.value ==
+                              //             ThemeModeThird.light
+                              //         ? (item['title'] == colorStorageValue
+                              //             ? Colors.white
+                              //             : Colors.black)
+                              //         : MyApp.themeNotifier.value ==
+                              //                 ThemeModeThird.dark
+                              //             ? (item['title'] == colorStorageValue
+                              //                 ? Colors.black
+                              //                 : Colors.white)
+                              //             : (item['title'] == colorStorageValue
+                              //                 ? Colors.black
+                              //                 : Color(0xFFFFFD57)),
+                              //     // color: item['title'] == colorStorageValue
+                              //     //     ? Color(0xFFFFFFFF)
+                              //     //     : Color(0xFF000000),
+                              //     fontWeight: FontWeight.w500,
+                              //   ),
+                              // ),
                             ],
                           ),
                           Container(

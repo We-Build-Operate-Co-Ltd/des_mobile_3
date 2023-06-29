@@ -26,6 +26,8 @@ class VerifyLastStepPage extends StatefulWidget {
 }
 
 class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
+  bool _loadindSubmit = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -235,6 +237,9 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
 
   _save() async {
     try {
+      setState(() {
+        _loadindSubmit = true;
+      });
       var value = await ManageStorage.read('profileData') ?? '';
       var user = json.decode(value);
 
@@ -245,6 +250,7 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
       user['age'] = widget.email;
       user['idcard'] = widget.model['idcard'];
       user['birthday'] = widget.model['birthday'];
+      user['phone'] = widget.model['phone'];
       user['imageUrl'] = widget.image;
       user['category'] = "guest";
       user['status'] = "A";

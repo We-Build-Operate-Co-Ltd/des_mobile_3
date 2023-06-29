@@ -3,8 +3,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:camera/camera.dart';
-import 'package:des/menu.dart';
-import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/verify_last_step_page.dart';
 import 'package:dio/dio.dart';
@@ -18,7 +16,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'main.dart';
-import 'shared/secure_storage.dart';
 
 class VerifyFifthStepPage extends StatefulWidget {
   const VerifyFifthStepPage({Key? key, this.model, required this.email})
@@ -335,7 +332,7 @@ class _VerifyFifthStepPageState extends State<VerifyFifthStepPage> {
       });
       Dio dio = Dio();
       var responseEmail = await dio.post(
-        'https://des.we-builds.com/de-api/m/register/otp/request',
+        'https://5fc1-125-24-83-177.ngrok-free.app/m/register/otp/request',
         data: {"email": widget.email},
       );
       var result = responseEmail.data;
@@ -360,7 +357,7 @@ class _VerifyFifthStepPageState extends State<VerifyFifthStepPage> {
       });
       Dio dio = Dio();
       var responseEmail = await dio.post(
-        'https://des.we-builds.com/de-api/m/register/otp/validate',
+        'https://5fc1-125-24-83-177.ngrok-free.app/m/register/otp/validate',
         data: {"email": widget.email, "title": txtNumber1.text},
       );
 
