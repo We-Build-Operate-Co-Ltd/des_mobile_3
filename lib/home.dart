@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:des/build_modal_connection_in_progress.dart';
 import 'package:des/detail.dart';
 import 'package:des/find_job.dart';
+import 'package:des/fund.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/notification_list.dart';
 import 'package:des/chat.dart';
@@ -995,7 +996,7 @@ class _HomePageState extends State<HomePage> {
     } else if (param == 'job') {
       Navigator.push(context, MaterialPageRoute(builder: (_) => FindJobPage()));
     } else if (param == 'fund') {
-      buildModalWaiting(context);
+      Navigator.push(context, MaterialPageRoute(builder: (_) => FundPage()));
     } else if (param == 'skill') {
       buildModalWaiting(context);
     } else if (param == 'knowledge') {

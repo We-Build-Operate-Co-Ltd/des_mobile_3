@@ -57,6 +57,7 @@ class _FindJobPageState extends State<FindJobPage> {
         ),
       ),
       body: ListView(
+        physics: BouncingScrollPhysics(),
         children: [
           SizedBox(height: 15),
           _buildListCategory(),
