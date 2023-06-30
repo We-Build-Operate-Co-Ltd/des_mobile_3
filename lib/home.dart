@@ -983,23 +983,23 @@ class _HomePageState extends State<HomePage> {
 
   void _callOpenPage(param) {
     if (param == 'btn1') {
-      buildModalConnectionInProgress(context);
+      buildModalWaiting(context);
     } else if (param == 'btn2') {
-      buildModalConnectionInProgress(context);
+      buildModalWaiting(context);
     } else if (param == 'btn3') {
-      buildModalConnectionInProgress(context);
+      buildModalWaiting(context);
     } else if (param == 'btn4') {
-      buildModalConnectionInProgress(context);
+      buildModalWaiting(context);
     } else if (param == 'booking') {
       widget.changePage!(1);
     } else if (param == 'job') {
       Navigator.push(context, MaterialPageRoute(builder: (_) => FindJobPage()));
     } else if (param == 'fund') {
-      buildModalConnectionInProgress(context);
+      buildModalWaiting(context);
     } else if (param == 'skill') {
-      buildModalConnectionInProgress(context);
+      buildModalWaiting(context);
     } else if (param == 'knowledge') {
-      buildModalConnectionInProgress(context);
+      buildModalWaiting(context);
     } else if (param == 'report') {
       Navigator.of(context).push(
         MaterialPageRoute(

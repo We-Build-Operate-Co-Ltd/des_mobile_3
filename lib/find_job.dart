@@ -68,7 +68,7 @@ class _FindJobPageState extends State<FindJobPage> {
 
   Widget _buildListCategory() {
     return SizedBox(
-      height: 160,
+      height: 130,
       child: ListView.separated(
         padding: EdgeInsets.symmetric(horizontal: 15),
         scrollDirection: Axis.horizontal,
@@ -80,34 +80,45 @@ class _FindJobPageState extends State<FindJobPage> {
   }
 
   Widget _buildItemCategory(dynamic data) {
-    return Container(
-      child: Column(
-        children: [
-          Image.asset(
-            data['imageUrl'],
-            height: 60,
-            width: 60,
-          ),
-          const SizedBox(height: 4),
-          SizedBox(
-            width: 130,
-            child: Text(
-              data['title'],
-              style: TextStyle(
-                fontSize: 13,
-                color: Theme.of(context).custom.b_w_y,
+    return InkWell(
+      onTap: () {},
+      borderRadius: BorderRadius.all(Radius.circular(8)),
+      child: Container(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 236, 233, 233),
+                shape: BoxShape.circle,
               ),
-              textAlign: TextAlign.center,
+              child: Image.asset(
+                data['imageUrl'],
+                height: 30,
+                width: 30,
+              ),
             ),
-          ),
-          Text(
-            data['count'],
-            style: TextStyle(
-              fontSize: 14,
-              color: Theme.of(context).custom.f70f70_w_fffd57,
+            const SizedBox(height: 2),
+            SizedBox(
+              width: 130,
+              child: Text(
+                data['title'],
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Theme.of(context).custom.b_w_y,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-        ],
+            Text(
+              data['count'],
+              style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).custom.f70f70_w_fffd57,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -186,12 +197,21 @@ class _FindJobPageState extends State<FindJobPage> {
                         ),
                       ],
                     ),
-                    Text(
-                      data['type'],
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Theme.of(context).custom.b_w_y,
-                      ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.access_time,
+                          size: 13,
+                          color: Theme.of(context).custom.b_w_y,
+                        ),
+                        Text(
+                          data['type'],
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Theme.of(context).custom.b_w_y,
+                          ),
+                        ),
+                      ],
                     ),
                     Text(
                       data['description'],
@@ -221,7 +241,7 @@ class _FindJobPageState extends State<FindJobPage> {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(5),
                 color: Theme.of(context).custom.b325f8_w_g,
               ),
               child: Text(
@@ -244,55 +264,55 @@ class MockFindJob {
   static List<dynamic> category = [
     {
       'code': '0',
-      'imageUrl': 'assets/images/find_job.png',
+      'imageUrl': 'assets/images/find_job_category.png',
       'title': 'โรงงาน/ผลิต/ควบคุมคุณภาพ',
       'count': '69,030'
     },
     {
       'code': '1',
-      'imageUrl': 'assets/images/find_job.png',
+      'imageUrl': 'assets/images/find_job_category.png',
       'title': 'การขาย/การตลาด',
       'count': '60,132'
     },
     {
       'code': '2',
-      'imageUrl': 'assets/images/find_job.png',
-      'title': 'ส่งเอกสาร-ผลิตภัณฑ์/ขับรถ/แม่บ้าน/รปภ.',
+      'imageUrl': 'assets/images/find_job_category.png',
+      'title': 'ส่งเอกสาร/ขับรถ/แม่บ้าน/รปภ.',
       'count': '44,435'
     },
     {
       'code': '3',
-      'imageUrl': 'assets/images/find_job.png',
+      'imageUrl': 'assets/images/find_job_category.png',
       'title': 'บัญชี/การเงิน',
       'count': '34,324'
     },
     {
       'code': '4',
-      'imageUrl': 'assets/images/find_job.png',
+      'imageUrl': 'assets/images/find_job_category.png',
       'title': 'ช่าง/โฟร์แมน',
       'count': '30,450'
     },
     {
       'code': '5',
-      'imageUrl': 'assets/images/find_job.png',
-      'title': 'ผู้บริหาร/ผู้จัดการ/ผู้อำนวยการ/เจ้าหน้าที่ของรัฐ',
+      'imageUrl': 'assets/images/find_job_category.png',
+      'title': 'ผู้บริหาร/ผู้จัดการ/ผู้อำนวยการ',
       'count': '28,130'
     },
   ];
 
   static List<dynamic> data = [
     {
-      'imageUrl': 'assets/images/find_job.png',
-      'title': 'พนักงานขาย',
+      'imageUrl': 'assets/images/logo_thai_jobs.png',
+      'title': 'พนักงานฝ่ายผลิต ',
       'description': '-',
-      'category': '1',
-      'organize': 'ร้าน พีเอ็น ซุปเปอร์ช๊อพ',
-      'location': 'อ่างทอง',
+      'category': '0',
+      'organize': 'บริษัท  แชมป์กบินทร์  จำกัด',
+      'location': ' กบินทร์บุรี ปราจีนบุรี',
       'type': 'งานประจำ',
       'salary': '15,000'
     },
     {
-      'imageUrl': 'assets/images/find_job.png',
+      'imageUrl': 'assets/images/logo_thai_jobs.png',
       'title': 'พนักงานฝ่ายผลิต',
       'description': 'ทำงานเป็นกะ',
       'category': '0',
@@ -302,7 +322,7 @@ class MockFindJob {
       'salary': '12,000'
     },
     {
-      'imageUrl': 'assets/images/find_job.png',
+      'imageUrl': 'assets/images/logo_thai_jobs.png',
       'title': 'พนักงานขับรถส่งสินค้า',
       'description': '-',
       'category': '0',
@@ -312,17 +332,17 @@ class MockFindJob {
       'salary': '450'
     },
     {
-      'imageUrl': 'assets/images/find_job.png',
+      'imageUrl': 'assets/images/logo_thai_jobs.png',
       'title': 'พนักงานฝ่ายผลิต',
       'description': 'ทำงานเป็นกะ',
       'category': '0',
       'organize': 'บริษัท จี-เทคคุโตะ (ประเทศไทย) จำกัด',
       'location': 'อ่างทอง',
       'type': 'งานประจำ',
-      'salary': '25'
+      'salary': '15,000'
     },
     {
-      'imageUrl': 'assets/images/find_job.png',
+      'imageUrl': 'assets/images/logo_thai_jobs.png',
       'title': 'คอมพิวเตอร์ กราฟฟิค',
       'description':
           'สามารถใช้โปรแกรม Photoshop ได้ หรืิโปรแกรมเกี่ยวกับ การแต่งภาพ ตัดต่อวิดีโอ ได้ สามารถดูแลซ่อม บำรุง ระบบคอมพิวเตอร์เบื้องต้นได้',
@@ -333,7 +353,7 @@ class MockFindJob {
       'salary': '25,000'
     },
     {
-      'imageUrl': 'assets/images/find_job.png',
+      'imageUrl': 'assets/images/logo_thai_jobs.png',
       'title': 'Sales E -commerce',
       'description': '-',
       'category': '1',
@@ -343,7 +363,7 @@ class MockFindJob {
       'salary': '14,000'
     },
     {
-      'imageUrl': 'assets/images/find_job.png',
+      'imageUrl': 'assets/images/logo_thai_jobs.png',
       'title': 'QC ไลน์ผลิต',
       'description': 'ประกันสังคม',
       'category': '0',
