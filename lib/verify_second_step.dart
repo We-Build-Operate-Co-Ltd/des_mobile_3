@@ -1,7 +1,7 @@
-import 'package:des/shared/extension.dart';
+import 'package:des/data_error.dart';
 import 'package:des/shared/theme_data.dart';
+import 'package:des/stack_tap.dart';
 import 'package:des/verify_third_step.dart';
-import 'package:des/verify_third_step_old.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +9,6 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-
 import 'main.dart';
 
 class VerifySecondStepPage extends StatefulWidget with WidgetsBindingObserver {
@@ -39,6 +38,7 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
   int month = 0;
   int day = 0;
   int age = 0;
+  int currentPage = 0;
   bool loading = false;
   bool _loadindSubmit = false;
 
@@ -46,11 +46,25 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
   String sex = '';
   String email = '';
   String image = '';
-
   String result = '';
+  String selectedCodeLv1 = '';
+  String selectedCodeLv2 = '';
+  String selectedCodeLv3 = '';
+  String selectedCodeLv4 = '';
+  String titleCategoryLv1 = '';
+  String titleCategoryLv2 = '';
+  String titleCategoryLv3 = '';
+  String titleCategoryLv4 = '';
+  String server = 'https://des.we-builds.com/de-api/';
+  dynamic categoryModel = {'provinceTitle': ''};
 
   List<String> _genderList = ['ชาย', 'หญิง', 'อื่น ๆ'];
   String _gender = 'ชาย';
+  PageController? pageController;
+
+  Future<dynamic>? _futureShopLv1;
+  Future<dynamic>? _futureShopLv2;
+  Future<dynamic>? _futureShopLv3;
 
   @override
   Widget build(BuildContext context) {
@@ -423,14 +437,14 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   TextFormField(
                     controller: txtAddress,
                     // inputFormatters: InputFormatTemple.laserid(),
                     keyboardType: TextInputType.name,
                     decoration: _decorationRegisterMember(
                       context,
-                      hintText: 'ที่อยู่ของท่าน',
+                      hintText: 'ที่อยู่ บ้านเลขที่ ซอย หมู่ ถนน',
                     ),
                     style: TextStyle(
                       fontFamily: 'Kanit',
@@ -453,6 +467,21 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                       return null;
                     },
                   ),
+                  SizedBox(height: 20),
+                  Text(
+                    'จังหวัด / อำเภอ/เขต / ตำบล/แขวง / รหัสไปรษณีย์',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  _buildColumn(),
                   SizedBox(
                     height: 20,
                     child: Center(
@@ -493,10 +522,16 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
                             'phone': txtPhone.text,
                             'address': txtAddress.text,
                             'sex': _gender,
+                            'provinceCode': selectedCodeLv1,
+                            'province': titleCategoryLv1,
+                            'amphoeCode': selectedCodeLv2,
+                            'amphoe': titleCategoryLv2,
+                            'tambonCode': selectedCodeLv3,
+                            'tambon': titleCategoryLv3,
+                            'postnoCode': selectedCodeLv4,
+                            'postno': titleCategoryLv4,
                           };
-
                           // _callLaser(model);
-
                           _requestOTP(model);
                         }
                       },
@@ -537,6 +572,369 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildColumn() {
+    return Column(
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        GestureDetector(
+          onTap: () {
+            _sheetBottom();
+          },
+          child: Container(
+            padding: EdgeInsets.only(left: 10.0),
+            constraints: BoxConstraints(
+              minHeight: 40,
+            ),
+            // height: 40,
+            decoration: new BoxDecoration(
+              color: Color(0xFFFFFFFF),
+              borderRadius: BorderRadius.circular(8.0),
+              border: Border.all(
+                width: 1,
+                color: Colors.grey.withOpacity(0.5),
+              ),
+            ),
+            child: Container(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  titleCategoryLv1 != ""
+                      ? (titleCategoryLv1 ?? "") +
+                          " / " +
+                          (titleCategoryLv2 ?? "") +
+                          " / " +
+                          (titleCategoryLv3 ?? "") +
+                          " / " +
+                          (selectedCodeLv4 ?? "")
+                      : 'จังหวัด / อำเภอ/เขต / ตำบล/แขวง / รหัสไปรษณีย์',
+                  style: TextStyle(
+                    color: Color(0xFF000000).withOpacity(0.9),
+                    fontFamily: 'Kanit',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w300,
+                    // letterSpacing: 0.23,
+                  ),
+                )),
+          ),
+        ),
+      ],
+    );
+  }
+
+  textCategory(page) {
+    String text = '';
+    if (page == 1) {
+      if (titleCategoryLv1 != "" && titleCategoryLv1 != "กรุงเทพมหานคร") {
+        text = "จังหวัด" + titleCategoryLv1;
+      } else if (titleCategoryLv1 == "กรุงเทพมหานคร") {
+        text = titleCategoryLv1;
+      } else {
+        text = 'เลือกจังหวัด';
+      }
+    }
+    if (page == 2) {
+      if (titleCategoryLv2 != "") {
+        text = titleCategoryLv2;
+      } else {
+        text = 'เลือกอำเภอ/เขต';
+      }
+    }
+    if (page == 3) {
+      if (titleCategoryLv3 != "" && titleCategoryLv1 != "กรุงเทพมหานคร") {
+        text = "ตำบล" + titleCategoryLv3;
+      } else if (titleCategoryLv1 == "กรุงเทพมหานคร") {
+        text = titleCategoryLv3;
+      } else {
+        text = 'เลือกตำบล/แขวง';
+      }
+    }
+    if (page == 4) {
+      if (selectedCodeLv4 != "") {
+        text = selectedCodeLv4;
+      } else {
+        text = 'เลือกรหัสไปรษณีย์';
+      }
+      // text = titleCategoryLv4;
+    }
+
+    return text;
+  }
+
+  StackTap _buildItem(item, page, StateSetter setStateModal) {
+    Color colorItem = Colors.black;
+    if (page == 1 && selectedCodeLv1 == item['code']) colorItem = Colors.red;
+    if (page == 2 && selectedCodeLv2 == item['code']) colorItem = Colors.red;
+    if (page == 3 && selectedCodeLv3 == item['code']) colorItem = Colors.red;
+    // if (page == 4 && selectedCodeLv4 == item['postCode']) colorItem = Colors.red;
+    return StackTap(
+      onTap: () async => {
+        setStateModal(() {
+          currentPage = page;
+        }),
+        if (page == 1)
+          {
+            setStateModal(() {
+              selectedCodeLv1 = item['code'];
+              selectedCodeLv2 = '';
+              selectedCodeLv3 = '';
+              selectedCodeLv4 = '';
+              titleCategoryLv1 = item['title'];
+              titleCategoryLv2 = '';
+              titleCategoryLv3 = '';
+              titleCategoryLv4 = '';
+              getCategory(page, setStateModal);
+              pageController!.animateToPage(page,
+                  duration: Duration(milliseconds: 500), curve: Curves.ease);
+            })
+          },
+        if (page == 2)
+          {
+            setStateModal(() => {
+                  selectedCodeLv2 = item['code'],
+                  selectedCodeLv3 = '',
+                  selectedCodeLv4 = '',
+                  titleCategoryLv2 = item['title'],
+                  getCategory(page, setStateModal),
+                  pageController!.animateToPage(page,
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.ease),
+                })
+          },
+        if (page == 3)
+          {
+            setStateModal(() => {
+                  selectedCodeLv3 = item['code'],
+                  titleCategoryLv3 = item['title'],
+                  selectedCodeLv4 = item['postCode'],
+                  titleCategoryLv4 = item['postCode'],
+                  getCategory(page, setStateModal),
+                  // pageController.animateToPage(page,
+                  //     duration: Duration(milliseconds: 500), curve: Curves.ease)
+                }),
+            Navigator.pop(context, 'success')
+          },
+        if (page == 4)
+          {
+            setStateModal(() => {
+                  selectedCodeLv4 = item['postCode'],
+                  titleCategoryLv4 = item['postCode'],
+                  getCategory(page, setStateModal),
+                  // pageController.animateToPage(page,
+                  //     duration: Duration(milliseconds: 500), curve: Curves.ease)
+                }),
+            Navigator.pop(context, 'success')
+          },
+        setState(() {}),
+      },
+      child: Container(
+        height: 50,
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        width: double.infinity,
+        alignment: Alignment.centerLeft,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              item['title'] != null ? item['title'] : item['title'],
+              style: TextStyle(
+                  fontFamily: 'Kanit', fontSize: 14, color: colorItem),
+            ),
+            Icon(
+              colorItem == Colors.red
+                  ? Icons.check
+                  : page != 4
+                      ? Icons.arrow_forward_ios_rounded
+                      : null,
+              size: colorItem == Colors.red ? 20 : 15,
+              color: colorItem,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  getCategory(lv, StateSetter setStateModal) async {
+    // var model = await get(server + 'provinces/' );
+    Dio dio = Dio();
+    var districtData;
+    var tambonData;
+    if (lv == 1) {
+      var response = await dio.post('${server}route/district/read',
+          data: {'province': selectedCodeLv1});
+      districtData = response.data['objectData'];
+    }
+    if (lv == 2) {
+      var response = await dio.post('${server}route/tambon/read',
+          data: {'district': selectedCodeLv2});
+      tambonData = response.data['objectData'];
+    }
+    setStateModal(
+      () {
+        if (lv == 1) {
+          _futureShopLv2 = Future.value(districtData);
+        }
+        if (lv == 2) {
+          _futureShopLv3 = Future.value(tambonData);
+        }
+      },
+    );
+  }
+
+  _buildPageLv(_future, lv, StateSetter setStateModal) {
+    return FutureBuilder<dynamic>(
+      future: _future,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return ListView.separated(
+            itemCount: snapshot.data.length,
+            separatorBuilder: (context, index) => Container(
+              height: 1,
+              color: Theme.of(context).backgroundColor,
+            ),
+            itemBuilder: (context, index) =>
+                _buildItem(snapshot.data[index], lv, setStateModal),
+          );
+        } else if (snapshot.hasError) {
+          return DataError(onTap: () => _callReadProvince(''));
+        } else {
+          return ListView.separated(
+            itemCount: 10,
+            separatorBuilder: (context, index) => Container(
+              height: 1,
+              color: Theme.of(context).backgroundColor,
+            ),
+            itemBuilder: (context, index) => Container(
+              height: 50,
+              width: double.infinity,
+              color: Colors.white,
+              padding: EdgeInsets.only(left: 10),
+              alignment: Alignment.centerLeft,
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  _titleCategory(lv, StateSetter setStateModal) {
+    return GestureDetector(
+      onTap: () => setStateModal(() {
+        currentPage = lv - 1;
+        pageController!.animateToPage(lv - 1,
+            duration: Duration(milliseconds: 500), curve: Curves.ease);
+      }),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              width: 2,
+              color: currentPage == lv - 1 ? Colors.red : Colors.white,
+            ),
+          ),
+        ),
+        child: Text(
+          textCategory(lv),
+          style: TextStyle(
+            fontFamily: 'Kanit',
+            fontSize: 14,
+          ),
+        ),
+      ),
+    );
+  }
+
+  _sheetBottom() {
+    return showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (BuildContext context,
+            StateSetter setStateModal /*You can rename this!*/) {
+          return Container(
+            // height: 300,
+            color: Color(0xFFFFFFFF),
+            child: Column(
+              children: [
+                Container(
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: Text(
+                          'เลือกที่อยู่',
+                          style: TextStyle(
+                            fontFamily: 'Kanit',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.close,
+                          size: 30,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        spreadRadius: 0,
+                        blurRadius: 2,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      _titleCategory(1, setStateModal),
+                      if (selectedCodeLv1 != '')
+                        _titleCategory(2, setStateModal),
+                      if (selectedCodeLv2 != '')
+                        _titleCategory(3, setStateModal),
+                      // if (selectedCodeLv3 != '')
+                      //   _titleCategory(4, setStateModal),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 5),
+                Expanded(
+                  child: PageView(
+                    controller: pageController,
+                    physics: new NeverScrollableScrollPhysics(),
+                    children: [
+                      _buildPageLv(_futureShopLv1, 1, setStateModal),
+                      if (selectedCodeLv1 != '')
+                        _buildPageLv(_futureShopLv2, 2, setStateModal),
+                      if (selectedCodeLv2 != '')
+                        _buildPageLv(_futureShopLv3, 3, setStateModal),
+                      // if (selectedCodeLv3 != '')
+                      //   _buildPageLv(_futureShopLv4, 4, setStateModal),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        });
+      },
     );
   }
 
@@ -882,6 +1280,8 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
 
   @override
   void initState() {
+    pageController = new PageController(initialPage: currentPage);
+    _callReadProvince(categoryModel);
     Intl.defaultLocale = "th";
     initializeDateFormatting();
 
@@ -901,11 +1301,21 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
   void dispose() {
     // Clean up the controller when the widget is disposed.
     // txtIdCard.dispose();
+    pageController!.dispose();
     txtFullName.dispose();
     txtDate.dispose();
     txtAge.dispose();
     txtLaserId.dispose();
     super.dispose();
+  }
+
+  _callReadProvince(param) async {
+    Dio dio = Dio();
+    var response = await dio.post('${server}route/province/read', data: {});
+    var provinceData = response.data['objectData'];
+    setState(() {
+      _futureShopLv1 = Future.value(provinceData);
+    });
   }
 
   void _callLaser(param) async {

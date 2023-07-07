@@ -247,7 +247,7 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
       user['lastName'] = widget.model['fullName'].split(' ')[1];
       user['fullName'] = widget.model['fullName'];
       user['age'] = widget.model['age'];
-      user['age'] = widget.email;
+      user['email'] = widget.email;
       user['idcard'] = widget.model['idcard'];
       user['birthday'] = widget.model['birthday'];
       user['phone'] = widget.model['phone'];
@@ -255,6 +255,15 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
       user['category'] = "guest";
       user['status'] = "A";
       user['isActive'] = true;
+      user['address'] = widget.model['address'];
+      user['provinceCode'] = widget.model['provinceCode'];
+      user['province'] = widget.model['province'];
+      user['amphoeCode'] = widget.model['amphoeCode'];
+      user['amphoe'] = widget.model['amphoe'];
+      user['tambonCode'] = widget.model['tambonCode'];
+      user['tambon'] = widget.model['tambon'];
+      user['postnoCode'] = widget.model['postnoCode'];
+      user['postno'] = widget.model['postno'];
 
       final response = await Dio().post(
           'https://des.we-builds.com/de-api/m/Register/update',
