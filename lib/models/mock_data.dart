@@ -328,3 +328,61 @@ class MockBookingData {
     ];
   }
 }
+
+const List<dynamic> mockDataCertificateList = [
+  {
+    'title': 'CERTIHCATE OF ACHIEVEMENT',
+    'imageUrl':
+        'https://page.hrteamwork.com/wp-content/uploads/2020/11/cer.jpg',
+    'createBy': 'เจ้าหน้าที่ศูนย์ดิติทัลชุมชน',
+    'view': 500,
+    'description': '',
+  },
+  {
+    'title': 'มาตรฐาน ผู้ควบคุมเครนรถบรรทุกขนส่ง',
+    'imageUrl':
+        'https://www.bhumisiam.com/wp-content/uploads/2017/01/micropile-ผู้ควบคุมปั้นจั่น-Certificate-1-1030x728.jpg',
+    'createBy': 'เจ้าหน้าที่ศูนย์ดิติทัลชุมชน',
+    'view': 500,
+    'description': '',
+  },
+  {
+    'title': 'มาตรฐาน ผู้ควบคุมปั้นจั่น',
+    'imageUrl':
+        'https://www.bhumisiam.com/wp-content/uploads/2017/01/micropile-ผู้ควบคุมเครนรถบรรทุกขนส่ง-Certificate-1-1030x728.jpg',
+    'createBy': 'เจ้าหน้าที่ศูนย์ดิติทัลชุมชน',
+    'view': 500,
+    'description': '',
+  },
+];
+
+const List<dynamic> mockDataApplyJobList = [
+  {
+    'title': 'พนักงานฝ่ายผลิต',
+    'title2': 'บริษัท  แชมป์กบินทร์  จำกัด',
+    'hour': 1,
+    'date': '20220911',
+    'time': '09.00'
+  },
+  {
+    'title': 'พนักงานขับรถส่งสินค้า',
+    'title2': 'บริษัท อินชา บีฟ จำกัด',
+    'hour': 2,
+    'date': '20220911',
+    'time': '10.00'
+  },
+  {
+    'title': 'คอมพิวเตอร์ กราฟฟิค',
+    'title2': 'บริษัท ไทยพิพัฒน์ทูล แอนด์ โฮมมาร์ท จำกัด',
+    'hour': 3,
+    'date': '20220911',
+    'time': '11.00'
+  },
+  {
+    'title': 'QC ไลน์ผลิต',
+    'title2': 'บริษัท สานิตแอนด์ซันส์ จำกัด (สาขานครนายก)',
+    'hour': 4,
+    'date': '20220911',
+    'time': '12.00'
+  },
+];

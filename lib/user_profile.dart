@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:des/certificate_all.dart';
 import 'package:des/detail.dart';
 import 'package:des/favorite_class_all.dart';
 import 'package:des/history_of_service_reservations.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import 'history_of_apply_job.dart';
 import 'main.dart';
 
 // ignore: must_be_immutable
@@ -125,7 +127,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'คลาสที่ชอบ',
+                  'ใบรับรอง',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
@@ -140,7 +142,70 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => FavoriteClassAllPage(),
+                      builder: (_) =>
+                          CertificateAllPage(model: mockDataCertificateList),
+                    ),
+                  ),
+                  child: Text(
+                    'ดูทั้งหมด',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF7A4CB1)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            // FutureBuilder(
+            //   future: _readEventcalendar(),
+            //   builder: (context, snapshot) => Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: snapshot.data!
+            //         .map<Widget>((e) => _buildFavoriteClass(e))
+            //         .toList(),
+            //   ),
+            // ),
+            FutureBuilder(
+              future: Future.value(mockDataCertificateList),
+              builder: (context, snapshot) => Container(
+                height: 150,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (_, __) =>
+                      _buildFavoriteClass(snapshot.data![__]),
+                  separatorBuilder: (_, __) => SizedBox(width: 10),
+                  itemCount: snapshot.data!.length,
+                ),
+              ),
+            ),
+            SizedBox(height: 33),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'ประวัติการสมัครงาน',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF7A4CB1)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  ),
+                ),
+                InkWell(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => HistoryOfApplyJobPage(model: mockDataApplyJobList),
                     ),
                   ),
                   child: Text(
@@ -161,12 +226,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             SizedBox(height: 10),
             FutureBuilder(
-              future: _readEventcalendar(),
-              builder: (context, snapshot) => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: snapshot.data!
-                    .map<Widget>((e) => _buildFavoriteClass(e))
-                    .toList(),
+              future: Future.value(mockDataApplyJobList),
+              builder: (context, snapshot) => Container(
+                height: 110,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (_, __) =>
+                      _buildHistoryOfApplyJob(snapshot.data![__]),
+                  separatorBuilder: (_, __) => SizedBox(width: 10),
+                  itemCount: snapshot.data!.length,
+                ),
               ),
             ),
             SizedBox(height: 33),
@@ -222,6 +291,118 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 3,
                 _dateStringToDateSlashBuddhistShort('20220911'),
                 '11.00'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHistoryOfApplyJob(dynamic model) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Color(0xFFB325F8).withOpacity(0.10)
+            : Color(0xFF292929),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              model['title'],
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+            Text(
+              model['title2'],
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+            SizedBox(height: 10),
+            Text(
+              '${model['hour']} ชั่วโมง',
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w500,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFFB325F8)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+            ),
+            SizedBox(height: 5),
+            Row(
+              children: [
+                Image.asset(
+                  'assets/images/calendar.png',
+                  height: 10,
+                  width: 10,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.black
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                ),
+                SizedBox(width: 5),
+                Text(
+                  _dateStringToDateSlashBuddhistShort(model['date']),
+                  style: TextStyle(
+                    fontSize: 7,
+                    fontWeight: FontWeight.w400,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  ),
+                ),
+                SizedBox(width: 20),
+                Image.asset(
+                  'assets/images/clock.png',
+                  height: 10,
+                  width: 10,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.black
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                ),
+                SizedBox(width: 5),
+                Text(
+                  '${model['time']} น.',
+                  style: TextStyle(
+                    fontSize: 7,
+                    fontWeight: FontWeight.w400,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -803,7 +984,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     try {
       response = await dio.post(
           'https://des.we-builds.com/de-api/m/eventcalendar/read',
-          data: {'skip': 0, 'limit': 2});
+          data: {'skip': 0, 'limit': 10});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
           return response.data['objectData'];
