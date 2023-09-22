@@ -21,7 +21,16 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   final _controllerContant = ScrollController();
-  Future<dynamic>? _futureModel;
+  Future<dynamic>? _futureLerningModel;
+  Future<dynamic>? _futureLernedModel;
+  Future<dynamic>? _futureFavoriteModel;
+  List<String> _categoryList = [
+    'คลาสกำลังเรียน',
+    'คลาสกำลังเรียนเสร็จแล้ว',
+    'คลาสที่ชอบ',
+  ];
+
+  int _categorySelected = 0;
 
   @override
   void dispose() {
@@ -30,8 +39,8 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
 
   @override
   void initState() {
-    _futureModel = Future.value(widget.model);
-    // _loading();
+    _futureFavoriteModel = Future.value(widget.model);
+    _loading();
     super.initState();
   }
 
@@ -42,14 +51,25 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
 
     if (response.statusCode == 200) {
       if (response.data['status'] == 'S') {
+        List<dynamic> data = response.data['objectData'];
+        List<dynamic> lerning = [];
+        List<dynamic> lerned = [];
+        for (int i = 0; i < data.length; i++) {
+          if (i % 2 == 0) {
+            lerned.add(data[i]);
+          } else {
+            lerning.add(data[i]);
+          }
+        }
         setState(() {
-          _futureModel = Future.value(response.data['objectData']);
+          _futureFavoriteModel = Future.value(response.data['objectData']);
+          _futureLernedModel = Future.value(lerned);
+          _futureLerningModel = Future.value(lerning);
         });
       }
     }
 
     await Future.delayed(Duration(milliseconds: 1000));
-
     _refreshController.loadComplete();
   }
 
@@ -67,20 +87,103 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
         backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
             ? Colors.white
             : Colors.black,
-        body: ListView(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).padding.bottom + 25,
-            right: 15,
-            left: 15,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          flexibleSpace: _buildHead(),
+        ),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+              Container(
+                height: 35,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (_, __) => GestureDetector(
+                    onTap: () => setState(() {
+                      _categorySelected = __;
+                    }),
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: __ == _categorySelected
+                            ? Color(0xFF7A4CB1)
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(17.5),
+                      ),
+                      child: Text(
+                        _categoryList[__],
+                        style: TextStyle(
+                          color: __ == _categorySelected
+                              ? Colors.white
+                              : Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                  separatorBuilder: (_, __) => const SizedBox(width: 5),
+                  itemCount: _categoryList.length,
+                ),
+              ),
+              SizedBox(height: 15),
+              Expanded(
+                child: IndexedStack(
+                  index: _categorySelected,
+                  children: [
+                    _buildMyClass(_futureLerningModel),
+                    _buildMyClass(_futureLernedModel),
+                    _buildMyClass(_futureFavoriteModel),
+                  ],
+                ),
+              )
+              //
+            ],
           ),
-          children: [
-            _buildHead(),
-            SizedBox(height: 20),
-            _buildMyClass(),
-            //
-          ],
         ),
       ),
+    );
+  }
+
+  Widget _buildMyClass(Future<dynamic>? future) {
+    return FutureBuilder(
+      future: future,
+      builder: (_, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.length == 0) {
+            return Container();
+          } else {
+            return ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) =>
+                  _buildContant(context, snapshot.data[index]),
+              shrinkWrap: true,
+              controller: _controllerContant,
+              physics: ClampingScrollPhysics(), // 2nd
+            );
+          }
+        } else if (snapshot.hasError) {
+          return Container(
+            alignment: Alignment.center,
+            height: 200,
+            width: double.infinity,
+            child: Text(
+              'Network ขัดข้อง',
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: 'Kanit',
+                color: Color.fromRGBO(0, 0, 0, 0.6),
+              ),
+            ),
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 
@@ -135,51 +238,12 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     );
   }
 
-  Widget _buildMyClass() {
-    return FutureBuilder(
-      future: _futureModel,
-      builder: (_, snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.length == 0) {
-            return Container();
-          } else {
-            return ListView.builder(
-              padding: EdgeInsets.zero,
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) =>
-                  _buildContant(context, snapshot.data[index]),
-              shrinkWrap: true,
-              controller: _controllerContant,
-              physics: ClampingScrollPhysics(), // 2nd
-            );
-          }
-        } else if (snapshot.hasError) {
-          return Container(
-            alignment: Alignment.center,
-            height: 200,
-            width: double.infinity,
-            child: Text(
-              'Network ขัดข้อง',
-              style: TextStyle(
-                fontSize: 18,
-                fontFamily: 'Kanit',
-                color: Color.fromRGBO(0, 0, 0, 0.6),
-              ),
-            ),
-          );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
-  }
-
   Widget _buildHead() {
     return Container(
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).padding.top,
+        left: 15,
+        right: 15,
       ),
       color: MyApp.themeNotifier.value == ThemeModeThird.light
           ? Colors.white
@@ -233,6 +297,4 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
       ),
     );
   }
-
-//
 }
