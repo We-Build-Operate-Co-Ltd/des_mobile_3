@@ -179,7 +179,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (_, __) =>
-                      _buildFavoriteClass(snapshot.data![__]),
+                      _buildCertificateClass(snapshot.data![__]),
                   separatorBuilder: (_, __) => SizedBox(width: 10),
                   itemCount: snapshot.data!.length,
                 ),
@@ -306,105 +306,103 @@ class _UserProfilePageState extends State<UserProfilePage> {
             : Color(0xFF292929),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              model['title'],
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            model['title'],
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Colors.black
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+          Text(
+            model['title2'],
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Colors.black
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+          SizedBox(height: 10),
+          Text(
+            '${model['hour']} ชั่วโมง',
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w500,
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFFB325F8)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
+            ),
+          ),
+          SizedBox(height: 5),
+          Row(
+            children: [
+              Image.asset(
+                'assets/images/calendar.png',
+                height: 10,
+                width: 10,
                 color: MyApp.themeNotifier.value == ThemeModeThird.light
                     ? Colors.black
                     : MyApp.themeNotifier.value == ThemeModeThird.dark
                         ? Colors.white
                         : Color(0xFFFFFD57),
               ),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
-            Text(
-              model['title2'],
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
+              SizedBox(width: 5),
+              Text(
+                _dateStringToDateSlashBuddhistShort(model['date']),
+                style: TextStyle(
+                  fontSize: 7,
+                  fontWeight: FontWeight.w400,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.black
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                ),
+              ),
+              SizedBox(width: 20),
+              Image.asset(
+                'assets/images/clock.png',
+                height: 10,
+                width: 10,
                 color: MyApp.themeNotifier.value == ThemeModeThird.light
                     ? Colors.black
                     : MyApp.themeNotifier.value == ThemeModeThird.dark
                         ? Colors.white
                         : Color(0xFFFFFD57),
               ),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
-            SizedBox(height: 10),
-            Text(
-              '${model['hour']} ชั่วโมง',
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w500,
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFFB325F8)
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
+              SizedBox(width: 5),
+              Text(
+                '${model['time']} น.',
+                style: TextStyle(
+                  fontSize: 7,
+                  fontWeight: FontWeight.w400,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.black
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                ),
               ),
-            ),
-            SizedBox(height: 5),
-            Row(
-              children: [
-                Image.asset(
-                  'assets/images/calendar.png',
-                  height: 10,
-                  width: 10,
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Colors.black
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57),
-                ),
-                SizedBox(width: 5),
-                Text(
-                  _dateStringToDateSlashBuddhistShort(model['date']),
-                  style: TextStyle(
-                    fontSize: 7,
-                    fontWeight: FontWeight.w400,
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Colors.black
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
-                  ),
-                ),
-                SizedBox(width: 20),
-                Image.asset(
-                  'assets/images/clock.png',
-                  height: 10,
-                  width: 10,
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Colors.black
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57),
-                ),
-                SizedBox(width: 5),
-                Text(
-                  '${model['time']} น.',
-                  style: TextStyle(
-                    fontSize: 7,
-                    fontWeight: FontWeight.w400,
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Colors.black
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -535,6 +533,57 @@ class _UserProfilePageState extends State<UserProfilePage> {
         MaterialPageRoute(
           builder: (_) => DetailPage(
             slug: 'eventcalendar',
+            model: model,
+          ),
+        ),
+      ),
+      child: SizedBox(
+        // height: screenSize,
+        width: screenSize,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: CachedNetworkImage(
+                imageUrl: '${model['imageUrl']}',
+                fit: BoxFit.fill,
+                height: 92,
+                width: screenSize,
+              ),
+            ),
+            SizedBox(height: 10),
+            SizedBox(
+              width: screenSize,
+              child: Text(
+                '${model['title']}',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.black
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCertificateClass(dynamic model) {
+    var screenSize = (44 * MediaQuery.of(context).size.width) / 100;
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => DetailPage(
+            slug: 'certificatePage',
             model: model,
           ),
         ),

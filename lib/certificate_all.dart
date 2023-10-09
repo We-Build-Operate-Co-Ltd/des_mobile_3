@@ -90,7 +90,7 @@ class _CertificateAllPageState extends State<CertificateAllPage> {
         context,
         MaterialPageRoute(
           builder: (_) => DetailPage(
-            slug: 'eventcalendar',
+            slug: 'certificatePage',
             model: model,
           ),
         ),
