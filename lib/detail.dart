@@ -601,7 +601,8 @@ class _DetailPageState extends State<DetailPage> {
     _imageSelected = widget.model['imageUrl'] ?? '';
     if (widget.slug != 'mainPage' &&
         widget.slug != 'mock' &&
-        widget.slug != 'bookingPage') {
+        widget.slug != 'bookingPage' &&
+        widget.slug != 'certificatePage') {
       _read();
       _galleryRead();
     }
