@@ -16,6 +16,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   Future<dynamic>? futureModel;
   String _profileCode = '';
+  List<dynamic> _model = [];
 
   @override
   Widget build(BuildContext context) {
@@ -23,72 +24,59 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   _buildSplash() {
-    return WillPopScope(
-      onWillPop: () {
-        return Future.value(false);
-      },
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: FutureBuilder<dynamic>(
-          future: _callRead(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            if (snapshot.hasData) {
-              //if no splash from service is return array length 0
-              _callTimer((snapshot.data.length > 0
-                      ? int.parse(snapshot.data[0]['timeOut']) / 1000
-                      : 0)
-                  .round());
-
-              return snapshot.data.length > 0
-                  ? Center(
-                      child: CachedNetworkImage(
-                        imageUrl: snapshot.data[0]['imageUrl'],
-                        fit: BoxFit.cover,
-                        height: double.infinity,
-                        width: double.infinity,
-                      ),
-                    )
-                  : Container();
-            } else if (snapshot.hasError) {
-              // postLineNoti();
-              _callTimer(3);
-              return Image.asset(
-                'assets/splash.png',
-                fit: BoxFit.fill,
-                height: double.infinity,
-                width: double.infinity,
-              );
-            } else {
-              return Center(
-                child: Container(),
-              );
-            }
-          },
+    if (_model.length > 0) {
+      _callTimer((int.parse(_model[0]['timeOut']) / 1000).round());
+      return WillPopScope(
+        onWillPop: () {
+          return Future.value(false);
+        },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(
+            child: CachedNetworkImage(
+              imageUrl: _model[0]['imageUrl'],
+              fit: BoxFit.cover,
+              height: double.infinity,
+              width: double.infinity,
+            ),
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      _callTimer(3);
+      return Image.asset(
+        'assets/splash.png',
+        fit: BoxFit.fill,
+        height: double.infinity,
+        width: double.infinity,
+      );
+    }
   }
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _profileCode = await ManageStorage.read('profileCode') ?? '';
+      await _callRead();
     });
     super.initState();
   }
 
   _callRead() async {
-    Dio dio = Dio();
-    Response<dynamic> result = await dio
-        .post('https://des.we-builds.com/de-api/m/splash/read', data: {});
+    try {
+      Dio dio = Dio();
+      Response<dynamic> result = await dio
+          .post('https://des.we-builds.com/de-api/m/splash/read', data: {});
 
-    if (result.statusCode == 200) {
-      if (result.data['status'] == 'S') {
-        return result.data['objectData'];
+      if (result.statusCode == 200) {
+        if (result.data['status'] == 'S') {
+          setState(() {
+            _model = result.data['objectData'];
+          });
+          // return result.data['objectData'];
+        }
       }
-    }
-
-    return Error();
+    } catch (e) {}
   }
 
   _callTimer(time) {
@@ -102,6 +90,7 @@ class _SplashPageState extends State<SplashPage> {
           (Route<dynamic> route) => false,
         );
       } else {
+        if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const LoginFirstPage(),
