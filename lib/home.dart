@@ -80,6 +80,9 @@ class _HomePageState extends State<HomePage> {
   String? fontStorageValue;
   String? colorStorageValue;
 
+  String _api_key = '19f072f9e4b14a19f72229719d2016d1';
+  String service = 'https://lms.dcc.onde.go.th/api/';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +92,7 @@ class _HomePageState extends State<HomePage> {
         enablePullUp: false,
         controller: _refreshController,
         onRefresh: onRefresh,
-        onLoading: _onLoading,
+        // onLoading: _onLoading,
         child: Stack(
           children: [
             ListView(
@@ -614,11 +617,13 @@ class _HomePageState extends State<HomePage> {
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            childAspectRatio: 9 / 12,
-                            crossAxisSpacing: 5,
+                            childAspectRatio: 10 / 11.5,
+                            crossAxisSpacing: 15,
+                            mainAxisSpacing: 15
                           ),
                           physics: const ClampingScrollPhysics(),
-                          itemCount: snapshot.data!.length,
+                          // itemCount: snapshot.data!.length,
+                          itemCount: 2,
                           itemBuilder: (context, index) =>
                               containerRecommendedClass(snapshot.data![index]),
                         );
@@ -649,16 +654,27 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       },
-      child: Card(
-        elevation: 4,
+      child: Container(
+        // elevation: 4,
         color: Theme.of(context).custom.primary,
         child: Container(
           decoration: BoxDecoration(
             color: Theme.of(context).custom.primary,
-            border: Border.all(
-              color: Theme.of(context).custom.b_w_y,
-            ),
-            borderRadius: BorderRadius.circular(15),
+            // border: Border.all(
+            //   color: Theme.of(context).custom.b_w_y,
+            // ),
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromARGB(0,0,0,0).withOpacity(0.15),
+                offset: const Offset(
+                  3.0,
+                  3.0,
+                ),
+                blurRadius: 10.0,
+                spreadRadius: 0.0,
+              ),
+            ],
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Column(
             children: [
@@ -668,7 +684,7 @@ class _HomePageState extends State<HomePage> {
                   topRight: Radius.circular(10),
                 ),
                 child: CachedNetworkImage(
-                  imageUrl: model['imageUrl'],
+                  imageUrl: model['img_url'],
                   height: 93,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -676,10 +692,11 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 9),
               Expanded(
-                child: Padding(
+                child: Container(
+                  alignment: Alignment.topLeft,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
-                    model['title'],
+                    model['name'],
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
@@ -691,7 +708,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.all(8),
                 child: Row(
                   children: [
                     Image.asset('assets/images/time_home_page.png',
@@ -708,7 +725,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              // const SizedBox(height: 20),
             ],
           ),
         ),
@@ -908,27 +925,50 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       _futureBanner = _readBanner();
-      _futureNews = _readNews();
+      _futureNews = _get_course();
     });
     var sizeName = await storage.read(key: 'switchSize');
     selectedSize = sizeName;
   }
 
-  Future<List<dynamic>> _readNews() async {
+  // Future<List<dynamic>> _readNews() async {
+  //   Dio dio = Dio();
+  //   Response<dynamic> response;
+  //   try {
+  //     response = await dio.post(
+  //         'https://des.we-builds.com/de-api/m/eventcalendar/read',
+  //         data: {'skip': 0, 'limit': 2});
+  //     if (response.statusCode == 200) {
+  //       if (response.data['status'] == 'S') {
+  //         return response.data['objectData'];
+  //       }
+  //     }
+  //   } catch (e) {}
+  //   return [];
+  // }
+
+  Future<List<dynamic>> _get_course() async {
     Dio dio = Dio();
-    Response<dynamic> response;
+    var response;
+    var map = new Map<String, dynamic>();
+    FormData formData = new FormData.fromMap({"apikey": _api_key});
+    // map['apikey'] = _api_key;
     try {
-      response = await dio.post(
-          'https://des.we-builds.com/de-api/m/eventcalendar/read',
-          data: {'skip': 0, 'limit': 2});
-      if (response.statusCode == 200) {
-        if (response.data['status'] == 'S') {
-          return response.data['objectData'];
-        }
+      response = await dio.post('${service}api/popular_course', data: formData);
+      if (response.data['status']) {
+        return response.data['data'];
       }
     } catch (e) {}
     return [];
   }
+
+  //  _get_course () async {
+  //   await dio.get('${service}api/get_coursecategory/${_api_key}').then((value) {
+  //     setState(() {
+  //       _categoryList = value.data['data'];
+  //     });
+  //   });
+  // }
 
   Future<List<dynamic>> _readBanner() async {
     Dio dio = Dio();

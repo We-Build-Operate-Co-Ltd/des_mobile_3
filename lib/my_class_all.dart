@@ -24,13 +24,15 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   Future<dynamic>? _futureLerningModel;
   Future<dynamic>? _futureLernedModel;
   Future<dynamic>? _futureFavoriteModel;
-  List<String> _categoryList = [
-    'คลาสกำลังเรียน',
-    'คลาสกำลังเรียนเสร็จแล้ว',
-    'คลาสที่ชอบ',
+  List<dynamic> _categoryList = [
+    // 'คลาสกำลังเรียน',
+    // 'คลาสกำลังเรียนเสร็จแล้ว',
+    // 'คลาสที่ชอบ',
   ];
 
   int _categorySelected = 0;
+  String _api_key = '19f072f9e4b14a19f72229719d2016d1';
+  String service = 'https://lms.dcc.onde.go.th/api/';
 
   @override
   void dispose() {
@@ -39,9 +41,29 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
 
   @override
   void initState() {
-    _futureFavoriteModel = Future.value(widget.model);
-    _loading();
+    // _futureFavoriteModel = Future.value(widget.model);
+    // _loading();
+    _get_category();
+    
     super.initState();
+  }
+
+  _get_category () async {
+    await dio.get('${service}api/get_coursecategory/${_api_key}').then((value) {
+      setState(() {
+        _categoryList = value.data['data'];
+        _get_course();
+      });
+    });
+  }
+
+  _get_course () async {
+    FormData formData = new FormData.fromMap({"apikey": _api_key, " cat_id": _categoryList[_categorySelected]['id']});
+    await dio.post('${service}api/popular_course', data:formData).then((value) {
+      setState(() {
+        _futureLerningModel = Future.value(value.data['data']);
+      });
+    });
   }
 
   _loading() async {
@@ -64,7 +86,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
         setState(() {
           _futureFavoriteModel = Future.value(response.data['objectData']);
           _futureLernedModel = Future.value(lerned);
-          _futureLerningModel = Future.value(lerning);
+          // _futureLerningModel = Future.value(lerning);
         });
       }
     }
@@ -103,6 +125,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                   itemBuilder: (_, __) => GestureDetector(
                     onTap: () => setState(() {
                       _categorySelected = __;
+                      _get_course();
                     }),
                     child: Container(
                       alignment: Alignment.center,
@@ -114,9 +137,9 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                         borderRadius: BorderRadius.circular(17.5),
                       ),
                       child: Text(
-                        _categoryList[__],
+                        _categoryList[__]['display_name'],
                         style: TextStyle(
-                          color: __ == _categorySelected
+                          color:  __ == _categorySelected
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -128,17 +151,27 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                 ),
               ),
               SizedBox(height: 15),
+              // Expanded(
+              //   child: IndexedStack(
+              //     index: _categorySelected,
+              //     children: [
+              //       _buildMyClass(_futureLerningModel),
+              //       _buildMyClass(_futureLernedModel),
+              //       _buildMyClass(_futureFavoriteModel),
+              //     ],
+              //   ),
+              // )
               Expanded(
-                child: IndexedStack(
-                  index: _categorySelected,
-                  children: [
-                    _buildMyClass(_futureLerningModel),
-                    _buildMyClass(_futureLernedModel),
-                    _buildMyClass(_futureFavoriteModel),
-                  ],
-                ),
+                child: _buildMyClass(),
+                // IndexedStack(
+                //   index: _categorySelected,
+                //   children: [
+                //     _buildMyClass(_futureLerningModel),
+                //     // _buildMyClass(_futureLernedModel),
+                //     // _buildMyClass(_futureFavoriteModel),
+                //   ],
+                // ),
               )
-              //
             ],
           ),
         ),
@@ -146,13 +179,16 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     );
   }
 
-  Widget _buildMyClass(Future<dynamic>? future) {
+  Widget _buildMyClass() {
     return FutureBuilder(
-      future: future,
+      future: _futureLerningModel,
       builder: (_, snapshot) {
         if (snapshot.hasData) {
-          if (snapshot.data.length == 0) {
-            return Container();
+          if (snapshot.data == 'No Data') {
+            return Center(
+              child: Text('ไม่มีข้อมูล' ,
+              style: TextStyle(fontSize: 16),)
+            );
           } else {
             return ListView.builder(
               padding: EdgeInsets.zero,
@@ -188,7 +224,9 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   }
 
   Widget _buildContant(BuildContext context, dynamic model) {
-    return InkWell(
+    print('dynamic >>>>>>>> ${model}');
+    return 
+    InkWell(
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
@@ -207,7 +245,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: CachedNetworkImage(
-                imageUrl: '${model['imageUrl']}',
+                imageUrl: '${model['img_url']}',
                 fit: BoxFit.cover,
                 height: 95,
                 width: 169,
@@ -217,7 +255,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             Expanded(
               child: Container(
                 child: Text(
-                  '${model['title']}',
+                  '${model['name']}',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
@@ -236,6 +274,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
         ),
       ),
     );
+  
   }
 
   Widget _buildHead() {

@@ -81,49 +81,50 @@ class _DetailPageState extends State<DetailPage> {
           ),
         ),
       ),
-      body: widget.slug == 'bookingPage'
-          ? _buildContentBookingPage(widget.model)
-          : ListView(
-              shrinkWrap: true,
-              children: [
-                SizedBox(height: 10),
-                Stack(
-                  children: [
-                    widget.checkNotiPage != true
-                        ? _buildContent(widget.model)
-                        : widget.slug != 'mainPage' &&
-                                widget.slug != 'bookingPage'
-                            ? FutureBuilder(
-                                future: _futureModel,
-                                builder: (_, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return _buildContent(snapshot.data);
-                                  } else if (snapshot.hasError) {
-                                    return Container(
-                                      alignment: Alignment.center,
-                                      height: 200,
-                                      width: double.infinity,
-                                      child: Text(
-                                        'Network ขัดข้อง',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontFamily: 'Kanit',
-                                          color: Color.fromRGBO(0, 0, 0, 0.6),
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    return Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-                                },
-                              )
-                            : _buildContentMainPage(widget.model),
-                  ],
-                ),
-              ],
-            ),
+      body: _buildContentMainPage(widget.model)
+      // widget.slug == 'bookingPage'
+      //     ? _buildContentBookingPage(widget.model)
+      //     : ListView(
+      //         shrinkWrap: true,
+      //         children: [
+      //           SizedBox(height: 10),
+      //           Stack(
+      //             children: [
+      //               widget.checkNotiPage != true
+      //                   ? _buildContent(widget.model)
+      //                   : widget.slug != 'mainPage' &&
+      //                           widget.slug != 'bookingPage'
+      //                       ? FutureBuilder(
+      //                           future: _futureModel,
+      //                           builder: (_, snapshot) {
+      //                             if (snapshot.hasData) {
+      //                               return _buildContent(snapshot.data);
+      //                             } else if (snapshot.hasError) {
+      //                               return Container(
+      //                                 alignment: Alignment.center,
+      //                                 height: 200,
+      //                                 width: double.infinity,
+      //                                 child: Text(
+      //                                   'Network ขัดข้อง',
+      //                                   style: TextStyle(
+      //                                     fontSize: 18,
+      //                                     fontFamily: 'Kanit',
+      //                                     color: Color.fromRGBO(0, 0, 0, 0.6),
+      //                                   ),
+      //                                 ),
+      //                               );
+      //                             } else {
+      //                               return Center(
+      //                                 child: CircularProgressIndicator(),
+      //                               );
+      //                             }
+      //                           },
+      //                         )
+      //                       : _buildContentMainPage(widget.model),
+      //             ],
+      //           ),
+      //         ],
+      //       ),
     );
   }
 
@@ -434,10 +435,22 @@ class _DetailPageState extends State<DetailPage> {
       shrinkWrap: true, // 1st add
       physics: const ClampingScrollPhysics(), // 2nd
       children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: CachedNetworkImage(
+                    imageUrl: '${model['img_url']}',
+                    // height: 30,
+                    width: 30,
+                    fit: BoxFit.cover,
+                    errorWidget: (context, url, error) =>
+                        Image.asset('assets/images/logo.png'),
+                  ),
+        ),
+        
         Container(
           margin: const EdgeInsets.only(right: 50, top: 10),
           child: Text(
-            model['title'],
+            model['name'],
             style: TextStyle(
               color: textTheme,
               fontSize: 20,
@@ -448,51 +461,88 @@ class _DetailPageState extends State<DetailPage> {
         Container(height: 10),
         Row(
           children: [
-            CachedNetworkImage(
-              imageUrl: '${model['imageUrlCreateBy']}',
-              height: 30,
-              width: 30,
-              fit: BoxFit.cover,
-              errorWidget: (context, url, error) =>
-                  Image.asset('assets/images/logo.png'),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${model['createBy'] ?? ''}',
-                    style: TextStyle(
-                      color: textTheme,
-                      fontSize: 15,
-                      fontFamily: 'Kanit',
-                    ),
+            model['imageUrlCreateBy'] != null
+                ? CachedNetworkImage(
+                    imageUrl: '${model['imageUrlCreateBy']}',
+                    height: 30,
+                    width: 30,
+                    fit: BoxFit.cover,
+                    errorWidget: (context, url, error) =>
+                        Image.asset('assets/images/logo.png'),
+                  )
+                : Image.asset(
+                    'assets/images/logo.png',
+                    height: 30,
+                    width: 30,
+                    fit: BoxFit.cover,
                   ),
-                  Text(
-                    '${dateStringToDateStringFormatV2(model['createDate'])}',
-                    style: TextStyle(
-                      color: textTheme,
-                      fontSize: 10,
-                      fontFamily: 'Kanit',
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Container(
+            //   padding: const EdgeInsets.all(10),
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       Text(
+            //         '${model['createBy'] ?? ''}',
+            //         style: TextStyle(
+            //           color: textTheme,
+            //           fontSize: 15,
+            //           fontFamily: 'Kanit',
+            //         ),
+            //       ),
+            //       Text(
+            //         '${dateStringToDateStringFormatV2(model['createDate'])}',
+            //         style: TextStyle(
+            //           color: textTheme,
+            //           fontSize: 10,
+            //           fontFamily: 'Kanit',
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
         SizedBox(height: 10),
-        Html(
-          data: model['description'],
-          style: {
-            "body": Style(
-              color: textTheme,
-              maxLines: 4,
-              textOverflow: TextOverflow.ellipsis,
-            ),
-          },
+        Text(
+          'รายละเอียด',
+          style: TextStyle(
+            color: textTheme,
+            fontSize: 15,
+            fontFamily: 'Kanit',
+            fontWeight: FontWeight.w500
+          ),
         ),
+        SizedBox(height: 10),
+        Text(
+          '${model['details']}',
+          style: TextStyle(
+            color: Color(0xFF707070),
+            fontSize: 13,
+            fontFamily: 'Kanit',
+            overflow: TextOverflow.ellipsis,
+          ),
+          maxLines: 4,
+        ),
+        SizedBox(height: 5),
+        Text(
+          'อ่านทั้งหมด',
+          style: TextStyle(
+            color: textTheme,
+            fontSize: 13,
+            fontFamily: 'Kanit',
+            fontWeight: FontWeight.w500
+          ),
+        ),
+        // Html(
+        //   data: model['description'],
+        //   style: {
+        //     "body": Style(
+        //       color: textTheme,
+        //       maxLines: 4,
+        //       textOverflow: TextOverflow.ellipsis,
+        //     ),
+        //   },
+        // ),
       ],
     );
   }
