@@ -1,16 +1,26 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:html/parser.dart';
 
-
 unfocus(context) {
   FocusScopeNode currentFocus = FocusScope.of(context);
   if (!currentFocus.hasPrimaryFocus) {
     currentFocus.unfocus();
   }
+}
+
+String getRandomString({int length = 10}) {
+  const _chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  Random _rnd = Random();
+  return String.fromCharCodes(
+    Iterable.generate(
+        length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))),
+  );
 }
 
 // convert html to string
@@ -193,6 +203,13 @@ logD(dynamic model) {
     printer: PrettyPrinter(),
   );
   return logger.d(model);
+}
+
+logWTF(dynamic model) {
+  var logger = Logger(
+    printer: PrettyPrinter(),
+  );
+  return logger.wtf(model);
 }
 
 logE(dynamic model) {

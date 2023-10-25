@@ -45,6 +45,11 @@ class ManageStorage {
     return await storage.read(key: key) ?? '';
   }
 
+  static deleteStorage(key) {
+    FlutterSecureStorage storage = const FlutterSecureStorage();
+    storage.delete(key: key);
+  }
+
   static readDynamic(String key) async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     var result = await storage.read(key: key) ?? '';

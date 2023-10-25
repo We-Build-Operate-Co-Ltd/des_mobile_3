@@ -1,11 +1,16 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:des/shared/extension.dart';
+import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
+import 'package:des/verify_thai_id.dart';
 import 'package:dio/dio.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'main.dart';
 
@@ -29,6 +34,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final txtPhone = TextEditingController();
   final txtEmail = TextEditingController();
   final txtPrefixName = TextEditingController();
+
+  bool _loading = false;
 
   late ScrollController _scrollController;
 
@@ -314,6 +321,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               SizedBox(height: 10),
                               TextFormField(
                                 controller: txtPhone,
+                                keyboardType: TextInputType.number,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.allow(
                                       RegExp(r'[0-9]')),
@@ -519,85 +527,107 @@ class _RegisterPageState extends State<RegisterPage> {
             _favoriteList[__]['selected'] = !_favoriteList[__]['selected'];
           });
         },
-        child: Row(
-          children: [
-            Container(
-              height: 20,
-              width: 20,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  width: 1,
-                  color: Theme.of(context).custom.b325f8_w_fffd57,
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Container(
-                margin: EdgeInsets.all(4),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Row(
+            children: [
+              Container(
+                height: 20,
+                width: 20,
                 decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _favoriteList[__]['selected']
-                        ? Theme.of(context).custom.b325f8_w_fffd57
-                        : Theme.of(context).custom.w_b_b),
-              ),
-            ),
-            SizedBox(width: 6),
-            Expanded(
-              child: Text(
-                '${_favoriteList[__]['value']}',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Theme.of(context).custom.b_W_fffd57,
+                  border: Border.all(
+                    width: 1,
+                    color: Theme.of(context).custom.b325f8_w_fffd57,
+                  ),
+                  borderRadius: BorderRadius.circular(2),
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+                child: Container(
+                  margin: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: _favoriteList[__]['selected']
+                          ? Theme.of(context).custom.b325f8_w_fffd57
+                          : Theme.of(context).custom.w_b_b),
+                ),
               ),
-            )
-          ],
+              SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  '${_favoriteList[__]['value']}',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Theme.of(context).custom.b_W_fffd57,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildButtonRegister() {
-    return InkWell(
-      onTap: () {
-        if (chbAcceptPDPA) {
-          final form = _formKey.currentState;
-          if (form!.validate()) {
-            form.save();
-            if (_careerSelected == '') {
-              Fluttertoast.showToast(msg: 'กรุณาเลือกอาชีพ');
-              return;
+    return Stack(
+      children: [
+        InkWell(
+          onTap: () {
+            if (chbAcceptPDPA) {
+              final form = _formKey.currentState;
+              if (form!.validate()) {
+                form.save();
+                if (_careerSelected == '') {
+                  Fluttertoast.showToast(msg: 'กรุณาเลือกอาชีพ');
+                  return;
+                }
+                if (_favoriteList.any((element) => element['selected'])) {
+                  _submitRegister();
+                } else {
+                  Fluttertoast.showToast(msg: 'กรุณาเลือกสิ่งที่สนใจ');
+                  return;
+                }
+              }
             }
-            if (_favoriteList.any((element) => element['selected'])) {
-              _submitRegister();
-            } else {
-              Fluttertoast.showToast(msg: 'กรุณาเลือกสิ่งที่สนใจ');
-              return;
-            }
-          }
-        }
-      },
-      child: Container(
-        alignment: Alignment.center,
-        height: 45,
-        width: double.infinity,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(23),
-            color: chbAcceptPDPA
-                ? Theme.of(context).custom.A4CB1_w_fffd57
-                : Color(0xFF707070)),
-        child: Text(
-          'สมัครสมาชิก',
-          style: TextStyle(
-            fontSize: 15,
-            color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Colors.white
-                : Colors.black,
-            fontWeight: FontWeight.w500,
+          },
+          child: Container(
+            alignment: Alignment.center,
+            height: 45,
+            width: double.infinity,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(23),
+                color: chbAcceptPDPA
+                    ? Theme.of(context).custom.A4CB1_w_fffd57
+                    : Color(0xFF707070)),
+            child: Text(
+              'สมัครสมาชิก',
+              style: TextStyle(
+                fontSize: 15,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.white
+                    : Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ),
         ),
-      ),
+        if (_loading)
+          Positioned.fill(
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.4),
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          ),
+      ],
     );
   }
 
@@ -746,126 +776,89 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  Future<bool?> _checkDuplicateEmail() async {
+    try {
+      print(txtEmail.text);
+      Response<bool> response = await Dio().get(
+        'http://dcc-portal.webview.co/dcc-api/api/user/verify/duplicate/${txtEmail.text}',
+      );
+      print(response.data);
+      return response.data;
+    } catch (e) {
+      setState(() {
+        _loading = false;
+      });
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+    }
+    return null;
+  }
+
   Future<dynamic> _submitRegister() async {
-    var favorites = '';
-    _favoriteList.forEach((e) {
-      if (e['selected']) {
-        if (favorites.isEmpty) {
-          favorites = favorites + e['value'];
-        } else {
-          favorites = favorites + ',' + e['value'];
-        }
-      }
-    });
-    final result = await Dio()
-        .post('https://des.we-builds.com/de-api/m/Register/create', data: {
-      'email': txtEmail.text,
-      'password': txtPassword.text,
-      'phone': txtPhone.text,
-      'firstName': txtFirstName.text,
-      'lastName': txtLastName.text,
-      'sex': _gender,
-      'age': _ageRange,
-      'username': txtEmail.text,
-      'career': _careerSelected,
-      'favorites': favorites,
-      'facebookID': "",
-      'appleID': "",
-      'googleID': "",
-      'lineID': "",
-      'imageUrl': "",
-      'category': "guest",
-      'birthDay': "",
-      'status': "N",
-      'platform': Platform.operatingSystem.toString(),
-      'countUnit': "[]"
-    });
-    if (result.statusCode == 200) {
-      if (result.data['status'] == 'S') {
-        return showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (BuildContext context) {
-              return WillPopScope(
-                onWillPop: () {
-                  return Future.value(false);
-                },
-                child: CupertinoAlertDialog(
-                  title: new Text(
-                    'ลงทะเบียนเรียบร้อยแล้ว',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'Kanit',
-                      color: Colors.black,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  content: Text(" "),
-                  actions: [
-                    CupertinoDialogAction(
-                      isDefaultAction: true,
-                      child: new Text(
-                        "ตกลง",
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontFamily: 'Kanit',
-                          color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
-              );
-            });
-      } else {
-        return showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (BuildContext context) {
-            return WillPopScope(
-              onWillPop: () {
-                return Future.value(false);
-              },
-              child: CupertinoAlertDialog(
-                title: new Text(
-                  result.data['message'],
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: 'Kanit',
-                    color: Colors.black,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-                content: Text(" "),
-                actions: [
-                  CupertinoDialogAction(
-                    isDefaultAction: true,
-                    child: new Text(
-                      "ตกลง",
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontFamily: 'Kanit',
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
-            );
-          },
+    try {
+      logD('start register');
+      setState(() => _loading = true);
+      // check duplicate email.
+      var emailDup = await _checkDuplicateEmail();
+      if (emailDup!) {
+        setState(() => _loading = false);
+        Fluttertoast.showToast(
+          msg: 'อีเมลนี้ถูกใช้งานไปแล้ว',
         );
+        return;
       }
-    } else {
-      return Error();
+      setState(() => _loading = false);
+
+      var favorites = '';
+      _favoriteList.forEach((e) {
+        if (e['selected']) {
+          if (favorites.isEmpty) {
+            favorites = favorites + e['value'];
+          } else {
+            favorites = favorites + ',' + e['value'];
+          }
+        }
+      });
+
+      var criteria = {
+        'email': txtEmail.text,
+        'password': txtPassword.text,
+        'phone': txtPhone.text,
+        'firstName': txtFirstName.text,
+        'lastName': txtLastName.text,
+        'sex': _gender,
+        'age': _ageRange,
+        'username': txtEmail.text,
+        'career': _careerSelected,
+        'favorites': favorites,
+        'facebookID': "",
+        'appleID': "",
+        'googleID': "",
+        'lineID': "",
+        'imageUrl': "",
+        'category': "guest",
+        'birthDay': "",
+        'status': "N",
+        'platform': Platform.operatingSystem.toString(),
+        'countUnit': "[]"
+      };
+
+      logD(criteria);
+
+      await ManageStorage.createSecureStorage(
+        key: 'tempRegister',
+        value: json.encode(criteria),
+      );
+
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => VerifyThaiIDPage(),
+        ),
+      );
+    } catch (e) {
+      setState(() => _loading = false);
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }
 
@@ -998,6 +991,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void initState() {
     _scrollController = ScrollController();
     super.initState();
+    _clearData();
   }
 
   @override
@@ -1011,6 +1005,14 @@ class _RegisterPageState extends State<RegisterPage> {
     txtFirstName.dispose();
     txtLastName.dispose();
     super.dispose();
+  }
+
+  _clearData() async {
+    ManageStorage.deleteStorage('tempRegister');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('thaiDCode');
+    await prefs.remove('thaiDState');
+    await prefs.remove('thaiDAction');
   }
 
   void goBack() async {

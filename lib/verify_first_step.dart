@@ -116,8 +116,8 @@ class VerifyFirstStepPage extends StatelessWidget {
                         Icons.check,
                         size: 15,
                         color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Color(0xFFB325F8)
-                          : Colors.white,
+                            ? Color(0xFFB325F8)
+                            : Colors.white,
                       ),
                     )
                     // Image.asset(
@@ -226,6 +226,25 @@ class VerifyFirstStepPage extends StatelessWidget {
                 //   height: 30,
                 //   width: 30,
                 // ),
+                const SizedBox(width: 15),
+                Text(
+                  'สแกนใบหน้า',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                iconStep('assets/images/scan_icon.png'),
                 const SizedBox(width: 15),
                 Text(
                   'สแกนใบหน้า',
@@ -412,8 +431,8 @@ class VerifyFirstStepPage extends StatelessWidget {
       child: Image.asset(
         asset,
         color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Colors.black
-                          : Colors.white,
+            ? Colors.black
+            : Colors.white,
         // height: 30,
         // width: 30,
       ),

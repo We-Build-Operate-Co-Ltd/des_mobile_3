@@ -1,13 +1,18 @@
+import 'package:des/shared/extension.dart';
 import 'package:des/shared/notification_service.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/splash.dart';
+import 'package:des/verify_thai_id.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uni_links/uni_links.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,8 +32,62 @@ Future<void> main() async {
   // runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+  static final ValueNotifier<ThemeModeThird> themeNotifier =
+      ValueNotifier(ThemeModeThird.light);
+  static final ValueNotifier<FontKanit> fontKanit =
+      ValueNotifier(FontKanit.small);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _handleIncomingLinks();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void _handleIncomingLinks() {
+    if (!kIsWeb) {
+      try {
+        uriLinkStream.listen((Uri? uri) async {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? state = prefs.getString('thaiDState') ?? '';
+          String? action = prefs.getString('thaiDAction') ?? '';
+
+          // logWTF('got uri: $uri');
+
+          if (state == uri!.queryParameters['state']) {
+            await prefs.setString(
+              'thaiDCode',
+              uri.queryParameters['code'].toString(),
+            );
+            if (action == 'create') {
+              navigatorKey.currentState!.pushReplacementNamed('/verifyThaiId');
+            }
+            // if (action == 'update') {
+            //   navigatorKey.currentState!.pushReplacementNamed('/profileVerify');
+            // }
+          }
+        }, onError: (Object err) {
+          logD('got err: $err');
+        });
+      } catch (e) {
+        logE(e);
+      }
+    }
+  }
+
   static final ValueNotifier<ThemeModeThird> themeNotifier =
       ValueNotifier(ThemeModeThird.light);
   static final ValueNotifier<FontKanit> fontKanit =
@@ -44,6 +103,13 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: 'DES ดิจิทัลชุมชน',
           debugShowCheckedModeBanner: false,
+          initialRoute: '/',
+          navigatorKey: navigatorKey,
+          routes: <String, WidgetBuilder>{
+            '/verifyThaiId': (BuildContext context) => const VerifyThaiIDPage(),
+            // '/profileVerify': (BuildContext context) =>
+            //     const ProfileVerifyThaiIDPage(),
+          },
           theme: FlexThemeData.light(
             fontFamily: 'kanit',
             colors: FlexSchemeColor.from(
