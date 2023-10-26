@@ -26,6 +26,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui show ImageFilter;
 
+import 'chat_botnoi.dart';
 import 'main.dart';
 import 'shared/notification_service.dart';
 
@@ -616,11 +617,10 @@ class _HomePageState extends State<HomePage> {
                           shrinkWrap: true,
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 10 / 11.5,
-                            crossAxisSpacing: 15,
-                            mainAxisSpacing: 15
-                          ),
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 10 / 11.5,
+                                  crossAxisSpacing: 15,
+                                  mainAxisSpacing: 15),
                           physics: const ClampingScrollPhysics(),
                           // itemCount: snapshot.data!.length,
                           itemCount: 2,
@@ -665,7 +665,7 @@ class _HomePageState extends State<HomePage> {
             // ),
             boxShadow: [
               BoxShadow(
-                color: Color.fromARGB(0,0,0,0).withOpacity(0.15),
+                color: Color.fromARGB(0, 0, 0, 0).withOpacity(0.15),
                 offset: const Offset(
                   3.0,
                   3.0,
@@ -1050,7 +1050,8 @@ class _HomePageState extends State<HomePage> {
     } else if (param == 'chat') {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => ChatPage(),
+          builder: (context) => ChatBotNoiPage(),
+          // builder: (context) => ChatPage(),
         ),
       );
     }
