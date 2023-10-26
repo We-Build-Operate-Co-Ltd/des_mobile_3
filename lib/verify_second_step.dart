@@ -58,7 +58,7 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
   String server = 'https://des.we-builds.com/de-api/';
   dynamic categoryModel = {'provinceTitle': ''};
 
-  List<String> _genderList = ['ชาย', 'หญิง', 'อื่น ๆ'];
+  List<String> _genderList = ['ชาย', 'หญิง'];
   String _gender = 'ชาย';
   PageController? pageController;
 
@@ -78,6 +78,9 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
           backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
               ? Colors.white
               : Colors.black,
+          systemOverlayStyle: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? SystemUiOverlayStyle.dark
+              : SystemUiOverlayStyle.light,
           elevation: 0,
           flexibleSpace: _buildHead(),
           automaticallyImplyLeading: false,
@@ -1215,7 +1218,7 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
     );
   }
 
-  Widget _radioGender(String value) {
+  Widget _radioGender(dynamic value) {
     // Color border = _gender == value ? Color(0xFFA924F0) : Colors.grey;
     // Color active = _gender == value ? Color(0xFFA924F0) : Colors.white;
     Color border;
@@ -1246,7 +1249,7 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          _gender = value;
+          _gender = value['key'];
         });
       },
       child: Row(
@@ -1268,7 +1271,7 @@ class _VerifySecondStepPageState extends State<VerifySecondStepPage> {
           ),
           SizedBox(width: 6),
           Text(
-            value,
+            value['key'],
             style: TextStyle(
               fontSize: 13,
             ),

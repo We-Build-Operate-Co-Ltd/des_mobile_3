@@ -39,14 +39,14 @@ class _RegisterPageState extends State<RegisterPage> {
 
   late ScrollController _scrollController;
 
-  List<String> _genderList = ['ชาย', 'หญิง', 'อื่น ๆ'];
-  List<String> _ageRangeList = [
-    '15-20 ปี',
-    '21-30 ปี',
-    '31-40 ปี',
-    '41-50 ปี',
-    '51-60 ปี',
-    '60 ปีขึ้นไป',
+  List<String> _genderList = ['ชาย', 'หญิง'];
+  List<dynamic> _ageRangeList = [
+    {'key': '15-20', 'value': '15-20 ปี'},
+    {'key': '21-30', 'value': '21-30 ปี'},
+    {'key': '31-40', 'value': '31-40 ปี'},
+    {'key': '41-50', 'value': '41-50 ปี'},
+    {'key': '51-60', 'value': '51-60 ปี'},
+    {'key': '60+', 'value': '60 ปีขึ้นไป'},
   ];
   List<dynamic> _careerList = [
     {
@@ -430,7 +430,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   runSpacing: 11,
                                   children: _ageRangeList
                                       .map<Widget>(
-                                          (String e) => _radioAgeRange(e))
+                                          (dynamic e) => _radioAgeRange(e))
                                       .toList(),
                                 ),
                               ),
@@ -670,13 +670,13 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _radioAgeRange(String value) {
+  Widget _radioAgeRange(dynamic value) {
     return SizedBox(
       width: 100,
       child: GestureDetector(
         onTap: () {
           setState(() {
-            _ageRange = value;
+            _ageRange = value['key'];
           });
         },
         child: Row(
@@ -695,22 +695,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 margin: EdgeInsets.all(4),
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: _ageRange == value
+                    color: _ageRange == value['key']
                         ? Theme.of(context).custom.b325f8_w_fffd57
-                        : Theme.of(context).custom.w_b_b
-                    // MyApp.themeNotifier.value == ThemeModeThird.light
-                    //     ? (_ageRange == value ? Color(0xFFA924F0) : Colors.white)
-                    //     : MyApp.themeNotifier.value == ThemeModeThird.dark
-                    //         ? (_ageRange == value ? Colors.white : Colors.black)
-                    //         : (_ageRange == value
-                    //             ? Color(0xFFFFFD57)
-                    //             : Colors.black),
-                    ),
+                        : Theme.of(context).custom.w_b_b),
               ),
             ),
             SizedBox(width: 6),
             Text(
-              value,
+              value['value'],
               style: TextStyle(
                 fontSize: 13,
                 color: Theme.of(context).custom.b_W_fffd57,
