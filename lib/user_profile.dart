@@ -205,7 +205,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => HistoryOfApplyJobPage(model: mockDataApplyJobList),
+                      builder: (_) =>
+                          HistoryOfApplyJobPage(model: mockDataApplyJobList),
                     ),
                   ),
                   child: Text(

@@ -768,34 +768,61 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Future<bool?> _checkDuplicateEmail() async {
+  Future<StatusDuplicate> _checkDuplicateEmail() async {
     try {
       print(txtEmail.text);
       Response<bool> response = await Dio().get(
         'http://dcc-portal.webview.co/dcc-api/api/user/verify/duplicate/${txtEmail.text}',
       );
       print(response.data);
-      return response.data;
+      return response.data! ? StatusDuplicate.fail : StatusDuplicate.pass;
     } catch (e) {
-      setState(() {
-        _loading = false;
-      });
-      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      return StatusDuplicate.error;
     }
-    return null;
+  }
+
+  Future<String> _checkDuplicateUser() async {
+    try {
+      logWTF(txtEmail.text);
+      Response<String> response = await Dio().get(
+        'https://des.we-builds.com/de-api/m/register/user/duplicate/${txtEmail.text}',
+      );
+      if (response.data == 'username') {
+        return 'ชื่อผู้ใช้งานนี้ถูกใช้งานไปแล้ว';
+      }
+      if (response.data == 'idcard') {
+        return 'เลขบัตรประชาชนนี้ถูกใช้งานไปแล้ว';
+      }
+
+      return '';
+    } catch (e) {
+      return 'เกิดข้อผิดพลาด';
+    }
   }
 
   Future<dynamic> _submitRegister() async {
     try {
       logD('start register');
       setState(() => _loading = true);
-      // check duplicate email.
-      var emailDup = await _checkDuplicateEmail();
-      if (emailDup!) {
+
+      // check duplicate username && idcard.
+      String usernameDup = await _checkDuplicateUser();
+      if (usernameDup.isNotEmpty) {
         setState(() => _loading = false);
-        Fluttertoast.showToast(
-          msg: 'อีเมลนี้ถูกใช้งานไปแล้ว',
-        );
+        Fluttertoast.showToast(msg: usernameDup);
+        return;
+      }
+
+      // check duplicate email.
+      StatusDuplicate emailDup = await _checkDuplicateEmail();
+      logWTF(emailDup);
+      if (emailDup == StatusDuplicate.fail) {
+        setState(() => _loading = false);
+        Fluttertoast.showToast(msg: 'อีเมลนี้ถูกใช้งานไปแล้ว');
+        return;
+      } else if (emailDup == StatusDuplicate.error) {
+        setState(() => _loading = false);
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
         return;
       }
       setState(() => _loading = false);
@@ -1012,3 +1039,5 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 //
 }
+
+enum StatusDuplicate { pass, fail, error }
