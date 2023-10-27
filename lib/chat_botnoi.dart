@@ -16,16 +16,14 @@ class ChatBotNoiPage extends StatefulWidget {
   const ChatBotNoiPage({super.key, this.idCard});
   final String? idCard;
   @override
-  _ChatBotNoiPageState createState() =>
-      new _ChatBotNoiPageState();
+  _ChatBotNoiPageState createState() => new _ChatBotNoiPageState();
 }
 
 class _ChatBotNoiPageState extends State<ChatBotNoiPage> {
   String faceScanUrl = "";
   @override
   Widget build(BuildContext context) {
-    faceScanUrl =
-        "https://decms.dcc.onde.go.th/botnoi/";
+    faceScanUrl = "https://decms.dcc.onde.go.th/botnoi/";
     return MaterialApp(home: InAppWebViewPage(scanFaceWeb: faceScanUrl));
   }
 }
@@ -51,22 +49,27 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
       Expanded(
         child: Container(
           child: InAppWebView(
-              initialUrlRequest: URLRequest(url: Uri.parse(scanFaceWeb ?? '')),
-              initialOptions: InAppWebViewGroupOptions(
-                crossPlatform: InAppWebViewOptions(
-                  mediaPlaybackRequiresUserGesture: false,
-                  // debuggingEnabled: true,
-                ),
+            initialUrlRequest: URLRequest(url: Uri.parse(scanFaceWeb ?? '')),
+            initialOptions: InAppWebViewGroupOptions(
+              crossPlatform: InAppWebViewOptions(
+                mediaPlaybackRequiresUserGesture: false,
+                // debuggingEnabled: true,
               ),
-              onWebViewCreated: (InAppWebViewController controller) {
-                _webViewController = controller;
-              },
-              androidOnPermissionRequest: (InAppWebViewController controller,
-                  String origin, List<String> resources) async {
-                return PermissionRequestResponse(
-                    resources: resources,
-                    action: PermissionRequestResponseAction.GRANT);
-              }),
+            ),
+            onWebViewCreated: (InAppWebViewController controller) {
+              _webViewController = controller;
+            },
+            androidOnPermissionRequest: (InAppWebViewController controller,
+                String origin, List<String> resources) async {
+              return PermissionRequestResponse(
+                  resources: resources,
+                  action: PermissionRequestResponseAction.GRANT);
+            },
+            onReceivedServerTrustAuthRequest: (controller, challenge) async {
+              return ServerTrustAuthResponse(
+                  action: ServerTrustAuthResponseAction.PROCEED);
+            },
+          ),
         ),
       ),
     ])));
