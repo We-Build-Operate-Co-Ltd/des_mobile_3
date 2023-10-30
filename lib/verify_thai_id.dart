@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:des/shared/secure_storage.dart';
-import 'package:des/verify_complete.dart';
+import 'package:des/verify_last_step.dart';
+import 'package:des/verify_otp_phone_input.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -49,7 +47,7 @@ class _VerifyThaiIDPageState extends State<VerifyThaiIDPage> {
   }
 
   _getUserData() async {
-    var value = await ManageStorage.read('tempRegister') ?? '';
+    var value = await ManageStorage.read('verifyTemp') ?? '';
     var result = json.decode(value);
     setState(() {
       _userData = result;
@@ -143,100 +141,12 @@ class _VerifyThaiIDPageState extends State<VerifyThaiIDPage> {
                     )
                 ],
               ),
-              const SizedBox(height: 10),
-              Stack(
-                children: [
-                  GestureDetector(
-                    onTap: () async {
-                      _userData['hasThaiD'] = false; // ไม่ได้ยืนยัน thaiD.
-                      _register();
-                    },
-                    child: Container(
-                      height: 50,
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: Theme.of(context).primaryColor,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(7),
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 4,
-                            color: Color(0x40F3D2FF),
-                            offset: Offset(0, 4),
-                          )
-                        ],
-                      ),
-                      child: Text(
-                        'ข้ามขั้นตอนนี้',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (_loadingSubmit)
-                    Positioned.fill(
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: const Color(0xFF707070).withOpacity(0.5),
-                        ),
-                        child: const CircularProgressIndicator(),
-                      ),
-                    )
-                ],
-              ),
               const SizedBox(height: 20),
             ],
           ),
         ),
       ),
     );
-  }
-
-  _register() async {
-    setState(() => _loadingSubmit = true);
-    try {
-      var response = await Dio().post(
-        'https://des.we-builds.com/de-api/m/Register/create',
-        data: _userData,
-      );
-
-      setState(() {
-        _loadingSubmit = false;
-      });
-
-      if (response.statusCode == 200) {
-        if (response.data['status'] == 'S') {
-          Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (_, __, ___) => const VerifyCompletePage(),
-              transitionDuration: const Duration(milliseconds: 200),
-              transitionsBuilder: (_, a, __, c) =>
-                  FadeTransition(opacity: a, child: c),
-            ),
-          );
-        } else {
-          Fluttertoast.showToast(
-              msg: response.data['message'] ?? 'เกิดข้อผิดพลาด');
-        }
-      } else {
-        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-      }
-    } catch (e) {
-      setState(() {
-        _loadingSubmit = false;
-      });
-      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-    }
   }
 
   _callThaiID() async {
@@ -258,7 +168,7 @@ class _VerifyThaiIDPageState extends State<VerifyThaiIDPage> {
       logWTF(state);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('thaiDState', state);
-      await prefs.setString('thaiDAction', 'create');
+      await prefs.setString('thaiDAction', 'update');
 
       launchUrl(
         Uri.parse('$base$parameter'),
@@ -313,25 +223,41 @@ class _VerifyThaiIDPageState extends State<VerifyThaiIDPage> {
         ),
       );
 
-      Map<String, dynamic> idData = JwtDecoder.decode(res.data['id_token']);
+      await prefs.setString('thaiDToken', res.data['id_token']);
 
-      _userData['hasThaiD'] = true; // ยืนยัน thaiD. = true;
-      _userData['thaiID'] = {
-        'pid': idData['pid'],
-        'name': '',
-        'name_th': '',
-        'birthdate': idData['birthdate'],
-        'address': idData['address']['formatted'],
-        'given_name': idData['given_name'],
-        'middle_name': '',
-        'family_name': idData['family_name'],
-        'given_name_en': '',
-        'middle_name_en': '',
-        'family_name_en': '',
-        'gender': idData['gender'],
-      };
+      // Map<String, dynamic> idData = JwtDecoder.decode(res.data['id_token']);
 
-      _register();
+      // dynamic thaiDData = {
+      //   'pid': idData['pid'],
+      //   'name': '',
+      //   'name_th': '',
+      //   'birthdate': idData['birthdate'],
+      //   'address': idData['address']['formatted'],
+      //   'given_name': idData['given_name'],
+      //   'middle_name': '',
+      //   'family_name': idData['family_name'],
+      //   'given_name_en': '',
+      //   'middle_name_en': '',
+      //   'family_name_en': '',
+      //   'gender': idData['gender'],
+      // };
+
+      setState(() => _loadingSubmit = false);
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (_) => VerifyLastStepPage(
+      //       isThaiD: true, // ยืนยัน thaiD. = true;
+      //       model: thaiDData,
+      //     ),
+      //   ),
+      // );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => VerifyOTPPhoneInputPage(),
+        ),
+      );
     } catch (e) {
       await prefs.remove('thaiDCode');
       await prefs.remove('thaiDState');

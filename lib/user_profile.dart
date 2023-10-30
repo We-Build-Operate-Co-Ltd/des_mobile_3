@@ -10,7 +10,7 @@ import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/user_profile_edit.dart';
 import 'package:des/user_profile_setting.dart';
-import 'package:des/verify_first_step.dart';
+import 'package:des/verify_main.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -42,7 +42,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   String? _imageUrl = '';
   String? _firstName = '';
   String? _lastName = '';
-  String? profileCode = '';
+  String _status = '';
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +64,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ),
           children: [
             _buildUserDetail(),
-            SizedBox(height: 20),
-            _buildVerifyYourIdentity(),
+            if (_status != 'A') SizedBox(height: 20),
+            if (_status != 'A') _buildVerifyYourIdentity(),
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -842,34 +842,60 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   ),
                 ),
                 SizedBox(height: 5),
-                Row(
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      width: 73,
-                      height: 19,
-                      decoration: BoxDecoration(
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Color(0xFFB325F8).withOpacity(0.10)
-                            : Color(0xFF292929),
-                        borderRadius: BorderRadius.circular(12.5),
-                      ),
-                      child: Text(
-                        'รอยืนยันตัวตน',
-                        style: TextStyle(
-                          fontSize: 9,
-                          fontWeight: FontWeight.w400,
-                          color: MyApp.themeNotifier.value ==
-                                  ThemeModeThird.light
-                              ? Color(0xFF7A4CB1)
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? Colors.white
-                                  : Color(0xFFFFFD57),
+                _status != 'A'
+                    ? Container(
+                        alignment: Alignment.center,
+                        width: 73,
+                        height: 19,
+                        decoration: BoxDecoration(
+                          color:
+                              MyApp.themeNotifier.value == ThemeModeThird.light
+                                  ? Color(0xFFB325F8).withOpacity(0.10)
+                                  : Color(0xFF292929),
+                          borderRadius: BorderRadius.circular(12.5),
+                        ),
+                        child: Text(
+                          'รอยืนยันตัวตน',
+                          style: TextStyle(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w400,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF7A4CB1)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        alignment: Alignment.center,
+                        width: 73,
+                        height: 19,
+                        decoration: BoxDecoration(
+                          color:
+                              MyApp.themeNotifier.value == ThemeModeThird.light
+                                  ? Color.fromARGB(255, 37, 248, 79)
+                                      .withOpacity(0.10)
+                                  : Color(0xFF292929),
+                          borderRadius: BorderRadius.circular(12.5),
+                        ),
+                        child: Text(
+                          'ยืนยันตัวตนแล้ว',
+                          style: TextStyle(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w400,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color.fromARGB(255, 12, 168, 33)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),
@@ -880,10 +906,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   Widget _buildVerifyYourIdentity() {
     return InkWell(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (builder) => VerifyFirstStepPage()),
-      ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (builder) => VerifyMainPage()),
+        );
+      },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12.5),
         decoration: BoxDecoration(
@@ -1059,6 +1087,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       _imageUrl = result['imageUrl'];
       _firstName = result['firstName'];
       _lastName = result['lastName'];
+      _status = result['status'];
     });
   }
 

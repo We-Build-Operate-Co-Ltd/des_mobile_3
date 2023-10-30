@@ -8,7 +8,7 @@ import 'package:des/shared/line.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/user_profile_edit.dart';
-import 'package:des/verify_first_step.dart';
+import 'package:des/verify_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -59,8 +59,8 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
                 width: 145,
                 decoration: BoxDecoration(
                   color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Color(0xFFB325F8).withOpacity(0.10)
-                                : Color(0xFF292929),
+                      ? Color(0xFFB325F8).withOpacity(0.10)
+                      : Color(0xFF292929),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
@@ -72,11 +72,10 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
                       height: 18.75,
                       width: 15,
                       color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Color(0xFFB325F8)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                          ? Color(0xFFB325F8)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                     const SizedBox(width: 10),
                     Text(
@@ -86,11 +85,10 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
                         fontFamily: 'Kanit',
                         fontWeight: FontWeight.w400,
                         color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Color(0xFFB325F8)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                            ? Color(0xFFB325F8)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       ),
                     ),
                   ],
@@ -115,11 +113,10 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
             fontFamily: 'Kanit',
             fontWeight: FontWeight.bold,
             color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                ? Colors.black
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
           ),
         ),
         const SizedBox(height: 5),
@@ -150,11 +147,10 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
             fontFamily: 'Kanit',
             fontWeight: FontWeight.bold,
             color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                ? Colors.black
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
           ),
         ),
         const SizedBox(height: 5),
@@ -176,11 +172,10 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
             fontFamily: 'Kanit',
             fontWeight: FontWeight.bold,
             color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                ? Colors.black
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
           ),
         ),
         const SizedBox(height: 5),
@@ -204,7 +199,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (builder) => const VerifyFirstStepPage(),
+              builder: (builder) => const VerifyMainPage(),
             ),
           ),
           child: _buildRow('ยืนยันตัวตน'),
@@ -227,22 +222,20 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
               fontFamily: 'Kanit',
               fontWeight: FontWeight.w400,
               color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                  ? Colors.black
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
             ),
           ),
           Image.asset(
             'assets/images/go.png',
             height: 11,
             color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                ? Colors.black
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
           ),
         ],
       ),
@@ -265,27 +258,27 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
               InkWell(
                 onTap: () => Navigator.pop(context),
                 child: Container(
-              height: 40,
-              width: 40,
-              padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFF7A4CB1)
-                      : Colors.black,
-                  border: Border.all(
-                    width: 1,
-                    style: BorderStyle.solid,
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Color(0xFF7A4CB1)
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
-                  )),
-              child: Image.asset(
-                'assets/images/back_arrow.png',
-              ),
-            ),
+                  height: 40,
+                  width: 40,
+                  padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF7A4CB1)
+                          : Colors.black,
+                      border: Border.all(
+                        width: 1,
+                        style: BorderStyle.solid,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                      )),
+                  child: Image.asset(
+                    'assets/images/back_arrow.png',
+                  ),
+                ),
               ),
             ],
           ),
@@ -340,7 +333,8 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w400,
-                            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
                                 ? Colors.black
                                 : MyApp.themeNotifier.value ==
                                         ThemeModeThird.dark
@@ -348,13 +342,16 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
                                     : Color(0xFFFFFD57),
                           ),
                         ),
-                        const SizedBox(width: 5,),
+                        const SizedBox(
+                          width: 5,
+                        ),
                         Text(
                           _lastName ?? '',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w400,
-                            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
                                 ? Colors.black
                                 : MyApp.themeNotifier.value ==
                                         ThemeModeThird.dark
@@ -372,11 +369,10 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
                     color: MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                 ),
               ],

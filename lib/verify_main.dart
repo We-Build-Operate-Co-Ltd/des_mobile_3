@@ -1,11 +1,12 @@
 import 'package:des/shared/theme_data.dart';
-import 'package:des/verify_second_step.dart';
+import 'package:des/verify_information.dart';
+import 'package:des/verify_thai_id.dart';
 import 'package:flutter/material.dart';
 
 import 'main.dart';
 
-class VerifyFirstStepPage extends StatelessWidget {
-  const VerifyFirstStepPage({Key? key}) : super(key: key);
+class VerifyMainPage extends StatelessWidget {
+  const VerifyMainPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -146,29 +147,50 @@ class VerifyFirstStepPage extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                iconStep('assets/images/id_icon.png'),
-                // Image.asset(
-                //   'assets/images/id_icon.png',
-                //   height: 30,
-                //   width: 30,
-                // ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.asset(
+                    'assets/images/icon_verify_thai_id.png',
+                    height: 30,
+                    width: 30,
+                  ),
+                ),
                 const SizedBox(width: 15),
-                Expanded(
-                  child: Text(
-                    'กรอกข้อมูลบัตรประชาชน',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Colors.black
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
-                    ),
+                Text(
+                  'ThaiD',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                 )
               ],
             ),
+            // const SizedBox(height: 10),
+            // Row(
+            //   children: [
+            //     iconStep('assets/images/id_icon.png'),
+            //     const SizedBox(width: 15),
+            //     Expanded(
+            //       child: Text(
+            //         'กรอกข้อมูลบัตรประชาชน',
+            //         style: TextStyle(
+            //           fontSize: 15,
+            //           fontWeight: FontWeight.w500,
+            //           color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //               ? Colors.black
+            //               : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //                   ? Colors.white
+            //                   : Color(0xFFFFFD57),
+            //         ),
+            //       ),
+            //     )
+            //   ],
+            // ),
             const SizedBox(height: 10),
             Row(
               children: [
@@ -217,49 +239,25 @@ class VerifyFirstStepPage extends StatelessWidget {
                 )
               ],
             ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                iconStep('assets/images/scan_icon.png'),
-                // Image.asset(
-                //   'assets/images/scan_icon.png',
-                //   height: 30,
-                //   width: 30,
-                // ),
-                const SizedBox(width: 15),
-                Text(
-                  'สแกนใบหน้า',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Colors.black
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                iconStep('assets/images/scan_icon.png'),
-                const SizedBox(width: 15),
-                Text(
-                  'สแกนใบหน้า',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Colors.black
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
-                  ),
-                )
-              ],
-            ),
+            // const SizedBox(height: 10),
+            // Row(
+            //   children: [
+            //     iconStep('assets/images/scan_icon.png'),
+            //     const SizedBox(width: 15),
+            //     Text(
+            //       'สแกนใบหน้า',
+            //       style: TextStyle(
+            //         fontSize: 15,
+            //         fontWeight: FontWeight.w500,
+            //         color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //             ? Colors.black
+            //             : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //                 ? Colors.white
+            //                 : Color(0xFFFFFD57),
+            //       ),
+            //     )
+            //   ],
+            // ),
             const SizedBox(height: 30),
             Text(
               'ประโยชน์ที่ได้รับ',
@@ -340,7 +338,7 @@ class VerifyFirstStepPage extends StatelessWidget {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (builder) => const VerifySecondStepPage(),
+                    builder: (builder) => const VerifyThaiIDPage(),
                   ),
                 ),
                 child: Container(

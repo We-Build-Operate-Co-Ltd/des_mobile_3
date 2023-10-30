@@ -1,27 +1,25 @@
-import 'dart:convert';
-
 import 'package:des/shared/extension.dart';
-import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
-import 'package:des/verify_fifth_step.dart';
+import 'package:des/verify_otp_email.dart';
+import 'package:des/verify_otp_phone.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'main.dart';
 
-class VerifyFourthStepPage extends StatefulWidget {
-  const VerifyFourthStepPage({Key? key, this.model}) : super(key: key);
-  final dynamic model;
+class VerifyOTPPhoneInputPage extends StatefulWidget {
+  const VerifyOTPPhoneInputPage({Key? key}) : super(key: key);
 
   @override
-  State<VerifyFourthStepPage> createState() => _VerifyFourthStepPageState();
+  State<VerifyOTPPhoneInputPage> createState() =>
+      _VerifyOTPPhoneInputPageState();
 }
 
-class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
-  TextEditingController? _phoneController;
-  final TextEditingController _emailController = TextEditingController();
+class _VerifyOTPPhoneInputPageState extends State<VerifyOTPPhoneInputPage> {
+  TextEditingController _phoneController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _loadindSubmit = false;
 
@@ -55,7 +53,7 @@ class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
                   height: 10,
                 ),
                 Text(
-                  'กรุณากรอกอีเมลของท่าน เพื่อทำการรับรหัสสำหรับยืนยัน',
+                  'กรุณากรอกหมายเลขโทรศัพท์ของท่าน เพื่อทำการรับรหัสสำหรับยืนยัน',
                   style: TextStyle(
                     fontSize: 15,
                     color: MyApp.themeNotifier.value == ThemeModeThird.light
@@ -67,12 +65,14 @@ class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
-                  controller: _emailController,
+                  controller: _phoneController,
+                  keyboardType: TextInputType.number,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'[0-9a-zA-Z@!_.-]')),
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    LengthLimitingTextInputFormatter(10),
                   ],
-                  decoration: _decorationBase(context, hintText: 'อีเมล'),
+                  decoration:
+                      _decorationBase(context, hintText: 'หมายเลขโทรศัพท์'),
                   style: TextStyle(
                     fontFamily: 'Kanit',
                     color: MyApp.themeNotifier.value == ThemeModeThird.light
@@ -103,6 +103,8 @@ class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
                         final form = _formKey.currentState;
                         if (form!.validate() && !_loadindSubmit) {
                           form.save();
+
+                          setState(() => _loadindSubmit = true);
                           _requestOTP();
                         }
                       },
@@ -205,7 +207,7 @@ class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
           ),
           Center(
             child: Text(
-              'OTP ผ่านอีเมล',
+              'OTP ผ่านหมายเลขโทรศัพท์',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w500,
@@ -286,27 +288,29 @@ class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
 
   _requestOTP() async {
     try {
-      setState(() {
-        _loadindSubmit = true;
-      });
       Dio dio = Dio();
-      var responseEmail = await dio.post(
-        'https://des.we-builds.com/de-api/m/register/otp/request',
-        data: {"email": _emailController.text},
-      );
+      dio.options.contentType = Headers.formUrlEncodedContentType;
+      dio.options.headers["api_key"] = "db88c29e14b65c9db353c9385f6e5f28";
+      dio.options.headers["secret_key"] = "XpM2EfFk7DKcyJzt";
+      var response =
+          await dio.post('https://portal-otp.smsmkt.com/api/otp-send', data: {
+        "project_key": "XcvVbGHhAi",
+        "phone": _phoneController.text.replaceAll('-', '').trim(),
+        "ref_code": "xxx123"
+      });
 
-      var result = responseEmail.data;
-      if (result['status'] == "S") {
-        _emailController.text;
+      var otp = response.data['result'];
+      if (otp['token'] != null) {
         setState(() {
           _loadindSubmit = false;
         });
+
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => VerifyFifthStepPage(
-              model: widget.model,
-              email: _emailController.text,
+            builder: (_) => VerifyOTPPhonePage(
+              token: otp['token'],
+              refCode: otp['ref_code'],
             ),
           ),
         );
@@ -316,7 +320,7 @@ class _VerifyFourthStepPageState extends State<VerifyFourthStepPage> {
         });
         Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
-    } catch (ex) {
+    } catch (e) {
       setState(() {
         _loadindSubmit = false;
       });

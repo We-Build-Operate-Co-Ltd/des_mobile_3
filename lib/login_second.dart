@@ -484,6 +484,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
         SizedBox(width: 10),
         InkWell(
           onTap: () {
+            FocusScope.of(context).unfocus();
             final form = _formKey.currentState;
             if (form!.validate()) {
               form.save();

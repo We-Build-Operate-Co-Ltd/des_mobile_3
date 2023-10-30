@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
-import 'package:des/verify_thai_id.dart';
+import 'package:des/register_verify_thai_id.dart';
+import 'package:des/verify_otp_email_input.dart';
 import 'package:dio/dio.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/cupertino.dart';
@@ -770,8 +771,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<StatusDuplicate> _checkDuplicateEmail() async {
     try {
-      print(txtEmail.text);
-      Response<bool> response = await Dio().get(
+      Response<bool?> response = await Dio().get(
         'http://dcc-portal.webview.co/dcc-api/api/user/verify/duplicate/${txtEmail.text}',
       );
       print(response.data);
@@ -872,7 +872,7 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => VerifyThaiIDPage(),
+          builder: (_) => RegisterVerifyThaiIDPage(),
         ),
       );
     } catch (e) {

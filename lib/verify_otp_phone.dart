@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:des/shared/extension.dart';
+import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
-import 'package:des/verify_fourth_step.dart';
+import 'package:des/verify_otp_email_input.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,23 +14,23 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'main.dart';
 
-class VerifyThirdStepPage extends StatefulWidget {
-  const VerifyThirdStepPage(
-      {Key? key, required this.token, required this.refCode, this.model})
+class VerifyOTPPhonePage extends StatefulWidget {
+  const VerifyOTPPhonePage(
+      {Key? key, required this.token, required this.refCode})
       : super(key: key);
   final String token;
   final String refCode;
-  final dynamic model;
 
   @override
-  State<VerifyThirdStepPage> createState() => _VerifyThirdStepPageState();
+  State<VerifyOTPPhonePage> createState() => _VerifyOTPPhonePageState();
 }
 
-class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
+class _VerifyOTPPhonePageState extends State<VerifyOTPPhonePage> {
   final txtNumber1 = TextEditingController();
   bool loading = false;
   String image = '';
   final _formKey = GlobalKey<FormState>();
+  late dynamic _userData;
 
   // face recognition start
   var image1 = Regula.MatchFacesImage();
@@ -160,9 +163,7 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => VerifyFourthStepPage(
-                            model: widget.model,
-                          ),
+                          builder: (_) => VerifyOTPEmailInputPage(),
                         ),
                       );
                     } else {
@@ -212,9 +213,7 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
                     if (await _validateOTP()) {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => VerifyFourthStepPage(
-                            model: widget.model,
-                          ),
+                          builder: (context) => VerifyOTPEmailInputPage(),
                         ),
                       );
                     } else {
@@ -323,16 +322,18 @@ class _VerifyThirdStepPageState extends State<VerifyThirdStepPage> {
   }
 
   _requestOTP() async {
+    var value = await ManageStorage.read('profileData') ?? '';
+    var result = json.decode(value);
     Dio dio = Dio();
     dio.options.contentType = Headers.formUrlEncodedContentType;
     dio.options.headers["api_key"] = "db88c29e14b65c9db353c9385f6e5f28";
     dio.options.headers["secret_key"] = "XpM2EfFk7DKcyJzt";
-    var response =
-        await dio.post('https://portal-otp.smsmkt.com/api/otp-send', data: {
-      "project_key": "XcvVbGHhAi",
-      "phone": widget.model['phone'],
-      "ref_code": "xxx123"
-    });
+    var response = await dio.post('https://portal-otp.smsmkt.com/api/otp-send',
+        data: {
+          "project_key": "XcvVbGHhAi",
+          "phone": result['phone'],
+          "ref_code": "xxx123"
+        });
 
     var otp = response.data['result'];
     if (otp['token'] != null) {

@@ -2,6 +2,7 @@ import 'package:des/shared/extension.dart';
 import 'package:des/shared/notification_service.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/splash.dart';
+import 'package:des/register_verify_thai_id.dart';
 import 'package:des/verify_thai_id.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
@@ -65,7 +66,7 @@ class _MyAppState extends State<MyApp> {
           String? state = prefs.getString('thaiDState') ?? '';
           String? action = prefs.getString('thaiDAction') ?? '';
 
-          // logWTF('got uri: $uri');
+          logWTF('got uri: $uri');
 
           if (state == uri!.queryParameters['state']) {
             await prefs.setString(
@@ -73,11 +74,17 @@ class _MyAppState extends State<MyApp> {
               uri.queryParameters['code'].toString(),
             );
             if (action == 'create') {
+              navigatorKey.currentState!
+                  .pushReplacementNamed('/registerVerifyThaiId');
+            }
+            if (action == 'update') {
               navigatorKey.currentState!.pushReplacementNamed('/verifyThaiId');
             }
-            // if (action == 'update') {
-            //   navigatorKey.currentState!.pushReplacementNamed('/profileVerify');
-            // }
+          } else {
+            // clear data.
+            await prefs.remove('thaiDCode');
+            await prefs.remove('thaiDState');
+            await prefs.remove('thaiDAction');
           }
         }, onError: (Object err) {
           logD('got err: $err');
@@ -88,17 +95,12 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  static final ValueNotifier<ThemeModeThird> themeNotifier =
-      ValueNotifier(ThemeModeThird.light);
-  static final ValueNotifier<FontKanit> fontKanit =
-      ValueNotifier(FontKanit.small);
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     _portraitModeOnly();
     return ValueListenableBuilder<ThemeModeThird>(
-      valueListenable: themeNotifier,
+      valueListenable: MyApp.themeNotifier,
       builder: (_, ThemeModeThird currentMode, __) {
         return MaterialApp(
           title: 'DES ดิจิทัลชุมชน',
@@ -106,12 +108,13 @@ class _MyAppState extends State<MyApp> {
           initialRoute: '/',
           navigatorKey: navigatorKey,
           routes: <String, WidgetBuilder>{
+            '/registerVerifyThaiId': (BuildContext context) =>
+                const RegisterVerifyThaiIDPage(),
             '/verifyThaiId': (BuildContext context) => const VerifyThaiIDPage(),
-            // '/profileVerify': (BuildContext context) =>
-            //     const ProfileVerifyThaiIDPage(),
           },
           theme: FlexThemeData.light(
             fontFamily: 'kanit',
+            useMaterial3: true,
             colors: FlexSchemeColor.from(
               primary: const Color(0xFF7A4CB1),
               brightness: Brightness.light,
@@ -120,7 +123,7 @@ class _MyAppState extends State<MyApp> {
           home: const SplashPage(),
           builder: (context, child) {
             return ValueListenableBuilder<FontKanit>(
-              valueListenable: fontKanit,
+              valueListenable: MyApp.fontKanit,
               builder: (_, FontKanit currentMode, __) {
                 return MediaQuery(
                   data: MediaQuery.of(context).copyWith(

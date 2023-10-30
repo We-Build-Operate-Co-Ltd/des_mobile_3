@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 
-class ThemeColorData {
+class ThemeColorData extends ChangeNotifier {
   Color primary;
   Color b_w_y;
   Color w_b_y;
@@ -42,6 +43,20 @@ class ThemeColorData {
       required this.f70f70_w_fffd57,
       required this.f70f70_292929_292929,
       required this.eeba33_292929_292929});
+
+  Future<void> swapTheme(ThemeModeThird selectedTheme) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (selectedTheme == ThemeModeThird.blindness) {
+      await prefs.setString("themeMode", 'light');
+    } else if (selectedTheme == ThemeModeThird.dark) {
+      await prefs.setString("themeMode", "light");
+    } else {
+      await prefs.setString("themeMode", "blindness");
+    }
+
+    notifyListeners();
+  }
 }
 
 final themeLight = ThemeColorData(
@@ -104,11 +119,6 @@ final themeBlindness = ThemeColorData(
     f70f70_w_fffd57: Color(0xFFfffd57),
     f70f70_292929_292929: Color(0xFf292929),
     eeba33_292929_292929: Color(0xFf292929));
-
-ThemeData customLight({
-  final Iterable<ThemeExtension<dynamic>>? extensions,
-}) =>
-    ThemeData();
 
 // ref: https://stackoverflow.com/questions/54139924/flutter-how-do-i-change-theme-brightness-at-runtime
 // use it with "Theme.of(context).custom"

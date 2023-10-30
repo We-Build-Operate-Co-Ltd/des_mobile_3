@@ -1,10 +1,13 @@
 import 'package:des/login_first.dart';
+import 'package:des/menu.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VerifyCompletePage extends StatefulWidget {
-  const VerifyCompletePage({super.key});
+  const VerifyCompletePage({super.key, this.action = 'create'});
+
+  final String action;
 
   @override
   State<VerifyCompletePage> createState() => _VerifyCompletePageState();
@@ -56,12 +59,21 @@ class _VerifyCompletePageState extends State<VerifyCompletePage> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: GestureDetector(
                     onTap: () async {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginFirstPage(),
-                        ),
-                      );
+                      if (widget.action == 'create') {
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (context) => const LoginFirstPage(),
+                          ),
+                          (Route<dynamic> route) => false,
+                        );
+                      } else {
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (context) => const Menu(),
+                          ),
+                          (Route<dynamic> route) => false,
+                        );
+                      }
                     },
                     child: Container(
                       height: 50,

@@ -83,6 +83,7 @@ dependencies:
   permission_handler: ^10.2.0
   pin_code_fields: ^7.4.0
   photo_view: ^0.14.0
+  provider: ^6.0.5
   pull_to_refresh: ^2.0.0
   qr_flutter: ^4.0.0
   # qualtrics_digital_flutter_plugin: ^1.0.0

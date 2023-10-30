@@ -94,146 +94,153 @@ class _HomePageState extends State<HomePage> {
         controller: _refreshController,
         onRefresh: onRefresh,
         // onLoading: _onLoading,
-        child: Stack(
+        child: ListView(
+          padding: EdgeInsets.only(
+            top: MediaQuery.of(context).padding.top + 10,
+            right: 15,
+            left: 15,
+          ),
+          shrinkWrap: true,
+          physics: const ClampingScrollPhysics(),
           children: [
-            ListView(
-              padding: EdgeInsets.only(
-                top: MediaQuery.of(context).padding.top + 10,
-                right: 15,
-                left: 15,
-              ),
-              shrinkWrap: true,
-              physics: const ClampingScrollPhysics(),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 40,
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/images/logo.png',
-                            height: 39,
-                            width: 48,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            'ดิจิทัลชุมชน',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Color(0xFF7A4CB1)
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          const Expanded(child: SizedBox()),
-                          const SizedBox(width: 10),
-                          GestureDetector(
-                            onTap: () {
-                              buildModalSwitch(context);
-                            },
-                            child: Image.asset(
-                              MyApp.themeNotifier.value == ThemeModeThird.light
-                                  ? 'assets/images/icon_blind.png'
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? 'assets/images/icon_blind_d.png'
-                                      : 'assets/images/icon_blind_d-y.png',
-                              height: 35,
-                              width: 35,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          GestureDetector(
-                            onTap: () {
-                              // Fluttertoast.showToast(
-                              //     msg: '''ยังไม่เปิดให้ใช้บริการ''');
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => NotificationListPage(),
-                                ),
-                              );
-                            },
-                            child: Image.asset(
-                              MyApp.themeNotifier.value == ThemeModeThird.light
-                                  ? 'assets/images/notification.png'
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? 'assets/images/notification_d.png'
-                                      : 'assets/images/notification_d-y.png',
-                              height: 35,
-                              width: 35,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  // height: 138,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Color(0xFF53327A).withOpacity(.25)
-                            : Colors.black,
-                        blurRadius: 10,
-                        offset: Offset(0, 5), // changes position of shadow
-                      ),
-                    ],
-                    image: DecorationImage(
-                      image: AssetImage(
-                        MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? 'assets/images/card_purple_v2.png'
-                            : 'assets/images/card_black.png',
-                      ),
-                    ),
-                  ),
-                  child: Column(
+                SizedBox(
+                  height: 40,
+                  child: Row(
                     children: [
-                      const SizedBox(height: 30),
+                      Image.asset(
+                        'assets/images/logo.png',
+                        height: 39,
+                        width: 48,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        'ดิจิทัลชุมชน',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFF7A4CB1)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const Expanded(child: SizedBox()),
+                      const SizedBox(width: 10),
                       GestureDetector(
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => SearchPage(),
-                          //   ),
-                          // );
+                          buildModalSwitch(context);
                         },
-                        child: Container(
-                          // alignment: Alignment.centerLeft,
+                        child: Image.asset(
+                          MyApp.themeNotifier.value == ThemeModeThird.light
+                              ? 'assets/images/icon_blind.png'
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? 'assets/images/icon_blind_d.png'
+                                  : 'assets/images/icon_blind_d-y.png',
                           height: 35,
-                          // width: MediaQuery.of(context).size.width - 100,
-                          decoration: BoxDecoration(
+                          width: 35,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      GestureDetector(
+                        onTap: () {
+                          // Fluttertoast.showToast(
+                          //     msg: '''ยังไม่เปิดให้ใช้บริการ''');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NotificationListPage(),
+                            ),
+                          );
+                        },
+                        child: Image.asset(
+                          MyApp.themeNotifier.value == ThemeModeThird.light
+                              ? 'assets/images/notification.png'
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? 'assets/images/notification_d.png'
+                                  : 'assets/images/notification_d-y.png',
+                          height: 35,
+                          width: 35,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              // height: 138,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF53327A).withOpacity(.25)
+                        : Colors.black,
+                    blurRadius: 10,
+                    offset: Offset(0, 5), // changes position of shadow
+                  ),
+                ],
+                image: DecorationImage(
+                  image: AssetImage(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/card_purple_v2.png'
+                        : 'assets/images/card_black.png',
+                  ),
+                ),
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 30),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => SearchPage(),
+                      //   ),
+                      // );
+                    },
+                    child: Container(
+                      // alignment: Alignment.centerLeft,
+                      height: 35,
+                      // width: MediaQuery.of(context).size.width - 100,
+                      decoration: BoxDecoration(
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.white
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Colors.black,
+                        borderRadius: BorderRadius.circular(46),
+                      ),
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 15),
+                          Image.asset(
+                            'assets/images/search.png',
+                            height: 16,
+                            width: 16,
                             color: MyApp.themeNotifier.value ==
                                     ThemeModeThird.light
-                                ? Colors.white
+                                ? Color(0xFF7A4CB1)
                                 : MyApp.themeNotifier.value ==
                                         ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Colors.black,
-                            borderRadius: BorderRadius.circular(46),
+                                    ? Colors.black
+                                    : Color(0xFFFFFD57),
                           ),
-                          child: Row(
-                            children: [
-                              const SizedBox(width: 15),
-                              Image.asset(
-                                'assets/images/search.png',
-                                height: 16,
-                                width: 16,
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: Text(
+                              'ค้นหาคลาสเรียน',
+                              style: TextStyle(
+                                fontSize: 13,
                                 color: MyApp.themeNotifier.value ==
                                         ThemeModeThird.light
                                     ? Color(0xFF7A4CB1)
@@ -241,197 +248,96 @@ class _HomePageState extends State<HomePage> {
                                             ThemeModeThird.dark
                                         ? Colors.black
                                         : Color(0xFFFFFD57),
+                                fontWeight: FontWeight.w400,
                               ),
-                              const SizedBox(width: 15),
-                              Expanded(
-                                child: Text(
-                                  'ค้นหาคลาสเรียน',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color(0xFF7A4CB1)
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.black
-                                            : Color(0xFFFFFD57),
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 15),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 25),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          columnButton(
-                            MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? 'assets/images/modern_farmer.png'
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? 'assets/images/modern_farmer_d.png'
-                                    : 'assets/images/modern_farmer_d-y.png',
-                            'เกษตรกรสมัยใหม่',
-                            code: 'btn1',
-                          ),
-                          columnButton(
-                            MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? 'assets/images/community_business.png'
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? 'assets/images/community_business_d.png'
-                                    : 'assets/images/community_business_d-y.png',
-                            'ธุรกิจชุมชน',
-                            code: 'btn2',
-                          ),
-                          columnButton(
-                            MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? 'assets/images/care_old.png'
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? 'assets/images/care_old_d.png'
-                                    : 'assets/images/care_old_d-y.png',
-                            'ดูแลผู้สูงอายุ',
-                            code: 'btn3',
-                          ),
-                          columnButton(
-                            MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? 'assets/images/more.png'
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? 'assets/images/more_d.png'
-                                    : 'assets/images/more_d-y.png',
-                            'เพิ่มเติม',
-                            code: 'btn4',
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'บริการสำหรับคุณ',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: Theme.of(context).custom.b_w_y,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        _determinePosition();
-                        // ปิดก่อน ios เด้ง
-                        // if (latLng != null)
-                        //   Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (_) => PoiPage(latLng: latLng!),
-                        //     ),
-                        //   );
-                      },
-                      child: Row(
-                        children: [
-                          Image.asset('assets/images/vector.png', height: 10),
-                          const SizedBox(width: 3),
-                          Text(
-                            '${currentLocation}',
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w400,
-                              color: Theme.of(context).custom.b_w_y,
                             ),
                           ),
+                          const SizedBox(width: 15),
                         ],
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 15),
-                Container(
-                  height: 100,
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    scrollDirection: Axis.horizontal,
-                    physics: const ClampingScrollPhysics(),
+                  ),
+                  const SizedBox(height: 25),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       columnButton(
                         MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? 'assets/images/reserve_service.png'
+                            ? 'assets/images/modern_farmer.png'
                             : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? 'assets/images/reserve_service_d.png'
-                                : 'assets/images/reserve_service_d-y.png',
-                        'จองใช้บริการ',
-                        type: 'serviceforyou',
-                        code: 'booking',
+                                ? 'assets/images/modern_farmer_d.png'
+                                : 'assets/images/modern_farmer_d-y.png',
+                        'เกษตรกรสมัยใหม่',
+                        code: 'btn1',
                       ),
                       columnButton(
                         MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? 'assets/images/find_job.png'
+                            ? 'assets/images/community_business.png'
                             : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? 'assets/images/find_job_d.png'
-                                : 'assets/images/find_job_d-y.png',
-                        'หางาน',
-                        type: 'serviceforyou',
-                        code: 'job',
+                                ? 'assets/images/community_business_d.png'
+                                : 'assets/images/community_business_d-y.png',
+                        'ธุรกิจชุมชน',
+                        code: 'btn2',
                       ),
                       columnButton(
                         MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? 'assets/images/funding_source.png'
+                            ? 'assets/images/care_old.png'
                             : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? 'assets/images/funding_source_d.png'
-                                : 'assets/images/funding_source_d-y.png',
-                        'หาแหล่งทุน',
-                        type: 'serviceforyou',
-                        code: 'fund',
+                                ? 'assets/images/care_old_d.png'
+                                : 'assets/images/care_old_d-y.png',
+                        'ดูแลผู้สูงอายุ',
+                        code: 'btn3',
                       ),
                       columnButton(
                         MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? 'assets/images/reskill.png'
+                            ? 'assets/images/more.png'
                             : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? 'assets/images/reskill_d.png'
-                                : 'assets/images/reskill_d-y.png',
-                        'ส่งเสริมทักษะ',
-                        type: 'serviceforyou',
-                        code: 'skill',
+                                ? 'assets/images/more_d.png'
+                                : 'assets/images/more_d-y.png',
+                        'เพิ่มเติม',
+                        code: 'btn4',
                       ),
-                      columnButton(
-                        MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? 'assets/images/chat2.png'
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? 'assets/images/chat2_d.png'
-                                : 'assets/images/chat2_d-y.png',
-                        'สนทนา',
-                        type: 'serviceforyou',
-                        code: 'chat',
-                      ),
-                      columnButton(
-                        MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? 'assets/images/data_warehouse.png'
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? 'assets/images/data_warehouse_d.png'
-                                : 'assets/images/data_warehouse_d-y.png',
-                        'คลังข้อมูล',
-                        type: 'serviceforyou',
-                        code: 'knowledge',
-                      ),
-                      columnButton(
-                        MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? 'assets/images/report_problem.png'
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? 'assets/images/report_problem_d.png'
-                                : 'assets/images/report_problem_d-y.png',
-                        'แจ้งปัญหา',
-                        type: 'serviceforyou',
-                        code: 'report',
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                ],
+              ),
+            ),
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'บริการสำหรับคุณ',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: Theme.of(context).custom.b_w_y,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _determinePosition();
+                    // ปิดก่อน ios เด้ง
+                    // if (latLng != null)
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (_) => PoiPage(latLng: latLng!),
+                    //     ),
+                    //   );
+                  },
+                  child: Row(
+                    children: [
+                      Image.asset('assets/images/vector.png', height: 10),
+                      const SizedBox(width: 3),
+                      Text(
+                        '${currentLocation}',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          color: Theme.of(context).custom.b_w_y,
+                        ),
                       ),
                     ],
                   ),
@@ -635,6 +541,276 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(height: 20 + MediaQuery.of(context).padding.bottom),
               ],
             ),
+            const SizedBox(height: 15),
+            Container(
+              height: 100,
+              child: ListView(
+                padding: EdgeInsets.zero,
+                scrollDirection: Axis.horizontal,
+                physics: const ClampingScrollPhysics(),
+                children: [
+                  columnButton(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/reserve_service.png'
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? 'assets/images/reserve_service_d.png'
+                            : 'assets/images/reserve_service_d-y.png',
+                    'จองใช้บริการ',
+                    type: 'serviceforyou',
+                    code: 'booking',
+                  ),
+                  columnButton(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/find_job.png'
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? 'assets/images/find_job_d.png'
+                            : 'assets/images/find_job_d-y.png',
+                    'หางาน',
+                    type: 'serviceforyou',
+                    code: 'job',
+                  ),
+                  columnButton(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/funding_source.png'
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? 'assets/images/funding_source_d.png'
+                            : 'assets/images/funding_source_d-y.png',
+                    'หาแหล่งทุน',
+                    type: 'serviceforyou',
+                    code: 'fund',
+                  ),
+                  columnButton(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/reskill.png'
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? 'assets/images/reskill_d.png'
+                            : 'assets/images/reskill_d-y.png',
+                    'ส่งเสริมทักษะ',
+                    type: 'serviceforyou',
+                    code: 'skill',
+                  ),
+                  columnButton(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/chat2.png'
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? 'assets/images/chat2_d.png'
+                            : 'assets/images/chat2_d-y.png',
+                    'สนทนา',
+                    type: 'serviceforyou',
+                    code: 'chat',
+                  ),
+                  columnButton(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/data_warehouse.png'
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? 'assets/images/data_warehouse_d.png'
+                            : 'assets/images/data_warehouse_d-y.png',
+                    'คลังข้อมูล',
+                    type: 'serviceforyou',
+                    code: 'knowledge',
+                  ),
+                  columnButton(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/report_problem.png'
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? 'assets/images/report_problem_d.png'
+                            : 'assets/images/report_problem_d-y.png',
+                    'แจ้งปัญหา',
+                    type: 'serviceforyou',
+                    code: 'report',
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'คลาสกำลังเรียน',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: Theme.of(context).custom.b_w_y,
+                  ),
+                ),
+                // Text(
+                //   'ดูทั้งหมด',
+                //   style: TextStyle(
+                //     fontSize: 13,
+                //     fontWeight: FontWeight.w400,
+                //   ),
+                // ),
+              ],
+            ),
+            FutureBuilder(
+              future: Future.value(mockDataList),
+              builder: (_, snapshot) {
+                if (snapshot.hasData) {
+                  return Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      containerStudy(snapshot.data![0], 50),
+                      const SizedBox(height: 10),
+                      containerStudy(snapshot.data![1], 80),
+                      const SizedBox(height: 24),
+                    ],
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+            FutureBuilder(
+              future: _futureBanner,
+              builder: (_, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data.length == 0) return const SizedBox();
+                  return Stack(
+                    children: [
+                      SizedBox(
+                        height: 180,
+                        child: CarouselSlider(
+                          options: CarouselOptions(
+                            aspectRatio: 4,
+                            enlargeCenterPage: true,
+                            scrollDirection: Axis.horizontal,
+                            viewportFraction: 0.9,
+                            autoPlay: true,
+                            enlargeFactor: 0.4,
+                            enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                _currentBanner = index;
+                              });
+                            },
+                          ),
+                          items: snapshot.data.map<Widget>(
+                            (item) {
+                              int index = snapshot.data.indexOf(item);
+                              return GestureDetector(
+                                onTap: () {
+                                  if (snapshot.data[_currentBanner]['action'] ==
+                                      'out') {
+                                    if (snapshot.data[_currentBanner]
+                                        ['isPostHeader']) {
+                                      var path = snapshot.data[_currentBanner]
+                                          ['linkUrl'];
+                                      if (profileCode != '') {
+                                        var splitCheck =
+                                            path.split('').reversed.join();
+                                        if (splitCheck[0] != "/") {
+                                          path = path + "/";
+                                        }
+                                        var codeReplae = "B" +
+                                            profileCode!.replaceAll('-', '') +
+                                            snapshot.data[_currentBanner]
+                                                    ['code']
+                                                .replaceAll('-', '');
+                                        launchUrl(Uri.parse('$path$codeReplae'),
+                                            mode:
+                                                LaunchMode.externalApplication);
+                                      }
+                                    } else
+                                      launchUrl(
+                                          Uri.parse(snapshot
+                                              .data[_currentBanner]['linkUrl']),
+                                          mode: LaunchMode.externalApplication);
+                                  } else if (snapshot.data[_currentBanner]
+                                          ['action'] ==
+                                      'in') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailPage(
+                                          slug: 'mock',
+                                          model: snapshot.data[_currentBanner],
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: ClipRRect(
+                                  borderRadius: _currentBanner == index
+                                      ? BorderRadius.all(Radius.circular(20))
+                                      : BorderRadius.circular(0),
+                                  child: CachedNetworkImage(
+                                    imageUrl: item['imageUrl'],
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                  ),
+                                ),
+                              );
+                            },
+                          ).toList(),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        left: 0,
+                        right: 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: mockBannerList.map<Widget>((url) {
+                            int index = mockBannerList.indexOf(url);
+                            return Container(
+                              width: _currentBanner == index ? 17.5 : 7.0,
+                              height: 7.0,
+                              margin: EdgeInsets.all(2.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.white,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              },
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Text(
+                  'คลาสแนะนำ',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            FutureBuilder(
+              future: _futureNews,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.length > 0) {
+                    return GridView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 10 / 11.5,
+                          crossAxisSpacing: 15,
+                          mainAxisSpacing: 15),
+                      physics: const ClampingScrollPhysics(),
+                      // itemCount: snapshot.data!.length,
+                      itemCount: 2,
+                      itemBuilder: (context, index) =>
+                          containerRecommendedClass(snapshot.data![index]),
+                    );
+                  }
+                }
+                return const SizedBox();
+              },
+            ),
+            SizedBox(height: 20 + MediaQuery.of(context).padding.bottom),
           ],
         ),
       ),
@@ -1103,62 +1279,65 @@ class _HomePageState extends State<HomePage> {
         context: context,
         backgroundColor: Colors.transparent,
         builder: (context) {
-          return Material(
-            type: MaterialType.transparency,
-            child: BackdropFilter(
-              filter: ui.ImageFilter.blur(
-                sigmaX: 5.0,
-                sigmaY: 5.0,
-              ),
-              child: Container(
-                height: 500,
-                width: double.infinity,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).custom.w_b_b,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(10),
+          return StatefulBuilder(builder: (BuildContext context,
+              StateSetter mSetState /*You can rename this!*/) {
+            return Material(
+              type: MaterialType.transparency,
+              child: BackdropFilter(
+                filter: ui.ImageFilter.blur(
+                  sigmaX: 5.0,
+                  sigmaY: 5.0,
+                ),
+                child: Container(
+                  height: 500,
+                  width: double.infinity,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).custom.w_b_b,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(10),
+                    ),
+                  ),
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      Text(
+                        'ขนาดตัวหนังสือ',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).custom.b_w_y,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      contentCard(context, "ปกติ", "1", "size"),
+                      SizedBox(height: 10),
+                      contentCard(context, "ปานกลาง", "2", "size"),
+                      SizedBox(height: 10),
+                      contentCard(context, "ใหญ่", "3", "size"),
+                      SizedBox(height: 20),
+                      Text(
+                        'ความตัดกันของสี',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).custom.b_w_y,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      // contentCard(context, "ปกติ", "1", "color"),
+                      // SizedBox(height: 10),
+                      // contentCard(context, "ขาวดำ", "2", "color"),
+                      // SizedBox(height: 10),
+                      // contentCard(context, "ดำเหลือง", "3", "color"),
+                      contentCardV2(context, mSetState),
+                    ],
                   ),
                 ),
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    Text(
-                      'ขนาดตัวหนังสือ',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Theme.of(context).custom.b_w_y,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    contentCard(context, "ปกติ", "1", "size"),
-                    SizedBox(height: 10),
-                    contentCard(context, "ปานกลาง", "2", "size"),
-                    SizedBox(height: 10),
-                    contentCard(context, "ใหญ่", "3", "size"),
-                    SizedBox(height: 20),
-                    Text(
-                      'ความตัดกันของสี',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Theme.of(context).custom.b_w_y,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    // contentCard(context, "ปกติ", "1", "color"),
-                    // SizedBox(height: 10),
-                    // contentCard(context, "ขาวดำ", "2", "color"),
-                    // SizedBox(height: 10),
-                    // contentCard(context, "ดำเหลือง", "3", "color"),
-                    contentCardV2(context),
-                  ],
-                ),
               ),
-            ),
-          );
+            );
+          });
         });
   }
 
@@ -1325,35 +1504,31 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  contentCardV2(BuildContext context) {
+  contentCardV2(BuildContext context, StateSetter mSetState) {
     return Container(
       child: Wrap(
           children: _listSwitchColors
               .map(
                 (item) => GestureDetector(
-                  onTap: () {
+                  onTap: () async {
+                    await storage.write(
+                      key: 'switchColor',
+                      value: item['title'],
+                    );
                     setState(
-                      (() async {
-                        await storage.write(
-                          key: 'switchColor',
-                          value: item['title'],
-                        );
+                      (() {
                         colorStorageValue = item['title'];
-                        setState(
-                          () {
-                            if (item['title'] == "ปกติ") {
-                              MyApp.themeNotifier.value = ThemeModeThird.light;
-                            } else if (item['title'] == "ขาวดำ") {
-                              MyApp.themeNotifier.value = ThemeModeThird.dark;
-                            } else {
-                              MyApp.themeNotifier.value =
-                                  ThemeModeThird.blindness;
-                            }
-                          },
-                        );
+                        if (item['title'] == "ปกติ") {
+                          MyApp.themeNotifier.value = ThemeModeThird.light;
+                        } else if (item['title'] == "ขาวดำ") {
+                          MyApp.themeNotifier.value = ThemeModeThird.dark;
+                        } else {
+                          MyApp.themeNotifier.value = ThemeModeThird.blindness;
+                        }
                       }),
                     );
-                    _callRead();
+                    // _callRead();
+                    Navigator.pop(context);
                   },
                   child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 20),

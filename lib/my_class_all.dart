@@ -44,11 +44,11 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     // _futureFavoriteModel = Future.value(widget.model);
     // _loading();
     _get_category();
-    
+
     super.initState();
   }
 
-  _get_category () async {
+  _get_category() async {
     await dio.get('${service}api/get_coursecategory/${_api_key}').then((value) {
       setState(() {
         _categoryList = value.data['data'];
@@ -57,9 +57,14 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     });
   }
 
-  _get_course () async {
-    FormData formData = new FormData.fromMap({"apikey": _api_key, " cat_id": _categoryList[_categorySelected]['id']});
-    await dio.post('${service}api/popular_course', data:formData).then((value) {
+  _get_course() async {
+    FormData formData = new FormData.fromMap({
+      "apikey": _api_key,
+      " cat_id": _categoryList[_categorySelected]['id']
+    });
+    await dio
+        .post('${service}api/popular_course', data: formData)
+        .then((value) {
       setState(() {
         _futureLerningModel = Future.value(value.data['data']);
       });
@@ -139,7 +144,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                       child: Text(
                         _categoryList[__]['display_name'],
                         style: TextStyle(
-                          color:  __ == _categorySelected
+                          color: __ == _categorySelected
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -186,9 +191,10 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
         if (snapshot.hasData) {
           if (snapshot.data == 'No Data') {
             return Center(
-              child: Text('ไม่มีข้อมูล' ,
-              style: TextStyle(fontSize: 16),)
-            );
+                child: Text(
+              'ไม่มีข้อมูล',
+              style: TextStyle(fontSize: 16),
+            ));
           } else {
             return ListView.builder(
               padding: EdgeInsets.zero,
@@ -225,8 +231,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
 
   Widget _buildContant(BuildContext context, dynamic model) {
     print('dynamic >>>>>>>> ${model}');
-    return 
-    InkWell(
+    return InkWell(
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
@@ -274,7 +279,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
         ),
       ),
     );
-  
   }
 
   Widget _buildHead() {
