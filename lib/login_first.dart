@@ -32,8 +32,8 @@ class _LoginFirstPageState extends State<LoginFirstPage>
   String? _username = '';
   String? _imageUrl = '';
   String? _category;
-  final txtEmail = TextEditingController();
-  final txtPassword = TextEditingController();
+  late TextEditingController txtEmail;
+  late TextEditingController txtPassword;
   final Duration duration = const Duration(milliseconds: 200);
   AnimationController? _controller;
   bool passwordVisibility = true;
@@ -208,7 +208,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                                         ThemeModeThird.dark
                                     ? Colors.white
                                     : Color(0xFFFFFD57),
-                            validator: (value) {
+                            validator: (String? value) {
                               if (value == null || value.isEmpty) {
                                 return 'กรอกอีเมล';
                               }
@@ -1044,6 +1044,9 @@ class _LoginFirstPageState extends State<LoginFirstPage>
 
   @override
   void initState() {
+    txtEmail = TextEditingController(text: '');
+    txtPassword = TextEditingController(text: '');
+    ;
     _controller = AnimationController(
       vsync: this,
       duration: duration,

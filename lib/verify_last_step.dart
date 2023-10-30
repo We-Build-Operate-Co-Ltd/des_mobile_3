@@ -209,7 +209,7 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
                         ''),
                 _text('เลขบัตรประชาชน', thaiDData['pid'] ?? ''),
                 _text('วันเดือนปีเกิด', thaiDData['birthdate'] ?? ''),
-                _text('อีเมล', _userData['email'] ?? ''),
+                // _text('อีเมล', _userData['email'] ?? ''),
                 _text('เพศ', thaiDData['gender'] == 'male' ? 'ชาย' : 'หญิง'),
               ],
             ),

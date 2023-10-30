@@ -223,11 +223,6 @@ class _VerifyOTPEmailPageState extends State<VerifyOTPEmailPage> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => VerifyLastStepPage(),
-                        ),
-                      );
                       if (txtNumber1.text.length == 6) {
                         if (await _validateOTP()) {
                           Navigator.of(context).push(
@@ -434,13 +429,6 @@ class _VerifyOTPEmailPageState extends State<VerifyOTPEmailPage> {
       String s = String.fromCharCodes(imageFile);
       await prefs.setString('imageTemp', s);
 
-      // ------------- test
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => VerifyThaiIDPage(),
-        ),
-      );
-      // ------------- test
       // _register();
     });
   }
