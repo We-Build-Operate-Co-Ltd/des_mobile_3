@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/verify_complete.dart';
@@ -66,137 +63,119 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: const Color(0xFFFAF4FF),
-        body: Padding(
-          padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top,
-            bottom: MediaQuery.of(context).padding.bottom,
-            left: 20,
-            right: 20,
-          ),
-          child: ListView(
-            children: [
-              const SizedBox(height: 120),
-              Image.asset(
-                'assets/images/verify_thai_id.png',
-                height: 166,
-                width: 205,
+        body: Stack(
+          children: [
+            ListView(
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top,
+                bottom: MediaQuery.of(context).padding.bottom,
+                left: 20,
+                right: 20,
               ),
-              Text(
-                'ยืนยันตัวตน\nด้วยแอปพลิเคชัน ThaiD',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w700,
-                  color: Theme.of(context).primaryColor,
+              children: [
+                const SizedBox(height: 120),
+                Image.asset(
+                  'assets/images/verify_thai_id.png',
+                  height: 166,
+                  width: 205,
                 ),
-                textAlign: TextAlign.start,
-              ),
-              const Text(
-                'ยืนยันตัวตนขั้นสุดท้าย! ท่านสามารถข้ามขั้นตอนนี้ \nและกลับมายืนยันตัวตนด้วยแอปพลิเคชัน ThaiD \nอีกครั้งได้ในภายหลัง ที่เมนูโปรไฟล์ของคุณ',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              const SizedBox(height: 30),
-              Stack(
-                children: [
-                  GestureDetector(
-                    onTap: () async {
-                      _callThaiID();
-                    },
-                    child: Container(
-                      height: 50,
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(7),
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 4,
-                            color: Color(0x40F3D2FF),
-                            offset: Offset(0, 4),
-                          )
-                        ],
-                      ),
-                      child: const Text(
-                        'ยืนยันตัวตน',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
+                Text(
+                  'ยืนยันตัวตน\nด้วยแอปพลิเคชัน ThaiD',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700,
+                    color: Theme.of(context).primaryColor,
                   ),
-                  if (_loadingSubmit)
-                    Positioned.fill(
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFEEEEEE).withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(7),
-                        ),
-                        alignment: Alignment.center,
-                        child: const CircularProgressIndicator(),
-                      ),
-                    )
-                ],
-              ),
-              const SizedBox(height: 10),
-              Stack(
-                children: [
-                  GestureDetector(
-                    onTap: () async {
-                      _userData['hasThaiD'] = false; // ไม่ได้ยืนยัน thaiD.
-                      _register();
-                    },
-                    child: Container(
-                      height: 50,
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
+                  textAlign: TextAlign.start,
+                ),
+                const Text(
+                  'ยืนยันตัวตนขั้นสุดท้าย! ท่านสามารถข้ามขั้นตอนนี้ \nและกลับมายืนยันตัวตนด้วยแอปพลิเคชัน ThaiD \nอีกครั้งได้ในภายหลัง ที่เมนูโปรไฟล์ของคุณ',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                GestureDetector(
+                  onTap: () async {
+                    _callThaiID();
+                  },
+                  child: Container(
+                    height: 50,
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(7),
+                      boxShadow: const [
+                        BoxShadow(
+                          blurRadius: 4,
+                          color: Color(0x40F3D2FF),
+                          offset: Offset(0, 4),
+                        )
+                      ],
+                    ),
+                    child: const Text(
+                      'ยืนยันตัวตน',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
                         color: Colors.white,
-                        border: Border.all(
-                          color: Theme.of(context).primaryColor,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(7),
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 4,
-                            color: Color(0x40F3D2FF),
-                            offset: Offset(0, 4),
-                          )
-                        ],
-                      ),
-                      child: Text(
-                        'ข้ามขั้นตอนนี้',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Theme.of(context).primaryColor,
-                        ),
                       ),
                     ),
                   ),
-                  if (_loadingSubmit)
-                    Positioned.fill(
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: const Color(0xFF707070).withOpacity(0.5),
-                        ),
-                        child: const CircularProgressIndicator(),
+                ),
+                const SizedBox(height: 10),
+                GestureDetector(
+                  onTap: () async {
+                    _userData['hasThaiD'] = false; // ไม่ได้ยืนยัน thaiD.
+                    _register();
+                  },
+                  child: Container(
+                    height: 50,
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Theme.of(context).primaryColor,
+                        width: 1,
                       ),
-                    )
-                ],
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
+                      borderRadius: BorderRadius.circular(7),
+                      boxShadow: const [
+                        BoxShadow(
+                          blurRadius: 4,
+                          color: Color(0x40F3D2FF),
+                          offset: Offset(0, 4),
+                        )
+                      ],
+                    ),
+                    child: Text(
+                      'ข้ามขั้นตอนนี้',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+            if (_loadingSubmit)
+              Positioned.fill(
+                child: Container(
+                  alignment: Alignment.center,
+                  color: Colors.white.withOpacity(0.5),
+                  child: const SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              )
+          ],
         ),
       ),
     );

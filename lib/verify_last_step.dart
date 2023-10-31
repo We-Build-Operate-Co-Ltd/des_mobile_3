@@ -202,11 +202,8 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
                   height: 1,
                 ),
                 SizedBox(height: 17),
-                _text(
-                    'ชื่อสกุล',
-                    thaiDData['given_name'] ??
-                        '' + ' ' + thaiDData['family_name'] ??
-                        ''),
+                _text('ชื่อสกุล',
+                    '${thaiDData['given_name']} ${thaiDData['family_name']}'),
                 _text('เลขบัตรประชาชน', thaiDData['pid'] ?? ''),
                 _text('วันเดือนปีเกิด', thaiDData['birthdate'] ?? ''),
                 // _text('อีเมล', _userData['email'] ?? ''),
