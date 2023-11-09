@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -54,37 +55,33 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
 
   _get_course() async {
     try {
-      return Dio().get('${endpoint_base_url}get_course/${_api_key}');
-
-      FormData formData = new FormData.fromMap({
-        "apikey": _api_key,
-        " cat_id": _categoryList[_categorySelected]['id']
-      });
-      await dio
-          .post(
-        '${endpoint_base_url}popular_course',
-        data: formData,
-        options: Options(
-          validateStatus: (_) => true,
-          contentType: Headers.formUrlEncodedContentType,
-          responseType: ResponseType.json,
-          headers: {
-            'Content-type': 'application/x-www-form-urlencoded',
-          },
-        ),
-      )
-          .then((value) {
-        setState(() {
-          _model = value.data;
+      if (_categorySelected == 0) {
+        return Dio().get('${endpoint_base_url}get_course/${_api_key}');
+      } else {
+        FormData formData = new FormData.fromMap({
+          "apikey": _api_key,
+          " cat_id": _categoryList[_categorySelected]['id']
         });
-        return value.data;
-      });
+        return dio.post(
+          '${endpoint_base_url}popular_course',
+          data: formData,
+          options: Options(
+            validateStatus: (_) => true,
+            contentType: Headers.formUrlEncodedContentType,
+            responseType: ResponseType.json,
+            headers: {
+              'Content-type': 'application/x-www-form-urlencoded',
+            },
+          ),
+        );
+      }
     } catch (e) {
       return {
         'status': false,
         'data': [],
       };
     }
+
     // try {
     // } catch (e) {
     //   Fluttertoast.showToast(msg: e.toString());
