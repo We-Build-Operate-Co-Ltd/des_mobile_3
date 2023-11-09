@@ -208,7 +208,12 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (!snapshot.data.data['status']) {
-                      return Text('ไม่พบข้อมูล');
+                      return Text(
+                        'ไม่พบข้อมูล',
+                        style: TextStyle(
+                          color: Theme.of(context).custom.b_W_fffd57,
+                        ),
+                      );
                     }
                     return Expanded(
                       child: _list(snapshot.data),

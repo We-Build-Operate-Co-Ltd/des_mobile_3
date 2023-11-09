@@ -436,14 +436,14 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'คลาสกำลังเรียน',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                    color: Theme.of(context).custom.b_w_y,
-                  ),
-                ),
+                // Text(
+                //   'คลาสกำลังเรียน',
+                //   style: TextStyle(
+                //     fontSize: 15,
+                //     fontWeight: FontWeight.w400,
+                //     color: Theme.of(context).custom.b_w_y,
+                //   ),
+                // ),
                 // Text(
                 //   'ดูทั้งหมด',
                 //   style: TextStyle(
@@ -453,24 +453,24 @@ class _HomePageState extends State<HomePage> {
                 // ),
               ],
             ),
-            FutureBuilder(
-              future: Future.value(mockDataList),
-              builder: (_, snapshot) {
-                if (snapshot.hasData) {
-                  return Column(
-                    children: [
-                      const SizedBox(height: 10),
-                      containerStudy(snapshot.data![0], 50),
-                      const SizedBox(height: 10),
-                      containerStudy(snapshot.data![1], 80),
-                      const SizedBox(height: 24),
-                    ],
-                  );
-                } else {
-                  return Container();
-                }
-              },
-            ),
+            // FutureBuilder(
+            //   future: Future.value(mockDataList),
+            //   builder: (_, snapshot) {
+            //     if (snapshot.hasData) {
+            //       return Column(
+            //         children: [
+            //           const SizedBox(height: 10),
+            //           containerStudy(snapshot.data![0], 50),
+            //           const SizedBox(height: 10),
+            //           containerStudy(snapshot.data![1], 80),
+            //           const SizedBox(height: 24),
+            //         ],
+            //       );
+            //     } else {
+            //       return Container();
+            //     }
+            //   },
+            // ),
             FutureBuilder(
               future: _futureBanner,
               builder: (_, snapshot) {

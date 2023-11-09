@@ -106,15 +106,27 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ],
             ),
             SizedBox(height: 15),
-            FutureBuilder(
-              future: Future.value(mockDataList),
+            FutureBuilder<List<dynamic>>(
+              future: Future.value([]),
               builder: (_, snapshot) {
                 if (snapshot.hasData) {
+                  if (snapshot.data?.length == 0) {
+                    return Container(
+                      height: 100,
+                      alignment: Alignment.center,
+                      child: Text(
+                        'ยังไม่มีคลาสกำลังเรียน',
+                        style: TextStyle(
+                          color: Theme.of(context).custom.b_W_fffd57,
+                        ),
+                      ),
+                    );
+                  }
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildMyClass(snapshot.data![0], 50),
-                      _buildMyClass(snapshot.data![1], 80),
+                      _buildMyClass(snapshot.data?[0] ?? {}, 50),
+                      _buildMyClass(snapshot.data?[1] ?? {}, 80),
                     ],
                   );
                 } else {
