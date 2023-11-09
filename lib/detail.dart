@@ -169,7 +169,7 @@ class _DetailPageState extends State<DetailPage> {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           margin: const EdgeInsets.only(right: 50, top: 10),
           child: Text(
-            model['title'],
+            model?['title'] ?? '',
             style: TextStyle(
               color: textTheme,
               fontSize: 20,
@@ -320,7 +320,7 @@ class _DetailPageState extends State<DetailPage> {
                               ),
                               SizedBox(height: 10),
                               Html(
-                                data: model['description'],
+                                data: '${model?['description'] ?? ''}',
                                 style: {
                                   'body': Style(
                                     color: MyApp.themeNotifier.value ==
@@ -372,7 +372,7 @@ class _DetailPageState extends State<DetailPage> {
                   left: 10,
                 ),
                 child: Text(
-                  '${parseHtmlString(model['description'])}',
+                  '${parseHtmlString(model?['description'] ?? '')}',
                   style: TextStyle(
                     fontSize: 13,
                     color: colorTheme,
@@ -438,7 +438,7 @@ class _DetailPageState extends State<DetailPage> {
         ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: CachedNetworkImage(
-            imageUrl: '${model['img_url']}',
+            imageUrl: '${model?['img_url'] ?? ''}',
             // height: 30,
             width: 30,
             fit: BoxFit.cover,
@@ -450,7 +450,7 @@ class _DetailPageState extends State<DetailPage> {
         Container(
           margin: const EdgeInsets.only(right: 50, top: 10),
           child: Text(
-            model['name'],
+            model?['name'] ?? '',
             style: TextStyle(
               color: textTheme,
               fontSize: 20,
@@ -461,21 +461,19 @@ class _DetailPageState extends State<DetailPage> {
         Container(height: 10),
         Row(
           children: [
-            model['imageUrlCreateBy'] != null
-                ? CachedNetworkImage(
-                    imageUrl: '${model['imageUrlCreateBy']}',
-                    height: 30,
-                    width: 30,
-                    fit: BoxFit.cover,
-                    errorWidget: (context, url, error) =>
-                        Image.asset('assets/images/logo.png'),
-                  )
-                : Image.asset(
-                    'assets/images/logo.png',
-                    height: 30,
-                    width: 30,
-                    fit: BoxFit.cover,
-                  ),
+            CachedNetworkImage(
+              imageUrl: '${model?['imageUrlCreateBy'] ?? ''}',
+              height: 30,
+              width: 30,
+              fit: BoxFit.cover,
+              errorWidget: (context, url, error) => Image.asset(
+                'assets/images/logo.png',
+                height: 30,
+                width: 30,
+                fit: BoxFit.cover,
+              ),
+            )
+
             // Container(
             //   padding: const EdgeInsets.all(10),
             //   child: Column(
@@ -513,7 +511,7 @@ class _DetailPageState extends State<DetailPage> {
         ),
         SizedBox(height: 10),
         Text(
-          '${model['details']}',
+          '${model?['details'] ?? ''}',
           style: TextStyle(
             color: Color(0xFF707070),
             fontSize: 13,
@@ -573,7 +571,7 @@ class _DetailPageState extends State<DetailPage> {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: Text(
-            model['title'],
+            model?['title'] ?? '',
             style: TextStyle(
               color: textTheme,
               fontSize: 15,
@@ -612,7 +610,7 @@ class _DetailPageState extends State<DetailPage> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: Html(
-            data: model['description'],
+            data: model?['description'] ?? '',
             style: {
               "body": Style(
                 color: textTheme,

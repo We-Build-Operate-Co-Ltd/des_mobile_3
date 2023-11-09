@@ -86,7 +86,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => MyClassAllPage(model: mockDataList),
+                      builder: (_) => MyClassAllPage(),
                     ),
                   ),
                   child: Text(

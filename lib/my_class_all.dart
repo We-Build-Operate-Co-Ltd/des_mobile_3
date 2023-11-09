@@ -3,15 +3,11 @@ import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'detail.dart';
+import 'course_detail.dart';
 import 'main.dart';
 
 class MyClassAllPage extends StatefulWidget {
-  MyClassAllPage({
-    Key? key,
-    this.model,
-  }) : super(key: key);
-  final dynamic model;
+  MyClassAllPage({Key? key}) : super(key: key);
   @override
   _MyClassAllPageState createState() => _MyClassAllPageState();
 }
@@ -20,19 +16,21 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   Dio dio = Dio();
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  final _controllerContant = ScrollController();
-  Future<dynamic>? _futureLerningModel;
-  Future<dynamic>? _futureLernedModel;
-  Future<dynamic>? _futureFavoriteModel;
-  List<dynamic> _categoryList = [
-    // 'คลาสกำลังเรียน',
-    // 'คลาสกำลังเรียนเสร็จแล้ว',
-    // 'คลาสที่ชอบ',
+  List<dynamic> _typeList = [
+    'คลาสทั้งหมด',
+    'คลาสกำลังเรียน',
+    'คลาสกำลังเรียนเสร็จแล้ว',
+    'คลาสที่ชอบ',
   ];
+  List<dynamic> _categoryList = [];
 
   int _categorySelected = 0;
-  String _api_key = '19f072f9e4b14a19f72229719d2016d1';
-  String service = 'https://lms.dcc.onde.go.th/api/';
+  int _typeSelected = 0;
+  List<dynamic> _model = [];
+
+  // String _api_key = '19f072f9e4b14a19f72229719d2016d1';
+  String _api_key = '29f5637fe877ab6d8797a8bcde3d67a7';
+  String endpoint_base_url = 'https://e2e.myappclass.bangalore2.com/api/api/';
 
   @override
   void dispose() {
@@ -41,34 +39,56 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
 
   @override
   void initState() {
-    // _futureFavoriteModel = Future.value(widget.model);
-    // _loading();
     _get_category();
 
     super.initState();
   }
 
   _get_category() async {
-    await dio.get('${service}api/get_coursecategory/${_api_key}').then((value) {
-      setState(() {
-        _categoryList = value.data['data'];
-        _get_course();
-      });
+    var response =
+        await dio.get('${endpoint_base_url}get_coursecategory/${_api_key}');
+    setState(() {
+      _categoryList.addAll(response.data['data']);
     });
   }
 
   _get_course() async {
-    FormData formData = new FormData.fromMap({
-      "apikey": _api_key,
-      " cat_id": _categoryList[_categorySelected]['id']
-    });
-    await dio
-        .post('${service}api/popular_course', data: formData)
-        .then((value) {
-      setState(() {
-        _futureLerningModel = Future.value(value.data['data']);
+    try {
+      return Dio().get('${endpoint_base_url}get_course/${_api_key}');
+
+      FormData formData = new FormData.fromMap({
+        "apikey": _api_key,
+        " cat_id": _categoryList[_categorySelected]['id']
       });
-    });
+      await dio
+          .post(
+        '${endpoint_base_url}popular_course',
+        data: formData,
+        options: Options(
+          validateStatus: (_) => true,
+          contentType: Headers.formUrlEncodedContentType,
+          responseType: ResponseType.json,
+          headers: {
+            'Content-type': 'application/x-www-form-urlencoded',
+          },
+        ),
+      )
+          .then((value) {
+        setState(() {
+          _model = value.data;
+        });
+        return value.data;
+      });
+    } catch (e) {
+      return {
+        'status': false,
+        'data': [],
+      };
+    }
+    // try {
+    // } catch (e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // }
   }
 
   _loading() async {
@@ -88,11 +108,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             lerning.add(data[i]);
           }
         }
-        setState(() {
-          _futureFavoriteModel = Future.value(response.data['objectData']);
-          _futureLernedModel = Future.value(lerned);
-          // _futureLerningModel = Future.value(lerning);
-        });
+        setState(() {});
       }
     }
 
@@ -104,9 +120,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onHorizontalDragUpdate: (details) {
-        // Note: Sensitivity is integer used when you don't want to mess up vertical drag
         if (details.delta.dx > 10) {
-          // Right Swipe
           Navigator.pop(context);
         }
       },
@@ -128,6 +142,40 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (_, __) => GestureDetector(
+                    onTap: () => setState(() => _typeSelected = __),
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: __ == _typeSelected
+                            ? Color(0xFF7A4CB1)
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(17.5),
+                      ),
+                      child: Text(
+                        _typeList[__],
+                        style: TextStyle(
+                          color:
+                              __ == _typeSelected ? Colors.white : Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                  separatorBuilder: (_, __) => const SizedBox(width: 5),
+                  itemCount: _typeList.length,
+                ),
+              ),
+              SizedBox(height: 10),
+              if (_categoryList.length == 0)
+                Container(
+                  height: 35,
+                  child: CircularProgressIndicator(),
+                ),
+              Container(
+                height: 35,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (_, __) => GestureDetector(
                     onTap: () => setState(() {
                       _categorySelected = __;
                       _get_course();
@@ -142,7 +190,9 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                         borderRadius: BorderRadius.circular(17.5),
                       ),
                       child: Text(
-                        _categoryList[__]['display_name'],
+                        _categoryList[__]?['display_name'] != ''
+                            ? _categoryList[__]['display_name']
+                            : 'ทั้งหมด',
                         style: TextStyle(
                           color: __ == _categorySelected
                               ? Colors.white
@@ -156,26 +206,20 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                 ),
               ),
               SizedBox(height: 15),
-              // Expanded(
-              //   child: IndexedStack(
-              //     index: _categorySelected,
-              //     children: [
-              //       _buildMyClass(_futureLerningModel),
-              //       _buildMyClass(_futureLernedModel),
-              //       _buildMyClass(_futureFavoriteModel),
-              //     ],
-              //   ),
-              // )
-              Expanded(
-                child: _buildMyClass(),
-                // IndexedStack(
-                //   index: _categorySelected,
-                //   children: [
-                //     _buildMyClass(_futureLerningModel),
-                //     // _buildMyClass(_futureLernedModel),
-                //     // _buildMyClass(_futureFavoriteModel),
-                //   ],
-                // ),
+              FutureBuilder<dynamic>(
+                future: _get_course(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (!snapshot.data.data['status']) {
+                      return Text('ไม่พบข้อมูล');
+                    }
+                    return Expanded(
+                      child: _list(snapshot.data),
+                    );
+                  } else {
+                    return _listLoading();
+                  }
+                },
               )
             ],
           ),
@@ -184,59 +228,51 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     );
   }
 
-  Widget _buildMyClass() {
-    return FutureBuilder(
-      future: _futureLerningModel,
-      builder: (_, snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data == 'No Data') {
-            return Center(
-                child: Text(
-              'ไม่มีข้อมูล',
-              style: TextStyle(fontSize: 16),
-            ));
-          } else {
-            return ListView.builder(
-              padding: EdgeInsets.zero,
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) =>
-                  _buildContant(context, snapshot.data[index]),
-              shrinkWrap: true,
-              controller: _controllerContant,
-              physics: ClampingScrollPhysics(), // 2nd
-            );
-          }
-        } else if (snapshot.hasError) {
-          return Container(
-            alignment: Alignment.center,
-            height: 200,
-            width: double.infinity,
-            child: Text(
-              'Network ขัดข้อง',
-              style: TextStyle(
-                fontSize: 18,
-                fontFamily: 'Kanit',
-                color: Color.fromRGBO(0, 0, 0, 0.6),
-              ),
-            ),
-          );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
+  _list(dynamic param) {
+    var data = param.data['data'];
+    return ListView.separated(
+      itemBuilder: (_, __) => _buildContant(data[__]),
+      separatorBuilder: (_, __) => const SizedBox(height: 10),
+      itemCount: data.length,
     );
   }
 
-  Widget _buildContant(BuildContext context, dynamic model) {
-    print('dynamic >>>>>>>> ${model}');
+  _listLoading() {
+    return Expanded(
+      child: ListView(
+        children: [1, 1, 1, 1, 1, 1, 1, 1, 1]
+            .map((e) => Container(
+                  height: 95,
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          height: 95,
+                          width: 160,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 9),
+                    ],
+                  ),
+                ))
+            .toList(),
+      ),
+    );
+  }
+
+  Widget _buildContant(dynamic model) {
     return InkWell(
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => DetailPage(
-            slug: 'eventcalendar',
+          builder: (_) => CourseDetailPage(
             model: model,
           ),
         ),
@@ -250,10 +286,24 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: CachedNetworkImage(
-                imageUrl: '${model['img_url']}',
+                imageUrl: '${model['docs']}',
                 fit: BoxFit.cover,
                 height: 95,
-                width: 169,
+                width: 160,
+                errorWidget: (context, url, error) => Container(
+                  padding: EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Theme.of(context).custom.A4CB1_w_fffd57,
+                    ),
+                  ),
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    height: 50,
+                    width: 50,
+                  ),
+                ),
               ),
             ),
             SizedBox(width: 9),
@@ -323,7 +373,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
               ),
               SizedBox(width: 34),
               Text(
-                '',
+                'คลาสเรียน',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,

@@ -74,10 +74,6 @@ class _RegisterPageState extends State<RegisterPage> {
   List<dynamic> _favoriteList = [
     {
       'selected': false,
-      'value': 'สิ่งที่สนใจ',
-    },
-    {
-      'selected': false,
       'value': 'การเกษตรสมัยใหม่',
     },
     {
@@ -846,6 +842,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'lastName': txtLastName.text,
         'sex': _gender,
         'age': _ageRange,
+        'ageRange': _ageRange,
         'username': txtEmail.text,
         'career': _careerSelected,
         'favorites': favorites,
