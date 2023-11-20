@@ -1,9 +1,8 @@
 import 'dart:math';
 
+import 'package:des/shared/config.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:intl/intl.dart';
-
-import '../config.dart';
 
 const List<dynamic> mockDataList = [
   mockDataObject1,

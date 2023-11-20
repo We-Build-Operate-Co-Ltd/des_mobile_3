@@ -1,3 +1,4 @@
+import 'package:des/shared/config.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,22 +7,26 @@ import 'package:des/login_first.dart';
 
 import 'main.dart';
 
-class OtpEmailForgotPasswordPage extends StatefulWidget {
+class ForgotPasswordOTPEmailPage extends StatefulWidget {
+  const ForgotPasswordOTPEmailPage({
+    Key? key,
+    required this.email,
+  }) : super(key: key);
+  final String email;
+
   @override
-  _OtpEmailForgotPasswordPageState createState() =>
-      _OtpEmailForgotPasswordPageState();
+  _ForgotPasswordOTPEmailPageState createState() =>
+      _ForgotPasswordOTPEmailPageState();
 }
 
-class _OtpEmailForgotPasswordPageState
-    extends State<OtpEmailForgotPasswordPage> {
+class _ForgotPasswordOTPEmailPageState
+    extends State<ForgotPasswordOTPEmailPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final txtEmail = TextEditingController();
   String text = '';
 
   @override
   void dispose() {
-    txtEmail.dispose();
     super.dispose();
   }
 
@@ -31,16 +36,10 @@ class _OtpEmailForgotPasswordPageState
   }
 
   Future<dynamic> submitForgotPassword() async {
-    Dio().post('m/Register/forgot/password', data: {
-      'email': txtEmail.text,
+    Dio().post('$server/de-api/m/Register/forgot/password', data: {
+      'email': widget.email,
     });
-    // final result = await postObjectData('m/Register/forgot/password', {
-    //   'email': txtEmail.text,
-    // });
 
-    setState(() {
-      txtEmail.text = '';
-    });
     return showDialog(
       context: context,
       builder: (BuildContext context) => new CupertinoAlertDialog(
@@ -162,12 +161,12 @@ class _OtpEmailForgotPasswordPageState
                                   fontSize: 20,
                                   fontWeight: FontWeight.w500,
                                   color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Colors.black
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.white
-                                            : Color(0xFFFFFD57),
+                                          ThemeModeThird.light
+                                      ? Colors.black
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                                 ),
                               ),
                               GestureDetector(
@@ -179,12 +178,12 @@ class _OtpEmailForgotPasswordPageState
                                   height: 18.52,
                                   width: 18.52,
                                   color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Colors.black
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.white
-                                            : Color(0xFFFFFD57),
+                                          ThemeModeThird.light
+                                      ? Colors.black
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                                 ),
                               ),
                             ],
@@ -195,12 +194,12 @@ class _OtpEmailForgotPasswordPageState
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                               color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Colors.black
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.white
-                                            : Color(0xFFFFFD57),
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                           ),
                           SizedBox(height: 10),
@@ -221,19 +220,22 @@ class _OtpEmailForgotPasswordPageState
                           ),
                           SizedBox(height: 10),
                           Center(
-                            child: Text(
-                              'ท่านต้องการรับรหัสใหม่',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
-                                decoration: TextDecoration.underline,
-                                color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Colors.black
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.white
-                                            : Color(0xFFFFFD57),
+                            child: GestureDetector(
+                              onTap: () => {},
+                              child: Text(
+                                'ท่านต้องการรับรหัสใหม่',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                  decoration: TextDecoration.underline,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Colors.black
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
+                                ),
                               ),
                             ),
                           ),
@@ -253,12 +255,12 @@ class _OtpEmailForgotPasswordPageState
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(23),
                                 color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Color(0xFF7A4CB1)
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.white
-                                          : Color(0xFFFFFD57),
+                                        ThemeModeThird.light
+                                    ? Color(0xFF7A4CB1)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
                               ),
                               child: Text(
                                 "ดำเนินการต่อ",

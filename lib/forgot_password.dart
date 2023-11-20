@@ -1,4 +1,4 @@
-import 'package:des/otp_email_forgot_password.dart';
+import 'package:des/forgot_password_otp_phone_input.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -152,12 +152,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 final form = _formKey.currentState;
                                 if (form!.validate()) {
                                   form.save();
-                                  submitForgotPassword();
-                                  await Navigator.pushReplacement(
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          OtpEmailForgotPasswordPage(),
+                                          ForgotPasswordOTPPhoneInputPage(
+                                        email: txtEmail.text,
+                                      ),
                                     ),
                                   );
                                 }

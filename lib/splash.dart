@@ -112,8 +112,8 @@ class _SplashPageState extends State<SplashPage> {
     String os_device = os == 'ios' ? 'Ios' : 'Android';
     // print('os : ${os_device}');
     Dio dio = Dio();
-    var res = await dio.post('https://des.we-builds.com/de-api/version/read',
-        data: {"platform": os_device});
+    var res = await dio
+        .post('$server/de-api/version/read', data: {"platform": os_device});
     setState(() {
       version_store =
           int.parse(res.data['objectData'][0]['version'].split('.').join(''));

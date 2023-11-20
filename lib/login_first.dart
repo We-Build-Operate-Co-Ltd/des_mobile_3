@@ -297,32 +297,32 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                                       : Color(0xFFFFFD57),
                             ),
                           ),
-                          SizedBox(height: 10),
-                          InkWell(
-                            onTap: () => _callLoginFacebook(),
-                            child: _buildButtonLogin(
-                              'assets/images/logo_facebook_login_page.png',
-                              'เข้าใช้ผ่าน Facebook',
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Color(0xFF227BEF)
-                                  : Colors.black,
-                              colorTitle: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.white
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
-                              colorBorder: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Color(0xFF227BEF)
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
-                            ),
-                          ),
+                          // SizedBox(height: 10),
+                          // InkWell(
+                          //   onTap: () => _callLoginFacebook(),
+                          //   child: _buildButtonLogin(
+                          //     'assets/images/logo_facebook_login_page.png',
+                          //     'เข้าใช้ผ่าน Facebook',
+                          //     color: MyApp.themeNotifier.value ==
+                          //             ThemeModeThird.light
+                          //         ? Color(0xFF227BEF)
+                          //         : Colors.black,
+                          //     colorTitle: MyApp.themeNotifier.value ==
+                          //             ThemeModeThird.light
+                          //         ? Colors.white
+                          //         : MyApp.themeNotifier.value ==
+                          //                 ThemeModeThird.dark
+                          //             ? Colors.white
+                          //             : Color(0xFFFFFD57),
+                          //     colorBorder: MyApp.themeNotifier.value ==
+                          //             ThemeModeThird.light
+                          //         ? Color(0xFF227BEF)
+                          //         : MyApp.themeNotifier.value ==
+                          //                 ThemeModeThird.dark
+                          //             ? Colors.white
+                          //             : Color(0xFFFFFD57),
+                          //   ),
+                          // ),
                           SizedBox(height: 10),
                           InkWell(
                             onTap: () => _callLoginGoogle(),
