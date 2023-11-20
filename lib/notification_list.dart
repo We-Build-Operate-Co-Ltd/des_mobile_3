@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 import 'main.dart';
 
 class NotificationListPage extends StatefulWidget {

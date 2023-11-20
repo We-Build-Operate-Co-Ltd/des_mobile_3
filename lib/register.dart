@@ -13,7 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 import 'main.dart';
 
 class RegisterPage extends StatefulWidget {

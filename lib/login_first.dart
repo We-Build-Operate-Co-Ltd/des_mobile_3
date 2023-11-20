@@ -17,7 +17,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 import 'main.dart';
 import 'dart:ui' as ui show ImageFilter;
 

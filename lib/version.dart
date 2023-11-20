@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:dio/dio.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 import 'splash.dart';
 
 class VersionPage extends StatefulWidget {

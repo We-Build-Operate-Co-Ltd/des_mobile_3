@@ -14,7 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 import 'main.dart';
 
 class LoginSecondPage extends StatefulWidget {

@@ -10,7 +10,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 
 class PoiPage extends StatefulWidget {
   PoiPage({Key? key, required this.latLng}) : super(key: key);

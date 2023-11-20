@@ -21,7 +21,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 import 'main.dart';
 
 class Menu extends StatefulWidget {

@@ -16,7 +16,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 import 'main.dart';
 
 class VerifyLastStepPage extends StatefulWidget {

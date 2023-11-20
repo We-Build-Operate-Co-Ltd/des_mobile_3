@@ -27,7 +27,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui show ImageFilter;
 
 import 'chat_botnoi.dart';
-import 'config.dart';
+import 'shared/config.dart';
 import 'main.dart';
 import 'shared/notification_service.dart';
 

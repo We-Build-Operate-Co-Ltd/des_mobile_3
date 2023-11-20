@@ -13,7 +13,7 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:html/parser.dart' show parse;
 import 'dart:ui' as ui show ImageFilter;
 import 'build_modal_connection_in_progress.dart';
-import 'config.dart';
+import 'shared/config.dart';
 
 // ignore: must_be_immutable
 class DetailPage extends StatefulWidget {

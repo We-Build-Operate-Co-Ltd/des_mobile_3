@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 import 'detail.dart';
 import 'main.dart';
 

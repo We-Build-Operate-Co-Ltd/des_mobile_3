@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:des/login_first.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 import 'main.dart';
 
 class ForgotPasswordPage extends StatefulWidget {

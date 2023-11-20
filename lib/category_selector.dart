@@ -2,7 +2,7 @@ import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 import 'main.dart';
 
 class CategorySelector extends StatefulWidget {

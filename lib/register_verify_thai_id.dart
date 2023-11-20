@@ -9,7 +9,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 import 'shared/extension.dart';
 
 class RegisterVerifyThaiIDPage extends StatefulWidget {

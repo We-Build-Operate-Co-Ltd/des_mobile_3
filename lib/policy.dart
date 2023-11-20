@@ -10,7 +10,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 import 'main.dart';
 import 'menu.dart';
 import 'dart:ui' as ui show ImageFilter;

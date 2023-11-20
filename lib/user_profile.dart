@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 import 'history_of_apply_job.dart';
 import 'main.dart';
 

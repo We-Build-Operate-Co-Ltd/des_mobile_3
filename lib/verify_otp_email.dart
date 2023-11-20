@@ -18,7 +18,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 import 'main.dart';
 
 class VerifyOTPEmailPage extends StatefulWidget {

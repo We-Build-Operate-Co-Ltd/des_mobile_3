@@ -12,7 +12,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 import 'main.dart';
 import 'shared/extension.dart';
 

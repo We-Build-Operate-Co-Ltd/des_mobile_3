@@ -1,7 +1,7 @@
 import 'package:des/shared/theme_data.dart';
 import 'package:flutter/material.dart';
 
-import 'config.dart';
+import 'shared/config.dart';
 
 class FundPage extends StatefulWidget {
   const FundPage({super.key});
