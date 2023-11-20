@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import 'config.dart';
 import 'detail.dart';
 import 'main.dart';
 
@@ -34,9 +35,8 @@ class _FavoriteClassAllState extends State<FavoriteClassAllPage> {
   }
 
   _loading() async {
-    Response<dynamic> response = await dio.post(
-        'https://des.we-builds.com/de-api/m/eventcalendar/read',
-        data: {});
+    Response<dynamic> response =
+        await dio.post('$server/de-api/m/eventcalendar/read', data: {});
 
     if (response.statusCode == 200) {
       if (response.data['status'] == 'S') {

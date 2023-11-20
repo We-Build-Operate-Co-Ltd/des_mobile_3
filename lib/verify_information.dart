@@ -14,6 +14,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'config.dart';
 import 'main.dart';
 
 class VerifyInformationPage extends StatefulWidget with WidgetsBindingObserver {
@@ -60,7 +61,7 @@ class _VerifyInformationPageState extends State<VerifyInformationPage> {
   String titleCategoryLv2 = '';
   String titleCategoryLv3 = '';
   String titleCategoryLv4 = '';
-  String server = 'https://des.we-builds.com/de-api/';
+  String _server = '$server/de-api/';
   dynamic categoryModel = {'provinceTitle': ''};
 
   List<String> _genderList = ['ชาย', 'หญิง'];

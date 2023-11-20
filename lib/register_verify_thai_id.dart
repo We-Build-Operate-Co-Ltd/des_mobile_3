@@ -9,6 +9,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'config.dart';
 import 'shared/extension.dart';
 
 class RegisterVerifyThaiIDPage extends StatefulWidget {
@@ -185,7 +186,7 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
     setState(() => _loadingSubmit = true);
     try {
       var response = await Dio().post(
-        'https://des.we-builds.com/de-api/m/Register/create',
+        '$server/de-api/m/Register/create',
         data: _userData,
       );
 

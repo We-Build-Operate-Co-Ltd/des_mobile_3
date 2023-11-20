@@ -12,6 +12,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
+import 'config.dart';
 import 'main.dart';
 import 'shared/extension.dart';
 
@@ -694,8 +695,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
   }
 
   Future<dynamic> readUser() async {
-    final response = await Dio()
-        .post("https://des.we-builds.com/de-api/m/Register/read", data: {
+    final response = await Dio().post("$server/de-api/m/Register/read", data: {
       'code': _code,
     });
 
@@ -753,8 +753,8 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
       ),
     );
 
-    final response = await Dio()
-        .post('https://des.we-builds.com/de-api/m/Register/update', data: user);
+    final response =
+        await Dio().post('$server/de-api/m/Register/update', data: user);
     var result = response.data;
     if (result['status'] == 'S') {
       await ManageStorage.createProfile(
@@ -935,9 +935,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
       "Image": await MultipartFile.fromFile(file.path, filename: fileName),
     });
 
-    var response = await dio.post(
-        'https://raot.we-builds.com/raot-document/upload',
-        data: formData);
+    var response = await dio.post('$server/de-document/upload', data: formData);
     return response.data['imageUrl'];
   }
 

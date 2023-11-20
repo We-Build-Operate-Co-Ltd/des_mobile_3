@@ -6,6 +6,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:des/menu.dart';
 
+import 'config.dart';
+
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 
@@ -65,8 +67,8 @@ class _SplashPageState extends State<SplashPage> {
   _callRead() async {
     try {
       Dio dio = Dio();
-      Response<dynamic> result = await dio
-          .post('https://des.we-builds.com/de-api/m/splash/read', data: {});
+      Response<dynamic> result =
+          await dio.post('$server/de-api/m/splash/read', data: {});
 
       if (result.statusCode == 200) {
         if (result.data['status'] == 'S') {

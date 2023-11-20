@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'config.dart';
 import 'main.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -781,7 +782,7 @@ class _RegisterPageState extends State<RegisterPage> {
     try {
       logWTF(txtEmail.text);
       Response<String> response = await Dio().get(
-        'https://des.we-builds.com/de-api/m/register/user/duplicate/${txtEmail.text}',
+        '$server/de-api/m/register/user/duplicate/${txtEmail.text}',
       );
       if (response.data == 'username') {
         return 'ชื่อผู้ใช้งานนี้ถูกใช้งานไปแล้ว';

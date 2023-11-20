@@ -18,6 +18,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'config.dart';
 import 'main.dart';
 
 class VerifyOTPEmailPage extends StatefulWidget {
@@ -356,7 +357,7 @@ class _VerifyOTPEmailPageState extends State<VerifyOTPEmailPage> {
       });
       Dio dio = Dio();
       var responseEmail = await dio.post(
-        'https://des.we-builds.com/de-api/m/register/otp/request',
+        '$server/de-api/m/register/otp/request',
         data: {"email": _email},
       );
       var result = responseEmail.data;
@@ -381,7 +382,7 @@ class _VerifyOTPEmailPageState extends State<VerifyOTPEmailPage> {
       });
       Dio dio = Dio();
       var responseEmail = await dio.post(
-        'https://des.we-builds.com/de-api/m/register/otp/validate',
+        '$server/de-api/m/register/otp/validate',
         data: {"email": _email, "title": txtNumber1.text},
       );
 

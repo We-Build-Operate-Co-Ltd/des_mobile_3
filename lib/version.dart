@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:dio/dio.dart';
 
+import 'config.dart';
 import 'splash.dart';
 
 class VersionPage extends StatefulWidget {
@@ -62,9 +63,8 @@ class _VersionPageState extends State<VersionPage> {
   _callRead() async {
     Dio dio = Dio();
     String platform = Platform.isAndroid ? 'Android' : 'Ios';
-    Response<dynamic> result = await dio.post(
-        'https://des.we-builds.com/de-api/m/v2/version/read',
-        data: {'platform': platform});
+    Response<dynamic> result = await dio
+        .post('$server/de-api/m/v2/version/read', data: {'platform': platform});
 
     if (result.statusCode == 200) {
       if (result.data['status'] == 'S') {

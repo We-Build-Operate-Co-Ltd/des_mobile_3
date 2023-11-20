@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import 'config.dart';
 import 'history_of_apply_job.dart';
 import 'main.dart';
 
@@ -1072,8 +1073,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     Dio dio = Dio();
     Response<dynamic> response;
     try {
-      response = await dio.post(
-          'https://des.we-builds.com/de-api/m/eventcalendar/read',
+      response = await dio.post('$server/de-api/m/eventcalendar/read',
           data: {'skip': 0, 'limit': 10});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {

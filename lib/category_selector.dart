@@ -2,6 +2,7 @@ import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+import 'config.dart';
 import 'main.dart';
 
 class CategorySelector extends StatefulWidget {
@@ -29,9 +30,8 @@ class _CategorySelectorState extends State<CategorySelector> {
   Future<dynamic> _readGroupByCategory() async {
     Response<dynamic> response;
     try {
-      response = await dio.post(
-          'https://des.we-builds.com/de-api/m/v2/notification/groupByCategory',
-          data: {});
+      response = await dio
+          .post('$server/de-api/m/v2/notification/groupByCategory', data: {});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
           var data = response.data['objectData'];

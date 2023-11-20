@@ -14,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'config.dart';
 import 'main.dart';
 
 class LoginSecondPage extends StatefulWidget {
@@ -751,8 +752,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       _loading = true;
       Response<dynamic> response;
       try {
-        response = await Dio()
-            .post('https://des.we-builds.com/de-api/m/register/read', data: {
+        response = await Dio().post('$server/de-api/m/register/read', data: {
           'username': txtEmail.text.trim(),
           'category': _category.toString(),
         });
@@ -819,7 +819,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
   void _callLoginGuest() async {
     _loading = true;
     var response = await Dio().post(
-      'https://des.we-builds.com/de-api/m/register/login',
+      '$server/de-api/m/register/login',
       data: {
         'username': _username,
         'password': txtPassword.text.toString(),
@@ -895,7 +895,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       Dio dio = new Dio();
       try {
         var response = await dio.post(
-          'https://des.we-builds.com/de-api/m/v2/register/facebook/login',
+          '$server/de-api/m/v2/register/facebook/login',
           data: model,
         );
 
@@ -943,7 +943,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       Dio dio = new Dio();
       try {
         var response = await dio.post(
-          'https://des.we-builds.com/de-api/m/v2/register/google/login',
+          '$server/de-api/m/v2/register/google/login',
           data: model,
         );
 
@@ -999,7 +999,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       Dio dio = new Dio();
       try {
         var response = await dio.post(
-          'https://des.we-builds.com/de-api/m/v2/register/line/login',
+          '$server/de-api/m/v2/register/line/login',
           data: model,
         );
 
@@ -1041,7 +1041,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
 
   //   Dio dio = new Dio();
   //   var response = await dio.post(
-  //     'https://des.we-builds.com/de-api/m/v2/register/apple/login',
+  //     '$server/de-api/m/v2/register/apple/login',
   //     data: model,
   //   );
 

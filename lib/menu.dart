@@ -21,6 +21,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'config.dart';
 import 'main.dart';
 
 class Menu extends StatefulWidget {
@@ -633,8 +634,7 @@ class _MenuState extends State<Menu> {
     Dio dio = Dio();
     Response<dynamic> response;
     try {
-      response = await dio
-          .post('https://des.we-builds.com/de-api/m/MainPopup/read', data: {});
+      response = await dio.post('$server/de-api/m/MainPopup/read', data: {});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
           return response.data['objectData'];
@@ -689,8 +689,7 @@ class _MenuState extends State<Menu> {
     Response<dynamic> response;
     dynamic policy = [];
     try {
-      response = await dio
-          .post('https://des.we-builds.com/de-api/m/policy/read', data: {
+      response = await dio.post('$server/de-api/m/policy/read', data: {
         "category": "application",
         "profileCode": pf,
       });

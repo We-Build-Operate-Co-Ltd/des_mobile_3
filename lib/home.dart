@@ -27,6 +27,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui show ImageFilter;
 
 import 'chat_botnoi.dart';
+import 'config.dart';
 import 'main.dart';
 import 'shared/notification_service.dart';
 
@@ -922,7 +923,7 @@ class _HomePageState extends State<HomePage> {
   //   Response<dynamic> response;
   //   try {
   //     response = await dio.post(
-  //         'https://des.we-builds.com/de-api/m/eventcalendar/read',
+  //         '$server/de-api/m/eventcalendar/read',
   //         data: {'skip': 0, 'limit': 2});
   //     if (response.statusCode == 200) {
   //       if (response.data['status'] == 'S') {
@@ -960,9 +961,7 @@ class _HomePageState extends State<HomePage> {
     Dio dio = Dio();
     Response<dynamic> response;
     try {
-      response = await dio.post(
-          'https://des.we-builds.com/de-api/m/Banner/main/read',
-          data: {});
+      response = await dio.post('$server/de-api/m/Banner/main/read', data: {});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
           return response.data['objectData'];

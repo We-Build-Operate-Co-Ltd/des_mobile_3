@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'config.dart';
 import 'main.dart';
 
 class VerifyOTPEmailInputPage extends StatefulWidget {
@@ -288,7 +289,7 @@ class _VerifyOTPEmailInputPageState extends State<VerifyOTPEmailInputPage> {
     try {
       Dio dio = Dio();
       var responseEmail = await dio.post(
-        'https://des.we-builds.com/de-api/m/register/otp/request',
+        '$server/de-api/m/register/otp/request',
         data: {"email": _emailController.text},
       );
 

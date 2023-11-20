@@ -16,6 +16,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'config.dart';
 import 'main.dart';
 
 class VerifyLastStepPage extends StatefulWidget {
@@ -313,8 +314,7 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
       "Image": await MultipartFile.fromFile(file.path, filename: fileName),
     });
 
-    var response = await dio
-        .post('https://des.we-builds.com/de-document/upload', data: formData);
+    var response = await dio.post('$server/de-document/upload', data: formData);
     return response.data['imageUrl'];
   }
 
@@ -355,9 +355,8 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
       user['thaiID'] = thaiDData;
       logWTF(user);
 
-      final response = await Dio().post(
-          'https://des.we-builds.com/de-api/m/Register/user/verify/update',
-          data: user);
+      final response = await Dio()
+          .post('$server/de-api/m/Register/user/verify/update', data: user);
 
       var result = response.data;
       setState(() => _loadindSubmit = false);

@@ -10,6 +10,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import 'config.dart';
+
 class PoiPage extends StatefulWidget {
   PoiPage({Key? key, required this.latLng}) : super(key: key);
 
@@ -775,8 +777,7 @@ class _PoiPage extends State<PoiPage> {
     Dio dio = Dio();
     Response<dynamic> response;
     try {
-      response =
-          await dio.post('https://des.we-builds.com/de-api/m/poi/read', data: {
+      response = await dio.post('$server/de-api/m/poi/read', data: {
         'skip': 0,
         'limit': _limit,
         'latitude': latLng!.latitude,
@@ -855,9 +856,8 @@ class _PoiPage extends State<PoiPage> {
   Future<dynamic> _readCategory() async {
     Response<dynamic> response;
     try {
-      response = await Dio().post(
-          'https://des.we-builds.com/de-api/m/poi/category/read',
-          data: {});
+      response =
+          await Dio().post('$server/de-api/m/poi/category/read', data: {});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
           var data = response.data['objectData'];

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:des/login_first.dart';
 
+import 'config.dart';
 import 'main.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
@@ -268,10 +269,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   Future<dynamic> submitForgotPassword() async {
-    Dio().post('https://des.we-builds.com/de-api/m/Register/forgot/password',
-        data: {
-          'email': txtEmail.text,
-        });
+    Dio().post('$server/de-api/m/Register/forgot/password', data: {
+      'email': txtEmail.text,
+    });
     // final result = await postObjectData('m/Register/forgot/password', {
     //   'email': txtEmail.text,
     // });

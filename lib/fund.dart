@@ -1,6 +1,8 @@
 import 'package:des/shared/theme_data.dart';
 import 'package:flutter/material.dart';
 
+import 'config.dart';
+
 class FundPage extends StatefulWidget {
   const FundPage({super.key});
 
@@ -12,45 +14,38 @@ class _FundPageState extends State<FundPage> {
   final List<dynamic> _model = [
     {
       'title': 'สินเชื่อ SME ยอดขายต่อปี  ไม่เกิน 20 ล้านบาท',
-      'imageUrl':
-          'http://des.we-builds.com/de-document/images/event/event_233702565.png',
+      'imageUrl': '$server/de-document/images/event/event_233702565.png',
       'description': '',
     },
     {
       'title': 'สินเชื่อที่ใช้ เงินฝาก/สลาก/กรมธรรม์ ค้ำประกัน',
-      'imageUrl':
-          'http://des.we-builds.com/de-document/images/event/event_234017074.png',
+      'imageUrl': '$server/de-document/images/event/event_234017074.png',
       'description': 'อิสระทุกการใช้จ่าย ง่ายทุกความต้องการ ',
     },
     {
       'title': 'สินเชื่อเพื่อการค้าระหว่างประเทศ',
-      'imageUrl':
-          'http://des.we-builds.com/de-document/images/event/event_234248716.jpg',
+      'imageUrl': '$server/de-document/images/event/event_234248716.jpg',
       'description': '',
     },
     {
       'title': 'สินเชื่อเคหะ',
-      'imageUrl':
-          'http://des.we-builds.com/de-document/images/event/event_234610362.jpg',
+      'imageUrl': '$server/de-document/images/event/event_234610362.jpg',
       'description': 'ช่วยสานฝันให้เป็นจริงด้วยเงื่อนไขสบายๆ และไม่ยุ่งยาก',
     },
     {
       'title': 'สินเชื่อบุคคล',
-      'imageUrl':
-          'http://des.we-builds.com/de-document/images/event/event_234500235.jpg',
+      'imageUrl': '$server/de-document/images/event/event_234500235.jpg',
       'description': 'ให้ทุกความต้องการของคุณเป็นจริง',
     },
     {
       'title': 'สินเชื่อจำนำทะเบียนรถ',
-      'imageUrl':
-          'http://des.we-builds.com/de-document/images/event/event_235056315.jpg',
+      'imageUrl': '$server/de-document/images/event/event_235056315.jpg',
       'description':
           'อนุมัติไว ผ่อนอยู่ ก็กู้ได้ รีไฟแนนซ์ง่าย ไม่ต้องโอนเล่ม ไม่เช็กประวัติทางการเงิน',
     },
     {
       'title': 'บริการสินเชื่อเพื่อการนำเข้า',
-      'imageUrl':
-          'http://des.we-builds.com/de-document/images/event/event_235414876.jpg',
+      'imageUrl': '$server/de-document/images/event/event_235414876.jpg',
       'description':
           'เงินทุนหมุนเวียนเพื่อผู้นำเข้าสำหรับชำระค่าสินค้าและบริการ ให้ธุรกิจไม่หยุดชะงัก',
     },

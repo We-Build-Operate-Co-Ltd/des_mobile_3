@@ -13,6 +13,7 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:html/parser.dart' show parse;
 import 'dart:ui' as ui show ImageFilter;
 import 'build_modal_connection_in_progress.dart';
+import 'config.dart';
 
 // ignore: must_be_immutable
 class DetailPage extends StatefulWidget {
@@ -657,7 +658,7 @@ class _DetailPageState extends State<DetailPage> {
 
   void _read() async {
     Response<dynamic> result = await Dio()
-        .post('https://des.we-builds.com/de-api/m/${widget.slug}/read', data: {
+        .post('$server/de-api/m/${widget.slug}/read', data: {
       'code': widget.checkNotiPage
           ? widget.model['reference']
           : widget.model['code']
@@ -678,13 +679,12 @@ class _DetailPageState extends State<DetailPage> {
   void _galleryRead() async {
     Response<dynamic> response;
     try {
-      response = await Dio().post(
-          'https://des.we-builds.com/de-api/m/${widget.slug}/gallery/read',
-          data: {
-            'code': widget.checkNotiPage
-                ? widget.model['reference']
-                : widget.model['code']
-          });
+      response = await Dio()
+          .post('$server/de-api/m/${widget.slug}/gallery/read', data: {
+        'code': widget.checkNotiPage
+            ? widget.model['reference']
+            : widget.model['code']
+      });
     } catch (ex) {
       throw Exception();
     }

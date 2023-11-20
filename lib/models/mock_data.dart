@@ -3,14 +3,15 @@ import 'dart:math';
 import 'package:des/shared/secure_storage.dart';
 import 'package:intl/intl.dart';
 
+import '../config.dart';
+
 const List<dynamic> mockDataList = [
   mockDataObject1,
   mockDataObject2,
 ];
 const dynamic mockDataObject1 = {
   'title': 'สกัดสมุนไพร เพื่อผลิตภัณฑ์เสริมความงาม',
-  'imageUrl':
-      'https://raot.we-builds.com/raot-document/images/aboutUs/aboutUs_232327200.png',
+  'imageUrl': '$server/raot-document/images/aboutUs/aboutUs_232327200.png',
   'createBy': 'เจ้าหน้าที่ศูนย์ดิติทัลชุมชน',
   'view': 5,
   'description':
@@ -47,8 +48,7 @@ const dynamic mockDataObject1 = {
 };
 const mockDataObject2 = {
   'title': 'ผลิตยาหม่องมณีพฤกษา ง่ายๆ ด้วยตัวเอง',
-  'imageUrl':
-      'https://raot.we-builds.com/raot-document/images/aboutUs/aboutUs_232416392.png',
+  'imageUrl': '$server/raot-document/images/aboutUs/aboutUs_232416392.png',
   'createBy': 'เจ้าหน้าที่ศูนย์ดิติทัลชุมชน',
   'view': 500,
   'description':
@@ -69,10 +69,10 @@ const dynamic mockDataClassFavorite = {
 };
 
 final List<String> mockBannerList = [
-  'https://raot.we-builds.com/raot-document/images/event/event_230009649.png',
-  'https://raot.we-builds.com/raot-document/images/event/event_231013260.jpg',
-  'https://raot.we-builds.com/raot-document/images/event/event_230539141.jpg',
-  'https://raot.we-builds.com/raot-document/images/event/event_235223817.png',
+  '$server/raot-document/images/event/event_230009649.png',
+  '$server/raot-document/images/event/event_231013260.jpg',
+  '$server/raot-document/images/event/event_230539141.jpg',
+  '$server/raot-document/images/event/event_235223817.png',
 ];
 
 mockCreateProfileData() {
@@ -82,7 +82,7 @@ mockCreateProfileData() {
       'firstName': 'ยุทธเลิศ',
       'lastName': 'สรณะ',
       'imageUrl':
-          'https://vetweb.we-builds.com/vet-document/images/employee/ff7ab024-5909-48c3-b421-4f0b1bbf8bf6/%E0%B8%AB%E0%B8%A1%E0%B8%B9%20%E0%B9%81%E0%B8%81%E0%B9%89.png',
+          '$server/vet-document/images/employee/ff7ab024-5909-48c3-b421-4f0b1bbf8bf6/%E0%B8%AB%E0%B8%A1%E0%B8%B9%20%E0%B9%81%E0%B8%81%E0%B9%89.png',
     },
     key: 'guest',
   );
@@ -352,7 +352,8 @@ const List<dynamic> mockDataCertificateList = [
         'https://www.bhumisiam.com/wp-content/uploads/2017/01/micropile-ผู้ควบคุมเครนรถบรรทุกขนส่ง-Certificate-1-1030x728.jpg',
     'createBy': 'เจ้าหน้าที่ศูนย์ดิติทัลชุมชน',
     'view': 500,
-    'description': 'อบรมเครน (Crane) ตามกฎหมาย 2552 - 2564 หรืออบรมปั้นจั่น เป็นหลักสูตรการอบรมสำหรับผู้ที่ทำงานร่วมกับการใช้เครนหรือปั้นจั่นตามราชกิจจานุเบกษา เผยแพร่กฎกระทรวงแรงงาน เกี่ยวกับการกำหนดให้นายจ้างบริหาร จัดการและดำเนินการด้านความปลอดภัย อาชีวอนามัย และสภาพแวดล้อมในการทำงาน ให้เป็นไปตามมาตรฐานที่กำหนดในกฎกระทรวงและเพื่อให้การทำงานเกี่ยวกับเครื่องจักร ปั้นจั่น และหม้อน้ำ ให้มีมาตรฐาน อันจะทำให้ลูกจ้างมีความปลอดภัยในการทำงานมากขึ้น อบรมได้ทั้งเขต ชลบุรี บางแสน และระยอง สอบใบเซอร์ปั้นจั่น ใบเซอร์เครน กฎหมายทบทวนปั้นจั่น อบรมทบทวนปั้นจั่น กฎหมาย อบรม เครน ทุก 2 ปีที่เซฟตี้อินไทย',
+    'description':
+        'อบรมเครน (Crane) ตามกฎหมาย 2552 - 2564 หรืออบรมปั้นจั่น เป็นหลักสูตรการอบรมสำหรับผู้ที่ทำงานร่วมกับการใช้เครนหรือปั้นจั่นตามราชกิจจานุเบกษา เผยแพร่กฎกระทรวงแรงงาน เกี่ยวกับการกำหนดให้นายจ้างบริหาร จัดการและดำเนินการด้านความปลอดภัย อาชีวอนามัย และสภาพแวดล้อมในการทำงาน ให้เป็นไปตามมาตรฐานที่กำหนดในกฎกระทรวงและเพื่อให้การทำงานเกี่ยวกับเครื่องจักร ปั้นจั่น และหม้อน้ำ ให้มีมาตรฐาน อันจะทำให้ลูกจ้างมีความปลอดภัยในการทำงานมากขึ้น อบรมได้ทั้งเขต ชลบุรี บางแสน และระยอง สอบใบเซอร์ปั้นจั่น ใบเซอร์เครน กฎหมายทบทวนปั้นจั่น อบรมทบทวนปั้นจั่น กฎหมาย อบรม เครน ทุก 2 ปีที่เซฟตี้อินไทย',
   },
 ];
 

@@ -17,6 +17,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import 'config.dart';
 import 'main.dart';
 import 'dart:ui' as ui show ImageFilter;
 
@@ -1104,8 +1105,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
       _loading = true;
       Response<dynamic> response;
       try {
-        response = await Dio()
-            .post('https://des.we-builds.com/de-api/m/register/read', data: {
+        response = await Dio().post('$server/de-api/m/register/read', data: {
           'username': txtEmail.text.trim(),
           'category': _category.toString(),
         });
@@ -1194,7 +1194,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
       Dio dio = new Dio();
       try {
         var response = await dio.post(
-          'https://des.we-builds.com/de-api/m/v2/register/facebook/login',
+          '$server/de-api/m/v2/register/facebook/login',
           data: model,
         );
 
@@ -1242,7 +1242,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
       Dio dio = new Dio();
       try {
         var response = await dio.post(
-          'https://des.we-builds.com/de-api/m/v2/register/google/login',
+          '$server/de-api/m/v2/register/google/login',
           data: model,
         );
 
@@ -1298,7 +1298,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
       Dio dio = new Dio();
       try {
         var response = await dio.post(
-          'https://des.we-builds.com/de-api/m/v2/register/line/login',
+          '$server/de-api/m/v2/register/line/login',
           data: model,
         );
 
@@ -1340,7 +1340,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
 
     Dio dio = new Dio();
     var response = await dio.post(
-      'https://des.we-builds.com/de-api/m/v2/register/apple/login',
+      '$server/de-api/m/v2/register/apple/login',
       data: model,
     );
 

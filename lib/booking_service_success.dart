@@ -7,6 +7,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'config.dart';
+
 class BookingServiceSuccessPage extends StatefulWidget {
   const BookingServiceSuccessPage({super.key});
 
@@ -297,8 +299,7 @@ class _BookingServiceSuccessPageState extends State<BookingServiceSuccessPage> {
     Dio dio = Dio();
     Response<dynamic> response;
     try {
-      response = await dio.post(
-          'https://des.we-builds.com/de-api/m/eventcalendar/read',
+      response = await dio.post('$server/de-api/m/eventcalendar/read',
           data: {'skip': 0, 'limit': 2});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import 'config.dart';
 import 'main.dart';
 
 class NotificationListPage extends StatefulWidget {
@@ -107,8 +108,8 @@ class _NotificationListState extends State<NotificationListPage> {
       });
     }
     selectedCategoryDays = "";
-    Response<dynamic> result = await dio
-        .post('https://des.we-builds.com/de-api/m/v2/notification/read', data: {
+    Response<dynamic> result =
+        await dio.post('$server/de-api/m/v2/notification/read', data: {
       'skip': 0,
       'limit': 999,
       'profileCode': profileCode,
@@ -125,7 +126,7 @@ class _NotificationListState extends State<NotificationListPage> {
         "docTime": "09:31:00",
         "createDate": "20230210093100",
         "imageUrlCreateBy":
-            "https://raot.we-builds.com/raot-document/images/member/member_234043642.png",
+            "$server/raot-document/images/member/member_234043642.png",
         "createBy": "admincms",
         "description":
             "<font face=\"Kanit\">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</font>",
@@ -243,8 +244,7 @@ class _NotificationListState extends State<NotificationListPage> {
   Future<dynamic> _readNotiCount() async {
     Response<dynamic> response;
     try {
-      response = await dio.post(
-          'https://des.we-builds.com/de-api/m/v2/notification/count',
+      response = await dio.post('$server/de-api/m/v2/notification/count',
           data: {"username": _username, "category": _category});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
@@ -835,7 +835,7 @@ class _NotificationListState extends State<NotificationListPage> {
             }
           : () async {
               await dio.post(
-                'https://des.we-builds.com/de-api/m/v2/notification/update',
+                '$server/de-api/m/v2/notification/update',
                 data: {
                   'category': '${model['category']}',
                   "code": '${model['code']}'
@@ -1396,7 +1396,7 @@ class _NotificationListState extends State<NotificationListPage> {
                             .toList();
                         for (var i = 0; i < totalSelected; i++) {
                           await dio.post(
-                            'https://des.we-builds.com/de-api/m/v2/notification/update',
+                            '$server/de-api/m/v2/notification/update',
                             data: {"code": '${listSelected[i]['code']}'},
                           );
                         }
@@ -1408,7 +1408,7 @@ class _NotificationListState extends State<NotificationListPage> {
                       } else if (selectedCategoryDays != "") {
                         for (var i = 0; i < listResultData.length; i++) {
                           await dio.post(
-                            'https://des.we-builds.com/de-api/m/v2/notification/update',
+                            '$server/de-api/m/v2/notification/update',
                             data: {"code": '${listResultData[i]['code']}'},
                           );
                         }
@@ -1419,7 +1419,7 @@ class _NotificationListState extends State<NotificationListPage> {
                         });
                       } else {
                         await dio.post(
-                          'https://des.we-builds.com/de-api/m/v2/notification/update',
+                          '$server/de-api/m/v2/notification/update',
                           data: {},
                         );
                         setState(() {
@@ -1542,7 +1542,7 @@ class _NotificationListState extends State<NotificationListPage> {
                             .toList();
                         for (var i = 0; i < totalSelected; i++) {
                           await dio.post(
-                              'https://des.we-builds.com/de-api/m/v2/notification/delete',
+                              '$server/de-api/m/v2/notification/delete',
                               data: {"code": '${listSelected[i]['code']}'});
                         }
                         setState(() {
@@ -1553,7 +1553,7 @@ class _NotificationListState extends State<NotificationListPage> {
                       } else if (selectedCategoryDays != "") {
                         for (var i = 0; i < listResultData.length; i++) {
                           await dio.post(
-                            'https://des.we-builds.com/de-api/m/v2/notification/delete',
+                            '$server/de-api/m/v2/notification/delete',
                             data: {"code": '${listResultData[i]['code']}'},
                           );
                         }
@@ -1564,7 +1564,7 @@ class _NotificationListState extends State<NotificationListPage> {
                         });
                       } else {
                         await dio.post(
-                            'https://des.we-builds.com/de-api/m/v2/notification/delete',
+                            '$server/de-api/m/v2/notification/delete',
                             data: {});
                         setState(() {
                           _loading();

@@ -10,6 +10,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'config.dart';
 import 'main.dart';
 import 'menu.dart';
 import 'dart:ui' as ui show ImageFilter;
@@ -81,8 +82,7 @@ class _PolicyPage extends State<PolicyPage> {
     Dio dio = Dio();
     Response<dynamic> response;
     try {
-      response = await dio
-          .post('https://des.we-builds.com/de-api/m/policy/read', data: {
+      response = await dio.post('$server/de-api/m/policy/read', data: {
         "category": "application",
         "profileCode": _profileCode,
       });
@@ -962,7 +962,7 @@ class _PolicyPage extends State<PolicyPage> {
       });
       acceptPolicyList.forEach((e) {
         e['profileCode'] = _profileCode;
-        dio.post('https://des.we-builds.com/de-api/m/policy/create', data: e);
+        dio.post('$server/de-api/m/policy/create', data: e);
       });
     } catch (e) {}
     return dialogConfirm();
