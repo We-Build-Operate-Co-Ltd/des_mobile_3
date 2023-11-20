@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/login_first.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:des/menu.dart';
+
+import 'check_version.dart';
+import 'shared/config.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -17,6 +21,9 @@ class _SplashPageState extends State<SplashPage> {
   Future<dynamic>? futureModel;
   String _profileCode = '';
   List<dynamic> _model = [];
+  late int version_store;
+  dynamic _model_version;
+  String os = Platform.operatingSystem;
 
   @override
   Widget build(BuildContext context) {
@@ -81,14 +88,15 @@ class _SplashPageState extends State<SplashPage> {
 
   _callTimer(time) {
     var duration = Duration(seconds: time);
-    Timer.periodic(duration, (timer) {
+    Timer.periodic(duration, (timer) async {
       if (_profileCode != '') {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => const Menu(),
-          ),
-          (Route<dynamic> route) => false,
-        );
+        check_version();
+        // Navigator.of(context).pushAndRemoveUntil(
+        //   MaterialPageRoute(
+        //     builder: (context) => const Menu(),
+        //   ),
+        //   (Route<dynamic> route) => false,
+        // );
       } else {
         if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
@@ -99,5 +107,40 @@ class _SplashPageState extends State<SplashPage> {
         );
       }
     });
+  }
+
+  void check_version() async {
+    String os_device = os == 'ios' ? 'Ios' : 'Android';
+    // print('os : ${os_device}');
+    Dio dio = Dio();
+    var res = await dio.post('https://des.we-builds.com/de-api/version/read',
+        data: {"platform": os_device});
+    setState(() {
+      version_store =
+          int.parse(res.data['objectData'][0]['version'].split('.').join(''));
+      _model_version = res.data['objectData'][0];
+    });
+
+    navigationPage();
+  }
+
+  Future<void> navigationPage() async {
+    if (!mounted) return;
+    if (version_store > versionNumber) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          // builder: (context) => const IntroductionPage(),
+          builder: (context) => CheckVersionPage(model: _model_version),
+        ),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Menu(),
+        ),
+      );
+    }
   }
 }
