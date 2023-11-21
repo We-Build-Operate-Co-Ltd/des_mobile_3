@@ -1,11 +1,7 @@
-import 'dart:convert';
 import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
-import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
-import 'package:des/verify_otp_email_input.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // ignore: library_prefixes
@@ -181,12 +177,6 @@ class _ForgotPasswordOTPPhonePageState
                       // currentText = value;
                     });
                   },
-                  beforeTextPaste: (text) {
-                    debugPrint("Allowing to paste $text");
-                    //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                    //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                    return true;
-                  },
                 ),
               ),
               const SizedBox(height: 20),
@@ -211,16 +201,16 @@ class _ForgotPasswordOTPPhonePageState
               const Expanded(child: SizedBox()),
               GestureDetector(
                 onTap: () async {
-                  await submitForgotPassword();
-                  // if (txtNumber1.text.isNotEmpty) {
-                  //   if (await _validateOTP()) {
-                  //     await submitForgotPassword();
-                  //   } else {
-                  //     Fluttertoast.showToast(msg: 'OTP ไม่ถูกต้อง');
-                  //   }
-                  // } else {
-                  //   Fluttertoast.showToast(msg: 'OTP ไม่ครบ');
-                  // }
+                  FocusScope.of(context).unfocus();
+                  if (txtNumber1.text.isNotEmpty) {
+                    if (await _validateOTP()) {
+                      await submitForgotPassword();
+                    } else {
+                      Fluttertoast.showToast(msg: 'OTP ไม่ถูกต้อง');
+                    }
+                  } else {
+                    Fluttertoast.showToast(msg: 'OTP ไม่ครบ');
+                  }
                 },
                 child: Container(
                   height: 50,
@@ -376,7 +366,7 @@ class _ForgotPasswordOTPPhonePageState
       });
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => VerifyOTPEmailInputPage(),
+          builder: (context) => ForgotPasswordOTPEmailPage(),
         ),
       );
     } catch (e) {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:des/policy_web.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
@@ -41,14 +42,17 @@ class _RegisterPageState extends State<RegisterPage> {
 
   late ScrollController _scrollController;
 
-  List<String> _genderList = ['ชาย', 'หญิง'];
+  List<dynamic> _genderList = [
+    {'key': 'male', 'value': 'ชาย'},
+    {'key': 'female', 'value': 'หญิง'},
+    {'key': 'other', 'value': 'อื่น ๆ'},
+  ];
   List<dynamic> _ageRangeList = [
-    {'key': '15-20', 'value': '15-20 ปี'},
-    {'key': '21-30', 'value': '21-30 ปี'},
-    {'key': '31-40', 'value': '31-40 ปี'},
-    {'key': '41-50', 'value': '41-50 ปี'},
-    {'key': '51-60', 'value': '51-60 ปี'},
-    {'key': '60+', 'value': '60 ปีขึ้นไป'},
+    {'key': '0-14', 'value': '0-14 ปี'},
+    {'key': '15-24', 'value': '15-24 ปี'},
+    {'key': '25-54', 'value': '25-54 ปี'},
+    {'key': '55-64', 'value': '55-64 ปี'},
+    {'key': '65+', 'value': '65 ปีขึ้นไป'},
   ];
   List<dynamic> _careerList = [
     {
@@ -493,11 +497,20 @@ class _RegisterPageState extends State<RegisterPage> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             value: chbAcceptPDPA,
-                            onChanged: (p0) => {
+                            onChanged: (p0) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const PolicyWebPage(),
+                                ),
+                              ).then((value) {
+                                if (value) {
                                   setState(() {
-                                    chbAcceptPDPA = p0!;
-                                  })
-                                }),
+                                    chbAcceptPDPA = true;
+                                  });
+                                }
+                              });
+                            }),
                         SizedBox(height: 40),
                         _buildButtonRegister(),
                       ],
@@ -629,11 +642,11 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _radioGender(String value) {
+  Widget _radioGender(dynamic value) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          _gender = value;
+          _gender = value['key'];
         });
       },
       child: Row(
@@ -650,14 +663,14 @@ class _RegisterPageState extends State<RegisterPage> {
               margin: EdgeInsets.all(4),
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: _gender == value
+                  color: _gender == value['key']
                       ? Theme.of(context).custom.b325f8_w_fffd57
                       : Theme.of(context).custom.w_b_b),
             ),
           ),
           SizedBox(width: 6),
           Text(
-            value,
+            value['value'],
             style: TextStyle(
               fontSize: 13,
               color: Theme.of(context).custom.b_W_fffd57,

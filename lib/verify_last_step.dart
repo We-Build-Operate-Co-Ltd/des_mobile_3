@@ -277,6 +277,9 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
         'gender': idData['gender'],
       };
     });
+
+    logWTF(_userData);
+    logWTF(thaiDData);
   }
 
   _getImageUnit8List() async {

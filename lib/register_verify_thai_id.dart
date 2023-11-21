@@ -311,6 +311,7 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
         'family_name_en': '',
         'gender': idData['gender'],
       };
+      _userData['sex'] = idData['gender'];
 
       _register();
     } catch (e) {

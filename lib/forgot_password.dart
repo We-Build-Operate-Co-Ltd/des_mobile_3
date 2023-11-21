@@ -149,6 +149,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             SizedBox(height: 20),
                             InkWell(
                               onTap: () async {
+                                FocusScope.of(context).unfocus();
                                 final form = _formKey.currentState;
                                 if (form!.validate()) {
                                   form.save();
