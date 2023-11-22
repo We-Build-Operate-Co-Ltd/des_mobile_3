@@ -1000,12 +1000,12 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
   }
 
   _uploadImage(XFile file) async {
-    var serverUpload = 'https://gateway.we-builds.com/qa-document/upload';
+    var serverUpload = '$server/de-document/upload';
     try {
       Dio dio = Dio();
       String fileName = file.path.split('/').last;
       FormData formData = FormData.fromMap({
-        "ImageCaption": "des",
+        "ImageCaption": "de_profile",
         "Image": await MultipartFile.fromFile(file.path, filename: fileName),
       });
 
