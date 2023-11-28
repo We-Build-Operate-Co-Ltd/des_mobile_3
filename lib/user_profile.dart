@@ -185,19 +185,29 @@ class _UserProfilePageState extends State<UserProfilePage> {
             //         .toList(),
             //   ),
             // ),
-            FutureBuilder(
-              future: Future.value(mockDataCertificateList),
-              builder: (context, snapshot) => Container(
-                height: 150,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (_, __) =>
-                      _buildCertificateClass(snapshot.data![__]),
-                  separatorBuilder: (_, __) => SizedBox(width: 10),
-                  itemCount: snapshot.data!.length,
+            Container(
+              height: 100,
+              alignment: Alignment.center,
+              child: Text(
+                'ยังไม่มีใบรับรอง',
+                style: TextStyle(
+                  color: Theme.of(context).custom.b_W_fffd57,
                 ),
               ),
             ),
+            // FutureBuilder(
+            //   future: Future.value(mockDataCertificateList),
+            //   builder: (context, snapshot) => Container(
+            //     height: 150,
+            //     child: ListView.separated(
+            //       scrollDirection: Axis.horizontal,
+            //       itemBuilder: (_, __) =>
+            //           _buildCertificateClass(snapshot.data![__]),
+            //       separatorBuilder: (_, __) => SizedBox(width: 10),
+            //       itemCount: snapshot.data!.length,
+            //     ),
+            //   ),
+            // ),
             SizedBox(height: 33),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -239,19 +249,29 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ],
             ),
             SizedBox(height: 10),
-            FutureBuilder(
-              future: Future.value(mockDataApplyJobList),
-              builder: (context, snapshot) => Container(
-                height: 110,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (_, __) =>
-                      _buildHistoryOfApplyJob(snapshot.data![__]),
-                  separatorBuilder: (_, __) => SizedBox(width: 10),
-                  itemCount: snapshot.data!.length,
+            Container(
+              height: 100,
+              alignment: Alignment.center,
+              child: Text(
+                'ยังไม่มีประวัติการสมัครงาน',
+                style: TextStyle(
+                  color: Theme.of(context).custom.b_W_fffd57,
                 ),
               ),
             ),
+            // FutureBuilder(
+            //   future: Future.value(mockDataApplyJobList),
+            //   builder: (context, snapshot) => Container(
+            //     height: 110,
+            //     child: ListView.separated(
+            //       scrollDirection: Axis.horizontal,
+            //       itemBuilder: (_, __) =>
+            //           _buildHistoryOfApplyJob(snapshot.data![__]),
+            //       separatorBuilder: (_, __) => SizedBox(width: 10),
+            //       itemCount: snapshot.data!.length,
+            //     ),
+            //   ),
+            // ),
             SizedBox(height: 33),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -252,6 +252,8 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                               final form = _formKey.currentState;
                               if (form!.validate()) {
                                 form.save();
+
+                                print('_callUser');
                                 _callUser();
                               }
                             },
@@ -1105,6 +1107,8 @@ class _LoginFirstPageState extends State<LoginFirstPage>
       _loading = true;
       Response<dynamic> response;
       try {
+        print('------');
+
         response = await Dio().post('$server/de-api/m/register/read', data: {
           'username': txtEmail.text.trim(),
           'category': _category.toString(),
@@ -1120,6 +1124,8 @@ class _LoginFirstPageState extends State<LoginFirstPage>
       setState(() {
         _loading = false;
       });
+
+      // print(response.data.toString());
       if (response.data['status'] == 'S') {
         List<dynamic> result = response.data['objectData'];
         if (result.length > 0) {
