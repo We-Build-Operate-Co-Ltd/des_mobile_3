@@ -1,5 +1,7 @@
 import 'package:des/booking_service_detail.dart';
 import 'package:des/models/mock_data.dart';
+import 'package:des/shared/extension.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class BookingServiceSearchResultPage extends StatefulWidget {
@@ -8,11 +10,13 @@ class BookingServiceSearchResultPage extends StatefulWidget {
     required this.date,
     required this.startTime,
     required this.endTime,
+    required this.search,
   });
 
   final String date;
   final String startTime;
   final String endTime;
+  final String search;
 
   @override
   State<BookingServiceSearchResultPage> createState() =>
@@ -21,7 +25,9 @@ class BookingServiceSearchResultPage extends StatefulWidget {
 
 class _BookingServiceSearchResultPageState
     extends State<BookingServiceSearchResultPage> {
-  dynamic modelCenter;
+  List<dynamic> _modelCenter = [];
+  List<dynamic> _filterModelCenter = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +61,7 @@ class _BookingServiceSearchResultPageState
         ),
       ),
       body: FutureBuilder<List<dynamic>>(
-        future: Future.value(modelCenter),
+        future: Future.value(_filterModelCenter),
         builder: (_, snapshot) {
           if (snapshot.hasData) {
             return ListView.separated(
@@ -86,72 +92,78 @@ class _BookingServiceSearchResultPageState
 
   Widget _item(model) {
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => BookingServiceDetailPage(
-            code: model['code'],
-            date: widget.date,
-            startTime: widget.startTime,
-            endTime: widget.endTime,
-          ),
-        ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 60,
-            width: 60,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: Color(0xFFB325F8).withOpacity(.1),
-            ),
-            child: Image.asset(
-              'assets/images/computer.png',
-              width: 30,
-              color: Color(0xFF53327A),
+      onTap: () {
+        logWTF(model);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => BookingServiceDetailPage(
+              model: model,
+              date: widget.date,
+              startTime: widget.startTime,
+              endTime: widget.endTime,
             ),
           ),
-          SizedBox(width: 15),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${model['title']}',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(height: 10),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: Color(0xFFB325F8).withOpacity(.1),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Text(
-                    '${model['count']} เครื่อง',
+        );
+      },
+      child: Container(
+        color: Colors.white,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 60,
+              width: 60,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Color(0xFFB325F8).withOpacity(.1),
+              ),
+              child: Image.asset(
+                'assets/images/computer.png',
+                width: 30,
+                color: Color(0xFF53327A),
+              ),
+            ),
+            SizedBox(width: 15),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${model?['centerName'] ?? ''}',
                     style: TextStyle(
-                      color: Color(0xFFB325F8),
-                      fontSize: 9,
-                      fontWeight: FontWeight.w400,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                )
-              ],
+                  SizedBox(height: 10),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFB325F8).withOpacity(.1),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Text(
+                      '${model?['slotCount'] ?? ''} เครื่อง',
+                      style: TextStyle(
+                        color: Color(0xFFB325F8),
+                        fontSize: 9,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: Icon(Icons.arrow_forward_ios, size: 16),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Icon(Icons.arrow_forward_ios, size: 16),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -159,6 +171,28 @@ class _BookingServiceSearchResultPageState
   @override
   void initState() {
     super.initState();
-    modelCenter = MockBookingData.center();
+    logWTF('a');
+    _callRead();
+  }
+
+  _callRead() async {
+    logWTF('callRead');
+    //test
+    _modelCenter = MockBookingData.centerReal();
+
+    setState(() {
+      _filterModelCenter = _modelCenter
+          .where(
+            (item) => item['centerName'].contains(widget.search),
+          )
+          .toList();
+    });
+
+    // final String baseUrl = 'https://dcc-portal.webview.co/dcc-api';
+    // dynamic response = await Dio().get('${baseUrl}/api/ShowCenter');
+    // logWTF(response.data);
+    // setState(() {
+    //   _modelCenter = response.data;
+    // });
   }
 }

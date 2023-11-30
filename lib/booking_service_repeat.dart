@@ -10,11 +10,13 @@ class BookingServiceRepeatPage extends StatefulWidget {
     required this.date,
     required this.startTime,
     required this.endTime,
+    this.model,
   });
 
   final String date;
   final String startTime;
   final String endTime;
+  final dynamic model;
 
   @override
   State<BookingServiceRepeatPage> createState() =>
@@ -175,9 +177,11 @@ class _BookingServiceRepeatPageState extends State<BookingServiceRepeatPage> {
             context,
             MaterialPageRoute(
               builder: (_) => BookingServiceConfirmPage(
+                centerId: widget.model['centerId'].toString(),
                 date: txtDate.text,
                 startTime: txtStartTime.text,
                 endTime: txtEndTime.text,
+                bookingSlotType: '',
               ),
             ),
           );

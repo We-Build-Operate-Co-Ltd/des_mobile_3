@@ -44,6 +44,7 @@ class _BookingServicePageState extends State<BookingServicePage>
   bool lastStatus = true;
 
   late AnimationController _animationController;
+  late TextEditingController _searchController;
 
   @override
   Widget build(BuildContext context) {
@@ -146,13 +147,11 @@ class _BookingServicePageState extends State<BookingServicePage>
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w500,
-                color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
               ),
               textAlign: TextAlign.center,
             ),
@@ -203,6 +202,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                             date: txtDate.text,
                             startTime: txtStartTime.text,
                             endTime: txtEndTime.text,
+                            search: _searchController.text,
                           ),
                         ),
                       );
@@ -250,13 +250,11 @@ class _BookingServicePageState extends State<BookingServicePage>
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w500,
-          color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Colors.black
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
         ),
         textAlign: TextAlign.center,
       ),
@@ -319,8 +317,8 @@ class _BookingServicePageState extends State<BookingServicePage>
                                   : MyApp.themeNotifier.value ==
                                           ThemeModeThird.dark
                                       ? (_currentPage == 0
-                                        ? Colors.black
-                                        : Color(0xFF707070))
+                                          ? Colors.black
+                                          : Color(0xFF707070))
                                       : Color(0xFFFFFD57)),
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -378,8 +376,8 @@ class _BookingServicePageState extends State<BookingServicePage>
                                   : MyApp.themeNotifier.value ==
                                           ThemeModeThird.dark
                                       ? (_currentPage == 1
-                                        ? Colors.black
-                                        : Color(0xFF707070))
+                                          ? Colors.black
+                                          : Color(0xFF707070))
                                       : Color(0xFFFFFD57)),
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -419,6 +417,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                         date: txtDate.text,
                         startTime: txtStartTime.text,
                         endTime: txtEndTime.text,
+                        search: _searchController.text,
                       ),
                     ),
                   );
@@ -611,6 +610,7 @@ class _BookingServicePageState extends State<BookingServicePage>
       //   height: 35,
       //   child:
       TextFormField(
+        controller: _searchController,
         decoration: _decorationSearch(
           context,
           hintText: 'สถานที่',
@@ -788,7 +788,7 @@ class _BookingServicePageState extends State<BookingServicePage>
             context,
             MaterialPageRoute(
               builder: (_) => BookingServiceDetailPage(
-                code: model['center'],
+                model: model,
                 edit: edit,
                 repeat: repeat,
                 repeatCurrentDay: repeatCurrentDay,
@@ -803,7 +803,7 @@ class _BookingServicePageState extends State<BookingServicePage>
           context,
           MaterialPageRoute(
             builder: (_) => BookingServiceDetailPage(
-              code: model['center'],
+              model: model,
               edit: edit,
               repeat: repeat,
               repeatCurrentDay: repeatCurrentDay,
@@ -1310,39 +1310,39 @@ class _BookingServicePageState extends State<BookingServicePage>
       context,
       theme: DatePickerTheme(
         backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
-        ? Colors.white
-        : Color(0xFF292929),
-    containerHeight: 210.0,
-    itemStyle: TextStyle(
-      fontSize: 16.0,
-      color: MyApp.themeNotifier.value == ThemeModeThird.light
-          ? Color(0xFF7A4CB1)
-          : MyApp.themeNotifier.value == ThemeModeThird.dark
-              ? Colors.white
-              : Color(0xFFFFFD57),
-      fontWeight: FontWeight.normal,
-      fontFamily: 'Kanit',
-    ),
-    doneStyle: TextStyle(
-      fontSize: 16.0,
-      color: MyApp.themeNotifier.value == ThemeModeThird.light
-          ? Color(0xFF7A4CB1)
-          : MyApp.themeNotifier.value == ThemeModeThird.dark
-              ? Colors.white
-              : Color(0xFFFFFD57),
-      fontWeight: FontWeight.normal,
-      fontFamily: 'Kanit',
-    ),
-    cancelStyle: TextStyle(
-      fontSize: 16.0,
-      color: MyApp.themeNotifier.value == ThemeModeThird.light
-          ? Color(0xFF7A4CB1)
-          : MyApp.themeNotifier.value == ThemeModeThird.dark
-              ? Colors.white
-              : Color(0xFFFFFD57),
-      fontWeight: FontWeight.normal,
-      fontFamily: 'Kanit',
-    ),
+            ? Colors.white
+            : Color(0xFF292929),
+        containerHeight: 210.0,
+        itemStyle: TextStyle(
+          fontSize: 16.0,
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF7A4CB1)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontWeight: FontWeight.normal,
+          fontFamily: 'Kanit',
+        ),
+        doneStyle: TextStyle(
+          fontSize: 16.0,
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF7A4CB1)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontWeight: FontWeight.normal,
+          fontFamily: 'Kanit',
+        ),
+        cancelStyle: TextStyle(
+          fontSize: 16.0,
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF7A4CB1)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontWeight: FontWeight.normal,
+          fontFamily: 'Kanit',
+        ),
       ),
       showTitleActions: true,
       minTime:
@@ -1402,39 +1402,39 @@ class _BookingServicePageState extends State<BookingServicePage>
       context,
       theme: DatePickerTheme(
         backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
-        ? Colors.white
-        : Color(0xFF292929),
-    containerHeight: 210.0,
-    itemStyle: TextStyle(
-      fontSize: 16.0,
-      color: MyApp.themeNotifier.value == ThemeModeThird.light
-          ? Color(0xFF7A4CB1)
-          : MyApp.themeNotifier.value == ThemeModeThird.dark
-              ? Colors.white
-              : Color(0xFFFFFD57),
-      fontWeight: FontWeight.normal,
-      fontFamily: 'Kanit',
-    ),
-    doneStyle: TextStyle(
-      fontSize: 16.0,
-      color: MyApp.themeNotifier.value == ThemeModeThird.light
-          ? Color(0xFF7A4CB1)
-          : MyApp.themeNotifier.value == ThemeModeThird.dark
-              ? Colors.white
-              : Color(0xFFFFFD57),
-      fontWeight: FontWeight.normal,
-      fontFamily: 'Kanit',
-    ),
-    cancelStyle: TextStyle(
-      fontSize: 16.0,
-      color: MyApp.themeNotifier.value == ThemeModeThird.light
-          ? Color(0xFF7A4CB1)
-          : MyApp.themeNotifier.value == ThemeModeThird.dark
-              ? Colors.white
-              : Color(0xFFFFFD57),
-      fontWeight: FontWeight.normal,
-      fontFamily: 'Kanit',
-    ),
+            ? Colors.white
+            : Color(0xFF292929),
+        containerHeight: 210.0,
+        itemStyle: TextStyle(
+          fontSize: 16.0,
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF7A4CB1)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontWeight: FontWeight.normal,
+          fontFamily: 'Kanit',
+        ),
+        doneStyle: TextStyle(
+          fontSize: 16.0,
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF7A4CB1)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontWeight: FontWeight.normal,
+          fontFamily: 'Kanit',
+        ),
+        cancelStyle: TextStyle(
+          fontSize: 16.0,
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF7A4CB1)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontWeight: FontWeight.normal,
+          fontFamily: 'Kanit',
+        ),
       ),
       showTitleActions: true,
       onChanged: (date) {},
@@ -1530,6 +1530,7 @@ class _BookingServicePageState extends State<BookingServicePage>
     _scrollController = ScrollController()..addListener(_scrollListener);
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    _searchController = TextEditingController(text: '');
     _callRead();
   }
 
@@ -1537,6 +1538,8 @@ class _BookingServicePageState extends State<BookingServicePage>
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
+    _searchController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 

@@ -84,9 +84,6 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
-        //     ? Colors.white
-        //     : Colors.black,
         elevation: 0,
         flexibleSpace: _buildHead(),
         automaticallyImplyLeading: false,
@@ -188,14 +185,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             TextFormField(
               controller: txtFirstName,
               decoration: _decorationBase(context, hintText: 'ชื่อ'),
-              style: TextStyle(
-                fontFamily: 'Kanit',
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Colors.black
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
-              ),
+              style: TextStyle(color: Theme.of(context).custom.b_w_y),
               cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
                   ? Color(0xFF7A4CB1)
                   : MyApp.themeNotifier.value == ThemeModeThird.dark
@@ -256,19 +246,13 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                 Expanded(
                   child: TextFormField(
                     controller: txtAge,
+                    keyboardType: TextInputType.number,
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(
                           RegExp(r'[0-9a-zA-Z.]')),
                     ],
                     decoration: _decorationBase(context, hintText: 'อายุ'),
-                    style: TextStyle(
-                      fontFamily: 'Kanit',
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Colors.black
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
-                    ),
+                    style: TextStyle(color: Theme.of(context).custom.b_w_y),
                     cursorColor:
                         MyApp.themeNotifier.value == ThemeModeThird.light
                             ? Color(0xFF7A4CB1)
@@ -296,23 +280,19 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             SizedBox(height: 10),
             TextFormField(
               controller: txtPhone,
+              keyboardType: TextInputType.phone,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                 LengthLimitingTextInputFormatter(10),
               ],
               decoration: _decorationBase(context, hintText: 'เบอร์ติดต่อ'),
               style: TextStyle(
-                fontFamily: 'Kanit',
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Colors.black
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
+                color: Theme.of(context).custom.b_w_y,
               ),
               cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
                   ? Color(0xFF7A4CB1)
                   : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
+                      ? Colors.black
                       : Color(0xFFFFFD57),
             ),
             SizedBox(height: 15),
@@ -610,7 +590,9 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
         ),
         // hintText: hintText,
         filled: true,
-        fillColor: readOnly ? Colors.black.withOpacity(0.2) : Colors.white,
+        fillColor: readOnly
+            ? Colors.black.withOpacity(0.2)
+            : Theme.of(context).custom.w_b_b,
         contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),

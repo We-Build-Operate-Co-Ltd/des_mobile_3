@@ -1,7 +1,15 @@
+import 'dart:convert';
+
 import 'package:des/booking_service_success.dart';
 import 'package:des/menu.dart';
+import 'package:des/shared/extension.dart';
+import 'package:des/shared/secure_storage.dart';
+import 'package:des/shared/theme_data.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class BookingServiceConfirmPage extends StatefulWidget {
   const BookingServiceConfirmPage({
@@ -11,6 +19,8 @@ class BookingServiceConfirmPage extends StatefulWidget {
     required this.date,
     required this.startTime,
     required this.endTime,
+    required this.centerId,
+    required this.bookingSlotType,
   });
 
   final bool repeat;
@@ -19,6 +29,8 @@ class BookingServiceConfirmPage extends StatefulWidget {
   final String date;
   final String startTime;
   final String endTime;
+  final String centerId;
+  final String bookingSlotType;
 
   @override
   State<BookingServiceConfirmPage> createState() =>
@@ -31,11 +43,12 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
   int month = 0;
   int day = 0;
   int age = 0;
-  TextEditingController txtDate = TextEditingController();
-  TextEditingController txtStartTime = TextEditingController();
-  TextEditingController txtEndTime = TextEditingController();
+  TextEditingController _dateTimeController = TextEditingController();
+  TextEditingController _startTimeController = TextEditingController();
+  TextEditingController _endTimeController = TextEditingController();
 
   String title = 'ยืนยันข้อมูล';
+  String _bookingSlotType = '';
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +93,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
                     onTap: () {},
                     child: AbsorbPointer(
                       child: TextFormField(
-                        controller: txtStartTime,
+                        controller: _startTimeController,
                         style: const TextStyle(
                           color: Color(0xFF7A4CB1),
                           fontWeight: FontWeight.normal,
@@ -107,7 +120,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
                     onTap: () {},
                     child: AbsorbPointer(
                       child: TextFormField(
-                        controller: txtEndTime,
+                        controller: _endTimeController,
                         style: const TextStyle(
                           color: Color(0xFF7A4CB1),
                           fontWeight: FontWeight.normal,
@@ -135,7 +148,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
               onTap: () {},
               child: AbsorbPointer(
                 child: TextFormField(
-                  controller: txtDate,
+                  controller: _dateTimeController,
                   style: const TextStyle(
                     color: Color(0xFF7A4CB1),
                     fontWeight: FontWeight.normal,
@@ -155,6 +168,21 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
                 ),
               ),
             ),
+            SizedBox(height: 15),
+            _dropdown(
+              data: [
+                {
+                  'key': '',
+                  'value': 'เลือกรูปแบบการจอง',
+                }
+              ],
+              value: '',
+              onChanged: (String value) {
+                setState(() {
+                  _bookingSlotType = value;
+                });
+              },
+            ),
             Expanded(child: SizedBox()),
             widget.edit ? _btnEdit() : _btnConfirm(),
             SizedBox(height: 10),
@@ -166,12 +194,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
 
   Widget _btnConfirm() {
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => BookingServiceSuccessPage(),
-        ),
-      ),
+      onTap: () async => _send(),
       child: Container(
         height: 45,
         decoration: BoxDecoration(
@@ -409,6 +432,95 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
     );
   }
 
+  _dropdown({
+    required List<dynamic> data,
+    required String value,
+    Function(String)? onChanged,
+  }) {
+    return Container(
+      height: 50,
+      decoration: BoxDecoration(
+        color: Theme.of(context).custom.w_b_b,
+        borderRadius: BorderRadius.circular(7),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 4,
+            color: Color(0x40F3D2FF),
+            offset: Offset(0, 4),
+          )
+        ],
+      ),
+      child: DropdownButtonFormField(
+        icon: Image.asset(
+          'assets/images/arrow_down.png',
+          width: 16,
+          height: 8,
+          color: Theme.of(context).custom.b325f8_w_fffd57,
+        ),
+        style: TextStyle(
+          fontSize: 14,
+          color: Theme.of(context).custom.b_W_fffd57,
+        ),
+        decoration: _decorationDropdown(context),
+        isExpanded: true,
+        value: value,
+        dropdownColor: Theme.of(context).custom.w_b_b,
+        // validator: (value) =>
+        //     value == '' || value == null ? 'กรุณาเลือก' : null,
+        onChanged: (dynamic newValue) {
+          onChanged!(newValue);
+        },
+        items: data.map((item) {
+          return DropdownMenuItem(
+            value: item['key'],
+            child: Text(
+              '${item['value']}',
+              style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).custom.b_W_fffd57,
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  static InputDecoration _decorationDropdown(context, {String hintText = ''}) =>
+      InputDecoration(
+        label: Text(hintText),
+        labelStyle: const TextStyle(
+          color: Color(0xFF707070),
+          fontSize: 12,
+        ),
+        hintStyle: const TextStyle(
+          color: Color(0xFF707070),
+          fontSize: 12,
+        ),
+        // hintText: hintText,
+        filled: true,
+        fillColor: Colors.transparent,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: const BorderSide(color: Color(0xFFE6B82C)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: const BorderSide(color: Color(0xFFE6B82C)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(
+            color: Colors.black.withOpacity(0.2),
+          ),
+        ),
+        errorStyle: const TextStyle(
+          fontWeight: FontWeight.w300,
+          fontSize: 10.0,
+        ),
+      );
+
   static InputDecoration _decorationDate(context, {String hintText = ''}) =>
       InputDecoration(
         label: Text(hintText),
@@ -507,13 +619,50 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
   void initState() {
     title = widget.edit ? 'ข้อมูลการจอง' : title;
 
-    txtDate.text = widget.date;
-    txtStartTime.text = widget.startTime;
-    txtEndTime.text = widget.endTime;
+    _dateTimeController.text = widget.date;
+    _startTimeController.text = widget.startTime;
+    _endTimeController.text = widget.endTime;
     var now = DateTime.now();
     year = now.year + 543;
     month = now.month;
     day = now.day;
     super.initState();
+  }
+
+  _send() async {
+    try {
+      var subDate = _dateTimeController.text.replaceAll(' ', '').split('/');
+      String yearStr = (int.parse(subDate[2]) - 543).toString();
+      String tempDate = '$yearStr-${subDate[1]}-${subDate[0]}T00:00:00';
+
+      logWTF(tempDate);
+      var value = await ManageStorage.read('profileData') ?? '';
+      var profileData = json.decode(value);
+      var data = {
+        "bookingDate": tempDate,
+        "bookingSlotType": "2",
+        "centerId": widget.centerId,
+        "endTime": _startTimeController.text,
+        "startTime": _endTimeController.text,
+        "userid": profileData['code'],
+        "phone": profileData['phone'],
+        "desc": "",
+        "remark": ""
+      };
+      logWTF(data);
+
+      final String baseUrl = 'https://dcc-portal.webview.co/dcc-api';
+      dynamic response =
+          await Dio().get('${baseUrl}/api/Booking/Booking/mobile');
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => BookingServiceSuccessPage(),
+        ),
+      );
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+    }
   }
 }

@@ -5,6 +5,7 @@ import '../main.dart';
 class ThemeColorData extends ChangeNotifier {
   Color primary;
   Color b_w_y;
+  Color b_b_b;
   Color w_b_y;
   Color f70f70_y;
   Color w_w_y;
@@ -26,6 +27,7 @@ class ThemeColorData extends ChangeNotifier {
   ThemeColorData(
       {required this.primary,
       required this.b_w_y,
+      required this.b_b_b,
       required this.w_b_y,
       required this.f70f70_y,
       required this.w_w_y,
@@ -62,6 +64,7 @@ class ThemeColorData extends ChangeNotifier {
 final themeLight = ThemeColorData(
     primary: Color(0xFFFFFFFF),
     b_w_y: Color(0xFF000000),
+    b_b_b: Color(0xFF000000),
     w_b_y: Color(0xFFFFFFFF),
     b_w: Colors.black,
     f70f70_y: Color(0xFF707070),
@@ -82,6 +85,7 @@ final themeLight = ThemeColorData(
 final themeDark = ThemeColorData(
     primary: Color(0xFF000000),
     b_w_y: Color(0xFFFFFFFF),
+    b_b_b: Color(0xFF000000),
     w_b_y: Color(0xFF000000),
     b_w: Colors.white,
     f70f70_y: Color(0xFF707070),
@@ -102,6 +106,7 @@ final themeDark = ThemeColorData(
 final themeBlindness = ThemeColorData(
     primary: Color(0xFF000000),
     b_w_y: Colors.yellow,
+    b_b_b: Color(0xFF000000),
     w_b_y: Colors.yellow,
     b_w: Colors.white,
     f70f70_y: Colors.yellow,
