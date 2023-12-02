@@ -499,12 +499,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
       setState(() => _loadingSubmit = false);
 
       if (response.data['success']) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => const Menu(),
-          ),
-          (Route<dynamic> route) => false,
-        );
+        _dialogCancelSuccess();
       } else {
         Fluttertoast.showToast(msg: response.data['errorMessage']);
       }
@@ -521,86 +516,158 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
   _dialogCancelBooking() {
     showDialog(
       context: context,
-      builder: (BuildContext context) => Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        elevation: 0,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: SizedBox(
-            height: 127,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                Text(
-                  'ยกเลิกการจอง',
-                  style: TextStyle(
-                    color: Color(0xFF7A4CB1),
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SizedBox(
+              height: 127,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  Text(
+                    'ยกเลิกการจอง',
+                    style: TextStyle(
+                      color: Color(0xFF7A4CB1),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                Text(
-                  'ท่านยืนยันที่จะทำการยกเลิกการจองใช้บริการในวันที่ 31/03/66 ใช่หรือไม่',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
+                  Text(
+                    'ท่านยืนยันที่จะทำการยกเลิกการจองใช้บริการในวันที่ ${widget.date} ใช่หรือไม่',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: Container(
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF7A4CB1),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            'ย้อนกลับ',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () => Navigator.pop(context),
+                          child: Container(
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Color(0xFF7A4CB1),
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'ย้อนกลับ',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                          _cancelBooking();
-                        },
-                        child: Container(
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF707070),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            'ยืนยัน',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                            _cancelBooking();
+                          },
+                          child: Container(
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Color(0xFF707070),
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'ยืนยัน',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
                       ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  _dialogCancelSuccess() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) => WillPopScope(
+        onWillPop: () => Future.value(false),
+        child: Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SizedBox(
+              height: 127,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'ยกเลิกจองสำเร็จ',
+                    style: TextStyle(
+                      color: Color(0xFF7A4CB1),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
                     ),
-                  ],
-                )
-              ],
+                  ),
+                  Text(
+                    'ทำการยกเลิกการจองใช้บริการเรียบร้อย',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (context) => const Menu(),
+                      ),
+                      (Route<dynamic> route) => false,
+                    ),
+                    child: Container(
+                      height: 40,
+                      width: 95,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF7A4CB1),
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'ตกลง',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -766,8 +833,9 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
 
   _send() async {
     try {
-      if (_bookingTypeRefNo.isEmpty) {
+      if (_bookingTypeRefNo.isEmpty && !widget.edit) {
         Fluttertoast.showToast(msg: 'เลือกรูปแบบการจอง');
+        return;
       }
       setState(() => _loadingSubmit = true);
 

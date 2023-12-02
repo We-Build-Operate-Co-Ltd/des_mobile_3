@@ -1032,7 +1032,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                       ),
                       SizedBox(width: 5),
                       Text(
-                        model?['bookingdate'] ?? '',
+                        _dateFormat(model?['bookingdate'] ?? ''),
                         style: TextStyle(
                           color: MyApp.themeNotifier.value ==
                                   ThemeModeThird.light
@@ -1580,14 +1580,12 @@ class _BookingServicePageState extends State<BookingServicePage>
             '$serverBooking/api/Booking/GetBooking/mobile/${profileData['email']}');
 
         _modelBookingAll = response.data;
-
-        //data without cancel.
-        dataWithoutCancelBooking =
-            _modelBookingAll.where((e) => e['status'] != '0').toList();
-      } else {
-        //ใช้ข้อมูลเดิม
-        dataWithoutCancelBooking = _modelBookingAll;
       }
+
+      //data without cancel.
+      dataWithoutCancelBooking =
+          _modelBookingAll.where((e) => e['status'] != '0').toList();
+
       List<dynamic> result = [];
 
       if (_selectedCategory == '0') {
@@ -1599,6 +1597,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                 ) >=
                 0)
             .toList();
+        result.sort((a, b) => a['bookingdate'].compareTo(b['bookingdate']));
       } else {
         result = await dataWithoutCancelBooking
             .where((dynamic e) =>
@@ -1608,8 +1607,8 @@ class _BookingServicePageState extends State<BookingServicePage>
                 ) <
                 0)
             .toList();
+        result.sort((a, b) => b['bookingdate'].compareTo(a['bookingdate']));
       }
-      logE(result);
 
       setState(() {
         _loadingBookingStatus = LoadingBookingStatus.success;
@@ -1676,6 +1675,13 @@ class _BookingServicePageState extends State<BookingServicePage>
       }
     }
     return '';
+  }
+
+  _dateFormat(dateStr) {
+    // จัด format date
+    DateFormat formatDate = DateFormat('yyyy-MM-dd');
+    DateTime bookingDate = formatDate.parse(dateStr);
+    return formatDate.format(bookingDate);
   }
 
   int _checkCurrentDate({

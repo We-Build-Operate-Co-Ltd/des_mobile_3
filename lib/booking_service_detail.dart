@@ -461,7 +461,10 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                       txtEndTime.text.isEmpty) {
                     Fluttertoast.showToast(msg: 'เลือกวันเวลาที่ต้องการจอง');
                   } else {
-                    logWTF(widget.model['centerId']);
+                    if (_bookingTypeRefNo.isEmpty && !widget.edit) {
+                      Fluttertoast.showToast(msg: 'เลือกรูปแบบการจอง');
+                      return;
+                    }
                     Navigator.push(
                       context,
                       MaterialPageRoute(
