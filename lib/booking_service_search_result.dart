@@ -1,8 +1,8 @@
 import 'package:des/booking_service_detail.dart';
-import 'package:des/models/mock_data.dart';
-import 'package:des/shared/extension.dart';
+import 'package:des/shared/config.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class BookingServiceSearchResultPage extends StatefulWidget {
   const BookingServiceSearchResultPage({
@@ -27,6 +27,7 @@ class _BookingServiceSearchResultPageState
     extends State<BookingServiceSearchResultPage> {
   List<dynamic> _modelCenter = [];
   List<dynamic> _filterModelCenter = [];
+  LoadingBookingStatus _loadingBookingStatus = LoadingBookingStatus.loading;
 
   @override
   Widget build(BuildContext context) {
@@ -60,21 +61,48 @@ class _BookingServiceSearchResultPageState
           ),
         ),
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: Future.value(_filterModelCenter),
-        builder: (_, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.separated(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              itemBuilder: (_, __) => _item(snapshot.data![__]),
-              separatorBuilder: (_, __) => SizedBox(height: 10),
-              itemCount: snapshot.data!.length,
-            );
-          }
-          return Container();
-        },
-      ),
+      body: _list(),
     );
+  }
+
+  _list() {
+    if (_loadingBookingStatus == LoadingBookingStatus.loading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    } else if (_loadingBookingStatus == LoadingBookingStatus.success) {
+      if (_filterModelCenter.length == 0) {
+        return Center(
+          child: Text('ไม่พบข้อมูล'),
+        );
+      }
+      return ListView.separated(
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        itemBuilder: (_, __) => _item(_filterModelCenter[__]),
+        separatorBuilder: (_, __) => SizedBox(height: 10),
+        itemCount: _filterModelCenter.length,
+      );
+    } else {
+      return Center(
+        child: GestureDetector(
+          onTap: () {
+            setState(() {
+              _loadingBookingStatus = LoadingBookingStatus.loading;
+            });
+            _callRead();
+          },
+          child: SizedBox(
+            height: 100,
+            child: Column(
+              children: [
+                Icon(Icons.refresh),
+                Text('โหลดใหม่'),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   Widget _backButton(BuildContext context) {
@@ -93,7 +121,6 @@ class _BookingServiceSearchResultPageState
   Widget _item(model) {
     return GestureDetector(
       onTap: () {
-        logWTF(model);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -171,28 +198,25 @@ class _BookingServiceSearchResultPageState
   @override
   void initState() {
     super.initState();
-    logWTF('a');
     _callRead();
   }
 
   _callRead() async {
-    logWTF('callRead');
-    //test
-    _modelCenter = MockBookingData.centerReal();
+    try {
+      Response response = await Dio().get('$serverBooking/api/ShowCenter');
+      _loadingBookingStatus = LoadingBookingStatus.success;
 
-    setState(() {
-      _filterModelCenter = _modelCenter
-          .where(
-            (item) => item['centerName'].contains(widget.search),
-          )
-          .toList();
-    });
-
-    // final String baseUrl = 'https://dcc-portal.webview.co/dcc-api';
-    // dynamic response = await Dio().get('${baseUrl}/api/ShowCenter');
-    // logWTF(response.data);
-    // setState(() {
-    //   _modelCenter = response.data;
-    // });
+      setState(() {
+        _modelCenter = response.data;
+        _filterModelCenter = _modelCenter
+            .where(
+              (item) => item['centerName'].contains(widget.search),
+            )
+            .toList();
+      });
+    } on DioError catch (e) {
+      setState(() => _loadingBookingStatus = LoadingBookingStatus.fail);
+      Fluttertoast.showToast(msg: e.response!.data['message']);
+    }
   }
 }

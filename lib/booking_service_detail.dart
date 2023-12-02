@@ -58,7 +58,9 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
   dynamic _model;
   String title = 'รายละเอียด';
   String titleSubmit = 'จองใช้บริการ';
-  String _bookingSlotType = '';
+  String _bookingTypeRefNo = '';
+  late List<dynamic> _modelType;
+  bool _loadingDropdownType = false;
 
   @override
   Widget build(BuildContext context) {
@@ -441,21 +443,17 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                 ],
               ),
               SizedBox(height: 15),
-              _dropdown(
-                data: [
-                  {
-                    'key': '',
-                    'value': 'เลือกรูปแบบการจอง',
-                  }
-                ],
-                value: _bookingSlotType,
-                onChanged: (String value) {
-                  setState(() {
-                    // _careerSelected = value;
-                  });
-                },
-              ),
-              SizedBox(height: 35),
+              if (!widget.edit)
+                _dropdown(
+                  data: _modelType,
+                  value: _bookingTypeRefNo,
+                  onChanged: (String value) {
+                    setState(() {
+                      _bookingTypeRefNo = value;
+                    });
+                  },
+                ),
+              Expanded(child: SizedBox()),
               GestureDetector(
                 onTap: () {
                   if (txtDate.text.isEmpty ||
@@ -468,12 +466,13 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                       context,
                       MaterialPageRoute(
                         builder: (_) => BookingServiceConfirmPage(
-                          centerId: widget.model['centerId'].toString(),
+                          centerId: widget.model['centerId'],
                           edit: widget.edit,
                           date: txtDate.text,
                           startTime: txtStartTime.text,
                           endTime: txtEndTime.text,
-                          bookingSlotType: _bookingSlotType,
+                          bookingTypeRefNo: _bookingTypeRefNo,
+                          bookingno: widget.model?['bookingno'] ?? 0,
                         ),
                       ),
                     );
@@ -517,52 +516,68 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
     required String value,
     Function(String)? onChanged,
   }) {
-    return Container(
-      height: 50,
-      decoration: BoxDecoration(
-        color: Theme.of(context).custom.w_b_b,
-        borderRadius: BorderRadius.circular(7),
-        boxShadow: const [
-          BoxShadow(
-            blurRadius: 4,
-            color: Color(0x40F3D2FF),
-            offset: Offset(0, 4),
-          )
-        ],
-      ),
-      child: DropdownButtonFormField(
-        icon: Image.asset(
-          'assets/images/arrow_down.png',
-          width: 16,
-          height: 8,
-          color: Theme.of(context).custom.b325f8_w_fffd57,
+    return Stack(
+      children: [
+        Container(
+          height: 50,
+          decoration: BoxDecoration(
+            color: Theme.of(context).custom.w_b_b,
+            borderRadius: BorderRadius.circular(7),
+            boxShadow: const [
+              BoxShadow(
+                blurRadius: 4,
+                color: Color(0x40F3D2FF),
+                offset: Offset(0, 4),
+              )
+            ],
+          ),
+          child: DropdownButtonFormField(
+            icon: Image.asset(
+              'assets/images/arrow_down.png',
+              width: 16,
+              height: 8,
+              color: Theme.of(context).custom.b325f8_w_fffd57,
+            ),
+            style: TextStyle(
+              fontSize: 14,
+              color: Theme.of(context).custom.b_W_fffd57,
+            ),
+            decoration: _decorationDropdown(context),
+            isExpanded: true,
+            value: value,
+            dropdownColor: Theme.of(context).custom.w_b_b,
+            // validator: (value) =>
+            //     value == '' || value == null ? 'กรุณาเลือก' : null,
+            onChanged: (dynamic newValue) {
+              onChanged!(newValue);
+            },
+            items: data.map((item) {
+              return DropdownMenuItem(
+                value: item['refNo'],
+                child: Text(
+                  '${item['typeName']}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).custom.b_W_fffd57,
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
         ),
-        style: TextStyle(
-          fontSize: 14,
-          color: Theme.of(context).custom.b_W_fffd57,
-        ),
-        decoration: _decorationDropdown(context),
-        isExpanded: true,
-        value: value,
-        dropdownColor: Theme.of(context).custom.w_b_b,
-        // validator: (value) =>
-        //     value == '' || value == null ? 'กรุณาเลือก' : null,
-        onChanged: (dynamic newValue) {
-          onChanged!(newValue);
-        },
-        items: data.map((item) {
-          return DropdownMenuItem(
-            value: item['key'],
-            child: Text(
-              '${item['value']}',
-              style: TextStyle(
-                fontSize: 14,
-                color: Theme.of(context).custom.b_W_fffd57,
+        if (_loadingDropdownType)
+          Positioned.fill(
+            child: Container(
+              padding: const EdgeInsets.only(right: 50),
+              alignment: Alignment.centerRight,
+              child: const SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(),
               ),
             ),
-          );
-        }).toList(),
-      ),
+          ),
+      ],
     );
   }
 
@@ -856,20 +871,44 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
     _selectedDay = now.day;
 
     _model = widget.model;
+    _modelType = [
+      {
+        "recordId": 99999,
+        "typeName": "เลือกรูปแบบการจอง",
+        "remark": null,
+        "refNo": ""
+      }
+    ];
+
     super.initState();
-    // _callRead();
+    _callReadType();
   }
 
-  // _callRead() async {
-  //   logWTF('callRead');
-  //   final String baseUrl = 'https://dcc-portal.webview.co/dcc-api';
-  //   dynamic response = await Dio().get('${baseUrl}/api/ShowCenter');
-  //   List<dynamic> listData = MockBookingData.centerReal();
-  //   dynamic result = listData.firstWhere((e) => e['taId'] == widget.code);
-  //   setState(() {
-  //     _model = result;
-  //   });
-  // }
+  _callReadType() async {
+    try {
+      setState(() => _loadingDropdownType = true);
+      final String baseUrl = 'http://dcc-portal.webview.co/dcc-api';
+      dynamic response =
+          await Dio().get('${baseUrl}/api/masterdata/book/slotType');
+
+      setState(() => _loadingDropdownType = false);
+      setState(() {
+        _modelType = [
+          {
+            "recordId": 99999,
+            "typeName": "เลือกรูปแบบการจอง",
+            "remark": null,
+            "refNo": ""
+          },
+          ...response.data
+        ];
+      });
+      logWTF(_modelType);
+    } catch (e) {
+      logE(e);
+      setState(() => _loadingDropdownType = false);
+    }
+  }
 
   _getTime(TimeOfDay startTime, TimeOfDay endTime) {
     bool result = false;

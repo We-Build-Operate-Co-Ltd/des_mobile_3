@@ -206,6 +206,7 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
             ),
           );
         } else {
+          logE(response.data['message']);
           Fluttertoast.showToast(
               msg: response.data['message'] ?? 'เกิดข้อผิดพลาด');
         }
@@ -213,6 +214,7 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
         Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
     } catch (e) {
+      logE(e);
       setState(() {
         _loadingSubmit = false;
       });

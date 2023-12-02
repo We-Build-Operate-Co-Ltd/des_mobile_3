@@ -10,7 +10,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'shared/config.dart';
 
 class BookingServiceSuccessPage extends StatefulWidget {
-  const BookingServiceSuccessPage({super.key});
+  const BookingServiceSuccessPage({super.key, required this.success});
+
+  final bool success;
 
   @override
   State<BookingServiceSuccessPage> createState() =>
@@ -50,8 +52,8 @@ class _BookingServiceSuccessPageState extends State<BookingServiceSuccessPage> {
                   child: Column(
                     children: [
                       SizedBox(height: 150),
-                      if (random == 0) ..._buildSuccess(),
-                      if (random == 1) ..._buildFail(),
+                      if (widget.success) ..._buildSuccess(),
+                      if (!widget.success) ..._buildFail(),
                       SizedBox(height: 45),
                       Align(
                         alignment: Alignment.centerLeft,

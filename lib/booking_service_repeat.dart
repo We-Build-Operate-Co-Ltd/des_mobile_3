@@ -177,11 +177,11 @@ class _BookingServiceRepeatPageState extends State<BookingServiceRepeatPage> {
             context,
             MaterialPageRoute(
               builder: (_) => BookingServiceConfirmPage(
-                centerId: widget.model['centerId'].toString(),
+                centerId: widget.model['centerId'],
                 date: txtDate.text,
                 startTime: txtStartTime.text,
                 endTime: txtEndTime.text,
-                bookingSlotType: '',
+                bookingTypeRefNo: '',
               ),
             ),
           );

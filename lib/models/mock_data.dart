@@ -328,7 +328,7 @@ class MockBookingData {
     ];
   }
 
-  static bookingList() {
+  static bookingReal() {
     return [
       {
         "bookingno": 20231114002,
