@@ -19,14 +19,14 @@ import 'shared/config.dart';
 import 'main.dart';
 import 'shared/extension.dart';
 
-class UserProfileEditPage extends StatefulWidget {
-  UserProfileEditPage({Key? key}) : super(key: key);
+class ChangePasswordPage extends StatefulWidget {
+  ChangePasswordPage({Key? key}) : super(key: key);
 
   @override
-  State<UserProfileEditPage> createState() => _UserProfileEditPageState();
+  State<ChangePasswordPage> createState() => _ChangePasswordPageState();
 }
 
-class _UserProfileEditPageState extends State<UserProfileEditPage> {
+class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final storage = new FlutterSecureStorage();
 
   String _imageUrl = '';
@@ -40,6 +40,9 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
 
   final txtEmail = TextEditingController();
   final txtPassword = TextEditingController();
+  final txtPasswordOld = TextEditingController();
+  final txtPasswordNew = TextEditingController();
+  final txtPasswordNewConfirm = TextEditingController();
   final txtConPassword = TextEditingController();
   final txtFirstName = TextEditingController();
   final txtLastName = TextEditingController();
@@ -101,181 +104,103 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
           physics: ClampingScrollPhysics(),
           padding: const EdgeInsets.all(15.0),
           children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                _modalImagePicker();
-              },
-              child: Center(
-                child: Container(
-                  height: 120,
-                  width: 120,
-                  padding: EdgeInsets.zero,
-                  child: Stack(
-                    children: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(60),
-                          child: _imageFile != null
-                              ? Image.file(
-                                  File(_imageFile!.path),
-                                  fit: BoxFit.cover,
-                                  height: 120,
-                                  width: 120,
-                                )
-                              : CachedNetworkImage(
-                                  imageUrl: _imageUrl,
-                                  fit: BoxFit.cover,
-                                  height: 120,
-                                  width: 120,
-                                  errorWidget: (_, __, ___) => Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(60),
-                                      border: Border.all(
-                                        width: 1,
-                                        color: Color(0xFFA924F0),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      'เพิ่มรูปภาพ +',
-                                      style: TextStyle(),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                )),
-                      Positioned(
-                          bottom: 5,
-                          right: 5,
-                          child: Container(
-                            height: 25,
-                            padding: EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? Color(0xFF7A4CB1)
-                                    : Colors.black,
-                                border: Border.all(
-                                  width: 1,
-                                  style: BorderStyle.solid,
-                                  color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Color(0xFF7A4CB1)
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.white
-                                          : Color(0xFFFFFD57),
-                                )),
-                            child: Image.asset(
-                              'assets/images/camera.png',
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.white
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
-                              // height: 25,
-                            ),
-                          )),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 32),
-            TextFormField(
-              controller: txtFirstName,
-              decoration: _decorationBase(context, hintText: 'ชื่อ'),
-              style: TextStyle(color: Theme.of(context).custom.b_w_y),
-              cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Color(0xFF7A4CB1)
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
-            ),
-            SizedBox(height: 15),
-            TextFormField(
-              controller: txtLastName,
-              decoration: _decorationBase(context, hintText: 'สกุล'),
-              style: TextStyle(
-                fontFamily: 'Kanit',
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Colors.black
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
-              ),
-              cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Color(0xFF7A4CB1)
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => dialogOpenPickerDate(),
-                    child: AbsorbPointer(
-                      child: TextFormField(
-                        controller: txtDate,
-                        style: TextStyle(
-                          color: MyApp.themeNotifier.value ==
-                                  ThemeModeThird.light
-                              ? Colors.black
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? Colors.white
-                                  : Color(0xFFFFFD57),
-                          fontWeight: FontWeight.normal,
-                          fontFamily: 'Kanit',
-                          fontSize: 15.0,
-                        ),
-                        decoration: _decorationDate(context,
-                            hintText: 'วันเดือนปีเกิด'),
-                        validator: (model) {
-                          if (model!.isEmpty) {
-                            return 'กรุณากรอกวันเดือนปีเกิด.';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 15),
-                Expanded(
-                  child: TextFormField(
-                    controller: txtAge,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(
-                          RegExp(r'[0-9a-zA-Z.]')),
-                    ],
-                    decoration: _decorationBase(context, hintText: 'อายุ'),
-                    style: TextStyle(color: Theme.of(context).custom.b_w_y),
-                    cursorColor:
-                        MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Color(0xFF7A4CB1)
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? Colors.white
-                                : Color(0xFFFFFD57),
-                  ),
-                ),
-              ],
-            ),
-            // SizedBox(height: 10),
+            // GestureDetector(
+            //   onTap: () {
+            //     // _modalImagePicker();
+            //   },
+            //   child: Center(
+            //     child: Container(
+            //       height: 120,
+            //       width: 120,
+            //       padding: EdgeInsets.zero,
+            //       child: Stack(
+            //         children: [
+            //           ClipRRect(
+            //               borderRadius: BorderRadius.circular(60),
+            //               child: _imageFile != null
+            //                   ? Image.file(
+            //                       File(_imageFile!.path),
+            //                       fit: BoxFit.cover,
+            //                       height: 120,
+            //                       width: 120,
+            //                     )
+            //                   : CachedNetworkImage(
+            //                       imageUrl: _imageUrl,
+            //                       fit: BoxFit.cover,
+            //                       height: 120,
+            //                       width: 120,
+            //                       errorWidget: (_, __, ___) => Container(
+            //                         alignment: Alignment.center,
+            //                         decoration: BoxDecoration(
+            //                           color: Colors.white,
+            //                           borderRadius: BorderRadius.circular(60),
+            //                           border: Border.all(
+            //                             width: 1,
+            //                             color: Color(0xFFA924F0),
+            //                           ),
+            //                         ),
+            //                         child: Text(
+            //                           'เพิ่มรูปภาพ +',
+            //                           style: TextStyle(),
+            //                           textAlign: TextAlign.center,
+            //                         ),
+            //                       ),
+            //                     )),
+            //           Positioned(
+            //               bottom: 5,
+            //               right: 5,
+            //               child: Container(
+            //                 height: 25,
+            //                 padding: EdgeInsets.all(6),
+            //                 decoration: BoxDecoration(
+            //                     shape: BoxShape.circle,
+            //                     color: MyApp.themeNotifier.value ==
+            //                             ThemeModeThird.light
+            //                         ? Color(0xFF7A4CB1)
+            //                         : Colors.black,
+            //                     border: Border.all(
+            //                       width: 1,
+            //                       style: BorderStyle.solid,
+            //                       color: MyApp.themeNotifier.value ==
+            //                               ThemeModeThird.light
+            //                           ? Color(0xFF7A4CB1)
+            //                           : MyApp.themeNotifier.value ==
+            //                                   ThemeModeThird.dark
+            //                               ? Colors.white
+            //                               : Color(0xFFFFFD57),
+            //                     )),
+            //                 child: Image.asset(
+            //                   'assets/images/camera.png',
+            //                   color: MyApp.themeNotifier.value ==
+            //                           ThemeModeThird.light
+            //                       ? Colors.white
+            //                       : MyApp.themeNotifier.value ==
+            //                               ThemeModeThird.dark
+            //                           ? Colors.white
+            //                           : Color(0xFFFFFD57),
+            //                   // height: 25,
+            //                 ),
+            //               )),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(height: 32),
             // TextFormField(
-            //   controller: txtPassword,
-            //   obscureText: passwordVisibility,
-            //   decoration: _decorationPasswordMember(context,
-            //       hintText: 'รหัสผ่าน',
-            //       visibility: passwordVisibility, suffixTap: () {
-            //     setState(() {
-            //       passwordVisibility = !passwordVisibility;
-            //     });
-            //   }),
+            //   controller: txtFirstName,
+            //   decoration: _decorationBase(context, hintText: 'ชื่อ'),
+            //   style: TextStyle(color: Theme.of(context).custom.b_w_y),
+            //   cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            //       ? Color(0xFF7A4CB1)
+            //       : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //           ? Colors.white
+            //           : Color(0xFFFFFD57),
+            // ),
+            // SizedBox(height: 15),
+            // TextFormField(
+            //   controller: txtLastName,
+            //   decoration: _decorationBase(context, hintText: 'สกุล'),
             //   style: TextStyle(
             //     fontFamily: 'Kanit',
             //     color: MyApp.themeNotifier.value == ThemeModeThird.light
@@ -289,16 +214,62 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             //       : MyApp.themeNotifier.value == ThemeModeThird.dark
             //           ? Colors.white
             //           : Color(0xFFFFFD57),
-            //   validator: (value) {
-            //     if (value == null || value.isEmpty) {
-            //       return 'กรอกรหัสผ่าน';
-            //     }
-            //     return null;
-            //   },
             // ),
-            SizedBox(height: 30),
+            // SizedBox(height: 15),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child: GestureDetector(
+            //         onTap: () => dialogOpenPickerDate(),
+            //         child: AbsorbPointer(
+            //           child: TextFormField(
+            //             controller: txtDate,
+            //             style: TextStyle(
+            //               color: MyApp.themeNotifier.value ==
+            //                       ThemeModeThird.light
+            //                   ? Colors.black
+            //                   : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //                       ? Colors.white
+            //                       : Color(0xFFFFFD57),
+            //               fontWeight: FontWeight.normal,
+            //               fontFamily: 'Kanit',
+            //               fontSize: 15.0,
+            //             ),
+            //             decoration: _decorationDate(context,
+            //                 hintText: 'วันเดือนปีเกิด'),
+            //             validator: (model) {
+            //               if (model!.isEmpty) {
+            //                 return 'กรุณากรอกวันเดือนปีเกิด.';
+            //               }
+            //               return null;
+            //             },
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     SizedBox(width: 15),
+            //     Expanded(
+            //       child: TextFormField(
+            //         controller: txtAge,
+            //         keyboardType: TextInputType.number,
+            //         inputFormatters: [
+            //           FilteringTextInputFormatter.allow(
+            //               RegExp(r'[0-9a-zA-Z.]')),
+            //         ],
+            //         decoration: _decorationBase(context, hintText: 'อายุ'),
+            //         style: TextStyle(color: Theme.of(context).custom.b_w_y),
+            //         cursorColor:
+            //             MyApp.themeNotifier.value == ThemeModeThird.light
+            //                 ? Color(0xFF7A4CB1)
+            //                 : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //                     ? Colors.white
+            //                     : Color(0xFFFFFD57),
+            //       ),
+            //     ),
+            //   ],
+            // ),
             Text(
-              'การติดต่อ',
+              'ระบุรหัสเก่า',
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
@@ -312,32 +283,17 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             ),
             SizedBox(height: 10),
             TextFormField(
-              controller: txtPhone,
-              keyboardType: TextInputType.phone,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                LengthLimitingTextInputFormatter(10),
-              ],
-              decoration: _decorationBase(context, hintText: 'เบอร์ติดต่อ'),
+              controller: txtPasswordOld,
+              obscureText: passwordVisibility,
+              decoration: _decorationPasswordMember(context,
+                  hintText: 'รหัสผ่าน',
+                  visibility: passwordVisibility, suffixTap: () {
+                setState(() {
+                  passwordVisibility = !passwordVisibility;
+                });
+              }),
               style: TextStyle(
-                color: Theme.of(context).custom.b_w_y,
-              ),
-              cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Color(0xFF7A4CB1)
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.black
-                      : Color(0xFFFFFD57),
-            ),
-            SizedBox(height: 15),
-            TextFormField(
-              controller: txtEmail,
-              readOnly: true,
-              decoration: _decorationBase(
-                context,
-                hintText: 'อีเมล',
-                readOnly: true,
-              ),
-              style: TextStyle(
+                fontFamily: 'Kanit',
                 color: MyApp.themeNotifier.value == ThemeModeThird.light
                     ? Colors.black
                     : MyApp.themeNotifier.value == ThemeModeThird.dark
@@ -349,10 +305,16 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                   : MyApp.themeNotifier.value == ThemeModeThird.dark
                       ? Colors.white
                       : Color(0xFFFFFD57),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'กรอกรหัสผ่าน';
+                }
+                return null;
+              },
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 10),
             Text(
-              'เพศ',
+              'กำหนดรหัสผ่านใหม่',
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
@@ -364,19 +326,163 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                         : Color(0xFFFFFD57),
               ),
             ),
-            SizedBox(height: 4),
-            SizedBox(
-              height: 30,
-              width: double.infinity,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.zero,
-                separatorBuilder: (_, __) => SizedBox(width: 10),
-                itemBuilder: (_, index) => _radioGender(_genderList[index]),
-                itemCount: _genderList.length,
+            SizedBox(height: 10),
+            TextFormField(
+              controller: txtPasswordNew,
+              obscureText: passwordVisibility,
+              decoration: _decorationPasswordMember(context,
+                  hintText: 'รหัสผ่าน',
+                  visibility: passwordVisibility, suffixTap: () {
+                setState(() {
+                  passwordVisibility = !passwordVisibility;
+                });
+              }),
+              style: TextStyle(
+                fontFamily: 'Kanit',
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+              cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFF7A4CB1)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'กรอกรหัสผ่าน';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 10),
+            Text(
+              'ยืนยันรหัสใหม่อีกครั้ง',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Kanit',
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
               ),
             ),
-            SizedBox(height: 40),
+            SizedBox(height: 10),
+            TextFormField(
+              controller: txtPasswordNewConfirm,
+              obscureText: passwordVisibility,
+              decoration: _decorationPasswordMember(context,
+                  hintText: 'รหัสผ่าน',
+                  visibility: passwordVisibility, suffixTap: () {
+                setState(() {
+                  passwordVisibility = !passwordVisibility;
+                });
+              }),
+              style: TextStyle(
+                fontFamily: 'Kanit',
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+              cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFF7A4CB1)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'กรอกรหัสผ่าน';
+                }
+                return null;
+              },
+            ),
+            // SizedBox(height: 30),
+            // Text(
+            //   'การติดต่อ',
+            //   style: TextStyle(
+            //     fontSize: 15,
+            //     fontWeight: FontWeight.w500,
+            //     fontFamily: 'Kanit',
+            //     color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //         ? Colors.black
+            //         : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //             ? Colors.white
+            //             : Color(0xFFFFFD57),
+            //   ),
+            // ),
+            // SizedBox(height: 10),
+            // TextFormField(
+            //   controller: txtPhone,
+            //   keyboardType: TextInputType.phone,
+            //   inputFormatters: [
+            //     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            //     LengthLimitingTextInputFormatter(10),
+            //   ],
+            //   decoration: _decorationBase(context, hintText: 'เบอร์ติดต่อ'),
+            //   style: TextStyle(
+            //     color: Theme.of(context).custom.b_w_y,
+            //   ),
+            //   cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            //       ? Color(0xFF7A4CB1)
+            //       : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //           ? Colors.black
+            //           : Color(0xFFFFFD57),
+            // ),
+            // SizedBox(height: 15),
+            // TextFormField(
+            //   controller: txtEmail,
+            //   readOnly: true,
+            //   decoration: _decorationBase(
+            //     context,
+            //     hintText: 'อีเมล',
+            //     readOnly: true,
+            //   ),
+            //   style: TextStyle(
+            //     color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //         ? Colors.black
+            //         : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //             ? Colors.white
+            //             : Color(0xFFFFFD57),
+            //   ),
+            //   cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            //       ? Color(0xFF7A4CB1)
+            //       : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //           ? Colors.white
+            //           : Color(0xFFFFFD57),
+            // ),
+            // SizedBox(height: 30),
+            // Text(
+            //   'เพศ',
+            //   style: TextStyle(
+            //     fontSize: 15,
+            //     fontWeight: FontWeight.w500,
+            //     fontFamily: 'Kanit',
+            //     color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //         ? Colors.black
+            //         : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //             ? Colors.white
+            //             : Color(0xFFFFFD57),
+            //   ),
+            // ),
+            // SizedBox(height: 4),
+            // SizedBox(
+            //   height: 30,
+            //   width: double.infinity,
+            //   child: ListView.separated(
+            //     scrollDirection: Axis.horizontal,
+            //     padding: EdgeInsets.zero,
+            //     separatorBuilder: (_, __) => SizedBox(width: 10),
+            //     itemBuilder: (_, index) => _radioGender(_genderList[index]),
+            //     itemCount: _genderList.length,
+            //   ),
+            // ),
+            // SizedBox(height: 40),
             GestureDetector(
               onTap: () => submitUpdateUser(),
               child: Container(
@@ -859,52 +965,18 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
       var value = await ManageStorage.read('profileData') ?? '';
       var user = json.decode(value);
 
-      setState(() => _loadingSubmit = true);
-      if (_imageFile?.path != null) {
-        await _uploadImage(_imageFile!);
-      }
+      print('txtPasswordNew.text' + txtPasswordNew.text);
+      // setState(() => _loadingSubmit = true);
+      // if (_imageFile?.path != null) {
+      //   await _uploadImage(_imageFile!);
+      // }
 
-      user['password'] = txtPassword.text;
-      user['imageUrl'] = _imageUrl;
-      user['firstName'] = txtFirstName.text;
-      user['lastName'] = txtLastName.text;
-      user['email'] = txtEmail.text;
-      user['age'] = txtAge.text;
-      user['phone'] = txtPhone.text;
-      user['prefixName'] = _selectedPrefixName;
-      user['birthDay'] = DateFormat("yyyyMMdd").format(
-        DateTime(
-          _selectedYear,
-          _selectedMonth,
-          _selectedDay,
-        ),
-      );
-
-      final response =
-          await Dio().post('$server/de-api/m/Register/update', data: user);
-      var result = response.data;
-      setState(() => _loadingSubmit = false);
-      if (result['status'] == 'S') {
-        await ManageStorage.createProfile(
-          key: result['objectData']['category'],
-          value: result['objectData'],
-        );
-        setState(() {
-          readStorage();
-        });
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Menu(),
-          ),
-        );
-
+      if (txtPassword.text != txtPasswordOld.text) {
         return showDialog(
           context: context,
           builder: (BuildContext context) => new CupertinoAlertDialog(
             title: new Text(
-              'อัพเดตข้อมูลเรียบร้อยแล้ว',
+              'รหัสเก่าไม่ถูกต้อง',
               style: TextStyle(
                 fontSize: 16,
                 fontFamily: 'Kanit',
@@ -932,12 +1004,12 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             ],
           ),
         );
-      } else {
+      } else if (txtPasswordNew.text != txtPasswordNewConfirm.text) {
         return showDialog(
           context: context,
           builder: (BuildContext context) => new CupertinoAlertDialog(
             title: new Text(
-              'อัพเดตข้อมูลไม่สำเร็จ',
+              'รหัสใหม่ไม่ตรงกัน',
               style: TextStyle(
                 fontSize: 16,
                 fontFamily: 'Kanit',
@@ -965,6 +1037,142 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             ],
           ),
         );
+      } else if (txtPasswordNew.text == "") {
+        return showDialog(
+          context: context,
+          builder: (BuildContext context) => new CupertinoAlertDialog(
+            title: new Text(
+              'รหัสไม่ถูกต้อง',
+              style: TextStyle(
+                fontSize: 16,
+                fontFamily: 'Kanit',
+                color: Colors.black,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            content: Text(" "),
+            actions: [
+              CupertinoDialogAction(
+                isDefaultAction: true,
+                child: new Text(
+                  "ตกลง",
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontFamily: 'Kanit',
+                    color: Color(0xFF005C9E),
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      } else if (txtPasswordNew.text == txtPasswordNewConfirm.text) {
+        user['password'] = txtPasswordNew.text;
+        user['imageUrl'] = _imageUrl;
+        user['firstName'] = txtFirstName.text;
+        user['lastName'] = txtLastName.text;
+        user['email'] = txtEmail.text;
+        user['age'] = txtAge.text;
+        user['phone'] = txtPhone.text;
+        user['prefixName'] = _selectedPrefixName;
+        user['birthDay'] = DateFormat("yyyyMMdd").format(
+          DateTime(
+            _selectedYear,
+            _selectedMonth,
+            _selectedDay,
+          ),
+        );
+
+        final response =
+            await Dio().post('$server/de-api/m/Register/update', data: user);
+        var result = response.data;
+        setState(() => _loadingSubmit = false);
+        if (result['status'] == 'S') {
+          await ManageStorage.createProfile(
+            key: result['objectData']['category'],
+            value: result['objectData'],
+          );
+          setState(() {
+            readStorage();
+          });
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Menu(),
+            ),
+          );
+
+          return showDialog(
+            context: context,
+            builder: (BuildContext context) => new CupertinoAlertDialog(
+              title: new Text(
+                'อัพเดตข้อมูลเรียบร้อยแล้ว',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Kanit',
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+              content: Text(" "),
+              actions: [
+                CupertinoDialogAction(
+                  isDefaultAction: true,
+                  child: new Text(
+                    "ตกลง",
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontFamily: 'Kanit',
+                      color: Color(0xFF005C9E),
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        } else {
+          return showDialog(
+            context: context,
+            builder: (BuildContext context) => new CupertinoAlertDialog(
+              title: new Text(
+                'อัพเดตข้อมูลไม่สำเร็จ',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Kanit',
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+              content: Text(" "),
+              actions: [
+                CupertinoDialogAction(
+                  isDefaultAction: true,
+                  child: new Text(
+                    "ตกลง",
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontFamily: 'Kanit',
+                      color: Color(0xFF005C9E),
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        }
       }
     } catch (e) {
       logE(e);

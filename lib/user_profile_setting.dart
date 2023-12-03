@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/about_us.dart';
+import 'package:des/change_password.dart';
 import 'package:des/login_first.dart';
 import 'package:des/shared/facebook_firebase.dart';
 import 'package:des/shared/google_firebase.dart';
@@ -203,6 +204,18 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
             ),
           ),
           child: _buildRow('ยืนยันตัวตน'),
+        ),
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (builder) => ChangePasswordPage(),
+            ),
+          ),
+          child: _buildRow('เปลี่ยนรหัสผ่าน'),
         ),
       ],
     );

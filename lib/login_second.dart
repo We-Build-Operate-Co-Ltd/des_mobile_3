@@ -817,7 +817,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
   }
 
   void _callLoginGuest() async {
-    _loading = true;
+    // _loading = true;
     var response = await Dio().post(
       '$server/de-api/m/register/login',
       data: {
@@ -871,6 +871,10 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                 FocusScope.of(context).unfocus();
                 new TextEditingController().clear();
                 Navigator.of(context).pop();
+
+                setState(() {
+                  _loading = false;
+                });
               },
             ),
           ],
