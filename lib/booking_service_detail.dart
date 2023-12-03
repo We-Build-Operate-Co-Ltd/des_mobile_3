@@ -305,17 +305,18 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
           ),
           child: GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => BookingServiceRepeatPage(
-                    model: widget.model,
-                    date: txtDate.text,
-                    startTime: txtStartTime.text,
-                    endTime: txtEndTime.text,
-                  ),
-                ),
-              );
+              logWTF(widget.model);
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (_) => BookingServiceRepeatPage(
+              //       model: widget.model,
+              //       date: txtDate.text,
+              //       startTime: txtStartTime.text,
+              //       endTime: txtEndTime.text,
+              //     ),
+              //   ),
+              // );
             },
             child: Container(
               height: 45,
@@ -465,6 +466,23 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                       Fluttertoast.showToast(msg: 'เลือกรูปแบบการจอง');
                       return;
                     }
+                    logWTF('centerId ${widget.model['centerId']}');
+                    logWTF('widget.edit ${widget.edit}');
+                    logWTF('txtDate.text ${txtDate.text}');
+                    logWTF('txtStartTime.text ${txtStartTime.text}');
+                    logWTF('txtEndTime.text ${txtEndTime.text}');
+                    logWTF('_bookingTypeRefNo $_bookingTypeRefNo');
+                    logWTF('bookingno ${widget.model?['bookingno']}');
+
+                    int bookingNo = 0;
+                    if (widget.edit) {
+                      bookingNo = widget.model?['bookingno'] ?? 0;
+                    }
+
+                    if (widget.repeat) {
+                      bookingNo = 0;
+                    }
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -475,7 +493,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                           startTime: txtStartTime.text,
                           endTime: txtEndTime.text,
                           bookingTypeRefNo: _bookingTypeRefNo,
-                          bookingno: widget.model?['bookingno'] ?? 0,
+                          bookingno: bookingNo,
                         ),
                       ),
                     );

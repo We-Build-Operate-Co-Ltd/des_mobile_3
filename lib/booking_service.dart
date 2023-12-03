@@ -812,6 +812,10 @@ class _BookingServicePageState extends State<BookingServicePage>
           repeat = true;
         }
 
+        DateTime date = DateTime.parse(model['bookingdate']);
+        DateTime dateTH = DateTime(date.year + 543, date.month, date.day);
+        var dateFormat = DateFormat("dd / MM / yyyy").format(dateTH);
+
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -820,8 +824,7 @@ class _BookingServicePageState extends State<BookingServicePage>
               edit: edit,
               repeat: repeat,
               repeatCurrentDay: false,
-              date: DateFormat("dd / MM / yyyy")
-                  .format(DateTime.parse(model['bookingdate'])),
+              date: dateFormat,
               startTime: model['startTime'],
               endTime: model['endTime'],
             ),
@@ -906,21 +909,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                       model['status'] != "4")
                     GestureDetector(
                       onTap: () async {
-                        try {
-                          logWTF(
-                              {"bookingNo": model['bookingNo'], "status": "4"});
-                          //check in
-                          await Dio().put(
-                              '$serverBooking/api/Booking/UserCheckin',
-                              data: {
-                                "bookingNo": model['bookingno'],
-                                "status": "4"
-                              });
-
-                          _callRead(refresh: true);
-                        } catch (e) {
-                          logE(e);
-                        }
+                        _dialogConfirmCheckIn(model);
                       },
                       child: Container(
                         height: 30,
@@ -1535,6 +1524,135 @@ class _BookingServicePageState extends State<BookingServicePage>
       currentTime: initCurrentTime,
       showSecondsColumn: false,
       locale: LocaleType.th,
+    );
+  }
+
+  _dialogConfirmCheckIn(dynamic param) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        bool loadingCheckIn = false;
+        return StatefulBuilder(builder: (BuildContext context,
+            StateSetter mSetState /*You can rename this!*/) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            elevation: 0,
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: SizedBox(
+                    height: 127,
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      children: [
+                        Text(
+                          'เช็คอิน',
+                          style: TextStyle(
+                            color: Color(0xFF7A4CB1),
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          'ท่านยืนยันที่จะทำการเช็คอินใช่หรือไม่',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Expanded(child: SizedBox()),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () async {
+                                  try {
+                                    mSetState(() => loadingCheckIn = true);
+                                    // check in
+                                    await Dio().put(
+                                        '$serverBooking/api/Booking/UserCheckin',
+                                        data: {
+                                          "bookingNo": param['bookingno'],
+                                          "status": "4"
+                                        });
+
+                                    mSetState(() => loadingCheckIn = false);
+
+                                    Navigator.pop(context);
+                                    Fluttertoast.showToast(
+                                        msg: 'เช็คอินสำเร็จ');
+
+                                    _callRead(refresh: true);
+                                  } catch (e) {
+                                    logE(e);
+                                  }
+                                },
+                                child: Container(
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF7A4CB1),
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'ยืนยัน',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF707070),
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'ย้อนกลับ',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                if (loadingCheckIn)
+                  Positioned.fill(
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration:
+                          BoxDecoration(color: Colors.white.withOpacity(0.3)),
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+              ],
+            ),
+          );
+        });
+      },
     );
   }
 
