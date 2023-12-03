@@ -466,14 +466,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                       Fluttertoast.showToast(msg: 'เลือกรูปแบบการจอง');
                       return;
                     }
-                    logWTF('centerId ${widget.model['centerId']}');
-                    logWTF('widget.edit ${widget.edit}');
-                    logWTF('txtDate.text ${txtDate.text}');
-                    logWTF('txtStartTime.text ${txtStartTime.text}');
-                    logWTF('txtEndTime.text ${txtEndTime.text}');
-                    logWTF('_bookingTypeRefNo $_bookingTypeRefNo');
-                    logWTF('bookingno ${widget.model?['bookingno']}');
-
+                    
                     int bookingNo = 0;
                     if (widget.edit) {
                       bookingNo = widget.model?['bookingno'] ?? 0;
