@@ -1843,17 +1843,17 @@ class _BookingServicePageState extends State<BookingServicePage>
         DateTime currentDate = DateTime(now.year, now.month, now.day);
 
         final difDate = currentDate.compareTo(date);
-
         if (DateTime(year, month, day, hour, minute).compareTo(now) == -1) {
           return '';
         }
 
         if (difDate == 0) {
           if (hour > DateTime.now().hour) {
-            if (hour == DateTime.now().hour + 1 &&
-                (minute + 60) > DateTime.now().minute)
+            if (minute < DateTime.now().minute) {
               return ((minute + 60) - DateTime.now().minute).toString() +
                   ' นาที';
+            }
+
             return (hour - DateTime.now().hour).toString() + ' ชั่วโมง';
           } else if (hour == DateTime.now().hour) {
             return (minute - DateTime.now().minute).toString() + ' นาที';
