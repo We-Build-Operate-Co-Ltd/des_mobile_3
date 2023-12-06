@@ -977,7 +977,8 @@ class _BookingServicePageState extends State<BookingServicePage>
                             onlyDay: true,
                           ) ==
                           0 &&
-                      model['status'] != "4")
+                      model['status'] != "4" &&
+                      _selectedCategory == '0')
                     GestureDetector(
                       onTap: () async {
                         _dialogConfirmCheckIn(model);
@@ -1007,33 +1008,6 @@ class _BookingServicePageState extends State<BookingServicePage>
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
                           ),
-                        ),
-                      ),
-                    ),
-                  if (model['status'] == "4")
-                    Container(
-                      height: 30,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 15,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Color(0xFF7A4CB1)
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? Colors.white
-                                : Color(0xFFFFFD57),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Text(
-                        'เช็คอินแล้ว',
-                        style: TextStyle(
-                          color:
-                              MyApp.themeNotifier.value == ThemeModeThird.light
-                                  ? Colors.white
-                                  : Colors.black,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
@@ -1129,22 +1103,22 @@ class _BookingServicePageState extends State<BookingServicePage>
                         ),
                       ),
                       SizedBox(width: 20),
-                      // Text(
-                      //   _setDifferentTime(
-                      //     dateStr: model?['bookingdate'] ?? '',
-                      //     startTime: model?['startTime'] ?? '',
-                      //   ),
-                      //   style: TextStyle(
-                      //     color: MyApp.themeNotifier.value ==
-                      //             ThemeModeThird.light
-                      //         ? Color(0xFF53327A)
-                      //         : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      //             ? Colors.white
-                      //             : Color(0xFFFFFD57),
-                      //     fontSize: 9,
-                      //     fontWeight: FontWeight.w400,
-                      //   ),
-                      // ),
+                      Text(
+                        _setDifferentTime(
+                          dateStr: model?['bookingdate'] ?? '',
+                          startTime: model?['startTime'] ?? '',
+                        ),
+                        style: TextStyle(
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFF53327A)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                          fontSize: 9,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: 10),
@@ -1851,32 +1825,43 @@ class _BookingServicePageState extends State<BookingServicePage>
     required String startTime,
   }) {
     if (dateStr.isNotEmpty) {
-      // จัด format date
-      DateFormat formatDate = DateFormat('yyyy-MM-dd');
-      DateTime bookingDate = formatDate.parse(dateStr);
+      try {
+        // จัด format date
+        DateFormat formatDate = DateFormat('yyyy-MM-dd');
+        DateTime bookingDate = formatDate.parse(dateStr);
 
-      List<String> timeSpit = startTime.split(':');
+        List<String> timeSpit = startTime.split(':');
 
-      int year = bookingDate.year;
-      int month = bookingDate.month;
-      int day = bookingDate.day;
-      int hour = int.parse(timeSpit[0]);
-      int minute = int.parse(timeSpit[1]);
-      final now = DateTime.now();
-      DateTime date = DateTime(year, month, day, hour, minute);
-      DateTime currentDate =
-          DateTime(now.year, now.month, now.day, now.hour, now.minute);
+        int year = bookingDate.year;
+        int month = bookingDate.month;
+        int day = bookingDate.day;
+        int hour = int.parse(timeSpit[0]);
+        int minute = int.parse(timeSpit[1]);
 
-      final difDate = currentDate.compareTo(date);
-      if (difDate == 0) {
-        if (hour > DateTime.now().hour) {
-          if (hour == DateTime.now().hour + 1 &&
-              (minute + 60) > DateTime.now().minute)
-            return ((minute + 60) - DateTime.now().minute).toString() + ' นาที';
-          return (hour - DateTime.now().hour).toString() + ' ชั่วโมง';
-        } else if (hour == DateTime.now().hour) {
-          return (minute - DateTime.now().minute).toString() + ' นาที';
+        final now = DateTime.now();
+        DateTime date = DateTime(year, month, day);
+        DateTime currentDate = DateTime(now.year, now.month, now.day);
+
+        final difDate = currentDate.compareTo(date);
+
+        if (DateTime(year, month, day, hour, minute).compareTo(now) == -1) {
+          return '';
         }
+
+        if (difDate == 0) {
+          if (hour > DateTime.now().hour) {
+            if (hour == DateTime.now().hour + 1 &&
+                (minute + 60) > DateTime.now().minute)
+              return ((minute + 60) - DateTime.now().minute).toString() +
+                  ' นาที';
+            return (hour - DateTime.now().hour).toString() + ' ชั่วโมง';
+          } else if (hour == DateTime.now().hour) {
+            return (minute - DateTime.now().minute).toString() + ' นาที';
+          }
+        }
+      } catch (e) {
+        logE(e);
+        return '';
       }
     }
     return '';
@@ -1927,16 +1912,21 @@ class _BookingServicePageState extends State<BookingServicePage>
   }
 
   bool _checkedCurrent(model) {
-    String dateStr = model['dateTime'] ?? '';
+    String dateStr = model['bookingdate'] ?? '';
     var result = -1;
     if (dateStr.isNotEmpty) {
-      int year = int.parse(dateStr.substring(0, 4));
-      int month = int.parse(dateStr.substring(4, 6));
-      int day = int.parse(dateStr.substring(6, 8));
-      int hour = int.parse(dateStr.substring(8, 10));
-      final date = DateTime(year, month, day, hour);
+      // จัด format date
+      DateFormat formatDate = DateFormat('yyyy-MM-dd');
+      DateTime bookingDate = formatDate.parse(dateStr);
+
+      int year = bookingDate.year;
+      int month = bookingDate.month;
+      int day = bookingDate.day;
+
       final now = DateTime.now();
-      final currentDate = DateTime(now.year, now.month, now.day);
+      DateTime date = DateTime(year, month, day);
+      DateTime currentDate = DateTime(now.year, now.month, now.day);
+
       final difDate = date.compareTo(currentDate);
       if (difDate == 0) {
         result = 0;
@@ -1945,10 +1935,10 @@ class _BookingServicePageState extends State<BookingServicePage>
       }
     }
     // check current day morethen;
-    bool currentDay = result == 1 ? true : false;
+    bool currentDay = result == 0 ? true : false;
 
     // วันปัจจุบัน และ เช็คอินแล้ว และ อยู่ในประวัติการจอง
-    if (currentDay && model['checkIn'] && _selectedCategory == '1') {
+    if (model['status'] == "4" && _selectedCategory == '1') {
       return true;
     }
     return false;
