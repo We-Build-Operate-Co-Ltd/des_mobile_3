@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Des ดิจิทัลชุมชน</string>
+	<string>DCC</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -44,7 +44,7 @@
 	<key>FacebookClientToken</key>
 	<string>ee1ee427dde4e9522960c88cb9f33f86</string>
 	<key>FacebookDisplayName</key>
-	<string>DES ดิจิทัลชุมชน</string>
+	<string>DCC</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -66,19 +66,19 @@
 		<true/>
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>DES ดิจิทัลชุมชน Music Usage</string>
+	<string>DCC Music Usage</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>DES ดิจิทัลชุมชน Bluetool Usage</string>
+	<string>DCC Bluetool Usage</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>DES ดิจิทัลชุมชน BluetoothPeripheral</string>
+	<string>DCC BluetoothPeripheral</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>DES ดิจิทัลชุมชน Calendar Usage</string>
+	<string>DCC Calendar Usage</string>
 	<key>NSCameraUsageDescription</key>
 	<string>เพื่อแสดงรูปภาพโปรไฟล์ของคุณ</string>
 	<key>NSContactsUsageDescription</key>
-	<string>DES ดิจิทัลชุมชน ต้องการเข้าถึงข้อมูลการติดต่อของคุณ</string>
+	<string>DCC ต้องการเข้าถึงข้อมูลการติดต่อของคุณ</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>DES ดิจิทัลชุมชน FaceID Usage</string>
+	<string>DCC FaceID Usage</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>เพื่อแสดงตำแหน่งปัจจุบันของคุณ และแนะนำสถานที่น่าสนใจให้กับคุณ</string>
 	<key>NSLocationUsageDescription</key>
@@ -86,21 +86,21 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>เพื่อแสดงตำแหน่งปัจจุบันของคุณ และแนะนำสถานที่น่าสนใจให้กับคุณ</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>DES ดิจิทัลชุมชน Microphone Usage</string>
+	<string>DCC Microphone Usage</string>
 	<key>NSMotionUsageDescription</key>
-	<string>DES ดิจิทัลชุมชน Motion Usage</string>
+	<string>DCC Motion Usage</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>เพื่อแสดงรูปภาพโปรไฟล์ของคุณ</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>เพื่อแสดงรูปภาพโปรไฟล์ของคุณ</string>
 	<key>NSRemindersUsageDescription</key>
-	<string>DES ดิจิทัลชุมชน Reminder Usage</string>
+	<string>DCC Reminder Usage</string>
 	<key>NSSiriUsageDescription</key>
-	<string>DES ดิจิทัลชุมชน Siri Usage</string>
+	<string>DCC Siri Usage</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>DES ดิจิทัลชุมชน Speech Recognition Usage</string>
+	<string>DCC Speech Recognition Usage</string>
 	<key>NSVideoSubscriberAccountUsageDescription</key>
-	<string>DES ดิจิทัลชุมชน Video Subscribe Usage</string>
+	<string>DCC Video Subscribe Usage</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
@@ -131,6 +131,6 @@
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
 	<key>kTCCServiceMediaLibrary</key>
-	<string>DES ดิจิทัลชุมชน MediaLibrary Usage</string>
+	<string>DCC MediaLibrary Usage</string>
 </dict>
 </plist>

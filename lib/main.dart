@@ -115,7 +115,7 @@ class _MyAppState extends State<MyApp> {
       valueListenable: MyApp.themeNotifier,
       builder: (_, ThemeModeThird currentMode, __) {
         return MaterialApp(
-          title: 'DES ดิจิทัลชุมชน',
+          title: 'DCC',
           debugShowCheckedModeBanner: false,
           initialRoute: '/',
           navigatorKey: navigatorKey,

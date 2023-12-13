@@ -49,13 +49,15 @@ class _SplashPageState extends State<SplashPage> {
         ),
       );
     } else {
-      _callTimer(3);
-      return Image.asset(
-        'assets/splash.png',
-        fit: BoxFit.fill,
-        height: double.infinity,
-        width: double.infinity,
-      );
+      _callTimer(0);
+      return Container();
+
+      // return Image.asset(
+      //   'assets/splash.png',
+      //   fit: BoxFit.fill,
+      //   height: double.infinity,
+      //   width: double.infinity,
+      // );
     }
   }
 

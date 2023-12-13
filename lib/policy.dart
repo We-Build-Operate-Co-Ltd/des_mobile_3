@@ -200,7 +200,7 @@ class _PolicyPage extends State<PolicyPage> {
             ),
             color: Colors.transparent,
             child: Text(
-              ' DES ดิจิทัลชุมชน',
+              ' DCC',
               style: TextStyle(
                   fontSize: 26,
                   fontFamily: 'Kanit',

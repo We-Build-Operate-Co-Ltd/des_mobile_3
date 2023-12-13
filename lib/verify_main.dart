@@ -130,7 +130,7 @@ class VerifyMainPage extends StatelessWidget {
                 const SizedBox(width: 15),
                 Expanded(
                   child: Text(
-                    'สมัครใช้แอปฯ “DES ดิจิทัลชุมชน”',
+                    'สมัครใช้แอปฯ “DCC”',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
