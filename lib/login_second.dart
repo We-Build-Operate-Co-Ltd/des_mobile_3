@@ -263,40 +263,40 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                           ],
                           SizedBox(height: 10),
                           _buildButton(),
-                          SizedBox(height: 30),
-                          _buildOR(),
-                          SizedBox(height: 25),
-                          InkWell(
-                            onTap: () {
-                              if (!openLine) {
-                                openLine = true;
-                                _callLoginLine();
-                              }
-                            },
-                            child: _buildButtonLogin(
-                              'assets/images/line_circle.png',
-                              'เข้าใช้ผ่าน Line',
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Color(0xFF06C755)
-                                  : Colors.black,
-                              colorTitle: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.white
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
-                              colorBorder: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Color(0xFF06C755)
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
-                            ),
-                          ),
-                          SizedBox(height: 10),
+                          // SizedBox(height: 30),
+                          // _buildOR(),
+                          // SizedBox(height: 25),
+                          // InkWell(
+                          //   onTap: () {
+                          //     if (!openLine) {
+                          //       openLine = true;
+                          //       _callLoginLine();
+                          //     }
+                          //   },
+                          //   child: _buildButtonLogin(
+                          //     'assets/images/line_circle.png',
+                          //     'เข้าใช้ผ่าน Line',
+                          //     color: MyApp.themeNotifier.value ==
+                          //             ThemeModeThird.light
+                          //         ? Color(0xFF06C755)
+                          //         : Colors.black,
+                          //     colorTitle: MyApp.themeNotifier.value ==
+                          //             ThemeModeThird.light
+                          //         ? Colors.white
+                          //         : MyApp.themeNotifier.value ==
+                          //                 ThemeModeThird.dark
+                          //             ? Colors.white
+                          //             : Color(0xFFFFFD57),
+                          //     colorBorder: MyApp.themeNotifier.value ==
+                          //             ThemeModeThird.light
+                          //         ? Color(0xFF06C755)
+                          //         : MyApp.themeNotifier.value ==
+                          //                 ThemeModeThird.dark
+                          //             ? Colors.white
+                          //             : Color(0xFFFFFD57),
+                          //   ),
+                          // ),
+                          // SizedBox(height: 10),
                           // InkWell(
                           //   onTap: () => _callLoginFacebook(),
                           //   child: _buildButtonLogin(
@@ -322,71 +322,71 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                           //             : Color(0xFFFFFD57),
                           //   ),
                           // ),
-                          SizedBox(height: 10),
-                          InkWell(
-                            onTap: () => _callLoginGoogle(),
-                            child: _buildButtonLogin(
-                              'assets/images/logo_google_login_page.png',
-                              'เข้าใช้ผ่าน Google',
-                              colorTitle: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.black
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
-                              colorBorder: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Color(0xFFE4E4E4)
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'ท่านเป็นผู้ใช้ใหม่',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w400,
-                                  color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Colors.black
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.white
-                                          : Color(0xFFFFFD57),
-                                ),
-                              ),
-                              SizedBox(width: 8),
-                              GestureDetector(
-                                onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (builder) => RegisterPage(),
-                                  ),
-                                ),
-                                child: Text(
-                                  'ต้องการสมัครสมาชิก',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
-                                    color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color(0xFFB325F8)
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.white
-                                            : Color(0xFFFFFD57),
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          // SizedBox(height: 10),
+                          // InkWell(
+                          //   onTap: () => _callLoginGoogle(),
+                          //   child: _buildButtonLogin(
+                          //     'assets/images/logo_google_login_page.png',
+                          //     'เข้าใช้ผ่าน Google',
+                          //     colorTitle: MyApp.themeNotifier.value ==
+                          //             ThemeModeThird.light
+                          //         ? Colors.black
+                          //         : MyApp.themeNotifier.value ==
+                          //                 ThemeModeThird.dark
+                          //             ? Colors.white
+                          //             : Color(0xFFFFFD57),
+                          //     colorBorder: MyApp.themeNotifier.value ==
+                          //             ThemeModeThird.light
+                          //         ? Color(0xFFE4E4E4)
+                          //         : MyApp.themeNotifier.value ==
+                          //                 ThemeModeThird.dark
+                          //             ? Colors.white
+                          //             : Color(0xFFFFFD57),
+                          //   ),
+                          // ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     Text(
+                          //       'ท่านเป็นผู้ใช้ใหม่',
+                          //       style: TextStyle(
+                          //         fontSize: 15,
+                          //         fontWeight: FontWeight.w400,
+                          //         color: MyApp.themeNotifier.value ==
+                          //                 ThemeModeThird.light
+                          //             ? Colors.black
+                          //             : MyApp.themeNotifier.value ==
+                          //                     ThemeModeThird.dark
+                          //                 ? Colors.white
+                          //                 : Color(0xFFFFFD57),
+                          //       ),
+                          //     ),
+                          //     SizedBox(width: 8),
+                          //     GestureDetector(
+                          //       onTap: () => Navigator.push(
+                          //         context,
+                          //         MaterialPageRoute(
+                          //           builder: (builder) => RegisterPage(),
+                          //         ),
+                          //       ),
+                          //       child: Text(
+                          //         'ต้องการสมัครสมาชิก',
+                          //         style: TextStyle(
+                          //           fontSize: 15,
+                          //           fontWeight: FontWeight.w400,
+                          //           color: MyApp.themeNotifier.value ==
+                          //                   ThemeModeThird.light
+                          //               ? Color(0xFFB325F8)
+                          //               : MyApp.themeNotifier.value ==
+                          //                       ThemeModeThird.dark
+                          //                   ? Colors.white
+                          //                   : Color(0xFFFFFD57),
+                          //           decoration: TextDecoration.underline,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),

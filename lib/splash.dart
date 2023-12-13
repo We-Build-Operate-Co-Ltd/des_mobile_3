@@ -25,6 +25,15 @@ class _SplashPageState extends State<SplashPage> {
   String os = Platform.operatingSystem;
 
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _profileCode = await ManageStorage.read('profileCode') ?? '';
+      await _callRead();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return _buildSplash();
   }
@@ -49,8 +58,10 @@ class _SplashPageState extends State<SplashPage> {
         ),
       );
     } else {
-      _callTimer(0);
-      return Container();
+      _callTimer(1);
+      return Container(
+        color: Colors.white,
+      );
 
       // return Image.asset(
       //   'assets/splash.png',
@@ -59,15 +70,6 @@ class _SplashPageState extends State<SplashPage> {
       //   width: double.infinity,
       // );
     }
-  }
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _profileCode = await ManageStorage.read('profileCode') ?? '';
-      await _callRead();
-    });
-    super.initState();
   }
 
   _callRead() async {

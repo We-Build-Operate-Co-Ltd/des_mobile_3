@@ -51,6 +51,26 @@ class _LoginFirstPageState extends State<LoginFirstPage>
   ];
 
   @override
+  void initState() {
+    txtEmail = TextEditingController(text: '');
+    txtPassword = TextEditingController(text: '');
+    ;
+    // _controller = AnimationController(
+    //   vsync: this,
+    //   duration: duration,
+    // );
+    _callReadConfig();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    txtEmail.dispose();
+    txtPassword.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
@@ -267,9 +287,10 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                             ),
                           ),
                           SizedBox(height: 30),
-                          if (configLoginSocial == 1) _buildOR(),
-                          if (configLoginSocial == 1) SizedBox(height: 25),
-                          if (configLoginSocial == 1)
+                          if (configLoginSocial.toString() == "1") _buildOR(),
+                          if (configLoginSocial.toString() == "1")
+                            SizedBox(height: 25),
+                          if (configLoginSocial.toString() == "1")
                             InkWell(
                               onTap: () {
                                 if (!openLine) {
@@ -326,8 +347,9 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                           //             : Color(0xFFFFFD57),
                           //   ),
                           // ),
-                          if (configLoginSocial == 1) SizedBox(height: 10),
-                          if (configLoginSocial == 1)
+                          if (configLoginSocial.toString() == "1")
+                            SizedBox(height: 10),
+                          if (configLoginSocial.toString() == "1")
                             InkWell(
                               onTap: () => _callLoginGoogle(),
                               child: _buildButtonLogin(
@@ -1067,25 +1089,6 @@ class _LoginFirstPageState extends State<LoginFirstPage>
 
   // login guest -----
 
-  @override
-  void initState() {
-    txtEmail = TextEditingController(text: '');
-    txtPassword = TextEditingController(text: '');
-    ;
-    _controller = AnimationController(
-      vsync: this,
-      duration: duration,
-    );
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    txtEmail.dispose();
-    txtPassword.dispose();
-    super.dispose();
-  }
-
   void _callUser() async {
     FocusScope.of(context).unfocus();
     setState(() {
@@ -1390,6 +1393,7 @@ class _LoginFirstPageState extends State<LoginFirstPage>
   dynamic configLoginSocial = 0;
   void _callReadConfig() async {
     var response = await Dio().get('$server/py-api/dcc/config/login_social');
+    print(response);
     setState(() {
       configLoginSocial = response;
     });
