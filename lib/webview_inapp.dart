@@ -4,44 +4,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-Future main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Permission.camera.request();
-  await Permission.microphone.request();
-
-  runApp(ChatBotNoiPage());
-}
-
-class ChatBotNoiPage extends StatefulWidget {
-  const ChatBotNoiPage({super.key, this.idCard});
-  final String? idCard;
+class WebViewInAppPage extends StatefulWidget {
+  const WebViewInAppPage({super.key, this.url, this.title});
+  final String? url;
+  final String? title;
   @override
-  _ChatBotNoiPageState createState() => new _ChatBotNoiPageState();
+  _WebViewInAppPageState createState() => new _WebViewInAppPageState();
 }
 
-class _ChatBotNoiPageState extends State<ChatBotNoiPage> {
-  String faceScanUrl = "";
+class _WebViewInAppPageState extends State<WebViewInAppPage> {
+  String? faceScanUrl = "";
   @override
   Widget build(BuildContext context) {
-    faceScanUrl = "https://decms.dcc.onde.go.th/botnoi/";
     // return MaterialApp(home: InAppWebViewPage(scanFaceWeb: faceScanUrl));
-    return InAppWebViewPage(scanFaceWeb: faceScanUrl);
+    return InAppWebViewPage(
+      scanFaceWeb: widget.url,
+      title: widget.title,
+    );
   }
 }
 
 class InAppWebViewPage extends StatefulWidget {
-  InAppWebViewPage({this.scanFaceWeb});
+  InAppWebViewPage({this.scanFaceWeb, this.title});
   String? scanFaceWeb;
+  String? title;
 
   @override
   _InAppWebViewPageState createState() =>
-      new _InAppWebViewPageState(scanFaceWeb: scanFaceWeb);
+      new _InAppWebViewPageState(scanFaceWeb: scanFaceWeb, title: title);
 }
 
 class _InAppWebViewPageState extends State<InAppWebViewPage> {
-  _InAppWebViewPageState({this.scanFaceWeb});
+  _InAppWebViewPageState({this.scanFaceWeb, this.title});
   String? scanFaceWeb;
+  String? title;
   late InAppWebViewController _webViewController;
   @override
   Widget build(BuildContext context) {
@@ -70,7 +66,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                 ),
                 Expanded(
                   child: Text(
-                    'สนทนา',
+                    title!,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,

@@ -9,7 +9,10 @@ import 'course_detail.dart';
 import 'main.dart';
 
 class MyClassAllPage extends StatefulWidget {
-  MyClassAllPage({Key? key}) : super(key: key);
+  MyClassAllPage({Key? key, this.title}) : super(key: key);
+
+  final title;
+
   @override
   _MyClassAllPageState createState() => _MyClassAllPageState();
 }
@@ -28,22 +31,56 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
 
   int _categorySelected = 0;
   int _typeSelected = 0;
-  List<dynamic> _model = [];
+  dynamic _model;
+  dynamic _tempModel;
 
   // String _api_key = '19f072f9e4b14a19f72229719d2016d1';
   String _api_key = '29f5637fe877ab6d8797a8bcde3d67a7';
   String endpoint_base_url = 'https://e2e.myappclass.bangalore2.com/api/api/';
 
   @override
+  void initState() {
+    _get_category();
+    // _get_course();
+    // _get_course();
+
+    _callRead();
+    super.initState();
+  }
+
+  @override
   void dispose() {
     super.dispose();
   }
 
-  @override
-  void initState() {
-    _get_category();
+  _filtter(param) async {
+    logWTF('=========fsdfsdfsdfdsfsd==========' + _tempModel.toString());
+    // var res = await _model;
+    var temp =
+        // _tempModel.where((item) => item['name'].contains(param)).toList();
 
-    super.initState();
+        _tempModel
+            .where((dynamic e) => e['name']
+                .toString()
+                .toUpperCase()
+                .contains(param.toString().toUpperCase()))
+            .toList();
+
+    logWTF('=========fsdfsdfsdfdsfsd==========' + temp.toString());
+
+    setState(() {
+      _model = Future.value(temp);
+    });
+  }
+
+  _callRead() async {
+    var response =
+        await Dio().get('${endpoint_base_url}get_course/${_api_key}');
+
+    setState(() {
+      _model = Future.value(response.data['data']);
+      _tempModel = response.data['data'];
+    });
   }
 
   _get_category() async {
@@ -57,13 +94,23 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   _get_course() async {
     try {
       if (_categorySelected == 0) {
-        return Dio().get('${endpoint_base_url}get_course/${_api_key}');
+        // return Dio().get('${endpoint_base_url}get_course/${_api_key}');
+
+        var response =
+            await Dio().get('${endpoint_base_url}get_course/${_api_key}');
+
+        // print('----!!!!-----------------------------' +
+        //     response.data['data'].toString());
+
+        setState(() {
+          _model = Future.value(response.data['data']);
+        });
       } else {
         FormData formData = new FormData.fromMap({
           "apikey": _api_key,
-          " cat_id": _categoryList[_categorySelected]['id']
+          "cat_id": _categoryList[_categorySelected]['id']
         });
-        return dio.post(
+        var response = await dio.post(
           '${endpoint_base_url}popular_course',
           data: formData,
           options: Options(
@@ -75,6 +122,16 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             },
           ),
         );
+
+        if (response.data['status'] == false) {
+          setState(() {
+            _model = Future.value([]);
+          });
+        } else {
+          setState(() {
+            _model = Future.value(response.data['data']);
+          });
+        }
       }
     } catch (e) {
       return {
@@ -133,6 +190,42 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: Column(
             children: [
+              SizedBox(height: 20),
+              SizedBox(
+                height: 45,
+                width: 360,
+                child: TextField(
+                  onChanged: (text) {
+                    print("First text field: $text");
+                    setState(() {
+                      _filtter(text);
+                    });
+                  },
+                  style: TextStyle(
+                    color: const Color(0xff020202),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: 0.5,
+                  ),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: const Color(0xfff1f1f1),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: "ค้นหาคอร์สเรียน",
+                    hintStyle: TextStyle(
+                        color: const Color(0xffb2b2b2),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        letterSpacing: 0.5,
+                        decorationThickness: 6),
+                    prefixIcon: const Icon(Icons.search),
+                    prefixIconColor: Colors.black,
+                  ),
+                ),
+              ),
               SizedBox(height: 20),
               Container(
                 height: 35,
@@ -204,17 +297,9 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
               ),
               SizedBox(height: 15),
               FutureBuilder<dynamic>(
-                future: _get_course(),
+                future: _model,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    if (!snapshot.data.data['status']) {
-                      return Text(
-                        'ไม่พบข้อมูล',
-                        style: TextStyle(
-                          color: Theme.of(context).custom.b_W_fffd57,
-                        ),
-                      );
-                    }
                     return Expanded(
                       child: _list(snapshot.data),
                     );
@@ -223,6 +308,27 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                   }
                 },
               )
+              // FutureBuilder<dynamic>(
+              //   future: _model,
+              //   builder: (context, snapshot) {
+              //     if (snapshot.hasData) {
+              //       // if (!snapshot.data['status']) {
+              //       //   return Text(
+              //       //     'ไม่พบข้อมูล',
+              //       //     style: TextStyle(
+              //       //       color: Theme.of(context).custom.b_W_fffd57,
+              //       //     ),
+              //       //   );
+              //       // }
+
+              //       return Expanded(
+              //         child: _list(snapshot.data),
+              //       );
+              //     } else {
+              //       return _listLoading();
+              //     }
+              //   },
+              // )
             ],
           ),
         ),
@@ -231,7 +337,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   }
 
   _list(dynamic param) {
-    var data = param.data['data'];
+    var data = param;
     return ListView.separated(
       itemBuilder: (_, __) => _buildContant(data[__]),
       separatorBuilder: (_, __) => const SizedBox(height: 10),
@@ -375,7 +481,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
               ),
               SizedBox(width: 34),
               Text(
-                'คลาสเรียน',
+                widget.title,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,

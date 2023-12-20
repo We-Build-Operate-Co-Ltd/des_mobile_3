@@ -863,7 +863,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
       };
 
       Response response = await Dio()
-          .post('$serverBooking/api/Booking/Booking/mobile', data: data);
+          .post('$serverPlatform/api/Booking/Booking/mobile', data: data);
 
       setState(() => _loadingSubmit = false);
       if (response.data['status'] == 200) {
@@ -890,7 +890,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
     try {
       setState(() => _loadingDropdownType = true);
       dynamic response =
-          await Dio().get('$serverBooking/api/masterdata/book/slotType');
+          await Dio().get('$serverPlatform/api/masterdata/book/slotType');
 
       setState(() => _loadingDropdownType = false);
       setState(() {

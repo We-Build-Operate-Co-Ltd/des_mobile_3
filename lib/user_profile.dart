@@ -6,6 +6,7 @@ import 'package:des/favorite_class_all.dart';
 import 'package:des/history_of_service_reservations.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/my_class_all.dart';
+import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/user_profile_edit.dart';
@@ -45,6 +46,20 @@ class _UserProfilePageState extends State<UserProfilePage> {
   String? _lastName = '';
   String _status = '';
 
+  dynamic _model;
+
+  @override
+  void initState() {
+    _getUser();
+    _get_course();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,14 +80,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ),
           children: [
             _buildUserDetail(),
-            if (_status != 'A') SizedBox(height: 20),
-            if (_status != 'A') _buildVerifyYourIdentity(),
+            // if (_status != 'A') SizedBox(height: 20),
+            // if (_status != 'A') _buildVerifyYourIdentity(),
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'คลาสเรียนของฉัน',
+                  'คอร์สเรียนของคุณ',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
@@ -87,7 +102,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => MyClassAllPage(),
+                      builder: (_) => MyClassAllPage(
+                        title: 'คอร์สเรียนของคุณ',
+                      ),
                     ),
                   ),
                   child: Text(
@@ -108,7 +125,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             SizedBox(height: 15),
             FutureBuilder<List<dynamic>>(
-              future: Future.value([]),
+              future: Future.value(_model),
               builder: (_, snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data?.length == 0) {
@@ -140,7 +157,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'ใบรับรอง',
+                  'วุฒิบัตร',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
@@ -189,7 +206,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               height: 100,
               alignment: Alignment.center,
               child: Text(
-                'ยังไม่มีใบรับรอง',
+                'ยังไม่มีวุฒิบัตร',
                 style: TextStyle(
                   color: Theme.of(context).custom.b_W_fffd57,
                 ),
@@ -273,58 +290,59 @@ class _UserProfilePageState extends State<UserProfilePage> {
             //   ),
             // ),
             SizedBox(height: 33),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'ประวัติการจองใช้บริการ',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Color(0xFF7A4CB1)
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
-                  ),
-                ),
-                InkWell(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => HistoryOfServiceReservationsPage(),
-                    ),
-                  ),
-                  child: Text(
-                    'ดูทั้งหมด',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Color(0xFF7A4CB1)
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            _buildHistoryOfServiceReservations(
-                'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน',
-                'อำเภอบางใหญ่ นนทบุรี',
-                3,
-                _dateStringToDateSlashBuddhistShort('20220911'),
-                '11.00'),
-            SizedBox(height: 10),
-            _buildHistoryOfServiceReservations(
-                'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน',
-                'อำเภอบางใหญ่ นนทบุรี',
-                3,
-                _dateStringToDateSlashBuddhistShort('20220911'),
-                '11.00'),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Text(
+            //       'ประวัติการจองใช้บริการ',
+            //       style: TextStyle(
+            //         fontSize: 15,
+            //         fontWeight: FontWeight.w400,
+            //         color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //             ? Color(0xFF7A4CB1)
+            //             : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //                 ? Colors.white
+            //                 : Color(0xFFFFFD57),
+            //       ),
+            //     ),
+            //     InkWell(
+            //       onTap: () => Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (_) => HistoryOfServiceReservationsPage(),
+            //         ),
+            //       ),
+            //       child: Text(
+            //         'ดูทั้งหมด',
+            //         style: TextStyle(
+            //           fontSize: 13,
+            //           fontWeight: FontWeight.w400,
+            //           color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //               ? Color(0xFF7A4CB1)
+            //               : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //                   ? Colors.white
+            //                   : Color(0xFFFFFD57),
+            //           decoration: TextDecoration.underline,
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+
+            // SizedBox(height: 10),
+            // _buildHistoryOfServiceReservations(
+            //     'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน',
+            //     'อำเภอบางใหญ่ นนทบุรี',
+            //     3,
+            //     _dateStringToDateSlashBuddhistShort('20220911'),
+            //     '11.00'),
+            // SizedBox(height: 10),
+            // _buildHistoryOfServiceReservations(
+            //     'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน',
+            //     'อำเภอบางใหญ่ นนทบุรี',
+            //     3,
+            //     _dateStringToDateSlashBuddhistShort('20220911'),
+            //     '11.00'),
           ],
         ),
       ),
@@ -680,18 +698,26 @@ class _UserProfilePageState extends State<UserProfilePage> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-                imageUrl: model['imageUrl'],
-                fit: BoxFit.fill,
-                height: 95,
-                width: screenSize,
-              ),
+              child: model['docs'] != ''
+                  ? CachedNetworkImage(
+                      imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
+                          model['docs'],
+                      fit: BoxFit.fill,
+                      height: 95,
+                      width: screenSize,
+                    )
+                  : Image.asset(
+                      'assets/icon.png',
+                      fit: BoxFit.fill,
+                      height: 95,
+                      width: screenSize,
+                    ),
             ),
             SizedBox(height: 10),
             SizedBox(
               width: 170,
               child: Text(
-                model['title'],
+                model['name'],
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
@@ -875,60 +901,83 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   ),
                 ),
                 SizedBox(height: 5),
-                _status != 'A'
-                    ? Container(
-                        alignment: Alignment.center,
-                        width: 73,
-                        height: 19,
-                        decoration: BoxDecoration(
-                          color:
-                              MyApp.themeNotifier.value == ThemeModeThird.light
-                                  ? Color(0xFFB325F8).withOpacity(0.10)
-                                  : Color(0xFF292929),
-                          borderRadius: BorderRadius.circular(12.5),
-                        ),
-                        child: Text(
-                          'รอยืนยันตัวตน',
-                          style: TextStyle(
-                            fontSize: 9,
-                            fontWeight: FontWeight.w400,
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                          ),
-                        ),
-                      )
-                    : Container(
-                        alignment: Alignment.center,
-                        width: 73,
-                        height: 19,
-                        decoration: BoxDecoration(
-                          color:
-                              MyApp.themeNotifier.value == ThemeModeThird.light
-                                  ? Color.fromARGB(255, 37, 248, 79)
-                                      .withOpacity(0.10)
-                                  : Color(0xFF292929),
-                          borderRadius: BorderRadius.circular(12.5),
-                        ),
-                        child: Text(
-                          'ยืนยันตัวตนแล้ว',
-                          style: TextStyle(
-                            fontSize: 9,
-                            fontWeight: FontWeight.w400,
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color.fromARGB(255, 12, 168, 33)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                          ),
-                        ),
-                      ),
+                Container(
+                  alignment: Alignment.center,
+                  width: 73,
+                  height: 19,
+                  decoration: BoxDecoration(
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color.fromARGB(255, 37, 248, 79).withOpacity(0.10)
+                        : Color(0xFF292929),
+                    borderRadius: BorderRadius.circular(12.5),
+                  ),
+                  child: Text(
+                    'ยืนยันตัวตนแล้ว',
+                    style: TextStyle(
+                      fontSize: 9,
+                      fontWeight: FontWeight.w400,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color.fromARGB(255, 12, 168, 33)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                    ),
+                  ),
+                ),
+                // _status != 'A'
+                //     ? Container(
+                //         alignment: Alignment.center,
+                //         width: 73,
+                //         height: 19,
+                //         decoration: BoxDecoration(
+                //           color:
+                //               MyApp.themeNotifier.value == ThemeModeThird.light
+                //                   ? Color(0xFFB325F8).withOpacity(0.10)
+                //                   : Color(0xFF292929),
+                //           borderRadius: BorderRadius.circular(12.5),
+                //         ),
+                //         child: Text(
+                //           'รอยืนยันตัวตน',
+                //           style: TextStyle(
+                //             fontSize: 9,
+                //             fontWeight: FontWeight.w400,
+                //             color: MyApp.themeNotifier.value ==
+                //                     ThemeModeThird.light
+                //                 ? Color(0xFF7A4CB1)
+                //                 : MyApp.themeNotifier.value ==
+                //                         ThemeModeThird.dark
+                //                     ? Colors.white
+                //                     : Color(0xFFFFFD57),
+                //           ),
+                //         ),
+                //       )
+                //     : Container(
+                //         alignment: Alignment.center,
+                //         width: 73,
+                //         height: 19,
+                //         decoration: BoxDecoration(
+                //           color:
+                //               MyApp.themeNotifier.value == ThemeModeThird.light
+                //                   ? Color.fromARGB(255, 37, 248, 79)
+                //                       .withOpacity(0.10)
+                //                   : Color(0xFF292929),
+                //           borderRadius: BorderRadius.circular(12.5),
+                //         ),
+                //         child: Text(
+                //           'ยืนยันตัวตนแล้ว',
+                //           style: TextStyle(
+                //             fontSize: 9,
+                //             fontWeight: FontWeight.w400,
+                //             color: MyApp.themeNotifier.value ==
+                //                     ThemeModeThird.light
+                //                 ? Color.fromARGB(255, 12, 168, 33)
+                //                 : MyApp.themeNotifier.value ==
+                //                         ThemeModeThird.dark
+                //                     ? Colors.white
+                //                     : Color(0xFFFFFD57),
+                //           ),
+                //         ),
+                //       ),
               ],
             ),
           ),
@@ -1078,17 +1127,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
     );
   }
 
-  @override
-  void initState() {
-    _getUser();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   Future<List<dynamic>> _readEventcalendar() async {
     Dio dio = Dio();
     Response<dynamic> response;
@@ -1137,5 +1175,25 @@ class _UserProfilePageState extends State<UserProfilePage> {
     var yearBuddhistString = yearBuddhist.toString();
     var yearBuddhistStringShort = yearBuddhistString.substring(2, 4);
     return '$day/$month/$yearBuddhistStringShort';
+  }
+
+  _get_course() async {
+    Dio dio = Dio();
+    var response;
+    var map = new Map<String, dynamic>();
+    FormData formData = new FormData.fromMap({"apikey": apiKeyLMS});
+    // map['apikey'] = _api_key;
+    try {
+      //https://lms.dcc.onde.go.th/api/api/recomend/003138ecf4ad3c45f1b903d72a860181
+      //response = await dio.post('${service}api/popular_course', data: formData);
+      response = await dio.post('$serverLMS/recommend_course', data: formData);
+      logWTF(response.data);
+      if (response.data['status']) {
+        setState(() {
+          _model = response.data['data'];
+        });
+      }
+    } catch (e) {}
+    return [];
   }
 }

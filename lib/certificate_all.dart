@@ -216,7 +216,7 @@ class _CertificateAllPageState extends State<CertificateAllPage> {
               ),
               SizedBox(width: 34),
               Text(
-                'ใบรับร้อง',
+                'วุฒิบัตร',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,

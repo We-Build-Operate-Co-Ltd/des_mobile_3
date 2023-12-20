@@ -1,10 +1,8 @@
-import 'dart:math';
-
-import 'package:des/main.dart';
 import 'package:des/shared/theme_data.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+
+import 'find_job_detail.dart';
 
 class FindJobPage extends StatefulWidget {
   const FindJobPage({super.key});
@@ -14,6 +12,22 @@ class FindJobPage extends StatefulWidget {
 }
 
 class _FindJobPageState extends State<FindJobPage> {
+  dynamic _model = [];
+  dynamic _categoryModel = [];
+
+  @override
+  void initState() {
+    _callCategoryRead();
+    _callRead();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +56,7 @@ class _FindJobPageState extends State<FindJobPage> {
               ),
               Expanded(
                 child: Text(
-                  'หางาน',
+                  'จับคู่งาน',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
@@ -69,41 +83,44 @@ class _FindJobPageState extends State<FindJobPage> {
 
   Widget _buildListCategory() {
     return SizedBox(
-      height: 130,
+      height: 50,
       child: ListView.separated(
         padding: EdgeInsets.symmetric(horizontal: 15),
         scrollDirection: Axis.horizontal,
-        itemBuilder: (_, __) => _buildItemCategory(MockFindJob.category[__]),
+        // itemBuilder: (_, __) => _buildItemCategory(MockFindJob.category[__]),
+        itemBuilder: (_, __) => _buildItemCategory(_categoryModel[__]),
         separatorBuilder: (_, __) => const SizedBox(width: 5),
-        itemCount: MockFindJob.category.length,
+        itemCount: _categoryModel.length,
       ),
     );
   }
 
   Widget _buildItemCategory(dynamic data) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        _callReadByCategory(data['jobCateId']);
+      },
       borderRadius: BorderRadius.all(Radius.circular(8)),
       child: Container(
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 236, 233, 233),
-                shape: BoxShape.circle,
-              ),
-              child: Image.asset(
-                data['imageUrl'],
-                height: 30,
-                width: 30,
-              ),
-            ),
-            const SizedBox(height: 2),
+            // Container(
+            //   padding: EdgeInsets.all(15),
+            //   decoration: BoxDecoration(
+            //     color: Color.fromARGB(255, 236, 233, 233),
+            //     shape: BoxShape.circle,
+            //   ),
+            //   child: Image.asset(
+            //     data['imageUrl'],
+            //     height: 30,
+            //     width: 30,
+            //   ),
+            // ),
+            // const SizedBox(height: 2),
             SizedBox(
               width: 130,
               child: Text(
-                data['title'],
+                data['nameTh'],
                 style: TextStyle(
                   fontSize: 13,
                   color: Theme.of(context).custom.b_w_y,
@@ -111,13 +128,13 @@ class _FindJobPageState extends State<FindJobPage> {
                 textAlign: TextAlign.center,
               ),
             ),
-            Text(
-              data['count'],
-              style: TextStyle(
-                fontSize: 14,
-                color: Theme.of(context).custom.f70f70_w_fffd57,
-              ),
-            ),
+            // Text(
+            //   data['count'],
+            //   style: TextStyle(
+            //     fontSize: 14,
+            //     color: Theme.of(context).custom.f70f70_w_fffd57,
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -129,135 +146,184 @@ class _FindJobPageState extends State<FindJobPage> {
       shrinkWrap: true,
       physics: ClampingScrollPhysics(),
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      itemBuilder: (_, __) => _buildItemJob(MockFindJob.data[__]),
+      // itemBuilder: (_, __) => _buildItemJob(MockFindJob.data[__]),
+      itemBuilder: (_, __) => _buildItemJob(_model[__]),
       separatorBuilder: (_, __) => const SizedBox(height: 10),
-      itemCount: MockFindJob.data.length,
+      itemCount: _model.length,
     );
   }
 
   _buildItemJob(dynamic data) {
-    return Container(
-      height: 180,
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Theme.of(context).custom.w_b_b,
-        borderRadius: BorderRadius.circular(3),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            blurRadius: 10,
-            offset: Offset(0, 3),
-          )
-        ],
-      ),
-      child: Stack(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Image.asset(
-                  data['imageUrl'],
-                  height: 80,
-                  width: 80,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      data['title'],
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Theme.of(context).custom.b325f8_w_fffd57,
-                      ),
-                    ),
-                    Text(
-                      data['organize'],
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).custom.b325f8_w_fffd57,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.location_on_outlined,
-                          size: 13,
-                          color: Theme.of(context).custom.b_w_y,
-                        ),
-                        Text(
-                          data['location'],
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Theme.of(context).custom.b_w_y,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.access_time,
-                          size: 13,
-                          color: Theme.of(context).custom.b_w_y,
-                        ),
-                        Text(
-                          data['type'],
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Theme.of(context).custom.b_w_y,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      data['description'],
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Theme.of(context).custom.f70f70_w_fffd57,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Expanded(child: const SizedBox()),
-                    Text(
-                      'ค่าจ้าง ${data['salary']}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).custom.b_w_y,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Theme.of(context).custom.b325f8_w_g,
-              ),
-              child: Text(
-                'สมัครงานนี้',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Theme.of(context).custom.w_b_y,
-                ),
-                textAlign: TextAlign.center,
-              ),
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FindJobDetailPage(
+              model: data,
             ),
           ),
-        ],
+        );
+      },
+      child: Container(
+        height: 180,
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Theme.of(context).custom.w_b_b,
+          borderRadius: BorderRadius.circular(3),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              blurRadius: 10,
+              offset: Offset(0, 3),
+            )
+          ],
+        ),
+        child: Stack(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Image.asset(
+                    'assets/icon.png',
+                    height: 80,
+                    width: 80,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data['positionName'],
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Theme.of(context).custom.b325f8_w_fffd57,
+                        ),
+                      ),
+                      Text(
+                        data['companyname'],
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).custom.b325f8_w_fffd57,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on_outlined,
+                            size: 13,
+                            color: Theme.of(context).custom.b_w_y,
+                          ),
+                          Text(
+                            data['changwatT'],
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Theme.of(context).custom.b_w_y,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.access_time,
+                            size: 13,
+                            color: Theme.of(context).custom.b_w_y,
+                          ),
+                          Text(
+                            data['nameTh'],
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Theme.of(context).custom.b_w_y,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        data['jobHightlight'],
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Theme.of(context).custom.f70f70_w_fffd57,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Expanded(child: const SizedBox()),
+                      Text(
+                        'ค่าจ้าง ${data['salaryRange']}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).custom.b_w_y,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Theme.of(context).custom.b325f8_w_g,
+                ),
+                child: Text(
+                  'สมัครงานนี้',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Theme.of(context).custom.w_b_y,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  _callRead() async {
+    Dio dio = new Dio();
+    var response = await dio
+        .get('http://dcc-portal.webview.co/dcc-api/api/Job/GetRecommendJob');
+
+    setState(() {
+      _model = response.data['data'];
+    });
+
+    // print(_model.toString());
+  }
+
+  _callReadByCategory(param) async {
+    Dio dio = new Dio();
+    var response = await dio.get(
+        'http://dcc-portal.webview.co/dcc-api/api/Job/GetSearchJob?CatId=$param');
+
+    setState(() {
+      _model = response.data['data'];
+    });
+
+    // print(_model.toString());
+  }
+
+  _callCategoryRead() async {
+    Dio dio = new Dio();
+    var response = await dio
+        .get('http://dcc-portal.webview.co/dcc-api/api/masterdata/jobcategory');
+
+    setState(() {
+      _categoryModel = response.data;
+    });
+
+    // print(_model.toString());
   }
 }
 

@@ -28,15 +28,14 @@ class LoginFirstPage extends StatefulWidget {
   State<LoginFirstPage> createState() => _LoginFirstPageState();
 }
 
-class _LoginFirstPageState extends State<LoginFirstPage>
-    with SingleTickerProviderStateMixin {
+class _LoginFirstPageState extends State<LoginFirstPage> {
   String? _username = '';
   String? _imageUrl = '';
   String? _category;
   late TextEditingController txtEmail;
   late TextEditingController txtPassword;
   final Duration duration = const Duration(milliseconds: 200);
-  AnimationController? _controller;
+  // AnimationController? _controller;
   bool passwordVisibility = true;
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;

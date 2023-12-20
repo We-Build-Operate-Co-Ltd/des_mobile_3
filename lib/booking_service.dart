@@ -1619,7 +1619,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                                     mSetState(() => loadingCheckIn = true);
                                     // check in
                                     await Dio().put(
-                                        '$serverBooking/api/Booking/UserCheckin',
+                                        '$serverPlatform/api/Booking/UserCheckin',
                                         data: {
                                           "bookingNo": param['bookingno'],
                                           "status": "4"
@@ -1733,7 +1733,7 @@ class _BookingServicePageState extends State<BookingServicePage>
 
   _callAutoComplete() async {
     try {
-      Response response = await Dio().get('$serverBooking/api/ShowCenter');
+      Response response = await Dio().get('$serverPlatform/api/ShowCenter');
       List<dynamic> data = response.data;
 
       setState(() {
@@ -1756,7 +1756,7 @@ class _BookingServicePageState extends State<BookingServicePage>
         var value = await ManageStorage.read('profileData') ?? '';
         var profileData = json.decode(value);
         Response response = await Dio().get(
-            '$serverBooking/api/Booking/GetBooking/mobile/${profileData['email']}');
+            '$serverPlatform/api/Booking/GetBooking/mobile/${profileData['email']}');
 
         _modelBookingAll = response.data;
       }

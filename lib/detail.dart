@@ -439,7 +439,8 @@ class _DetailPageState extends State<DetailPage> {
         ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: CachedNetworkImage(
-            imageUrl: '${model?['img_url'] ?? ''}',
+            imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
+                '${model?['docs'] ?? ''}',
             // height: 30,
             width: 30,
             fit: BoxFit.cover,
@@ -460,47 +461,47 @@ class _DetailPageState extends State<DetailPage> {
           ),
         ),
         Container(height: 10),
-        Row(
-          children: [
-            CachedNetworkImage(
-              imageUrl: '${model?['imageUrlCreateBy'] ?? ''}',
-              height: 30,
-              width: 30,
-              fit: BoxFit.cover,
-              errorWidget: (context, url, error) => Image.asset(
-                'assets/images/logo.png',
-                height: 30,
-                width: 30,
-                fit: BoxFit.cover,
-              ),
-            )
+        // Row(
+        //   children: [
+        //     CachedNetworkImage(
+        //       imageUrl: '${model?['imageUrlCreateBy'] ?? ''}',
+        //       height: 30,
+        //       width: 30,
+        //       fit: BoxFit.cover,
+        //       errorWidget: (context, url, error) => Image.asset(
+        //         'assets/images/logo.png',
+        //         height: 30,
+        //         width: 30,
+        //         fit: BoxFit.cover,
+        //       ),
+        //     )
 
-            // Container(
-            //   padding: const EdgeInsets.all(10),
-            //   child: Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: [
-            //       Text(
-            //         '${model['createBy'] ?? ''}',
-            //         style: TextStyle(
-            //           color: textTheme,
-            //           fontSize: 15,
-            //           fontFamily: 'Kanit',
-            //         ),
-            //       ),
-            //       Text(
-            //         '${dateStringToDateStringFormatV2(model['createDate'])}',
-            //         style: TextStyle(
-            //           color: textTheme,
-            //           fontSize: 10,
-            //           fontFamily: 'Kanit',
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-          ],
-        ),
+        //     // Container(
+        //     //   padding: const EdgeInsets.all(10),
+        //     //   child: Column(
+        //     //     crossAxisAlignment: CrossAxisAlignment.start,
+        //     //     children: [
+        //     //       Text(
+        //     //         '${model['createBy'] ?? ''}',
+        //     //         style: TextStyle(
+        //     //           color: textTheme,
+        //     //           fontSize: 15,
+        //     //           fontFamily: 'Kanit',
+        //     //         ),
+        //     //       ),
+        //     //       Text(
+        //     //         '${dateStringToDateStringFormatV2(model['createDate'])}',
+        //     //         style: TextStyle(
+        //     //           color: textTheme,
+        //     //           fontSize: 10,
+        //     //           fontFamily: 'Kanit',
+        //     //         ),
+        //     //       ),
+        //     //     ],
+        //     //   ),
+        //     // ),
+        //   ],
+        // ),
         SizedBox(height: 10),
         Text(
           'รายละเอียด',
@@ -522,14 +523,14 @@ class _DetailPageState extends State<DetailPage> {
           maxLines: 4,
         ),
         SizedBox(height: 5),
-        Text(
-          'อ่านทั้งหมด',
-          style: TextStyle(
-              color: textTheme,
-              fontSize: 13,
-              fontFamily: 'Kanit',
-              fontWeight: FontWeight.w500),
-        ),
+        // Text(
+        //   'อ่านทั้งหมด',
+        //   style: TextStyle(
+        //       color: textTheme,
+        //       fontSize: 13,
+        //       fontFamily: 'Kanit',
+        //       fontWeight: FontWeight.w500),
+        // ),
         // Html(
         //   data: model['description'],
         //   style: {

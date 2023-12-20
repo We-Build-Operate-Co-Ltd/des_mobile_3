@@ -203,7 +203,7 @@ class _BookingServiceSearchResultPageState
 
   _callRead() async {
     try {
-      Response response = await Dio().get('$serverBooking/api/ShowCenter');
+      Response response = await Dio().get('$serverPlatform/api/ShowCenter');
       _loadingBookingStatus = LoadingBookingStatus.success;
 
       setState(() {

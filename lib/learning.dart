@@ -1,18 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/models/mock_data.dart';
+import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'build_modal_connection_in_progress.dart';
+import 'course_detail.dart';
 import 'main.dart';
 import 'models/user.dart';
 import 'detail.dart';
+import 'shared/config.dart';
 
 class LearningPage extends StatefulWidget {
-  const LearningPage({
-    Key? key,
-    this.userData,
-  }) : super(key: key);
+  const LearningPage({Key? key, this.userData, this.model}) : super(key: key);
   final User? userData;
+  final dynamic model;
   @override
   State<LearningPage> createState() => _LearningPageState();
 }
@@ -26,12 +29,26 @@ class _LearningPageState extends State<LearningPage> {
     "timeOfUse": '3',
   };
 
+  dynamic _model = [];
+
+  @override
+  void initState() {
+    logWTF('fksdjflksdjflfsdkfjskldfjslkdf');
+    _get_course();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
-            ? Colors.white
-            : Colors.black,
+          ? Colors.white
+          : Colors.black,
       body: ListView(
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.only(
@@ -47,10 +64,13 @@ class _LearningPageState extends State<LearningPage> {
             shrinkWrap: true,
             physics: const ClampingScrollPhysics(),
             padding: EdgeInsets.zero,
-            itemCount: 2,
+            itemCount: _model.length,
             separatorBuilder: (_, __) => const SizedBox(height: 25),
             itemBuilder: (context, _) {
-              return _buildHistoryOfServiceReservations(model);
+              return _buildHistoryOfServiceReservations(_model[_]);
+              // return Container(
+              //   child: Text(_model[_]['name']),
+              // );
             },
           )
         ],
@@ -62,10 +82,18 @@ class _LearningPageState extends State<LearningPage> {
     // String title, String title2, int hour, String date, String time
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(
+        // Navigator.of(context).push(
+        //   MaterialPageRoute(
+        //     builder: (context) =>
+        //         DetailPage(slug: 'mock', model: mockDataObject1),
+        //   ),
+        // );
+        Navigator.push(
+          context,
           MaterialPageRoute(
-            builder: (context) =>
-                DetailPage(slug: 'mock', model: mockDataObject1),
+            builder: (context) => CourseDetailPage(
+              model: model,
+            ),
           ),
         );
       },
@@ -75,10 +103,20 @@ class _LearningPageState extends State<LearningPage> {
             children: [
               Expanded(
                 flex: 1,
-                child: Image.asset(
-                  'assets/images/01.png',
-                  width: 35,
-                ),
+                child: model['docs'] != ''
+                    ? CachedNetworkImage(
+                        imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
+                            model['docs'],
+                        height: 120,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.asset(
+                        'assets/icon.png',
+                        height: 120,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
               ),
               const SizedBox(width: 15),
               Expanded(
@@ -87,33 +125,29 @@ class _LearningPageState extends State<LearningPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${model['title']}',
+                      '${model['name']}',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
-                        color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
                     Text(
-                      '${model['description']}',
+                      '${model['details']}',
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
-                        color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF707070)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFF707070)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
@@ -124,79 +158,69 @@ class _LearningPageState extends State<LearningPage> {
             ],
           ),
           const SizedBox(height: 17),
-          Row(
-            children: [
-              const SizedBox(width: 150),
-              Image.asset(
-                'assets/images/calendar_check.png',
-                width: 10,
-                color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF53327A)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-              ),
-              const SizedBox(width: 5),
-              Text(
-                _dateStringToDateSlashBuddhistShort(model['date']),
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w400,
-                  color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF53327A)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Image.asset(
-                'assets/images/time_user_profile_page.png',
-                width: 10,
-                color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF53327A)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-              ),
-              const SizedBox(width: 5),
-              Text(
-                '${model['time']} น.',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w400,
-                  color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF53327A)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Text(
-                '${model['timeOfUse']} ชั่วโมง',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w400,
-                  color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF53327A)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                ),
-              ),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     const SizedBox(width: 150),
+          //     Image.asset(
+          //       'assets/images/calendar_check.png',
+          //       width: 10,
+          //       color: MyApp.themeNotifier.value == ThemeModeThird.light
+          //           ? Color(0xFF53327A)
+          //           : MyApp.themeNotifier.value == ThemeModeThird.dark
+          //               ? Colors.white
+          //               : Color(0xFFFFFD57),
+          //     ),
+          //     const SizedBox(width: 5),
+          //     // Text(
+          //     //   _dateStringToDateSlashBuddhistShort(model['date']),
+          //     //   style: TextStyle(
+          //     //     fontSize: 10,
+          //     //     fontWeight: FontWeight.w400,
+          //     //     color: MyApp.themeNotifier.value == ThemeModeThird.light
+          //     //         ? Color(0xFF53327A)
+          //     //         : MyApp.themeNotifier.value == ThemeModeThird.dark
+          //     //             ? Colors.white
+          //     //             : Color(0xFFFFFD57),
+          //     //   ),
+          //     // ),
+          //     // const SizedBox(width: 10),
+          //     // Image.asset(
+          //     //   'assets/images/time_user_profile_page.png',
+          //     //   width: 10,
+          //     //   color: MyApp.themeNotifier.value == ThemeModeThird.light
+          //     //       ? Color(0xFF53327A)
+          //     //       : MyApp.themeNotifier.value == ThemeModeThird.dark
+          //     //           ? Colors.white
+          //     //           : Color(0xFFFFFD57),
+          //     // ),
+          //     // const SizedBox(width: 5),
+          //     // // Text(
+          //     //   '${model['time']} น.',
+          //     //   style: TextStyle(
+          //     //     fontSize: 10,
+          //     //     fontWeight: FontWeight.w400,
+          //     //     color: MyApp.themeNotifier.value == ThemeModeThird.light
+          //     //         ? Color(0xFF53327A)
+          //     //         : MyApp.themeNotifier.value == ThemeModeThird.dark
+          //     //             ? Colors.white
+          //     //             : Color(0xFFFFFD57),
+          //     //   ),
+          //     // ),
+          //     // const SizedBox(width: 10),
+          //     // Text(
+          //     //   '${model['timeOfUse']} ชั่วโมง',
+          //     //   style: TextStyle(
+          //     //     fontSize: 10,
+          //     //     fontWeight: FontWeight.w400,
+          //     //     color: MyApp.themeNotifier.value == ThemeModeThird.light
+          //     //         ? Color(0xFF53327A)
+          //     //         : MyApp.themeNotifier.value == ThemeModeThird.dark
+          //     //             ? Colors.white
+          //     //             : Color(0xFFFFFD57),
+          //     //   ),
+          //     // ),
+          //   ],
+          // ),
           const SizedBox(height: 6),
           Row(
             children: [
@@ -204,13 +228,11 @@ class _LearningPageState extends State<LearningPage> {
               Expanded(
                 child: Container(
                   height: 1,
-                  color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF707070)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFF707070)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
                   // color:  Color(0xFF707070),
                 ),
               ),
@@ -228,35 +250,23 @@ class _LearningPageState extends State<LearningPage> {
         top: MediaQuery.of(context).padding.top,
       ),
       color: MyApp.themeNotifier.value == ThemeModeThird.light
-            ? Colors.white
-            : Colors.black,
+          ? Colors.white
+          : Colors.black,
       child: Center(
         child: Text(
           'การเรียน',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500,
-            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
           ),
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   _dateStringToDateSlashBuddhistShort(String date) {
@@ -268,5 +278,35 @@ class _LearningPageState extends State<LearningPage> {
     var yearBuddhistString = yearBuddhist.toString();
     var yearBuddhistStringShort = yearBuddhistString.substring(2, 4);
     return '$day/$month/$yearBuddhistStringShort';
+  }
+
+  _get_course() async {
+    logWTF('==========rerwerwerwerw=========');
+    Dio dio = Dio();
+    var response;
+    var map = new Map<String, dynamic>();
+    FormData formData = new FormData.fromMap({"apikey": apiKeyLMS});
+    // map['apikey'] = _api_key;
+    try {
+      //https://lms.dcc.onde.go.th/api/api/recomend/003138ecf4ad3c45f1b903d72a860181
+      //response = await dio.post('${service}api/popular_course', data: formData);
+      response =
+          await dio.post('$serverLMS/recomend/$apiKeyLMS', data: formData);
+      // logWTF(response.data);
+      if (response.data['status']) {
+        setState(() {
+          _model = response.data['data'];
+
+          logWTF('==========trtrgdfgdfgdfgdf=========');
+          logWTF(_model.toString());
+        });
+
+        // logWTF('_get_course' + response.data['data']);
+        // return response.data['data'];
+      }
+    } catch (e) {
+      logWTF(e);
+    }
+    return [];
   }
 }
