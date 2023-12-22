@@ -976,13 +976,15 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               _callOpenPage(code);
             },
-            child: type == 'serviceforyou'
-                ? Image.asset(
-                    image,
-                    height: 45,
-                    width: 45,
-                  )
-                : Image.asset(image, height: 30, width: 30),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.asset(
+                image,
+                height: type == 'serviceforyou' ? 45 : 30,
+                width: type == 'serviceforyou' ? 45 : 30,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
           SizedBox(height: type == 'serviceforyou' ? 7 : 5),
           type == 'serviceforyou'
