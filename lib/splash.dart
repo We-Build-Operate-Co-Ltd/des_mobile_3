@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/login_first.dart';
+import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -23,83 +24,82 @@ class _SplashPageState extends State<SplashPage> {
   late int version_store;
   dynamic _model_version;
   String os = Platform.operatingSystem;
+  bool _loading = true;
+  String _image = '';
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _profileCode = await ManageStorage.read('profileCode') ?? '';
-      await _callRead();
-    });
+    _callRead();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _buildSplash();
+    return WillPopScope(
+      onWillPop: () {
+        return Future.value(false);
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: _buildSplash(),
+      ),
+    );
   }
 
   _buildSplash() {
-    if (_model.length > 0) {
-      _callTimer((int.parse(_model[0]['timeOut']) / 1000).round());
-      return WillPopScope(
-        onWillPop: () {
-          return Future.value(false);
-        },
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: Center(
-            child: CachedNetworkImage(
-              imageUrl: _model[0]['imageUrl'],
-              fit: BoxFit.cover,
-              height: double.infinity,
-              width: double.infinity,
-            ),
+    if (!_loading) {
+      if (_image != '') {
+        return Center(
+          child: CachedNetworkImage(
+            imageUrl: _image,
+            fit: BoxFit.cover,
+            height: double.infinity,
+            width: double.infinity,
           ),
-        ),
-      );
-    } else {
-      _callTimer(1);
-      return Container(
-        color: Colors.white,
-      );
-
-      // return Image.asset(
-      //   'assets/splash.png',
-      //   fit: BoxFit.fill,
-      //   height: double.infinity,
-      //   width: double.infinity,
-      // );
+        );
+      }
     }
+    return Container(
+      color: Colors.white,
+    );
   }
 
   _callRead() async {
     try {
+      var pf = await ManageStorage.read('profileCode') ?? '';
+
       Dio dio = Dio();
-      Response<dynamic> result =
+      Response result =
           await dio.post('$server/de-api/m/splash/read', data: {});
 
       if (result.statusCode == 200) {
         if (result.data['status'] == 'S') {
           setState(() {
+            _profileCode = pf;
             _model = result.data['objectData'];
+            _image = _model.length > 0 ? _model[0]['imageUrl'] : '';
           });
-          // return result.data['objectData'];
         }
       }
-    } catch (e) {}
+      setState(() => _loading = false);
+      _callTimer();
+    } catch (e) {
+      setState(() => _loading = false);
+      logE(e);
+      _callTimer();
+    }
   }
 
-  _callTimer(time) {
-    var duration = Duration(seconds: time);
-    Timer.periodic(duration, (timer) async {
+  _callTimer() async {
+    int time = 0;
+    if (_model.length > 0) {
+      time = int.parse((_model[0]?['timeOut'] ?? '0'));
+    }
+    var calTime = time > 0 ? (time / 1000).round() : 0;
+
+    Timer(Duration(seconds: calTime), () {
       if (_profileCode != '') {
         check_version();
-        // Navigator.of(context).pushAndRemoveUntil(
-        //   MaterialPageRoute(
-        //     builder: (context) => const Menu(),
-        //   ),
-        //   (Route<dynamic> route) => false,
-        // );
       } else {
         if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
