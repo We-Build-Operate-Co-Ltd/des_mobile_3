@@ -988,7 +988,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
           _code = user['code'];
         });
 
-        logWTF(user['birthDay']);
+        // logWTF(user['birthDay']);
 
         // if (user['birthDay'] != '') {
         //   var date = user['birthDay'];

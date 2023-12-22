@@ -35,8 +35,8 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   dynamic _tempModel;
 
   // String _api_key = '19f072f9e4b14a19f72229719d2016d1';
-  String _api_key = '29f5637fe877ab6d8797a8bcde3d67a7';
-  String endpoint_base_url = 'https://e2e.myappclass.bangalore2.com/api/api/';
+  // String _api_key = '29f5637fe877ab6d8797a8bcde3d67a7';
+  // String endpoint_base_url = 'https://e2e.myappclass.bangalore2.com/api/api/';
 
   @override
   void initState() {
@@ -54,19 +54,19 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   }
 
   _filtter(param) async {
-    logWTF('=========fsdfsdfsdfdsfsd==========' + _tempModel.toString());
+    // logWTF('=========fsdfsdfsdfdsfsd==========' + _tempModel.toString());
     // var res = await _model;
     var temp =
         // _tempModel.where((item) => item['name'].contains(param)).toList();
 
         _tempModel
-            .where((dynamic e) => e['name']
+            .where((dynamic e) => e['course_name']
                 .toString()
                 .toUpperCase()
                 .contains(param.toString().toUpperCase()))
             .toList();
 
-    logWTF('=========fsdfsdfsdfdsfsd==========' + temp.toString());
+    // logWTF('=========fsdfsdfsdfdsfsd==========' + temp.toString());
 
     setState(() {
       _model = Future.value(temp);
@@ -74,18 +74,22 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   }
 
   _callRead() async {
-    var response =
-        await Dio().get('${endpoint_base_url}get_course/${_api_key}');
+    // var response =
+    //     await Dio().get('${endpoint_base_url}get_course/${_api_key}');
+
+    var response = await Dio().get('$serverLMS/get_course/$apiKeyLMS');
 
     setState(() {
-      _model = Future.value(response.data['data']);
+      _model = Future.value(response.data['data']
+          .where((dynamic e) => e['is_active'].toString() == 'yes')
+          .toList());
       _tempModel = response.data['data'];
     });
   }
 
   _get_category() async {
     var response =
-        await dio.get('${endpoint_base_url}get_coursecategory/${_api_key}');
+        await dio.get('${serverLMS}/get_coursecategory/${apiKeyLMS}');
     setState(() {
       _categoryList.addAll(response.data['data']);
     });
@@ -96,8 +100,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
       if (_categorySelected == 0) {
         // return Dio().get('${endpoint_base_url}get_course/${_api_key}');
 
-        var response =
-            await Dio().get('${endpoint_base_url}get_course/${_api_key}');
+        var response = await Dio().get('${serverLMS}get_course/${apiKeyLMS}');
 
         // print('----!!!!-----------------------------' +
         //     response.data['data'].toString());
@@ -106,32 +109,46 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
           _model = Future.value(response.data['data']);
         });
       } else {
-        FormData formData = new FormData.fromMap({
-          "apikey": _api_key,
-          "cat_id": _categoryList[_categorySelected]['id']
-        });
-        var response = await dio.post(
-          '${endpoint_base_url}popular_course',
-          data: formData,
-          options: Options(
-            validateStatus: (_) => true,
-            contentType: Headers.formUrlEncodedContentType,
-            responseType: ResponseType.json,
-            headers: {
-              'Content-type': 'application/x-www-form-urlencoded',
-            },
-          ),
-        );
+        var temp =
+            // _tempModel.where((item) => item['name'].contains(param)).toList();
 
-        if (response.data['status'] == false) {
-          setState(() {
-            _model = Future.value([]);
-          });
-        } else {
-          setState(() {
-            _model = Future.value(response.data['data']);
-          });
-        }
+            _tempModel
+                .where((dynamic e) =>
+                    e['course_cat_id'].toString() ==
+                    _categorySelected.toString())
+                .toList();
+
+        // logWTF('=========fsdfsdfsdfdsfsd==========' + temp.toString());
+
+        setState(() {
+          _model = Future.value(temp);
+        });
+        // FormData formData = new FormData.fromMap({
+        //   "apikey": apiKeyLMS,
+        //   "cat_id": _categoryList[_categorySelected]['id']
+        // });
+        // var response = await dio.post(
+        //   '${serverLMS}/popular_course',
+        //   data: formData,
+        //   options: Options(
+        //     validateStatus: (_) => true,
+        //     contentType: Headers.formUrlEncodedContentType,
+        //     responseType: ResponseType.json,
+        //     headers: {
+        //       'Content-type': 'application/x-www-form-urlencoded',
+        //     },
+        //   ),
+        // );
+
+        // if (response.data['status'] == false) {
+        //   setState(() {
+        //     _model = Future.value([]);
+        //   });
+        // } else {
+        //   setState(() {
+        //     _model = Future.value(response.data['data']);
+        //   });
+        // }
       }
     } catch (e) {
       return {
@@ -394,7 +411,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: CachedNetworkImage(
-                imageUrl: '${model['docs']}',
+                imageUrl: '${model['cover_image_url']}',
                 fit: BoxFit.cover,
                 height: 95,
                 width: 160,
@@ -418,7 +435,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             Expanded(
               child: Container(
                 child: Text(
-                  '${model['name']}',
+                  '${model['course_name']}',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,

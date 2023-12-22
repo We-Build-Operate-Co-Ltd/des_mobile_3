@@ -542,6 +542,50 @@ class _BookingServicePageState extends State<BookingServicePage>
 
   List<Widget> _pageOne() {
     return <Widget>[
+      Container(
+        height: 50,
+        child: Autocomplete<String>(
+          fieldViewBuilder: (BuildContext context,
+              TextEditingController controller,
+              FocusNode focusNode,
+              VoidCallback onFieldSubmitted) {
+            return TextFormField(
+              decoration: _decorationSearch(
+                context,
+                hintText: 'สถานที่',
+              ),
+              controller: controller,
+              focusNode: focusNode,
+              style: TextStyle(
+                fontFamily: 'Kanit',
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+              onFieldSubmitted: (String value) {
+                onFieldSubmitted();
+              },
+            );
+          },
+          optionsBuilder: (TextEditingValue textEditingValue) {
+            if (textEditingValue.text == '') {
+              return const Iterable<String>.empty();
+            }
+            return _modelAutoComplete.where((String option) {
+              return option.contains(textEditingValue.text.toLowerCase());
+            });
+          },
+          onSelected: (String selection) {
+            setState(() {
+              _searchController.text = selection;
+            });
+          },
+        ),
+      ),
+      SizedBox(height: 15),
+
       GestureDetector(
         onTap: () => dialogOpenPickerDate(),
         child: AbsorbPointer(
@@ -571,6 +615,7 @@ class _BookingServicePageState extends State<BookingServicePage>
         ),
       ),
       SizedBox(height: 15),
+
       Row(
         children: [
           Expanded(
@@ -636,49 +681,7 @@ class _BookingServicePageState extends State<BookingServicePage>
           )
         ],
       ),
-      SizedBox(height: 15),
-      Container(
-        height: 50,
-        child: Autocomplete<String>(
-          fieldViewBuilder: (BuildContext context,
-              TextEditingController controller,
-              FocusNode focusNode,
-              VoidCallback onFieldSubmitted) {
-            return TextFormField(
-              decoration: _decorationSearch(
-                context,
-                hintText: 'สถานที่',
-              ),
-              controller: controller,
-              focusNode: focusNode,
-              style: TextStyle(
-                fontFamily: 'Kanit',
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Colors.black
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
-              ),
-              onFieldSubmitted: (String value) {
-                onFieldSubmitted();
-              },
-            );
-          },
-          optionsBuilder: (TextEditingValue textEditingValue) {
-            if (textEditingValue.text == '') {
-              return const Iterable<String>.empty();
-            }
-            return _modelAutoComplete.where((String option) {
-              return option.contains(textEditingValue.text.toLowerCase());
-            });
-          },
-          onSelected: (String selection) {
-            setState(() {
-              _searchController.text = selection;
-            });
-          },
-        ),
-      ),
+
       // TextFormField(
       //   controller: _searchController,
       //   decoration: _decorationSearch(

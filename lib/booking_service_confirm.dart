@@ -401,7 +401,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
         "desc": "",
         "remark": ""
       };
-      logWTF(data);
+      // logWTF(data);
 
       setState(() => _loadingSubmit = true);
       final String baseUrl = 'http://dcc-portal.webview.co/dcc-api';
@@ -816,7 +816,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
     month = now.month;
     day = now.day;
 
-    logWTF(widget);
+    // logWTF(widget);
 
     _modelType = [
       {
@@ -905,7 +905,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
         ];
         _bookingTypeRefNo = widget.bookingTypeRefNo;
       });
-      logWTF(_modelType);
+      // logWTF(_modelType);
     } catch (e) {
       logE(e);
       setState(() => _loadingDropdownType = false);

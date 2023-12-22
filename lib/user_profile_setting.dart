@@ -13,7 +13,9 @@ import 'package:des/verify_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'chat_botnoi.dart';
 import 'main.dart';
+import 'webview_inapp.dart';
 
 class UserProfileSettingPage extends StatefulWidget {
   const UserProfileSettingPage({Key? key}) : super(key: key);
@@ -48,8 +50,8 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
           const SizedBox(height: 40),
           _buildRowAboutAccount(),
           const SizedBox(height: 40),
-          _buildRowNotifications(),
-          const SizedBox(height: 40),
+          // _buildRowNotifications(),
+          // const SizedBox(height: 40),
           _buildRowHelp(),
           const SizedBox(height: 50),
           Center(
@@ -222,35 +224,57 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
   }
 
   Widget _buildRow(String title) {
-    return Container(
-      // color: Colors.red,
-      height: 40,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 13,
-              fontFamily: 'Kanit',
-              fontWeight: FontWeight.w400,
+    return InkWell(
+      onTap: () {
+        if (title == 'ศูนย์ช่วยเหลือ') {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ChatBotNoiPage(),
+              // builder: (context) => ChatPage(),
+            ),
+          );
+        } else if (title == 'นโยบาย') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => WebViewInAppPage(
+                url: 'https://decms.dcc.onde.go.th/privacy-policy/pp.html',
+                title: 'นโยบาย',
+              ),
+            ),
+          );
+        }
+      },
+      child: Container(
+        // color: Colors.red,
+        height: 40,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 13,
+                fontFamily: 'Kanit',
+                fontWeight: FontWeight.w400,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+            ),
+            Image.asset(
+              'assets/images/go.png',
+              height: 11,
               color: MyApp.themeNotifier.value == ThemeModeThird.light
                   ? Colors.black
                   : MyApp.themeNotifier.value == ThemeModeThird.dark
                       ? Colors.white
                       : Color(0xFFFFFD57),
             ),
-          ),
-          Image.asset(
-            'assets/images/go.png',
-            height: 11,
-            color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Colors.black
-                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                    ? Colors.white
-                    : Color(0xFFFFFD57),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

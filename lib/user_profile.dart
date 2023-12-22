@@ -1187,7 +1187,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       //https://lms.dcc.onde.go.th/api/api/recomend/003138ecf4ad3c45f1b903d72a860181
       //response = await dio.post('${service}api/popular_course', data: formData);
       response = await dio.post('$serverLMS/recommend_course', data: formData);
-      logWTF(response.data);
+      // logWTF(response.data);
       if (response.data['status']) {
         setState(() {
           _model = response.data['data'];

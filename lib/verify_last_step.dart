@@ -278,8 +278,8 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
       };
     });
 
-    logWTF(_userData);
-    logWTF(thaiDData);
+    // logWTF(_userData);
+    // logWTF(thaiDData);
   }
 
   _getImageUnit8List() async {
@@ -356,7 +356,7 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
       user['isActive'] = true;
       user['hasThaiD'] = true;
       user['thaiID'] = thaiDData;
-      logWTF(user);
+      // logWTF(user);
 
       final response = await Dio()
           .post('$server/de-api/m/Register/user/verify/update', data: user);

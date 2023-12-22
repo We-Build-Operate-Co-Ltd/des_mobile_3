@@ -33,7 +33,7 @@ class _LearningPageState extends State<LearningPage> {
 
   @override
   void initState() {
-    logWTF('fksdjflksdjflfsdkfjskldfjslkdf');
+    // logWTF('fksdjflksdjflfsdkfjskldfjslkdf');
     _get_course();
     super.initState();
   }
@@ -281,7 +281,7 @@ class _LearningPageState extends State<LearningPage> {
   }
 
   _get_course() async {
-    logWTF('==========rerwerwerwerw=========');
+    // logWTF('==========rerwerwerwerw=========');
     Dio dio = Dio();
     var response;
     var map = new Map<String, dynamic>();
@@ -297,15 +297,15 @@ class _LearningPageState extends State<LearningPage> {
         setState(() {
           _model = response.data['data'];
 
-          logWTF('==========trtrgdfgdfgdfgdf=========');
-          logWTF(_model.toString());
+          // logWTF('==========trtrgdfgdfgdfgdf=========');
+          // logWTF(_model.toString());
         });
 
         // logWTF('_get_course' + response.data['data']);
         // return response.data['data'];
       }
     } catch (e) {
-      logWTF(e);
+      // logWTF(e);
     }
     return [];
   }
