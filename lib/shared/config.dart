@@ -7,6 +7,8 @@ const serverBooking = 'http://dcc-portal.webview.co/dcc-api';
 
 const clientID = 'dcc-mobile';
 const clientSecret = 'TweWGTy31ptx0NzHUnXuPv4J0hP97lMH';
+const keycloakReaml = 'dcc-portal';
+const ondeURL = 'https://dcc.onde.go.th/dcc-api';
 const ssoURL = 'https://sso.dcc.onde.go.th:8443';
 
 enum LoadingBookingStatus { success, fail, loading }

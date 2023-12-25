@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -217,6 +218,145 @@ logE(dynamic model) {
     printer: PrettyPrinter(),
   );
   return logger.e(model);
+}
+
+class InputFormatTemple {
+  static username() => [
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z.]')),
+      ];
+  static name() => [
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z .]')),
+      ];
+  static password() => [
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z@!_.]')),
+        LengthLimitingTextInputFormatter(20),
+      ];
+  static phone() => [
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+        LengthLimitingTextInputFormatter(10),
+      ];
+
+  static otp() => [
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+        LengthLimitingTextInputFormatter(1),
+      ];
+  static email() => [
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z@!_.-]')),
+      ];
+  static idcard() => [
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+        LengthLimitingTextInputFormatter(13),
+      ];
+  static laserid() => [
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9A-Z]')),
+        LengthLimitingTextInputFormatter(12),
+      ];
+}
+
+class ValidateForm {
+  static const emptyText = '**ช่องนี้ไม่สามารถเว้นว่างได้';
+  static empty(String value) {
+    if (value.isEmpty) {
+      return 'กรุณากรอกข้อมูล ';
+    }
+
+    if (value.length < 3) {
+      return 'short ';
+    } else {
+      return null;
+    }
+  }
+
+  static firstName(String value) {
+    if (value.isEmpty) {
+      return emptyText;
+    }
+    return null;
+  }
+
+  static lastName(String value) {
+    if (value.isEmpty) {
+      return emptyText;
+    }
+    return null;
+  }
+
+  static phone(String value) {
+    if (value.isEmpty) {
+      return emptyText;
+    }
+    return null;
+  }
+
+  static email(String value) {
+    if (value.isEmpty) {
+      return emptyText;
+    }
+    if (!value.isValidEmail()) {
+      return '**ตรวจสอบรูปแบบอีเมล';
+    }
+    return null;
+  }
+
+  static username(String value) {
+    if (value.isEmpty) {
+      return emptyText;
+    }
+    return null;
+  }
+
+  static password(String value) {
+    if (value.isEmpty) {
+      return emptyText;
+    }
+    if (value.length < 6) {
+      return '**รหัสผ่านต้องเป็นตัวอักษร a-z, A-Z และ 0-9 ความยาวขั้นต่ำ 6 ตัวอักษร';
+    }
+    return null;
+  }
+
+  static confirmPassword(String value, String password) {
+    if (value.isEmpty) {
+      return emptyText;
+    }
+    if (value != password) {
+      return '**รหัสผ่านไม่ตรงกัน';
+    }
+    return null;
+  }
+
+  static occupation(int value) {
+    if (value == 0 || value == null) {
+      return '**กรุณาเลือกอาชีพ';
+    }
+    return null;
+  }
+
+  static String idcard(String? value) {
+    if (value!.isEmpty) {
+      return 'กรุณากรอกเลขที่บัตรประชาชน.';
+    }
+
+    String pattern = r'(^[0-9]\d{12}$)';
+    RegExp regex = RegExp(pattern);
+
+    if (regex.hasMatch(value)) {
+      if (value.length != 13) {
+        return 'กรุณากรอกรูปแบบเลขบัตรประชาชนให้ถูกต้อง';
+      } else {
+        var sum = 0.0;
+        for (var i = 0; i < 12; i++) {
+          sum += double.parse(value[i]) * (13 - i);
+        }
+        if ((11 - (sum % 11)) % 10 != double.parse(value[12])) {
+          return 'กรุณากรอกเลขบัตรประชาชนให้ถูกต้อง';
+        } else {
+          return '';
+        }
+      }
+    }
+    return 'กรุณากรอกรูปแบบเลขบัตรประชาชนให้ถูกต้อง';
+  }
 }
 
 // List<Identity> toListModel(List<dynamic> model) {

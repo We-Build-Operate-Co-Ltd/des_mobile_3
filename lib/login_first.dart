@@ -5,6 +5,7 @@ import 'package:des/login_second.dart';
 import 'package:des/menu.dart';
 import 'package:des/register.dart';
 import 'package:des/shared/apple_firebase.dart';
+import 'package:des/shared/extension.dart';
 import 'package:des/shared/google_firebase.dart';
 import 'package:des/shared/line.dart';
 import 'package:des/shared/secure_storage.dart';
@@ -13,6 +14,7 @@ import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -208,6 +210,10 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                           SizedBox(height: 10),
                           TextFormField(
                             controller: txtEmail,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9a-zA-Z@!_.-]'))
+                            ],
                             decoration: _decorationRegisterMember(
                               context,
                               hintText: 'อีเมล',
@@ -229,12 +235,18 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                                         ThemeModeThird.dark
                                     ? Colors.white
                                     : Color(0xFFFFFD57),
-                            validator: (String? value) {
-                              if (value == null || value.isEmpty) {
-                                return 'กรอกอีเมล';
-                              }
-                              return null;
-                            },
+                            validator: (model) {
+                                  String pattern =
+                                      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                  RegExp regex = new RegExp(pattern);
+                                  if (model!.isEmpty) {
+                                    return 'กรุณากรอกอีเมล.';
+                                  } else if (!regex.hasMatch(model)) {
+                                    return 'กรุณากรอกรูปแบบอีเมลให้ถูกต้อง.';
+                                  } else {
+                                    return null;
+                                  }
+                                },
                           ),
                           SizedBox(height: 10),
                           GestureDetector(
@@ -1129,83 +1141,95 @@ class _LoginFirstPageState extends State<LoginFirstPage>
         ),
       );
     } else {
-      _loading = true;
-      Response<dynamic> response;
-      try {
-        print('------');
-
-        response = await Dio().post('$server/de-api/m/register/read', data: {
-          'username': txtEmail.text.trim(),
-          'category': _category.toString(),
-        });
-      } catch (ex) {
-        setState(() {
-          _loading = false;
-        });
-        Fluttertoast.showToast(msg: 'error');
-        return null;
-      }
-
       setState(() {
-        _loading = false;
+        _username = txtEmail.text.trim();
+        // _imageUrl = response.data['objectData'][0]['imageUrl'] ?? '';
       });
+      txtEmail.clear();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) =>
+              LoginSecondPage(username: _username!, imageUrl: _imageUrl!),
+        ),
+      );
+      // _loading = true;
+      // Response<dynamic> response;
+      // try {
+      //   print('------');
+
+      //   response = await Dio().post('$server/de-api/m/register/read', data: {
+      //     'username': txtEmail.text.trim(),
+      //     'category': _category.toString(),
+      //   });
+      // } catch (ex) {
+      //   setState(() {
+      //     _loading = false;
+      //   });
+      //   Fluttertoast.showToast(msg: 'error');
+      //   return null;
+      // }
+
+      // setState(() {
+      //   _loading = false;
+      // });
 
       // print(response.data.toString());
-      if (response.data['status'] == 'S') {
-        List<dynamic> result = response.data['objectData'];
-        if (result.length > 0) {
-          setState(() {
-            _username = txtEmail.text.trim();
-            _imageUrl = response.data['objectData'][0]['imageUrl'] ?? '';
-          });
-          txtEmail.clear();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) =>
-                  LoginSecondPage(username: _username!, imageUrl: _imageUrl!),
-            ),
-          );
-        } else {
-          showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (BuildContext context) => new CupertinoAlertDialog(
-              title: new Text(
-                'ชื่อผู้ใช้งาน ไม่พบในระบบ',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontFamily: 'Kanit',
-                  color: Colors.black,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              content: Text(" "),
-              actions: [
-                CupertinoDialogAction(
-                  isDefaultAction: true,
-                  child: new Text(
-                    "ตกลง",
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontFamily: 'Kanit',
-                      color: Color(0xFF000070),
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    new TextEditingController().clear();
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          );
-        }
-      } else {
-        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-      }
+      // if (response.data['status'] == 'S') {
+      //   List<dynamic> result = response.data['objectData'];
+      //   if (result.length > 0) {
+      //     setState(() {
+      //       _username = txtEmail.text.trim();
+      //       _imageUrl = response.data['objectData'][0]['imageUrl'] ?? '';
+      //     });
+      //     txtEmail.clear();
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (_) =>
+      //             LoginSecondPage(username: _username!, imageUrl: _imageUrl!),
+      //       ),
+      //     );
+      //   } else {
+      //     showDialog(
+      //       barrierDismissible: false,
+      //       context: context,
+      //       builder: (BuildContext context) => new CupertinoAlertDialog(
+      //         title: new Text(
+      //           'ชื่อผู้ใช้งาน ไม่พบในระบบ',
+      //           style: TextStyle(
+      //             fontSize: 16,
+      //             fontFamily: 'Kanit',
+      //             color: Colors.black,
+      //             fontWeight: FontWeight.normal,
+      //           ),
+      //         ),
+      //         content: Text(" "),
+      //         actions: [
+      //           CupertinoDialogAction(
+      //             isDefaultAction: true,
+      //             child: new Text(
+      //               "ตกลง",
+      //               style: TextStyle(
+      //                 fontSize: 13,
+      //                 fontFamily: 'Kanit',
+      //                 color: Color(0xFF000070),
+      //                 fontWeight: FontWeight.normal,
+      //               ),
+      //             ),
+      //             onPressed: () {
+      //               FocusScope.of(context).unfocus();
+      //               new TextEditingController().clear();
+      //               Navigator.of(context).pop();
+      //             },
+      //           ),
+      //         ],
+      //       ),
+      //     );
+      //   }
+      // } else {
+      //   Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      // }
     }
   }
 

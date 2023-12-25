@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/menu.dart';
 import 'package:des/shared/image_picker.dart';
@@ -33,9 +34,9 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
   String? _code;
   bool _loadingSubmit = false;
   XFile? _imageFile;
-
+  String _userId = '';
   String? _selectedPrefixName;
-
+  DateTime? _dateTime;
   bool passwordVisibility = true;
 
   final txtEmail = TextEditingController();
@@ -49,7 +50,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
   TextEditingController txtDate = TextEditingController();
   dynamic rubberFarmer;
   Future<dynamic>? futureModel;
-
+  dynamic _model;
   ScrollController scrollController = new ScrollController();
 
   int _selectedDay = 0;
@@ -75,9 +76,9 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
   }
 
   List<dynamic> _genderList = [
-    {'key': 'male', 'value': 'ชาย'},
-    {'key': 'female', 'value': 'หญิง'},
-    {'key': 'other', 'value': 'อื่น ๆ'},
+    {'key': 'MALE', 'value': 'ชาย'},
+    {'key': 'FEMALE', 'value': 'หญิง'},
+    {'key': 'OTHER', 'value': 'อื่น ๆ'},
   ];
   String _gender = '';
   DateTime? now;
@@ -245,24 +246,24 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                   ),
                 ),
                 SizedBox(width: 15),
-                Expanded(
-                  child: TextFormField(
-                    controller: txtAge,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(
-                          RegExp(r'[0-9a-zA-Z.]')),
-                    ],
-                    decoration: _decorationBase(context, hintText: 'อายุ'),
-                    style: TextStyle(color: Theme.of(context).custom.b_w_y),
-                    cursorColor:
-                        MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Color(0xFF7A4CB1)
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? Colors.white
-                                : Color(0xFFFFFD57),
-                  ),
-                ),
+                // Expanded(
+                //   child: TextFormField(
+                //     controller: txtAge,
+                //     keyboardType: TextInputType.number,
+                //     inputFormatters: [
+                //       FilteringTextInputFormatter.allow(
+                //           RegExp(r'[0-9a-zA-Z.]')),
+                //     ],
+                //     decoration: _decorationBase(context, hintText: 'อายุ'),
+                //     style: TextStyle(color: Theme.of(context).custom.b_w_y),
+                //     cursorColor:
+                //         MyApp.themeNotifier.value == ThemeModeThird.light
+                //             ? Color(0xFF7A4CB1)
+                //             : MyApp.themeNotifier.value == ThemeModeThird.dark
+                //                 ? Colors.white
+                //                 : Color(0xFFFFFD57),
+                //   ),
+                // ),
               ],
             ),
             // SizedBox(height: 10),
@@ -378,7 +379,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             ),
             SizedBox(height: 40),
             GestureDetector(
-              onTap: () => submitUpdateUser(),
+              onTap: () => submitUpdateUserV2(),
               child: Container(
                 margin: EdgeInsets.only(top: 20),
                 height: 50,
@@ -652,6 +653,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
         maxTime: DateTime(year, month, day), onConfirm: (date) {
       setState(
         () {
+          _dateTime = date;
           _selectedYear = date.year;
           _selectedMonth = date.month;
           _selectedDay = date.day;
@@ -854,159 +856,177 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
     }
   }
 
-  Future<dynamic> submitUpdateUser() async {
+  Future<dynamic> submitUpdateUserV2() async {
     try {
-      var value = await ManageStorage.read('profileData') ?? '';
-      var user = json.decode(value);
-
       setState(() => _loadingSubmit = true);
+      String base64Image = '';
       if (_imageFile?.path != null) {
-        await _uploadImage(_imageFile!);
+        // await _uploadImage(_imageFile!);
+
+        List<int> imageBytes = File(_imageFile!.path).readAsBytesSync();
+        // base64Image = "data:image/png;base64," + base64Encode(imageBytes);
+        String base64Image = base64Encode(imageBytes);
+        logWTF(base64Image);
       }
 
-      user['password'] = txtPassword.text;
-      user['imageUrl'] = _imageUrl;
-      user['firstName'] = txtFirstName.text;
-      user['lastName'] = txtLastName.text;
-      user['email'] = txtEmail.text;
-      user['age'] = txtAge.text;
-      user['phone'] = txtPhone.text;
-      user['prefixName'] = _selectedPrefixName;
-      user['birthDay'] = DateFormat("yyyyMMdd").format(
-        DateTime(
-          _selectedYear,
-          _selectedMonth,
-          _selectedDay,
+      FormData formData = FormData.fromMap({
+        'Userid': _model['userid'],
+        'Phonenumber': txtPhone.text,
+        'photo': base64Image,
+        'Firstname': txtFirstName.text,
+        'Lastname': txtLastName.text,
+        'Email': txtEmail.text,
+        'Dob': _dateTime == null ? _model['dob'] : _dateTime,
+        'Gender': _gender,
+        'JobName': _model?['jobName'] ?? '',
+        'LmsCat': _model?['lmsCat'] ?? '',
+      });
+
+      Response response = await Dio().put(
+        '$ondeURL/api/user/UpdateById',
+        data: formData,
+      );
+      logWTF(response.data);
+
+      if (response.statusCode == 200) {
+        // return response.data;
+        if (response.data) {
+          var accessToken = await ManageStorage.read('accessToken') ?? '';
+          var profileMe = await _getProfileMe(accessToken);
+
+          await ManageStorage.createSecureStorage(
+            value: json.encode(profileMe['data']),
+            key: 'profileMe',
+          );
+          setState(() => _loadingSubmit = false);
+          _dialog(text: 'อัพเดตข้อมูลเรียบร้อยแล้ว');
+        } else {
+          setState(() => _loadingSubmit = false);
+          logE(response);
+          _dialog(
+            text: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
+            error: true,
+          );
+        }
+      } else {
+        logE(response.data);
+        setState(() => _loadingSubmit = false);
+        _dialog(
+          text: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
+          error: true,
+        );
+      }
+    } on DioError catch (e) {
+      logE(e.error);
+      setState(() => _loadingSubmit = false);
+      String err = e.error.toString();
+      if (e.response != null) {
+        err = e.response!.data['title'].toString();
+      }
+      Fluttertoast.showToast(msg: err);
+      return null;
+    }
+  }
+
+  dynamic _getProfileMe(String token) async {
+    try {
+      // get info
+      if (token.isEmpty) return null;
+      Response response = await Dio().get(
+        '$ondeURL/api/user/ProfileMe',
+        options: Options(
+          validateStatus: (_) => true,
+          contentType: 'application/x-www-form-urlencoded',
+          responseType: ResponseType.json,
+          headers: {
+            'Content-type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Bearer $token',
+          },
         ),
       );
 
-      final response =
-          await Dio().post('$server/de-api/m/Register/update', data: user);
-      var result = response.data;
-      setState(() => _loadingSubmit = false);
-      if (result['status'] == 'S') {
-        await ManageStorage.createProfile(
-          key: result['objectData']['category'],
-          value: result['objectData'],
-        );
-        setState(() {
-          readStorage();
-        });
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Menu(),
-          ),
-        );
-
-        return showDialog(
-          context: context,
-          builder: (BuildContext context) => new CupertinoAlertDialog(
-            title: new Text(
-              'อัพเดตข้อมูลเรียบร้อยแล้ว',
-              style: TextStyle(
-                fontSize: 16,
-                fontFamily: 'Kanit',
-                color: Colors.black,
-                fontWeight: FontWeight.normal,
-              ),
-            ),
-            content: Text(" "),
-            actions: [
-              CupertinoDialogAction(
-                isDefaultAction: true,
-                child: new Text(
-                  "ตกลง",
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontFamily: 'Kanit',
-                    color: Color(0xFF005C9E),
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        );
+      if (response.statusCode == 200) {
+        return response.data;
       } else {
-        return showDialog(
-          context: context,
-          builder: (BuildContext context) => new CupertinoAlertDialog(
-            title: new Text(
-              'อัพเดตข้อมูลไม่สำเร็จ',
+        logE(response.data);
+        Fluttertoast.showToast(msg: response.data['title']);
+        setState(() => _loadingSubmit = false);
+        return null;
+      }
+    } on DioError catch (e) {
+      setState(() => _loadingSubmit = false);
+      String err = e.error.toString();
+      if (e.response != null) {
+        err = e.response!.data['title'].toString();
+      }
+      Fluttertoast.showToast(msg: err);
+      return null;
+    }
+  }
+
+  _dialog({required String text, bool error = false}) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 16,
+            fontFamily: 'Kanit',
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        content: const Text(" "),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: const Text(
+              "ตกลง",
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 13,
                 fontFamily: 'Kanit',
-                color: Colors.black,
+                color: Color(0xFF005C9E),
                 fontWeight: FontWeight.normal,
               ),
             ),
-            content: Text(" "),
-            actions: [
-              CupertinoDialogAction(
-                isDefaultAction: true,
-                child: new Text(
-                  "ตกลง",
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontFamily: 'Kanit',
-                    color: Color(0xFF005C9E),
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
+            onPressed: () {
+              Navigator.of(context).pop();
+              if (!error) {
+                // Navigator.of(context).pushAndRemoveUntil(
+                //   MaterialPageRoute(
+                //     builder: (context) => const Menupage(),
+                //   ),
+                //   (Route<dynamic> route) => false,
+                // );
+                Navigator.of(context).pop();
+              }
+            },
           ),
-        );
-      }
-    } catch (e) {
-      logE(e);
-      setState(() => _loadingSubmit = false);
-    }
+        ],
+      ),
+    );
   }
 
   readStorage() async {
     try {
-      var value = await ManageStorage.read('profileData') ?? '';
-      var user = json.decode(value);
+      var res = await ManageStorage.read('profileMe') ?? '';
+      var profileMe = json.decode(res);
 
-      if (user['code'] != '') {
-        setState(() {
-          _imageUrl = user['imageUrl'] ?? '';
-          txtFirstName.text = user['firstName'] ?? '';
-          txtLastName.text = user['lastName'] ?? '';
-          txtEmail.text = user['email'] ?? '';
-          txtPhone.text = user['phone'] ?? '';
-          _selectedPrefixName = user['prefixName'];
-          _code = user['code'];
-        });
+      setState(() {
+        _model = profileMe;
+        txtFirstName.text = profileMe['firstnameTh'] ?? '';
+        txtLastName.text = profileMe['lastnameTh'] ?? '';
+        txtEmail.text = profileMe['email'] ?? '';
+        txtPhone.text = profileMe['phonenumber'] ?? '';
+        txtAge.text =
+            profileMe['ageRange'] == null ? '' : profileMe['ageRange'];
+        txtDate.text =
+            DateFormat('dd / MM / yyyy').format(DateTime.parse(profileMe['dob']));
+        _gender = profileMe['gender'] ?? '';
+      });
 
-        logWTF(user['birthDay']);
-
-        // if (user['birthDay'] != '') {
-        //   var date = user['birthDay'];
-        //   var year = date.substring(0, 4);
-        //   var month = date.substring(4, 6);
-        //   var day = date.substring(6, 8);
-        //   DateTime todayDate = DateTime.parse(year + '-' + month + '-' + day);
-        //   // DateTime todayDate = DateTime.parse(user['birthDay']);
-
-        //   setState(() {
-        //     _selectedYear = todayDate.year;
-        //     _selectedMonth = todayDate.month;
-        //     _selectedDay = todayDate.day;
-        //     txtDate.text = DateFormat("dd / MM / yyyy").format(todayDate);
-        //   });
-        // }
-        readUser();
-      }
+      // readUser();
     } catch (e) {
       logE(e);
     }

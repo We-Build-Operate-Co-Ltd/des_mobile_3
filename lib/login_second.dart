@@ -1,9 +1,12 @@
 // ignore_for_file: unnecessary_null_comparison
 
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/forgot_password.dart';
 import 'package:des/menu.dart';
 import 'package:des/register.dart';
+import 'package:des/shared/extension.dart';
 import 'package:des/shared/google_firebase.dart';
 import 'package:des/shared/line.dart';
 import 'package:des/shared/secure_storage.dart';
@@ -44,6 +47,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
   bool openLine = false;
+  bool _loadingSubmit = false;
 
   @override
   Widget build(BuildContext context) {
@@ -489,11 +493,12 @@ class _LoginSecondPageState extends State<LoginSecondPage>
             final form = _formKey.currentState;
             if (form!.validate()) {
               form.save();
-              if (_username!.isEmpty) {
-                _callUser();
-              } else {
-                _callLoginGuest();
-              }
+              // if (_username!.isEmpty) {
+              //   _callUser();
+              // } else {
+              //   _callLoginGuest();
+              // }
+              _callLogin();
             }
             ;
           },
@@ -1028,6 +1033,170 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       }
     } else {
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+    }
+  }
+
+  _callLogin() async {
+    var token = await _getTokenKeycloak();
+    var responseKeyCloak = await _getUserInfoKeycloak(token);
+    var modelProfile = await _getProfileMe(token);
+    var modelUser = await _getUserProfile();
+
+  //  if (responseKeyCloak == null ||
+  //         modelProfile == null ||
+  //         modelUser == null) {
+  //       return;
+  //     }
+
+      await ManageStorage.createSecureStorage(
+        value: token,
+        key: 'accessToken',
+      );
+      await ManageStorage.createSecureStorage(
+        value: json.encode(responseKeyCloak),
+        key: 'loginData',
+      );
+       await ManageStorage.createSecureStorage(
+        value: json.encode(modelProfile['data']),
+        key: 'profileMe',
+      );
+      await ManageStorage.createProfile(
+        value: modelUser[0],
+        key: 'guest',
+      );
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Menu(),
+        ),
+      );
+    
+  }
+
+  _getTokenKeycloak() async {
+    try {
+      // get token
+      Response response = await Dio().post(
+        '$ssoURL/realms/$keycloakReaml/protocol/openid-connect/token',
+        data: {
+          'username': _username,
+          'password': txtPassword.text.toString(),
+          'client_id': clientID,
+          'client_secret': clientSecret,
+          'grant_type': 'password',
+        },
+        options: Options(
+          validateStatus: (_) => true,
+          contentType: 'application/x-www-form-urlencoded',
+          responseType: ResponseType.json,
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return response.data['access_token'];
+      } else {
+        logE(response.data);
+        Fluttertoast.showToast(msg: response.data['error_description']);
+        setState(() => _loadingSubmit = false);
+      }
+    } on DioError catch (e) {
+      logE(e.error);
+      setState(() => _loadingSubmit = false);
+      String err = e.error.toString();
+      if (e.response != null) {
+        err = e.response!.data.toString();
+      }
+      Fluttertoast.showToast(msg: err);
+    }
+  }
+
+  dynamic _getUserInfoKeycloak(String token) async {
+    try {
+      // get info
+      if (token.isEmpty) return null;
+      Response response = await Dio().get(
+        '$ssoURL/realms/dcc-portal/protocol/openid-connect/userinfo',
+        options: Options(
+          validateStatus: (_) => true,
+          contentType: 'application/x-www-form-urlencoded',
+          responseType: ResponseType.json,
+          headers: {
+            'Content-type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        logE(response.data);
+        Fluttertoast.showToast(msg: response.data['error_description']);
+        setState(() => _loadingSubmit = false);
+        return null;
+      }
+    } on DioError catch (e) {
+      setState(() => _loadingSubmit = false);
+      String err = e.error.toString();
+      if (e.response != null) {
+        err = e.response!.data.toString();
+      }
+      Fluttertoast.showToast(msg: err);
+      return null;
+    }
+  }
+
+  dynamic _getProfileMe(String token) async {
+    try {
+      // get info
+      if (token.isEmpty) return null;
+      Response response = await Dio().get(
+        '$ondeURL/api/user/ProfileMe',
+        options: Options(
+          validateStatus: (_) => true,
+          contentType: 'application/x-www-form-urlencoded',
+          responseType: ResponseType.json,
+          headers: {
+            'Content-type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        logE(response.data);
+        Fluttertoast.showToast(msg: response.data['title']);
+        setState(() => _loadingSubmit = false);
+        return null;
+      }
+    } on DioError catch (e) {
+      setState(() => _loadingSubmit = false);
+      String err = e.error.toString();
+      if (e.response != null) {
+        err = e.response!.data['title'].toString();
+      }
+      Fluttertoast.showToast(msg: err);
+      return null;
+    }
+  }
+
+  _getUserProfile() async {
+    Response response = await Dio().post(
+        '$server/de-api/m/register/read',
+        data: {
+          'username': _username,
+          // 'category': 'guest',
+        });
+
+    if (response.statusCode == 200) {
+      return response.data['objectData'];
+    } else {
+      logE(response.data);
+      Fluttertoast.showToast(msg: response.data['error_description']);
+      return null;
     }
   }
 

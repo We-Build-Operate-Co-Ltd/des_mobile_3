@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'forgot_password_complete.dart';
+import 'forgot_password_new_password.dart';
 import 'main.dart';
 
 class ForgotPasswordOTPEmailPage extends StatefulWidget {
@@ -201,15 +202,16 @@ class _ForgotPasswordOTPEmailPageState
                     GestureDetector(
                       onTap: () async {
                         FocusScope.of(context).unfocus();
-                        if (txtNumber1.text.isNotEmpty) {
-                          if (await _validateOTP()) {
-                            await _submitForgotPassword();
-                          } else {
-                            Fluttertoast.showToast(msg: 'OTP ไม่ถูกต้อง');
-                          }
-                        } else {
-                          Fluttertoast.showToast(msg: 'OTP ไม่ครบ');
-                        }
+                        await _submitForgotPassword();
+                        // if (txtNumber1.text.isNotEmpty) {
+                        //   if (await _validateOTP()) {
+                        //     await _submitForgotPassword();
+                        //   } else {
+                        //     Fluttertoast.showToast(msg: 'OTP ไม่ถูกต้อง');
+                        //   }
+                        // } else {
+                        //   Fluttertoast.showToast(msg: 'OTP ไม่ครบ');
+                        // }
                       },
                       child: Container(
                         height: 50,
@@ -351,13 +353,15 @@ class _ForgotPasswordOTPEmailPageState
   _submitForgotPassword() async {
     try {
       logWTF(widget.email);
-      var res =
-          await Dio().post('$server/de-api/m/Register/forgot/password', data: {
-        'email': widget.email,
-      });
-      Navigator.of(context).push(
+      
+    //  setState(() => _loadingSubmit = false);
+      if (!mounted) return;
+      Navigator.push(
+        context,
         MaterialPageRoute(
-          builder: (context) => ForgotPasswordCompletePage(),
+          builder: (_) => ForgotPasswordNewPasswordPage(
+            email: widget.email,
+          ),
         ),
       );
     } catch (e) {
