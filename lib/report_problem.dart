@@ -3,6 +3,7 @@ import 'package:des/contact.dart';
 import 'package:des/contact_category.dart';
 import 'package:flutter/material.dart';
 
+import 'chat_botnoi.dart';
 import 'models/mock_data.dart';
 
 class ReportProblemPage extends StatelessWidget {
@@ -68,10 +69,17 @@ class ReportProblemPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
+                      // onTap: () => Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (_) => ChatPage(),
+                      //   ),
+                      // ),
+
+                      onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => ChatPage(),
+                          builder: (context) => ChatBotNoiPage(),
+                          // builder: (context) => ChatPage(),
                         ),
                       ),
                       child: Column(

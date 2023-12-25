@@ -2,12 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>FlutterDeepLinkingEnabled</key>
+	<true/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>DCC</string>
+	<string>DCC Platform</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -44,7 +46,7 @@
 	<key>FacebookClientToken</key>
 	<string>ee1ee427dde4e9522960c88cb9f33f86</string>
 	<key>FacebookDisplayName</key>
-	<string>DCC</string>
+	<string>DCC Platform</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -66,19 +68,19 @@
 		<true/>
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>DCC Music Usage</string>
+	<string>DCC Platform Music Usage</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>DCC Bluetool Usage</string>
+	<string>DCC Platform Bluetool Usage</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>DCC BluetoothPeripheral</string>
+	<string>DCC Platform BluetoothPeripheral</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>DCC Calendar Usage</string>
+	<string>DCC Platform Calendar Usage</string>
 	<key>NSCameraUsageDescription</key>
 	<string>เพื่อแสดงรูปภาพโปรไฟล์ของคุณ</string>
 	<key>NSContactsUsageDescription</key>
-	<string>DCC ต้องการเข้าถึงข้อมูลการติดต่อของคุณ</string>
+	<string>DCC Platform ต้องการเข้าถึงข้อมูลการติดต่อของคุณ</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>DCC FaceID Usage</string>
+	<string>DCC Platform FaceID Usage</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>เพื่อแสดงตำแหน่งปัจจุบันของคุณ และแนะนำสถานที่น่าสนใจให้กับคุณ</string>
 	<key>NSLocationUsageDescription</key>
@@ -86,21 +88,21 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>เพื่อแสดงตำแหน่งปัจจุบันของคุณ และแนะนำสถานที่น่าสนใจให้กับคุณ</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>DCC Microphone Usage</string>
+	<string>DCC Platform Microphone Usage</string>
 	<key>NSMotionUsageDescription</key>
-	<string>DCC Motion Usage</string>
+	<string>DCC Platform Motion Usage</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>เพื่อแสดงรูปภาพโปรไฟล์ของคุณ</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>เพื่อแสดงรูปภาพโปรไฟล์ของคุณ</string>
 	<key>NSRemindersUsageDescription</key>
-	<string>DCC Reminder Usage</string>
+	<string>DCC Platform Reminder Usage</string>
 	<key>NSSiriUsageDescription</key>
-	<string>DCC Siri Usage</string>
+	<string>DCC Platform Siri Usage</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>DCC Speech Recognition Usage</string>
+	<string>DCC Platform Speech Recognition Usage</string>
 	<key>NSVideoSubscriberAccountUsageDescription</key>
-	<string>DCC Video Subscribe Usage</string>
+	<string>DCC Platform Video Subscribe Usage</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
@@ -131,6 +133,6 @@
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
 	<key>kTCCServiceMediaLibrary</key>
-	<string>DCC MediaLibrary Usage</string>
+	<string>DCC Platform MediaLibrary Usage</string>
 </dict>
 </plist>

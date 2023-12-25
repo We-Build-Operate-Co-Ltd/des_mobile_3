@@ -7,29 +7,29 @@ import 'package:des/find_job.dart';
 import 'package:des/fund.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/notification_list.dart';
-import 'package:des/chat.dart';
 import 'package:des/report_problem.dart';
-import 'package:des/shared/extension.dart';
-import 'package:des/shared/notification_bloc.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:des/poi.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart' as getLib;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui show ImageFilter;
 
 import 'chat_botnoi.dart';
+import 'controller/lms_controller.dart';
+import 'course_detail.dart';
+import 'my_class_all.dart';
 import 'shared/config.dart';
 import 'main.dart';
 import 'shared/notification_service.dart';
+import 'webview_inapp.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
@@ -44,6 +44,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // final lmsController = getLib.Get.put(LMSController());
+
   final storage = const FlutterSecureStorage();
   DateTime? currentBackPressTime;
   final RefreshController _refreshController =
@@ -196,12 +198,14 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => SearchPage(),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => MyClassAllPage(
+                            title: 'คอร์สเรียนของคุณ',
+                          ),
+                        ),
+                      );
                     },
                     child: Container(
                       // alignment: Alignment.centerLeft,
@@ -253,62 +257,167 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  Row(
-                    children: [
-                      Flexible(
-                        flex: 1,
-                        fit: FlexFit.tight,
-                        child: columnButton(
-                          MyApp.themeNotifier.value == ThemeModeThird.light
-                              ? 'assets/images/modern_farmer.png'
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? 'assets/images/modern_farmer_d.png'
-                                  : 'assets/images/modern_farmer_d-y.png',
-                          'เกษตรกรสมัยใหม่',
-                          code: 'btn1',
+                  Container(
+                    height: 100,
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      scrollDirection: Axis.horizontal,
+                      physics: const ClampingScrollPhysics(),
+                      children: [
+                        Container(
+                          width: 85,
+                          height: 85,
+                          child: columnButton(
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/icon_devcourse.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/icon_devcourse.png'
+                                    : 'assets/images/icon_devcourse.png',
+                            'DevCourse',
+                            code: 'devcourse',
+                          ),
                         ),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        fit: FlexFit.tight,
-                        child: columnButton(
-                          MyApp.themeNotifier.value == ThemeModeThird.light
-                              ? 'assets/images/community_business.png'
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? 'assets/images/community_business_d.png'
-                                  : 'assets/images/community_business_d-y.png',
-                          'ธุรกิจชุมชน',
-                          code: 'btn2',
+                        Container(
+                          width: 85,
+                          height: 85,
+                          child: columnButton(
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/icon_market.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/icon_market.png'
+                                    : 'assets/images/icon_market.png',
+                            'ด้านการพัฒนาผลิตภัณฑ์และการสื่อสารทางการตลาด',
+                            code: 'market',
+                          ),
                         ),
-                      ),
-                      Flexible(
-                        fit: FlexFit.tight,
-                        flex: 1,
-                        child: columnButton(
-                          MyApp.themeNotifier.value == ThemeModeThird.light
-                              ? 'assets/images/care_old.png'
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? 'assets/images/care_old_d.png'
-                                  : 'assets/images/care_old_d-y.png',
-                          'ดูแลผู้สูงอายุ',
-                          code: 'btn3',
+                        Container(
+                          width: 85,
+                          height: 85,
+                          child: columnButton(
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/icon_digital.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/icon_digital.png'
+                                    : 'assets/images/icon_digital.png',
+                            'ด้าน Digital Literacy',
+                            code: 'digital',
+                          ),
                         ),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        fit: FlexFit.tight,
-                        child: columnButton(
-                          MyApp.themeNotifier.value == ThemeModeThird.light
-                              ? 'assets/images/more.png'
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? 'assets/images/more_d.png'
-                                  : 'assets/images/more_d-y.png',
-                          'เพิ่มเติม',
-                          code: 'btn4',
+                        Container(
+                          width: 75,
+                          child: columnButton(
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/icon_travel.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/icon_travel.png'
+                                    : 'assets/images/icon_travel.png',
+                            'ด้านการท่องเที่ยวเชิงการแพทย์และสุขภาพ',
+                            code: 'btn4',
+                          ),
                         ),
-                      ),
-                    ],
+                        Container(
+                          width: 85,
+                          height: 85,
+                          child: columnButton(
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/modern_farmer.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/modern_farmer_d.png'
+                                    : 'assets/images/modern_farmer_d-y.png',
+                            'เกษตรกรสมัยใหม่',
+                            code: 'btn1',
+                          ),
+                        ),
+                        Container(
+                          width: 75,
+                          child: columnButton(
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/community_business.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/community_business_d.png'
+                                    : 'assets/images/community_business_d-y.png',
+                            'ธุรกิจชุมชน',
+                            code: 'btn2',
+                          ),
+                        ),
+                        Container(
+                          width: 75,
+                          child: columnButton(
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/care_old.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/care_old_d.png'
+                                    : 'assets/images/care_old_d-y.png',
+                            'ดูแลผู้สูงอายุ',
+                            code: 'btn3',
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+                  // Row(
+                  //   children: [
+                  //     Flexible(
+                  //       flex: 1,
+                  //       fit: FlexFit.tight,
+                  //       child: columnButton(
+                  //         MyApp.themeNotifier.value == ThemeModeThird.light
+                  //             ? 'assets/images/modern_farmer.png'
+                  //             : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  //                 ? 'assets/images/modern_farmer_d.png'
+                  //                 : 'assets/images/modern_farmer_d-y.png',
+                  //         'เกษตรกรสมัยใหม่',
+                  //         code: 'btn1',
+                  //       ),
+                  //     ),
+                  //     Flexible(
+                  //       flex: 1,
+                  //       fit: FlexFit.tight,
+                  //       child: columnButton(
+                  //         MyApp.themeNotifier.value == ThemeModeThird.light
+                  //             ? 'assets/images/community_business.png'
+                  //             : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  //                 ? 'assets/images/community_business_d.png'
+                  //                 : 'assets/images/community_business_d-y.png',
+                  //         'ธุรกิจชุมชน',
+                  //         code: 'btn2',
+                  //       ),
+                  //     ),
+                  //     Flexible(
+                  //       fit: FlexFit.tight,
+                  //       flex: 1,
+                  //       child: columnButton(
+                  //         MyApp.themeNotifier.value == ThemeModeThird.light
+                  //             ? 'assets/images/care_old.png'
+                  //             : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  //                 ? 'assets/images/care_old_d.png'
+                  //                 : 'assets/images/care_old_d-y.png',
+                  //         'ดูแลผู้สูงอายุ',
+                  //         code: 'btn3',
+                  //       ),
+                  //     ),
+                  //     Flexible(
+                  //       flex: 1,
+                  //       fit: FlexFit.tight,
+                  //       child: columnButton(
+                  //         MyApp.themeNotifier.value == ThemeModeThird.light
+                  //             ? 'assets/images/more.png'
+                  //             : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  //                 ? 'assets/images/more_d.png'
+                  //                 : 'assets/images/more_d-y.png',
+                  //         'ท่องเที่ยว',
+                  //         code: 'btn4',
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),
@@ -377,7 +486,7 @@ class _HomePageState extends State<HomePage> {
                         : MyApp.themeNotifier.value == ThemeModeThird.dark
                             ? 'assets/images/find_job_d.png'
                             : 'assets/images/find_job_d-y.png',
-                    'หางาน',
+                    'จับคู่งาน',
                     type: 'serviceforyou',
                     code: 'job',
                   ),
@@ -518,15 +627,37 @@ class _HomePageState extends State<HomePage> {
                                             snapshot.data[_currentBanner]
                                                     ['code']
                                                 .replaceAll('-', '');
-                                        launchUrl(Uri.parse('$path$codeReplae'),
-                                            mode:
-                                                LaunchMode.externalApplication);
+                                        // launchUrl(Uri.parse('$path$codeReplae'),
+                                        //     mode:
+                                        //         LaunchMode.externalApplication);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => WebViewInAppPage(
+                                              url: "$path$codeReplae",
+                                              title:
+                                                  snapshot.data[_currentBanner]
+                                                      ['title'],
+                                            ),
+                                          ),
+                                        );
                                       }
                                     } else
-                                      launchUrl(
-                                          Uri.parse(snapshot
-                                              .data[_currentBanner]['linkUrl']),
-                                          mode: LaunchMode.externalApplication);
+                                      // launchUrl(
+                                      //     Uri.parse(snapshot
+                                      //         .data[_currentBanner]['linkUrl']),
+                                      //     mode: LaunchMode.externalApplication);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => WebViewInAppPage(
+                                            url: snapshot.data[_currentBanner]
+                                                ['linkUrl'],
+                                            title: snapshot.data[_currentBanner]
+                                                ['title'],
+                                          ),
+                                        ),
+                                      );
                                   } else if (snapshot.data[_currentBanner]
                                           ['action'] ==
                                       'in') {
@@ -589,7 +720,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
                 Text(
-                  'คลาสแนะนำ',
+                  'คอร์สแนะนำ',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
@@ -598,6 +729,19 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             const SizedBox(height: 10),
+
+            // getLib.Obx(
+            //   () => lmsController.recomendModel.isEmpty
+            //       ? const CircularProgressIndicator()
+            //       : ListView(
+            //           children: [
+            //             Container(
+            //               child: Text('xxx'),
+            //             ),
+            //           ],
+            //         ),
+            // ),
+
             FutureBuilder(
               future: _futureNews,
               builder: (context, snapshot) {
@@ -613,7 +757,7 @@ class _HomePageState extends State<HomePage> {
                           mainAxisSpacing: 15),
                       physics: const ClampingScrollPhysics(),
                       // itemCount: snapshot.data!.length,
-                      itemCount: 2,
+                      itemCount: 4,
                       itemBuilder: (context, index) =>
                           containerRecommendedClass(snapshot.data![index]),
                     );
@@ -635,8 +779,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailPage(
-              slug: 'eventcalendar',
+            builder: (context) => CourseDetailPage(
               model: model,
             ),
           ),
@@ -671,12 +814,20 @@ class _HomePageState extends State<HomePage> {
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
                 ),
-                child: CachedNetworkImage(
-                  imageUrl: model['img_url'],
-                  height: 93,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+                child: model['docs'] != ''
+                    ? CachedNetworkImage(
+                        imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
+                            model['docs'],
+                        height: 120,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.asset(
+                        'assets/icon.png',
+                        height: 120,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
               ),
               const SizedBox(height: 9),
               Expanded(
@@ -825,13 +976,15 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               _callOpenPage(code);
             },
-            child: type == 'serviceforyou'
-                ? Image.asset(
-                    image,
-                    height: 45,
-                    width: 45,
-                  )
-                : Image.asset(image, height: 30, width: 30),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.asset(
+                image,
+                height: type == 'serviceforyou' ? 45 : 30,
+                width: type == 'serviceforyou' ? 45 : 30,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
           SizedBox(height: type == 'serviceforyou' ? 7 : 5),
           type == 'serviceforyou'
@@ -938,11 +1091,16 @@ class _HomePageState extends State<HomePage> {
     Dio dio = Dio();
     var response;
     var map = new Map<String, dynamic>();
-    FormData formData = new FormData.fromMap({"apikey": _api_key});
+    FormData formData = new FormData.fromMap({"apikey": apiKeyLMS});
     // map['apikey'] = _api_key;
     try {
-      response = await dio.post('${service}api/popular_course', data: formData);
+      //https://lms.dcc.onde.go.th/api/api/recomend/003138ecf4ad3c45f1b903d72a860181
+      //response = await dio.post('${service}api/popular_course', data: formData);
+      response =
+          await dio.post('$serverLMS/recomend/$apiKeyLMS', data: formData);
+      // logWTF(response.data);
       if (response.data['status']) {
+        // logWTF('_get_course' + response.data['data']);
         return response.data['data'];
       }
     } catch (e) {}
@@ -1008,14 +1166,80 @@ class _HomePageState extends State<HomePage> {
   // }
 
   void _callOpenPage(param) {
-    if (param == 'btn1') {
-      buildModalWaiting(context);
+    if (param == 'devcourse') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => WebViewInAppPage(
+            url: "https://dcc.onde.go.th/user/digitalskill/coursecategory/46",
+            title: "DevCourse",
+          ),
+        ),
+      );
+    } else if (param == 'digital') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => WebViewInAppPage(
+            url: "https://dcc.onde.go.th/user/digitalskill/coursecategory/13",
+            title: "Digital Literacy",
+          ),
+        ),
+      );
+    } else if (param == 'market') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => WebViewInAppPage(
+            url: "https://dcc.onde.go.th/user/digitalskill/coursecategory/27",
+            title: "DevCourse",
+          ),
+        ),
+      );
+    } else if (param == 'btn1') {
+      // buildModalWaiting(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => WebViewInAppPage(
+            url: "https://dcc.onde.go.th/user/digitalskill/coursecategory/6",
+            title: "การเกษตรสมัยใหม่",
+          ),
+        ),
+      );
     } else if (param == 'btn2') {
-      buildModalWaiting(context);
+      // buildModalWaiting(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => WebViewInAppPage(
+            url: "https://dcc.onde.go.th/user/digitalskill/coursecategory/5",
+            title: "ธุรกิจชุมชน",
+          ),
+        ),
+      );
     } else if (param == 'btn3') {
-      buildModalWaiting(context);
+      // buildModalWaiting(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => WebViewInAppPage(
+            url: "https://dcc.onde.go.th/user/digitalskill/coursecategory/7",
+            title: "ดูแลผู้สูงอายุ",
+          ),
+        ),
+      );
     } else if (param == 'btn4') {
-      buildModalWaiting(context);
+      // buildModalWaiting(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => WebViewInAppPage(
+            url: "https://dcc.onde.go.th/user/digitalskill/coursecategory/8",
+            title: "ท่องเที่ยว",
+          ),
+        ),
+      );
     } else if (param == 'booking') {
       widget.changePage!(1);
     } else if (param == 'job') {
@@ -1023,9 +1247,25 @@ class _HomePageState extends State<HomePage> {
     } else if (param == 'fund') {
       Navigator.push(context, MaterialPageRoute(builder: (_) => FundPage()));
     } else if (param == 'skill') {
-      buildModalWaiting(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => MyClassAllPage(
+            title: 'ส่งเสริมทักษะ',
+          ),
+        ),
+      );
+      // buildModalWaiting(context);
     } else if (param == 'knowledge') {
-      buildModalWaiting(context);
+      // buildModalWaiting(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => MyClassAllPage(
+            title: 'คลังข้อมูล',
+          ),
+        ),
+      );
     } else if (param == 'report') {
       Navigator.of(context).push(
         MaterialPageRoute(

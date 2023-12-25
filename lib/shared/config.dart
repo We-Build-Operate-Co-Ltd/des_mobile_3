@@ -1,8 +1,8 @@
-const version = '1.0.1';
-const versionNumber = 101;
+const version = '1.0.5';
+const versionNumber = 105;
 // const server = 'https://des.we-builds.com';
 const server = 'https://decms.dcc.onde.go.th';
-const serverBooking = 'http://dcc-portal.webview.co/dcc-api';
+const serverPlatform = 'http://dcc-portal.webview.co/dcc-api';
 // const server = 'https://des.we-builds.com';
 
 const clientID = 'dcc-mobile';
@@ -10,5 +10,8 @@ const clientSecret = 'TweWGTy31ptx0NzHUnXuPv4J0hP97lMH';
 const keycloakReaml = 'dcc-portal';
 const ondeURL = 'https://dcc.onde.go.th/dcc-api';
 const ssoURL = 'https://sso.dcc.onde.go.th:8443';
+
+const serverLMS = 'https://lms.dcc.onde.go.th/api/api';
+const apiKeyLMS = '003138ecf4ad3c45f1b903d72a860181';
 
 enum LoadingBookingStatus { success, fail, loading }

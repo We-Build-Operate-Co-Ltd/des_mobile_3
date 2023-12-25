@@ -305,7 +305,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
           ),
           child: GestureDetector(
             onTap: () {
-              logWTF(widget.model);
+              // logWTF(widget.model);
               // Navigator.push(
               //   context,
               //   MaterialPageRoute(
@@ -466,7 +466,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                       Fluttertoast.showToast(msg: 'เลือกรูปแบบการจอง');
                       return;
                     }
-                    
+
                     int bookingNo = 0;
                     if (widget.edit) {
                       bookingNo = widget.model?['bookingno'] ?? 0;
@@ -917,7 +917,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
           ...response.data
         ];
       });
-      logWTF(_modelType);
+      // logWTF(_modelType);
     } catch (e) {
       logE(e);
       setState(() => _loadingDropdownType = false);

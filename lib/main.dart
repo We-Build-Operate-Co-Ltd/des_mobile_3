@@ -78,7 +78,7 @@ class _MyAppState extends State<MyApp> {
           String? state = prefs.getString('thaiDState') ?? '';
           String? action = prefs.getString('thaiDAction') ?? '';
 
-          logWTF('got uri: $uri');
+          // logWTF('got uri: $uri');
 
           if (state == uri!.queryParameters['state']) {
             await prefs.setString(

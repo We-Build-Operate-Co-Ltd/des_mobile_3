@@ -18,6 +18,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:twitter_login/twitter_login.dart';
 
 import 'shared/config.dart';
 import 'main.dart';
@@ -30,15 +31,14 @@ class LoginFirstPage extends StatefulWidget {
   State<LoginFirstPage> createState() => _LoginFirstPageState();
 }
 
-class _LoginFirstPageState extends State<LoginFirstPage>
-    with SingleTickerProviderStateMixin {
+class _LoginFirstPageState extends State<LoginFirstPage> {
   String? _username = '';
   String? _imageUrl = '';
   String? _category;
   late TextEditingController txtEmail;
   late TextEditingController txtPassword;
   final Duration duration = const Duration(milliseconds: 200);
-  AnimationController? _controller;
+  // AnimationController? _controller;
   bool passwordVisibility = true;
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
@@ -367,6 +367,30 @@ class _LoginFirstPageState extends State<LoginFirstPage>
                               child: _buildButtonLogin(
                                 'assets/images/logo_google_login_page.png',
                                 'เข้าใช้ผ่าน Google',
+                                colorTitle: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.black
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                                colorBorder: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFFE4E4E4)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                              ),
+                            ),
+                          if (configLoginSocial.toString() == "1")
+                            SizedBox(height: 10),
+                          if (configLoginSocial.toString() == "1")
+                            InkWell(
+                              onTap: () => _callLoginX(),
+                              child: _buildButtonLogin(
+                                'assets/images/logo_google_login_page.png',
+                                'เข้าใช้ผ่าน X',
                                 colorTitle: MyApp.themeNotifier.value ==
                                         ThemeModeThird.light
                                     ? Colors.black
@@ -1277,6 +1301,75 @@ class _LoginFirstPageState extends State<LoginFirstPage>
     } else {
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
+  }
+
+  void _callLoginX() async {
+    final twitterLogin = TwitterLogin(
+      // Consumer API keys
+      apiKey: 'VZWc4305qtisGTva2z52ue5A3',
+      // Consumer API Secret keys
+      apiSecretKey: 'WlBAmdIiGgUsDRJ0w2JuoFKrvh34CAwlC4l3ChzQhkHlt6Qd1W',
+      // Registered Callback URLs in TwitterApp
+      // Android is a deeplink
+      // iOS is a URLScheme
+      redirectURI: 'dccadmin://',
+    );
+    final authResult = await twitterLogin.login();
+    switch (authResult.status) {
+      case TwitterLoginStatus.loggedIn:
+        // success
+        logWTF(authResult.user!.id);
+        logWTF(authResult.user!.name);
+        break;
+      case TwitterLoginStatus.cancelledByUser:
+        // cancel
+        break;
+      case TwitterLoginStatus.error:
+        // error
+        break;
+      case null:
+        break;
+    }
+
+    // if (obj != null) {
+    //   var model = {
+    //     "username": obj.user!.email,
+    //     "email": obj.user!.email,
+    //     "imageUrl": obj.user!.photoURL ?? '',
+    //     "firstName": obj.user!.displayName,
+    //     "lastName": '',
+    //     "googleID": obj.user!.uid
+    //   };
+
+    //   Dio dio = new Dio();
+    //   try {
+    //     var response = await dio.post(
+    //       '$server/de-api/m/v2/register/google/login',
+    //       data: model,
+    //     );
+
+    //     await ManageStorage.createSecureStorage(
+    //       key: 'imageUrlSocial',
+    //       value: obj.user!.photoURL != null ? obj.user!.photoURL : '',
+    //     );
+
+    //     ManageStorage.createProfile(
+    //       value: response.data['objectData'],
+    //       key: 'google',
+    //     );
+
+    //     Navigator.pushReplacement(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (context) => Menu(),
+    //       ),
+    //     );
+    //   } catch (e) {
+    //     Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+    //   }
+    // } else {
+    //   Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+    // }
   }
 
   void _callLoginGoogle() async {

@@ -1,4 +1,5 @@
 import 'package:des/shared/theme_data.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'shared/config.dart';
@@ -11,45 +12,22 @@ class FundPage extends StatefulWidget {
 }
 
 class _FundPageState extends State<FundPage> {
-  final List<dynamic> _model = [
-    {
-      'title': 'สินเชื่อ SME ยอดขายต่อปี  ไม่เกิน 20 ล้านบาท',
-      'imageUrl': '$server/de-document/images/event/event_233702565.png',
-      'description': '',
-    },
-    {
-      'title': 'สินเชื่อที่ใช้ เงินฝาก/สลาก/กรมธรรม์ ค้ำประกัน',
-      'imageUrl': '$server/de-document/images/event/event_234017074.png',
-      'description': 'อิสระทุกการใช้จ่าย ง่ายทุกความต้องการ ',
-    },
-    {
-      'title': 'สินเชื่อเพื่อการค้าระหว่างประเทศ',
-      'imageUrl': '$server/de-document/images/event/event_234248716.jpg',
-      'description': '',
-    },
-    {
-      'title': 'สินเชื่อเคหะ',
-      'imageUrl': '$server/de-document/images/event/event_234610362.jpg',
-      'description': 'ช่วยสานฝันให้เป็นจริงด้วยเงื่อนไขสบายๆ และไม่ยุ่งยาก',
-    },
-    {
-      'title': 'สินเชื่อบุคคล',
-      'imageUrl': '$server/de-document/images/event/event_234500235.jpg',
-      'description': 'ให้ทุกความต้องการของคุณเป็นจริง',
-    },
-    {
-      'title': 'สินเชื่อจำนำทะเบียนรถ',
-      'imageUrl': '$server/de-document/images/event/event_235056315.jpg',
-      'description':
-          'อนุมัติไว ผ่อนอยู่ ก็กู้ได้ รีไฟแนนซ์ง่าย ไม่ต้องโอนเล่ม ไม่เช็กประวัติทางการเงิน',
-    },
-    {
-      'title': 'บริการสินเชื่อเพื่อการนำเข้า',
-      'imageUrl': '$server/de-document/images/event/event_235414876.jpg',
-      'description':
-          'เงินทุนหมุนเวียนเพื่อผู้นำเข้าสำหรับชำระค่าสินค้าและบริการ ให้ธุรกิจไม่หยุดชะงัก',
-    },
-  ];
+  dynamic _model = [];
+  dynamic _categoryModel = [];
+
+  @override
+  void initState() {
+    // _callCategoryRead();
+    _callRead();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,8 +102,8 @@ class _FundPageState extends State<FundPage> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(4),
-                child: Image.network(
-                  data['imageUrl'],
+                child: Image.asset(
+                  'assets/icon.png',
                   height: 120,
                   width: 120,
                   fit: BoxFit.cover,
@@ -139,7 +117,7 @@ class _FundPageState extends State<FundPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        data['title'],
+                        data['annoucement'],
                         style: TextStyle(
                           fontSize: 16,
                           color: Theme.of(context).custom.b_w_y,
@@ -147,23 +125,39 @@ class _FundPageState extends State<FundPage> {
                       ),
                       Expanded(
                         child: Text(
-                          data['description'],
+                          data['target'],
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: 12,
                             color: Theme.of(context).custom.f70f70_w_fffd57,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      Text(
-                        'อ่านเพิ่มเติม',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Theme.of(context).custom.b325f8_w_fffd57,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            data['announceDate']
+                                .toString()
+                                .replaceAll('T00:00:00', ''),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).custom.b325f8_w_fffd57,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            'สนใจเข้าร่วม',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).custom.b325f8_w_fffd57,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -174,5 +168,17 @@ class _FundPageState extends State<FundPage> {
         ],
       ),
     );
+  }
+
+  _callRead() async {
+    Dio dio = new Dio();
+    var response = await dio
+        .get('http://dcc-portal.webview.co/dcc-api/api/InvestorAnnoucement/');
+
+    setState(() {
+      _model = response.data;
+    });
+
+    // print(_model.toString());
   }
 }

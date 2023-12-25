@@ -823,7 +823,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<String> _checkDuplicateUser() async {
     try {
-      logWTF(txtEmail.text);
+      // logWTF(txtEmail.text);
       Response<String> response = await Dio().get(
         '$server/de-api/m/register/user/duplicate/${txtEmail.text}',
       );
@@ -855,7 +855,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       // check duplicate email.
       StatusDuplicate emailDup = await _checkDuplicateEmail();
-      logWTF(emailDup);
+      // logWTF(emailDup);
       if (emailDup == StatusDuplicate.fail) {
         setState(() => _loading = false);
         Fluttertoast.showToast(msg: 'อีเมลนี้ถูกใช้งานไปแล้ว');

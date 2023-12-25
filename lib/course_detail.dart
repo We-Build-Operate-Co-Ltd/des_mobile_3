@@ -11,6 +11,8 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui show ImageFilter;
 
+import 'webview_inapp.dart';
+
 // ignore: must_be_immutable
 class CourseDetailPage extends StatefulWidget {
   const CourseDetailPage({
@@ -92,7 +94,8 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(17.5),
               child: CachedNetworkImage(
-                imageUrl: widget.model['docs'],
+                imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
+                    '${widget.model?['docs'] ?? ''}',
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
                 errorWidget: (context, url, error) =>
@@ -118,60 +121,60 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-                decoration: BoxDecoration(
-                  color: buttonTheme,
-                  borderRadius: BorderRadius.circular(12.5),
-                  border: Border.all(color: colorTheme),
-                ),
-                child: Row(
-                  children: const [
-                    Icon(
-                      Icons.access_time_outlined,
-                      size: 10,
-                      color: Colors.white,
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      '3 ชั่วโมง',
-                      style: TextStyle(
-                        fontSize: 9,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 5),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 9,
-                  vertical: 3,
-                ),
-                decoration: BoxDecoration(
-                  color: buttonTheme,
-                  borderRadius: BorderRadius.circular(12.5),
-                  border: Border.all(color: colorTheme),
-                ),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/book.png',
-                      height: 10,
-                      width: 8.41,
-                    ),
-                    const SizedBox(width: 5),
-                    const Text(
-                      '4 บทเรียน',
-                      style: TextStyle(
-                        fontSize: 9,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Container(
+              //   padding: EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+              //   decoration: BoxDecoration(
+              //     color: buttonTheme,
+              //     borderRadius: BorderRadius.circular(12.5),
+              //     border: Border.all(color: colorTheme),
+              //   ),
+              //   child: Row(
+              //     children: const [
+              //       Icon(
+              //         Icons.access_time_outlined,
+              //         size: 10,
+              //         color: Colors.white,
+              //       ),
+              //       SizedBox(width: 5),
+              //       Text(
+              //         '3 ชั่วโมง',
+              //         style: TextStyle(
+              //           fontSize: 9,
+              //           color: Colors.white,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // const SizedBox(width: 5),
+              // Container(
+              //   padding: EdgeInsets.symmetric(
+              //     horizontal: 9,
+              //     vertical: 3,
+              //   ),
+              //   decoration: BoxDecoration(
+              //     color: buttonTheme,
+              //     borderRadius: BorderRadius.circular(12.5),
+              //     border: Border.all(color: colorTheme),
+              //   ),
+              //   child: Row(
+              //     children: [
+              //       Image.asset(
+              //         'assets/images/book.png',
+              //         height: 10,
+              //         width: 8.41,
+              //       ),
+              //       const SizedBox(width: 5),
+              //       const Text(
+              //         '4 บทเรียน',
+              //         style: TextStyle(
+              //           fontSize: 9,
+              //           color: Colors.white,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               const Expanded(child: SizedBox()),
               InkWell(
                 onTap: () => _callShare(widget.model),
@@ -346,11 +349,22 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
         const SizedBox(height: 85),
         InkWell(
           onTap: () {
-            launchUrl(
-              Uri.parse(
-                  'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['id']}'),
-              mode: LaunchMode.externalApplication,
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => WebViewInAppPage(
+                  url:
+                      'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['id']}',
+                  title: widget.model['name'],
+                ),
+              ),
             );
+
+            // launchUrl(
+            //   Uri.parse(
+            //       'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['id']}'),
+            //   mode: LaunchMode.externalApplication,
+            // );
           },
           child: Container(
             height: 45,
@@ -419,7 +433,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
 
   Future<void> _callShare(param) async {
     await FlutterShare.share(
-        title: 'DCC',
+        title: 'DCC Platform',
         text: '''📚🔖ขอเชิญชวนร่วม คลาสเรียนเพื่อการเรียนรู้ ดิจิทัลชุมชน หัวข้อ
 "${param['title']}"
 🚩🚩 🚩🚩''',

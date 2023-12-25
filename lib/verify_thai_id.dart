@@ -165,7 +165,7 @@ class _VerifyThaiIDPageState extends State<VerifyThaiIDPage> {
       String parameter =
           '?response_type=$responseType&client_id=$clientId&redirect_uri=$redirectUri&scope=$scope&state=$state';
 
-      logWTF(state);
+      // logWTF(state);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('thaiDState', state);
       await prefs.setString('thaiDAction', 'update');

@@ -90,7 +90,7 @@ class _ForgotPasswordOTPEmailPageState
                         ),
                         GestureDetector(
                           onTap: () {
-                            logWTF('close');
+                            // logWTF('close');
                             Navigator.pop(context);
                           },
                           child: Container(
@@ -326,8 +326,8 @@ class _ForgotPasswordOTPEmailPageState
 
   _validateOTP() async {
     try {
-      logWTF(widget.email);
-      logWTF(txtNumber1.text);
+      // logWTF(widget.email);
+      // logWTF(txtNumber1.text);
       var response = await Dio().post(
         '$server/de-api/m/register/otp/validate',
         data: {
@@ -365,7 +365,7 @@ class _ForgotPasswordOTPEmailPageState
         ),
       );
     } catch (e) {
-      logWTF(e);
+      // logWTF(e);
       Fluttertoast.showToast(msg: 'ลองอีกครั้ง');
     }
   }
