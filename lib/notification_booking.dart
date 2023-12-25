@@ -186,7 +186,7 @@ class _NotificationListState extends State<NotificationBookingPage> {
     var profile = await ManageStorage.readDynamic('profileData');
     try {
       Response response = await Dio().post(
-        'https://6ec4-101-109-167-237.ngrok-free.app/m/v2/notificationbooking/read',
+        '$server/de-api/m/v2/notificationbooking/read',
         data: {
           'email': profile['email'],
         },
@@ -318,7 +318,7 @@ class _NotificationListState extends State<NotificationBookingPage> {
     Response<dynamic> response;
     try {
       response = await dio.post(
-          'https://6ec4-101-109-167-237.ngrok-free.app/m/v2/notificationbooking/count',
+          '$server/de-api/m/v2/notificationbooking/count',
           data: {
             "email": result['email'],
           });
@@ -823,7 +823,7 @@ class _NotificationListState extends State<NotificationBookingPage> {
         try {
           if (model['category'] == 'bookingPage') {
             dio.post(
-              'https://6ec4-101-109-167-237.ngrok-free.app/m/v2/notificationBooking/update',
+              '$server/de-api/m/v2/notificationBooking/update',
               data: {"code": '${model['code']}'},
             );
             // model['status'] = 'A';
@@ -1413,7 +1413,7 @@ class _NotificationListState extends State<NotificationBookingPage> {
                         setState(() => _loadingWidget = true);
 
                         await dio.post(
-                            'https://6ec4-101-109-167-237.ngrok-free.app/m/v2/notificationBooking/update/all',
+                            '$server/de-api/m/v2/notificationBooking/update/all',
                             data: {"email": '${profileData['email']}'});
                         _readBooking();
                       } catch (e) {
@@ -1539,7 +1539,7 @@ class _NotificationListState extends State<NotificationBookingPage> {
                         setState(() => _loadingWidget = true);
 
                         await dio.post(
-                            'https://6ec4-101-109-167-237.ngrok-free.app/m/v2/notificationBooking/delete',
+                            '$server/de-api/m/v2/notificationBooking/delete',
                             data: {"email": '${profileData['email']}'});
                         _readBooking();
                       } catch (e) {

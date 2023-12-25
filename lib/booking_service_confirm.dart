@@ -917,7 +917,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
 
     try {
       Response res = await Dio().post(
-        'https://6ec4-101-109-167-237.ngrok-free.app/m/v2/notificationbooking/create',
+        '$server/de-api/m/v2/notificationbooking/create',
         data: param,
       );
     } catch (e) {
