@@ -98,6 +98,20 @@ dateStringToDateStringFormat(String date, {String type = '/'}) {
   return result;
 }
 
+dateTimeToDateStringFormat(String param, {String type = '/'}) {
+  DateTime date = DateTime.parse(param);
+  String result = '';
+  if (date != '') {
+    result = date.day.toString() +
+        type +
+        date.month.toString() +
+        type +
+        date.year.toString();
+  }
+
+  return result;
+}
+
 dateStringToDateStringFormatDot(String date, {String type = '.'}) {
   String result = '';
   if (date != '') {

@@ -481,6 +481,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                       MaterialPageRoute(
                         builder: (_) => BookingServiceConfirmPage(
                           centerId: widget.model['centerId'],
+                          centerName: widget.model['centerName'],
                           edit: widget.edit,
                           date: txtDate.text,
                           startTime: txtStartTime.text,

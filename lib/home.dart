@@ -26,6 +26,7 @@ import 'chat_botnoi.dart';
 import 'controller/lms_controller.dart';
 import 'course_detail.dart';
 import 'my_class_all.dart';
+import 'notification_booking.dart';
 import 'shared/config.dart';
 import 'main.dart';
 import 'shared/notification_service.dart';
@@ -152,7 +153,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => NotificationListPage(),
+                          builder: (context) => NotificationBookingPage(),
                         ),
                       );
                     },

@@ -23,6 +23,7 @@ class BookingServiceConfirmPage extends StatefulWidget {
     required this.centerId,
     required this.bookingTypeRefNo,
     this.bookingno,
+    required this.centerName,
   });
 
   final bool repeat;
@@ -32,6 +33,7 @@ class BookingServiceConfirmPage extends StatefulWidget {
   final String startTime;
   final String endTime;
   final int centerId;
+  final String centerName;
   final String bookingTypeRefNo;
   final int? bookingno;
 
@@ -375,47 +377,6 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
     );
   }
 
-  _postpone() async {
-    // postpone
-    try {
-      if (widget.bookingno == null) {
-        return;
-      }
-      var subDate = _dateTimeController.text.replaceAll(' ', '').split('/');
-      String yearStr = (int.parse(subDate[2]) - 543).toString();
-      String tempDate = '$yearStr-${subDate[1]}-${subDate[0]}T00:00:00';
-
-      var value = await ManageStorage.read('profileData') ?? '';
-      var profileData = json.decode(value);
-
-      var recordId = _modelType
-          .firstWhere((e) => e['refNo'] == _bookingTypeRefNo)['recordId'];
-
-      var data = {
-        "bookingDate": tempDate,
-        "bookingno": widget.bookingno,
-        "centerId": widget.centerId,
-        "startTime": _startTimeController.text,
-        "endTime": _endTimeController.text,
-        "phone": profileData['phone'],
-        "desc": "",
-        "remark": ""
-      };
-      // logWTF(data);
-
-      setState(() => _loadingSubmit = true);
-      final String baseUrl = 'http://dcc-portal.webview.co/dcc-api';
-      Response response =
-          await Dio().put('${baseUrl}/api/Booking/PostponeBooking', data: data);
-
-      _dialogPostpone();
-      setState(() => _loadingSubmit = false);
-    } on DioError catch (e) {
-      setState(() => _loadingSubmit = false);
-      Fluttertoast.showToast(msg: e.response!.data['message']);
-    }
-  }
-
   _dialogPostpone() {
     showDialog(
       barrierDismissible: false,
@@ -484,33 +445,6 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
         ),
       ),
     );
-  }
-
-  _cancelBooking() async {
-    // cancel
-    try {
-      if (widget.bookingno == null) {
-        return;
-      }
-      setState(() => _loadingSubmit = true);
-      final String baseUrl = 'http://dcc-portal.webview.co/dcc-api';
-      Response response = await Dio()
-          .put('${baseUrl}/api/Booking/Cancel?bookingNo=${widget.bookingno}');
-      setState(() => _loadingSubmit = false);
-
-      if (response.data['success']) {
-        _dialogCancelSuccess();
-      } else {
-        Fluttertoast.showToast(msg: response.data['errorMessage']);
-      }
-    } on DioError catch (e) {
-      setState(() => _loadingSubmit = false);
-      var err = e.toString();
-      if (e.response!.statusCode != 200) {
-        err = e.response!.data['message'];
-      }
-      Fluttertoast.showToast(msg: err);
-    }
   }
 
   _dialogCancelBooking() {
@@ -828,7 +762,35 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
     ];
 
     super.initState();
+    logWTF('bookingTypeRefNo');
+    logWTF(widget.bookingTypeRefNo);
     _callReadType();
+  }
+
+  _callReadType() async {
+    try {
+      setState(() => _loadingDropdownType = true);
+      dynamic response =
+          await Dio().get('$serverPlatform/api/masterdata/book/slotType');
+
+      setState(() => _loadingDropdownType = false);
+      setState(() {
+        _modelType = [
+          {
+            "recordId": 99999,
+            "typeName": "เลือกรูปแบบการจอง",
+            "remark": null,
+            "refNo": ""
+          },
+          ...response.data
+        ];
+        _bookingTypeRefNo = widget.bookingTypeRefNo;
+      });
+      // logWTF(_modelType);
+    } catch (e) {
+      logE(e);
+      setState(() => _loadingDropdownType = false);
+    }
   }
 
   _send() async {
@@ -865,6 +827,8 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
       Response response = await Dio()
           .post('$serverPlatform/api/Booking/Booking/mobile', data: data);
 
+      _sendNotification(title: 'booking', date: tempDate);
+
       setState(() => _loadingSubmit = false);
       if (response.data['status'] == 200) {
         Navigator.push(
@@ -886,29 +850,105 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
     }
   }
 
-  _callReadType() async {
+  _postpone() async {
+    // postpone
     try {
-      setState(() => _loadingDropdownType = true);
-      dynamic response =
-          await Dio().get('$serverPlatform/api/masterdata/book/slotType');
+      if (widget.bookingno == null) {
+        return;
+      }
+      var subDate = _dateTimeController.text.replaceAll(' ', '').split('/');
+      String yearStr = (int.parse(subDate[2]) - 543).toString();
+      String tempDate = '$yearStr-${subDate[1]}-${subDate[0]}T00:00:00';
 
-      setState(() => _loadingDropdownType = false);
-      setState(() {
-        _modelType = [
-          {
-            "recordId": 99999,
-            "typeName": "เลือกรูปแบบการจอง",
-            "remark": null,
-            "refNo": ""
-          },
-          ...response.data
-        ];
-        _bookingTypeRefNo = widget.bookingTypeRefNo;
-      });
-      // logWTF(_modelType);
+      var value = await ManageStorage.read('profileData') ?? '';
+      var profileData = json.decode(value);
+
+      var recordId = _modelType
+          .firstWhere((e) => e['refNo'] == _bookingTypeRefNo)['recordId'];
+
+      var data = {
+        "bookingDate": tempDate,
+        "bookingno": widget.bookingno,
+        "centerId": widget.centerId,
+        "startTime": _startTimeController.text,
+        "endTime": _endTimeController.text,
+        "phone": profileData['phone'],
+        "desc": "",
+        "remark": ""
+      };
+      // logWTF(data);
+
+      setState(() => _loadingSubmit = true);
+      logWTF('model');
+      final String baseUrl = 'http://dcc-portal.webview.co/dcc-api';
+      Response response =
+          await Dio().put('${baseUrl}/api/Booking/PostponeBooking', data: data);
+      _sendNotification(title: 'postpone', date: tempDate);
+
+      _dialogPostpone();
+      setState(() => _loadingSubmit = false);
+    } on DioError catch (e) {
+      setState(() => _loadingSubmit = false);
+      Fluttertoast.showToast(msg: e.response!.data['message']);
+    }
+  }
+
+  _sendNotification({required String title, required String date}) async {
+    var profile = await ManageStorage.readDynamic('profileData');
+    var recordName = _modelType
+            .firstWhere((e) => e['refNo'] == _bookingTypeRefNo)['typeName'] ??
+        '';
+    var param = {
+      "bookingDate": date,
+      "category": title,
+      "bookingSlotType": recordName,
+      "bookingno": widget.bookingno.toString(),
+      "centerId": widget.centerId.toString(),
+      "centerName": widget.centerName,
+      "startTime": _startTimeController.text,
+      "endTime": _endTimeController.text,
+      "phone": profile['phone'],
+      "firstName": profile['firstName'],
+      "lastName": profile['lastName'],
+      "email": profile['email'],
+      "desc": "",
+      "remark": ""
+    };
+
+    try {
+      Response res = await Dio().post(
+        'https://6ec4-101-109-167-237.ngrok-free.app/m/v2/notificationbooking/create',
+        data: param,
+      );
     } catch (e) {
       logE(e);
-      setState(() => _loadingDropdownType = false);
+    }
+  }
+
+  _cancelBooking() async {
+    // cancel
+    try {
+      if (widget.bookingno == null) {
+        return;
+      }
+      setState(() => _loadingSubmit = true);
+      final String baseUrl = 'http://dcc-portal.webview.co/dcc-api';
+      Response response = await Dio()
+          .put('${baseUrl}/api/Booking/Cancel?bookingNo=${widget.bookingno}');
+      setState(() => _loadingSubmit = false);
+
+      if (response.data['success']) {
+        _dialogCancelSuccess();
+      } else {
+        Fluttertoast.showToast(msg: response.data['errorMessage']);
+      }
+    } on DioError catch (e) {
+      setState(() => _loadingSubmit = false);
+      var err = e.toString();
+      if (e.response!.statusCode != 200) {
+        err = e.response!.data['message'];
+      }
+      Fluttertoast.showToast(msg: err);
     }
   }
 }
