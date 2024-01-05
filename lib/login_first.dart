@@ -1319,7 +1319,9 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       // Registered Callback URLs in TwitterApp
       // Android is a deeplink
       // iOS is a URLScheme
-      redirectURI: 'dccadmin://',
+      // redirectURI: 'https://decms.dcc.onde.go.th/dcc-app',
+      redirectURI: 'dccadmin://thaid',
+      // redirectURI: 'dccadmin://', <-- ios
     );
     final authResult = await twitterLogin.login();
     switch (authResult.status) {
@@ -1327,6 +1329,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         // success
         logWTF(authResult.user!.id);
         logWTF(authResult.user!.name);
+
         break;
       case TwitterLoginStatus.cancelledByUser:
         // cancel
