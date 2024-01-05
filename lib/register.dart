@@ -847,17 +847,23 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  Future<String> _checkDuplicateUser() async {
+Future<String> _checkDuplicateUser() async {
     try {
-      // logWTF(txtEmail.text);
       Response<String> response = await Dio().get(
-        '$server/de-api/m/register/user/duplicate/guest/${txtEmail.text}',
+        '$server/de-api/m/register/admin/duplicate/${txtUsername.text}/${txtEmail.text}',
       );
-      if (response.data == 'username') {
-        return 'ชื่อผู้ใช้งานนี้ถูกใช้งานไปแล้ว';
+
+      // if (response.data == 'username') {
+      //   return 'ชื่อผู้ใช้งานนี้ถูกใช้งานไปแล้ว';
+      // }
+      // if (response.data == 'idcard') {
+      //   return 'เลขบัตรประชาชนนี้ถูกใช้งานไปแล้ว';
+      // }
+      if (response.data == 'email') {
+        return 'อีเมลนี้ถูกใช้งานไปแล้ว';
       }
-      if (response.data == 'idcard') {
-        return 'เลขบัตรประชาชนนี้ถูกใช้งานไปแล้ว';
+      if (response.data == 'server') {
+        return 'internal server error';
       }
 
       return '';
@@ -905,13 +911,14 @@ class _RegisterPageState extends State<RegisterPage> {
         'sex': _gender,
         'age': _ageRange,
         'ageRange': _ageRange,
-        'username': txtUsername.text,
+        'username': txtUsername.text == "" ? txtEmail.text : txtUsername.text,
         'career': _careerSelected,
         'favorites': favorites,
         'facebookID': "",
         'appleID': "",
         'lineID': widget.model?['lineID'] ?? '',
         'googleID': widget.model?['googleID'] ?? '',
+        'xID' : widget.model?['xID'] ?? '',
         'imageUrl': "",
         'category': "guest",
         'birthDay': "",

@@ -225,10 +225,10 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
           'username': widget.email,
           'password': _passwordController.text,
           // 'lineID': widget.model?['lineID'] ?? '',
-          'googleID': widget.model?['lineID'] + '00' ?? '',
+          'googleID': widget.model?['googleID'],
         };
         Response response = await Dio().post(
-          '$server/de-api/m/register/link/socialaccount/admin',
+          '$server/de-api/m/register/link/socialaccount',
           data: param,
         );
         setState(() => _loadingSubmit = false);

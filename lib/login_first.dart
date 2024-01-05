@@ -1311,75 +1311,119 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   }
 
   void _callLoginX() async {
-    final twitterLogin = TwitterLogin(
-      // Consumer API keys
-      apiKey: 'VZWc4305qtisGTva2z52ue5A3',
-      // Consumer API Secret keys
-      apiSecretKey: 'WlBAmdIiGgUsDRJ0w2JuoFKrvh34CAwlC4l3ChzQhkHlt6Qd1W',
-      // Registered Callback URLs in TwitterApp
-      // Android is a deeplink
-      // iOS is a URLScheme
-      // redirectURI: 'https://decms.dcc.onde.go.th/dcc-app',
-      redirectURI: 'dccadmin://thaid',
-      // redirectURI: 'dccadmin://', <-- ios
-    );
-    final authResult = await twitterLogin.login();
-    switch (authResult.status) {
-      case TwitterLoginStatus.loggedIn:
-        // success
-        logWTF(authResult.user!.id);
-        logWTF(authResult.user!.name);
+    try {
+      final twitterLogin = TwitterLogin(
+        // Consumer API keys
+        apiKey: 'VZWc4305qtisGTva2z52ue5A3',
+        // Consumer API Secret keys
+        apiSecretKey: 'WlBAmdIiGgUsDRJ0w2JuoFKrvh34CAwlC4l3ChzQhkHlt6Qd1W',
+        // Registered Callback URLs in TwitterApp
+        // Android is a deeplink
+        // iOS is a URLScheme
+        redirectURI: 'dccadmin://thaid',
+      );
+      final obj = await twitterLogin.login();
+      if (obj != null && obj.status == TwitterLoginStatus.loggedIn) {
+        var model = {
+          "username": obj.user!.id.toString(),
+          "email": obj.user!.email.toString(),
+          "imageUrl": obj.user!.thumbnailImage,
+          "firstName": obj.user!.name.toString(),
+          "lastName": '',
+          "xID": obj.user!.id.toString()
+        };
+        logWTF(model);
+        // switch (obj.status) {
+        //   case TwitterLoginStatus.loggedIn:
+        //     // success
+        //     logWTF(obj.user!.id);
+        //     logWTF(obj.user!.name);
+        //     break;
+        //   case TwitterLoginStatus.cancelledByUser:
+        //     // cancel
+        //     break;
+        //   case TwitterLoginStatus.error:
+        //     // error
+        //     break;
+        //   case null:
+        //     break;
+        // }
 
-        break;
-      case TwitterLoginStatus.cancelledByUser:
-        // cancel
-        break;
-      case TwitterLoginStatus.error:
-        // error
-        break;
-      case null:
-        break;
+        Dio dio = Dio();
+        var check = await dio.post(
+          '$server/de-api/m/register/check/login/social/guest',
+          data: {'username': obj.user!.id.toString()},
+        );
+        logWTF(check.data);
+        if (check.data) {
+          Response response = await dio.post(
+            '$server/de-api/m/v2/register/x/login',
+            data: model,
+          );
+          logWTF(response.data);
+          if (response.data['status'] != 'S') {
+            return null;
+          }
+          logWTF(response);
+          logWTF('token');
+          String accessToken = await _getTokenKeycloak(
+            username: response.data['objectData']['email'],
+            password: response.data['objectData']['password'],
+          );
+          logWTF(accessToken);
+          logWTF('responseKeyCloak');
+          dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
+          logWTF('responseProfileMe');
+          dynamic responseProfileMe = await _getProfileMe(accessToken);
+          logWTF('responseStaffProfileData');
+          if (responseKeyCloak == null || responseProfileMe == null) {
+            // Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+            return;
+          }
+          await ManageStorage.createSecureStorage(
+            value: accessToken,
+            key: 'accessToken',
+          );
+          await ManageStorage.createSecureStorage(
+            value: json.encode(responseKeyCloak),
+            key: 'loginData',
+          );
+          await ManageStorage.createSecureStorage(
+            value: json.encode(responseProfileMe['data']),
+            key: 'profileMe',
+          );
+
+          logWTF(response.data['objectData']);
+          await ManageStorage.createProfile(
+            value: response.data['objectData'],
+            key: 'x',
+          );
+
+          if (!mounted) return;
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const Menu(),
+            ),
+          );
+        } else {
+          if (!mounted) return;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => RegisterPage(model: model, category: 'x'),
+            ),
+          );
+        }
+      } else {
+        logE('obj :: ');
+        logE(obj);
+        // setState(() => _loadingSubmit = false);
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'ยกเลิก');
     }
-
-    // if (obj != null) {
-    //   var model = {
-    //     "username": obj.user!.email,
-    //     "email": obj.user!.email,
-    //     "imageUrl": obj.user!.photoURL ?? '',
-    //     "firstName": obj.user!.displayName,
-    //     "lastName": '',
-    //     "googleID": obj.user!.uid
-    //   };
-
-    //   Dio dio = new Dio();
-    //   try {
-    //     var response = await dio.post(
-    //       '$server/de-api/m/v2/register/google/login',
-    //       data: model,
-    //     );
-
-    //     await ManageStorage.createSecureStorage(
-    //       key: 'imageUrlSocial',
-    //       value: obj.user!.photoURL != null ? obj.user!.photoURL : '',
-    //     );
-
-    //     ManageStorage.createProfile(
-    //       value: response.data['objectData'],
-    //       key: 'google',
-    //     );
-
-    //     Navigator.pushReplacement(
-    //       context,
-    //       MaterialPageRoute(
-    //         builder: (context) => Menu(),
-    //       ),
-    //     );
-    //   } catch (e) {
-    //     Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-    //   }
-    // } else {
-    //   Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-    // }
   }
 
   // void _callLoginGoogle() async {
@@ -1442,7 +1486,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           "lastName": '',
           "googleID": obj.user!.uid
         };
-    
+
         Dio dio = Dio();
         var check = await dio.post(
           '$server/de-api/m/register/check/login/social',
@@ -1450,28 +1494,59 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         );
         logWTF(check.data);
         if (check.data) {
-        var response = await dio.post(
-          '$server/de-api/m/v2/register/google/login',
-          data: model,
-        );
+          var response = await dio.post(
+            '$server/de-api/m/v2/register/google/login',
+            data: model,
+          );
 
-        // setState(() => _loadingSubmit = false);
-        await ManageStorage.createSecureStorage(
-          key: 'imageUrlSocial',
-          value: obj.user!.photoURL != null ? obj.user!.photoURL : '',
-        );
+          logWTF(response);
 
-        ManageStorage.createProfile(
-          value: response.data['objectData'],
-          key: 'google',
-        );
-        if (!mounted) return;
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const Menu(),
-          ),
-        );
+          logWTF('token');
+          String accessToken = await _getTokenKeycloak(
+            username: response.data['objectData']['email'],
+            password: response.data['objectData']['password'],
+          );
+          logWTF(accessToken);
+          logWTF('responseKeyCloak');
+          dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
+          logWTF('responseProfileMe');
+          dynamic responseProfileMe = await _getProfileMe(accessToken);
+          logWTF('responseStaffProfileData');
+          if (responseKeyCloak == null || responseProfileMe == null) {
+            // Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+            return;
+          }
+
+          await ManageStorage.createSecureStorage(
+            value: accessToken,
+            key: 'accessToken',
+          );
+          await ManageStorage.createSecureStorage(
+            value: json.encode(responseKeyCloak),
+            key: 'loginData',
+          );
+          await ManageStorage.createSecureStorage(
+            value: json.encode(responseProfileMe['data']),
+            key: 'profileMe',
+          );
+
+          // setState(() => _loadingSubmit = false);
+          await ManageStorage.createSecureStorage(
+            key: 'imageUrlSocial',
+            value: obj.user!.photoURL != null ? obj.user!.photoURL : '',
+          );
+
+          ManageStorage.createProfile(
+            value: response.data['objectData'],
+            key: 'google',
+          );
+          if (!mounted) return;
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const Menu(),
+            ),
+          );
         } else {
           setState(() => _loadingSubmit = false);
           if (!mounted) return;
@@ -1569,7 +1644,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           logWTF(response.data['objectData']);
           await ManageStorage.createProfile(
             value: response.data['objectData'],
-            key: 'guest',
+            key: 'line',
           );
 
           if (!mounted) return;
