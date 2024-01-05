@@ -13,6 +13,7 @@ import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/facebook_firebase.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -979,6 +980,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }
+
 
   void _callLoginLine() async {
     var obj = await loginLine();

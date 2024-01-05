@@ -189,6 +189,7 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
         '$server/de-api/m/Register/create',
         data: _userData,
       );
+      logWTF(_userData);
 
       setState(() {
         _loadingSubmit = false;

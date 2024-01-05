@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:des/policy_web.dart';
+import 'package:des/register_link_account.dart';
 import 'package:des/shared/extension.dart';
+import 'package:des/shared/google_firebase.dart';
+import 'package:des/shared/line.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/register_verify_thai_id.dart';
@@ -18,10 +21,9 @@ import 'shared/config.dart';
 import 'main.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({
-    Key? key,
-  }) : super(key: key);
-
+  const RegisterPage({super.key, this.model, this.category = ''});
+  final dynamic model;
+  final String category;
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
@@ -256,6 +258,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             children: [
                               SizedBox(height: 10),
                               TextFormField(
+                                readOnly:
+                                    widget.category == 'google' ? true : false,
                                 controller: txtEmail,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.allow(
@@ -614,11 +618,33 @@ class _RegisterPageState extends State<RegisterPage> {
     return Stack(
       children: [
         InkWell(
-          onTap: () {
+          onTap: () async {
             if (chbAcceptPDPA) {
               final form = _formKey.currentState;
               if (form!.validate()) {
                 form.save();
+
+                String usernameDup = await _checkDuplicateUser();
+                logWTF(usernameDup);
+                if (usernameDup.isNotEmpty) {
+                  if (usernameDup == 'อีเมลนี้ถูกใช้งานไปแล้ว' &&
+                      widget.category != '') {
+                    if (!mounted) return;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => RegisterLinkAccountPage(
+                          email: txtEmail.text,
+                          category: 'google',
+                          model: widget.model,
+                        ),
+                      ),
+                    );
+                    return;
+                  }
+                  Fluttertoast.showToast(msg: usernameDup);
+                  return;
+                }
                 if (_careerSelected == '') {
                   Fluttertoast.showToast(msg: 'กรุณาเลือกอาชีพ');
                   return;
@@ -825,7 +851,7 @@ class _RegisterPageState extends State<RegisterPage> {
     try {
       // logWTF(txtEmail.text);
       Response<String> response = await Dio().get(
-        '$server/de-api/m/register/user/duplicate/${txtEmail.text}',
+        '$server/de-api/m/register/user/duplicate/guest/${txtEmail.text}',
       );
       if (response.data == 'username') {
         return 'ชื่อผู้ใช้งานนี้ถูกใช้งานไปแล้ว';
@@ -845,27 +871,19 @@ class _RegisterPageState extends State<RegisterPage> {
       logD('start register');
       setState(() => _loading = true);
 
-      // check duplicate username && idcard.
-      String usernameDup = await _checkDuplicateUser();
-      if (usernameDup.isNotEmpty) {
-        setState(() => _loading = false);
-        Fluttertoast.showToast(msg: usernameDup);
-        return;
-      }
-
-      // check duplicate email.
-      StatusDuplicate emailDup = await _checkDuplicateEmail();
-      // logWTF(emailDup);
-      if (emailDup == StatusDuplicate.fail) {
-        setState(() => _loading = false);
-        Fluttertoast.showToast(msg: 'อีเมลนี้ถูกใช้งานไปแล้ว');
-        return;
-      } else if (emailDup == StatusDuplicate.error) {
-        setState(() => _loading = false);
-        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-        return;
-      }
-      setState(() => _loading = false);
+      // // check duplicate email.
+      // StatusDuplicate emailDup = await _checkDuplicateEmail();
+      // // logWTF(emailDup);
+      // if (emailDup == StatusDuplicate.fail) {
+      //   setState(() => _loading = false);
+      //   Fluttertoast.showToast(msg: 'อีเมลนี้ถูกใช้งานไปแล้ว');
+      //   return;
+      // } else if (emailDup == StatusDuplicate.error) {
+      //   setState(() => _loading = false);
+      //   Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      //   return;
+      // }
+      // setState(() => _loading = false);
 
       var favorites = '';
       _favoriteList.forEach((e) {
@@ -887,13 +905,13 @@ class _RegisterPageState extends State<RegisterPage> {
         'sex': _gender,
         'age': _ageRange,
         'ageRange': _ageRange,
-        'username': txtEmail.text,
+        'username': txtUsername.text,
         'career': _careerSelected,
         'favorites': favorites,
         'facebookID': "",
         'appleID': "",
-        'googleID': "",
-        'lineID': "",
+        'lineID': widget.model?['lineID'] ?? '',
+        'googleID': widget.model?['googleID'] ?? '',
         'imageUrl': "",
         'category': "guest",
         'birthDay': "",
@@ -1050,6 +1068,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void initState() {
     _scrollController = ScrollController();
+    _setDataFromThridParty();
     super.initState();
     _clearData();
   }
@@ -1064,6 +1083,18 @@ class _RegisterPageState extends State<RegisterPage> {
     txtPhone.dispose();
     txtFirstName.dispose();
     txtLastName.dispose();
+    switch (widget.category) {
+      // case 'facebook':
+      //   logoutFacebook();
+      //   break;
+      case 'google':
+        logoutGoogle();
+        break;
+      case 'line':
+        logoutLine();
+        break;
+      default:
+    }
     super.dispose();
   }
 
@@ -1073,6 +1104,17 @@ class _RegisterPageState extends State<RegisterPage> {
     await prefs.remove('thaiDCode');
     await prefs.remove('thaiDState');
     await prefs.remove('thaiDAction');
+  }
+
+  _setDataFromThridParty() {
+    if (widget.category.isNotEmpty) {
+      logWTF(widget.model);
+      setState(() {
+        txtEmail.text = widget.model?['email'] ?? '';
+        txtUsername.text = widget.model?['username'] ?? '';
+        txtPassword.text = widget.category;
+      });
+    }
   }
 
   void goBack() async {

@@ -1,20 +1,24 @@
 // ignore_for_file: unnecessary_null_comparison
 
+import 'dart:convert';
+
 import 'package:des/forgot_password.dart';
 import 'package:des/login_second.dart';
 import 'package:des/menu.dart';
 import 'package:des/register.dart';
 import 'package:des/shared/apple_firebase.dart';
 import 'package:des/shared/extension.dart';
-import 'package:des/shared/google_firebase.dart';
 import 'package:des/shared/line.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/facebook_firebase.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -23,6 +27,8 @@ import 'package:twitter_login/twitter_login.dart';
 import 'shared/config.dart';
 import 'main.dart';
 import 'dart:ui' as ui show ImageFilter;
+
+import 'shared/google_firebase.dart';
 
 class LoginFirstPage extends StatefulWidget {
   const LoginFirstPage({Key? key}) : super(key: key);
@@ -51,6 +57,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     {'code': '2', 'title': 'ขาวดำ', 'isSelected': false},
     {'code': '3', 'title': 'ดำเหลือง', 'isSelected': false},
   ];
+  bool _loadingSubmit = false;
 
   @override
   void initState() {
@@ -236,17 +243,17 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                                     ? Colors.white
                                     : Color(0xFFFFFD57),
                             validator: (model) {
-                                  String pattern =
-                                      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                                  RegExp regex = new RegExp(pattern);
-                                  if (model!.isEmpty) {
-                                    return 'กรุณากรอกอีเมล.';
-                                  } else if (!regex.hasMatch(model)) {
-                                    return 'กรุณากรอกรูปแบบอีเมลให้ถูกต้อง.';
-                                  } else {
-                                    return null;
-                                  }
-                                },
+                              String pattern =
+                                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                              RegExp regex = new RegExp(pattern);
+                              if (model!.isEmpty) {
+                                return 'กรุณากรอกอีเมล.';
+                              } else if (!regex.hasMatch(model)) {
+                                return 'กรุณากรอกรูปแบบอีเมลให้ถูกต้อง.';
+                              } else {
+                                return null;
+                              }
+                            },
                           ),
                           SizedBox(height: 10),
                           GestureDetector(
@@ -389,7 +396,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                             InkWell(
                               onTap: () => _callLoginX(),
                               child: _buildButtonLogin(
-                                'assets/images/logo_google_login_page.png',
+                                'assets/images/logo_x_twitter.png',
                                 'เข้าใช้ผ่าน X',
                                 colorTitle: MyApp.themeNotifier.value ==
                                         ThemeModeThird.light
@@ -1372,28 +1379,80 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     // }
   }
 
+  // void _callLoginGoogle() async {
+  //   var obj = await signInWithGoogle();
+
+  //   print('---signInWithGoogle---' + obj.toString());
+
+  //   if (obj != null) {
+  //     var model = {
+  //       "username": obj.user!.email,
+  //       "email": obj.user!.email,
+  //       "imageUrl": obj.user!.photoURL ?? '',
+  //       "firstName": obj.user!.displayName,
+  //       "lastName": '',
+  //       "googleID": obj.user!.uid
+  //     };
+
+  //     Dio dio = new Dio();
+  //     try {
+  //       var response = await dio.post(
+  //         '$server/de-api/m/v2/register/google/login',
+  //         data: model,
+  //       );
+
+  //       await ManageStorage.createSecureStorage(
+  //         key: 'imageUrlSocial',
+  //         value: obj.user!.photoURL != null ? obj.user!.photoURL : '',
+  //       );
+
+  //       ManageStorage.createProfile(
+  //         value: response.data['objectData'],
+  //         key: 'google',
+  //       );
+
+  //       Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (context) => Menu(),
+  //         ),
+  //       );
+  //     } catch (e) {
+  //       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+  //     }
+  //   } else {
+  //     Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+  //   }
+  // }
+
   void _callLoginGoogle() async {
-    var obj = await signInWithGoogle();
+    try {
+      UserCredential obj = await signInWithGoogle();
 
-    print('---signInWithGoogle---' + obj.toString());
-
-    if (obj != null) {
-      var model = {
-        "username": obj.user!.email,
-        "email": obj.user!.email,
-        "imageUrl": obj.user!.photoURL ?? '',
-        "firstName": obj.user!.displayName,
-        "lastName": '',
-        "googleID": obj.user!.uid
-      };
-
-      Dio dio = new Dio();
-      try {
+      logWTF(obj);
+      if (obj != null) {
+        var model = {
+          "username": obj.user!.uid,
+          "email": obj.user!.email,
+          "imageUrl": obj.user!.photoURL ?? '',
+          "firstName": obj.user!.displayName,
+          "lastName": '',
+          "googleID": obj.user!.uid
+        };
+    
+        Dio dio = Dio();
+        var check = await dio.post(
+          '$server/de-api/m/register/check/login/social',
+          data: {'username': obj.user!.uid},
+        );
+        logWTF(check.data);
+        if (check.data) {
         var response = await dio.post(
           '$server/de-api/m/v2/register/google/login',
           data: model,
         );
 
+        // setState(() => _loadingSubmit = false);
         await ManageStorage.createSecureStorage(
           key: 'imageUrlSocial',
           value: obj.user!.photoURL != null ? obj.user!.photoURL : '',
@@ -1403,74 +1462,134 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           value: response.data['objectData'],
           key: 'google',
         );
-
+        if (!mounted) return;
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => Menu(),
+            builder: (context) => const Menu(),
           ),
         );
-      } catch (e) {
+        } else {
+          setState(() => _loadingSubmit = false);
+          if (!mounted) return;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => RegisterPage(model: model, category: 'google'),
+            ),
+          );
+        }
+      } else {
+        logE('obj :: ');
+        logE(obj);
+        // setState(() => _loadingSubmit = false);
         Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
-    } else {
+    } catch (e) {
+      logE(e);
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      // setState(() => _loadingSubmit = false);
     }
   }
 
   void _callLoginLine() async {
-    var obj = await loginLine();
-    openLine = false;
+    try {
+      LoginResult? obj = await loginLine();
+      openLine = false;
+      logWTF(obj!.data);
 
-    if (obj != null) {
-      final idToken = obj.accessToken.idToken;
-      final userEmail = (idToken != null)
-          ? idToken['email'] != null
-              ? idToken['email']
-              : ''
-          : '';
-      var model = {
-        "username": (userEmail != '' && userEmail != null)
-            ? userEmail
-            : obj.userProfile!.userId,
-        "email": userEmail,
-        "imageUrl": (obj.userProfile!.pictureUrl != '' &&
-                obj.userProfile!.pictureUrl != null)
-            ? obj.userProfile!.pictureUrl
-            : '',
-        "firstName": obj.userProfile!.displayName,
-        "lastName": '',
-        "lineID": obj.userProfile!.userId
-      };
-
-      Dio dio = new Dio();
-      try {
-        var response = await dio.post(
-          '$server/de-api/m/v2/register/line/login',
-          data: model,
+      if (obj != null) {
+        final idToken = obj.accessToken.idToken;
+        final userEmail = (idToken != null)
+            ? idToken['email'] != null
+                ? idToken['email']
+                : ''
+            : '';
+        var model = {
+          "username": obj.userProfile!.userId.toString(),
+          "email": userEmail,
+          "imageUrl": (obj.userProfile!.pictureUrl != '' &&
+                  obj.userProfile!.pictureUrl != null)
+              ? obj.userProfile!.pictureUrl
+              : '',
+          "firstName": obj.userProfile!.displayName,
+          "lastName": '',
+          "lineID": obj.userProfile!.userId.toString()
+        };
+        Dio dio = Dio();
+        var check = await dio.post(
+          '$server/de-api/m/register/check/login/social/guest',
+          data: {'username': obj.userProfile!.userId.toString()},
         );
+        logWTF(check.data);
+        if (check.data) {
+          Response response = await dio.post(
+            '$server/de-api/m/v2/register/line/login',
+            data: model,
+          );
+          logWTF(response.data);
+          if (response.data['status'] != 'S') {
+            return null;
+          }
 
-        await ManageStorage.createSecureStorage(
-          key: 'imageUrlSocial',
-          value: model['imageUrl'],
-        );
+          logWTF(response);
 
-        await ManageStorage.createProfile(
-          value: response.data['objectData'],
-          key: 'line',
-        );
+          logWTF('token');
+          String accessToken = await _getTokenKeycloak(
+            username: response.data['objectData']['email'],
+            password: response.data['objectData']['password'],
+          );
+          logWTF(accessToken);
+          logWTF('responseKeyCloak');
+          dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
+          logWTF('responseProfileMe');
+          dynamic responseProfileMe = await _getProfileMe(accessToken);
+          logWTF('responseStaffProfileData');
+          if (responseKeyCloak == null || responseProfileMe == null) {
+            // Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+            return;
+          }
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Menu(),
-          ),
-        );
-      } catch (e) {
+          await ManageStorage.createSecureStorage(
+            value: accessToken,
+            key: 'accessToken',
+          );
+          await ManageStorage.createSecureStorage(
+            value: json.encode(responseKeyCloak),
+            key: 'loginData',
+          );
+          await ManageStorage.createSecureStorage(
+            value: json.encode(responseProfileMe['data']),
+            key: 'profileMe',
+          );
+
+          logWTF(response.data['objectData']);
+          await ManageStorage.createProfile(
+            value: response.data['objectData'],
+            key: 'guest',
+          );
+
+          if (!mounted) return;
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const Menu(),
+            ),
+          );
+        } else {
+          if (!mounted) return;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => RegisterPage(model: model, category: 'line'),
+            ),
+          );
+        }
+      } else {
         Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
-    } else {
-      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'ยกเลิก');
     }
   }
 
@@ -1504,6 +1623,131 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           builder: (context) => Menu(),
         ),
       );
+    }
+  }
+
+  _getTokenKeycloak({String username = '', String password = ''}) async {
+    try {
+      // get token
+      Response response = await Dio().post(
+        '$ssoURL/realms/$keycloakReaml/protocol/openid-connect/token',
+        data: {
+          'username': username,
+          'password': password.toString(),
+          'client_id': clientID,
+          'client_secret': clientSecret,
+          'grant_type': 'password',
+        },
+        options: Options(
+          validateStatus: (_) => true,
+          contentType: 'application/x-www-form-urlencoded',
+          responseType: ResponseType.json,
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return response.data['access_token'];
+      } else {
+        logE(response.data);
+        Fluttertoast.showToast(msg: response.data['error_description']);
+        setState(() => _loadingSubmit = false);
+      }
+    } on DioError catch (e) {
+      logE(e.error);
+      setState(() => _loadingSubmit = false);
+      String err = e.error.toString();
+      if (e.response != null) {
+        err = e.response!.data.toString();
+      }
+      Fluttertoast.showToast(msg: err);
+    }
+  }
+
+  dynamic _getUserInfoKeycloak(String token) async {
+    try {
+      // get info
+      if (token.isEmpty) return null;
+      Response response = await Dio().get(
+        '$ssoURL/realms/dcc-portal/protocol/openid-connect/userinfo',
+        options: Options(
+          validateStatus: (_) => true,
+          contentType: 'application/x-www-form-urlencoded',
+          responseType: ResponseType.json,
+          headers: {
+            'Content-type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        logE(response.data);
+        Fluttertoast.showToast(msg: response.data['error_description']);
+        setState(() => _loadingSubmit = false);
+        return null;
+      }
+    } on DioError catch (e) {
+      setState(() => _loadingSubmit = false);
+      String err = e.error.toString();
+      if (e.response != null) {
+        err = e.response!.data.toString();
+      }
+      Fluttertoast.showToast(msg: err);
+      return null;
+    }
+  }
+
+  dynamic _getProfileMe(String token) async {
+    try {
+      // get info
+      if (token.isEmpty) return null;
+      Response response = await Dio().get(
+        '$ondeURL/api/user/ProfileMe',
+        options: Options(
+          validateStatus: (_) => true,
+          contentType: 'application/x-www-form-urlencoded',
+          responseType: ResponseType.json,
+          headers: {
+            'Content-type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        logE(response.data);
+        Fluttertoast.showToast(msg: response.data['title']);
+        setState(() => _loadingSubmit = false);
+        return null;
+      }
+    } on DioError catch (e) {
+      setState(() => _loadingSubmit = false);
+      String err = e.error.toString();
+      if (e.response != null) {
+        err = e.response!.data['title'].toString();
+      }
+      Fluttertoast.showToast(msg: err);
+      return null;
+    }
+  }
+
+  _getUserProfile() async {
+    Response response =
+        await Dio().post('$server/de-api/m/register/read', data: {
+      'username': _username,
+      // 'category': 'guest',
+    });
+
+    if (response.statusCode == 200) {
+      return response.data['objectData'];
+    } else {
+      logE(response.data);
+      Fluttertoast.showToast(msg: response.data['error_description']);
+      return null;
     }
   }
 
