@@ -236,17 +236,17 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                                     ? Colors.white
                                     : Color(0xFFFFFD57),
                             validator: (model) {
-                                  String pattern =
-                                      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                                  RegExp regex = new RegExp(pattern);
-                                  if (model!.isEmpty) {
-                                    return 'กรุณากรอกอีเมล.';
-                                  } else if (!regex.hasMatch(model)) {
-                                    return 'กรุณากรอกรูปแบบอีเมลให้ถูกต้อง.';
-                                  } else {
-                                    return null;
-                                  }
-                                },
+                              String pattern =
+                                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                              RegExp regex = new RegExp(pattern);
+                              if (model!.isEmpty) {
+                                return 'กรุณากรอกอีเมล.';
+                              } else if (!regex.hasMatch(model)) {
+                                return 'กรุณากรอกรูปแบบอีเมลให้ถูกต้อง.';
+                              } else {
+                                return null;
+                              }
+                            },
                           ),
                           SizedBox(height: 10),
                           GestureDetector(
@@ -1312,7 +1312,8 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       // Registered Callback URLs in TwitterApp
       // Android is a deeplink
       // iOS is a URLScheme
-      redirectURI: 'dccadmin://',
+      redirectURI: 'https://decms.dcc.onde.go.th/dcc-app',
+      // redirectURI: 'dccadmin://', <-- ios
     );
     final authResult = await twitterLogin.login();
     switch (authResult.status) {
@@ -1320,6 +1321,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         // success
         logWTF(authResult.user!.id);
         logWTF(authResult.user!.name);
+
         break;
       case TwitterLoginStatus.cancelledByUser:
         // cancel
