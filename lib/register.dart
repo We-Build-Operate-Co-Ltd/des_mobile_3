@@ -624,27 +624,6 @@ class _RegisterPageState extends State<RegisterPage> {
               if (form!.validate()) {
                 form.save();
 
-                String usernameDup = await _checkDuplicateUser();
-                logWTF(usernameDup);
-                if (usernameDup.isNotEmpty) {
-                  if (usernameDup == 'อีเมลนี้ถูกใช้งานไปแล้ว' &&
-                      widget.category != '') {
-                    if (!mounted) return;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => RegisterLinkAccountPage(
-                          email: txtEmail.text,
-                          category: 'google',
-                          model: widget.model,
-                        ),
-                      ),
-                    );
-                    return;
-                  }
-                  Fluttertoast.showToast(msg: usernameDup);
-                  return;
-                }
                 if (_careerSelected == '') {
                   Fluttertoast.showToast(msg: 'กรุณาเลือกอาชีพ');
                   return;
@@ -847,12 +826,11 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-Future<String> _checkDuplicateUser() async {
+  Future<String> _checkDuplicateUser() async {
     try {
       Response<String> response = await Dio().get(
-        '$server/de-api/m/register/admin/duplicate/${txtUsername.text}/${txtEmail.text}',
+        '$server/de-api/m/register/guest/duplicate/${txtEmail.text}/${txtEmail.text}',
       );
-
       // if (response.data == 'username') {
       //   return 'ชื่อผู้ใช้งานนี้ถูกใช้งานไปแล้ว';
       // }
@@ -891,6 +869,27 @@ Future<String> _checkDuplicateUser() async {
       // }
       // setState(() => _loading = false);
 
+      String usernameDup = await _checkDuplicateUser();
+      logWTF(usernameDup);
+      if (usernameDup.isNotEmpty) {
+        if (usernameDup == 'อีเมลนี้ถูกใช้งานไปแล้ว' && widget.category != '') {
+          if (!mounted) return;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => RegisterLinkAccountPage(
+                email: txtEmail.text,
+                category: 'google',
+                model: widget.model,
+              ),
+            ),
+          );
+          return;
+        }
+        Fluttertoast.showToast(msg: usernameDup);
+        return;
+      }
+
       var favorites = '';
       _favoriteList.forEach((e) {
         if (e['selected']) {
@@ -918,7 +917,7 @@ Future<String> _checkDuplicateUser() async {
         'appleID': "",
         'lineID': widget.model?['lineID'] ?? '',
         'googleID': widget.model?['googleID'] ?? '',
-        'xID' : widget.model?['xID'] ?? '',
+        'xID': widget.model?['xID'] ?? '',
         'imageUrl': "",
         'category': "guest",
         'birthDay': "",
@@ -1076,6 +1075,7 @@ Future<String> _checkDuplicateUser() async {
   void initState() {
     _scrollController = ScrollController();
     _setDataFromThridParty();
+    _checkDataSocial();
     super.initState();
     _clearData();
   }
@@ -1122,6 +1122,29 @@ Future<String> _checkDuplicateUser() async {
         txtPassword.text = widget.category;
       });
     }
+  }
+
+  _checkDataSocial() async {
+     String usernameDup = await _checkDuplicateUser();
+      logWTF(usernameDup);
+      if (usernameDup.isNotEmpty) {
+        if (usernameDup == 'อีเมลนี้ถูกใช้งานไปแล้ว' && widget.category != '') {
+          if (!mounted) return;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => RegisterLinkAccountPage(
+                email: txtEmail.text,
+                category: 'google',
+                model: widget.model,
+              ),
+            ),
+          );
+          return;
+        }
+        Fluttertoast.showToast(msg: usernameDup);
+        return;
+      }
   }
 
   void goBack() async {

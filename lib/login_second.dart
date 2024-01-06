@@ -981,7 +981,6 @@ class _LoginSecondPageState extends State<LoginSecondPage>
     }
   }
 
-
   void _callLoginLine() async {
     var obj = await loginLine();
     openLine = false;
@@ -1040,40 +1039,45 @@ class _LoginSecondPageState extends State<LoginSecondPage>
 
   _callLogin() async {
     var token = await _getTokenKeycloak();
+    logWTF(token);
     var responseKeyCloak = await _getUserInfoKeycloak(token);
+    logWTF(responseKeyCloak);
+
     var modelProfile = await _getProfileMe(token);
+    logWTF(modelProfile);
+
     var modelUser = await _getUserProfile();
+    logWTF(modelUser);
 
-  //  if (responseKeyCloak == null ||
-  //         modelProfile == null ||
-  //         modelUser == null) {
-  //       return;
-  //     }
+    //  if (responseKeyCloak == null ||
+    //         modelProfile == null ||
+    //         modelUser == null) {
+    //       return;
+    //     }
 
-      await ManageStorage.createSecureStorage(
-        value: token,
-        key: 'accessToken',
-      );
-      await ManageStorage.createSecureStorage(
-        value: json.encode(responseKeyCloak),
-        key: 'loginData',
-      );
-       await ManageStorage.createSecureStorage(
-        value: json.encode(modelProfile['data']),
-        key: 'profileMe',
-      );
-      await ManageStorage.createProfile(
-        value: modelUser[0],
-        key: 'guest',
-      );
+    await ManageStorage.createSecureStorage(
+      value: token,
+      key: 'accessToken',
+    );
+    await ManageStorage.createSecureStorage(
+      value: json.encode(responseKeyCloak),
+      key: 'loginData',
+    );
+    await ManageStorage.createSecureStorage(
+      value: json.encode(modelProfile['data']),
+      key: 'profileMe',
+    );
+    await ManageStorage.createProfile(
+      value: modelUser[0],
+      key: 'guest',
+    );
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Menu(),
-        ),
-      );
-    
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Menu(),
+      ),
+    );
   }
 
   _getTokenKeycloak() async {
@@ -1186,12 +1190,11 @@ class _LoginSecondPageState extends State<LoginSecondPage>
   }
 
   _getUserProfile() async {
-    Response response = await Dio().post(
-        '$server/de-api/m/register/read',
-        data: {
-          'username': _username,
-          // 'category': 'guest',
-        });
+    Response response =
+        await Dio().post('$server/de-api/m/register/read', data: {
+      'username': _username,
+      // 'category': 'guest',
+    });
 
     if (response.statusCode == 200) {
       return response.data['objectData'];

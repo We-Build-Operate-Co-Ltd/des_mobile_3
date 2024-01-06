@@ -1,4 +1,3 @@
-
 import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/widget/input_decoration.dart';
@@ -7,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'login_first.dart';
 
 class RegisterLinkAccountPage extends StatefulWidget {
   const RegisterLinkAccountPage({
@@ -224,14 +224,25 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
         var param = {
           'username': widget.email,
           'password': _passwordController.text,
-          // 'lineID': widget.model?['lineID'] ?? '',
-          'googleID': widget.model?['googleID'],
+          'lineID': widget.model?['lineID'] ?? '',
+          'googleID': widget.model?['googleID'] ?? '',
+          'xID': widget.model?['xID'] ?? '',
         };
+        logWTF(widget.model);
         Response response = await Dio().post(
           '$server/de-api/m/register/link/socialaccount',
           data: param,
         );
+        logWTF(response);
         setState(() => _loadingSubmit = false);
+        if (response.data['status'] == 'S') {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const LoginFirstPage(),
+            ),
+            (Route<dynamic> route) => false,
+          );
+        }
       } catch (e) {
         setState(() => _loadingSubmit = false);
         Fluttertoast.showToast(msg: 'error');
