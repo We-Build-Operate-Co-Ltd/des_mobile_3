@@ -1153,7 +1153,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   void _getUser() async {
     var data = await ManageStorage.read('profileData') ?? '';
     var result = json.decode(data);
-     var rProfileMe = await ManageStorage.read('profileMe') ?? '';
+    var rProfileMe = await ManageStorage.read('profileMe') ?? '';
     var proflieMe = json.decode(rProfileMe);
     setState(() {
       _imageUrl = result['imageUrl'];

@@ -63,83 +63,90 @@ class _RegisterPageState extends State<RegisterPage> {
       'value': 'เลือกอาชีพ',
     },
     {
-      'key':
-          'ข้าราชการ พนักงาน เจ้าหน้าที่ หรือผู้ปฏิบัติงานอื่นของส่วนราชการวิสาหกิจ/องค์กรอิสระ/องค์กรมหาชน/หน่วยงานของรัฐอื่นๆ',
+      'key': '1',
       'value':
           'ข้าราชการ พนักงาน เจ้าหน้าที่ หรือผู้ปฏิบัติงานอื่นของส่วนราชการวิสาหกิจ/องค์กรอิสระ/องค์กรมหาชน/หน่วยงานของรัฐอื่นๆ',
     },
     {
-      'key': 'พนักงาน/ลูกจ้างเอกชน',
+      'key': '2',
       'value': 'พนักงาน/ลูกจ้างเอกชน',
     },
     {
-      'key': 'เจ้าของกิจการ/ประกอบธุรกิจส่วนตัว',
+      'key': '3',
       'value': 'เจ้าของกิจการ/ประกอบธุรกิจส่วนตัว',
     },
     {
-      'key': 'อาชีพอิสระ/ฟรีแลนซ์',
+      'key': '4',
       'value': 'อาชีพอิสระ/ฟรีแลนซ์',
     },
     {
-      'key': 'รับจ้างทั่วไป/ขับรถรับจ้าง/กรรมกร',
+      'key': '5',
       'value': 'รับจ้างทั่วไป/ขับรถรับจ้าง/กรรมกร',
     },
     {
-      'key': 'นักเรียน/นักศึกษา',
+      'key': '6',
       'value': 'นักเรียน/นักศึกษา',
     },
     {
-      'key': 'พ่อบ้าน/แม่บ้าน',
+      'key': '7',
       'value': 'พ่อบ้าน/แม่บ้าน',
     },
     {
-      'key': 'เกษียณจากการทำงาน/ข้าราชการบำนาญ',
+      'key': '8',
       'value': 'เกษียณจากการทำงาน/ข้าราชการบำนาญ',
     },
     {
-      'key': 'เกษตรกร',
+      'key': '9',
       'value': 'เกษตรกร',
     },
     {
-      'key': 'ว่างงาน/ไม่มีงานทำ',
+      'key': '10',
       'value': 'ว่างงาน/ไม่มีงานทำ',
     },
     {
-      'key': 'อื่นๆ',
+      'key': '11',
       'value': 'อื่นๆ',
     },
   ];
   List<dynamic> _favoriteList = [
     {
       'selected': false,
+      'key': '1',
       'value': 'การเกษตรสมัยใหม่',
     },
     {
       'selected': false,
+      'key': '2',
       'value': 'การพัฒนาผลิตภัณฑ์และการสื่อสารทางการตลาด',
     },
     {
       'selected': false,
+      'key': '3',
       'value': 'การจัดการธุรกิจชุมชน',
     },
     {
       'selected': false,
+      'key': '4',
       'value': 'การท่องเที่ยวเชิงแพทย์ และสุขภาพ',
     },
     {
       'selected': false,
+      'key': '5',
       'value': 'Digital Literacy',
     },
     {
       'selected': false,
+      'key': '6',
       'value': 'การดูแลผู้สูงอายุ',
     },
     {
       'selected': false,
+      'key': '7',
       'value': 'coding',
     },
     {
       'selected': false,
+      'key': '8',
       'value': 'practice lab',
     },
   ];
@@ -848,6 +855,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       return '';
     } catch (e) {
+      logE(e);
       return 'เกิดข้อผิดพลาด';
     }
   }
@@ -889,6 +897,7 @@ class _RegisterPageState extends State<RegisterPage> {
           return;
         }
         Fluttertoast.showToast(msg: usernameDup);
+        setState(() => _loading = false);
         return;
       }
 
@@ -896,9 +905,9 @@ class _RegisterPageState extends State<RegisterPage> {
       _favoriteList.forEach((e) {
         if (e['selected']) {
           if (favorites.isEmpty) {
-            favorites = favorites + e['value'];
+            favorites = favorites + e['key'];
           } else {
-            favorites = favorites + ',' + e['value'];
+            favorites = favorites + ',' + e['key'];
           }
         }
       });
@@ -931,6 +940,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       logWTF(criteria);
 
+      setState(() => _loading = false);
       await ManageStorage.createSecureStorage(
         key: 'tempRegister',
         value: json.encode(criteria),
@@ -944,6 +954,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       );
     } catch (e) {
+      logE(e);
       setState(() => _loading = false);
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }

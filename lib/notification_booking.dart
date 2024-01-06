@@ -317,11 +317,10 @@ class _NotificationListState extends State<NotificationBookingPage> {
     var result = json.decode(data);
     Response<dynamic> response;
     try {
-      response = await dio.post(
-          '$server/de-api/m/v2/notificationbooking/count',
-          data: {
-            "email": result['email'],
-          });
+      response = await dio
+          .post('$server/de-api/m/v2/notificationbooking/count', data: {
+        "email": result['email'],
+      });
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
           modelNotiCount = response.data['objectData'];

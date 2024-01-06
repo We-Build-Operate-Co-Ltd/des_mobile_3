@@ -1021,8 +1021,8 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
         txtPhone.text = profileMe['phonenumber'] ?? '';
         txtAge.text =
             profileMe['ageRange'] == null ? '' : profileMe['ageRange'];
-        txtDate.text =
-            DateFormat('dd / MM / yyyy').format(DateTime.parse(profileMe['dob']));
+        txtDate.text = DateFormat('dd / MM / yyyy')
+            .format(DateTime.parse(profileMe['dob']));
         _gender = profileMe['gender'] ?? '';
       });
 

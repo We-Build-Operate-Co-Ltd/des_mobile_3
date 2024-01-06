@@ -1,6 +1,5 @@
 import 'dart:math';
 
-
 import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/widget/input_decoration.dart';
@@ -226,7 +225,6 @@ class _ForgotPasswordNewPasswordPageState
 
   _send() async {
     try {
-
       setState(() => _loadingSubmit = true);
       // update password
       Response response = await Dio().post(
