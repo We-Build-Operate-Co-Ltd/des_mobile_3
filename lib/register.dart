@@ -50,12 +50,13 @@ class _RegisterPageState extends State<RegisterPage> {
     {'key': 'other', 'value': 'อื่น ๆ'},
   ];
   List<dynamic> _ageRangeList = [
-    {'key': '0-14', 'value': '0-14 ปี'},
-    {'key': '15-24', 'value': '15-24 ปี'},
-    {'key': '25-54', 'value': '25-54 ปี'},
-    {'key': '55-64', 'value': '55-64 ปี'},
-    {'key': '65+', 'value': '65 ปีขึ้นไป'},
+    {'code': '1', 'title': 'ต่ำกว่า 15 ปี', 'value': 'ต่ำกว่า 15 ปี'},
+    {'code': '2', 'title': '18 - 24 ปี', 'value': '18 - 24 ปี'},
+    {'code': '3', 'title': '25 - 54 ปี', 'value': '25 - 54 ปี'},
+    {'code': '4', 'title': '55 - 64 ปี', 'value': '55 - 64 ปี'},
+    {'code': '5', 'title': '65 ปีขึ้นไป', 'value': '65 ปีขึ้นไป'},
   ];
+
   List<dynamic> _careerList = [
     {
       'key': '',
@@ -258,8 +259,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             children: [
                               SizedBox(height: 10),
                               TextFormField(
-                                readOnly:
-                                    widget.category == 'google' ? true : false,
+                                readOnly: (widget.model?['email'] ?? '') != ''
+                                    ? true
+                                    : false,
                                 controller: txtEmail,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.allow(
@@ -722,7 +724,7 @@ class _RegisterPageState extends State<RegisterPage> {
       child: GestureDetector(
         onTap: () {
           setState(() {
-            _ageRange = value['key'];
+            _ageRange = value['code'];
           });
         },
         child: Row(
@@ -741,7 +743,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 margin: EdgeInsets.all(4),
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: _ageRange == value['key']
+                    color: _ageRange == value['code']
                         ? Theme.of(context).custom.b325f8_w_fffd57
                         : Theme.of(context).custom.w_b_b),
               ),
@@ -879,7 +881,7 @@ class _RegisterPageState extends State<RegisterPage> {
             MaterialPageRoute(
               builder: (_) => RegisterLinkAccountPage(
                 email: txtEmail.text,
-                category: 'google',
+                category: widget.category,
                 model: widget.model,
               ),
             ),
@@ -908,8 +910,9 @@ class _RegisterPageState extends State<RegisterPage> {
         'firstName': txtFirstName.text,
         'lastName': txtLastName.text,
         'sex': _gender,
-        'age': _ageRange,
-        'ageRange': _ageRange,
+        'age': int.parse(_ageRange),
+        'ageRange': _ageRangeList
+            .firstWhere((element) => element['code'] == _ageRange)['title'],
         'username': txtUsername.text == "" ? txtEmail.text : txtUsername.text,
         'career': _careerSelected,
         'favorites': favorites,
@@ -926,7 +929,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'countUnit': "[]"
       };
 
-      logD(criteria);
+      logWTF(criteria);
 
       await ManageStorage.createSecureStorage(
         key: 'tempRegister',
@@ -1075,7 +1078,6 @@ class _RegisterPageState extends State<RegisterPage> {
   void initState() {
     _scrollController = ScrollController();
     _setDataFromThridParty();
-    _checkDataSocial();
     super.initState();
     _clearData();
   }
@@ -1120,31 +1122,33 @@ class _RegisterPageState extends State<RegisterPage> {
         txtEmail.text = widget.model?['email'] ?? '';
         txtUsername.text = widget.model?['username'] ?? '';
         txtPassword.text = widget.category;
+
+        _checkDataSocial();
       });
     }
   }
 
   _checkDataSocial() async {
-     String usernameDup = await _checkDuplicateUser();
-      logWTF(usernameDup);
-      if (usernameDup.isNotEmpty) {
-        if (usernameDup == 'อีเมลนี้ถูกใช้งานไปแล้ว' && widget.category != '') {
-          if (!mounted) return;
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => RegisterLinkAccountPage(
-                email: txtEmail.text,
-                category: 'google',
-                model: widget.model,
-              ),
+    String usernameDup = await _checkDuplicateUser();
+    logWTF(usernameDup);
+    if (usernameDup.isNotEmpty) {
+      if (usernameDup == 'อีเมลนี้ถูกใช้งานไปแล้ว' && widget.category != '') {
+        if (!mounted) return;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => RegisterLinkAccountPage(
+              email: txtEmail.text,
+              category: 'google',
+              model: widget.model,
             ),
-          );
-          return;
-        }
-        Fluttertoast.showToast(msg: usernameDup);
+          ),
+        );
         return;
       }
+      Fluttertoast.showToast(msg: usernameDup);
+      return;
+    }
   }
 
   void goBack() async {
