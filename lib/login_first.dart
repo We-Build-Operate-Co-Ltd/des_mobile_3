@@ -1478,7 +1478,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
 
         Dio dio = Dio();
         var check = await dio.post(
-          '$server/de-api/m/register/check/login/social',
+          '$server/de-api/m/register/check/login/social/guest',
           data: {'username': obj.user!.uid},
         );
         logWTF(check.data);
