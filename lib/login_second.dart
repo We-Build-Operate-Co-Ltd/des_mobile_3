@@ -1103,7 +1103,8 @@ class _LoginSecondPageState extends State<LoginSecondPage>
         return response.data['access_token'];
       } else {
         logE(response.data);
-        Fluttertoast.showToast(msg: response.data['error_description']);
+        // Fluttertoast.showToast(msg: response.data['error_description']);
+        Fluttertoast.showToast(msg:'รหัสไม่ถูกต้องหรือไม่พบอีเมล์');
         setState(() => _loadingSubmit = false);
       }
     } on DioError catch (e) {

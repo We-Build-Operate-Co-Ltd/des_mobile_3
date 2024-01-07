@@ -925,7 +925,9 @@ class _RegisterPageState extends State<RegisterPage> {
         'age': int.parse(_ageRange),
         'ageRange': _ageRangeList
             .firstWhere((element) => element['code'] == _ageRange)['title'],
-        'username': txtUsername.text == "" ? txtEmail.text : txtUsername.text,
+        'username': widget.category.isNotEmpty
+            ? widget.model['username']
+            : txtEmail.text,
         'career': _careerSelected,
         'favorites': favorites,
         'facebookID': "",

@@ -19,6 +19,7 @@ import 'package:intl/intl.dart';
 import 'shared/config.dart';
 import 'main.dart';
 import 'shared/extension.dart';
+import 'package:http/http.dart' as http;
 
 class UserProfileEditPage extends StatefulWidget {
   UserProfileEditPage({Key? key}) : super(key: key);
@@ -869,11 +870,14 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
   Future<dynamic> submitUpdateUserV2() async {
     try {
       setState(() => _loadingSubmit = true);
+      var value = await ManageStorage.read('profileData') ?? '';
+      var user = json.decode(value);
+
       String base64Image = '';
       if (_imageFile?.path != null) {
         // await _uploadImage(_imageFile!);
 
-        List<int> imageBytes = File(_imageFile!.path).readAsBytesSync();
+        List<int> imageBytes = await File(_imageFile!.path).readAsBytesSync();
         // base64Image = "data:image/png;base64," + base64Encode(imageBytes);
         String base64Image = base64Encode(imageBytes);
         logWTF(base64Image);
@@ -897,7 +901,19 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
         data: formData,
       );
       logWTF(response.data);
+      await _uploadImage(_imageFile!);
+      user['imageUrl'] = _imageUrl;
 
+      final responseRegister =
+          await Dio().post('$server/de-api/m/Register/update', data: user);
+      var result = responseRegister.data;
+      logWTF(result['objectData']);
+      if (result['status'] == 'S') {
+        await ManageStorage.createProfile(
+          key: result['objectData']['category'],
+          value: result['objectData'],
+        );
+      }
       if (response.statusCode == 200) {
         // return response.data;
         if (response.data) {
@@ -1022,7 +1038,8 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
     try {
       var res = await ManageStorage.read('profileMe') ?? '';
       var profileMe = json.decode(res);
-
+      var data = await ManageStorage.read('profileData') ?? '';
+      var result = json.decode(data);
       setState(() {
         _model = profileMe;
         logWTF(profileMe);
@@ -1030,6 +1047,8 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
         txtLastName.text = profileMe['lastnameTh'] ?? '';
         txtEmail.text = profileMe['email'] ?? '';
         txtPhone.text = profileMe['phonenumber'] ?? '';
+        _imageUrl = result['imageUrl'];
+
         // txtAge.text =
         //     profileMe['ageRange'] == null ? '' : profileMe['ageRange'];
         // txtDate.text = DateFormat('dd / MM / yyyy')

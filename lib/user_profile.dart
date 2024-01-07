@@ -1157,7 +1157,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     var proflieMe = json.decode(rProfileMe);
     setState(() {
       logWTF(proflieMe);
-      _imageUrl = proflieMe['picname'];
+      _imageUrl = result['imageUrl'];
       _firstName = proflieMe['firstnameTh'];
       _lastName = proflieMe['lastnameTh'];
       _status = result['status'];
