@@ -187,8 +187,13 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             SizedBox(height: 32),
             TextFormField(
               controller: txtFirstName,
-              decoration: _decorationBase(context, hintText: 'ชื่อ'),
+              decoration: _decorationBase(
+                context,
+                hintText: 'ชื่อ',
+                readOnly: true,
+              ),
               style: TextStyle(color: Theme.of(context).custom.b_w_y),
+              readOnly: true,
               cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
                   ? Color(0xFF7A4CB1)
                   : MyApp.themeNotifier.value == ThemeModeThird.dark
@@ -198,7 +203,12 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             SizedBox(height: 15),
             TextFormField(
               controller: txtLastName,
-              decoration: _decorationBase(context, hintText: 'สกุล'),
+              decoration: _decorationBase(
+                context,
+                hintText: 'สกุล',
+                readOnly: true,
+              ),
+              readOnly: true,
               style: TextStyle(
                 fontFamily: 'Kanit',
                 color: MyApp.themeNotifier.value == ThemeModeThird.light
@@ -214,58 +224,58 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                       : Color(0xFFFFFD57),
             ),
             SizedBox(height: 15),
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => dialogOpenPickerDate(),
-                    child: AbsorbPointer(
-                      child: TextFormField(
-                        controller: txtDate,
-                        style: TextStyle(
-                          color: MyApp.themeNotifier.value ==
-                                  ThemeModeThird.light
-                              ? Colors.black
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? Colors.white
-                                  : Color(0xFFFFFD57),
-                          fontWeight: FontWeight.normal,
-                          fontFamily: 'Kanit',
-                          fontSize: 15.0,
-                        ),
-                        decoration: _decorationDate(context,
-                            hintText: 'วันเดือนปีเกิด'),
-                        validator: (model) {
-                          if (model!.isEmpty) {
-                            return 'กรุณากรอกวันเดือนปีเกิด.';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 15),
-                // Expanded(
-                //   child: TextFormField(
-                //     controller: txtAge,
-                //     keyboardType: TextInputType.number,
-                //     inputFormatters: [
-                //       FilteringTextInputFormatter.allow(
-                //           RegExp(r'[0-9a-zA-Z.]')),
-                //     ],
-                //     decoration: _decorationBase(context, hintText: 'อายุ'),
-                //     style: TextStyle(color: Theme.of(context).custom.b_w_y),
-                //     cursorColor:
-                //         MyApp.themeNotifier.value == ThemeModeThird.light
-                //             ? Color(0xFF7A4CB1)
-                //             : MyApp.themeNotifier.value == ThemeModeThird.dark
-                //                 ? Colors.white
-                //                 : Color(0xFFFFFD57),
-                //   ),
-                // ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child: GestureDetector(
+            //         onTap: () => dialogOpenPickerDate(),
+            //         child: AbsorbPointer(
+            //           child: TextFormField(
+            //             controller: txtDate,
+            //             style: TextStyle(
+            //               color: MyApp.themeNotifier.value ==
+            //                       ThemeModeThird.light
+            //                   ? Colors.black
+            //                   : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //                       ? Colors.white
+            //                       : Color(0xFFFFFD57),
+            //               fontWeight: FontWeight.normal,
+            //               fontFamily: 'Kanit',
+            //               fontSize: 15.0,
+            //             ),
+            //             decoration: _decorationDate(context,
+            //                 hintText: 'วันเดือนปีเกิด'),
+            //             validator: (model) {
+            //               if (model!.isEmpty) {
+            //                 return 'กรุณากรอกวันเดือนปีเกิด.';
+            //               }
+            //               return null;
+            //             },
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     SizedBox(width: 15),
+            //     // Expanded(
+            //     //   child: TextFormField(
+            //     //     controller: txtAge,
+            //     //     keyboardType: TextInputType.number,
+            //     //     inputFormatters: [
+            //     //       FilteringTextInputFormatter.allow(
+            //     //           RegExp(r'[0-9a-zA-Z.]')),
+            //     //     ],
+            //     //     decoration: _decorationBase(context, hintText: 'อายุ'),
+            //     //     style: TextStyle(color: Theme.of(context).custom.b_w_y),
+            //     //     cursorColor:
+            //     //         MyApp.themeNotifier.value == ThemeModeThird.light
+            //     //             ? Color(0xFF7A4CB1)
+            //     //             : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //     //                 ? Colors.white
+            //     //                 : Color(0xFFFFFD57),
+            //     //   ),
+            //     // ),
+            //   ],
+            // ),
             // SizedBox(height: 10),
             // TextFormField(
             //   controller: txtPassword,
@@ -352,31 +362,31 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                       : Color(0xFFFFFD57),
             ),
             SizedBox(height: 30),
-            Text(
-              'เพศ',
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'Kanit',
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Colors.black
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
-              ),
-            ),
-            SizedBox(height: 4),
-            SizedBox(
-              height: 30,
-              width: double.infinity,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.zero,
-                separatorBuilder: (_, __) => SizedBox(width: 10),
-                itemBuilder: (_, index) => _radioGender(_genderList[index]),
-                itemCount: _genderList.length,
-              ),
-            ),
+            // Text(
+            //   'เพศ',
+            //   style: TextStyle(
+            //     fontSize: 15,
+            //     fontWeight: FontWeight.w500,
+            //     fontFamily: 'Kanit',
+            //     color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //         ? Colors.black
+            //         : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //             ? Colors.white
+            //             : Color(0xFFFFFD57),
+            //   ),
+            // ),
+            // SizedBox(height: 4),
+            // SizedBox(
+            //   height: 30,
+            //   width: double.infinity,
+            //   child: ListView.separated(
+            //     scrollDirection: Axis.horizontal,
+            //     padding: EdgeInsets.zero,
+            //     separatorBuilder: (_, __) => SizedBox(width: 10),
+            //     itemBuilder: (_, index) => _radioGender(_genderList[index]),
+            //     itemCount: _genderList.length,
+            //   ),
+            // ),
             SizedBox(height: 40),
             GestureDetector(
               onTap: () => submitUpdateUserV2(),
@@ -876,8 +886,8 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
         'Firstname': txtFirstName.text,
         'Lastname': txtLastName.text,
         'Email': txtEmail.text,
-        'Dob': _dateTime == null ? _model['dob'] : _dateTime,
-        'Gender': _gender,
+        'Dob': _model['dob'],
+        'Gender': _model['gender'],
         'JobName': _model?['jobName'] ?? '',
         'LmsCat': _model?['lmsCat'] ?? '',
       });
@@ -1015,15 +1025,16 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
 
       setState(() {
         _model = profileMe;
+        logWTF(profileMe);
         txtFirstName.text = profileMe['firstnameTh'] ?? '';
         txtLastName.text = profileMe['lastnameTh'] ?? '';
         txtEmail.text = profileMe['email'] ?? '';
         txtPhone.text = profileMe['phonenumber'] ?? '';
-        txtAge.text =
-            profileMe['ageRange'] == null ? '' : profileMe['ageRange'];
-        txtDate.text = DateFormat('dd / MM / yyyy')
-            .format(DateTime.parse(profileMe['dob']));
-        _gender = profileMe['gender'] ?? '';
+        // txtAge.text =
+        //     profileMe['ageRange'] == null ? '' : profileMe['ageRange'];
+        // txtDate.text = DateFormat('dd / MM / yyyy')
+        //     .format(DateTime.parse(profileMe['dob']));
+        // _gender = profileMe['gender'] ?? '';
       });
 
       // readUser();

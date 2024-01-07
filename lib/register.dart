@@ -297,72 +297,75 @@ class _RegisterPageState extends State<RegisterPage> {
                                   }
                                 },
                               ),
-                              SizedBox(height: 10),
-                              TextFormField(
-                                controller: txtPassword,
-                                obscureText: passwordVisibility,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp(r'[0-9a-zA-Z@!_.]')),
-                                ],
-                                decoration: _decorationPasswordMember(
-                                  context,
-                                  labelText: 'รหัสผ่าน',
-                                  hintText:
-                                      'รหัสผ่านต้องเป็นตัวอักษร a-z, A-Z และ 0-9 ความยาวขั้นต่ำ 6 ตัวอักษร',
-                                  visibility: passwordVisibility,
-                                  suffixTap: () => setState(() =>
-                                      passwordVisibility = !passwordVisibility),
+                              if (widget.category.isEmpty) SizedBox(height: 10),
+                              if (widget.category.isEmpty)
+                                TextFormField(
+                                  controller: txtPassword,
+                                  obscureText: passwordVisibility,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[0-9a-zA-Z@!_.]')),
+                                  ],
+                                  decoration: _decorationPasswordMember(
+                                    context,
+                                    labelText: 'รหัสผ่าน',
+                                    hintText:
+                                        'รหัสผ่านต้องเป็นตัวอักษร a-z, A-Z และ 0-9 ความยาวขั้นต่ำ 6 ตัวอักษร',
+                                    visibility: passwordVisibility,
+                                    suffixTap: () => setState(() =>
+                                        passwordVisibility =
+                                            !passwordVisibility),
+                                  ),
+                                  style: TextStyle(
+                                    fontFamily: 'Kanit',
+                                    color: Theme.of(context).custom.b_w_y,
+                                  ),
+                                  cursorColor:
+                                      Theme.of(context).custom.b325f8_w_fffd57,
+                                  validator: (model) {
+                                    if (model!.isEmpty) {
+                                      return 'กรุณากรอกรหัสผ่าน.';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
                                 ),
-                                style: TextStyle(
-                                  fontFamily: 'Kanit',
-                                  color: Theme.of(context).custom.b_w_y,
+                              if (widget.category.isEmpty) SizedBox(height: 10),
+                              if (widget.category.isEmpty)
+                                TextFormField(
+                                  controller: txtConPassword,
+                                  obscureText: confirmPasswordVisibility,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[0-9a-zA-Z@!_.]')),
+                                  ],
+                                  decoration: _decorationPasswordMember(
+                                    context,
+                                    labelText: 'ยืนยันรหัสผ่าน',
+                                    hintText:
+                                        'รหัสผ่านต้องเป็นตัวอักษร a-z, A-Z และ 0-9 ความยาวขั้นต่ำ 6 ตัวอักษร',
+                                    visibility: confirmPasswordVisibility,
+                                    suffixTap: () => setState(() =>
+                                        confirmPasswordVisibility =
+                                            !confirmPasswordVisibility),
+                                  ),
+                                  style: TextStyle(
+                                    fontFamily: 'Kanit',
+                                    color: Theme.of(context).custom.b_W_fffd57,
+                                  ),
+                                  cursorColor:
+                                      Theme.of(context).custom.b325f8_w_fffd57,
+                                  validator: (model) {
+                                    if (model!.isEmpty) {
+                                      return 'กรุณากรอกยืนยันรหัสผ่าน.';
+                                    } else if (txtPassword.text !=
+                                        txtConPassword.text) {
+                                      return 'กรุณากรอกรหัสผ่านให้ตรงกัน.';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
                                 ),
-                                cursorColor:
-                                    Theme.of(context).custom.b325f8_w_fffd57,
-                                validator: (model) {
-                                  if (model!.isEmpty) {
-                                    return 'กรุณากรอกรหัสผ่าน.';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                              ),
-                              SizedBox(height: 10),
-                              TextFormField(
-                                controller: txtConPassword,
-                                obscureText: confirmPasswordVisibility,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp(r'[0-9a-zA-Z@!_.]')),
-                                ],
-                                decoration: _decorationPasswordMember(
-                                  context,
-                                  labelText: 'ยืนยันรหัสผ่าน',
-                                  hintText:
-                                      'รหัสผ่านต้องเป็นตัวอักษร a-z, A-Z และ 0-9 ความยาวขั้นต่ำ 6 ตัวอักษร',
-                                  visibility: confirmPasswordVisibility,
-                                  suffixTap: () => setState(() =>
-                                      confirmPasswordVisibility =
-                                          !confirmPasswordVisibility),
-                                ),
-                                style: TextStyle(
-                                  fontFamily: 'Kanit',
-                                  color: Theme.of(context).custom.b_W_fffd57,
-                                ),
-                                cursorColor:
-                                    Theme.of(context).custom.b325f8_w_fffd57,
-                                validator: (model) {
-                                  if (model!.isEmpty) {
-                                    return 'กรุณากรอกยืนยันรหัสผ่าน.';
-                                  } else if (txtPassword.text !=
-                                      txtConPassword.text) {
-                                    return 'กรุณากรอกรหัสผ่านให้ตรงกัน.';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                              ),
                               SizedBox(height: 10),
                               TextFormField(
                                 controller: txtPhone,
@@ -1133,8 +1136,8 @@ class _RegisterPageState extends State<RegisterPage> {
         txtEmail.text = widget.model?['email'] ?? '';
         txtUsername.text = widget.model?['username'] ?? '';
         txtPassword.text = widget.category;
-
-        _checkDataSocial();
+        txtConPassword.text = widget.category;
+        txtFirstName.text = widget.model?['firstName'] ?? '';
       });
     }
   }

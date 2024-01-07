@@ -814,7 +814,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             height: 100,
             width: 100,
             child: InkWell(
-              child: _imageUrl!.isNotEmpty && _imageUrl != ''
+              child:  _imageUrl != '' && _imageUrl != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(50),
                       child: CachedNetworkImage(
@@ -1156,7 +1156,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
     var rProfileMe = await ManageStorage.read('profileMe') ?? '';
     var proflieMe = json.decode(rProfileMe);
     setState(() {
-      _imageUrl = result['imageUrl'];
+      logWTF(proflieMe);
+      _imageUrl = proflieMe['picname'];
       _firstName = proflieMe['firstnameTh'];
       _lastName = proflieMe['lastnameTh'];
       _status = result['status'];

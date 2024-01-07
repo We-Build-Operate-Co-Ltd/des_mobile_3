@@ -1172,95 +1172,83 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         ),
       );
     } else {
+      _loading = true;
+      Response<dynamic> response;
+      try {
+        print('------');
+
+        response = await Dio().post('$server/de-api/m/register/read', data: {
+          'username': txtEmail.text.trim(),
+          'category': _category.toString(),
+        });
+      } catch (ex) {
+        setState(() {
+          _loading = false;
+        });
+        Fluttertoast.showToast(msg: 'error');
+        return null;
+      }
+
       setState(() {
-        _username = txtEmail.text.trim();
-        // _imageUrl = response.data['objectData'][0]['imageUrl'] ?? '';
+        _loading = false;
       });
-      txtEmail.clear();
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) =>
-              LoginSecondPage(username: _username!, imageUrl: _imageUrl!),
-        ),
-      );
-      // _loading = true;
-      // Response<dynamic> response;
-      // try {
-      //   print('------');
 
-      //   response = await Dio().post('$server/de-api/m/register/read', data: {
-      //     'username': txtEmail.text.trim(),
-      //     'category': _category.toString(),
-      //   });
-      // } catch (ex) {
-      //   setState(() {
-      //     _loading = false;
-      //   });
-      //   Fluttertoast.showToast(msg: 'error');
-      //   return null;
-      // }
-
-      // setState(() {
-      //   _loading = false;
-      // });
-
-      // print(response.data.toString());
-      // if (response.data['status'] == 'S') {
-      //   List<dynamic> result = response.data['objectData'];
-      //   if (result.length > 0) {
-      //     setState(() {
-      //       _username = txtEmail.text.trim();
-      //       _imageUrl = response.data['objectData'][0]['imageUrl'] ?? '';
-      //     });
-      //     txtEmail.clear();
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //         builder: (_) =>
-      //             LoginSecondPage(username: _username!, imageUrl: _imageUrl!),
-      //       ),
-      //     );
-      //   } else {
-      //     showDialog(
-      //       barrierDismissible: false,
-      //       context: context,
-      //       builder: (BuildContext context) => new CupertinoAlertDialog(
-      //         title: new Text(
-      //           'ชื่อผู้ใช้งาน ไม่พบในระบบ',
-      //           style: TextStyle(
-      //             fontSize: 16,
-      //             fontFamily: 'Kanit',
-      //             color: Colors.black,
-      //             fontWeight: FontWeight.normal,
-      //           ),
-      //         ),
-      //         content: Text(" "),
-      //         actions: [
-      //           CupertinoDialogAction(
-      //             isDefaultAction: true,
-      //             child: new Text(
-      //               "ตกลง",
-      //               style: TextStyle(
-      //                 fontSize: 13,
-      //                 fontFamily: 'Kanit',
-      //                 color: Color(0xFF000070),
-      //                 fontWeight: FontWeight.normal,
-      //               ),
-      //             ),
-      //             onPressed: () {
-      //               FocusScope.of(context).unfocus();
-      //               new TextEditingController().clear();
-      //               Navigator.of(context).pop();
-      //             },
-      //           ),
-      //         ],
-      //       ),
-      //     );
-      //   }
-      // } else {
-      //   Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-      // }
+      print(response.data.toString());
+      if (response.data['status'] == 'S') {
+        List<dynamic> result = response.data['objectData'];
+        if (result.length > 0) {
+          setState(() {
+            _username = txtEmail.text.trim();
+            // _imageUrl = response.data['objectData'][0]['imageUrl'] ?? '';
+          });
+          txtEmail.clear();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) =>
+                  LoginSecondPage(username: _username!, imageUrl: _imageUrl!),
+            ),
+          );
+        } else {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (BuildContext context) => new CupertinoAlertDialog(
+              title: new Text(
+                'ชื่อผู้ใช้งาน ไม่พบในระบบ',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Kanit',
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+              content: Text(" "),
+              actions: [
+                CupertinoDialogAction(
+                  isDefaultAction: true,
+                  child: new Text(
+                    "ตกลง",
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontFamily: 'Kanit',
+                      color: Color(0xFF000070),
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  onPressed: () {
+                    FocusScope.of(context).unfocus();
+                    new TextEditingController().clear();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        }
+      } else {
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      }
     }
   }
 
@@ -1323,31 +1311,32 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         redirectURI: 'dccadmin://thaid',
       );
       final obj = await twitterLogin.login();
-      if (obj != null && obj.status == TwitterLoginStatus.loggedIn) {
+      switch (obj.status) {
+        case TwitterLoginStatus.loggedIn:
+          // success
+          logWTF(obj.user!.id);
+          logWTF(obj.user!.name);
+          break;
+        case TwitterLoginStatus.cancelledByUser:
+          // cancel
+          break;
+        case TwitterLoginStatus.error:
+          // error
+          break;
+        case null:
+          break;
+      }
+
+      if (obj != null) {
         var model = {
           "username": obj.user!.id.toString(),
-          "email": obj.user!.email.toString(),
+          "email": obj.user!.email.toLowerCase(),
           "imageUrl": obj.user!.thumbnailImage,
-          "firstName": obj.user!.name.toString(),
+          "firstName": obj.user!.name,
           "lastName": '',
           "xID": obj.user!.id.toString()
         };
         logWTF(model);
-        // switch (obj.status) {
-        //   case TwitterLoginStatus.loggedIn:
-        //     // success
-        //     logWTF(obj.user!.id);
-        //     logWTF(obj.user!.name);
-        //     break;
-        //   case TwitterLoginStatus.cancelledByUser:
-        //     // cancel
-        //     break;
-        //   case TwitterLoginStatus.error:
-        //     // error
-        //     break;
-        //   case null:
-        //     break;
-        // }
 
         Dio dio = Dio();
         var check = await dio.post(
@@ -1411,7 +1400,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => RegisterPage(model: model, category: 'x'),
+              builder: (_) => RegisterPage(model: model, category: 'X'),
             ),
           );
         }
