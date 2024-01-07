@@ -875,7 +875,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
 
       String base64Image = '';
       if (_imageFile?.path != null) {
-        // await _uploadImage(_imageFile!);
+        await _uploadImage(_imageFile!);
 
         List<int> imageBytes = await File(_imageFile!.path).readAsBytesSync();
         // base64Image = "data:image/png;base64," + base64Encode(imageBytes);
@@ -901,7 +901,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
         data: formData,
       );
       logWTF(response.data);
-      await _uploadImage(_imageFile!);
+
       user['imageUrl'] = _imageUrl;
 
       final responseRegister =
