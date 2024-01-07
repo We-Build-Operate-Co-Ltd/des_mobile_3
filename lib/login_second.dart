@@ -1102,10 +1102,16 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       if (response.statusCode == 200) {
         return response.data['access_token'];
       } else {
+        String err = response.data['error_description'].toString();
+
         logE(response.data);
-        // Fluttertoast.showToast(msg: response.data['error_description']);
-        Fluttertoast.showToast(msg:'รหัสไม่ถูกต้องหรือไม่พบอีเมล์');
+        Fluttertoast.showToast(msg: response.data['error_description']);
+        if (response.data['error_description'] == 'Invalid user credentials') {
+          err = 'email หรือ รหัสผ่านไม่ถูกต้อง';
+        }
+        Fluttertoast.showToast(msg: err);
         setState(() => _loadingSubmit = false);
+        return null;
       }
     } on DioError catch (e) {
       logE(e.error);
