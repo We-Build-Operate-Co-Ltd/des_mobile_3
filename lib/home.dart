@@ -8,6 +8,7 @@ import 'package:des/fund.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/notification_list.dart';
 import 'package:des/report_problem.dart';
+import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -815,7 +816,7 @@ class _HomePageState extends State<HomePage> {
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
                 ),
-                child: model['docs'] != ''
+                child: (model?['docs'] ?? '') != ''
                     ? CachedNetworkImage(
                         imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
                             model['docs'],
@@ -836,7 +837,7 @@ class _HomePageState extends State<HomePage> {
                   alignment: Alignment.topLeft,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
-                    model['name'],
+                    model?['name'] ?? '',
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
