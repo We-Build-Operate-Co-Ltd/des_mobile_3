@@ -1014,7 +1014,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                         ),
                       ),
                     ),
-                  if (_checkedCurrent(model))
+                  if (_checkedCurrent(model, '4'))
                     Container(
                       height: 30,
                       width: 120,
@@ -1043,6 +1043,47 @@ class _BookingServicePageState extends State<BookingServicePage>
                           SizedBox(width: 5),
                           Text(
                             'เช็คอินแล้ว',
+                            style: TextStyle(
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (_checkedCurrent(model, '0'))
+                    Container(
+                      height: 30,
+                      width: 120,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color.fromARGB(255, 168, 38, 38)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.check_circle,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.white
+                                : Colors.black,
+                            size: 15,
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            'ยกเลิกแล้ว',
                             style: TextStyle(
                               color: MyApp.themeNotifier.value ==
                                       ThemeModeThird.light
@@ -1758,39 +1799,53 @@ class _BookingServicePageState extends State<BookingServicePage>
         // โหลดข้อมูลใหม่
         var value = await ManageStorage.read('profileData') ?? '';
         var profileData = json.decode(value);
+        logWTF(profileData['email']);
         Response response = await Dio().get(
             '$serverPlatform/api/Booking/GetBooking/mobile/${profileData['email']}');
 
-        _modelBookingAll = response.data;
+        logWTF(response);
+        if (response.data.isEmpty) {
+          setState(() {
+            _loadingBookingStatus = LoadingBookingStatus.success;
+            _modelBookingFiltered = [];
+          });
+          return;
+        }
+        setState(() {
+          _modelBookingAll = response.data ?? [];
+        });
       }
 
       //data without cancel.
-      dataWithoutCancelBooking =
-          _modelBookingAll.where((e) => e['status'] != '0').toList();
+      // dataWithoutCancelBooking =
+      //     _modelBookingAll.where((e) => e['status'] != '0').toList();
 
       List<dynamic> result = [];
 
       if (_selectedCategory == '0') {
-        result = await dataWithoutCancelBooking
-            .where((dynamic e) =>
-                _checkCurrentDate(
-                  dateStr: e?['bookingdate'] ?? '',
-                  startTime: e?['startTime'] ?? '',
-                ) >=
-                0)
+        result = await _modelBookingAll
+            .where((dynamic e) => (_checkCurrentDate(
+                      dateStr: e?['bookingdate'] ?? '',
+                      startTime: e?['startTime'] ?? '',
+                    ) >=
+                    0 &&
+                e['status'] == '1'))
             .toList();
         result.sort((a, b) => a['bookingdate'].compareTo(b['bookingdate']));
       } else {
-        result = await dataWithoutCancelBooking
-            .where((dynamic e) =>
-                _checkCurrentDate(
-                  dateStr: e?['bookingdate'] ?? '',
-                  startTime: e?['startTime'] ?? '',
-                ) <
-                0)
+        result = await _modelBookingAll
+            .where((dynamic e) => (_checkCurrentDate(
+                      dateStr: e?['bookingdate'] ?? '',
+                      startTime: e?['startTime'] ?? '',
+                    ) <
+                    0 ||
+                e['status'] == '0' ||
+                e['status'] == '4'))
             .toList();
         result.sort((a, b) => b['bookingdate'].compareTo(a['bookingdate']));
       }
+
+      logWTF(result);
 
       setState(() {
         _loadingBookingStatus = LoadingBookingStatus.success;
@@ -1914,7 +1969,8 @@ class _BookingServicePageState extends State<BookingServicePage>
     return -1;
   }
 
-  bool _checkedCurrent(model) {
+  bool _checkedCurrent(model, String type) {
+    // type คือ status '4' เช็คอินแล้ว , '0' ยกเลิก
     String dateStr = model['bookingdate'] ?? '';
     var result = -1;
     if (dateStr.isNotEmpty) {
@@ -1941,7 +1997,7 @@ class _BookingServicePageState extends State<BookingServicePage>
     bool currentDay = result == 0 ? true : false;
 
     // วันปัจจุบัน และ เช็คอินแล้ว และ อยู่ในประวัติการจอง
-    if (model['status'] == "4" && _selectedCategory == '1') {
+    if (model['status'] == type && _selectedCategory == '1') {
       return true;
     }
     return false;
