@@ -1058,14 +1058,14 @@ class _BookingServicePageState extends State<BookingServicePage>
                   if (_checkedCurrent(model, '0'))
                     Container(
                       height: 30,
-                      width: 120,
+                      width: 100,
                       padding: EdgeInsets.symmetric(
                         horizontal: 15,
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
                         color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Color.fromARGB(255, 168, 38, 38)
+                            ? Color(0xFFD9D9D9)
                             : MyApp.themeNotifier.value == ThemeModeThird.dark
                                 ? Colors.white
                                 : Color(0xFFFFFD57),
@@ -1073,21 +1073,12 @@ class _BookingServicePageState extends State<BookingServicePage>
                       ),
                       child: Row(
                         children: [
-                          Icon(
-                            Icons.check_circle,
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Colors.white
-                                : Colors.black,
-                            size: 15,
-                          ),
-                          SizedBox(width: 5),
                           Text(
                             'ยกเลิกแล้ว',
                             style: TextStyle(
                               color: MyApp.themeNotifier.value ==
                                       ThemeModeThird.light
-                                  ? Colors.white
+                                  ? Color(0xFF707070)
                                   : Colors.black,
                               fontSize: 15,
                               fontWeight: FontWeight.w500,

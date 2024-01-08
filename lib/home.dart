@@ -8,7 +8,6 @@ import 'package:des/fund.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/notification_list.dart';
 import 'package:des/report_problem.dart';
-import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';

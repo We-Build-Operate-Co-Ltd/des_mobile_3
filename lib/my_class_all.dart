@@ -392,16 +392,18 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     );
   }
 
-  Widget _buildContant(dynamic model) {
+  Widget _buildContant(dynamic param) {
     return InkWell(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => CourseDetailPage(
-            model: model,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => CourseDetailPage(
+              model: param,
+            ),
           ),
-        ),
-      ),
+        );
+      },
       child: Container(
         height: 95,
         margin: EdgeInsets.only(bottom: 20),
@@ -411,7 +413,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: CachedNetworkImage(
-                imageUrl: '${model['cover_image_url']}',
+                imageUrl: '${param['cover_image_url']}',
                 fit: BoxFit.cover,
                 height: 95,
                 width: 160,
@@ -435,7 +437,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             Expanded(
               child: Container(
                 child: Text(
-                  '${model['course_name']}',
+                  '${param['course_name']}',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,

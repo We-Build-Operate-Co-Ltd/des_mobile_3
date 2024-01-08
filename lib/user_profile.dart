@@ -698,7 +698,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: model['docs'] != ''
+              child: (model?['docs'] ?? '') != ''
                   ? CachedNetworkImage(
                       imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
                           model['docs'],
@@ -814,7 +814,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             height: 100,
             width: 100,
             child: InkWell(
-              child:  _imageUrl != '' && _imageUrl != null
+              child: _imageUrl != '' && _imageUrl != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(50),
                       child: CachedNetworkImage(

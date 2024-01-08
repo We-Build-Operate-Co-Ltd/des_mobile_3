@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/main.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/image_viewer.dart';
+import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/cupertino.dart';
@@ -94,8 +95,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(17.5),
               child: CachedNetworkImage(
-                imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
-                    '${widget.model?['docs'] ?? ''}',
+                imageUrl: widget.model?['cover_image_url'] ?? '',
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
                 errorWidget: (context, url, error) =>
@@ -348,14 +348,15 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
         const SizedBox(height: 30),
         const SizedBox(height: 85),
         InkWell(
-          onTap: () {
+          onTap: () async {
+            var loginData = await ManageStorage.readDynamic('loginData');
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => WebViewInAppPage(
                   url:
-                      'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['id']}',
-                  title: widget.model['name'],
+                      'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['course_id']}?sso_key=${loginData['sub']}',
+                  title: widget.model?['course_name'] ?? '',
                 ),
               ),
             );
