@@ -1491,6 +1491,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           logWTF(response);
 
           logWTF('token');
+          logWTF(response.data);
           String accessToken = await _getTokenKeycloak(
             username: response.data['objectData']['email'],
             password: response.data['objectData']['password'],

@@ -14,7 +14,6 @@ class HistoryOfApplyJobPage extends StatefulWidget {
 }
 
 class _HistoryOfApplyJobState extends State<HistoryOfApplyJobPage> {
-
   @override
   void dispose() {
     super.dispose();
@@ -84,16 +83,26 @@ class _HistoryOfApplyJobState extends State<HistoryOfApplyJobPage> {
             ],
           ),
           SizedBox(height: 25),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: ClampingScrollPhysics(),
-            padding: EdgeInsets.zero,
-            itemCount: widget.model.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 25),
-            itemBuilder: (context, _) {
-              return _buildHistoryOfApplyJob(widget.model[_]);
-            },
-          )
+          Center(
+            child: Text(
+              'ไม่พบข้อมูล',
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: 'Sarabun',
+                color: Colors.grey,
+              ),
+            ),
+          ),
+          // ListView.separated(
+          //   shrinkWrap: true,
+          //   physics: ClampingScrollPhysics(),
+          //   padding: EdgeInsets.zero,
+          //   itemCount: widget.model.length,
+          //   separatorBuilder: (_, __) => const SizedBox(height: 25),
+          //   itemBuilder: (context, _) {
+          //     return _buildHistoryOfApplyJob(widget.model[_]);
+          //   },
+          // )
           //
         ],
       ),

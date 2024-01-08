@@ -143,14 +143,24 @@ class _CertificateAllPageState extends State<CertificateAllPage> {
           if (snapshot.data.length == 0) {
             return Container();
           } else {
-            return ListView.builder(
-              padding: EdgeInsets.zero,
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) =>
-                  _buildContant(context, snapshot.data[index]),
-              shrinkWrap: true,
-              controller: _controllerContant,
-              physics: ClampingScrollPhysics(), // 2nd
+            // return ListView.builder(
+            //   padding: EdgeInsets.zero,
+            //   itemCount: snapshot.data.length,
+            //   itemBuilder: (context, index) =>
+            //       _buildContant(context, snapshot.data[index]),
+            //   shrinkWrap: true,
+            //   controller: _controllerContant,
+            //   physics: ClampingScrollPhysics(), // 2nd
+            // );
+            return Center(
+              child: Text(
+                'ไม่พบข้อมูล',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Sarabun',
+                  color: Colors.grey,
+                ),
+              ),
             );
           }
         } else if (snapshot.hasError) {
