@@ -103,7 +103,7 @@ class _LearningPageState extends State<LearningPage> {
             children: [
               Expanded(
                 flex: 1,
-                child: model['docs'] != ''
+                child:( model?['docs']??'') != ''
                     ? CachedNetworkImage(
                         imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
                             model['docs'],
