@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:des/policy_web.dart';
 import 'package:des/register_link_account.dart';
 import 'package:des/shared/extension.dart';
+import 'package:des/shared/facebook_firebase.dart';
 import 'package:des/shared/google_firebase.dart';
 import 'package:des/shared/line.dart';
 import 'package:des/shared/secure_storage.dart';
@@ -1109,9 +1110,9 @@ class _RegisterPageState extends State<RegisterPage> {
     txtFirstName.dispose();
     txtLastName.dispose();
     switch (widget.category) {
-      // case 'facebook':
-      //   logoutFacebook();
-      //   break;
+      case 'facebook':
+        logoutFacebook();
+        break;
       case 'google':
         logoutGoogle();
         break;

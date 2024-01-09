@@ -340,32 +340,34 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                                         : Color(0xFFFFFD57),
                               ),
                             ),
-                          SizedBox(height: 10),
-                          InkWell(
-                            onTap: () => _callLoginFacebook(),
-                            child: _buildButtonLogin(
-                              'assets/images/logo_facebook_login_page.png',
-                              'เข้าใช้ผ่าน Facebook',
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Color(0xFF227BEF)
-                                  : Colors.black,
-                              colorTitle: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.white
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
-                              colorBorder: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Color(0xFF227BEF)
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
+                          if (configLoginSocial.toString() == "1")
+                            SizedBox(height: 10),
+                          if (configLoginSocial.toString() == "1")
+                            InkWell(
+                              onTap: () => _callLoginFacebook(),
+                              child: _buildButtonLogin(
+                                'assets/images/logo_facebook_login_page.png',
+                                'เข้าใช้ผ่าน Facebook',
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF227BEF)
+                                    : Colors.black,
+                                colorTitle: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.white
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                                colorBorder: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF227BEF)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                              ),
                             ),
-                          ),
                           if (configLoginSocial.toString() == "1")
                             SizedBox(height: 10),
                           if (configLoginSocial.toString() == "1")
@@ -1255,48 +1257,86 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   void _callLoginFacebook() async {
     var obj = await signInWithFacebook();
 
-    print(obj.toString());
+    logWTF(obj.toString());
     // print(obj.user.displayName);
     // print(obj.user.uid);
     if (obj != null) {
       var model = {
-        "username": obj.user.email,
+        "username": obj.user.uid.toString(),
         "email": obj.user.email,
         "imageUrl":
             obj.user.photoURL != null ? obj.user.photoURL + "?width=9999" : '',
         "firstName": obj.user.displayName,
         "lastName": '',
-        "facebookID": obj.user.uid
+        "facebookID": obj.user.uid.toString(),
       };
+      logWTF(model);
+      Dio dio = new Dio();
+      var check = await dio.post(
+        '$server/de-api/m/register/check/login/social/guest',
+        data: {'username': obj.user!.uid.toString()},
+      );
+      logWTF(check.data);
+      if (check.data) {
+        Response response = await dio.post(
+          '$server/de-api/m/v2/register/facebook/login',
+          data: model,
+        );
+        logWTF(response.data);
+        if (response.data['status'] != 'S') {
+          return null;
+        }
+        logWTF(response);
+        logWTF('token');
+        String accessToken = await _getTokenKeycloak(
+          username: response.data['objectData']['email'],
+          password: response.data['objectData']['password'],
+        );
+        logWTF(accessToken);
+        logWTF('responseKeyCloak');
+        dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
+        logWTF('responseProfileMe');
+        dynamic responseProfileMe = await _getProfileMe(accessToken);
+        logWTF('responseStaffProfileData');
+        if (responseKeyCloak == null || responseProfileMe == null) {
+          // Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+          return;
+        }
+        await ManageStorage.createSecureStorage(
+          value: accessToken,
+          key: 'accessToken',
+        );
+        await ManageStorage.createSecureStorage(
+          value: json.encode(responseKeyCloak),
+          key: 'loginData',
+        );
+        await ManageStorage.createSecureStorage(
+          value: json.encode(responseProfileMe['data']),
+          key: 'profileMe',
+        );
 
-      // Dio dio = new Dio();
-      // try {
-      //   var response = await dio.post(
-      //     '$server/de-api/m/v2/register/facebook/login',
-      //     data: model,
-      //   );
+        logWTF(response.data['objectData']);
+        await ManageStorage.createProfile(
+          value: response.data['objectData'],
+          key: 'facebook',
+        );
 
-      //   await ManageStorage.createSecureStorage(
-      //     key: 'imageUrlSocial',
-      //     value: obj.user.photoURL != null
-      //         ? obj.user.photoURL + "?width=9999"
-      //         : '',
-      //   );
-
-      //   await ManageStorage.createProfile(
-      //     value: response.data['objectData'],
-      //     key: 'facebook',
-      //   );
-
-      //   Navigator.pushReplacement(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) => Menu(),
-      //     ),
-      //   );
-      // } catch (e) {
-      //   Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-      // }
+        if (!mounted) return;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Menu(),
+          ),
+        );
+      } else {
+        if (!mounted) return;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => RegisterPage(model: model, category: 'facebook'),
+          ),
+        );
+      }
     } else {
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
