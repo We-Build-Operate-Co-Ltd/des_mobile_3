@@ -34,7 +34,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>line3rdp.$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-				<string>fb765446618029822</string>
+				<string>fb3648915618713978</string>
 				<string>com.googleusercontent.apps.949874182161-5jgngor16524p76qlckqhdk4l8hkgvih</string>
 			</array>
 		</dict>
@@ -42,7 +42,7 @@
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>FacebookAppID</key>
-	<string>765446618029822</string>
+	<string>3648915618713978</string>
 	<key>FacebookClientToken</key>
 	<string>ee1ee427dde4e9522960c88cb9f33f86</string>
 	<key>FacebookDisplayName</key>
