@@ -930,7 +930,7 @@ class _RegisterPageState extends State<RegisterPage> {
             : txtEmail.text,
         'career': _careerSelected,
         'favorites': favorites,
-        'facebookID': "",
+        'facebookID': widget.model?['facebookID'] ?? '',
         'appleID': "",
         'lineID': widget.model?['lineID'] ?? '',
         'googleID': widget.model?['googleID'] ?? '',

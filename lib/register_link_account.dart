@@ -227,6 +227,7 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
           'lineID': widget.model?['lineID'] ?? '',
           'googleID': widget.model?['googleID'] ?? '',
           'xID': widget.model?['xID'] ?? '',
+          'facebookID': widget.model?['facebookID'] ?? '',
         };
         logWTF(widget.model);
         Response response = await Dio().post(
