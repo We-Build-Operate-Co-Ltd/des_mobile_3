@@ -90,7 +90,7 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
                   textAlign: TextAlign.start,
                 ),
                 const Text(
-                  'ยืนยันตัวตนขั้นสุดท้าย! ท่านสามารถข้ามขั้นตอนนี้ \nและกลับมายืนยันตัวตนด้วยแอปพลิเคชัน ThaiD \nอีกครั้งได้ในภายหลัง ที่เมนูโปรไฟล์ของคุณ',
+                  'ยืนยันตัวตนขั้นสุดท้าย!', //ท่านสามารถข้ามขั้นตอนนี้ \nและกลับมายืนยันตัวตนด้วยแอปพลิเคชัน ThaiD \nอีกครั้งได้ในภายหลัง ที่เมนูโปรไฟล์ของคุณ
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
@@ -126,41 +126,41 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () async {
-                    _userData['hasThaiD'] = false; // ไม่ได้ยืนยัน thaiD.
-                    _register();
-                  },
-                  child: Container(
-                    height: 50,
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Theme.of(context).primaryColor,
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(7),
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 4,
-                          color: Color(0x40F3D2FF),
-                          offset: Offset(0, 4),
-                        )
-                      ],
-                    ),
-                    child: Text(
-                      'ข้ามขั้นตอนนี้',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ),
-                ),
+                // const SizedBox(height: 10),
+                // GestureDetector(
+                //   onTap: () async {
+                //     _userData['hasThaiD'] = false; // ไม่ได้ยืนยัน thaiD.
+                //     _register();
+                //   },
+                //   child: Container(
+                //     height: 50,
+                //     width: double.infinity,
+                //     alignment: Alignment.center,
+                //     decoration: BoxDecoration(
+                //       color: Colors.white,
+                //       border: Border.all(
+                //         color: Theme.of(context).primaryColor,
+                //         width: 1,
+                //       ),
+                //       borderRadius: BorderRadius.circular(7),
+                //       boxShadow: const [
+                //         BoxShadow(
+                //           blurRadius: 4,
+                //           color: Color(0x40F3D2FF),
+                //           offset: Offset(0, 4),
+                //         )
+                //       ],
+                //     ),
+                //     child: Text(
+                //       'ข้ามขั้นตอนนี้',
+                //       style: TextStyle(
+                //         fontSize: 16,
+                //         fontWeight: FontWeight.w400,
+                //         color: Theme.of(context).primaryColor,
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(height: 20),
               ],
             ),
