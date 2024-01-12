@@ -280,7 +280,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                           //   },
                           //   child: _buildButtonLogin(
                           //     'assets/images/line_circle.png',
-                          //     'เข้าใช้ผ่าน Line',
+                          //     'เข้าใช้งานผ่าน Line',
                           //     color: MyApp.themeNotifier.value ==
                           //             ThemeModeThird.light
                           //         ? Color(0xFF06C755)
@@ -306,7 +306,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                           //   onTap: () => _callLoginFacebook(),
                           //   child: _buildButtonLogin(
                           //     'assets/images/logo_facebook_login_page.png',
-                          //     'เข้าใช้ผ่าน Facebook',
+                          //     'เข้าใช้งานผ่าน Facebook',
                           //     color: MyApp.themeNotifier.value ==
                           //             ThemeModeThird.light
                           //         ? Color(0xFF227BEF)
@@ -332,7 +332,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                           //   onTap: () => _callLoginGoogle(),
                           //   child: _buildButtonLogin(
                           //     'assets/images/logo_google_login_page.png',
-                          //     'เข้าใช้ผ่าน Google',
+                          //     'เข้าใช้งานผ่าน Google',
                           //     colorTitle: MyApp.themeNotifier.value ==
                           //             ThemeModeThird.light
                           //         ? Colors.black
