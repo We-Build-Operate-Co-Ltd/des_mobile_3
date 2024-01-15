@@ -10,7 +10,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 
 class BookingServiceConfirmPage extends StatefulWidget {
   const BookingServiceConfirmPage({
@@ -863,6 +862,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
       var value = await ManageStorage.read('profileData') ?? '';
       var profileData = json.decode(value);
 
+      // ignore: unused_local_variable
       var recordId = _modelType
           .firstWhere((e) => e['refNo'] == _bookingTypeRefNo)['recordId'];
 
@@ -881,6 +881,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
       setState(() => _loadingSubmit = true);
       logWTF('model');
       final String baseUrl = 'http://dcc-portal.webview.co/dcc-api';
+      // ignore: unused_local_variable
       Response response =
           await Dio().put('${baseUrl}/api/Booking/PostponeBooking', data: data);
       _sendNotification(title: 'postpone', date: tempDate);
@@ -916,6 +917,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
     };
 
     try {
+      // ignore: unused_local_variable
       Response res = await Dio().post(
         '$server/de-api/m/v2/notificationbooking/create',
         data: param,

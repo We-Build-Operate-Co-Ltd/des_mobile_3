@@ -265,20 +265,20 @@ class _HomePageState extends State<HomePage> {
                       scrollDirection: Axis.horizontal,
                       physics: const ClampingScrollPhysics(),
                       children: [
-                        Container(
-                          width: 85,
-                          height: 85,
-                          child: columnButton(
-                            MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? 'assets/images/icon_devcourse.png'
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? 'assets/images/icon_devcourse.png'
-                                    : 'assets/images/icon_devcourse.png',
-                            'DevCourse',
-                            code: 'devcourse',
-                          ),
-                        ),
+                        // Container(
+                        //   width: 85,
+                        //   height: 85,
+                        //   child: columnButton(
+                        //     MyApp.themeNotifier.value == ThemeModeThird.light
+                        //         ? 'assets/images/icon_devcourse.png'
+                        //         : MyApp.themeNotifier.value ==
+                        //                 ThemeModeThird.dark
+                        //             ? 'assets/images/icon_devcourse.png'
+                        //             : 'assets/images/icon_devcourse.png',
+                        //     'DevCourse',
+                        //     code: 'devcourse',
+                        //   ),
+                        // ),
                         Container(
                           width: 85,
                           height: 85,

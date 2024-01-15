@@ -297,6 +297,7 @@ class _BookingServiceSuccessPageState extends State<BookingServiceSuccessPage> {
     super.initState();
   }
 
+  // ignore: unused_element
   Future<List<dynamic>> _readNews() async {
     Dio dio = Dio();
     Response<dynamic> response;
