@@ -99,7 +99,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     try {
       if (_categorySelected == 0) {
         // return Dio().get('${endpoint_base_url}get_course/${_api_key}');
-
+        // logWTF('${serverLMS}get_course/${apiKeyLMS}');
         var response = await Dio().get('${serverLMS}get_course/${apiKeyLMS}');
 
         // print('----!!!!-----------------------------' +
@@ -413,7 +413,10 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: CachedNetworkImage(
-                imageUrl: '${param['cover_image_url']}',
+                imageUrl: (param?['docs'] ?? '') != ''
+                    ? 'https://lms.dcc.onde.go.th/uploads/course/' +
+                        param['docs']
+                    : '',
                 fit: BoxFit.cover,
                 height: 95,
                 width: 160,

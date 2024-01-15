@@ -95,7 +95,10 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(17.5),
               child: CachedNetworkImage(
-                imageUrl: widget.model?['cover_image_url'] ?? '',
+                imageUrl: (widget.model?['docs'] ?? '') != ''
+                    ? 'https://lms.dcc.onde.go.th/uploads/course/' +
+                        widget.model['docs']
+                    : '',
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
                 errorWidget: (context, url, error) =>
@@ -354,7 +357,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             logWTF(accessToken);
             https: //lms.dcc.onde.go.th/user/user/lesson_details/${Course_Id}?sso_key=${sso_key}&access_token=${token}
             logWTF(
-                'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['course_cat_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}');
+                'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['id']}?sso_key=${loginData['sub']}&access_token=${accessToken}');
             Navigator.push(
               context,
               MaterialPageRoute(
