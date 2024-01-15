@@ -1785,6 +1785,7 @@ class _BookingServicePageState extends State<BookingServicePage>
     try {
       setState(() => _loadingBookingStatus = LoadingBookingStatus.loading);
 
+      // ignore: unused_local_variable
       List<dynamic> dataWithoutCancelBooking = [];
       if (refresh) {
         // โหลดข้อมูลใหม่
@@ -1860,6 +1861,7 @@ class _BookingServicePageState extends State<BookingServicePage>
     _refreshController.loadComplete();
   }
 
+  // ignore: unused_element
   String _setDate(String? date) {
     if (date!.isEmpty) return '';
     String year = date.substring(0, 4);
@@ -1985,6 +1987,7 @@ class _BookingServicePageState extends State<BookingServicePage>
       }
     }
     // check current day morethen;
+    // ignore: unused_local_variable
     bool currentDay = result == 0 ? true : false;
 
     // วันปัจจุบัน และ เช็คอินแล้ว และ อยู่ในประวัติการจอง

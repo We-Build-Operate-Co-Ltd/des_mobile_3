@@ -338,7 +338,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                                             ThemeModeThird.dark
                                         ? Colors.white
                                         : Color(0xFFFFFD57),
-                                fontSize: 14,
                               ),
                             ),
                           if (configLoginSocial.toString() == "1")

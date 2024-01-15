@@ -5,7 +5,6 @@ import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/stack_tap.dart';
-import 'package:des/verify_thai_id.dart';
 import 'package:des/verify_otp_phone.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +60,6 @@ class _VerifyInformationPageState extends State<VerifyInformationPage> {
   String titleCategoryLv2 = '';
   String titleCategoryLv3 = '';
   String titleCategoryLv4 = '';
-  String _server = '$server/de-api/';
   dynamic categoryModel = {'provinceTitle': ''};
 
   List<String> _genderList = ['ชาย', 'หญิง'];
@@ -611,13 +609,13 @@ class _VerifyInformationPageState extends State<VerifyInformationPage> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   titleCategoryLv1 != ""
-                      ? (titleCategoryLv1 ?? "") +
+                      ? (titleCategoryLv1) +
                           " / " +
-                          (titleCategoryLv2 ?? "") +
+                          (titleCategoryLv2) +
                           " / " +
-                          (titleCategoryLv3 ?? "") +
+                          (titleCategoryLv3) +
                           " / " +
-                          (selectedCodeLv4 ?? "")
+                          (selectedCodeLv4)
                       : 'จังหวัด / อำเภอ/เขต / ตำบล/แขวง / รหัสไปรษณีย์',
                   style: TextStyle(
                     color: Color(0xFF000000).withOpacity(0.9),
@@ -802,7 +800,7 @@ class _VerifyInformationPageState extends State<VerifyInformationPage> {
             itemCount: snapshot.data.length,
             separatorBuilder: (context, index) => Container(
               height: 1,
-              color: Theme.of(context).backgroundColor,
+              color: Theme.of(context).colorScheme.background,
             ),
             itemBuilder: (context, index) =>
                 _buildItem(snapshot.data[index], lv, setStateModal),
@@ -814,7 +812,7 @@ class _VerifyInformationPageState extends State<VerifyInformationPage> {
             itemCount: 10,
             separatorBuilder: (context, index) => Container(
               height: 1,
-              color: Theme.of(context).backgroundColor,
+              color: Theme.of(context).colorScheme.background,
             ),
             itemBuilder: (context, index) => Container(
               height: 50,
@@ -1328,6 +1326,7 @@ class _VerifyInformationPageState extends State<VerifyInformationPage> {
     });
   }
 
+  // ignore: unused_element
   void _callLaser(param) async {
     setState(() {
       loading = true;

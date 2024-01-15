@@ -4,8 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_app_badger/flutter_app_badger.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   '9999', // id
@@ -29,10 +27,12 @@ final storage = new FlutterSecureStorage();
 _updateBagder(message) async {
   final storage = new FlutterSecureStorage();
   dynamic valueStorage = await storage.read(key: 'dataUserLoginDDPM');
+  // ignore: unused_local_variable
   dynamic _token = await storage.read(key: 'tokenD');
   dynamic dataValue =
       valueStorage == null ? {'email': ''} : json.decode(valueStorage);
-  var _email = dataValue['email'].toString() ?? "";
+  // ignore: unused_local_variable
+  var _email = dataValue['email'].toString();
 }
 
 class NotificationService {
@@ -145,16 +145,15 @@ class NotificationService {
                 ),
               );
             });
-      }
-       else {
+      } else {
         switch (message.data['page']) {
           case 'NEWS':
             {
-             print('----123----Test');
+              print('----123----Test');
             }
             break;
         }
-       }
+      }
     });
 
     FirebaseMessaging.instance.onTokenRefresh
