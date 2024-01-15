@@ -319,7 +319,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                               },
                               child: _buildButtonLogin(
                                 'assets/images/line_circle.png',
-                                'เข้าใช้ผ่าน Line',
+                                'เข้าใช้งานผ่าน Line',
                                 color: MyApp.themeNotifier.value ==
                                         ThemeModeThird.light
                                     ? Color(0xFF06C755)
@@ -338,6 +338,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                                             ThemeModeThird.dark
                                         ? Colors.white
                                         : Color(0xFFFFFD57),
+                                fontSize: 14,
                               ),
                             ),
                           if (configLoginSocial.toString() == "1")
@@ -347,7 +348,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                               onTap: () => _callLoginFacebook(),
                               child: _buildButtonLogin(
                                 'assets/images/logo_facebook_login_page.png',
-                                'เข้าใช้ผ่าน Facebook',
+                                'เข้าใช้งานผ่าน Facebook',
                                 color: MyApp.themeNotifier.value ==
                                         ThemeModeThird.light
                                     ? Color(0xFF227BEF)
@@ -375,7 +376,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                               onTap: () => _callLoginGoogle(),
                               child: _buildButtonLogin(
                                 'assets/images/logo_google_login_page.png',
-                                'เข้าใช้ผ่าน Google',
+                                'เข้าใช้งานผ่าน Google',
                                 colorTitle: MyApp.themeNotifier.value ==
                                         ThemeModeThird.light
                                     ? Colors.black
@@ -399,7 +400,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                               onTap: () => _callLoginX(),
                               child: _buildButtonLogin(
                                 'assets/images/logo_x_twitter.png',
-                                'เข้าใช้ผ่าน X',
+                                'เข้าใช้งานผ่าน X',
                                 colorTitle: MyApp.themeNotifier.value ==
                                         ThemeModeThird.light
                                     ? Colors.black
@@ -995,13 +996,11 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     return Future.value(true);
   }
 
-  Widget _buildButtonLogin(
-    String image,
-    String title, {
-    Color colorBorder = Colors.transparent,
-    Color colorTitle = const Color(0xFF000000),
-    Color color = Colors.transparent,
-  }) {
+  Widget _buildButtonLogin(String image, String title,
+      {Color colorBorder = Colors.transparent,
+      Color colorTitle = const Color(0xFF000000),
+      Color color = Colors.transparent,
+      double fontSize = 13}) {
     return Container(
       height: 45,
       // padding: EdgeInsets.symmetric(vertical: 10),
@@ -1024,7 +1023,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           Text(
             title,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: fontSize,
               fontWeight: FontWeight.w500,
               color: colorTitle,
             ),

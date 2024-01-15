@@ -399,48 +399,48 @@ class _RegisterPageState extends State<RegisterPage> {
                                 },
                               ),
                               SizedBox(height: 10),
-                              TextFormField(
-                                controller: txtFirstName,
-                                decoration: _decorationRegisterMember(
-                                  context,
-                                  hintText: 'ชื่อ',
-                                ),
-                                style: TextStyle(
-                                  fontFamily: 'Kanit',
-                                  color: Theme.of(context).custom.b_W_fffd57,
-                                ),
-                                cursorColor:
-                                    Theme.of(context).custom.b325f8_w_fffd57,
-                                validator: (model) {
-                                  if (model!.isEmpty) {
-                                    return 'กรุณากรอกชื่อ.';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                              ),
-                              SizedBox(height: 10),
-                              TextFormField(
-                                controller: txtLastName,
-                                decoration: _decorationRegisterMember(
-                                  context,
-                                  hintText: 'นามสกุล',
-                                ),
-                                style: TextStyle(
-                                  fontFamily: 'Kanit',
-                                  color: Theme.of(context).custom.b_W_fffd57,
-                                ),
-                                cursorColor:
-                                    Theme.of(context).custom.b325f8_w_fffd57,
-                                validator: (model) {
-                                  if (model!.isEmpty) {
-                                    return 'กรุณากรอกนามสกุล.';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                              ),
-                              SizedBox(height: 10),
+                              // TextFormField(
+                              //   controller: txtFirstName,
+                              //   decoration: _decorationRegisterMember(
+                              //     context,
+                              //     hintText: 'ชื่อ',
+                              //   ),
+                              //   style: TextStyle(
+                              //     fontFamily: 'Kanit',
+                              //     color: Theme.of(context).custom.b_W_fffd57,
+                              //   ),
+                              //   cursorColor:
+                              //       Theme.of(context).custom.b325f8_w_fffd57,
+                              //   validator: (model) {
+                              //     if (model!.isEmpty) {
+                              //       return 'กรุณากรอกชื่อ.';
+                              //     } else {
+                              //       return null;
+                              //     }
+                              //   },
+                              // ),
+                              // SizedBox(height: 10),
+                              // TextFormField(
+                              //   controller: txtLastName,
+                              //   decoration: _decorationRegisterMember(
+                              //     context,
+                              //     hintText: 'นามสกุล',
+                              //   ),
+                              //   style: TextStyle(
+                              //     fontFamily: 'Kanit',
+                              //     color: Theme.of(context).custom.b_W_fffd57,
+                              //   ),
+                              //   cursorColor:
+                              //       Theme.of(context).custom.b325f8_w_fffd57,
+                              //   validator: (model) {
+                              //     if (model!.isEmpty) {
+                              //       return 'กรุณากรอกนามสกุล.';
+                              //     } else {
+                              //       return null;
+                              //     }
+                              //   },
+                              // ),
+                              // SizedBox(height: 10),
                               Text(
                                 'เพศ',
                                 style: TextStyle(
