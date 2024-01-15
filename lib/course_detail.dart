@@ -81,9 +81,10 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               builder: (context) {
                 return ImageViewer(
                   initialIndex: 0,
-                  imageProviders: [widget.model['docs']]
-                      .map<ImageProvider<Object>>((e) => NetworkImage(e))
-                      .toList(),
+                  imageProviders: [
+                    'https://lms.dcc.onde.go.th/uploads/course/' +
+                        widget.model['cover_image']
+                  ].map<ImageProvider<Object>>((e) => NetworkImage(e)).toList(),
                 );
               },
             );
@@ -95,9 +96,9 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(17.5),
               child: CachedNetworkImage(
-                imageUrl: (widget.model?['docs'] ?? '') != ''
+                imageUrl: (widget.model?['cover_image'] ?? '') != ''
                     ? 'https://lms.dcc.onde.go.th/uploads/course/' +
-                        widget.model['docs']
+                        widget.model['cover_image']
                     : '',
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
@@ -111,7 +112,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           margin: const EdgeInsets.only(right: 50, top: 10),
           child: Text(
-            widget.model?['name'] ?? '',
+            widget.model?['course_name'] ?? '',
             style: TextStyle(
               color: textTheme,
               fontSize: 20,
@@ -218,7 +219,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                 ),
               ),
               Text(
-                widget.model?['details'] ?? '',
+                widget.model?['description'] ?? '',
                 style: TextStyle(
                   color: textTheme,
                   fontSize: 13,
@@ -277,7 +278,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                               ),
                               SizedBox(height: 10),
                               Text(
-                                widget.model['details'],
+                                widget.model['description'],
                                 style: TextStyle(
                                   color: Colors.white.withOpacity(0.8),
                                 ),
@@ -321,7 +322,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
-                  '${parseHtmlString(widget.model?['description'] ?? '')}',
+                  'อ่านทั้งหมด',
                   style: TextStyle(
                     fontSize: 13,
                     color: colorTheme,
@@ -331,33 +332,14 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                 ),
               ),
               SizedBox(height: 5),
-              Padding(
-                padding: const EdgeInsets.only(
-                  right: 10,
-                  left: 10,
-                ),
-                child: Text(
-                  'อ่านทั้งหมด',
-                  style: TextStyle(
-                    color: textTheme,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
             ],
           ),
         ),
-        const SizedBox(height: 30),
         const SizedBox(height: 85),
         InkWell(
           onTap: () async {
             var loginData = await ManageStorage.readDynamic('loginData');
             var accessToken = await ManageStorage.read('accessToken');
-            logWTF(accessToken);
-            https: //lms.dcc.onde.go.th/user/user/lesson_details/${Course_Id}?sso_key=${sso_key}&access_token=${token}
-            logWTF(
-                'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['id']}?sso_key=${loginData['sub']}&access_token=${accessToken}');
             Navigator.push(
               context,
               MaterialPageRoute(

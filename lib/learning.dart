@@ -88,11 +88,21 @@ class _LearningPageState extends State<LearningPage> {
         //         DetailPage(slug: 'mock', model: mockDataObject1),
         //   ),
         // );
+        var data = {
+          'course_id': model?['id'] ?? '',
+          "course_name": model?['name'] ?? '',
+          "course_cat_id": model?['course_cat_id'] ?? '',
+          "cover_image": model?['docs'] ?? '',
+          "description": model['details'] ?? '',
+          "created_at": model['created_at'] ?? '',
+          "category_name": model['cat_name'] ?? '',
+          "certificate": model['certificate'] ?? '',
+        };
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => CourseDetailPage(
-              model: model,
+              model: data,
             ),
           ),
         );
@@ -103,7 +113,7 @@ class _LearningPageState extends State<LearningPage> {
             children: [
               Expanded(
                 flex: 1,
-                child:( model?['docs']??'') != ''
+                child: (model?['docs'] ?? '') != ''
                     ? CachedNetworkImage(
                         imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
                             model['docs'],
