@@ -48,7 +48,7 @@ class _RegisterPageState extends State<RegisterPage> {
   List<dynamic> _genderList = [
     {'key': 'male', 'value': 'ชาย'},
     {'key': 'female', 'value': 'หญิง'},
-    {'key': 'other', 'value': 'อื่น ๆ'},
+    {'key': 'LGBTQ+', 'value': 'LGBTQ+'},
   ];
   List<dynamic> _ageRangeList = [
     {'code': '1', 'title': 'ต่ำกว่า 15 ปี', 'value': 'ต่ำกว่า 15 ปี'},
@@ -305,7 +305,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   obscureText: passwordVisibility,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9a-zA-Z@!_.]')),
+                                        RegExp(r'[0-9a-zA-Z@!_#$%?*~^<>.]')),
                                   ],
                                   decoration: _decorationPasswordMember(
                                     context,

@@ -350,12 +350,17 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
         InkWell(
           onTap: () async {
             var loginData = await ManageStorage.readDynamic('loginData');
+            var accessToken = await ManageStorage.read('accessToken');
+            logWTF(accessToken);
+            https: //lms.dcc.onde.go.th/user/user/lesson_details/${Course_Id}?sso_key=${sso_key}&access_token=${token}
+            logWTF(
+                'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['course_cat_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}');
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => WebViewInAppPage(
                   url:
-                      'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['course_id']}?sso_key=${loginData['sub']}',
+                      'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['id']}?sso_key=${loginData['sub']}&access_token=${accessToken}',
                   title: widget.model?['course_name'] ?? '',
                 ),
               ),
