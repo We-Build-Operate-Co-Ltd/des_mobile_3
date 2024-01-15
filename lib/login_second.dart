@@ -488,36 +488,55 @@ class _LoginSecondPageState extends State<LoginSecondPage>
           ),
         ),
         SizedBox(width: 10),
-        InkWell(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-            final form = _formKey.currentState;
-            if (form!.validate()) {
-              form.save();
-              // if (_username!.isEmpty) {
-              //   _callUser();
-              // } else {
-              //   _callLoginGuest();
-              // }
-              _callLogin();
-            }
-            ;
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: Theme.of(context).custom.A4CB1_w_fffd57,
-            ),
-            child: Text(
-              'ดำเนินการต่อ',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-                color: Theme.of(context).custom.w_b_b,
+        Stack(
+          children: [
+            GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+                final form = _formKey.currentState;
+                if (form!.validate()) {
+                  form.save();
+                  // if (_username!.isEmpty) {
+                  //   _callUser();
+                  // } else {
+                  //   _callLoginGuest();
+                  // }
+                  _callLogin();
+                }
+                ;
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Theme.of(context).custom.A4CB1_w_fffd57,
+                ),
+                child: Text(
+                  'ดำเนินการต่อ',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                    color: Theme.of(context).custom.w_b_b,
+                  ),
+                ),
               ),
             ),
-          ),
+            if (_loadingSubmit)
+              Positioned.fill(
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Container(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+          ],
         ),
       ],
     );
@@ -1038,46 +1057,77 @@ class _LoginSecondPageState extends State<LoginSecondPage>
   }
 
   _callLogin() async {
-    var token = await _getTokenKeycloak();
-    logWTF(token);
-    var responseKeyCloak = await _getUserInfoKeycloak(token);
-    logWTF(responseKeyCloak);
+    try {
+      setState(() => _loadingSubmit = true);
 
-    var modelProfile = await _getProfileMe(token);
-    logWTF(modelProfile);
+      var token = await _getTokenKeycloak();
+      logWTF(token);
+      if (token == null) {
+        setState(() => _loadingSubmit = false);
+        return;
+      }
+      var responseKeyCloak = await _getUserInfoKeycloak(token);
+      logWTF(responseKeyCloak);
+      if (responseKeyCloak == null) {
+        setState(() => _loadingSubmit = false);
+        return;
+      }
 
-    var modelUser = await _getUserProfile();
-    logWTF(modelUser);
+      var modelProfile = await _getProfileMe(token);
+      logWTF(modelProfile);
 
-    //  if (responseKeyCloak == null ||
-    //         modelProfile == null ||
-    //         modelUser == null) {
-    //       return;
-    //     }
+      if (modelProfile == null) {
+        setState(() => _loadingSubmit = false);
+        return;
+      }
+      var modelUser = await _getUserProfile();
+      logWTF('modelUser');
+      logWTF(modelUser);
 
-    await ManageStorage.createSecureStorage(
-      value: token,
-      key: 'accessToken',
-    );
-    await ManageStorage.createSecureStorage(
-      value: json.encode(responseKeyCloak),
-      key: 'loginData',
-    );
-    await ManageStorage.createSecureStorage(
-      value: json.encode(modelProfile['data']),
-      key: 'profileMe',
-    );
-    await ManageStorage.createProfile(
-      value: modelUser[0],
-      key: 'guest',
-    );
+      if (modelUser.length == 0) {
+        var create = await _createUserProfile(modelProfile['data']);
+        if (create == null) {
+          return;
+        } else {
+          modelUser = await _getUserProfile();
+        }
+      }
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Menu(),
-      ),
-    );
+      await ManageStorage.createSecureStorage(
+        value: token,
+        key: 'accessToken',
+      );
+      // await ManageStorage.createSecureStorage(
+      //   value: json.encode({
+      //     'username': widget.username,
+      //     'password': txtPassword.text,
+      //   }),
+      //   key: 'usernamepassword',
+      // );
+      await ManageStorage.createSecureStorage(
+        value: json.encode(responseKeyCloak),
+        key: 'loginData',
+      );
+      await ManageStorage.createSecureStorage(
+        value: json.encode(modelProfile['data']),
+        key: 'profileMe',
+      );
+      await ManageStorage.createProfile(
+        value: modelUser[0],
+        key: 'guest',
+      );
+      setState(() => _loadingSubmit = false);
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Menu(),
+        ),
+      );
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      setState(() => _loadingSubmit = false);
+    }
   }
 
   _getTokenKeycloak() async {
@@ -1105,7 +1155,6 @@ class _LoginSecondPageState extends State<LoginSecondPage>
         String err = response.data['error_description'].toString();
 
         logE(response.data);
-        Fluttertoast.showToast(msg: response.data['error_description']);
         if (response.data['error_description'] == 'Invalid user credentials') {
           err = 'email หรือ รหัสผ่านไม่ถูกต้อง';
         }
@@ -1121,6 +1170,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
         err = e.response!.data.toString();
       }
       Fluttertoast.showToast(msg: err);
+      return null;
     }
   }
 
@@ -1208,6 +1258,53 @@ class _LoginSecondPageState extends State<LoginSecondPage>
     } else {
       logE(response.data);
       Fluttertoast.showToast(msg: response.data['error_description']);
+      return null;
+    }
+  }
+
+  _createUserProfile(param) async {
+    logD(param);
+    try {
+      logWTF('create');
+      var data = {
+        'username': widget.username,
+        'password': txtPassword.text,
+        'idcard': param['idcard'],
+        'category': 'guest',
+        'email': _username,
+        'phone': param?['phonenumber'] ?? '',
+        'gender': param?['gender'] ?? '',
+        // 'uuid': param['uuid'],
+        'firstName': param['firstnameTh'],
+        'lastName': param['lastnameTh'],
+        'age': param['ageRange'],
+        'career': param?['jobName'] ?? '',
+        'favorites': param?['lmsCat'] ?? '',
+        'centerCode': param['centerId'].toString(),
+        'status': 'N',
+        'hasThaiD': false,
+      };
+      logE(data);
+      Response response = await Dio()
+          .post('$server/de-api/m/register/link/account/create', data: data);
+      logD('create sss');
+
+      if (response.statusCode == 200) {
+        logD(response.data['objectData']);
+        return response.data['objectData'];
+      } else {
+        logE(response.data);
+        Fluttertoast.showToast(msg: response.data['error_description']);
+        return null;
+      }
+    } on DioError catch (e) {
+      setState(() => _loadingSubmit = false);
+      String err = e.error.toString();
+      if (e.response != null) {
+        err = e.response!.data['title'].toString();
+      }
+      logE(err);
+      Fluttertoast.showToast(msg: err);
       return null;
     }
   }

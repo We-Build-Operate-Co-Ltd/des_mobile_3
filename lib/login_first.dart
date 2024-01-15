@@ -1136,7 +1136,16 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     FocusScope.of(context).unfocus();
     setState(() {
       _category = 'guest';
+      _username = txtEmail.text.trim();
     });
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            LoginSecondPage(username: _username!, imageUrl: _imageUrl!),
+      ),
+    );
+    return;
     if (txtEmail.text.isEmpty && _category == 'guest') {
       return showDialog(
         barrierDismissible: false,
