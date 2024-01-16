@@ -69,7 +69,7 @@ class _VerifyOTPEmailInputPageState extends State<VerifyOTPEmailInputPage> {
                   controller: _emailController,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
-                        RegExp(r'[0-9a-zA-Z@!_.-]')),
+                        RegExp(r'[0-9a-zA-Z@!#$%?*~^<>._.-]')),
                   ],
                   decoration: _decorationBase(context, hintText: 'อีเมล'),
                   style: TextStyle(

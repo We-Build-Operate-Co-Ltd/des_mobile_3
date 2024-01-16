@@ -219,7 +219,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                             controller: txtEmail,
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
-                                  RegExp(r'[0-9a-zA-Z@!_.-]'))
+                                  RegExp(r'[0-9a-zA-Z@!#$%?*~^<>._.-]'))
                             ],
                             decoration: _decorationRegisterMember(
                               context,

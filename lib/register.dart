@@ -273,7 +273,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 controller: txtEmail,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.allow(
-                                      RegExp(r'[0-9a-zA-Z@!_.-]'))
+                                      RegExp(r'[0-9a-zA-Z@!#$%?*~^<>._.-]'))
                                 ],
                                 decoration: _decorationRegisterMember(
                                   context,
@@ -305,7 +305,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   obscureText: passwordVisibility,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9a-zA-Z@!_#$%?*~^<>.]')),
+                                        RegExp(r'[0-9a-zA-Z@!#$%?*~^<>._.-]')),
                                   ],
                                   decoration: _decorationPasswordMember(
                                     context,
@@ -338,7 +338,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   obscureText: confirmPasswordVisibility,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9a-zA-Z@!_.]')),
+                                        RegExp(r'[0-9a-zA-Z@!#$%?*~^<>._.-]')),
                                   ],
                                   decoration: _decorationPasswordMember(
                                     context,

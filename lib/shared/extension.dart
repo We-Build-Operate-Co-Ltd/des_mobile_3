@@ -242,7 +242,8 @@ class InputFormatTemple {
         FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z .]')),
       ];
   static password() => [
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z@!_.]')),
+        FilteringTextInputFormatter.allow(
+            RegExp(r'[0-9a-zA-Z@!#$%?*~^<>._.-]')),
         LengthLimitingTextInputFormatter(20),
       ];
   static phone() => [
@@ -255,7 +256,8 @@ class InputFormatTemple {
         LengthLimitingTextInputFormatter(1),
       ];
   static email() => [
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z@!_.-]')),
+        FilteringTextInputFormatter.allow(
+            RegExp(r'[0-9a-zA-Z@!#$%?*~^<>._.-]')),
       ];
   static idcard() => [
         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
