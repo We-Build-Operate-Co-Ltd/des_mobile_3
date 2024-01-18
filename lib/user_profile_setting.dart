@@ -485,11 +485,17 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
                             children: [
                               GestureDetector(
                                 onTap: () async {
-                                  mSetState(() => loadingC = true);
-                                  logWTF('test');
-                                  await _requestDeleteAccount();
-                                  Navigator.pop(context);
-                                  _dialogDeleteAccountSuccess();
+                                  try {
+                                    mSetState(() => loadingC = true);
+                                    await _requestDeleteAccount();
+                                    mSetState(() => loadingC = false);
+                                    Navigator.pop(context);
+                                    _dialogDeleteAccountSuccess();
+                                  } catch (e) {
+                                    Fluttertoast.showToast(
+                                        msg: 'ลองใหม่อีกครั้ง');
+                                    mSetState(() => loadingC = false);
+                                  }
                                 },
                                 child: Container(
                                   height: 40,
@@ -649,9 +655,8 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
       };
       logWTF('model');
       logWTF(data);
-      Response response = await Dio().post(
-          'https://b9fd-1-10-184-226.ngrok-free.app/m/register/delete/account',
-          data: data);
+      Response response = await Dio()
+          .post('$server/de-api/m/register/delete/account', data: data);
       logE(response.data);
 
       // setState(() => _loadingSubmit = false);
