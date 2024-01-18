@@ -1287,7 +1287,6 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       logE(data);
       Response response = await Dio()
           .post('$server/de-api/m/register/link/account/create', data: data);
-      logD('create sss');
 
       if (response.statusCode == 200) {
         logD(response.data['objectData']);

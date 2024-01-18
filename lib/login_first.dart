@@ -256,33 +256,36 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                             },
                           ),
                           SizedBox(height: 10),
-                          GestureDetector(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ForgotPasswordPage(),
-                              ),
-                            ),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 5,
-                              ),
-                              child: Text(
-                                'ลืมรหัสผ่าน',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
-                                  color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Color(0xFF7A4CB1)
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.white
-                                          : Color(0xFFFFFD57),
-                                  decoration: TextDecoration.underline,
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: GestureDetector(
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ForgotPasswordPage(),
                                 ),
-                                textAlign: TextAlign.right,
+                              ),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 5,
+                                ),
+                                child: Text(
+                                  'ลืมรหัสผ่าน',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                    color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Color(0xFF7A4CB1)
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  textAlign: TextAlign.right,
+                                ),
                               ),
                             ),
                           ),
