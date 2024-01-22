@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:des/booking_service.dart';
@@ -615,6 +616,7 @@ class _MenuState extends State<Menu> {
     // _futureMainPopup = _readMainPopup();
     _buildMainPopUp();
     _callRead();
+    _logUsed();
     pages = <Widget>[
       homePage,
       BookingServicePage(),
@@ -628,6 +630,25 @@ class _MenuState extends State<Menu> {
   void dispose() {
     _emailController.dispose();
     super.dispose();
+  }
+
+  _logUsed() async {
+    try {
+      String os = Platform.operatingSystem;
+      String os_device = os == 'ios' ? 'Ios' : 'Android';
+      var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
+      var criteria = {
+        'email': profileMe['email'],
+        'category': 'admin',
+        'platform': os_device,
+      };
+      Dio().post(
+        '$server/de-api/m/register/log/used/create',
+        data: criteria,
+      );
+    } on DioError catch (e) {
+      logE(e.toString());
+    }
   }
 
   Future<List<dynamic>> _readMainPopup() async {

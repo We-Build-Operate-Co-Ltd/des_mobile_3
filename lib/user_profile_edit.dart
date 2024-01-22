@@ -389,31 +389,50 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             //   ),
             // ),
             SizedBox(height: 40),
-            GestureDetector(
-              onTap: () => submitUpdateUserV2(),
-              child: Container(
-                margin: EdgeInsets.only(top: 20),
-                height: 50,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFF7A4CB1)
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  'บันทึกข้อมูล',
-                  style: TextStyle(
-                    fontFamily: 'Kanit',
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Colors.white
-                        : Colors.black,
-                    fontSize: 16,
+            Stack(
+              children: [
+                GestureDetector(
+                  onTap: () => submitUpdateUserV2(),
+                  child: Container(
+                    margin: EdgeInsets.only(top: 20),
+                    height: 50,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF7A4CB1)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      'บันทึกข้อมูล',
+                      style: TextStyle(
+                        fontFamily: 'Kanit',
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.white
+                            : Colors.black,
+                        fontSize: 16,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                if (_loadingSubmit)
+                  Positioned.fill(
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  ),
+              ],
             )
           ],
         ),
@@ -872,6 +891,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
       setState(() => _loadingSubmit = true);
       var value = await ManageStorage.read('profileData') ?? '';
       var user = json.decode(value);
+      String accessToken = await ManageStorage.read('accessToken');
 
       String base64Image = '';
       if (_imageFile?.path != null) {
@@ -899,9 +919,12 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
       Response response = await Dio().put(
         '$ondeURL/api/user/UpdateById',
         data: formData,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+          },
+        ),
       );
-      logWTF(response.data);
-
       user['imageUrl'] = _imageUrl;
 
       final responseRegister =
@@ -917,7 +940,6 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
       if (response.statusCode == 200) {
         // return response.data;
         if (response.data) {
-          var accessToken = await ManageStorage.read('accessToken') ?? '';
           var profileMe = await _getProfileMe(accessToken);
 
           await ManageStorage.createSecureStorage(
@@ -1019,13 +1041,13 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             onPressed: () {
               Navigator.of(context).pop();
               if (!error) {
-                // Navigator.of(context).pushAndRemoveUntil(
-                //   MaterialPageRoute(
-                //     builder: (context) => const Menupage(),
-                //   ),
-                //   (Route<dynamic> route) => false,
-                // );
-                Navigator.of(context).pop();
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (context) => const Menu(),
+                  ),
+                  (Route<dynamic> route) => false,
+                );
+                // Navigator.of(context).pop();
               }
             },
           ),

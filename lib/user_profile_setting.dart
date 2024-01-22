@@ -34,6 +34,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
   String? _firstName = '';
   String? _lastName = '';
   String? profileCode = '';
+  bool _hasThaiD = false;
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +143,15 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
           ),
         ),
         const SizedBox(height: 5),
-        _buildRow('ศูนย์ช่วยเหลือ'),
+        GestureDetector(
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ChatBotNoiPage(),
+              // builder: (context) => ChatPage(),
+            ),
+          ),
+          child: _buildRow('ศูนย์ช่วยเหลือ'),
+        ),
         // const SizedBox(height: 10),
         InkWell(
           child: _buildRow('เกี่ยวกับ'),
@@ -153,7 +162,18 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
           ),
         ),
         // const SizedBox(height: 10),
-        _buildRow('นโยบาย'),
+        GestureDetector(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => WebViewInAppPage(
+                url: 'https://decms.dcc.onde.go.th/privacy-policy/pp.html',
+                title: 'นโยบาย',
+              ),
+            ),
+          ),
+          child: _buildRow('นโยบาย'),
+        ),
       ],
     );
   }
@@ -201,31 +221,31 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
           ),
         ),
         const SizedBox(height: 5),
-        InkWell(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          focusColor: Colors.transparent,
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => UserProfileEditPage(),
-            ),
-          ),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => UserProfileEditPage(),
+              ),
+            );
+          },
           child: _buildRow('แก้ไขข้อมูลส่วนตัว'),
         ),
         // const SizedBox(height: 25),
-        InkWell(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          focusColor: Colors.transparent,
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (builder) => const VerifyMainPage(),
+        if (!_hasThaiD)
+          InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            focusColor: Colors.transparent,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (builder) => const VerifyMainPage(),
+              ),
             ),
+            child: _buildRow('ยืนยันตัวตน'),
           ),
-          child: _buildRow('ยืนยันตัวตน'),
-        ),
         InkWell(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
@@ -243,57 +263,35 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
   }
 
   Widget _buildRow(String title) {
-    return InkWell(
-      onTap: () {
-        if (title == 'ศูนย์ช่วยเหลือ') {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => ChatBotNoiPage(),
-              // builder: (context) => ChatPage(),
-            ),
-          );
-        } else if (title == 'นโยบาย') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => WebViewInAppPage(
-                url: 'https://decms.dcc.onde.go.th/privacy-policy/pp.html',
-                title: 'นโยบาย',
-              ),
-            ),
-          );
-        }
-      },
-      child: Container(
-        // color: Colors.red,
-        height: 40,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 13,
-                fontFamily: 'Kanit',
-                fontWeight: FontWeight.w400,
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Colors.black
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
-              ),
-            ),
-            Image.asset(
-              'assets/images/go.png',
-              height: 11,
+    return Container(
+      color: Colors.white,
+      height: 40,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 13,
+              fontFamily: 'Kanit',
+              fontWeight: FontWeight.w400,
               color: MyApp.themeNotifier.value == ThemeModeThird.light
                   ? Colors.black
                   : MyApp.themeNotifier.value == ThemeModeThird.dark
                       ? Colors.white
                       : Color(0xFFFFFD57),
             ),
-          ],
-        ),
+          ),
+          Image.asset(
+            'assets/images/go.png',
+            height: 11,
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          ),
+        ],
       ),
     );
   }
@@ -636,7 +634,6 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
     try {
       var profileMe = await ManageStorage.readDynamic('profileMe');
       var pf = await ManageStorage.read('profileCode') ?? '';
-      // setState(() => _loadingSubmit = true);
       var data = {
         'profileCode': pf,
         'uuid': profileMe['uuid'],
@@ -653,8 +650,6 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
         "isStaff": profileMe['isStaff'],
         "lmsUserId": profileMe['lmsUserId'],
       };
-      logWTF('model');
-      logWTF(data);
       Response response = await Dio()
           .post('$server/de-api/m/register/delete/account', data: data);
       logE(response.data);
@@ -670,20 +665,27 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      var data = await ManageStorage.read('profileData') ?? '';
-      var result = json.decode(data);
-      setState(() {
-        _imageUrl = result['imageUrl'];
-        _firstName = result['firstName'];
-        _lastName = result['lastName'];
-      });
-    });
+    _getUser();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void _getUser() async {
+    var data = await ManageStorage.read('profileData') ?? '';
+    var result = json.decode(data);
+    var rProfileMe = await ManageStorage.read('profileMe') ?? '';
+    var proflieMe = json.decode(rProfileMe);
+    logWTF(result);
+    logWTF(proflieMe);
+    setState(() {
+      _hasThaiD = result?['hasThaiD'] ?? false;
+      _imageUrl = result['imageUrl'];
+      _firstName = proflieMe['firstnameTh'];
+      _lastName = proflieMe['lastnameTh'];
+    });
   }
 
   void logout() async {
