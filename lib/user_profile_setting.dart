@@ -251,12 +251,12 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
           highlightColor: Colors.transparent,
           focusColor: Colors.transparent,
           onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (builder) => ChangePasswordPage(),
-            //   ),
-            // );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (builder) => ChangePasswordPage(),
+              ),
+            );
           },
           child: _buildRow('เปลี่ยนรหัสผ่าน'),
         ),
@@ -266,7 +266,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
 
   Widget _buildRow(String title) {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).custom.w_b_b,
       height: 40,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

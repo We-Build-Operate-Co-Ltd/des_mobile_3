@@ -32,6 +32,8 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
 
+  String _passwordStringValidate = '';
+
   final txtUsername = TextEditingController();
   final txtPassword = TextEditingController();
   final txtConPassword = TextEditingController();
@@ -323,12 +325,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   cursorColor:
                                       Theme.of(context).custom.b325f8_w_fffd57,
-                                  validator: (model) {
-                                    if (model!.isEmpty) {
-                                      return 'กรุณากรอกรหัสผ่าน.';
-                                    } else {
-                                      return null;
-                                    }
+                                  validator: (value) {
+                                    var result = ValidateForm.password(value!);
+                                    return result == null ? null : result;
                                   },
                                 ),
                               if (widget.category.isEmpty) SizedBox(height: 10),
