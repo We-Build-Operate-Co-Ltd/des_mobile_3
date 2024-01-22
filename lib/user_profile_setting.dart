@@ -250,12 +250,14 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           focusColor: Colors.transparent,
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (builder) => ChangePasswordPage(),
-            ),
-          ),
+          onTap: () {
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (builder) => ChangePasswordPage(),
+            //   ),
+            // );
+          },
           child: _buildRow('เปลี่ยนรหัสผ่าน'),
         ),
       ],
