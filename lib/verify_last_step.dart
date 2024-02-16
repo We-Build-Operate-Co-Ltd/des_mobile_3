@@ -323,35 +323,13 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
 
   _save() async {
     try {
-      setState(() {
-        _loadindSubmit = true;
-      });
+      setState(() => _loadindSubmit = true);
 
       // await updateSaveBase64(imageUint8List);
       // _userData['imageUrl'] = _image;
 
-      var value = await ManageStorage.read('profileData') ?? '';
-      var user = json.decode(value);
+      var user = await ManageStorage.readDynamic('profileData') ?? '';
 
-      // user['firstName'] = _userData['fullName'].split(' ')[0];
-      // user['lastName'] = _userData['fullName'].split(' ')[1];
-      // user['fullName'] = _userData['fullName'];
-      // user['age'] = _userData['age'];
-      // user['email'] = _email;
-      // user['imageUrl'] = _image;
-      // user['idcard'] = _userData['idcard'];
-      // user['birthday'] = _userData['birthday'];
-      // user['phone'] = _userData['phone'];
-      // user['category'] = "guest";
-      // user['address'] = _userData['address'];
-      // user['provinceCode'] = _userData['provinceCode'];
-      // user['province'] = _userData['province'];
-      // user['amphoeCode'] = _userData['amphoeCode'];
-      // user['amphoe'] = _userData['amphoe'];
-      // user['tambonCode'] = _userData['tambonCode'];
-      // user['tambon'] = _userData['tambon'];
-      // user['postnoCode'] = _userData['postnoCode'];
-      // user['postno'] = _userData['postno'];
       user['status'] = "A";
       user['isActive'] = true;
       user['hasThaiD'] = true;

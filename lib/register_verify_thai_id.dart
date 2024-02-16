@@ -182,47 +182,6 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
     );
   }
 
-  _register() async {
-    setState(() => _loadingSubmit = true);
-    try {
-      var response = await Dio().post(
-        '$server/de-api/m/Register/create',
-        data: _userData,
-      );
-      logWTF(_userData);
-
-      setState(() {
-        _loadingSubmit = false;
-      });
-
-      if (response.statusCode == 200) {
-        if (response.data['status'] == 'S') {
-          Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (_, __, ___) => const VerifyCompletePage(),
-              transitionDuration: const Duration(milliseconds: 200),
-              transitionsBuilder: (_, a, __, c) =>
-                  FadeTransition(opacity: a, child: c),
-            ),
-          );
-        } else {
-          logE(response.data['message']);
-          Fluttertoast.showToast(
-              msg: response.data['message'] ?? 'เกิดข้อผิดพลาด');
-        }
-      } else {
-        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-      }
-    } catch (e) {
-      logE(e);
-      setState(() {
-        _loadingSubmit = false;
-      });
-      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-    }
-  }
-
   _callThaiID() async {
     try {
       String responseType = 'code';
@@ -325,6 +284,46 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
       await prefs.remove('thaiDCode');
       await prefs.remove('thaiDState');
       setState(() => _loadingSubmit = false);
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+    }
+  }
+
+  _register() async {
+    setState(() => _loadingSubmit = true);
+    try {
+      var response = await Dio().post(
+        '$server/de-api/m/Register/create',
+        data: _userData,
+      );
+
+      setState(() {
+        _loadingSubmit = false;
+      });
+
+      if (response.statusCode == 200) {
+        if (response.data['status'] == 'S') {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => const VerifyCompletePage(),
+              transitionDuration: const Duration(milliseconds: 200),
+              transitionsBuilder: (_, a, __, c) =>
+                  FadeTransition(opacity: a, child: c),
+            ),
+          );
+        } else {
+          logE(response.data['message']);
+          Fluttertoast.showToast(
+              msg: response.data['message'] ?? 'เกิดข้อผิดพลาด');
+        }
+      } else {
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      }
+    } catch (e) {
+      logE(e);
+      setState(() {
+        _loadingSubmit = false;
+      });
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }

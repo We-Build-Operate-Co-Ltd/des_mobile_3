@@ -13,7 +13,7 @@ class ContactCategoryPage extends StatefulWidget {
 class _ContactCategoryPageState extends State<ContactCategoryPage> {
   late TextEditingController _searchController;
   Future<dynamic>? _futureModel;
-  String _categoryCode = '';
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

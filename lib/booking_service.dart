@@ -202,14 +202,21 @@ class _BookingServicePageState extends State<BookingServicePage>
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
+                      var startTime =
+                          _selectedCategory == '1' ? txtStartTime.text : '';
+                      var endTime =
+                          txtEndTime.text == '1' ? txtEndTime.text : '';
+                      var search = _searchController.text == '1'
+                          ? _searchController.text
+                          : '';
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => BookingServiceSearchResultPage(
                             date: txtDate.text,
-                            startTime: txtStartTime.text,
-                            endTime: txtEndTime.text,
-                            search: _searchController.text,
+                            startTime: startTime,
+                            endTime: endTime,
+                            search: search,
                           ),
                         ),
                       );
@@ -417,14 +424,20 @@ class _BookingServicePageState extends State<BookingServicePage>
               if (_currentPage == 1) ..._pageTwo(),
               GestureDetector(
                 onTap: () {
+                  var startTime =
+                      _selectedCategory == '1' ? txtStartTime.text : '';
+                  var endTime = txtEndTime.text == '1' ? txtEndTime.text : '';
+                  var search = _searchController.text == '1'
+                      ? _searchController.text
+                      : '';
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (_) => BookingServiceSearchResultPage(
                         date: txtDate.text,
-                        startTime: txtStartTime.text,
-                        endTime: txtEndTime.text,
-                        search: _searchController.text,
+                        startTime: startTime,
+                        endTime: endTime,
+                        search: search,
                       ),
                     ),
                   );
@@ -1789,11 +1802,10 @@ class _BookingServicePageState extends State<BookingServicePage>
       List<dynamic> dataWithoutCancelBooking = [];
       if (refresh) {
         // โหลดข้อมูลใหม่
-        var value = await ManageStorage.read('profileData') ?? '';
-        var profileData = json.decode(value);
-        logWTF(profileData['email']);
+        var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
+        logWTF(profileMe['email']);
         Response response = await Dio().get(
-            '$serverPlatform/api/Booking/GetBooking/mobile/${profileData['email']}');
+            '$serverPlatform/api/Booking/GetBooking/mobile/${profileMe['email']}');
 
         logWTF(response);
         if (response.data.isEmpty) {

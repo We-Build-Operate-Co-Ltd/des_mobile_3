@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class DataError extends StatefulWidget {
   const DataError({
     Key? key,
-    this.height: 100,
+    this.height = 100,
     required this.onTap,
-    this.color: Colors.black,
+    this.color = Colors.black,
   }) : super(key: key);
 
   final double height;
@@ -39,15 +39,13 @@ class _DataErrorState extends State<DataError> {
             ],
           ),
           SizedBox(height: 20),
-          widget.onTap != null
-              ? IconButton(
-                  icon: Icon(
-                    Icons.refresh_rounded,
-                    size: 30,
-                  ),
-                  onPressed: widget.onTap,
-                )
-              : SizedBox(),
+          IconButton(
+            icon: Icon(
+              Icons.refresh_rounded,
+              size: 30,
+            ),
+            onPressed: widget.onTap,
+          ),
         ],
       ),
     );

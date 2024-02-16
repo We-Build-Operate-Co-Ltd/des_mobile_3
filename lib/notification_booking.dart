@@ -18,10 +18,10 @@ class NotificationBookingPage extends StatefulWidget {
     Key? key,
   }) : super(key: key);
   @override
-  _NotificationListState createState() => _NotificationListState();
+  _NotificationBookingPage createState() => _NotificationBookingPage();
 }
 
-class _NotificationListState extends State<NotificationBookingPage> {
+class _NotificationBookingPage extends State<NotificationBookingPage> {
   dynamic model = {
     "title": 'ศูนย์ดิจิทัลชุมชนเทศบาลตำบลเสาธงหิน',
     "description": 'หมู่ที่ 5 99/99 ตำบล เสาธงหิน อำเภอบางใหญ่ นนทบุรี 11140',
@@ -82,6 +82,9 @@ class _NotificationListState extends State<NotificationBookingPage> {
 
   @override
   void dispose() {
+    _controllerBuildCategory.dispose();
+    _controllerCardV2.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -183,12 +186,12 @@ class _NotificationListState extends State<NotificationBookingPage> {
   }
 
   _readBooking() async {
-    var profile = await ManageStorage.readDynamic('profileData');
+    var profileMe = await ManageStorage.readDynamic('profileMe');
     try {
       Response response = await Dio().post(
         '$server/de-api/m/v2/notificationbooking/read',
         data: {
-          'email': profile['email'],
+          'email': profileMe['email'],
         },
       );
 
@@ -313,13 +316,12 @@ class _NotificationListState extends State<NotificationBookingPage> {
   }
 
   Future<dynamic> _readNotiCount() async {
-    var data = await ManageStorage.read('profileData') ?? '';
-    var result = json.decode(data);
+    var profileMe = await ManageStorage.read('profileMe') ?? '';
     Response<dynamic> response;
     try {
       response = await dio
           .post('$server/de-api/m/v2/notificationbooking/count', data: {
-        "email": result['email'],
+        "email": profileMe['email'],
       });
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
@@ -1404,16 +1406,16 @@ class _NotificationListState extends State<NotificationBookingPage> {
                     onPressed: () async {
                       logWTF('update');
                       try {
-                        var profileData =
-                            await ManageStorage.readDynamic('profileData');
+                        var profileMe =
+                            await ManageStorage.readDynamic('profileMe');
 
-                        logWTF(profileData);
+                        logWTF(profileMe);
                         Navigator.pop(context);
                         setState(() => _loadingWidget = true);
 
                         await dio.post(
                             '$server/de-api/m/v2/notificationBooking/update/all',
-                            data: {"email": '${profileData['email']}'});
+                            data: {"email": '${profileMe['email']}'});
                         _readBooking();
                       } catch (e) {
                         setState(() => _loadingWidget = false);
@@ -1530,16 +1532,16 @@ class _NotificationListState extends State<NotificationBookingPage> {
                     onPressed: () async {
                       logWTF('delete');
                       try {
-                        var profileData =
-                            await ManageStorage.readDynamic('profileData');
+                        var profileMe =
+                            await ManageStorage.readDynamic('profileMe');
 
-                        logWTF(profileData);
+                        logWTF(profileMe);
                         Navigator.pop(context);
                         setState(() => _loadingWidget = true);
 
                         await dio.post(
                             '$server/de-api/m/v2/notificationBooking/delete',
-                            data: {"email": '${profileData['email']}'});
+                            data: {"email": '${profileMe['email']}'});
                         _readBooking();
                       } catch (e) {
                         setState(() => _loadingWidget = false);

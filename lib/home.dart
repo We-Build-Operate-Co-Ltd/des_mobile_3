@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:des/build_modal_connection_in_progress.dart';
 import 'package:des/detail.dart';
 import 'package:des/find_job.dart';
 import 'package:des/fund.dart';
@@ -15,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart' as getLib;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -23,7 +21,6 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'dart:ui' as ui show ImageFilter;
 
 import 'chat_botnoi.dart';
-import 'controller/lms_controller.dart';
 import 'course_detail.dart';
 import 'my_class_all.dart';
 import 'notification_booking.dart';
@@ -45,8 +42,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // final lmsController = getLib.Get.put(LMSController());
-
   final storage = const FlutterSecureStorage();
   DateTime? currentBackPressTime;
   final RefreshController _refreshController =
@@ -730,18 +725,6 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             const SizedBox(height: 10),
-
-            // getLib.Obx(
-            //   () => lmsController.recomendModel.isEmpty
-            //       ? const CircularProgressIndicator()
-            //       : ListView(
-            //           children: [
-            //             Container(
-            //               child: Text('xxx'),
-            //             ),
-            //           ],
-            //         ),
-            // ),
 
             FutureBuilder(
               future: _futureNews,

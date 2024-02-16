@@ -1,8 +1,6 @@
-import 'dart:async';
 import 'package:des/shared/theme_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class WebViewInAppPage extends StatefulWidget {
   const WebViewInAppPage({super.key, this.url, this.title});
@@ -26,8 +24,8 @@ class _WebViewInAppPageState extends State<WebViewInAppPage> {
 
 class InAppWebViewPage extends StatefulWidget {
   InAppWebViewPage({this.scanFaceWeb, this.title});
-  String? scanFaceWeb;
-  String? title;
+  final String? scanFaceWeb;
+  final String? title;
 
   @override
   _InAppWebViewPageState createState() =>
@@ -38,7 +36,6 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
   _InAppWebViewPageState({this.scanFaceWeb, this.title});
   String? scanFaceWeb;
   String? title;
-  late InAppWebViewController _webViewController;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +91,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                   ),
                 ),
                 onWebViewCreated: (InAppWebViewController controller) {
-                  _webViewController = controller;
+                  // _webViewController = controller;
                 },
                 androidOnPermissionRequest: (InAppWebViewController controller,
                     String origin, List<String> resources) async {

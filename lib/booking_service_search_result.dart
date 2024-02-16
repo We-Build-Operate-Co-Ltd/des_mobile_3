@@ -1,5 +1,6 @@
 import 'package:des/booking_service_detail.dart';
 import 'package:des/shared/config.dart';
+import 'package:des/shared/extension.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -121,6 +122,7 @@ class _BookingServiceSearchResultPageState
   Widget _item(model) {
     return GestureDetector(
       onTap: () {
+        logWTF(model);
         Navigator.push(
           context,
           MaterialPageRoute(

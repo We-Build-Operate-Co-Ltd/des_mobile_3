@@ -1,12 +1,8 @@
 import 'dart:convert';
-
-import 'package:des/shared/secure_storage.dart';
-import 'package:des/verify_last_step.dart';
 import 'package:des/verify_otp_phone_input.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -20,7 +16,6 @@ class VerifyThaiIDPage extends StatefulWidget {
 }
 
 class _VerifyThaiIDPageState extends State<VerifyThaiIDPage> {
-  dynamic _userData = {};
   bool _loadingSubmit = false;
   String _thiaDCode = '';
 
@@ -47,11 +42,8 @@ class _VerifyThaiIDPageState extends State<VerifyThaiIDPage> {
   }
 
   _getUserData() async {
-    var value = await ManageStorage.read('verifyTemp') ?? '';
-    var result = json.decode(value);
-    setState(() {
-      _userData = result;
-    });
+    // var result = await ManageStorage.readDynamic('verifyTemp') ?? '';
+    setState(() {});
   }
 
   @override

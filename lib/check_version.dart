@@ -1,21 +1,16 @@
 import 'package:des/menu.dart';
-import 'package:des/shared/extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CheckVersionPage extends StatefulWidget {
-  CheckVersionPage({super.key, this.model});
-  late dynamic model;
+  const CheckVersionPage({super.key, this.model});
+  final dynamic model;
   @override
   State<CheckVersionPage> createState() => _CheckVersionPageState();
 }
 
 class _CheckVersionPageState extends State<CheckVersionPage>
     with TickerProviderStateMixin {
-  int _pageSelected = 0;
-  int _count = 0;
-
   late final AnimationController _controllerAnimation = AnimationController(
     duration: const Duration(seconds: 1),
     vsync: this,

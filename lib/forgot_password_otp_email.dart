@@ -1,4 +1,3 @@
-import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
@@ -6,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-
-import 'forgot_password_complete.dart';
 import 'forgot_password_new_password.dart';
 import 'main.dart';
 
@@ -26,9 +23,7 @@ class ForgotPasswordOTPEmailPage extends StatefulWidget {
 
 class _ForgotPasswordOTPEmailPageState
     extends State<ForgotPasswordOTPEmailPage> {
-  TextEditingController _phoneController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _loadindSubmit = false;
   final txtNumber1 = TextEditingController();
 
   @override
@@ -306,8 +301,6 @@ class _ForgotPasswordOTPEmailPageState
 
   @override
   void initState() {
-    _phoneController = TextEditingController();
-    _loadindSubmit = false;
     super.initState();
   }
 

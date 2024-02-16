@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -11,6 +13,23 @@ unfocus(context) {
   FocusScopeNode currentFocus = FocusScope.of(context);
   if (!currentFocus.hasPrimaryFocus) {
     currentFocus.unfocus();
+  }
+}
+
+connectInternet() async {
+  try {
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      logWTF('I am not connected to any network.');
+      Fluttertoast.cancel();
+      Fluttertoast.showToast(msg: 'ตรวจสอบการเชื่อมต่ออินเทอร์เน็ต');
+      return false;
+    }
+    return true;
+  } catch (e) {
+    logE('error Connectivity');
+    logE(e);
+    return true;
   }
 }
 

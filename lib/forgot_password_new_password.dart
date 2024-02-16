@@ -1,16 +1,12 @@
-import 'dart:math';
-
 import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/widget/input_decoration.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'forgot_password_complete.dart';
-import 'menu.dart';
 
 class ForgotPasswordNewPasswordPage extends StatefulWidget {
   const ForgotPasswordNewPasswordPage({

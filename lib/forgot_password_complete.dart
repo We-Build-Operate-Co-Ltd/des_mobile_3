@@ -1,11 +1,5 @@
-import 'package:des/shared/config.dart';
-import 'package:des/shared/theme_data.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:des/login_first.dart';
-
-import 'main.dart';
 
 class ForgotPasswordCompletePage extends StatefulWidget {
   const ForgotPasswordCompletePage({
@@ -19,8 +13,6 @@ class ForgotPasswordCompletePage extends StatefulWidget {
 
 class _ForgotPasswordCompletePageState
     extends State<ForgotPasswordCompletePage> {
-  final _formKey = GlobalKey<FormState>();
-
   String text = '';
 
   @override

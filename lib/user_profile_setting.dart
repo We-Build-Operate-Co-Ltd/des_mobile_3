@@ -4,6 +4,7 @@ import 'package:des/about_us.dart';
 import 'package:des/change_password.dart';
 import 'package:des/login_first.dart';
 import 'package:des/shared/config.dart';
+import 'package:des/shared/dcc.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/facebook_firebase.dart';
 import 'package:des/shared/google_firebase.dart';
@@ -30,10 +31,10 @@ class UserProfileSettingPage extends StatefulWidget {
 
 class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
   final storage = const FlutterSecureStorage();
-  String? _imageUrl = '';
-  String? _firstName = '';
-  String? _lastName = '';
-  String? profileCode = '';
+  String _imageProfile = '';
+  String _firstName = '';
+  String _lastName = '';
+  String profileCode = '';
   bool _hasThaiD = false;
 
   @override
@@ -356,24 +357,21 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
       child: Row(
         children: [
           SizedBox(
-            height: 100,
-            width: 100,
-            child: _imageUrl != null && _imageUrl != ''
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: CachedNetworkImage(
-                      imageUrl: _imageUrl!,
-                      fit: BoxFit.fill,
-                    ),
-                  )
-                : ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: Image.asset(
-                      "assets/images/profile_empty.png",
-                      fit: BoxFit.fill,
-                    ),
+              height: 100,
+              width: 100,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: Image.memory(
+                  base64Decode(_imageProfile),
+                  fit: BoxFit.cover,
+                  height: 120,
+                  width: 120,
+                  errorBuilder: (_, __, ___) => Image.asset(
+                    "assets/images/profile_empty.png",
+                    fit: BoxFit.fill,
                   ),
-          ),
+                ),
+              )),
           const SizedBox(width: 15),
           Expanded(
             child: Column(
@@ -643,9 +641,6 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
         "firstName": profileMe['firstnameTh'],
         "lastName": profileMe['lastnameTh'],
         "email": profileMe['email'],
-        // "idcard": profileMe['idcard'],
-        // "phonenumber": profileMe['phonenumber'],
-        // "createdate": profileMe['createdate'],
         "role": profileMe['role'],
         "isVerify": profileMe['isVerify'],
         "isMember": profileMe['isMember'],
@@ -666,8 +661,8 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
 
   @override
   void initState() {
-    super.initState();
     _getUser();
+    super.initState();
   }
 
   @override
@@ -676,18 +671,14 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
   }
 
   void _getUser() async {
-    var data = await ManageStorage.read('profileData') ?? '';
-    var result = json.decode(data);
-    var rProfileMe = await ManageStorage.read('profileMe') ?? '';
-    var proflieMe = json.decode(rProfileMe);
-    logWTF(result);
-    logWTF(proflieMe);
+    var proflieMe = await ManageStorage.readDynamic('profileMe') ?? '';
     setState(() {
-      _hasThaiD = result?['hasThaiD'] ?? false;
-      _imageUrl = result['imageUrl'];
+      _hasThaiD = proflieMe?['isVerify'] == 1 ? true : false;
       _firstName = proflieMe['firstnameTh'];
       _lastName = proflieMe['lastnameTh'];
     });
+    var img = await DCCProvider.getImageProfile();
+    setState(() => _imageProfile = img);
   }
 
   void logout() async {

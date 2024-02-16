@@ -81,6 +81,9 @@ class _NotificationListState extends State<NotificationListPage> {
 
   @override
   void dispose() {
+    _controllerBuildCategory.dispose();
+    _controllerCardV2.dispose();
+    _controller.dispose();
     super.dispose();
   }
 

@@ -8,16 +8,15 @@ import 'package:des/detail.dart';
 import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
 import 'package:des/policy.dart';
+import 'package:des/shared/dcc.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/notification_service.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/user_profile.dart';
-import 'package:des/verify_main.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:des/home.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -42,12 +41,9 @@ class _MenuState extends State<Menu> {
   int addBadger = 0;
   int _currentPage = 0;
   String _profileCode = '';
-  String _imageUrl = '';
+  String _imageProfile = '';
   bool hiddenMainPopUp = false;
   List<Widget> pages = <Widget>[];
-  late TextEditingController _emailController;
-  bool _verified = false;
-  final _formKey = GlobalKey<FormState>();
   bool notShowOnDay = false;
   int _currentBanner = 0;
 
@@ -68,124 +64,9 @@ class _MenuState extends State<Menu> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: WillPopScope(
           onWillPop: confirmExit,
-          child: Stack(
-            children: [
-              Column(
-                children: [
-                  Expanded(
-                    child: IndexedStack(
-                      index: _currentPage,
-                      children: pages,
-                    ),
-                  ),
-                  if (!_verified) const SizedBox(height: 250),
-                ],
-              ),
-              if (!_verified)
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Form(
-                    key: _formKey,
-                    child: Container(
-                      height: 280,
-                      padding: EdgeInsets.only(
-                        left: 35,
-                        right: 35,
-                        bottom: MediaQuery.of(context).padding.bottom,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).custom.primary,
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 3,
-                            color: Color(0xFFC5C5C5),
-                            offset: Offset(0, -2),
-                          ),
-                        ],
-                      ),
-                      child: ListView(
-                        padding: EdgeInsets.only(top: 25),
-                        children: [
-                          Text(
-                            'อีเมลของท่าน',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              color: Theme.of(context).custom.b_w_y,
-                            ),
-                          ),
-                          Text(
-                            'กรุณาระบุอีเมลของท่านเพื่อให้เราแนะนำคอร์สเรียนที่เหมาะกับท่านในอนาคต',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w400,
-                              color: Theme.of(context).custom.b_w_y,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                              controller: _emailController,
-                              keyboardType: TextInputType.emailAddress,
-                              style: TextStyle(decoration: TextDecoration.none),
-                              decoration:
-                                  _decorationBase(context, hintText: 'อีเมล'),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'กรุณากรอกอีเมล';
-                                }
-                                if (!value.isValidEmail()) {
-                                  return '**ตรวจสอบรูปแบบอีเมล';
-                                }
-                                return null;
-                              }),
-                          const SizedBox(height: 10),
-                          GestureDetector(
-                            onTap: () {
-                              final form = _formKey.currentState;
-                              if (form!.validate()) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => VerifyMainPage(),
-                                  ),
-                                );
-                                ;
-                              }
-                            },
-                            child: Container(
-                              height: 45,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF7A4CB1),
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              alignment: Alignment.center,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'ดำเนินการต่อ',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Theme.of(context).custom.w_w_y,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 60),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-            ],
+          child: IndexedStack(
+            index: _currentPage,
+            children: pages,
           ),
         ),
       ),
@@ -421,7 +302,7 @@ class _MenuState extends State<Menu> {
             _buildTap(0, 'หน้าหลัก', 'assets/images/home.png'),
             _buildTap(1, 'จองบริการ', 'assets/images/computer.png'),
             _buildTap(2, 'การเรียน', 'assets/images/learning.png'),
-            _buildTap(3, 'สมาชิก', _imageUrl, isNetwork: true),
+            _buildTap(3, 'สมาชิก', _imageProfile, isNetwork: true),
           ],
         ),
       ),
@@ -480,11 +361,15 @@ class _MenuState extends State<Menu> {
                           child: pathImage != ''
                               ? ClipRRect(
                                   borderRadius: BorderRadius.circular(15),
-                                  child: CachedNetworkImage(
-                                    imageUrl: pathImage,
+                                  child: Image.memory(
+                                    base64Decode(_imageProfile),
+                                    fit: BoxFit.cover,
                                     height: 30,
                                     width: 30,
-                                    fit: BoxFit.cover,
+                                    errorBuilder: (_, __, ___) => Image.asset(
+                                      "assets/images/profile_empty.png",
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
                                 )
                               : Image.asset(
@@ -523,51 +408,10 @@ class _MenuState extends State<Menu> {
     );
   }
 
-  static InputDecoration _decorationBase(context, {String hintText = ''}) =>
-      InputDecoration(
-        label: Text(hintText),
-        labelStyle: TextStyle(
-          color: Theme.of(context).custom.f70f70_y,
-          fontSize: 12,
-          fontWeight: FontWeight.normal,
-        ),
-        hintStyle: TextStyle(
-          color: Theme.of(context).custom.f70f70_y,
-          fontSize: 12,
-          fontWeight: FontWeight.normal,
-        ),
-
-        // hintText: hintText,
-        filled: true,
-        fillColor: Colors.transparent,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(7.0),
-          borderSide: BorderSide(color: Color(0xFFE6B82C)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(7.0),
-          borderSide: BorderSide(color: Color(0xFFE6B82C)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(7.0),
-          borderSide: BorderSide(
-            color: Theme.of(context).custom.f70f70_y,
-          ),
-        ),
-        errorStyle: const TextStyle(
-          fontWeight: FontWeight.w300,
-          fontSize: 10.0,
-        ),
-      );
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       var pf = await ManageStorage.read('profileCode') ?? '';
-      var im = await ManageStorage.read('profileImageUrl') ?? '';
-      var value = await ManageStorage.read('profileData') ?? '';
-      var profileData = json.decode(value);
 
       //set color init.
       var colorStorage = await storage.read(key: 'switchColor') ?? 'ปกติ';
@@ -592,10 +436,6 @@ class _MenuState extends State<Menu> {
 
       setState(() {
         _profileCode = pf;
-        _imageUrl = im;
-        _verified = profileData['email'] != null && profileData['email'] != ''
-            ? true
-            : false;
       });
 
       if (_profileCode.isEmpty) {
@@ -609,11 +449,8 @@ class _MenuState extends State<Menu> {
       _callReadPolicy(pf);
     });
 
-    _emailController = TextEditingController(text: '');
-
     homePage = HomePage(changePage: _changePage);
     profilePage = UserProfilePage(changePage: _changePage);
-    // _futureMainPopup = _readMainPopup();
     _buildMainPopUp();
     _callRead();
     _logUsed();
@@ -628,7 +465,6 @@ class _MenuState extends State<Menu> {
 
   @override
   void dispose() {
-    _emailController.dispose();
     super.dispose();
   }
 
@@ -643,7 +479,7 @@ class _MenuState extends State<Menu> {
         'platform': os_device,
       };
       Dio().post(
-        '$server/de-api/m/register/log/used/create',
+        'https://d49b-1-46-146-248.ngrok-free.app/m/register/log/used/create',
         data: criteria,
       );
     } on DioError catch (e) {
@@ -655,7 +491,9 @@ class _MenuState extends State<Menu> {
     Dio dio = Dio();
     Response<dynamic> response;
     try {
-      response = await dio.post('$server/de-api/m/MainPopup/read', data: {});
+      response = await dio.post(
+          'https://d49b-1-46-146-248.ngrok-free.app/m/MainPopup/read',
+          data: {});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
           return response.data['objectData'];
@@ -686,18 +524,14 @@ class _MenuState extends State<Menu> {
       if (index == 0 && _currentPage == 0) {
         _callRead();
         _buildMainPopUp();
-        // homePage.getState().onRefresh();
       }
       _currentPage = index;
     });
   }
 
   _callRead() async {
-    // if (token != '' && token != null) {
-    //   postDio('${server}m/v2/register/token/create',
-    //       {'token': token, 'profileCode': profileCode});
-    // }
-
+    var img = await DCCProvider.getImageProfile();
+    setState(() => _imageProfile = img);
     setState(() {
       if (_profileCode != '') {
         pages[3] = profilePage;
@@ -710,10 +544,12 @@ class _MenuState extends State<Menu> {
     Response<dynamic> response;
     dynamic policy = [];
     try {
-      response = await dio.post('$server/de-api/m/policy/read', data: {
-        "category": "application",
-        "profileCode": pf,
-      });
+      response = await dio.post(
+          'https://d49b-1-46-146-248.ngrok-free.app/m/policy/read',
+          data: {
+            "category": "application",
+            "profileCode": pf,
+          });
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
           policy = response.data['objectData'];

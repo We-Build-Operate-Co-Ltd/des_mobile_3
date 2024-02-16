@@ -49,6 +49,10 @@ class _LearningPageState extends State<LearningPage> {
       backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
           ? Colors.white
           : Colors.black,
+      appBar: AppBar(
+        title: const Text('การเรียน'),
+        centerTitle: true,
+      ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.only(
@@ -57,7 +61,7 @@ class _LearningPageState extends State<LearningPage> {
           left: 15,
         ),
         children: [
-          _buildHead(),
+          // _buildHead(),
           const SizedBox(height: 15),
           const SizedBox(height: 25),
           ListView.separated(

@@ -13,7 +13,6 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:html/parser.dart' show parse;
 import 'dart:ui' as ui show ImageFilter;
 import 'build_modal_connection_in_progress.dart';
-import 'shared/config.dart';
 
 // ignore: must_be_immutable
 class DetailPage extends StatefulWidget {
@@ -39,7 +38,6 @@ class _DetailPageState extends State<DetailPage> {
   Color backgroundTheme = Colors.transparent;
   Color buttonTheme = Colors.transparent;
   Color textTheme = Colors.transparent;
-  Future<dynamic>? _futureModel;
   final _scController = ScrollController();
   final storage = const FlutterSecureStorage();
 
@@ -668,7 +666,6 @@ class _DetailPageState extends State<DetailPage> {
     if (result.statusCode == 200) {
       if (result.data['status'] == 'S') {
         model = result.data['objectData'][0];
-        _futureModel = Future.value(model);
         setState(() {
           _imageSelected = model['imageUrl'];
         });

@@ -12,6 +12,7 @@ import 'package:des/shared/line.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/facebook_firebase.dart';
 import 'package:des/shared/theme_data.dart';
+import 'package:des/widget/input_decoration.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -58,6 +59,11 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     {'code': '3', 'title': 'ดำเหลือง', 'isSelected': false},
   ];
   bool _loadingSubmit = false;
+
+  late TextEditingController _passwordModalController;
+  bool _obscureTextPassword = true;
+  String _passwordStringValidate = '';
+  dynamic configLoginSocial = 0;
 
   @override
   void initState() {
@@ -196,18 +202,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                                         color: Theme.of(context).custom.w_w_y,
                                       ),
                                     ),
-
-                                    //       // Image.asset(
-                                    //       //   MyApp.themeNotifier.value ==
-                                    //       //           ThemeModeThird.light
-                                    //       //       ? 'assets/images/icon_blind.png'
-                                    //       //       : MyApp.themeNotifier.value ==
-                                    //       //               ThemeModeThird.dark
-                                    //       //           ? 'assets/images/icon_blind_d.png'
-                                    //       //           : 'assets/images/icon_blind_d-y.png',
-                                    //       //   height: 55,
-                                    //       //   width: 55,
-                                    //       // ),
                                   ),
                                 )
                               ],
@@ -580,11 +574,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                         ),
                       ),
                       SizedBox(height: 20),
-                      // contentCard(context, "ปกติ", "1", "color"),
-                      // SizedBox(height: 10),
-                      // contentCard(context, "ขาวดำ", "2", "color"),
-                      // SizedBox(height: 10),
-                      // contentCard(context, "ดำเหลือง", "3", "color"),
                       contentCardV2(context),
                     ],
                   ),
@@ -1280,73 +1269,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         "lastName": '',
         "facebookID": obj.user.uid.toString(),
       };
-      logWTF(model);
-      Dio dio = new Dio();
-      var check = await dio.post(
-        '$server/de-api/m/register/check/login/social/guest',
-        data: {'username': obj.user!.uid.toString()},
-      );
-      logWTF(check.data);
-      if (check.data) {
-        Response response = await dio.post(
-          '$server/de-api/m/v2/register/facebook/login',
-          data: model,
-        );
-        logWTF(response.data);
-        if (response.data['status'] != 'S') {
-          return null;
-        }
-        logWTF(response);
-        logWTF('token');
-        String accessToken = await _getTokenKeycloak(
-          username: response.data['objectData']['email'],
-          password: response.data['objectData']['password'],
-        );
-        logWTF(accessToken);
-        logWTF('responseKeyCloak');
-        dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
-        logWTF('responseProfileMe');
-        dynamic responseProfileMe = await _getProfileMe(accessToken);
-        logWTF('responseStaffProfileData');
-        if (responseKeyCloak == null || responseProfileMe == null) {
-          // Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-          return;
-        }
-        await ManageStorage.createSecureStorage(
-          value: accessToken,
-          key: 'accessToken',
-        );
-        await ManageStorage.createSecureStorage(
-          value: json.encode(responseKeyCloak),
-          key: 'loginData',
-        );
-        await ManageStorage.createSecureStorage(
-          value: json.encode(responseProfileMe['data']),
-          key: 'profileMe',
-        );
-
-        logWTF(response.data['objectData']);
-        await ManageStorage.createProfile(
-          value: response.data['objectData'],
-          key: 'facebook',
-        );
-
-        if (!mounted) return;
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const Menu(),
-          ),
-        );
-      } else {
-        if (!mounted) return;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => RegisterPage(model: model, category: 'facebook'),
-          ),
-        );
-      }
+      _callLoginSocial(model, 'facebook');
     } else {
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
@@ -1390,74 +1313,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           "lastName": '',
           "xID": obj.user!.id.toString()
         };
-        logWTF(model);
-
-        Dio dio = Dio();
-        var check = await dio.post(
-          '$server/de-api/m/register/check/login/social/guest',
-          data: {'username': obj.user!.id.toString()},
-        );
-        logWTF(check.data);
-        if (check.data) {
-          Response response = await dio.post(
-            '$server/de-api/m/v2/register/x/login',
-            data: model,
-          );
-          logWTF(response.data);
-          if (response.data['status'] != 'S') {
-            return null;
-          }
-          logWTF(response);
-          logWTF('token');
-          String accessToken = await _getTokenKeycloak(
-            username: response.data['objectData']['email'],
-            password: response.data['objectData']['password'],
-          );
-          logWTF(accessToken);
-          logWTF('responseKeyCloak');
-          dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
-          logWTF('responseProfileMe');
-          dynamic responseProfileMe = await _getProfileMe(accessToken);
-          logWTF('responseStaffProfileData');
-          if (responseKeyCloak == null || responseProfileMe == null) {
-            // Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-            return;
-          }
-          await ManageStorage.createSecureStorage(
-            value: accessToken,
-            key: 'accessToken',
-          );
-          await ManageStorage.createSecureStorage(
-            value: json.encode(responseKeyCloak),
-            key: 'loginData',
-          );
-          await ManageStorage.createSecureStorage(
-            value: json.encode(responseProfileMe['data']),
-            key: 'profileMe',
-          );
-
-          logWTF(response.data['objectData']);
-          await ManageStorage.createProfile(
-            value: response.data['objectData'],
-            key: 'x',
-          );
-
-          if (!mounted) return;
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const Menu(),
-            ),
-          );
-        } else {
-          if (!mounted) return;
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => RegisterPage(model: model, category: 'X'),
-            ),
-          );
-        }
+        _callLoginSocial(model, 'x');
       } else {
         logE('obj :: ');
         logE(obj);
@@ -1468,52 +1324,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       Fluttertoast.showToast(msg: 'ยกเลิก');
     }
   }
-
-  // void _callLoginGoogle() async {
-  //   var obj = await signInWithGoogle();
-
-  //   print('---signInWithGoogle---' + obj.toString());
-
-  //   if (obj != null) {
-  //     var model = {
-  //       "username": obj.user!.email,
-  //       "email": obj.user!.email,
-  //       "imageUrl": obj.user!.photoURL ?? '',
-  //       "firstName": obj.user!.displayName,
-  //       "lastName": '',
-  //       "googleID": obj.user!.uid
-  //     };
-
-  //     Dio dio = new Dio();
-  //     try {
-  //       var response = await dio.post(
-  //         '$server/de-api/m/v2/register/google/login',
-  //         data: model,
-  //       );
-
-  //       await ManageStorage.createSecureStorage(
-  //         key: 'imageUrlSocial',
-  //         value: obj.user!.photoURL != null ? obj.user!.photoURL : '',
-  //       );
-
-  //       ManageStorage.createProfile(
-  //         value: response.data['objectData'],
-  //         key: 'google',
-  //       );
-
-  //       Navigator.pushReplacement(
-  //         context,
-  //         MaterialPageRoute(
-  //           builder: (context) => Menu(),
-  //         ),
-  //       );
-  //     } catch (e) {
-  //       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-  //     }
-  //   } else {
-  //     Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-  //   }
-  // }
 
   void _callLoginGoogle() async {
     try {
@@ -1529,78 +1339,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           "lastName": '',
           "googleID": obj.user!.uid
         };
-
-        Dio dio = Dio();
-        var check = await dio.post(
-          '$server/de-api/m/register/check/login/social/guest',
-          data: {'username': obj.user!.uid},
-        );
-        logWTF(check.data);
-        if (check.data) {
-          var response = await dio.post(
-            '$server/de-api/m/v2/register/google/login',
-            data: model,
-          );
-
-          logWTF(response);
-
-          logWTF('token');
-          logWTF(response.data);
-          String accessToken = await _getTokenKeycloak(
-            username: response.data['objectData']['email'],
-            password: response.data['objectData']['password'],
-          );
-          logWTF(accessToken);
-          logWTF('responseKeyCloak');
-          dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
-          logWTF('responseProfileMe');
-          dynamic responseProfileMe = await _getProfileMe(accessToken);
-          logWTF('responseStaffProfileData');
-          if (responseKeyCloak == null || responseProfileMe == null) {
-            // Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-            return;
-          }
-
-          await ManageStorage.createSecureStorage(
-            value: accessToken,
-            key: 'accessToken',
-          );
-          await ManageStorage.createSecureStorage(
-            value: json.encode(responseKeyCloak),
-            key: 'loginData',
-          );
-          await ManageStorage.createSecureStorage(
-            value: json.encode(responseProfileMe['data']),
-            key: 'profileMe',
-          );
-
-          // setState(() => _loadingSubmit = false);
-          await ManageStorage.createSecureStorage(
-            key: 'imageUrlSocial',
-            value: obj.user!.photoURL != null ? obj.user!.photoURL : '',
-          );
-
-          ManageStorage.createProfile(
-            value: response.data['objectData'],
-            key: 'google',
-          );
-          if (!mounted) return;
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const Menu(),
-            ),
-          );
-        } else {
-          setState(() => _loadingSubmit = false);
-          if (!mounted) return;
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => RegisterPage(model: model, category: 'google'),
-            ),
-          );
-        }
+        _callLoginSocial(model, 'google');
       } else {
         logE('obj :: ');
         logE(obj);
@@ -1638,75 +1377,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           "lastName": '',
           "lineID": obj.userProfile!.userId.toString()
         };
-        Dio dio = Dio();
-        var check = await dio.post(
-          '$server/de-api/m/register/check/login/social/guest',
-          data: {'username': obj.userProfile!.userId.toString()},
-        );
-        logWTF(check.data);
-        if (check.data) {
-          Response response = await dio.post(
-            '$server/de-api/m/v2/register/line/login',
-            data: model,
-          );
-          logWTF(response.data);
-          if (response.data['status'] != 'S') {
-            return null;
-          }
-
-          logWTF(response);
-
-          logWTF('token');
-          String accessToken = await _getTokenKeycloak(
-            username: response.data['objectData']['email'],
-            password: response.data['objectData']['password'],
-          );
-          logWTF(accessToken);
-          logWTF('responseKeyCloak');
-          dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
-          logWTF('responseProfileMe');
-          dynamic responseProfileMe = await _getProfileMe(accessToken);
-          logWTF('responseStaffProfileData');
-          if (responseKeyCloak == null || responseProfileMe == null) {
-            // Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-            return;
-          }
-
-          await ManageStorage.createSecureStorage(
-            value: accessToken,
-            key: 'accessToken',
-          );
-          await ManageStorage.createSecureStorage(
-            value: json.encode(responseKeyCloak),
-            key: 'loginData',
-          );
-          await ManageStorage.createSecureStorage(
-            value: json.encode(responseProfileMe['data']),
-            key: 'profileMe',
-          );
-
-          logWTF(response.data['objectData']);
-          await ManageStorage.createProfile(
-            value: response.data['objectData'],
-            key: 'line',
-          );
-
-          if (!mounted) return;
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const Menu(),
-            ),
-          );
-        } else {
-          if (!mounted) return;
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => RegisterPage(model: model, category: 'line'),
-            ),
-          );
-        }
+        _callLoginSocial(model, 'line');
       } else {
         Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
@@ -1716,35 +1387,21 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   }
 
   void _callLoginApple() async {
-    var obj = await signInWithApple();
+    try {
+      var obj = await signInWithApple();
 
-    var model = {
-      "username": obj.user!.email ?? obj.user!.uid,
-      "email": obj.user!.email ?? '',
-      "imageUrl": '',
-      "firstName": obj.user!.email,
-      "lastName": '',
-      "appleID": obj.user!.uid
-    };
+      var model = {
+        "username": obj.user!.email ?? obj.user!.uid,
+        "email": obj.user!.email ?? '',
+        "imageUrl": '',
+        "firstName": obj.user!.email,
+        "lastName": '',
+        "appleID": obj.user!.uid
+      };
 
-    Dio dio = new Dio();
-    var response = await dio.post(
-      '$server/de-api/m/v2/register/apple/login',
-      data: model,
-    );
-
-    ManageStorage.createProfile(
-      value: response.data['objectData'],
-      key: 'apple',
-    );
-
-    if (obj != null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Menu(),
-        ),
-      );
+      _callLoginSocial(model, 'apple');
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }
 
@@ -1873,7 +1530,466 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     }
   }
 
-  dynamic configLoginSocial = 0;
+  void _callLoginSocial(dynamic param, String type) async {
+    setState(() => _loadingSubmit = true);
+    logWTF('_callLoginSocial');
+    try {
+      if (param != null) {
+        Dio dio = Dio();
+        var check = await dio.post(
+          '$server/de-api/m/register/check/login/social',
+          data: {'username': param['username']},
+        );
+        logWTF(check.data);
+        if (check.data) {
+          Response response = await dio.post(
+            '$server/de-api/m/v2/register/social/login/admin',
+            data: param,
+          );
+          // logWTF(response.data);
+          if (response.data['status'] != 'S') {
+            setState(() => _loadingSubmit = false);
+            return null;
+          }
+
+          logWTF('token');
+          String accessToken = await _getTokenKeycloak(
+            username: response.data['objectData']['email'],
+            password: response.data['objectData']['password'],
+          );
+          // logWTF(accessToken);
+
+          if (accessToken == 'invalid_grant') {
+            logWTF('password fail');
+            Fluttertoast.showToast(msg: 'รหัสผ่านไม่ถูกต้อง');
+            setState(() => _loadingSubmit = false);
+            _modalPassword(param, type);
+            return;
+            // กรอกรหัสผ่าน
+          }
+          // logWTF(response);
+          logWTF('responseKeyCloak');
+          dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
+          logWTF('responseProfileMe');
+          dynamic responseProfileMe = await _getProfileMe(accessToken);
+          logWTF('responseStaffProfileData');
+          if (responseKeyCloak == null || responseProfileMe == null) {
+            setState(() => _loadingSubmit = false);
+            // Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+            return;
+          }
+
+          // check isMember
+          if (responseProfileMe['data']['isMember'] == 0) {
+            Fluttertoast.showToast(msg: 'บัญชีนี้เป็นเจ้าหน้าที่');
+            return;
+          }
+
+          await ManageStorage.createSecureStorage(
+            value: accessToken,
+            key: 'accessToken',
+          );
+          await ManageStorage.createSecureStorage(
+            value: json.encode(responseKeyCloak),
+            key: 'loginData',
+          );
+          await ManageStorage.createSecureStorage(
+            value: json.encode(responseProfileMe['data']),
+            key: 'profileMe',
+          );
+          await ManageStorage.createProfile(
+            value: response.data['objectData'],
+            key: 'guest',
+          );
+
+          setState(() => _loadingSubmit = false);
+          if (!mounted) return;
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const Menu(),
+            ),
+          );
+        } else {
+          setState(() => _loadingSubmit = false);
+          if (!mounted) return;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => RegisterPage(model: param, category: type),
+            ),
+          );
+        }
+      } else {
+        logE('login social else');
+        setState(() => _loadingSubmit = false);
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      }
+    } catch (e) {
+      logE('login social catch');
+      logE(e);
+      setState(() => _loadingSubmit = false);
+      Fluttertoast.showToast(msg: 'ยกเลิก');
+    }
+  }
+
+  void _modalPassword(dynamic param, String type) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext bc) {
+        return Padding(
+            padding: EdgeInsets.only(
+              top: 20,
+              left: 20,
+              right: 20,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: txtPassword,
+                  obscureText: passwordVisibility,
+                  decoration: _decorationPasswordMember(context,
+                      hintText: 'รหัสผ่าน',
+                      visibility: passwordVisibility, suffixTap: () {
+                    setState(() {
+                      passwordVisibility = !passwordVisibility;
+                    });
+                  }),
+                  style: TextStyle(
+                    fontFamily: 'Kanit',
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  ),
+                  cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFF7A4CB1)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'กรอกรหัสผ่าน';
+                    }
+                    return null;
+                  },
+                ),
+                _buildFeildPassword(
+                  controller: _passwordModalController,
+                  hint: 'รหัสผ่าน',
+                  obscureText: _obscureTextPassword,
+                  autofillHints: const [AutofillHints.password],
+                  validateString: _passwordStringValidate,
+                  inputFormatters: InputFormatTemple.password(),
+                  suffixTap: () {
+                    setState(() {
+                      _obscureTextPassword = !_obscureTextPassword;
+                    });
+                  },
+                  validator: (value) {
+                    var result = ValidateForm.username(value!);
+                    setState(() {
+                      _passwordStringValidate = result ?? '';
+                    });
+                    return result == null ? null : '';
+                  },
+                ),
+                const SizedBox(height: 20),
+                Stack(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        Navigator.pop(context);
+                        _callLoginSocialNewPassword(param, type);
+                      },
+                      child: Container(
+                        height: 50,
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: _loadingSubmit
+                              ? Theme.of(context).primaryColor.withOpacity(0.8)
+                              : Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(7),
+                          boxShadow: const [
+                            BoxShadow(
+                              blurRadius: 4,
+                              color: Color(0x40F3D2FF),
+                              offset: Offset(0, 4),
+                            )
+                          ],
+                        ),
+                        child: const Text(
+                          'ยืนยัน',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (_loadingSubmit)
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                          alignment: Alignment.center,
+                          child: const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ));
+      },
+    );
+  }
+
+  static InputDecoration _decorationPasswordMember(
+    context, {
+    String labelText = '',
+    String hintText = '',
+    bool visibility = false,
+    Function? suffixTap,
+  }) =>
+      InputDecoration(
+        label: Text(labelText),
+        labelStyle: TextStyle(
+          color: Theme.of(context).custom.f70f70_w_fffd57,
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+        hintStyle: TextStyle(
+          color: Theme.of(context).custom.f70f70_w_fffd57,
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+        hintText: hintText,
+        suffixIcon: GestureDetector(
+          onTap: () {
+            suffixTap!();
+          },
+          child: visibility
+              ? const Icon(Icons.visibility_off)
+              : const Icon(Icons.visibility),
+        ),
+        suffixIconColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Color(0xFF7A4CB1)
+            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                ? Colors.white
+                : Color(0xFFFFFD57),
+        filled: true,
+        fillColor: Colors.transparent,
+        contentPadding: const EdgeInsets.fromLTRB(15.0, 5.0, 5.0, 5.0),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(color: Color(0xFFE6B82C)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black.withOpacity(0.2)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Color(0xFF707070)
+                    : Color(0xFFFFFD57),
+          ),
+        ),
+        errorStyle: const TextStyle(
+          fontWeight: FontWeight.normal,
+          fontSize: 10.0,
+        ),
+      );
+
+  void _callLoginSocialNewPassword(dynamic param, String type) async {
+    setState(() => _loadingSubmit = true);
+    try {
+      if (param != null) {
+        Dio dio = Dio();
+
+        try {
+          await Dio().post(
+            '$server/de-api/m/register/reset/passwordbyusername',
+            data: {
+              'username': param['username'],
+              'password': _passwordModalController.text,
+            },
+          );
+        } catch (e) {
+          Fluttertoast.showToast(msg: 'ลองใหม่อีกครั้ง');
+          setState(() => _loadingSubmit = false);
+          return;
+        }
+        var check = await dio.post(
+          '$server/de-api/m/register/check/login/social',
+          data: {'username': param['username']},
+        );
+        logWTF(check.data);
+        if (check.data) {
+          Response response = await dio.post(
+            '$server/de-api/m/v2/register/social/login/admin',
+            data: param,
+          );
+          logWTF(response.data);
+          if (response.data['status'] != 'S') {
+            setState(() => _loadingSubmit = false);
+            return null;
+          }
+
+          logWTF(response.data);
+
+          logWTF('token');
+          String accessToken = await _getTokenKeycloak(
+            username: response.data['objectData']['email'],
+            password: response.data['objectData']['password'],
+          );
+          logWTF(accessToken);
+
+          if (accessToken == 'invalid_grant') {
+            logWTF('password fail');
+            Fluttertoast.showToast(msg: 'รหัสผ่านไม่ถูกต้อง');
+            setState(() => _loadingSubmit = false);
+            _modalPassword(param, type);
+            return;
+            // กรอกรหัสผ่าน
+          }
+          logWTF(response);
+          logWTF('responseKeyCloak');
+          dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
+          logWTF('responseProfileMe');
+          dynamic responseProfileMe = await _getProfileMe(accessToken);
+          if (responseKeyCloak == null || responseProfileMe == null) {
+            // Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+            return;
+          }
+
+          await ManageStorage.createSecureStorage(
+            value: accessToken,
+            key: 'accessToken',
+          );
+          await ManageStorage.createSecureStorage(
+            value: json.encode(responseKeyCloak),
+            key: 'loginData',
+          );
+          await ManageStorage.createSecureStorage(
+            value: json.encode(responseProfileMe['data']),
+            key: 'profileMe',
+          );
+          await ManageStorage.createProfile(
+            value: response.data['objectData'],
+            key: 'face',
+          );
+
+          setState(() => _loadingSubmit = false);
+          if (!mounted) return;
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const Menu(),
+            ),
+          );
+        } else {
+          setState(() => _loadingSubmit = false);
+          if (!mounted) return;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => RegisterPage(model: param, category: type),
+            ),
+          );
+        }
+      } else {
+        setState(() => _loadingSubmit = false);
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      }
+    } catch (e) {
+      setState(() => _loadingSubmit = false);
+      Fluttertoast.showToast(msg: 'ยกเลิก');
+    }
+  }
+
+  Widget _buildFeildPassword({
+    required TextEditingController controller,
+    String hint = '',
+    Function(String?)? validator,
+    String validateString = '',
+    Iterable<String>? autofillHints,
+    bool obscureText = false,
+    bool visibility = false,
+    List<TextInputFormatter>? inputFormatters,
+    Function? suffixTap,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          height: 50,
+          padding: const EdgeInsets.only(top: 12),
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(7),
+            boxShadow: const [
+              BoxShadow(
+                blurRadius: 4,
+                color: Color(0x40F3D2FF),
+                offset: Offset(0, 4),
+              )
+            ],
+          ),
+          child: TextFormField(
+            obscureText: obscureText,
+            controller: controller,
+            autofillHints: autofillHints,
+            style: const TextStyle(fontSize: 14),
+            onEditingComplete: () => FocusScope.of(context).unfocus(),
+            decoration: CusInpuDecoration.password(
+              context,
+              hintText: hint,
+              visibility: visibility,
+              suffixTap: suffixTap,
+            ),
+            inputFormatters: inputFormatters,
+            validator: (String? value) => validator!(value),
+          ),
+        ),
+        if (validateString.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(left: 5, top: 3),
+            child: Text(
+              validateString,
+              style: const TextStyle(
+                fontSize: 10,
+                color: Colors.red,
+              ),
+            ),
+          )
+      ],
+    );
+  }
+
   void _callReadConfig() async {
     var response = await Dio().get('$server/py-api/dcc/config/login_social');
     print(response);

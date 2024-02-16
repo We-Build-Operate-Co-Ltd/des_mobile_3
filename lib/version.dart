@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:dio/dio.dart';
 
-import 'shared/config.dart';
 import 'splash.dart';
 
 class VersionPage extends StatefulWidget {
@@ -20,7 +19,6 @@ class _VersionPageState extends State<VersionPage> {
 
   @override
   void initState() {
-    // WidgetsBinding.instance.addPostFrameCallback((_) => _callRead());
     _callRead();
     super.initState();
   }

@@ -2,12 +2,9 @@ import 'package:des/forgot_password_otp_email.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:des/login_first.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import 'shared/config.dart';
 import 'main.dart';
 
 class ForgotPasswordPage extends StatefulWidget {

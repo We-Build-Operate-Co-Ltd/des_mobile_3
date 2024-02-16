@@ -804,8 +804,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
       String yearStr = (int.parse(subDate[2]) - 543).toString();
       String tempDate = '$yearStr-${subDate[1]}-${subDate[0]}T00:00:00';
 
-      var value = await ManageStorage.read('profileData') ?? '';
-      var profileData = json.decode(value);
+      var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
 
       var recordId = _modelType
           .firstWhere((e) => e['refNo'] == _bookingTypeRefNo)['recordId'];
@@ -816,9 +815,9 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
         "centerId": widget.centerId,
         "startTime": _startTimeController.text,
         "endTime": _endTimeController.text,
-        "userEmail": profileData['email'],
+        "userEmail": profileMe['email'],
         "userid": 0, // for test = 0; waiting API.
-        "phone": profileData['phone'],
+        "phone": profileMe['phone'],
         "desc": "",
         "remark": ""
       };
@@ -859,8 +858,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
       String yearStr = (int.parse(subDate[2]) - 543).toString();
       String tempDate = '$yearStr-${subDate[1]}-${subDate[0]}T00:00:00';
 
-      var value = await ManageStorage.read('profileData') ?? '';
-      var profileData = json.decode(value);
+      var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
 
       // ignore: unused_local_variable
       var recordId = _modelType
@@ -872,7 +870,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
         "centerId": widget.centerId,
         "startTime": _startTimeController.text,
         "endTime": _endTimeController.text,
-        "phone": profileData['phone'],
+        "phone": profileMe['phonenumber'],
         "desc": "",
         "remark": ""
       };
@@ -895,7 +893,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
   }
 
   _sendNotification({required String title, required String date}) async {
-    var profile = await ManageStorage.readDynamic('profileData');
+    var profile = await ManageStorage.readDynamic('profileMe');
     var recordName = _modelType
             .firstWhere((e) => e['refNo'] == _bookingTypeRefNo)['typeName'] ??
         '';
@@ -909,8 +907,8 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
       "startTime": _startTimeController.text,
       "endTime": _endTimeController.text,
       "phone": profile['phone'],
-      "firstName": profile['firstName'],
-      "lastName": profile['lastName'],
+      "firstName": profile['firstnameTh'],
+      "lastName": profile['lastnameTh'],
       "email": profile['email'],
       "desc": "",
       "remark": ""

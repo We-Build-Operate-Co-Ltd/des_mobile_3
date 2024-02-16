@@ -11,9 +11,10 @@ class ManageStorage {
     // debugPrint(value);
 
     await storage.write(key: 'profileCategory', value: key);
-    await storage.write(key: 'profileImageUrl', value: value['imageUrl']);
+    await storage.write(
+        key: 'profileImageUrl', value: value?['imageUrl'] ?? '');
 
-    await storage.write(key: 'profileCode', value: value['code']);
+    await storage.write(key: 'profileCode', value: value?['code'] ?? '');
     await storage.write(key: 'profileData', value: json.encode(value));
   }
 
