@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/main.dart';
+import 'package:des/shared/extension.dart';
 import 'package:des/shared/image_viewer.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
@@ -335,12 +336,14 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           onTap: () async {
             var loginData = await ManageStorage.readDynamic('loginData');
             var accessToken = await ManageStorage.read('accessToken');
+            logWTF(
+                'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}');
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => WebViewInAppPage(
                   url:
-                      'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['id']}?sso_key=${loginData['sub']}&access_token=${accessToken}',
+                      'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}',
                   title: widget.model?['course_name'] ?? '',
                 ),
               ),

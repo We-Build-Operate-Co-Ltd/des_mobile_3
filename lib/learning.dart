@@ -1,39 +1,24 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:des/models/mock_data.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-import 'build_modal_connection_in_progress.dart';
 import 'course_detail.dart';
 import 'main.dart';
-import 'models/user.dart';
-import 'detail.dart';
 import 'shared/config.dart';
 
 class LearningPage extends StatefulWidget {
-  const LearningPage({Key? key, this.userData, this.model}) : super(key: key);
-  final User? userData;
-  final dynamic model;
+  const LearningPage({Key? key}) : super(key: key);
   @override
   State<LearningPage> createState() => _LearningPageState();
 }
 
 class _LearningPageState extends State<LearningPage> {
-  dynamic model = {
-    "title": 'สกัดสมุนไพร เพื่อผลิตภัณฑ์เสริมความงาม',
-    "description": 'หมู่ที่ 5 99/99 ตำบล เสาธงหิน อำเภอบางใหญ่ นนทบุรี 11140',
-    "time": '11:00:00',
-    "date": '20220911110000',
-    "timeOfUse": '3',
-  };
-
   dynamic _model = [];
 
   @override
   void initState() {
-    // logWTF('fksdjflksdjflfsdkfjskldfjslkdf');
     _get_course();
     super.initState();
   }
@@ -61,9 +46,7 @@ class _LearningPageState extends State<LearningPage> {
           left: 15,
         ),
         children: [
-          // _buildHead(),
           const SizedBox(height: 15),
-          const SizedBox(height: 25),
           ListView.separated(
             shrinkWrap: true,
             physics: const ClampingScrollPhysics(),
@@ -72,9 +55,6 @@ class _LearningPageState extends State<LearningPage> {
             separatorBuilder: (_, __) => const SizedBox(height: 25),
             itemBuilder: (context, _) {
               return _buildHistoryOfServiceReservations(_model[_]);
-              // return Container(
-              //   child: Text(_model[_]['name']),
-              // );
             },
           )
         ],
@@ -86,12 +66,6 @@ class _LearningPageState extends State<LearningPage> {
     // String title, String title2, int hour, String date, String time
     return InkWell(
       onTap: () {
-        // Navigator.of(context).push(
-        //   MaterialPageRoute(
-        //     builder: (context) =>
-        //         DetailPage(slug: 'mock', model: mockDataObject1),
-        //   ),
-        // );
         var data = {
           'course_id': model?['id'] ?? '',
           "course_name": model?['name'] ?? '',
@@ -112,17 +86,18 @@ class _LearningPageState extends State<LearningPage> {
         );
       },
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
               Expanded(
                 flex: 1,
                 child: (model?['docs'] ?? '') != ''
-                    ? CachedNetworkImage(
-                        imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
+                    ? Image.network(
+                        'https://lms.dcc.onde.go.th/uploads/course/' +
                             model['docs'],
                         height: 120,
-                        width: double.infinity,
+                        width: 120,
                         fit: BoxFit.cover,
                       )
                     : Image.asset(
@@ -137,9 +112,10 @@ class _LearningPageState extends State<LearningPage> {
                 flex: 2,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      '${model['name']}',
+                      '${model?['name'] ?? ''}',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
@@ -153,7 +129,7 @@ class _LearningPageState extends State<LearningPage> {
                       maxLines: 1,
                     ),
                     Text(
-                      '${model['details']}',
+                      '${model?['details'] ?? ''}',
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
@@ -172,113 +148,16 @@ class _LearningPageState extends State<LearningPage> {
             ],
           ),
           const SizedBox(height: 17),
-          // Row(
-          //   children: [
-          //     const SizedBox(width: 150),
-          //     Image.asset(
-          //       'assets/images/calendar_check.png',
-          //       width: 10,
-          //       color: MyApp.themeNotifier.value == ThemeModeThird.light
-          //           ? Color(0xFF53327A)
-          //           : MyApp.themeNotifier.value == ThemeModeThird.dark
-          //               ? Colors.white
-          //               : Color(0xFFFFFD57),
-          //     ),
-          //     const SizedBox(width: 5),
-          //     // Text(
-          //     //   _dateStringToDateSlashBuddhistShort(model['date']),
-          //     //   style: TextStyle(
-          //     //     fontSize: 10,
-          //     //     fontWeight: FontWeight.w400,
-          //     //     color: MyApp.themeNotifier.value == ThemeModeThird.light
-          //     //         ? Color(0xFF53327A)
-          //     //         : MyApp.themeNotifier.value == ThemeModeThird.dark
-          //     //             ? Colors.white
-          //     //             : Color(0xFFFFFD57),
-          //     //   ),
-          //     // ),
-          //     // const SizedBox(width: 10),
-          //     // Image.asset(
-          //     //   'assets/images/time_user_profile_page.png',
-          //     //   width: 10,
-          //     //   color: MyApp.themeNotifier.value == ThemeModeThird.light
-          //     //       ? Color(0xFF53327A)
-          //     //       : MyApp.themeNotifier.value == ThemeModeThird.dark
-          //     //           ? Colors.white
-          //     //           : Color(0xFFFFFD57),
-          //     // ),
-          //     // const SizedBox(width: 5),
-          //     // // Text(
-          //     //   '${model['time']} น.',
-          //     //   style: TextStyle(
-          //     //     fontSize: 10,
-          //     //     fontWeight: FontWeight.w400,
-          //     //     color: MyApp.themeNotifier.value == ThemeModeThird.light
-          //     //         ? Color(0xFF53327A)
-          //     //         : MyApp.themeNotifier.value == ThemeModeThird.dark
-          //     //             ? Colors.white
-          //     //             : Color(0xFFFFFD57),
-          //     //   ),
-          //     // ),
-          //     // const SizedBox(width: 10),
-          //     // Text(
-          //     //   '${model['timeOfUse']} ชั่วโมง',
-          //     //   style: TextStyle(
-          //     //     fontSize: 10,
-          //     //     fontWeight: FontWeight.w400,
-          //     //     color: MyApp.themeNotifier.value == ThemeModeThird.light
-          //     //         ? Color(0xFF53327A)
-          //     //         : MyApp.themeNotifier.value == ThemeModeThird.dark
-          //     //             ? Colors.white
-          //     //             : Color(0xFFFFFD57),
-          //     //   ),
-          //     // ),
-          //   ],
-          // ),
           const SizedBox(height: 6),
-          Row(
-            children: [
-              const SizedBox(width: 50),
-              Expanded(
-                child: Container(
-                  height: 1,
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFF707070)
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57),
-                  // color:  Color(0xFF707070),
-                ),
-              ),
-            ],
-          ),
-          // SizedBox(height: 25),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHead() {
-    return Container(
-      padding: EdgeInsets.only(
-        top: MediaQuery.of(context).padding.top,
-      ),
-      color: MyApp.themeNotifier.value == ThemeModeThird.light
-          ? Colors.white
-          : Colors.black,
-      child: Center(
-        child: Text(
-          'การเรียน',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
+          Container(
+            height: 1,
             color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Colors.black
+                ? Color(0xFF707070)
                 : MyApp.themeNotifier.value == ThemeModeThird.dark
                     ? Colors.white
                     : Color(0xFFFFFD57),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -319,7 +198,7 @@ class _LearningPageState extends State<LearningPage> {
         // return response.data['data'];
       }
     } catch (e) {
-      // logWTF(e);
+      logWTF(e);
     }
     return [];
   }

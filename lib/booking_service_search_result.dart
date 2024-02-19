@@ -208,14 +208,22 @@ class _BookingServiceSearchResultPageState
       Response response = await Dio().get('$serverPlatform/api/ShowCenter');
       _loadingBookingStatus = LoadingBookingStatus.success;
 
+      logWTF(response.data);
+
       setState(() {
         _modelCenter = response.data;
-        _filterModelCenter = _modelCenter
-            .where(
-              (item) => item['centerName'].contains(widget.search),
-            )
-            .toList();
+        if (widget.search.isNotEmpty) {
+          _filterModelCenter = _modelCenter
+              .where(
+                (item) => item['centerName'].contains(widget.search),
+              )
+              .toList();
+          ;
+        } else {
+          _filterModelCenter = _modelCenter;
+        }
       });
+      logWTF('search :: ${widget.search}');
     } on DioError catch (e) {
       setState(() => _loadingBookingStatus = LoadingBookingStatus.fail);
       Fluttertoast.showToast(msg: e.response!.data['message']);

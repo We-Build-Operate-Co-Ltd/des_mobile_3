@@ -48,6 +48,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
     txtFirstName.dispose();
     txtLastName.dispose();
     txtPhone.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -163,17 +164,19 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
   }
 
   _callRead() async {
-    var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
+    try {
+      var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
 
-    setState(() {
-      _model = profileMe;
-      txtFirstName.text = profileMe['firstnameTh'];
-      txtLastName.text = profileMe['lastnameTh'];
-      txtPhone.text = profileMe['phonenumber'];
-      txtEmail.text = profileMe['email'];
-    });
-    var img = await DCCProvider.getImageProfile();
-    setState(() => _imageProfile = img);
+      setState(() {
+        _model = profileMe;
+        txtFirstName.text = profileMe['firstnameTh'];
+        txtLastName.text = profileMe['lastnameTh'];
+        txtPhone.text = profileMe['phonenumber'];
+        txtEmail.text = profileMe['email'];
+      });
+      var img = await DCCProvider.getImageProfile();
+      setState(() => _imageProfile = img);
+    } catch (e) {}
   }
 
   @override

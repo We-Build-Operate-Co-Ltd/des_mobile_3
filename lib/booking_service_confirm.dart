@@ -805,6 +805,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
       String tempDate = '$yearStr-${subDate[1]}-${subDate[0]}T00:00:00';
 
       var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
+      var accessToken = await ManageStorage.read('accessToken') ?? '';
 
       var recordId = _modelType
           .firstWhere((e) => e['refNo'] == _bookingTypeRefNo)['recordId'];
@@ -822,13 +823,19 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
         "remark": ""
       };
 
-      Response response = await Dio()
-          .post('$serverPlatform/api/Booking/Booking/mobile', data: data);
-
-      _sendNotification(title: 'booking', date: tempDate);
+      Response response = await Dio().post(
+        '$serverPlatform/api/Booking/Booking/mobile',
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+          },
+        ),
+      );
 
       setState(() => _loadingSubmit = false);
       if (response.data['status'] == 200) {
+        _sendNotification(title: 'booking', date: tempDate);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -840,6 +847,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
       }
     } on DioError catch (e) {
       var err = e.toString();
+      logE(e);
       setState(() => _loadingSubmit = false);
       if (e.response!.statusCode != 200) {
         err = e.response!.data['message'];

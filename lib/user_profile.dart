@@ -4,6 +4,7 @@ import 'package:des/certificate_all.dart';
 import 'package:des/detail.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/my_class_all.dart';
+import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/user_profile_edit.dart';
@@ -57,6 +58,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   @override
   void dispose() {
+    _refreshController.dispose();
     super.dispose();
   }
 
@@ -96,7 +98,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             : Color(0xFFFFFD57),
                   ),
                 ),
-                InkWell(
+                GestureDetector(
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -122,34 +124,41 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ],
             ),
             SizedBox(height: 15),
-            FutureBuilder<List<dynamic>>(
-              future: Future.value(_modelCourse),
-              builder: (_, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data?.length == 0) {
-                    return Container(
-                      height: 100,
-                      alignment: Alignment.center,
-                      child: Text(
-                        'ยังไม่มีคลาสกำลังเรียน',
-                        style: TextStyle(
-                          color: Theme.of(context).custom.b_W_fffd57,
-                        ),
-                      ),
-                    );
-                  }
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildMyClass(snapshot.data?[0] ?? {}, 50),
-                      _buildMyClass(snapshot.data?[1] ?? {}, 80),
-                    ],
-                  );
-                } else {
-                  return Container();
-                }
-              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildMyClass(_modelCourse[0] ?? {}, 50),
+                _buildMyClass(_modelCourse[1] ?? {}, 80),
+              ],
             ),
+            // FutureBuilder<List<dynamic>>(
+            //   future: Future.value(_modelCourse),
+            //   builder: (_, snapshot) {
+            //     if (snapshot.hasData) {
+            //       if (snapshot.data?.length == 0) {
+            //         return Container(
+            //           height: 100,
+            //           alignment: Alignment.center,
+            //           child: Text(
+            //             'ยังไม่มีคลาสกำลังเรียน',
+            //             style: TextStyle(
+            //               color: Theme.of(context).custom.b_W_fffd57,
+            //             ),
+            //           ),
+            //         );
+            //       }
+            //       return Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [
+            //           _buildMyClass(_modelCourse[0] ?? {}, 50),
+            //           _buildMyClass(_modelCourse[1] ?? {}, 80),
+            //         ],
+            //       );
+            //     } else {
+            //       return Container();
+            //     }
+            //   },
+            // ),
             SizedBox(height: 33),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,7 +175,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             : Color(0xFFFFFD57),
                   ),
                 ),
-                InkWell(
+                GestureDetector(
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -217,7 +226,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             : Color(0xFFFFFD57),
                   ),
                 ),
-                InkWell(
+                GestureDetector(
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -591,7 +600,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   Widget _buildMyClass(dynamic model, double study) {
     var screenSize = (45.07 * MediaQuery.of(context).size.width) / 100;
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
@@ -717,13 +726,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
         MaterialPageRoute(
           builder: (_) => UserProfileEditPage(),
         ),
-      ).then((value) => _getUser()),
+      ),
       child: Row(
         children: [
           SizedBox(
             height: 100,
             width: 100,
-            child: InkWell(
+            child: GestureDetector(
               child: _imageProfile != ''
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(50),
@@ -774,9 +783,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    InkWell(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
+                    GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
@@ -849,7 +856,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   // Widget _buildVerifyYourIdentity() {
-  //   return InkWell(
+  //   return GestureDetector(
   //     onTap: () {
   //       Navigator.push(
   //         context,
@@ -1003,6 +1010,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
       _isVerify = profileMe['isVerify'] == 1 ? true : false;
     });
     var img = await DCCProvider.getImageProfile();
+    logWTF('img');
+    logWTF(img);
     setState(() => _imageProfile = img);
   }
 

@@ -1,3 +1,4 @@
+import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';

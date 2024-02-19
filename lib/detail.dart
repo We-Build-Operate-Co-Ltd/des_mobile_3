@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/main.dart';
+import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/image_viewer.dart';
 import 'package:des/shared/theme_data.dart';

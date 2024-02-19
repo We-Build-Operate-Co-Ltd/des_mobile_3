@@ -202,13 +202,12 @@ class _BookingServicePageState extends State<BookingServicePage>
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
+                      FocusScope.of(context).unfocus();
                       var startTime =
                           _selectedCategory == '1' ? txtStartTime.text : '';
                       var endTime =
-                          txtEndTime.text == '1' ? txtEndTime.text : '';
-                      var search = _searchController.text == '1'
-                          ? _searchController.text
-                          : '';
+                          _selectedCategory == '1' ? txtEndTime.text : '';
+                      var search = _searchController.text;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -424,12 +423,11 @@ class _BookingServicePageState extends State<BookingServicePage>
               if (_currentPage == 1) ..._pageTwo(),
               GestureDetector(
                 onTap: () {
+                  FocusScope.of(context).unfocus();
                   var startTime =
                       _selectedCategory == '1' ? txtStartTime.text : '';
-                  var endTime = txtEndTime.text == '1' ? txtEndTime.text : '';
-                  var search = _searchController.text == '1'
-                      ? _searchController.text
-                      : '';
+                  var endTime = _selectedCategory == '1' ? txtEndTime.text : '';
+                  var search = _searchController.text;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -1797,6 +1795,7 @@ class _BookingServicePageState extends State<BookingServicePage>
   _callRead({required bool refresh}) async {
     try {
       setState(() => _loadingBookingStatus = LoadingBookingStatus.loading);
+      String accessToken = await ManageStorage.read('accessToken');
 
       // ignore: unused_local_variable
       List<dynamic> dataWithoutCancelBooking = [];
@@ -1805,7 +1804,13 @@ class _BookingServicePageState extends State<BookingServicePage>
         var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
         logWTF(profileMe['email']);
         Response response = await Dio().get(
-            '$serverPlatform/api/Booking/GetBooking/mobile/${profileMe['email']}');
+          '$serverPlatform/api/Booking/GetBooking/mobile/${profileMe['email']}',
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $accessToken',
+            },
+          ),
+        );
 
         logWTF(response);
         if (response.data.isEmpty) {
@@ -1857,6 +1862,7 @@ class _BookingServicePageState extends State<BookingServicePage>
       });
       // logWTF(_modelBookingFiltered);
     } on DioError catch (e) {
+      logE(e);
       setState(() => _loadingBookingStatus = LoadingBookingStatus.fail);
       Fluttertoast.showToast(msg: e.response!.data['message']);
     }
