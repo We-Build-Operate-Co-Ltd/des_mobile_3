@@ -769,8 +769,9 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
   _callReadType() async {
     try {
       setState(() => _loadingDropdownType = true);
-      dynamic response =
-          await Dio().get('$serverPlatform/api/masterdata/book/slotType');
+      dynamic response = await Dio().get(
+        '$ondeURL/api/masterdata/book/slotType',
+      );
 
       setState(() => _loadingDropdownType = false);
       setState(() {
@@ -818,13 +819,15 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
         "endTime": _endTimeController.text,
         "userEmail": profileMe['email'],
         "userid": 0, // for test = 0; waiting API.
-        "phone": profileMe['phone'],
+        "phone": profileMe?['phone'] ?? '',
         "desc": "",
         "remark": ""
       };
+      logWTF(data);
+      logWTF(data);
 
       Response response = await Dio().post(
-        '$serverPlatform/api/Booking/Booking/mobile',
+        '$ondeURL/api/Booking/Booking/mobile',
         data: data,
         options: Options(
           headers: {

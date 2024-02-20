@@ -205,7 +205,7 @@ class _BookingServiceSearchResultPageState
 
   _callRead() async {
     try {
-      Response response = await Dio().get('$serverPlatform/api/ShowCenter');
+      Response response = await Dio().get('$ondeURL/api/ShowCenter');
       _loadingBookingStatus = LoadingBookingStatus.success;
 
       logWTF(response.data);

@@ -1341,7 +1341,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
     } catch (e) {
       setState(() => _loadingSubmit = false);
       logE(e);
-      // Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: e.toString());
     }
   }
 

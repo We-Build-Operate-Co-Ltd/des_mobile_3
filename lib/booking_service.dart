@@ -11,6 +11,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -42,6 +44,8 @@ class _BookingServicePageState extends State<BookingServicePage>
   List<dynamic> _modelBookingAll = [];
   List<dynamic> _modelBookingFiltered = [];
   dynamic modelCategory;
+  late List<dynamic> _modelNearMe;
+  late bool _loadingNearMe;
 
   String _selectedCategory = '0';
 
@@ -112,6 +116,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                                   curve: Curves.easeIn,
                                   opacity: _isShrink ? 0.0 : 1,
                                   child: ListView(
+                                    shrinkWrap: true,
                                     physics: ClampingScrollPhysics(),
                                     padding: EdgeInsets.zero,
                                     children: _criteriaExpanded(),
@@ -169,7 +174,10 @@ class _BookingServicePageState extends State<BookingServicePage>
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => dialogOpenPickerDate(),
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                      dialogOpenPickerDate();
+                    },
                     child: AbsorbPointer(
                       child: TextFormField(
                         controller: txtDate,
@@ -204,10 +212,10 @@ class _BookingServicePageState extends State<BookingServicePage>
                     onTap: () {
                       FocusScope.of(context).unfocus();
                       var startTime =
-                          _selectedCategory == '1' ? txtStartTime.text : '';
-                      var endTime =
-                          _selectedCategory == '1' ? txtEndTime.text : '';
+                          _currentPage == 0 ? txtStartTime.text : '';
+                      var endTime = _currentPage == 0 ? txtEndTime.text : '';
                       var search = _searchController.text;
+                      logWTF(_selectedCategory);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -424,10 +432,10 @@ class _BookingServicePageState extends State<BookingServicePage>
               GestureDetector(
                 onTap: () {
                   FocusScope.of(context).unfocus();
-                  var startTime =
-                      _selectedCategory == '1' ? txtStartTime.text : '';
-                  var endTime = _selectedCategory == '1' ? txtEndTime.text : '';
+                  var startTime = _currentPage == 0 ? txtStartTime.text : '';
+                  var endTime = _currentPage == 0 ? txtEndTime.text : '';
                   var search = _searchController.text;
+                  logWTF(_currentPage);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -631,7 +639,10 @@ class _BookingServicePageState extends State<BookingServicePage>
         children: [
           Expanded(
             child: GestureDetector(
-              onTap: () => dialogOpenPickerTime('start'),
+              onTap: () {
+                FocusScope.of(context).unfocus();
+                dialogOpenPickerTime('start');
+              },
               child: AbsorbPointer(
                 child: TextFormField(
                   controller: txtStartTime,
@@ -662,7 +673,10 @@ class _BookingServicePageState extends State<BookingServicePage>
           SizedBox(width: 15),
           Expanded(
             child: GestureDetector(
-              onTap: () => dialogOpenPickerTime('end'),
+              onTap: () {
+                FocusScope.of(context).unfocus();
+                dialogOpenPickerTime('end');
+              },
               child: AbsorbPointer(
                 child: TextFormField(
                   controller: txtEndTime,
@@ -771,60 +785,97 @@ class _BookingServicePageState extends State<BookingServicePage>
         textAlign: TextAlign.left,
       ),
       SizedBox(height: 10),
-      Row(
-        children: [
-          Image.asset(
-            'assets/images/vector.png',
-            height: 15,
-            color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Colors.black
-                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                    ? Colors.white
-                    : Color(0xFFFFFD57),
-          ),
-          SizedBox(width: 10),
-          Text(
-            'ศูนย์ฯ จังหวัดนนทบุรี',
+      if (_modelNearMe.length == 0)
+        Center(
+          child: Text(
+            'ไม่พบศูนย์ใกล้ฉัน',
             style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Colors.black
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ListView.separated(
+        padding: EdgeInsets.zero,
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemBuilder: (_, __) => Row(
+          children: [
+            Image.asset(
+              'assets/images/vector.png',
+              height: 15,
               color: MyApp.themeNotifier.value == ThemeModeThird.light
                   ? Colors.black
                   : MyApp.themeNotifier.value == ThemeModeThird.dark
                       ? Colors.white
                       : Color(0xFFFFFD57),
             ),
-          ),
-        ],
-      ),
-      SizedBox(height: 10),
-      Row(
-        children: [
-          Image.asset(
-            'assets/images/vector.png',
-            height: 15,
-            color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Colors.black
-                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                    ? Colors.white
-                    : Color(0xFFFFFD57),
-          ),
-          SizedBox(width: 10),
-          Text(
-            'ศูนย์ฯ อำเภอเมืองนนทบุรี',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Colors.black
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
+            SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                _modelNearMe[__]?['center_Name'] ?? '',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.black
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+        separatorBuilder: (_, __) => const SizedBox(height: 10),
+        itemCount: _modelNearMe.length,
       ),
-      SizedBox(height: 50),
+      // Column(
+      //     mainAxisSize: MainAxisSize.min,
+      //     children: _modelNearMe
+      //         .asMap()
+      //         .map(
+      //           (i, element) => MapEntry(
+      //             i,
+      //             Row(
+      //               children: [
+      //                 Image.asset(
+      //                   'assets/images/vector.png',
+      //                   height: 15,
+      //                   color: MyApp.themeNotifier.value == ThemeModeThird.light
+      //                       ? Colors.black
+      //                       : MyApp.themeNotifier.value == ThemeModeThird.dark
+      //                           ? Colors.white
+      //                           : Color(0xFFFFFD57),
+      //                 ),
+      //                 SizedBox(width: 10),
+      //                 Expanded(
+      //                   child: Text(
+      //                     element?['center_Name'] ?? '',
+      //                     style: TextStyle(
+      //                       fontSize: 13,
+      //                       fontWeight: FontWeight.w400,
+      //                       color: MyApp.themeNotifier.value ==
+      //                               ThemeModeThird.light
+      //                           ? Colors.black
+      //                           : MyApp.themeNotifier.value ==
+      //                                   ThemeModeThird.dark
+      //                               ? Colors.white
+      //                               : Color(0xFFFFFD57),
+      //                     ),
+      //                   ),
+      //                 ),
+      //               ],
+      //             ),
+      //           ),
+      //         )
+      //         .values
+      //         .toList()),
+      SizedBox(height: 30),
     ];
   }
 
@@ -1663,13 +1714,24 @@ class _BookingServicePageState extends State<BookingServicePage>
                                 onTap: () async {
                                   try {
                                     mSetState(() => loadingCheckIn = true);
+                                    var accessToken = await ManageStorage.read(
+                                            'accessToken') ??
+                                        '';
+
                                     // check in
                                     await Dio().put(
-                                        '$serverPlatform/api/Booking/UserCheckin',
-                                        data: {
-                                          "bookingNo": param['bookingno'],
-                                          "status": "4"
-                                        });
+                                      '$ondeURL/api/Booking/UserCheckin',
+                                      data: {
+                                        "bookingNo": param['bookingno'],
+                                        "status": "4"
+                                      },
+                                      options: Options(
+                                        headers: {
+                                          'Authorization':
+                                              'Bearer $accessToken',
+                                        },
+                                      ),
+                                    );
 
                                     mSetState(() => loadingCheckIn = false);
 
@@ -1764,6 +1826,9 @@ class _BookingServicePageState extends State<BookingServicePage>
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 500));
     _searchController = TextEditingController(text: '');
+    _modelNearMe = [];
+    _loadingNearMe = false;
+    _determinePosition();
     _callAutoComplete();
     _callRead(refresh: true);
   }
@@ -1779,7 +1844,16 @@ class _BookingServicePageState extends State<BookingServicePage>
 
   _callAutoComplete() async {
     try {
-      Response response = await Dio().get('$serverPlatform/api/ShowCenter');
+      String accessToken = await ManageStorage.read('accessToken');
+
+      Response response = await Dio().get(
+        '$ondeURL/api/ShowCenter',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+          },
+        ),
+      );
       List<dynamic> data = response.data;
 
       setState(() {
@@ -1804,7 +1878,7 @@ class _BookingServicePageState extends State<BookingServicePage>
         var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
         logWTF(profileMe['email']);
         Response response = await Dio().get(
-          '$serverPlatform/api/Booking/GetBooking/mobile/${profileMe['email']}',
+          '$ondeURL/api/Booking/GetBooking/mobile/${profileMe['email']}',
           options: Options(
             headers: {
               'Authorization': 'Bearer $accessToken',
@@ -1868,7 +1942,57 @@ class _BookingServicePageState extends State<BookingServicePage>
     }
   }
 
+  _determinePosition() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.deniedForever) {
+        return Future.error('Location Not Available');
+      }
+    } else if (permission == LocationPermission.always) {
+    } else if (permission == LocationPermission.whileInUse) {
+    } else if (permission == LocationPermission.unableToDetermine) {
+    } else {
+      setState(() => _loadingNearMe = false);
+      throw Exception('Error');
+    }
+    _getLocation();
+  }
+
+  _getLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+      _getCenterNearMe(LatLng(position.latitude, position.longitude));
+    } catch (e) {
+      setState(() => _loadingNearMe = false);
+      logE('_getLocation');
+      logE(e);
+    }
+  }
+
+  _getCenterNearMe(LatLng latlng) async {
+    try {
+      String path =
+          'https://dcc.onde.go.th/dcc-api/api/DataManagement/GetCenterLocation';
+
+      Response response = await Dio().get(
+          '$path?latitude=${latlng.latitude}&longitude=${latlng.longitude}');
+      List<dynamic> data = response.data['data'];
+      setState(() {
+        _modelNearMe = data.take(2).toList();
+      });
+      setState(() => _loadingNearMe = false);
+      logWTF(_modelNearMe);
+    } catch (e) {
+      setState(() => _loadingNearMe = false);
+      logE(e);
+    }
+  }
+
   void onRefresh() async {
+    _determinePosition();
     await _callRead(refresh: true);
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
