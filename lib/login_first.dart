@@ -1537,13 +1537,13 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       if (param != null) {
         Dio dio = Dio();
         var check = await dio.post(
-          '$server/de-api/m/register/check/login/social',
+          '$server/de-api/m/register/check/login/social/guest',
           data: {'username': param['username']},
         );
         logWTF(check.data);
         if (check.data) {
           Response response = await dio.post(
-            '$server/de-api/m/v2/register/social/login/admin',
+            '$server/de-api/m/v2/register/social/login',
             data: param,
           );
           // logWTF(response.data);
@@ -1849,7 +1849,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         logWTF(check.data);
         if (check.data) {
           Response response = await dio.post(
-            '$server/de-api/m/v2/register/social/login/admin',
+            '$server/de-api/m/v2/register/social/login',
             data: param,
           );
           logWTF(response.data);

@@ -1479,7 +1479,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       var data = {
         'username': widget.username,
         // 'password': txtPassword.text,
-        'idcard': param['idcard'],
+        'idcard': param['idcard'] ?? "",
         'category': 'guest',
         'email': _username,
         // 'phone': param?['phonenumber'] ?? '',
@@ -1543,7 +1543,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
         logWTF(check.data);
         if (check.data) {
           Response response = await dio.post(
-            '$server/de-api/m/v2/register/social/login/admin',
+            '$server/de-api/m/v2/register/social/login',
             data: param,
           );
           // logWTF(response.data);
