@@ -1,5 +1,5 @@
-const version = '1.1.0';
-const versionNumber = 110;
+const version = '1.1.2';
+const versionNumber = 112;
 // const server = 'https://des.we-builds.com';
 const server = 'https://decms.dcc.onde.go.th';
 const serverPlatform = 'http://dcc-portal.webview.co/dcc-api';
