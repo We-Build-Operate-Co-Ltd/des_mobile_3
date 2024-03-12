@@ -411,7 +411,7 @@ class _MenuState extends State<Menu> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      var pf = await ManageStorage.read('profileCode') ?? '';
+      var pf = await ManageStorage.read('accessToken') ?? '';
 
       //set color init.
       var colorStorage = await storage.read(key: 'switchColor') ?? 'ปกติ';
@@ -446,7 +446,7 @@ class _MenuState extends State<Menu> {
           (Route<dynamic> route) => false,
         );
       }
-      _callReadPolicy(pf);
+      // _callReadPolicy(pf);
     });
 
     homePage = HomePage(changePage: _changePage);
@@ -455,6 +455,9 @@ class _MenuState extends State<Menu> {
     _callRead();
     _logUsed();
     pages = <Widget>[
+      // SizedBox(),
+      // SizedBox(),
+      // SizedBox(),
       homePage,
       BookingServicePage(),
       LearningPage(),
@@ -479,7 +482,7 @@ class _MenuState extends State<Menu> {
         'platform': os_device,
       };
       Dio().post(
-        'https://d49b-1-46-146-248.ngrok-free.app/m/register/log/used/create',
+        '$server/dcc-api/m/register/log/used/create',
         data: criteria,
       );
     } on DioError catch (e) {
@@ -491,9 +494,7 @@ class _MenuState extends State<Menu> {
     Dio dio = Dio();
     Response<dynamic> response;
     try {
-      response = await dio.post(
-          'https://d49b-1-46-146-248.ngrok-free.app/m/MainPopup/read',
-          data: {});
+      response = await dio.post('$server/dcc-api/m/MainPopup/read', data: {});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
           return response.data['objectData'];
@@ -544,12 +545,10 @@ class _MenuState extends State<Menu> {
     Response<dynamic> response;
     dynamic policy = [];
     try {
-      response = await dio.post(
-          'https://d49b-1-46-146-248.ngrok-free.app/m/policy/read',
-          data: {
-            "category": "application",
-            "profileCode": pf,
-          });
+      response = await dio.post('$server/dcc-api/m/policy/read', data: {
+        "category": "application",
+        "profileCode": pf,
+      });
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
           policy = response.data['objectData'];

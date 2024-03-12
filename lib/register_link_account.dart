@@ -292,7 +292,7 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
     logWTF('_callLoginSocial');
     try {
       Response response = await Dio().post(
-        '$server/de-api/m/v2/register/social/login',
+        '$server/dcc-api/m/v2/register/social/login',
         data: widget.model,
       );
       // logWTF(response.data);

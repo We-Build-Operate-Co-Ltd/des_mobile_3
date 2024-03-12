@@ -9,7 +9,6 @@ import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/user_profile_edit.dart';
 import 'package:des/user_profile_setting.dart';
-import 'package:des/verify_main.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -636,7 +635,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             SizedBox(
               width: 170,
               child: Text(
-                model['name'],
+                model['name'] ?? '',
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
@@ -1010,8 +1009,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
       _isVerify = profileMe['isVerify'] == 1 ? true : false;
     });
     var img = await DCCProvider.getImageProfile();
-    logWTF('img');
-    logWTF(img);
     setState(() => _imageProfile = img);
   }
 

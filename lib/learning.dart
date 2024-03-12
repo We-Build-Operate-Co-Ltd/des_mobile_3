@@ -35,7 +35,15 @@ class _LearningPageState extends State<LearningPage> {
           ? Colors.white
           : Colors.black,
       appBar: AppBar(
-        title: const Text('การเรียน'),
+        backgroundColor: Theme.of(context).custom.w_b_b,
+        title: Text(
+          'การเรียน',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+            color: Theme.of(context).custom.b_w_y,
+          ),
+        ),
         centerTitle: true,
       ),
       body: ListView(
