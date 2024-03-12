@@ -648,7 +648,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
         "lmsUserId": profileMe['lmsUserId'],
       };
       Response response = await Dio()
-          .post('$server/de-api/m/register/delete/account', data: data);
+          .post('$server/dcc-api/m/register/delete/account', data: data);
       logE(response.data);
 
       // setState(() => _loadingSubmit = false);

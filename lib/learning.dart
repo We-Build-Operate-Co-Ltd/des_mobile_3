@@ -19,7 +19,7 @@ class _LearningPageState extends State<LearningPage> {
 
   @override
   void initState() {
-    _get_course();
+    // _get_course();
     super.initState();
   }
 

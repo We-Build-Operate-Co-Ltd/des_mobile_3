@@ -357,7 +357,7 @@ class _VerifyOTPEmailPageState extends State<VerifyOTPEmailPage> {
       });
       Dio dio = Dio();
       var responseEmail = await dio.post(
-        '$server/de-api/m/register/otp/request',
+        '$server/dcc-api/m/register/otp/request',
         data: {"email": _email},
       );
       var result = responseEmail.data;
@@ -382,7 +382,7 @@ class _VerifyOTPEmailPageState extends State<VerifyOTPEmailPage> {
       });
       Dio dio = Dio();
       var responseEmail = await dio.post(
-        '$server/de-api/m/register/otp/validate',
+        '$server/dcc-api/m/register/otp/validate',
         data: {"email": _email, "title": txtNumber1.text},
       );
 

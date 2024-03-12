@@ -289,7 +289,7 @@ class _VerifyOTPEmailInputPageState extends State<VerifyOTPEmailInputPage> {
     try {
       Dio dio = Dio();
       var responseEmail = await dio.post(
-        '$server/de-api/m/register/otp/request',
+        '$server/dcc-api/m/register/otp/request',
         data: {"email": _emailController.text},
       );
 

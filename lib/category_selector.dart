@@ -31,7 +31,7 @@ class _CategorySelectorState extends State<CategorySelector> {
     Response<dynamic> response;
     try {
       response = await dio
-          .post('$server/de-api/m/v2/notification/groupByCategory', data: {});
+          .post('$server/dcc-api/m/v2/notification/groupByCategory', data: {});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
           var data = response.data['objectData'];

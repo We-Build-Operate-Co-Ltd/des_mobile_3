@@ -488,7 +488,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         if (response.data) {
           logWTF('success');
           await Dio().post(
-            '$server/de-api/m/register/reset/password',
+            '$server/dcc-api/m/register/reset/password',
             data: {
               'email': profileMe['email'],
               'password': txtPasswordNew.text,

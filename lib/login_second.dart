@@ -969,7 +969,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       _loading = true;
       Response<dynamic> response;
       try {
-        response = await Dio().post('$server/de-api/m/register/read', data: {
+        response = await Dio().post('$server/dcc-api/m/register/read', data: {
           'username': txtEmail.text.trim(),
           'category': _category.toString(),
         });
@@ -1036,7 +1036,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
   void _callLoginGuest() async {
     // _loading = true;
     var response = await Dio().post(
-      '$server/de-api/m/register/login',
+      '$server/dcc-api/m/register/login',
       data: {
         'username': _username,
         'password': txtPassword.text.toString(),
@@ -1116,7 +1116,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       Dio dio = new Dio();
       try {
         var response = await dio.post(
-          '$server/de-api/m/v2/register/facebook/login',
+          '$server/dcc-api/m/v2/register/facebook/login',
           data: model,
         );
 
@@ -1164,7 +1164,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       Dio dio = new Dio();
       try {
         var response = await dio.post(
-          '$server/de-api/m/v2/register/google/login',
+          '$server/dcc-api/m/v2/register/google/login',
           data: model,
         );
 
@@ -1220,7 +1220,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       Dio dio = new Dio();
       try {
         var response = await dio.post(
-          '$server/de-api/m/v2/register/line/login',
+          '$server/dcc-api/m/v2/register/line/login',
           data: model,
         );
 
@@ -1456,7 +1456,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
 
   _getUserProfile() async {
     Response response =
-        await Dio().post('$server/de-api/m/register/read', data: {
+        await Dio().post('$server/dcc-api/m/register/read', data: {
       'username': _username,
     });
 
@@ -1496,7 +1496,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       };
       logE(data);
       Response response = await Dio()
-          .post('$server/de-api/m/register/link/account/create', data: data);
+          .post('$server/dcc-api/m/register/link/account/create', data: data);
 
       if (response.statusCode == 200) {
         return response.data['objectData'];
@@ -1537,13 +1537,13 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       if (param != null) {
         Dio dio = Dio();
         var check = await dio.post(
-          '$server/de-api/m/register/check/login/social',
+          '$server/dcc-api/m/register/check/login/social',
           data: {'username': param['username']},
         );
         logWTF(check.data);
         if (check.data) {
           Response response = await dio.post(
-            '$server/de-api/m/v2/register/social/login',
+            '$server/dcc-api/m/v2/register/social/login',
             data: param,
           );
           // logWTF(response.data);
@@ -1641,7 +1641,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
 
         try {
           await Dio().post(
-            '$server/de-api/m/register/reset/passwordbyusername',
+            '$server/dcc-api/m/register/reset/passwordbyusername',
             data: {
               'username': param['username'],
               'password': _passwordModalController.text,

@@ -106,7 +106,7 @@ class _NotificationBookingPage extends State<NotificationBookingPage> {
       }
       selectedCategoryDays = "";
       Response<dynamic> result =
-          await dio.post('$server/de-api/m/v2/notification/read', data: {
+          await dio.post('$server/dcc-api/m/v2/notification/read', data: {
         'skip': 0,
         'limit': 999,
         'profileCode': profileCode,
@@ -189,7 +189,7 @@ class _NotificationBookingPage extends State<NotificationBookingPage> {
     var profileMe = await ManageStorage.readDynamic('profileMe');
     try {
       Response response = await Dio().post(
-        '$server/de-api/m/v2/notificationbooking/read',
+        '$server/dcc-api/m/v2/notificationbooking/read',
         data: {
           'email': profileMe['email'],
         },
@@ -320,7 +320,7 @@ class _NotificationBookingPage extends State<NotificationBookingPage> {
     Response<dynamic> response;
     try {
       response = await dio
-          .post('$server/de-api/m/v2/notificationbooking/count', data: {
+          .post('$server/dcc-api/m/v2/notificationbooking/count', data: {
         "email": profileMe['email'],
       });
       if (response.statusCode == 200) {
@@ -824,7 +824,7 @@ class _NotificationBookingPage extends State<NotificationBookingPage> {
         try {
           if (model['category'] == 'bookingPage') {
             dio.post(
-              '$server/de-api/m/v2/notificationBooking/update',
+              '$server/dcc-api/m/v2/notificationBooking/update',
               data: {"code": '${model['code']}'},
             );
             // model['status'] = 'A';
@@ -845,7 +845,7 @@ class _NotificationBookingPage extends State<NotificationBookingPage> {
             isCheckSelect
                 ? _singleClick(model)
                 : await dio.post(
-                    '$server/de-api/m/v2/notification/update',
+                    '$server/dcc-api/m/v2/notification/update',
                     data: {
                       'category': '${model['category']}',
                       "code": '${model['code']}'
@@ -1414,7 +1414,7 @@ class _NotificationBookingPage extends State<NotificationBookingPage> {
                         setState(() => _loadingWidget = true);
 
                         await dio.post(
-                            '$server/de-api/m/v2/notificationBooking/update/all',
+                            '$server/dcc-api/m/v2/notificationBooking/update/all',
                             data: {"email": '${profileMe['email']}'});
                         _readBooking();
                       } catch (e) {
@@ -1540,7 +1540,7 @@ class _NotificationBookingPage extends State<NotificationBookingPage> {
                         setState(() => _loadingWidget = true);
 
                         await dio.post(
-                            '$server/de-api/m/v2/notificationBooking/delete',
+                            '$server/dcc-api/m/v2/notificationBooking/delete',
                             data: {"email": '${profileMe['email']}'});
                         _readBooking();
                       } catch (e) {

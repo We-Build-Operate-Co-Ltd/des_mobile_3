@@ -1070,7 +1070,7 @@ class _HomePageState extends State<HomePage> {
   //   Response<dynamic> response;
   //   try {
   //     response = await dio.post(
-  //         '$server/de-api/m/eventcalendar/read',
+  //         '$server/dcc-api/m/eventcalendar/read',
   //         data: {'skip': 0, 'limit': 2});
   //     if (response.statusCode == 200) {
   //       if (response.data['status'] == 'S') {
@@ -1113,7 +1113,7 @@ class _HomePageState extends State<HomePage> {
     Dio dio = Dio();
     Response<dynamic> response;
     try {
-      response = await dio.post('$server/de-api/m/Banner/main/read', data: {});
+      response = await dio.post('$server/dcc-api/m/Banner/main/read', data: {});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
           return response.data['objectData'];

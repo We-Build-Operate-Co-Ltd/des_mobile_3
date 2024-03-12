@@ -306,7 +306,7 @@ class _ForgotPasswordOTPEmailPageState
   }
 
   _requestOTP() async {
-    var response = await Dio().post('$server/de-api/m/register/otp/request',
+    var response = await Dio().post('$server/dcc-api/m/register/otp/request',
         data: {'email': widget.email});
     if (response.data['status'] == 'S') {
       // pass
@@ -323,7 +323,7 @@ class _ForgotPasswordOTPEmailPageState
       // logWTF(widget.email);
       // logWTF(txtNumber1.text);
       var response = await Dio().post(
-        '$server/de-api/m/register/otp/validate',
+        '$server/dcc-api/m/register/otp/validate',
         data: {
           'email': widget.email,
           'title': txtNumber1.text,

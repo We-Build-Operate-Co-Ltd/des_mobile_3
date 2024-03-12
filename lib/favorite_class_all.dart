@@ -36,7 +36,7 @@ class _FavoriteClassAllState extends State<FavoriteClassAllPage> {
 
   _loading() async {
     Response<dynamic> response =
-        await dio.post('$server/de-api/m/eventcalendar/read', data: {});
+        await dio.post('$server/dcc-api/m/eventcalendar/read', data: {});
 
     if (response.statusCode == 200) {
       if (response.data['status'] == 'S') {

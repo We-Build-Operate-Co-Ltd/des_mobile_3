@@ -112,7 +112,7 @@ class _NotificationListState extends State<NotificationListPage> {
     }
     selectedCategoryDays = "";
     Response<dynamic> result =
-        await dio.post('$server/de-api/m/v2/notification/read', data: {
+        await dio.post('$server/dcc-api/m/v2/notification/read', data: {
       'skip': 0,
       'limit': 999,
       'profileCode': profileCode,
@@ -247,7 +247,7 @@ class _NotificationListState extends State<NotificationListPage> {
   Future<dynamic> _readNotiCount() async {
     Response<dynamic> response;
     try {
-      response = await dio.post('$server/de-api/m/v2/notification/count',
+      response = await dio.post('$server/dcc-api/m/v2/notification/count',
           data: {"username": _username, "category": _category});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
@@ -838,7 +838,7 @@ class _NotificationListState extends State<NotificationListPage> {
             }
           : () async {
               await dio.post(
-                '$server/de-api/m/v2/notification/update',
+                '$server/dcc-api/m/v2/notification/update',
                 data: {
                   'category': '${model['category']}',
                   "code": '${model['code']}'
@@ -1399,7 +1399,7 @@ class _NotificationListState extends State<NotificationListPage> {
                             .toList();
                         for (var i = 0; i < totalSelected; i++) {
                           await dio.post(
-                            '$server/de-api/m/v2/notification/update',
+                            '$server/dcc-api/m/v2/notification/update',
                             data: {"code": '${listSelected[i]['code']}'},
                           );
                         }
@@ -1411,7 +1411,7 @@ class _NotificationListState extends State<NotificationListPage> {
                       } else if (selectedCategoryDays != "") {
                         for (var i = 0; i < listResultData.length; i++) {
                           await dio.post(
-                            '$server/de-api/m/v2/notification/update',
+                            '$server/dcc-api/m/v2/notification/update',
                             data: {"code": '${listResultData[i]['code']}'},
                           );
                         }
@@ -1422,7 +1422,7 @@ class _NotificationListState extends State<NotificationListPage> {
                         });
                       } else {
                         await dio.post(
-                          '$server/de-api/m/v2/notification/update',
+                          '$server/dcc-api/m/v2/notification/update',
                           data: {},
                         );
                         setState(() {
@@ -1545,7 +1545,7 @@ class _NotificationListState extends State<NotificationListPage> {
                             .toList();
                         for (var i = 0; i < totalSelected; i++) {
                           await dio.post(
-                              '$server/de-api/m/v2/notification/delete',
+                              '$server/dcc-api/m/v2/notification/delete',
                               data: {"code": '${listSelected[i]['code']}'});
                         }
                         setState(() {
@@ -1556,7 +1556,7 @@ class _NotificationListState extends State<NotificationListPage> {
                       } else if (selectedCategoryDays != "") {
                         for (var i = 0; i < listResultData.length; i++) {
                           await dio.post(
-                            '$server/de-api/m/v2/notification/delete',
+                            '$server/dcc-api/m/v2/notification/delete',
                             data: {"code": '${listResultData[i]['code']}'},
                           );
                         }
@@ -1567,7 +1567,7 @@ class _NotificationListState extends State<NotificationListPage> {
                         });
                       } else {
                         await dio.post(
-                            '$server/de-api/m/v2/notification/delete',
+                            '$server/dcc-api/m/v2/notification/delete',
                             data: {});
                         setState(() {
                           _loading();

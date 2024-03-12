@@ -82,7 +82,7 @@ class _PolicyPage extends State<PolicyPage> {
     Dio dio = Dio();
     Response<dynamic> response;
     try {
-      response = await dio.post('$server/de-api/m/policy/read', data: {
+      response = await dio.post('$server/dcc-api/m/policy/read', data: {
         "category": "application",
         "profileCode": _profileCode,
       });
@@ -962,7 +962,7 @@ class _PolicyPage extends State<PolicyPage> {
       });
       acceptPolicyList.forEach((e) {
         e['profileCode'] = _profileCode;
-        dio.post('$server/de-api/m/policy/create', data: e);
+        dio.post('$server/dcc-api/m/policy/create', data: e);
       });
     } catch (e) {}
     return dialogConfirm();

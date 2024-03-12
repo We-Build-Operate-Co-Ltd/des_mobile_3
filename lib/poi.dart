@@ -777,7 +777,7 @@ class _PoiPage extends State<PoiPage> {
     Dio dio = Dio();
     Response<dynamic> response;
     try {
-      response = await dio.post('$server/de-api/m/poi/read', data: {
+      response = await dio.post('$server/dcc-api/m/poi/read', data: {
         'skip': 0,
         'limit': _limit,
         'latitude': latLng!.latitude,
@@ -857,7 +857,7 @@ class _PoiPage extends State<PoiPage> {
     Response<dynamic> response;
     try {
       response =
-          await Dio().post('$server/de-api/m/poi/category/read', data: {});
+          await Dio().post('$server/dcc-api/m/poi/category/read', data: {});
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
           var data = response.data['objectData'];
