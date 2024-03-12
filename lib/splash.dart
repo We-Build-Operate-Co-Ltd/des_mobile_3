@@ -98,22 +98,24 @@ class _SplashPageState extends State<SplashPage> {
     var calTime = time > 0 ? (time / 1000).round() : 0;
 
     Timer(Duration(seconds: calTime), () {
-      if (_profileCode != '') {
-        check_version();
-      } else {
-        if (!mounted) return;
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => const LoginFirstPage(),
-          ),
-          (Route<dynamic> route) => false,
-        );
-      }
+      check_version();
+
+      // if (_profileCode != '') {
+      //   check_version();
+      // } else {
+      //   if (!mounted) return;
+      //   Navigator.of(context).pushAndRemoveUntil(
+      //     MaterialPageRoute(
+      //       builder: (context) => const LoginFirstPage(),
+      //     ),
+      //     (Route<dynamic> route) => false,
+      //   );
+      // }
     });
   }
 
   void check_version() async {
-    String os_device = os == 'ios' ? 'Ios' : 'Android';
+    String os_device = os == 'ios' ? 'Ios' : 'Android-DCC';
     // print('os : ${os_device}');
     Dio dio = Dio();
     var res = await dio
@@ -138,12 +140,22 @@ class _SplashPageState extends State<SplashPage> {
         ),
       );
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const Menu(),
-        ),
-      );
+      if (_profileCode != '') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Menu(),
+          ),
+        );
+      } else {
+        if (!mounted) return;
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const LoginFirstPage(),
+          ),
+          (Route<dynamic> route) => false,
+        );
+      }
     }
   }
 }
