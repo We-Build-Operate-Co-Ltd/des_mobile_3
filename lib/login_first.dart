@@ -1965,7 +1965,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           );
           await ManageStorage.createProfile(
             value: response.data['objectData'],
-            key: 'face',
+            key: 'guest',
           );
 
           setState(() => _loadingSubmit = false);
