@@ -20,6 +20,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart' as fb;
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -1256,6 +1257,49 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   }
 
   void _callLoginFacebook() async {
+    final fb.LoginResult result = await fb.FacebookAuth.instance
+        .login(); // by default we request the email and the public profile
+    // or FacebookAuth.i.login()
+    if (result.status == fb.LoginStatus.success) {
+      // you are logged
+      final fb.AccessToken? accessToken = result.accessToken;
+
+      if (accessToken != null) {
+        // user is logged
+        print(accessToken.toString());
+        final userData = await fb.FacebookAuth.i.getUserData();
+        print(userData['email'].toString());
+
+        try {
+          setState(() => _loadingSubmit = true);
+
+          // var model = {
+          //   "username": userData['email'].toString(),
+          //   "email": userData['email'].toString(),
+          //   "imageUrl": userData['picture']['data']['url'].toString(),
+          //   "firstName": userData['name'].toString(),
+          //   "lastName": '',
+          //   "facebookID": userData['id'].toString()
+          // };
+
+          var model = {
+            "username": userData['id'].toString(),
+            "email": userData['email'].toString(),
+            "imageUrl": userData['picture']['data']['url'].toString(),
+            "firstName": userData['name'].toString(),
+            "lastName": '',
+            "facebookID": userData['id'].toString()
+          };
+          _callLoginSocial(model, 'facebook');
+        } catch (e) {
+          // setState(() => _loadingSubmit = false);
+        }
+      }
+    } else {
+      print(result.status);
+      print(result.message);
+    }
+
     var obj = await signInWithFacebook();
 
     logWTF(obj.toString());
