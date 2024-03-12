@@ -70,7 +70,7 @@ class _SplashPageState extends State<SplashPage> {
 
       Dio dio = Dio();
       Response result =
-          await dio.post('$server/de-api/m/splash/read', data: {});
+          await dio.post('$server/dcc-api/m/splash/read', data: {});
 
       if (result.statusCode == 200) {
         if (result.data['status'] == 'S') {
@@ -119,7 +119,7 @@ class _SplashPageState extends State<SplashPage> {
     // print('os : ${os_device}');
     Dio dio = Dio();
     var res = await dio
-        .post('$server/de-api/version/read', data: {"platform": os_device});
+        .post('$server/dcc-api/version/read', data: {"platform": os_device});
     setState(() {
       version_store =
           int.parse(res.data['objectData'][0]['version'].split('.').join(''));

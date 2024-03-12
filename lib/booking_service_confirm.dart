@@ -928,7 +928,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
     try {
       // ignore: unused_local_variable
       Response res = await Dio().post(
-        '$server/de-api/m/v2/notificationbooking/create',
+        '$server/dcc-api/m/v2/notificationbooking/create',
         data: param,
       );
     } catch (e) {

@@ -1178,7 +1178,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       try {
         print('------');
 
-        response = await Dio().post('$server/de-api/m/register/read', data: {
+        response = await Dio().post('$server/dcc-api/m/register/read', data: {
           'username': txtEmail.text.trim(),
           'category': _category.toString(),
         });
@@ -1516,7 +1516,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
 
   _getUserProfile() async {
     Response response =
-        await Dio().post('$server/de-api/m/register/read', data: {
+        await Dio().post('$server/dcc-api/m/register/read', data: {
       'username': _username,
       // 'category': 'guest',
     });
@@ -1537,13 +1537,13 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       if (param != null) {
         Dio dio = Dio();
         var check = await dio.post(
-          '$server/de-api/m/register/check/login/social/guest',
+          '$server/dcc-api/m/register/check/login/social/guest',
           data: {'username': param['username']},
         );
         logWTF(check.data);
         if (check.data) {
           Response response = await dio.post(
-            '$server/de-api/m/v2/register/social/login',
+            '$server/dcc-api/m/v2/register/social/login',
             data: param,
           );
           // logWTF(response.data);
@@ -1831,7 +1831,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
 
         try {
           await Dio().post(
-            '$server/de-api/m/register/reset/passwordbyusername',
+            '$server/dcc-api/m/register/reset/passwordbyusername',
             data: {
               'username': param['username'],
               'password': _passwordModalController.text,
@@ -1843,13 +1843,13 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           return;
         }
         var check = await dio.post(
-          '$server/de-api/m/register/check/login/social',
+          '$server/dcc-api/m/register/check/login/social',
           data: {'username': param['username']},
         );
         logWTF(check.data);
         if (check.data) {
           Response response = await dio.post(
-            '$server/de-api/m/v2/register/social/login',
+            '$server/dcc-api/m/v2/register/social/login',
             data: param,
           );
           logWTF(response.data);

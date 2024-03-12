@@ -658,7 +658,7 @@ class _DetailPageState extends State<DetailPage> {
 
   void _read() async {
     Response<dynamic> result = await Dio()
-        .post('$server/de-api/m/${widget.slug}/read', data: {
+        .post('$server/dcc-api/m/${widget.slug}/read', data: {
       'code': widget.checkNotiPage
           ? widget.model['reference']
           : widget.model['code']
@@ -679,7 +679,7 @@ class _DetailPageState extends State<DetailPage> {
     Response<dynamic> response;
     try {
       response = await Dio()
-          .post('$server/de-api/m/${widget.slug}/gallery/read', data: {
+          .post('$server/dcc-api/m/${widget.slug}/gallery/read', data: {
         'code': widget.checkNotiPage
             ? widget.model['reference']
             : widget.model['code']

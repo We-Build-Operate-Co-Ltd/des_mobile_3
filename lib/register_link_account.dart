@@ -231,7 +231,7 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
         };
         logWTF(widget.model);
         Response response = await Dio().post(
-          '$server/de-api/m/register/link/socialaccount',
+          '$server/dcc-api/m/register/link/socialaccount',
           data: param,
         );
         logWTF(response);
@@ -399,7 +399,7 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
   dynamic _getUser() async {
     try {
       Response response = await Dio().post(
-        '$server/de-api/m/register/login',
+        '$server/dcc-api/m/register/login',
         data: {
           'username': widget.email,
           'password': _passwordController.text,

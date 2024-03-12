@@ -62,8 +62,9 @@ class _VersionPageState extends State<VersionPage> {
   _callRead() async {
     Dio dio = Dio();
     String platform = Platform.isAndroid ? 'Android' : 'Ios';
-    Response<dynamic> result = await dio
-        .post('$server/de-api/m/v2/version/read', data: {'platform': platform});
+    Response<dynamic> result = await dio.post(
+        '$server/dcc-api/m/v2/version/read',
+        data: {'platform': platform});
 
     if (result.statusCode == 200) {
       if (result.data['status'] == 'S') {

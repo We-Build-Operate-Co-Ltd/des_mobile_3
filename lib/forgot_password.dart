@@ -304,7 +304,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       setState(() => _loading = true);
       Dio dio = Dio();
       var response = await dio.get(
-        '$server/de-api/m/register/find/email/guest/${_emailController.text}',
+        '$server/dcc-api/m/register/find/email/guest/${_emailController.text}',
       );
 
       if (response.data['status'] == 'S') {
@@ -329,7 +329,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   _requestOTP() async {
     try {
-      var response = await Dio().post('$server/de-api/m/register/otp/request',
+      var response = await Dio().post('$server/dcc-api/m/register/otp/request',
           data: {'email': _emailController.text});
 
       setState(() => _loading = false);

@@ -337,7 +337,7 @@ class _VerifyLastStepPageState extends State<VerifyLastStepPage> {
       // logWTF(user);
 
       final response = await Dio()
-          .post('$server/de-api/m/Register/user/verify/update', data: user);
+          .post('$server/dcc-api/m/Register/user/verify/update', data: user);
 
       var result = response.data;
       setState(() => _loadindSubmit = false);

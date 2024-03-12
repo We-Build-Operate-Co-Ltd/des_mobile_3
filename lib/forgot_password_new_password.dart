@@ -236,7 +236,7 @@ class _ForgotPasswordNewPasswordPageState
         if (response.data) {
           logWTF('success');
           await Dio().post(
-            '$server/de-api/m/register/reset/password',
+            '$server/dcc-api/m/register/reset/password',
             data: {
               'email': widget.email,
               'password': _passwordController.text,

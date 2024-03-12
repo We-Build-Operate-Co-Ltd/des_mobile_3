@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">DES ดิจิตอลชุมชน</string>
     <string name="facebook_app_id">3648915618713978</string>
-    <string name="facebook_client_token">ee1ee427dde4e9522960c88cb9f33f86</string>
+    <string name="facebook_client_token">dea564b10c59f68b0a7d69ccb44041b5</string>
     <string name="fb_login_protocol_scheme">fb3648915618713978</string>
     <string name="line_channel_id">1660694688</string>
     <!-- <integer name="request_code_login">20000904</integer> -->

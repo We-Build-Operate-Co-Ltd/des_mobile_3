@@ -292,7 +292,7 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
     setState(() => _loadingSubmit = true);
     try {
       var response = await Dio().post(
-        '$server/de-api/m/Register/create',
+        '$server/dcc-api/m/Register/create',
         data: _userData,
       );
 
