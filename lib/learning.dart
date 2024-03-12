@@ -19,7 +19,7 @@ class _LearningPageState extends State<LearningPage> {
 
   @override
   void initState() {
-    // _get_course();
+    _get_course();
     super.initState();
   }
 
@@ -59,7 +59,7 @@ class _LearningPageState extends State<LearningPage> {
             shrinkWrap: true,
             physics: const ClampingScrollPhysics(),
             padding: EdgeInsets.zero,
-            itemCount: _model.length,
+            itemCount: 40,
             separatorBuilder: (_, __) => const SizedBox(height: 25),
             itemBuilder: (context, _) {
               return _buildHistoryOfServiceReservations(_model[_]);

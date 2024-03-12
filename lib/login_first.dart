@@ -1300,25 +1300,25 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       print(result.message);
     }
 
-    var obj = await signInWithFacebook();
+    // var obj = await signInWithFacebook();
 
-    logWTF(obj.toString());
-    // print(obj.user.displayName);
-    // print(obj.user.uid);
-    if (obj != null) {
-      var model = {
-        "username": obj.user.uid.toString(),
-        "email": obj.user.email,
-        "imageUrl":
-            obj.user.photoURL != null ? obj.user.photoURL + "?width=9999" : '',
-        "firstName": obj.user.displayName,
-        "lastName": '',
-        "facebookID": obj.user.uid.toString(),
-      };
-      _callLoginSocial(model, 'facebook');
-    } else {
-      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-    }
+    // logWTF(obj.toString());
+    // // print(obj.user.displayName);
+    // // print(obj.user.uid);
+    // if (obj != null) {
+    //   var model = {
+    //     "username": obj.user.uid.toString(),
+    //     "email": obj.user.email,
+    //     "imageUrl":
+    //         obj.user.photoURL != null ? obj.user.photoURL + "?width=9999" : '',
+    //     "firstName": obj.user.displayName,
+    //     "lastName": '',
+    //     "facebookID": obj.user.uid.toString(),
+    //   };
+    //   _callLoginSocial(model, 'facebook');
+    // } else {
+    //   Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+    // }
   }
 
   void _callLoginX() async {
