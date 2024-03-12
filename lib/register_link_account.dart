@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:des/register.dart';
 import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
+import 'package:des/shared/secure_storage.dart';
 import 'package:des/widget/input_decoration.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'login_first.dart';
+import 'menu.dart';
 
 class RegisterLinkAccountPage extends StatefulWidget {
   const RegisterLinkAccountPage({
@@ -221,6 +226,31 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
     if (form!.validate() && !_loadingSubmit) {
       form.save();
       try {
+        setState(() => _loadingSubmit = true);
+        String accessToken = await _getTokenKeycloak(
+          username: widget.email,
+          password: _passwordController.text,
+        );
+        logWTF('accessToken');
+        logWTF('${widget.email} ${_passwordController.text}');
+        logWTF(accessToken);
+        if (accessToken == 'invalid_grant') {
+          logWTF('password fail');
+          Fluttertoast.showToast(msg: 'รหัสผ่านไม่ถูกต้อง');
+          setState(() => _loadingSubmit = false);
+          return;
+          // กรอกรหัสผ่าน
+        }
+
+        logWTF('responseProfileMe');
+        dynamic responseProfileMe = await _getProfileMe(accessToken);
+        // check isMember
+        // if (responseProfileMe['data']['isMember'] == 0) {
+        //   Fluttertoast.showToast(msg: 'บัญชีนี้เป็นเจ้าหน้าที่');
+        //   setState(() => _loadingSubmit = false);
+        //   return;
+        // }
+        logWTF('${responseProfileMe}');
         var param = {
           'username': widget.email,
           'password': _passwordController.text,
@@ -229,7 +259,7 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
           'xID': widget.model?['xID'] ?? '',
           'facebookID': widget.model?['facebookID'] ?? '',
         };
-        logWTF(widget.model);
+        logWTF(param);
         Response response = await Dio().post(
           '$server/dcc-api/m/register/link/socialaccount',
           data: param,
@@ -237,28 +267,104 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
         logWTF(response);
         setState(() => _loadingSubmit = false);
         if (response.data['status'] == 'S') {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const LoginFirstPage(),
-            ),
-            (Route<dynamic> route) => false,
-          );
+          _callLoginSocial();
+          // Navigator.of(context).pushAndRemoveUntil(
+          //   MaterialPageRoute(
+          //     builder: (context) => const LoginFirstPage(),
+          //   ),
+          //   (Route<dynamic> route) => false,
+          // );
+        } else {
+          setState(() => _loadingSubmit = false);
+          Fluttertoast.showToast(msg: '');
+          //error
         }
       } catch (e) {
+        // logE(e);
         setState(() => _loadingSubmit = false);
-        Fluttertoast.showToast(msg: 'error');
+        Fluttertoast.showToast(msg: 'error $e');
       }
     }
   }
 
-  _getTokenKeycloak() async {
+  void _callLoginSocial() async {
+    setState(() => _loadingSubmit = true);
+    logWTF('_callLoginSocial');
+    try {
+      Response response = await Dio().post(
+        '$server/de-api/m/v2/register/social/login',
+        data: widget.model,
+      );
+      // logWTF(response.data);
+      if (response.data['status'] != 'S') {
+        setState(() => _loadingSubmit = false);
+        return null;
+      }
+
+      logWTF('token');
+      String accessToken = await _getTokenKeycloak(
+        username: response.data['objectData']['email'],
+        password: response.data['objectData']['password'],
+      );
+
+      // logWTF(response);
+      logWTF('responseKeyCloak');
+      dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
+      logWTF('responseProfileMe');
+      dynamic responseProfileMe = await _getProfileMe(accessToken);
+      if (responseKeyCloak == null || responseProfileMe == null) {
+        setState(() => _loadingSubmit = false);
+        // Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+        return;
+      }
+
+      // check isMember
+      // if (responseProfileMe['data']['isMember'] == 0) {
+      //   Fluttertoast.showToast(msg: 'บัญชีนี้เป็นเจ้าหน้าที่');
+      //   return;
+      // }
+
+      await ManageStorage.createSecureStorage(
+        value: accessToken,
+        key: 'accessToken',
+      );
+      await ManageStorage.createSecureStorage(
+        value: json.encode(responseKeyCloak),
+        key: 'loginData',
+      );
+      await ManageStorage.createSecureStorage(
+        value: json.encode(responseProfileMe['data']),
+        key: 'profileMe',
+      );
+      await ManageStorage.createProfile(
+        value: response.data['objectData'],
+        key: 'guest',
+      );
+
+      setState(() => _loadingSubmit = false);
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const Menu(),
+        ),
+        (Route<dynamic> route) => false,
+      );
+    } catch (e) {
+      logE('login social catch');
+      logE(e);
+      setState(() => _loadingSubmit = false);
+      Fluttertoast.showToast(msg: 'ยกเลิก');
+    }
+  }
+
+  _getTokenKeycloak({String username = '', String password = ''}) async {
     try {
       // get token
       Response response = await Dio().post(
         '$ssoURL/realms/$keycloakReaml/protocol/openid-connect/token',
         data: {
-          'username': widget.email,
-          'password': _passwordController.text,
+          'username': username,
+          'password': password.toString(),
           'client_id': clientID,
           'client_secret': clientSecret,
           'grant_type': 'password',
@@ -273,9 +379,11 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
       if (response.statusCode == 200) {
         return response.data['access_token'];
       } else {
-        logE(response.data);
-        Fluttertoast.showToast(msg: response.data['error_description']);
-        setState(() => _loadingSubmit = false);
+        // logE(response.data);
+        // Fluttertoast.showToast(msg: response.data['error_de d////  scription']);
+        // setState(() => _loadingSubmit = false);
+        return response.data['error'];
+        return response.data['error_description'];
       }
     } on DioError catch (e) {
       logE(e.error);
@@ -284,7 +392,7 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
       if (e.response != null) {
         err = e.response!.data.toString();
       }
-      Fluttertoast.showToast(msg: err);
+      // Fluttertoast.showToast(msg: err);
     }
   }
 
@@ -330,42 +438,6 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
       if (token.isEmpty) return null;
       Response response = await Dio().get(
         '$ondeURL/api/user/ProfileMe',
-        options: Options(
-          validateStatus: (_) => true,
-          contentType: 'application/x-www-form-urlencoded',
-          responseType: ResponseType.json,
-          headers: {
-            'Content-type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Bearer $token',
-          },
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        return response.data;
-      } else {
-        logE(response.data);
-        Fluttertoast.showToast(msg: response.data['title']);
-        setState(() => _loadingSubmit = false);
-        return null;
-      }
-    } on DioError catch (e) {
-      setState(() => _loadingSubmit = false);
-      String err = e.error.toString();
-      if (e.response != null) {
-        err = e.response!.data['title'].toString();
-      }
-      Fluttertoast.showToast(msg: err);
-      return null;
-    }
-  }
-
-  dynamic _getStaffProfileData(String token) async {
-    try {
-      // get info
-      if (token.isEmpty) return null;
-      Response response = await Dio().post(
-        '$ondeURL/api/user/GetStaffProfileData',
         options: Options(
           validateStatus: (_) => true,
           contentType: 'application/x-www-form-urlencoded',

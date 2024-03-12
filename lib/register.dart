@@ -476,6 +476,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 width: double.infinity,
                                 child: Wrap(
                                   runSpacing: 11,
+                                  spacing: 8,
                                   children: _ageRangeList
                                       .map<Widget>(
                                           (dynamic e) => _radioAgeRange(e))
@@ -720,6 +721,7 @@ class _RegisterPageState extends State<RegisterPage> {
             value['value'],
             style: TextStyle(
               fontSize: 13,
+              height: 1,
               color: Theme.of(context).custom.b_W_fffd57,
             ),
           )
@@ -730,7 +732,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _radioAgeRange(dynamic value) {
     return SizedBox(
-      width: 100,
       child: GestureDetector(
         onTap: () {
           setState(() {
@@ -738,6 +739,7 @@ class _RegisterPageState extends State<RegisterPage> {
           });
         },
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               height: 20,

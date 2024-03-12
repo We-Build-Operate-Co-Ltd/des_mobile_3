@@ -6,6 +6,7 @@ import 'package:des/forgot_password.dart';
 import 'package:des/login_second.dart';
 import 'package:des/menu.dart';
 import 'package:des/register.dart';
+import 'package:des/register_link_account.dart';
 import 'package:des/shared/apple_firebase.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/line.dart';
@@ -160,6 +161,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                                     'เข้าสู่ระบบ',
                                     style: TextStyle(
                                       fontSize: 20,
+                                      height: 1,
                                       fontWeight: FontWeight.w500,
                                       color: MyApp.themeNotifier.value ==
                                               ThemeModeThird.light
@@ -417,41 +419,46 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                'ท่านเป็นผู้ใช้ใหม่',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w400,
-                                  color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Colors.black
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.white
-                                          : Color(0xFFFFFD57),
-                                ),
-                              ),
-                              SizedBox(width: 8),
-                              GestureDetector(
-                                onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (builder) => RegisterPage(),
-                                  ),
-                                ),
+                              Expanded(
                                 child: Text(
-                                  'ต้องการสมัครสมาชิก',
+                                  'ท่านเป็นผู้ใช้ใหม่',
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
                                     color: MyApp.themeNotifier.value ==
                                             ThemeModeThird.light
-                                        ? Color(0xFFB325F8)
+                                        ? Colors.black
                                         : MyApp.themeNotifier.value ==
                                                 ThemeModeThird.dark
                                             ? Colors.white
                                             : Color(0xFFFFFD57),
-                                    decoration: TextDecoration.underline,
+                                  ),
+                                  textAlign: TextAlign.end,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (builder) => RegisterPage(),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'ต้องการสมัครสมาชิก',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Color(0xFFB325F8)
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Color(0xFFFFFD57),
+                                      decoration: TextDecoration.underline,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -536,9 +543,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: ListView(
                     children: [
                       Text(
                         'ขนาดตัวหนังสือ',
@@ -600,26 +605,23 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
               key: 'switchSizeFont',
               value: title,
             );
-            setState(
-              () {
-                if (title == "ปกติ") {
-                  // MyApp.themeNotifier.value = ThemeModeThird.light;
-                  MyApp.fontKanit.value = FontKanit.small;
-                } else if (title == "ปานกลาง") {
-                  MyApp.fontKanit.value = FontKanit.medium;
-                } else {
-                  MyApp.fontKanit.value = FontKanit.large;
-                }
-                var a = storage.read(key: 'switchSizeFont');
-                a.then((value) => {
-                      setState(() {
-                        fontStorageValue = value;
-                      })
-                    });
-              },
-            );
+            if (title == "ปกติ") {
+              // MyApp.themeNotifier.value = ThemeModeThird.light;
+              MyApp.fontKanit.value = FontKanit.small;
+            } else if (title == "ปานกลาง") {
+              MyApp.fontKanit.value = FontKanit.medium;
+            } else {
+              MyApp.fontKanit.value = FontKanit.large;
+            }
+            var a = storage.read(key: 'switchSizeFont');
+            a.then((value) => {
+                  setState(() {
+                    fontStorageValue = value;
+                  })
+                });
           }),
         );
+        Navigator.pop(context);
       },
       child: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
@@ -1572,7 +1574,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
           logWTF('responseProfileMe');
           dynamic responseProfileMe = await _getProfileMe(accessToken);
-          logWTF('responseStaffProfileData');
           if (responseKeyCloak == null || responseProfileMe == null) {
             setState(() => _loadingSubmit = false);
             // Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
@@ -1580,10 +1581,10 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           }
 
           // check isMember
-          if (responseProfileMe['data']['isMember'] == 0) {
-            Fluttertoast.showToast(msg: 'บัญชีนี้เป็นเจ้าหน้าที่');
-            return;
-          }
+          // if (responseProfileMe['data']['isMember'] == 0) {
+          //   Fluttertoast.showToast(msg: 'บัญชีนี้เป็นเจ้าหน้าที่');
+          //   return;
+          // }
 
           await ManageStorage.createSecureStorage(
             value: accessToken,
@@ -1612,13 +1613,34 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           );
         } else {
           setState(() => _loadingSubmit = false);
-          if (!mounted) return;
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => RegisterPage(model: param, category: type),
-            ),
-          );
+          String usernameDup = await _checkDuplicateUser();
+          logWTF(usernameDup);
+          if (usernameDup.isNotEmpty) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => RegisterLinkAccountPage(
+                  email: param['email'],
+                  category: type,
+                  model: param,
+                ),
+              ),
+            );
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => RegisterPage(model: param, category: type),
+              ),
+            );
+          }
+          // if (!mounted) return;
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (_) => RegisterPage(model: param, category: type),
+          //   ),
+          // );
         }
       } else {
         logE('login social else');
@@ -1996,5 +2018,30 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     setState(() {
       configLoginSocial = response;
     });
+  }
+
+  Future<String> _checkDuplicateUser() async {
+    try {
+      Response<String> response = await Dio().get(
+        '$server/de-api/m/register/guest/duplicate/${txtEmail.text}/${txtEmail.text}',
+      );
+      // if (response.data == 'username') {
+      //   return 'ชื่อผู้ใช้งานนี้ถูกใช้งานไปแล้ว';
+      // }
+      // if (response.data == 'idcard') {
+      //   return 'เลขบัตรประชาชนนี้ถูกใช้งานไปแล้ว';
+      // }
+      if (response.data == 'email') {
+        return 'อีเมลนี้ถูกใช้งานไปแล้ว';
+      }
+      if (response.data == 'server') {
+        return 'internal server error';
+      }
+
+      return '';
+    } catch (e) {
+      logE(e);
+      return 'เกิดข้อผิดพลาด';
+    }
   }
 }
