@@ -2067,7 +2067,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   Future<String> _checkDuplicateUser() async {
     try {
       Response<String> response = await Dio().get(
-        '$server/de-api/m/register/guest/duplicate/${txtEmail.text}/${txtEmail.text}',
+        '$server/dcc-api/m/register/guest/duplicate/${txtEmail.text}/${txtEmail.text}',
       );
       // if (response.data == 'username') {
       //   return 'ชื่อผู้ใช้งานนี้ถูกใช้งานไปแล้ว';
