@@ -1597,10 +1597,10 @@ class _LoginSecondPageState extends State<LoginSecondPage>
             value: json.encode(responseProfileMe['data']),
             key: 'profileMe',
           );
-          // await ManageStorage.createProfile(
-          //   value: response.data['objectData'],
-          //   key: 'face',
-          // );
+          await ManageStorage.createProfile(
+            value: response.data['objectData'],
+            key: 'guest',
+          );
 
           setState(() => _loadingSubmit = false);
           if (!mounted) return;
