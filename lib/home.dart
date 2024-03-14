@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(width: 5),
                   Text(
-                    'ดิจิทัลชุมชน',
+                    'ศูนย์ดิจิทัลชุมชน',
                     style: TextStyle(
                       fontSize: 15,
                       color: MyApp.themeNotifier.value == ThemeModeThird.light
@@ -233,7 +233,7 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(width: 15),
                           Expanded(
                             child: Text(
-                              'ค้นหาคลาสเรียน',
+                              'ค้นหาคอร์สเรียน',
                               style: TextStyle(
                                 fontSize: 13,
                                 color: MyApp.themeNotifier.value ==
@@ -543,7 +543,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Text(
-                //   'คลาสกำลังเรียน',
+                //   'คอร์สกำลังเรียน',
                 //   style: TextStyle(
                 //     fontSize: 15,
                 //     fontWeight: FontWeight.w400,

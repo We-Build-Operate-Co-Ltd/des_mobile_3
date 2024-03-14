@@ -139,7 +139,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             //           height: 100,
             //           alignment: Alignment.center,
             //           child: Text(
-            //             'ยังไม่มีคลาสกำลังเรียน',
+            //             'ยังไม่มีคอร์สกำลังเรียน',
             //             style: TextStyle(
             //               color: Theme.of(context).custom.b_W_fffd57,
             //             ),
@@ -823,29 +823,30 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   ),
                 ),
                 SizedBox(height: 5),
-                Container(
-                  alignment: Alignment.center,
-                  width: 73,
-                  height: 19,
-                  decoration: BoxDecoration(
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Color.fromARGB(255, 37, 248, 79).withOpacity(0.10)
-                        : Color(0xFF292929),
-                    borderRadius: BorderRadius.circular(12.5),
-                  ),
-                  child: Text(
-                    'ยืนยันตัวตนแล้ว',
-                    style: TextStyle(
-                      fontSize: 9,
-                      fontWeight: FontWeight.w400,
+                if (_isVerify)
+                  Container(
+                    alignment: Alignment.center,
+                    width: 73,
+                    height: 19,
+                    decoration: BoxDecoration(
                       color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Color.fromARGB(255, 12, 168, 33)
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
+                          ? Color.fromARGB(255, 37, 248, 79).withOpacity(0.10)
+                          : Color(0xFF292929),
+                      borderRadius: BorderRadius.circular(12.5),
+                    ),
+                    child: Text(
+                      'ยืนยันตัวตนแล้ว',
+                      style: TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.w400,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color.fromARGB(255, 12, 168, 33)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
@@ -924,7 +925,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   //                   ),
   //                 ),
   //                 Text(
-  //                   'เพื่อเข้าใช้งานคลาสเรียน จองใช้บริการ และบริการอื่นๆ',
+  //                   'เพื่อเข้าใช้งานคอร์สเรียน จองใช้บริการ และบริการอื่นๆ',
   //                   style: TextStyle(
   //                     fontSize: 13,
   //                     fontWeight: FontWeight.w400,

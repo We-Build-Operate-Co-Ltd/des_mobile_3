@@ -917,20 +917,21 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
       "centerName": widget.centerName,
       "startTime": _startTimeController.text,
       "endTime": _endTimeController.text,
-      "phone": profile['phone'],
-      "firstName": profile['firstnameTh'],
-      "lastName": profile['lastnameTh'],
-      "email": profile['email'],
+      "phone": profile?['phone'] ?? '',
+      "firstName": profile?['firstnameTh'] ?? '',
+      "lastName": profile?['lastnameTh'] ?? '',
+      "email": profile?['email'] ?? '',
       "desc": "",
       "remark": ""
     };
 
     try {
-      // ignore: unused_local_variable
+      logWTF(param);
       Response res = await Dio().post(
         '$server/dcc-api/m/v2/notificationbooking/create',
         data: param,
       );
+      logWTF(res);
     } catch (e) {
       logE(e);
     }

@@ -89,7 +89,7 @@ class _FindJobPageState extends State<FindJobPage> {
         scrollDirection: Axis.horizontal,
         // itemBuilder: (_, __) => _buildItemCategory(MockFindJob.category[__]),
         itemBuilder: (_, __) => _buildItemCategory(_categoryModel[__]),
-        separatorBuilder: (_, __) => const SizedBox(width: 5),
+        separatorBuilder: (_, __) => const SizedBox(width: 20),
         itemCount: _categoryModel.length,
       ),
     );
@@ -102,6 +102,9 @@ class _FindJobPageState extends State<FindJobPage> {
       },
       borderRadius: BorderRadius.all(Radius.circular(8)),
       child: Container(
+        height: 50,
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        alignment: Alignment.center,
         child: Column(
           children: [
             // Container(
@@ -117,16 +120,13 @@ class _FindJobPageState extends State<FindJobPage> {
             //   ),
             // ),
             // const SizedBox(height: 2),
-            SizedBox(
-              width: 130,
-              child: Text(
-                data['nameTh'],
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Theme.of(context).custom.b_w_y,
-                ),
-                textAlign: TextAlign.center,
+            Text(
+              data?['nameTh'] ?? '',
+              style: TextStyle(
+                fontSize: 13,
+                color: Theme.of(context).custom.b_w_y,
               ),
+              textAlign: TextAlign.center,
             ),
             // Text(
             //   data['count'],
@@ -166,7 +166,6 @@ class _FindJobPageState extends State<FindJobPage> {
         );
       },
       child: Container(
-        height: 180,
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Theme.of(context).custom.w_b_b,
@@ -184,6 +183,7 @@ class _FindJobPageState extends State<FindJobPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Center(
                   child: Image.asset(
@@ -196,16 +196,17 @@ class _FindJobPageState extends State<FindJobPage> {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        data['positionName'],
+                        data?['positionName'] ?? '',
                         style: TextStyle(
                           fontSize: 16,
                           color: Theme.of(context).custom.b325f8_w_fffd57,
                         ),
                       ),
                       Text(
-                        data['companyname'],
+                        data?['companyname'] ?? '',
                         style: TextStyle(
                           fontSize: 14,
                           color: Theme.of(context).custom.b325f8_w_fffd57,
@@ -219,7 +220,7 @@ class _FindJobPageState extends State<FindJobPage> {
                             color: Theme.of(context).custom.b_w_y,
                           ),
                           Text(
-                            data['changwatT'],
+                            data?['changwatT'] ?? '',
                             style: TextStyle(
                               fontSize: 13,
                               color: Theme.of(context).custom.b_w_y,
@@ -235,7 +236,7 @@ class _FindJobPageState extends State<FindJobPage> {
                             color: Theme.of(context).custom.b_w_y,
                           ),
                           Text(
-                            data['nameTh'],
+                            data?['nameTh'] ?? '',
                             style: TextStyle(
                               fontSize: 13,
                               color: Theme.of(context).custom.b_w_y,
@@ -244,7 +245,7 @@ class _FindJobPageState extends State<FindJobPage> {
                         ],
                       ),
                       Text(
-                        data['jobHightlight'],
+                        data?['jobHightlight'] ?? '',
                         style: TextStyle(
                           fontSize: 10,
                           color: Theme.of(context).custom.f70f70_w_fffd57,
@@ -252,9 +253,9 @@ class _FindJobPageState extends State<FindJobPage> {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      Expanded(child: const SizedBox()),
+                      const SizedBox(height: 10),
                       Text(
-                        'ค่าจ้าง ${data['salaryRange']}',
+                        'ค่าจ้าง ${data?['salaryRange'] ?? ''}',
                         style: TextStyle(
                           fontSize: 14,
                           color: Theme.of(context).custom.b_w_y,

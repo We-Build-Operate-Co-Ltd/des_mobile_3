@@ -22,10 +22,10 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   List<dynamic> _typeList = [
-    'คลาสทั้งหมด',
-    'คลาสกำลังเรียน',
-    'คลาสกำลังเรียนเสร็จแล้ว',
-    'คลาสที่ชอบ',
+    'คอร์สทั้งหมด',
+    'คอร์สกำลังเรียน',
+    'คอร์สกำลังเรียนเสร็จแล้ว',
+    'คอร์สที่ชอบ',
   ];
   List<dynamic> _categoryList = [];
 

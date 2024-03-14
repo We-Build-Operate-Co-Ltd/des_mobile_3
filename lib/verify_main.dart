@@ -80,7 +80,7 @@ class VerifyMainPage extends StatelessWidget {
               ),
             ),
             Text(
-              'เพียงทำ 3 ขั้นตอน',
+              'เพียงทำ 1 ขั้นตอน',
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
@@ -92,59 +92,54 @@ class VerifyMainPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 25),
-            Row(
-              children: [
-                Container(
-                    height: 30,
-                    width: 30,
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Color(0xFFB325F8)
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Colors.white
-                            : Colors.black,
-                      ),
-                      child: Icon(
-                        Icons.check,
-                        size: 15,
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Color(0xFFB325F8)
-                            : Colors.white,
-                      ),
-                    )
-                    // Image.asset(
-                    //   'assets/images/check_purple.png',
-                    //   height: 30,
-                    //   width: 30,
-                    // ),
-                    ),
-                const SizedBox(width: 15),
-                Expanded(
-                  child: Text(
-                    'สมัครใช้แอปฯ “DCC”',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Colors.black
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 10),
+            // Row(
+            //   children: [
+            //     Container(
+            //         height: 30,
+            //         width: 30,
+            //         padding: EdgeInsets.all(5),
+            //         decoration: BoxDecoration(
+            //           shape: BoxShape.circle,
+            //           color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //               ? Color(0xFFB325F8)
+            //               : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //                   ? Colors.white
+            //                   : Color(0xFFFFFD57),
+            //         ),
+            //         child: Container(
+            //           decoration: BoxDecoration(
+            //             shape: BoxShape.circle,
+            //             color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //                 ? Colors.white
+            //                 : Colors.black,
+            //           ),
+            //           child: Icon(
+            //             Icons.check,
+            //             size: 15,
+            //             color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //                 ? Color(0xFFB325F8)
+            //                 : Colors.white,
+            //           ),
+            //         ),
+            //         ),
+            //     const SizedBox(width: 15),
+            //     Expanded(
+            //       child: Text(
+            //         'สมัครใช้แอปฯ “DCC”',
+            //         style: TextStyle(
+            //           fontSize: 15,
+            //           fontWeight: FontWeight.w500,
+            //           color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //               ? Colors.black
+            //               : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //                   ? Colors.white
+            //                   : Color(0xFFFFFD57),
+            //         ),
+            //       ),
+            //     )
+            //   ],
+            // ),
+            // const SizedBox(height: 10),
             Row(
               children: [
                 ClipRRect(
@@ -191,54 +186,54 @@ class VerifyMainPage extends StatelessWidget {
             //     )
             //   ],
             // ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                iconStep('assets/images/icon_email.png'),
-                // Image.asset(
-                //   'assets/images/icon_email.png',
-                //   height: 30,
-                //   width: 30,
-                // ),
-                const SizedBox(width: 15),
-                Text(
-                  'OTP ผ่านอีเมล',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Colors.black
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                iconStep('assets/images/icon_phone.png'),
-                // Image.asset(
-                //   'assets/images/icon_phone.png',
-                //   height: 30,
-                //   width: 30,
-                // ),
-                const SizedBox(width: 15),
-                Text(
-                  'OTP เบอร์โทรศัพท์',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Colors.black
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
-                  ),
-                )
-              ],
-            ),
+            // const SizedBox(height: 10),
+            // Row(
+            //   children: [
+            //     iconStep('assets/images/icon_email.png'),
+            //     // Image.asset(
+            //     //   'assets/images/icon_email.png',
+            //     //   height: 30,
+            //     //   width: 30,
+            //     // ),
+            //     const SizedBox(width: 15),
+            //     Text(
+            //       'OTP ผ่านอีเมล',
+            //       style: TextStyle(
+            //         fontSize: 15,
+            //         fontWeight: FontWeight.w500,
+            //         color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //             ? Colors.black
+            //             : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //                 ? Colors.white
+            //                 : Color(0xFFFFFD57),
+            //       ),
+            //     )
+            //   ],
+            // ),
+            // const SizedBox(height: 10),
+            // Row(
+            //   children: [
+            //     iconStep('assets/images/icon_phone.png'),
+            //     // Image.asset(
+            //     //   'assets/images/icon_phone.png',
+            //     //   height: 30,
+            //     //   width: 30,
+            //     // ),
+            //     const SizedBox(width: 15),
+            //     Text(
+            //       'OTP เบอร์โทรศัพท์',
+            //       style: TextStyle(
+            //         fontSize: 15,
+            //         fontWeight: FontWeight.w500,
+            //         color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //             ? Colors.black
+            //             : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //                 ? Colors.white
+            //                 : Color(0xFFFFFD57),
+            //       ),
+            //     )
+            //   ],
+            // ),
             // const SizedBox(height: 10),
             // Row(
             //   children: [

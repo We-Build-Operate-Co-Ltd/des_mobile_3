@@ -58,7 +58,7 @@ class _BookingServiceSuccessPageState extends State<BookingServiceSuccessPage> {
                       // Align(
                       //   alignment: Alignment.centerLeft,
                       //   child: Text(
-                      //     'คลาสแนะนำ',
+                      //     'คอร์สแนะนำ',
                       //     style: TextStyle(
                       //       fontSize: 15,
                       //       fontWeight: FontWeight.w500,

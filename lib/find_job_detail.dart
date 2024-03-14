@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/main.dart';
+import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class _FindJobDetailPageState extends State<FindJobDetailPage> {
   Color textTheme = Colors.transparent;
   final storage = const FlutterSecureStorage();
 
-  dynamic _detailModel;
+  dynamic _detailModel = {};
 
   @override
   void initState() {
@@ -165,7 +166,7 @@ class _FindJobDetailPageState extends State<FindJobDetailPage> {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           margin: const EdgeInsets.only(right: 50),
           child: Text(
-            widget.model?['jobHightlight'] ?? '',
+            widget.model?['jobHightlight'] ?? '-',
             style: TextStyle(
               color: textTheme,
               fontSize: 15,
@@ -189,8 +190,12 @@ class _FindJobDetailPageState extends State<FindJobDetailPage> {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           margin: const EdgeInsets.only(right: 50),
           child: Text(
-            _detailModel != null
-                ? _detailModel!['jobResponsibilityDto']![0]!['jobdescription']
+            _detailModel?['jobResponsibilityDto'] != null
+                ? _detailModel['jobResponsibilityDto'].length > 0
+                    ? (_detailModel?['jobResponsibilityDto']?[0]
+                            ['jobdescription'] ??
+                        '')
+                    : '-'
                 : '',
             style: TextStyle(
               color: textTheme,
@@ -215,7 +220,7 @@ class _FindJobDetailPageState extends State<FindJobDetailPage> {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           margin: const EdgeInsets.only(right: 50),
           child: Text(
-            widget.model?['benefit'] ?? '',
+            widget.model?['benefit'] ?? '-',
             style: TextStyle(
               color: textTheme,
               fontSize: 15,
@@ -241,9 +246,7 @@ class _FindJobDetailPageState extends State<FindJobDetailPage> {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           margin: const EdgeInsets.only(right: 50),
           child: Text(
-            _detailModel != null
-                ? _detailModel!['jobPostSalaryDto']!['salary']
-                : '',
+            _detailModel?['jobPostSalaryDto']?['salary'] ?? '',
             style: TextStyle(
               color: textTheme,
               fontSize: 15,
@@ -284,9 +287,7 @@ class _FindJobDetailPageState extends State<FindJobDetailPage> {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               margin: const EdgeInsets.only(right: 50),
               child: Text(
-                _detailModel != null
-                    ? _detailModel!['jobPostContactDto']!['mobile']
-                    : '',
+                _detailModel?['jobPostContactDto']?['mobile'] ?? '',
                 style: TextStyle(
                   color: textTheme,
                   fontSize: 15,
@@ -314,9 +315,7 @@ class _FindJobDetailPageState extends State<FindJobDetailPage> {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               margin: const EdgeInsets.only(right: 50),
               child: Text(
-                _detailModel != null
-                    ? _detailModel!['jobPostContactDto']!['email']
-                    : '',
+                _detailModel?['jobPostContactDto']?['email'] ?? '',
                 style: TextStyle(
                   color: textTheme,
                   fontSize: 15,
