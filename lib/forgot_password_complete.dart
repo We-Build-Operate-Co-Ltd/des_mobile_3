@@ -42,7 +42,7 @@ class _ForgotPasswordCompletePageState
             ),
             const SizedBox(height: 15),
             Text(
-              'รีเซ็ทรหัสผ่านใหม่เรียบร้อยแล้ว',
+              'รีเซ็ตรหัสผ่านใหม่เรียบร้อยแล้ว',
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.w700,
