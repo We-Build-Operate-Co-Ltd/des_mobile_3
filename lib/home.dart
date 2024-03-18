@@ -84,6 +84,28 @@ class _HomePageState extends State<HomePage> {
   String service = 'https://lms.dcc.onde.go.th/api/';
 
   @override
+  void initState() {
+    NotificationService.instance.start(context);
+
+    // _notificationSubscription = NotificationsBloc.instance.notificationStream
+    //     .listen(_performActionOnNotification);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _determinePosition();
+    });
+
+    _callRead();
+    _callReadGetCourse();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).custom.primary,
@@ -725,7 +747,6 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             const SizedBox(height: 10),
-
             FutureBuilder(
               future: _futureNews,
               builder: (context, snapshot) {
@@ -848,7 +869,7 @@ class _HomePageState extends State<HomePage> {
                         height: 24, width: 24),
                     const SizedBox(width: 8),
                     Text(
-                      '3 ชั่วโมง',
+                      model?['course_duration'],
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w400,
@@ -1029,27 +1050,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  @override
-  void initState() {
-    NotificationService.instance.start(context);
-
-    // _notificationSubscription = NotificationsBloc.instance.notificationStream
-    //     .listen(_performActionOnNotification);
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _determinePosition();
-    });
-
-    _callRead();
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   void _callRead() async {
     fontStorageValue = await storage.read(key: 'switchSizeFont') ?? 'ปกติ';
     colorStorageValue = await storage.read(key: 'switchColor') ?? 'ปกติ';
@@ -1059,7 +1059,7 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       _futureBanner = _readBanner();
-      _futureNews = _get_course();
+      // _futureNews = _readGetCourse();
     });
     var sizeName = await storage.read(key: 'switchSize');
     selectedSize = sizeName;
@@ -1081,10 +1081,10 @@ class _HomePageState extends State<HomePage> {
   //   return [];
   // }
 
-  Future<List<dynamic>> _get_course() async {
+  Future<List<dynamic>> _callReadGetCourseOld() async {
     Dio dio = Dio();
     var response;
-    var map = new Map<String, dynamic>();
+    // var map = new Map<String, dynamic>();
     FormData formData = new FormData.fromMap({"apikey": apiKeyLMS});
     // map['apikey'] = _api_key;
     try {
@@ -1095,19 +1095,30 @@ class _HomePageState extends State<HomePage> {
       // logWTF(response.data);
       if (response.data['status']) {
         // logWTF('_get_course' + response.data['data']);
-        return response.data['data'];
+        dynamic model = await response.data['data'].toList();
+        // model..sort((a, b) => a['name'].compareTo(b['name']));
+        print(model.toString());
+        return Future.value(model);
+        // print('xxx' + response.data['data'].toString());
+        // print(response.data['data']
+        //   ..sort((a, b) => a['name'].compareTo(b['name'])));
+        // return response.data['data'];
       }
     } catch (e) {}
     return [];
   }
 
-  //  _get_course () async {
-  //   await dio.get('${service}api/get_coursecategory/${_api_key}').then((value) {
-  //     setState(() {
-  //       _categoryList = value.data['data'];
-  //     });
-  //   });
-  // }
+  void _callReadGetCourse() async {
+    // print('------------hello');
+    dynamic response = await Dio().get('$server/py-api/dcc/lms/recomend');
+    // print(response.data.toString());
+
+    setState(() {
+      _futureNews = Future.value(response.data);
+    });
+
+    // return Future.value(response);
+  }
 
   Future<List<dynamic>> _readBanner() async {
     Dio dio = Dio();

@@ -51,7 +51,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     _isVerify = false;
     _modelCourse = [];
     _getUser();
-    _get_course();
+    _callReadGetCourse();
     super.initState();
   }
 
@@ -82,6 +82,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           children: [
             _buildUserDetail(),
             SizedBox(height: 20),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -123,13 +124,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ],
             ),
             SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildMyClass(_modelCourse[0] ?? {}, 50),
-                _buildMyClass(_modelCourse[1] ?? {}, 80),
-              ],
-            ),
+
+            if (_modelCourse.length != 0)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildMyClass(_modelCourse[0] ?? {}, 50),
+                  _buildMyClass(_modelCourse[1] ?? {}, 80),
+                ],
+              ),
             // FutureBuilder<List<dynamic>>(
             //   future: Future.value(_modelCourse),
             //   builder: (_, snapshot) {
@@ -998,7 +1001,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   void _onRefresh() async {
     _getUser();
-    _get_course();
+    _callReadGetCourse();
     _refreshController.refreshCompleted();
   }
 
@@ -1029,23 +1032,32 @@ class _UserProfilePageState extends State<UserProfilePage> {
     return '$day/$month/$yearBuddhistStringShort';
   }
 
-  _get_course() async {
-    Dio dio = Dio();
-    var response;
-    var map = new Map<String, dynamic>();
-    FormData formData = new FormData.fromMap({"apikey": apiKeyLMS});
-    // map['apikey'] = _api_key;
-    try {
-      //https://lms.dcc.onde.go.th/api/api/recomend/003138ecf4ad3c45f1b903d72a860181
-      //response = await dio.post('${service}api/popular_course', data: formData);
-      response = await dio.post('$serverLMS/recommend_course', data: formData);
-      // logWTF(response.data);
-      if (response.data['status']) {
-        setState(() {
-          _modelCourse = response.data?['data'] ?? [];
-        });
-      }
-    } catch (e) {}
-    return [];
+  // _get_course() async {
+  //   Dio dio = Dio();
+  //   var response;
+  //   var map = new Map<String, dynamic>();
+  //   FormData formData = new FormData.fromMap({"apikey": apiKeyLMS});
+  //   // map['apikey'] = _api_key;
+  //   try {
+  //     //https://lms.dcc.onde.go.th/api/api/recomend/003138ecf4ad3c45f1b903d72a860181
+  //     //response = await dio.post('${service}api/popular_course', data: formData);
+  //     response = await dio.post('$serverLMS/recommend_course', data: formData);
+  //     // logWTF(response.data);
+  //     if (response.data['status']) {
+  //       setState(() {
+  //         _modelCourse = response.data?['data'] ?? [];
+  //       });
+  //     }
+  //   } catch (e) {}
+  //   return [];
+  // }
+
+  _callReadGetCourse() async {
+    dynamic response = await Dio().get('$server/py-api/dcc/lms/recomend');
+    print(response.data.toString());
+
+    setState(() {
+      _modelCourse = response.data;
+    });
   }
 }

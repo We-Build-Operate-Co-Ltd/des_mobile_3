@@ -1876,7 +1876,7 @@ class _BookingServicePageState extends State<BookingServicePage>
       if (refresh) {
         // โหลดข้อมูลใหม่
         var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
-        logWTF(profileMe['email']);
+        // logWTF(profileMe['email']);
         Response response = await Dio().get(
           '$ondeURL/api/Booking/GetBooking/mobile/${profileMe['email']}',
           options: Options(
@@ -1886,7 +1886,7 @@ class _BookingServicePageState extends State<BookingServicePage>
           ),
         );
 
-        logWTF(response);
+        // logWTF(response);
         if (response.data.isEmpty) {
           setState(() {
             _loadingBookingStatus = LoadingBookingStatus.success;

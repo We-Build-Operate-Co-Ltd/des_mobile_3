@@ -77,13 +77,13 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     // var response =
     //     await Dio().get('${endpoint_base_url}get_course/${_api_key}');
 
-    var response = await Dio().get('$serverLMS/get_course/$apiKeyLMS');
+    var response = await Dio().get('$server/py-api/dcc/lms/get_course');
 
     setState(() {
-      _model = Future.value(response.data['data']
+      _model = Future.value(response.data
           .where((dynamic e) => e['is_active'].toString() == 'yes')
           .toList());
-      _tempModel = response.data['data'];
+      _tempModel = response.data;
     });
   }
 
@@ -95,7 +95,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     });
   }
 
-  _get_course() async {
+  _callRealGetCourseOld() async {
     try {
       if (_categorySelected == 0) {
         // return Dio().get('${endpoint_base_url}get_course/${_api_key}');
@@ -107,6 +107,70 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
 
         setState(() {
           _model = Future.value(response.data['data']);
+        });
+      } else {
+        var temp =
+            // _tempModel.where((item) => item['name'].contains(param)).toList();
+
+            _tempModel
+                .where((dynamic e) =>
+                    e['course_cat_id'].toString() ==
+                    _categorySelected.toString())
+                .toList();
+
+        // logWTF('=========fsdfsdfsdfdsfsd==========' + temp.toString());
+
+        setState(() {
+          _model = Future.value(temp);
+        });
+        // FormData formData = new FormData.fromMap({
+        //   "apikey": apiKeyLMS,
+        //   "cat_id": _categoryList[_categorySelected]['id']
+        // });
+        // var response = await dio.post(
+        //   '${serverLMS}/popular_course',
+        //   data: formData,
+        //   options: Options(
+        //     validateStatus: (_) => true,
+        //     contentType: Headers.formUrlEncodedContentType,
+        //     responseType: ResponseType.json,
+        //     headers: {
+        //       'Content-type': 'application/x-www-form-urlencoded',
+        //     },
+        //   ),
+        // );
+
+        // if (response.data['status'] == false) {
+        //   setState(() {
+        //     _model = Future.value([]);
+        //   });
+        // } else {
+        //   setState(() {
+        //     _model = Future.value(response.data['data']);
+        //   });
+        // }
+      }
+    } catch (e) {
+      return {
+        'status': false,
+        'data': [],
+      };
+    }
+
+    // try {
+    // } catch (e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // }
+  }
+
+  _callRealGetCourse() async {
+    try {
+      if (_categorySelected == 0) {
+        dynamic response = await Dio().get('$server/py-api/dcc/lms/get_course');
+        print(response.data.toString());
+
+        setState(() {
+          _model = response.data;
         });
       } else {
         var temp =
@@ -285,7 +349,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                   itemBuilder: (_, __) => GestureDetector(
                     onTap: () => setState(() {
                       _categorySelected = __;
-                      _get_course();
+                      _callRealGetCourse();
                     }),
                     child: Container(
                       alignment: Alignment.center,

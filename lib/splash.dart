@@ -47,7 +47,7 @@ class _SplashPageState extends State<SplashPage> {
     try {
       Response result =
           await Dio().post('$server/dcc-api/m/splash/read', data: {});
-      logE('load splash screen');
+      // logE('load splash screen');
 
       if (result.data['objectData'].length > 0) {
         setState(() {
@@ -55,7 +55,7 @@ class _SplashPageState extends State<SplashPage> {
           _timeOut = int.parse(result.data['objectData'][0]['timeOut'] ?? 0);
         });
       }
-      logWTF(_urlImage);
+      // logWTF(_urlImage);
       int time = (_timeOut / 1000).round();
       Timer(Duration(seconds: time), _checkVersion);
     } catch (e) {

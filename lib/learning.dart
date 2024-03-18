@@ -19,7 +19,7 @@ class _LearningPageState extends State<LearningPage> {
 
   @override
   void initState() {
-    _get_course();
+    _callReadGetCourse();
     super.initState();
   }
 
@@ -59,10 +59,11 @@ class _LearningPageState extends State<LearningPage> {
             shrinkWrap: true,
             physics: const ClampingScrollPhysics(),
             padding: EdgeInsets.zero,
-            itemCount: 40,
+            itemCount: _model.length,
             separatorBuilder: (_, __) => const SizedBox(height: 25),
             itemBuilder: (context, _) {
-              return _buildHistoryOfServiceReservations(_model[_]);
+              if (_model.length != 0)
+                return _buildHistoryOfServiceReservations(_model[_]);
             },
           )
         ],
@@ -106,7 +107,7 @@ class _LearningPageState extends State<LearningPage> {
                             model['docs'],
                         height: 120,
                         width: 120,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                       )
                     : Image.asset(
                         'assets/icon.png',
@@ -209,5 +210,17 @@ class _LearningPageState extends State<LearningPage> {
       logWTF(e);
     }
     return [];
+  }
+
+  void _callReadGetCourse() async {
+    // print('------------hello');
+    dynamic response = await Dio().get('$server/py-api/dcc/lms/recomend');
+    print(response.data.toString());
+
+    setState(() {
+      _model = response.data;
+    });
+
+    // return Future.value(response);
   }
 }
