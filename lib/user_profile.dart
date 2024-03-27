@@ -128,10 +128,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
             if (_modelCourse.length != 0)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildMyClass(_modelCourse[0] ?? {}, 50),
-                  _buildMyClass(_modelCourse[1] ?? {}, 80),
-                ],
+                children: _modelCourse
+                    .take(2)
+                    .map((e) => _buildMyClass(e, 50))
+                    .toList(),
               ),
             // FutureBuilder<List<dynamic>>(
             //   future: Future.value(_modelCourse),
