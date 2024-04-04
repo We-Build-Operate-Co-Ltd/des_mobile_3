@@ -982,7 +982,6 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
         "remark": bookingCategory
       };
       logWTF(data);
-      logWTF(data);
 
       Response response = await Dio().post(
         '$ondeURL/api/Booking/Booking/mobile',
