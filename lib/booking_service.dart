@@ -194,7 +194,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                         ),
                         decoration: _decorationDate(
                           context,
-                          hintText: 'วันใช้บริการ',
+                          hintText: 'วันที่ใช้บริการ',
                         ),
                         validator: (model) {
                           if (model!.isEmpty) {
@@ -267,7 +267,7 @@ class _BookingServicePageState extends State<BookingServicePage>
         height: 20 + MediaQuery.of(context).padding.top,
       ),
       Text(
-        'จองบริการ',
+        'จองใช้งานทรัพยากร',
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w500,
@@ -571,7 +571,7 @@ class _BookingServicePageState extends State<BookingServicePage>
             return TextFormField(
               decoration: _decorationSearch(
                 context,
-                hintText: 'สถานที่',
+                hintText: 'ค้นหาสถานที่',
               ),
               controller: controller,
               focusNode: focusNode,
@@ -622,7 +622,7 @@ class _BookingServicePageState extends State<BookingServicePage>
             ),
             decoration: _decorationDate(
               context,
-              hintText: 'วันใช้บริการ',
+              hintText: 'วันที่ใช้บริการ',
             ),
             validator: (model) {
               if (model!.isEmpty) {
@@ -951,7 +951,7 @@ class _BookingServicePageState extends State<BookingServicePage>
         DateTime date = DateTime.parse(model['bookingdate']);
         DateTime dateTH = DateTime(date.year + 543, date.month, date.day);
         var dateFormat = DateFormat("dd / MM / yyyy").format(dateTH);
-
+        logWTF(model);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -963,6 +963,8 @@ class _BookingServicePageState extends State<BookingServicePage>
               date: dateFormat,
               startTime: model['startTime'],
               endTime: model['endTime'],
+              phone: model['phone'],
+              remark:  model['remark'],
             ),
           ),
         );

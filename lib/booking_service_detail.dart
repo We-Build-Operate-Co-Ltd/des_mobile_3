@@ -1,14 +1,19 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 import 'package:des/booking_service_confirm.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'main.dart';
 
 class BookingServiceDetailPage extends StatefulWidget {
   const BookingServiceDetailPage({
@@ -20,6 +25,8 @@ class BookingServiceDetailPage extends StatefulWidget {
     required this.date,
     required this.startTime,
     required this.endTime,
+    this.phone,
+    this.remark,
   }) : super(key: key);
 
   final dynamic model;
@@ -30,6 +37,8 @@ class BookingServiceDetailPage extends StatefulWidget {
   final String date;
   final String startTime;
   final String endTime;
+  final String? phone;
+  final String? remark;
 
   @override
   State<BookingServiceDetailPage> createState() =>
@@ -48,6 +57,8 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
   TextEditingController txtDate = TextEditingController();
   TextEditingController txtStartTime = TextEditingController();
   TextEditingController txtEndTime = TextEditingController();
+  TextEditingController txtPhone = TextEditingController();
+  late List<dynamic> _modelBookingCategory;
 
   dynamic _model;
   String title = 'รายละเอียด';
@@ -337,7 +348,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
         right: 0,
         bottom: MediaQuery.of(context).padding.bottom,
         child: Container(
-          height: 296,
+          height: 550,
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -368,7 +379,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                     ),
                     decoration: _decorationDate(
                       context,
-                      hintText: 'วันใช้บริการ',
+                      hintText: 'วันที่ใช้บริการ',
                     ),
                     validator: (model) {
                       if (model!.isEmpty) {
@@ -438,6 +449,24 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                 ],
               ),
               SizedBox(height: 15),
+              TextFormField(
+                controller: txtPhone,
+                keyboardType: TextInputType.phone,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  LengthLimitingTextInputFormatter(10),
+                ],
+                decoration: _decorationBase(context, hintText: 'เบอร์ติดต่อ'),
+                style: TextStyle(
+                  color: Color(0xFF7A4CB1),
+                ),
+                cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFF7A4CB1)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.black
+                        : Color(0xFFFFFD57),
+              ),
+              SizedBox(height: 15),
               if (!widget.edit)
                 _dropdown(
                   data: _modelType,
@@ -448,6 +477,19 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                     });
                   },
                 ),
+              SizedBox(height: 10),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'หมวดหมู่การใช้งาน',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              _buildBookingCategory(),
               Expanded(child: SizedBox()),
               GestureDetector(
                 onTap: () {
@@ -482,6 +524,8 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                           endTime: txtEndTime.text,
                           bookingTypeRefNo: _bookingTypeRefNo,
                           bookingno: bookingNo,
+                          phone: txtPhone.text,
+                          remark: _modelBookingCategory,
                         ),
                       ),
                     );
@@ -517,6 +561,62 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
     }
     return SizedBox(
       height: height,
+    );
+  }
+
+  Widget _buildBookingCategory() {
+    return ListView.separated(
+      shrinkWrap: true,
+      padding: EdgeInsets.zero,
+      physics: ClampingScrollPhysics(),
+      itemCount: _modelBookingCategory.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 8),
+      itemBuilder: (_, __) => GestureDetector(
+        onTap: () {
+          setState(() {
+            _modelBookingCategory[__]['selected'] =
+                !_modelBookingCategory[__]['selected'];
+          });
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 3),
+          child: Row(
+            children: [
+              Container(
+                height: 20,
+                width: 20,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 1,
+                    color: Color(0xFFA06CD5),
+                  ),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+                child: Container(
+                  margin: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: _modelBookingCategory[__]['selected']
+                          ? Color(0xFFA06CD5)
+                          : Color(0xFFFFFFFF)),
+                ),
+              ),
+              SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  '${_modelBookingCategory[__]['catNameTh']}',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF707070),
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -771,6 +871,67 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
     );
   }
 
+  static InputDecoration _decorationBase(
+    context, {
+    String hintText = '',
+    bool readOnly = false,
+  }) =>
+      InputDecoration(
+        label: Text(hintText),
+        labelStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+        hintStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+        // hintText: hintText,
+        filled: true,
+        fillColor: readOnly
+            ? Colors.black.withOpacity(0.2)
+            : Theme.of(context).custom.w_b_b,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(color: Color(0xFFE6B82C)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black.withOpacity(0.2)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Color(0xFF707070)
+                    : Color(0xFFFFFD57),
+          ),
+        ),
+        errorStyle: const TextStyle(
+          fontWeight: FontWeight.w300,
+          fontSize: 10.0,
+        ),
+      );
+
   dynamic dialogOpenPickerTime(String type) {
     var now = DateTime.now();
 
@@ -871,6 +1032,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
     txtDate.text = widget.date;
     txtStartTime.text = widget.startTime;
     txtEndTime.text = widget.endTime;
+    txtPhone.text = widget.phone ?? '';
     var now = DateTime.now();
     year = now.year + 543;
     month = now.month;
@@ -880,6 +1042,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
     _selectedDay = now.day;
 
     _model = widget.model;
+    _modelBookingCategory = [];
     _modelType = [
       {
         "recordId": 99999,
@@ -891,6 +1054,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
 
     super.initState();
     _callReadType();
+    _callReadBookingCategory();
   }
 
   _callReadType() async {
@@ -905,7 +1069,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
         _modelType = [
           {
             "recordId": 99999,
-            "typeName": "เลือกรูปแบบการจอง",
+            "typeName": "โปรดเลือกประเภทการจอง",
             "remark": null,
             "refNo": ""
           },
@@ -913,6 +1077,45 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
         ];
       });
       // logWTF(_modelType);
+    } catch (e) {
+      logE(e);
+      setState(() => _loadingDropdownType = false);
+    }
+  }
+
+  _callReadBookingCategory() async {
+    try {
+      setState(() => _loadingDropdownType = true);
+      const ondeURL = 'https://dcc.onde.go.th/dcc-api';
+      Response response =
+          await Dio().get('$ondeURL/api/masterdata/bookingcategories');
+
+      setState(() => _loadingDropdownType = false);
+      setState(() {
+        _modelBookingCategory = response.data;
+        // logWTF(_modelBookingCategory);
+
+        _modelBookingCategory.forEach((e) {
+          e['selected'] = false;
+        });
+
+        if (widget.remark != "" && widget.remark != null) {
+          var remark = widget.remark ?? "";
+          final split = remark.split(',');
+
+          // logWTF(split);
+
+          _modelBookingCategory.forEach((x) { 
+            split.forEach((i) {
+              if(x['bookingCatId'].toString() == i.toString())
+              {
+                x['selected'] = true;
+              }
+             });
+          });
+        }
+      });
+      // logWTF(_modelBookingCategory);
     } catch (e) {
       logE(e);
       setState(() => _loadingDropdownType = false);

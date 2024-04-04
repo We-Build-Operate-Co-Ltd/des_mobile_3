@@ -130,7 +130,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'ข้อมูลติดต่อ',
+                    'ช่องทางติดต่อ',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
@@ -139,7 +139,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   ),
                 ),
                 SizedBox(height: 15),
-                rowContactInformation('เบอร์ติดต่อ', '02 123 4568',
+                rowContactInformation('เบอร์โทรติดต่อ', '02 123 4568',
                     'assets/images/contact_number_about_us.png'),
                 SizedBox(height: 15),
                 rowContactInformation(

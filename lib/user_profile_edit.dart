@@ -234,7 +234,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                                     ),
                                   ),
                                   child: Text(
-                                    'เพิ่มรูปภาพ +',
+                                    'แก้ไขรูปภาพ',
                                     style: TextStyle(),
                                     textAlign: TextAlign.center,
                                   ),
@@ -302,7 +302,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
               controller: txtLastName,
               decoration: _decorationBase(
                 context,
-                hintText: 'สกุล',
+                hintText: 'นามสกุล',
                 readOnly: true,
               ),
               readOnly: true,
@@ -343,7 +343,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                 LengthLimitingTextInputFormatter(10),
               ],
-              decoration: _decorationBase(context, hintText: 'เบอร์ติดต่อ'),
+              decoration: _decorationBase(context, hintText: 'เบอร์โทรศัพท์'),
               style: TextStyle(
                 color: Theme.of(context).custom.b_w_y,
               ),
@@ -393,7 +393,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      'บันทึกข้อมูล',
+                      'บันทึก',
                       style: TextStyle(
                         fontFamily: 'Kanit',
                         color: MyApp.themeNotifier.value == ThemeModeThird.light

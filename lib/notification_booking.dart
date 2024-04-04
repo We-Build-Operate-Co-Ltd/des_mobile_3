@@ -29,6 +29,13 @@ class _NotificationBookingPage extends State<NotificationBookingPage> {
     "date": '20220911110000',
     "timeOfUse": '3',
   };
+
+  List<dynamic> cateNoti = [
+    'ทั้งหมด',
+    'ยังไม่อ่าน',
+  ];
+  int _typeSelected = 0;
+
   int notiCount = 0;
   int totalSelected = 0;
   int selectedIndex = 0;
@@ -54,6 +61,7 @@ class _NotificationBookingPage extends State<NotificationBookingPage> {
 
   bool _loadingWidget = true;
   List<dynamic> _listBooking = [];
+  List<dynamic> _listTempBooking = [];
 
   List<dynamic> listData = [];
   List<dynamic> listResultData = [];
@@ -237,7 +245,11 @@ class _NotificationBookingPage extends State<NotificationBookingPage> {
       logWTF('list');
       logWTF(list);
       setState(() {
+        if (_typeSelected != 0) {
+          list = list.where((x) => x['status'] == "N").toList();
+        }
         _listBooking = list;
+        _listTempBooking = list;
         _loadingWidget = false;
         chkListCount = _listBooking.length > 0 ? true : false;
         chkListActive =
@@ -379,6 +391,8 @@ class _NotificationBookingPage extends State<NotificationBookingPage> {
                 //       )
                 //     : Container(),
                 SizedBox(height: 20),
+
+                _buildListNotiCategory(),
                 Expanded(
                   child: SmartRefresher(
                     enablePullDown: false,
@@ -646,7 +660,7 @@ class _NotificationBookingPage extends State<NotificationBookingPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'แจ้งเตือน',
+                      'การแจ้งเตือน',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 20,
@@ -664,19 +678,19 @@ class _NotificationBookingPage extends State<NotificationBookingPage> {
                   ],
                 ),
               ),
-              InkWell(
-                child: Image.asset(
-                  'assets/images/noti_list.png',
-                  height: 25,
-                  width: 25,
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Colors.black
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57),
-                ),
-                onTap: _handleClickMe,
-              ),
+              // InkWell(
+              //   child: Image.asset(
+              //     'assets/images/noti_list.png',
+              //     height: 25,
+              //     width: 25,
+              //     color: MyApp.themeNotifier.value == ThemeModeThird.light
+              //         ? Colors.black
+              //         : MyApp.themeNotifier.value == ThemeModeThird.dark
+              //             ? Colors.white
+              //             : Color(0xFFFFFD57),
+              //   ),
+              //   onTap: _handleClickMe,
+              // ),
             ],
           ),
         ],
@@ -1717,6 +1731,39 @@ class _NotificationBookingPage extends State<NotificationBookingPage> {
         }
         break;
     }
+  }
+
+  Widget _buildListNotiCategory() {
+    return Container(
+      height: 35,
+      child: ListView.separated(
+        padding: EdgeInsets.symmetric(horizontal: 15),
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (_, __) => GestureDetector(
+          onTap: () {
+            setState(() => _typeSelected = __);
+
+            _readBooking();
+          },
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              color: __ == _typeSelected ? Color(0xFF7A4CB1) : Colors.white,
+              borderRadius: BorderRadius.circular(17.5),
+            ),
+            child: Text(
+              cateNoti[__],
+              style: TextStyle(
+                color: __ == _typeSelected ? Colors.white : Colors.black,
+              ),
+            ),
+          ),
+        ),
+        separatorBuilder: (_, __) => const SizedBox(width: 5),
+        itemCount: cateNoti.length,
+      ),
+    );
   }
 
   checkCategoryName(String page, dynamic model) {

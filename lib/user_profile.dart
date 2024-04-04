@@ -103,7 +103,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     context,
                     MaterialPageRoute(
                       builder: (_) => MyClassAllPage(
-                        title: 'คอร์สเรียนของคุณ',
+                        title: 'คอร์สและความสำเร็จ',
                       ),
                     ),
                   ),
@@ -133,6 +133,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   _buildMyClass(_modelCourse[1] ?? {}, 80),
                 ],
               ),
+            // if (_modelCourse.length == 0) Container(),
             // FutureBuilder<List<dynamic>>(
             //   future: Future.value(_modelCourse),
             //   builder: (_, snapshot) {
@@ -217,7 +218,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'ประวัติการสมัครงาน',
+                  'ประวัติการใช้งาน',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
@@ -814,7 +815,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   ],
                 ),
                 Text(
-                  'แก้ไขข้อมูล',
+                  'แก้ไขโปรไฟล์',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
@@ -1046,7 +1047,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   //     if (response.data['status']) {
   //       setState(() {
   //         _modelCourse = response.data?['data'] ?? [];
-  //       });
+  //       })
   //     }
   //   } catch (e) {}
   //   return [];
