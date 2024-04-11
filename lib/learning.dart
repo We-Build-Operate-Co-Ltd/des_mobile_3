@@ -215,7 +215,7 @@ class _LearningPageState extends State<LearningPage> {
   void _callReadGetCourse() async {
     // print('------------hello');
     dynamic response = await Dio().get('$server/py-api/dcc/lms/recomend');
-    print(response.data.toString());
+    // print(response.data.toString());
 
     setState(() {
       _model = response.data;

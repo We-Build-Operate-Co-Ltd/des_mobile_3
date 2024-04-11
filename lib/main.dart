@@ -34,7 +34,7 @@ Future<void> main() async {
   initializeDateFormatting();
 
   LineSDK.instance.setup('1660694688').then((_) {
-    print('LineSDK Prepared');
+    // print('LineSDK Prepared');
   });
 
   HttpOverrides.global = MyHttpOverrides();

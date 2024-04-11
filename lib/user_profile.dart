@@ -1054,7 +1054,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   _callReadGetCourse() async {
     dynamic response = await Dio().get('$server/py-api/dcc/lms/recomend');
-    print(response.data.toString());
+    // print(response.data.toString());
 
     setState(() {
       _modelCourse = response.data;

@@ -1252,23 +1252,23 @@ class _LoginSecondPageState extends State<LoginSecondPage>
     try {
       setState(() => _loadingSubmit = true);
 
-      logWTF('token');
+      // logWTF('token');
       String accessToken = await _getTokenKeycloak(
         username: _username,
         password: txtPassword.text,
       );
-      logWTF('response accessToken');
 
-      if (accessToken == 'invalid_grant') {
-        Fluttertoast.showToast(msg: 'email หรือ รหัสผ่านไม่ถูกต้อง');
+      if (accessToken == 'invalid_grant' || accessToken == '') {
+        Fluttertoast.showToast(
+            msg: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง', gravity: ToastGravity.CENTER);
         setState(() => _loadingSubmit = false);
         return;
         // กรอกรหัสผ่าน
       }
 
-      logWTF('key cloak');
+      // logWTF('key cloak');
       dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
-      logWTF('responseKeyCloak');
+      // logWTF('responseKeyCloak');
       // logWTF(responseKeyCloak);
 
       if (responseKeyCloak == null) {
@@ -1276,8 +1276,8 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       }
 
       dynamic responseProfileMe = await _getProfileMe(accessToken);
-      logWTF('responseProfileMe');
-      logWTF(responseProfileMe);
+      // logWTF('responseProfileMe');
+      // logWTF(responseProfileMe);
       if (responseProfileMe == null) {
         return;
       }
@@ -1290,11 +1290,11 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       // }
 
       dynamic responseUser = await _getUserProfile();
-      logWTF('responseUser');
-      logWTF(responseUser);
+      // logWTF('responseUser');
+      // logWTF(responseUser);
 
       if (responseUser?['message'] == 'code_not_found') {
-        logWTF('create');
+        // logWTF('create');
         var create = await _createUserProfile(responseProfileMe['data']);
         if (create == null) {
           return;
@@ -1324,7 +1324,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
         key: 'profileMe',
       );
 
-      logWTF(responseUser);
+      // logWTF(responseUser);
       await ManageStorage.createProfile(
         value: responseUser['objectData'][0],
         key: 'guest',
@@ -1340,8 +1340,10 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       );
     } catch (e) {
       setState(() => _loadingSubmit = false);
-      logE(e);
+      // logE(e);
       Fluttertoast.showToast(msg: e.toString());
+      // Fluttertoast.showToast(
+      //     msg: 'รหัสผ่านหรืออีเมลไม่ถูกต้อง', gravity: ToastGravity.CENTER);
     }
   }
 
@@ -1367,9 +1369,12 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       if (response.statusCode == 200) {
         return response.data['access_token'];
       } else {
-        logE(response.data);
-        Fluttertoast.showToast(msg: response.data['error_description']);
+        // logE(response.data);
+        // Fluttertoast.showToast(msg: response.data['error_description']);
+        // Fluttertoast.showToast(
+        //     msg: 'รหัสผ่านหรืออีเมลไม่ถูกต้อง..', gravity: ToastGravity.CENTER);
         setState(() => _loadingSubmit = false);
+        return '';
       }
     } on DioError catch (e) {
       logE(e.error);
@@ -1378,7 +1383,8 @@ class _LoginSecondPageState extends State<LoginSecondPage>
       if (e.response != null) {
         err = e.response!.data.toString();
       }
-      Fluttertoast.showToast(msg: err);
+      // Fluttertoast.showToast(msg: err);
+      Fluttertoast.showToast(msg: 'การเชื่อมต่อเซิฟเวอร์ขัดข้อง');
     }
   }
 
@@ -1461,12 +1467,12 @@ class _LoginSecondPageState extends State<LoginSecondPage>
     });
 
     if (response.statusCode == 200) {
-      logWTF('register read');
-      logWTF(response.data);
+      // logWTF('register read');
+      // logWTF(response.data);
       return response.data;
     } else {
-      logE('error _getUserProfile');
-      logE(response.data);
+      // logE('error _getUserProfile');
+      // logE(response.data);
       Fluttertoast.showToast(msg: response.data['error_description']);
       return null;
     }
@@ -1552,7 +1558,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
             return null;
           }
 
-          logWTF('token');
+          // logWTF('token');
           String accessToken = await _getTokenKeycloak(
             username: response.data['objectData']['email'],
             password: response.data['objectData']['password'],

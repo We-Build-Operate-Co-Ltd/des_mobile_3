@@ -298,7 +298,7 @@ class _HomePageState extends State<HomePage> {
                         // ),
                         Container(
                           width: 85,
-                          height: 85,
+                          // color: Colors.black,
                           child: columnButton(
                             MyApp.themeNotifier.value == ThemeModeThird.light
                                 ? 'assets/images/icon_market.png'
@@ -306,7 +306,7 @@ class _HomePageState extends State<HomePage> {
                                         ThemeModeThird.dark
                                     ? 'assets/images/icon_market.png'
                                     : 'assets/images/icon_market.png',
-                            'ด้านการพัฒนาผลิตภัณฑ์และการสื่อสารทางการตลาด',
+                            '''ด้านการพัฒนาผลิตภัณฑ์และการสื่อสารทางการตลาด''',
                             code: 'market',
                           ),
                         ),
@@ -320,7 +320,7 @@ class _HomePageState extends State<HomePage> {
                                         ThemeModeThird.dark
                                     ? 'assets/images/icon_digital.png'
                                     : 'assets/images/icon_digital.png',
-                            'ด้าน Digital Literacy',
+                            'ด้านดิจิทัล',
                             code: 'digital',
                           ),
                         ),
@@ -338,6 +338,19 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Container(
+                          width: 75,
+                          child: columnButton(
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/care_old.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/care_old_d.png'
+                                    : 'assets/images/care_old_d-y.png',
+                            'ด้านการดูแลผู้สูงอายุ',
+                            code: 'btn3',
+                          ),
+                        ),
+                        Container(
                           width: 85,
                           height: 85,
                           child: columnButton(
@@ -347,7 +360,7 @@ class _HomePageState extends State<HomePage> {
                                         ThemeModeThird.dark
                                     ? 'assets/images/modern_farmer_d.png'
                                     : 'assets/images/modern_farmer_d-y.png',
-                            'เกษตรกรสมัยใหม่',
+                            'ด้านการเกษตรสมัยใหม่',
                             code: 'btn1',
                           ),
                         ),
@@ -360,21 +373,8 @@ class _HomePageState extends State<HomePage> {
                                         ThemeModeThird.dark
                                     ? 'assets/images/community_business_d.png'
                                     : 'assets/images/community_business_d-y.png',
-                            'ธุรกิจชุมชน',
+                            'ด้านการจัดการธุรกิจชุมชน',
                             code: 'btn2',
-                          ),
-                        ),
-                        Container(
-                          width: 75,
-                          child: columnButton(
-                            MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? 'assets/images/care_old.png'
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? 'assets/images/care_old_d.png'
-                                    : 'assets/images/care_old_d-y.png',
-                            'ดูแลผู้สูงอายุ',
-                            code: 'btn3',
                           ),
                         ),
                       ],
@@ -514,7 +514,8 @@ class _HomePageState extends State<HomePage> {
                         : MyApp.themeNotifier.value == ThemeModeThird.dark
                             ? 'assets/images/funding_source_d.png'
                             : 'assets/images/funding_source_d-y.png',
-                    'หาแหล่งทุน',
+                    '''สรรหา
+                    แหล่งทุน''',
                     type: 'serviceforyou',
                     code: 'fund',
                   ),
@@ -524,7 +525,8 @@ class _HomePageState extends State<HomePage> {
                         : MyApp.themeNotifier.value == ThemeModeThird.dark
                             ? 'assets/images/reskill_d.png'
                             : 'assets/images/reskill_d-y.png',
-                    'ส่งเสริมทักษะ',
+                    '''ระบบส่งเสริม
+                    Re-skill''',
                     type: 'serviceforyou',
                     code: 'skill',
                   ),
@@ -1010,7 +1012,7 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
-                      height: 1,
+                      height: 0.5,
                       color: MyApp.themeNotifier.value == ThemeModeThird.light
                           ? Colors.black
                           : MyApp.themeNotifier.value == ThemeModeThird.dark
@@ -1026,7 +1028,7 @@ class _HomePageState extends State<HomePage> {
                     // _callOpenPage(code);
                   },
                   child: SizedBox(
-                    height: 31,
+                    height: 55,
                     child: Text(
                       title,
                       style: TextStyle(
@@ -1256,7 +1258,7 @@ class _HomePageState extends State<HomePage> {
         context,
         MaterialPageRoute(
           builder: (_) => MyClassAllPage(
-            title: 'ส่งเสริมทักษะ',
+            title: 'ระบบส่งเสริม Re-skill',
           ),
         ),
       );

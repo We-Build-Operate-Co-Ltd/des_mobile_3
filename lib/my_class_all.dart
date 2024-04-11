@@ -167,7 +167,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     try {
       if (_categorySelected == 0) {
         dynamic response = await Dio().get('$server/py-api/dcc/lms/get_course');
-        print(response.data.toString());
+        // print(response.data.toString());
 
         setState(() {
           _model = response.data;

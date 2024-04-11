@@ -9,10 +9,8 @@ import 'package:des/shared/line.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/register_verify_thai_id.dart';
-import 'package:des/verify_otp_email_input.dart';
 import 'package:dio/dio.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -46,6 +44,8 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _loading = false;
 
   late ScrollController _scrollController;
+
+  dynamic configRegister = 0;
 
   List<dynamic> _genderList = [
     {'key': 'male', 'value': 'ชาย'},
@@ -162,6 +162,40 @@ class _RegisterPageState extends State<RegisterPage> {
   bool passwordVisibility = true;
   bool confirmPasswordVisibility = true;
   bool chbAcceptPDPA = false;
+
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+    _setDataFromThridParty();
+    _callReadConfigRegister();
+    super.initState();
+    _clearData();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    _scrollController.dispose();
+    txtUsername.dispose();
+    txtPassword.dispose();
+    txtConPassword.dispose();
+    txtPhone.dispose();
+    txtFirstName.dispose();
+    txtLastName.dispose();
+    switch (widget.category) {
+      case 'facebook':
+        logoutFacebook();
+        break;
+      case 'google':
+        logoutGoogle();
+        break;
+      case 'line':
+        logoutLine();
+        break;
+      default:
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -440,68 +474,79 @@ class _RegisterPageState extends State<RegisterPage> {
                               //   },
                               // ),
                               // SizedBox(height: 10),
-                              Text(
-                                'เพศ',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  color: Theme.of(context).custom.b_W_fffd57,
+                              if (configRegister.toString() == "1")
+                                Text(
+                                  'เพศ',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                    color: Theme.of(context).custom.b_W_fffd57,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 6),
-                              SizedBox(
-                                height: 20,
-                                width: double.infinity,
-                                child: ListView.separated(
-                                  scrollDirection: Axis.horizontal,
-                                  padding: EdgeInsets.zero,
-                                  separatorBuilder: (_, __) =>
-                                      SizedBox(width: 25),
-                                  itemBuilder: (_, index) =>
-                                      _radioGender(_genderList[index]),
-                                  itemCount: _genderList.length,
+                              if (configRegister.toString() == "1")
+                                SizedBox(height: 6),
+                              if (configRegister.toString() == "1")
+                                SizedBox(
+                                  height: 20,
+                                  width: double.infinity,
+                                  child: ListView.separated(
+                                    scrollDirection: Axis.horizontal,
+                                    padding: EdgeInsets.zero,
+                                    separatorBuilder: (_, __) =>
+                                        SizedBox(width: 25),
+                                    itemBuilder: (_, index) =>
+                                        _radioGender(_genderList[index]),
+                                    itemCount: _genderList.length,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 20),
-                              Text(
-                                'ช่วงอายุ',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  color: Theme.of(context).custom.b_W_fffd57,
+                              if (configRegister.toString() == "1")
+                                SizedBox(height: 20),
+                              if (configRegister.toString() == "1")
+                                Text(
+                                  'ช่วงอายุ',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                    color: Theme.of(context).custom.b_W_fffd57,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 6),
-                              SizedBox(
-                                width: double.infinity,
-                                child: Wrap(
-                                  runSpacing: 11,
-                                  spacing: 8,
-                                  children: _ageRangeList
-                                      .map<Widget>(
-                                          (dynamic e) => _radioAgeRange(e))
-                                      .toList(),
+                              if (configRegister.toString() == "1")
+                                SizedBox(height: 6),
+                              if (configRegister.toString() == "1")
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: Wrap(
+                                    runSpacing: 11,
+                                    spacing: 8,
+                                    children: _ageRangeList
+                                        .map<Widget>(
+                                            (dynamic e) => _radioAgeRange(e))
+                                        .toList(),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                'อาชีพ',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  color: Theme.of(context).custom.b_W_fffd57,
+                              if (configRegister.toString() == "1")
+                                SizedBox(height: 10),
+                              if (configRegister.toString() == "1")
+                                Text(
+                                  'อาชีพ',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                    color: Theme.of(context).custom.b_W_fffd57,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 10),
-                              _dropdown(
-                                data: _careerList,
-                                value: _careerSelected,
-                                onChanged: (String value) {
-                                  setState(() {
-                                    _careerSelected = value;
-                                  });
-                                },
-                              ),
+                              if (configRegister.toString() == "1")
+                                SizedBox(height: 10),
+                              if (configRegister.toString() == "1")
+                                _dropdown(
+                                  data: _careerList,
+                                  value: _careerSelected,
+                                  onChanged: (String value) {
+                                    setState(() {
+                                      _careerSelected = value;
+                                    });
+                                  },
+                                ),
                               SizedBox(height: 10),
                               Text(
                                 'สิ่งที่สนใจ',
@@ -636,6 +681,15 @@ class _RegisterPageState extends State<RegisterPage> {
               final form = _formKey.currentState;
               if (form!.validate()) {
                 form.save();
+
+                if (configRegister.toString() == "0") {
+                  setState(() {
+                    _gender = 'male';
+                    _ageRange = '3';
+                    _careerSelected = '10';
+                    // favorites = '';
+                  });
+                }
 
                 if (_careerSelected == '') {
                   Fluttertoast.showToast(msg: 'กรุณาเลือกอาชีพ');
@@ -885,7 +939,7 @@ class _RegisterPageState extends State<RegisterPage> {
       // setState(() => _loading = false);
 
       String usernameDup = await _checkDuplicateUser();
-      logWTF(usernameDup);
+      // logWTF(usernameDup);
       if (usernameDup.isNotEmpty) {
         if (usernameDup == 'อีเมลนี้ถูกใช้งานไปแล้ว' && widget.category != '') {
           if (!mounted) return;
@@ -1092,39 +1146,6 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       );
 
-  @override
-  void initState() {
-    _scrollController = ScrollController();
-    _setDataFromThridParty();
-    super.initState();
-    _clearData();
-  }
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    _scrollController.dispose();
-    txtUsername.dispose();
-    txtPassword.dispose();
-    txtConPassword.dispose();
-    txtPhone.dispose();
-    txtFirstName.dispose();
-    txtLastName.dispose();
-    switch (widget.category) {
-      case 'facebook':
-        logoutFacebook();
-        break;
-      case 'google':
-        logoutGoogle();
-        break;
-      case 'line':
-        logoutLine();
-        break;
-      default:
-    }
-    super.dispose();
-  }
-
   _clearData() async {
     ManageStorage.deleteStorage('tempRegister');
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -1172,6 +1193,16 @@ class _RegisterPageState extends State<RegisterPage> {
   void goBack() async {
     Navigator.pop(context, false);
   }
+
+  void _callReadConfigRegister() async {
+    var response = await Dio()
+        .get('$server/py-api/dcc/config/register/' + versionNumber.toString());
+    // print(response);
+    setState(() {
+      configRegister = response;
+    });
+  }
+
 //
 }
 
