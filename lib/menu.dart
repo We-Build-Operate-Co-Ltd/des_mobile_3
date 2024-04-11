@@ -300,7 +300,7 @@ class _MenuState extends State<Menu> {
         child: Row(
           children: [
             _buildTap(0, 'หน้าหลัก', 'assets/images/home.png'),
-            _buildTap(1, 'จองบริการ', 'assets/images/computer.png'),
+            _buildTap(1, 'จองใช้บริการ', 'assets/images/computer.png'),
             _buildTap(2, 'การเรียน', 'assets/images/learning.png'),
             _buildTap(3, 'สมาชิก', _imageProfile, isNetwork: true),
           ],

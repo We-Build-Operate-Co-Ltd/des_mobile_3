@@ -8,8 +8,11 @@ import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import 'main.dart';
 
 class BookingServiceConfirmPage extends StatefulWidget {
   const BookingServiceConfirmPage({
@@ -23,6 +26,8 @@ class BookingServiceConfirmPage extends StatefulWidget {
     required this.bookingTypeRefNo,
     this.bookingno,
     required this.centerName,
+    required this.phone,
+    required this.remark,
   });
 
   final bool repeat;
@@ -35,7 +40,8 @@ class BookingServiceConfirmPage extends StatefulWidget {
   final String centerName;
   final String bookingTypeRefNo;
   final int? bookingno;
-
+  final String phone;
+  final List<dynamic> remark;
   @override
   State<BookingServiceConfirmPage> createState() =>
       _BookingServiceConfirmPageState();
@@ -50,12 +56,14 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
   TextEditingController _dateTimeController = TextEditingController();
   TextEditingController _startTimeController = TextEditingController();
   TextEditingController _endTimeController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
 
   String title = 'ยืนยันข้อมูล';
   String _bookingTypeRefNo = '';
   late List<dynamic> _modelType;
   bool _loadingDropdownType = false;
   bool _loadingSubmit = false;
+  late List<dynamic> _modelBookingCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +174,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
                       ),
                       decoration: _decorationDate(
                         context,
-                        hintText: 'วันใช้บริการ',
+                        hintText: 'วันที่ใช้บริการ',
                       ),
                       validator: (model) {
                         if (model!.isEmpty) {
@@ -177,6 +185,24 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
                     ),
                   ),
                 ),
+                 SizedBox(height: 15),
+              TextFormField(
+                controller: _phoneController,
+                keyboardType: TextInputType.phone,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  LengthLimitingTextInputFormatter(10),
+                ],
+                decoration: _decorationBase(context, hintText: 'เบอร์ติดต่อ'),
+                style: TextStyle(
+                  color: Color(0xFF7A4CB1),
+                ),
+                cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFF7A4CB1)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.black
+                        : Color(0xFFFFFD57),
+              ),
                 SizedBox(height: 15),
                 if (!widget.edit)
                   _dropdown(
@@ -188,6 +214,8 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
                       });
                     },
                   ),
+                SizedBox(height: 15),
+                _buildBookingCategory(),
                 Expanded(child: SizedBox()),
                 widget.edit ? _btnEdit() : _btnConfirm(),
                 SizedBox(height: 10),
@@ -679,6 +707,67 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
         ),
       );
 
+    static InputDecoration _decorationBase(
+    context, {
+    String hintText = '',
+    bool readOnly = false,
+  }) =>
+      InputDecoration(
+        label: Text(hintText),
+        labelStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+        hintStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFF707070)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+        // hintText: hintText,
+        filled: true,
+        fillColor: readOnly
+            ? Colors.black.withOpacity(0.2)
+            : Theme.of(context).custom.w_b_b,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(color: Color(0xFFE6B82C)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFF7A4CB1)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black.withOpacity(0.2)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Color(0xFF707070)
+                    : Color(0xFFFFFD57),
+          ),
+        ),
+        errorStyle: const TextStyle(
+          fontWeight: FontWeight.w300,
+          fontSize: 10.0,
+        ),
+      );
+
   static InputDecoration _decorationTime(context, {String hintText = ''}) =>
       InputDecoration(
         label: Text(hintText),
@@ -737,6 +826,62 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
     ),
   );
 
+  Widget _buildBookingCategory() {
+    return ListView.separated(
+      shrinkWrap: true,
+      padding: EdgeInsets.zero,
+      physics: ClampingScrollPhysics(),
+      itemCount: _modelBookingCategory.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 8),
+      itemBuilder: (_, __) => GestureDetector(
+        onTap: () {
+          setState(() {
+            _modelBookingCategory[__]['selected'] =
+                !_modelBookingCategory[__]['selected'];
+          });
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 3),
+          child: Row(
+            children: [
+              Container(
+                height: 20,
+                width: 20,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 1,
+                    color: Color(0xFFA06CD5),
+                  ),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+                child: Container(
+                  margin: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: _modelBookingCategory[__]['selected']
+                          ? Color(0xFFA06CD5)
+                          : Color(0xFFFFFFFF)),
+                ),
+              ),
+              SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  '${_modelBookingCategory[__]['catNameTh']}',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF707070),
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     title = widget.edit ? 'ข้อมูลการจอง' : title;
@@ -744,13 +889,14 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
     _dateTimeController.text = widget.date;
     _startTimeController.text = widget.startTime;
     _endTimeController.text = widget.endTime;
+    _phoneController.text = widget.phone;
     var now = DateTime.now();
     year = now.year + 543;
     month = now.month;
     day = now.day;
 
     // logWTF(widget);
-
+    _modelBookingCategory = widget.remark;
     _modelType = [
       {
         "recordId": 99999,
@@ -811,6 +957,18 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
       var recordId = _modelType
           .firstWhere((e) => e['refNo'] == _bookingTypeRefNo)['recordId'];
 
+      var bookingCategory = '';
+      _modelBookingCategory.forEach((e) {
+        if (e['selected']) {
+          if (bookingCategory.isEmpty) {
+            bookingCategory = bookingCategory + e['bookingCatId'].toString();
+          } else {
+            bookingCategory =
+                bookingCategory + ',' + e['bookingCatId'].toString();
+          }
+        }
+      });
+
       var data = {
         "bookingDate": tempDate,
         "bookingSlotType": recordId,
@@ -819,11 +977,10 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
         "endTime": _endTimeController.text,
         "userEmail": profileMe['email'],
         "userid": 0, // for test = 0; waiting API.
-        "phone": profileMe?['phone'] ?? '',
+        "phone": _phoneController.text,
         "desc": "",
-        "remark": ""
+        "remark": bookingCategory
       };
-      logWTF(data);
       logWTF(data);
 
       Response response = await Dio().post(
@@ -875,15 +1032,27 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
       var recordId = _modelType
           .firstWhere((e) => e['refNo'] == _bookingTypeRefNo)['recordId'];
 
+      var bookingCategory = '';
+      _modelBookingCategory.forEach((e) {
+        if (e['selected']) {
+          if (bookingCategory.isEmpty) {
+            bookingCategory = bookingCategory + e['bookingCatId'].toString();
+          } else {
+            bookingCategory =
+                bookingCategory + ',' + e['bookingCatId'].toString();
+          }
+        }
+      });
+
       var data = {
         "bookingDate": tempDate,
         "bookingno": widget.bookingno,
         "centerId": widget.centerId,
         "startTime": _startTimeController.text,
         "endTime": _endTimeController.text,
-        "phone": profileMe['phonenumber'],
+        "phone": widget.phone,
         "desc": "",
-        "remark": ""
+        "remark": bookingCategory
       };
       // logWTF(data);
 

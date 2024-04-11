@@ -231,7 +231,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
               ),
             );
           },
-          child: _buildRow('แก้ไขข้อมูลส่วนตัว'),
+          child: _buildRow('แก้ไขโปรไฟล์'),
         ),
         // const SizedBox(height: 25),
         if (!_hasThaiD)
@@ -418,7 +418,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
                   ],
                 ),
                 Text(
-                  'แก้ไขข้อมูล',
+                  'แก้ไขโปรไฟล์',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,

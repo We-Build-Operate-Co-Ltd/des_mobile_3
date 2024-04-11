@@ -122,7 +122,7 @@ class _BookingServiceSearchResultPageState
   Widget _item(model) {
     return GestureDetector(
       onTap: () {
-        logWTF(model);
+        // logWTF(model);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -208,7 +208,7 @@ class _BookingServiceSearchResultPageState
       Response response = await Dio().get('$ondeURL/api/ShowCenter');
       _loadingBookingStatus = LoadingBookingStatus.success;
 
-      logWTF(response.data);
+      // logWTF(response.data);
 
       setState(() {
         _modelCenter = response.data;
@@ -223,7 +223,7 @@ class _BookingServiceSearchResultPageState
           _filterModelCenter = _modelCenter;
         }
       });
-      logWTF('search :: ${widget.search}');
+      // logWTF('search :: ${widget.search}');
     } on DioError catch (e) {
       setState(() => _loadingBookingStatus = LoadingBookingStatus.fail);
       Fluttertoast.showToast(msg: e.response!.data['message']);

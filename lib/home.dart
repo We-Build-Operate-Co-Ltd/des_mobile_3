@@ -764,7 +764,9 @@ class _HomePageState extends State<HomePage> {
                           mainAxisSpacing: 15),
                       physics: const ClampingScrollPhysics(),
                       // itemCount: snapshot.data!.length,
-                      itemCount: 4,
+                      itemCount: (snapshot.data.length >= 4
+                          ? 4
+                          : snapshot.data.length),
                       itemBuilder: (context, index) =>
                           containerRecommendedClass(snapshot.data![index]),
                     );
@@ -773,6 +775,7 @@ class _HomePageState extends State<HomePage> {
                 return const SizedBox();
               },
             ),
+            Container(),
             SizedBox(height: 20 + MediaQuery.of(context).padding.bottom),
           ],
         ),
@@ -834,7 +837,7 @@ class _HomePageState extends State<HomePage> {
                 child: (model?['docs'] ?? '') != ''
                     ? CachedNetworkImage(
                         imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
-                            model['docs'],
+                            model?['docs'],
                         height: 120,
                         width: double.infinity,
                         fit: BoxFit.cover,
