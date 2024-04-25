@@ -587,7 +587,8 @@ class _MenuState extends State<Menu> {
     DateTime date = new DateTime(now.year, now.month, now.day);
 
     if (dataValue != null) {
-      var index = dataValue.indexWhere((c) => c['profileCode'] == _profileCode);
+      var index =
+          dataValue.indexWhere((c) => c['profileCode'] == _profileCode);
 
       if (index == -1) {
         dataValue.add({

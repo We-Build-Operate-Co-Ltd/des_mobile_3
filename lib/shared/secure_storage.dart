@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:des/models/mock_data.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'config.dart';
+
 class ManageStorage {
   static createProfile({dynamic value, String? key}) async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
@@ -14,7 +16,8 @@ class ManageStorage {
     await storage.write(
         key: 'profileImageUrl', value: value?['imageUrl'] ?? '');
 
-    await storage.write(key: 'profileCode', value: value?['code'] ?? '');
+    await storage.write(
+        key: 'profileCode$version', value: value?['code'] ?? '');
     await storage.write(key: 'profileData', value: json.encode(value));
   }
 

@@ -90,7 +90,7 @@ class _NotificationListState extends State<NotificationListPage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      profileCode = await ManageStorage.read('profileCode') ?? '';
+      profileCode = await ManageStorage.read('profileCode$version') ?? '';
       var data = await ManageStorage.read('profileData') ?? '';
       var result = json.decode(data);
       setState(() {

@@ -633,7 +633,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
   _requestDeleteAccount() async {
     try {
       var profileMe = await ManageStorage.readDynamic('profileMe');
-      var pf = await ManageStorage.read('profileCode') ?? '';
+      var pf = await ManageStorage.read('profileCode$version') ?? '';
       var data = {
         'profileCode': pf,
         'uuid': profileMe['uuid'],

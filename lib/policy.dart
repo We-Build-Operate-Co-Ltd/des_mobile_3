@@ -75,7 +75,7 @@ class _PolicyPage extends State<PolicyPage> {
   List acceptPolicyList = [];
 
   _read() async {
-    var pf = await ManageStorage.read('profileCode') ?? '';
+    var pf = await ManageStorage.read('profileCode$version') ?? '';
     setState(() {
       _profileCode = pf;
     });
