@@ -14,6 +14,7 @@ import 'package:des/shared/notification_service.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/user_profile.dart';
+import 'package:des/user_profile_new.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:des/home.dart';
@@ -450,7 +451,7 @@ class _MenuState extends State<Menu> {
     });
 
     homePage = HomePage(changePage: _changePage);
-    profilePage = UserProfilePage(changePage: _changePage);
+    profilePage = UserProfileNewPage(changePage: _changePage);
     _buildMainPopUp();
     _callRead();
     _logUsed();
