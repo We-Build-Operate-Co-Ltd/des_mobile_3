@@ -23,6 +23,8 @@ class ThemeColorData extends ChangeNotifier {
   Color f70f70_w_fffd57;
   Color f70f70_292929_292929;
   Color eeba33_292929_292929;
+  Color f7cafce;
+  Color f796dc3;
 
   ThemeColorData(
       {required this.primary,
@@ -44,7 +46,9 @@ class ThemeColorData extends ChangeNotifier {
       required this.f70f70_b_b,
       required this.f70f70_w_fffd57,
       required this.f70f70_292929_292929,
-      required this.eeba33_292929_292929});
+      required this.eeba33_292929_292929,
+      required this.f7cafce,
+      required this.f796dc3});
 
   Future<void> swapTheme(ThemeModeThird selectedTheme) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -81,7 +85,9 @@ final themeLight = ThemeColorData(
     f70f70_b_b: Color(0xFF707070),
     f70f70_w_fffd57: Color(0xFF707070),
     f70f70_292929_292929: Color(0xFF707070),
-    eeba33_292929_292929: Color(0xFFeeba33));
+    eeba33_292929_292929: Color(0xFFeeba33),
+    f7cafce: Color(0xFF7CAFCE),
+    f796dc3: Color(0xFF796DC3));
 final themeDark = ThemeColorData(
     primary: Color(0xFF000000),
     b_w_y: Color(0xFFFFFFFF),
@@ -102,7 +108,9 @@ final themeDark = ThemeColorData(
     f70f70_b_b: Colors.black,
     f70f70_w_fffd57: Colors.white,
     f70f70_292929_292929: Color(0xFf292929),
-    eeba33_292929_292929: Color(0xFf292929));
+    eeba33_292929_292929: Color(0xFf292929),
+    f7cafce: Color(0xFF000000),
+    f796dc3: Color(0xFF000000));
 final themeBlindness = ThemeColorData(
     primary: Color(0xFF000000),
     b_w_y: Colors.yellow,
@@ -123,7 +131,9 @@ final themeBlindness = ThemeColorData(
     f70f70_b_b: Colors.black,
     f70f70_w_fffd57: Color(0xFFfffd57),
     f70f70_292929_292929: Color(0xFf292929),
-    eeba33_292929_292929: Color(0xFf292929));
+    eeba33_292929_292929: Color(0xFf292929),
+    f7cafce: Color(0xFF000000),
+    f796dc3: Color(0xFF000000));
 
 // ref: https://stackoverflow.com/questions/54139924/flutter-how-do-i-change-theme-brightness-at-runtime
 // use it with "Theme.of(context).custom"
@@ -190,3 +200,4 @@ class _ChangeDarkModeState extends State<ChangeDarkMode> {
     );
   }
 }
+
