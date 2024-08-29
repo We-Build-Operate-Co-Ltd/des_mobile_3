@@ -74,7 +74,7 @@ final themeLight = ThemeColorData(
     b325f8_w_fffd57: Color(0xFFb325f8),
     b325f8_w_g: Color(0xFFb325f8),
     b_W_fffd57: Colors.black,
-    A4CB1_w_fffd57: Color(0xFF7A4CB1),
+    A4CB1_w_fffd57: Color(0xFFB325F8),
     eeba33_b_b: Color(0xFFeeba33),
     w_w_fffd57: Colors.white,
     g05_w01_w01: Colors.grey.withOpacity(0.5),
