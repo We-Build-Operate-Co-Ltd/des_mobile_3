@@ -14,7 +14,6 @@ import 'package:des/shared/notification_service.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/user_profile.dart';
-import 'package:des/user_profile_new.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:des/home.dart';
@@ -285,15 +284,23 @@ class _MenuState extends State<Menu> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Container(
-        height: 55 + MediaQuery.of(context).padding.bottom,
+        height: 66 + MediaQuery.of(context).padding.bottom,
         decoration: BoxDecoration(
-          color: Theme.of(context).custom.primary,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+          // color: Theme.of(context).custom.primary,
+          gradient: LinearGradient(
+            colors: [
+              Theme.of(context).custom.f7cafce,
+              Theme.of(context).custom.f796dc3
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          // borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFFD8D8D8).withOpacity(0.29),
+              color: const Color(0xFF000000).withOpacity(0.10),
               spreadRadius: 0,
-              blurRadius: 6,
+              blurRadius: 4,
               offset: const Offset(0, -3), // changes position of shadow
             ),
           ],
@@ -301,9 +308,10 @@ class _MenuState extends State<Menu> {
         child: Row(
           children: [
             _buildTap(0, 'หน้าหลัก', 'assets/images/home.png'),
-            _buildTap(1, 'จองใช้บริการ', 'assets/images/computer.png'),
-            _buildTap(2, 'การเรียน', 'assets/images/learning.png'),
-            _buildTap(3, 'สมาชิก', _imageProfile, isNetwork: true),
+            _buildTap(1, 'จองใช้บริการ', 'assets/images/calendar_menu.png'),
+            _buildTap(2, 'การเรียน', 'assets/images/re_skill.png'),
+            _buildTap(3, 'การเรียน', 'assets/images/noti_menu.png'),
+            _buildTap(4, 'สมาชิก', _imageProfile, isNetwork: true),
           ],
         ),
       ),
@@ -321,20 +329,18 @@ class _MenuState extends State<Menu> {
     if (_currentPage == index) {
       if ((MyApp.themeNotifier.value == ThemeModeThird.light) ||
           (MyApp.themeNotifier.value == ThemeModeThird.dark)) {
-        color = const Color(0xFF7A4CB1);
+        color = Colors.white;
       } else {
         color = Theme.of(context).custom.b_w_y;
       }
     } else {
       if (MyApp.themeNotifier.value == ThemeModeThird.light) {
-        color = Theme.of(context).custom.f70f70_y;
+        color = Theme.of(context).custom.w_w_y;
       } else {
         color = Colors.white;
       }
     }
-    // Color color = _currentPage == index
-    //     ? const Color(0xFF7A4CB1)
-    //     : Theme.of(context).custom.bwy;
+
     return Flexible(
       key: key,
       flex: 1,
@@ -351,57 +357,47 @@ class _MenuState extends State<Menu> {
             child: Container(
               width: double.infinity,
               height: double.infinity,
-              padding: const EdgeInsets.only(
-                top: 5,
-              ),
-              child: Column(
-                children: [
-                  isNetwork
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: pathImage != ''
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Image.memory(
-                                    base64Decode(_imageProfile),
-                                    fit: BoxFit.cover,
-                                    height: 30,
-                                    width: 30,
-                                    errorBuilder: (_, __, ___) => Image.asset(
-                                      "assets/images/profile_empty.png",
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                )
-                              : Image.asset(
-                                  'assets/images/profile_empty.png',
-                                  height: 30,
-                                  width: 30,
-                                  color: color,
-                                ),
+              padding: EdgeInsets.all(10),
+              margin: EdgeInsets.all(10),
+              decoration: _currentPage == index
+                  ? BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFFFFFFFF).withOpacity(0.50),
+                          // spreadRadius: 0,
+                          // blurRadius: 0,
+                          // offset:
+                          //     const Offset(0, 0), // changes position of shadow
+                        ),
+                      ],
+                    )
+                  : null,
+              // borderRadius: BorderRadius.circular(15),
+              child: isNetwork
+                  ? pathImage != ''
+                      ? Image.memory(
+                          base64Decode(_imageProfile),
+                          fit: BoxFit.cover,
+                          height: 30,
+                          width: 30,
+                          errorBuilder: (_, __, ___) => Image.asset(
+                            "assets/images/profile_menu.png",
+                            fit: BoxFit.fill,
+                          ),
                         )
                       : Image.asset(
-                          pathImage,
+                          'assets/images/profile_menu.png',
                           height: 30,
                           width: 30,
                           color: color,
-                        ),
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        fontFamily: 'Kanit',
-                        fontSize: 15,
-                        color: color,
-                        fontWeight: _currentPage == index
-                            ? FontWeight.w500
-                            : FontWeight.w300,
-                      ),
-                      textAlign: TextAlign.center,
+                        )
+                  : Image.asset(
+                      pathImage,
+                      height: 30,
+                      width: 30,
+                      color: color,
                     ),
-                  ),
-                ],
-              ),
             ),
           ),
         ),
@@ -451,7 +447,7 @@ class _MenuState extends State<Menu> {
     });
 
     homePage = HomePage(changePage: _changePage);
-    profilePage = UserProfileNewPage(changePage: _changePage);
+    profilePage = UserProfilePage(changePage: _changePage);
     _buildMainPopUp();
     _callRead();
     _logUsed();
@@ -588,8 +584,7 @@ class _MenuState extends State<Menu> {
     DateTime date = new DateTime(now.year, now.month, now.day);
 
     if (dataValue != null) {
-      var index =
-          dataValue.indexWhere((c) => c['profileCode'] == _profileCode);
+      var index = dataValue.indexWhere((c) => c['profileCode'] == _profileCode);
 
       if (index == -1) {
         dataValue.add({
@@ -619,3 +614,4 @@ class _MenuState extends State<Menu> {
     print(dataValue);
   }
 }
+
