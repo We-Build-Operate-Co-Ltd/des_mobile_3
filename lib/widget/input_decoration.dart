@@ -62,10 +62,10 @@ class CusInpuDecoration {
         contentPadding: const EdgeInsets.only(left: 19, right: 19, bottom: 4),
         border: InputBorder.none,
         focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.transparent),
+          borderSide: BorderSide(color: Color(0xFFDDDDDD)),
         ),
         enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.transparent),
+          borderSide: BorderSide(color: Color(0xFFDDDDDD)),
         ),
         errorStyle: const TextStyle(
           fontWeight: FontWeight.normal,

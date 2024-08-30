@@ -55,6 +55,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   ),
                   elevation: 5,
                   child: Container(
+                    decoration: BoxDecoration(
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.white
+                          : Colors.black,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                      ),
+                    ),
                     padding: EdgeInsets.all(20),
                     child: Form(
                       key: _formKey,

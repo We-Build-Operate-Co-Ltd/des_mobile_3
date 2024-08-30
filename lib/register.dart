@@ -211,8 +211,8 @@ class _RegisterPageState extends State<RegisterPage> {
             image: DecorationImage(
               image: AssetImage(
                 MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? "assets/images/bg_login_page.png"
-                    : "assets/images/bg_login_page-dark.png",
+                    ? "assets/images/BG.png"
+                    : "",
               ),
               fit: BoxFit.cover,
             ),

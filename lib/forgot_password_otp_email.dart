@@ -34,7 +34,7 @@ class _ForgotPasswordOTPEmailPageState
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         body: Container(
           height: double.infinity,
           // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -64,6 +64,15 @@ class _ForgotPasswordOTPEmailPageState
               elevation: 5,
               child: Container(
                 height: 700,
+                decoration: BoxDecoration(
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
+                      : Colors.black,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  ),
+                ),
                 padding: EdgeInsets.all(20),
                 // alignment: Alignment.center,
                 child: Form(
@@ -149,13 +158,12 @@ class _ForgotPasswordOTPEmailPageState
                           }
                         },
                         pinTheme: PinTheme(
-                          inactiveColor: Colors.black.withOpacity(0.2),
-                          //  Color(
-                          //     0xFF707070), // สีของเส้นขอบช่องที่ไม่ได้ใช้งาน
-                          activeColor: Theme.of(context)
-                              .primaryColor, //สีของเส้นขอบช่องที่กำลังใช้งาน
-                          selectedColor: Theme.of(context)
-                              .primaryColor, //สีพื้นหลังของช่องที่ถูกเลือก
+                          inactiveColor: Color(
+                              0xFFEEEEEE), // สีของเส้นขอบช่องที่ไม่ได้ใช้งาน
+                          activeColor: Color(
+                              0xFFEEEEEE), //สีของเส้นขอบช่องที่กำลังใช้งาน
+                          selectedColor:
+                              Color(0xFFB325F8), //สีพื้นหลังของช่องที่ถูกเลือก
                           // disabledColor: Colors.white,
                           activeFillColor: Color(
                               0xFFEEEEEE), // สีพื้นหลังของช่องที่กำลังใช้งาน
@@ -169,11 +177,12 @@ class _ForgotPasswordOTPEmailPageState
                           fieldWidth: 50.42,
                         ),
                         textStyle: TextStyle(
-                          color: Color(
-                              0xFF7A4CB1), // เปลี่ยนสีของข้อความที่กรอกเป็นสีน้ำเงิน
-                          fontSize: 32, // ขนาดของข้อความ
-                          fontWeight: FontWeight.bold, // ความหนาของข้อความ
-                        ),
+                            color: Color(
+                                0xFF7A4CB1), // เปลี่ยนสีของข้อความที่กรอกเป็นสีน้ำเงิน
+                            fontSize: 32, // ขนาดของข้อความ
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Kanit' // ความหนาของข้อความ
+                            ),
                         backgroundColor: Colors.transparent,
                         cursorColor: Colors.black,
                         animationDuration: const Duration(milliseconds: 300),
