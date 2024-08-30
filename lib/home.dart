@@ -7,6 +7,8 @@ import 'package:des/fund.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/notification_list.dart';
 import 'package:des/report_problem.dart';
+import 'package:des/shared/extension.dart';
+import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -28,6 +30,7 @@ import 'shared/config.dart';
 import 'main.dart';
 import 'shared/notification_service.dart';
 import 'webview_inapp.dart';
+import 'package:badges/badges.dart' as badges;
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
@@ -51,7 +54,7 @@ class _HomePageState extends State<HomePage> {
   List<dynamic>? dataCharts1;
   int? notificationCount = 0;
 
-  int addBadger = 0;
+  int notiCount = 0;
   int currentTabIndex = 0;
   int viewAdd = 4;
 
@@ -197,15 +200,34 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      child: Image.asset(
-                        MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? 'assets/images/notification.png'
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? 'assets/images/notification_d.png'
-                                : 'assets/images/notification_d-y.png',
-                        height: 35,
-                        width: 35,
-                      ),
+                      child: notiCount > 0
+                          ? badges.Badge(
+                              badgeContent: Text(
+                                notiCount.toString(),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              child: Image.asset(
+                                MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? 'assets/images/notification.png'
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? 'assets/images/notification_d.png'
+                                        : 'assets/images/notification_d-y.png',
+                                height: 35,
+                                width: 35,
+                              ),
+                            )
+                          : Image.asset(
+                              MyApp.themeNotifier.value == ThemeModeThird.light
+                                  ? 'assets/images/notification.png'
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? 'assets/images/notification_d.png'
+                                      : 'assets/images/notification_d-y.png',
+                              height: 35,
+                              width: 35,
+                            ),
                     ),
                   ],
                 ),
@@ -1102,7 +1124,7 @@ class _HomePageState extends State<HomePage> {
     FirebaseMessaging.instance.getToken().then((token) async {
       print('token: $token');
     });
-
+    _readNotiCount();
     setState(() {
       _futureBanner = _readBanner();
       // _futureNews = _readGetCourse();
@@ -1164,6 +1186,30 @@ class _HomePageState extends State<HomePage> {
     });
 
     // return Future.value(response);
+  }
+
+  Future<dynamic> _readNotiCount() async {
+    var profileMe = await ManageStorage.read('profileMe') ?? '';
+    Response<dynamic> response;
+    Dio dio = Dio();
+    try {
+      response = await dio
+          .post('$server/dcc-api/m/v2/notificationbooking/count', data: {
+        "email": profileMe['email'],
+      });
+      if (response.statusCode == 200) {
+        if (response.data['status'] == 'S') {
+          var modelNotiCount = response.data['objectData'];
+          setState(() {
+            notiCount = modelNotiCount['total'];
+          });
+          return response.data['objectData'];
+        }
+      }
+    } catch (e) {
+      logE(e);
+    }
+    return [];
   }
 
   Future<List<dynamic>> _readBanner() async {

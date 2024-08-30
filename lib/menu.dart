@@ -24,6 +24,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'shared/config.dart';
 import 'main.dart';
+import 'package:badges/badges.dart' as badges;
 
 class Menu extends StatefulWidget {
   const Menu({
@@ -39,7 +40,7 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   DateTime? currentBackPressTime;
   dynamic futureNotificationTire;
-  int addBadger = 0;
+  int notiCount = 0;
   int _currentPage = 0;
   String _profileCode = '';
   String _imageProfile = '';
@@ -393,12 +394,25 @@ class _MenuState extends State<Menu> {
                           width: 30,
                           color: color,
                         )
-                  : Image.asset(
-                      pathImage,
-                      height: 30,
-                      width: 30,
-                      color: color,
-                    ),
+                  : title == "แจ้งเตือน" && notiCount > 0
+                      ? badges.Badge(
+                          badgeContent: Text(
+                            notiCount.toString(),
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          child: Image.asset(
+                            pathImage,
+                            height: 30,
+                            width: 30,
+                            color: color,
+                          ),
+                        )
+                      : Image.asset(
+                          pathImage,
+                          height: 30,
+                          width: 30,
+                          color: color,
+                        ),
             ),
           ),
         ),
@@ -531,6 +545,7 @@ class _MenuState extends State<Menu> {
 
   _callRead() async {
     var img = await DCCProvider.getImageProfile();
+    _readNotiCount();
     setState(() => _imageProfile = img);
     setState(() {
       if (_profileCode != '') {
@@ -614,5 +629,29 @@ class _MenuState extends State<Menu> {
       value: jsonEncode(dataValue),
     );
     print(dataValue);
+  }
+
+  Future<dynamic> _readNotiCount() async {
+    var profileMe = await ManageStorage.read('profileMe') ?? '';
+    Response<dynamic> response;
+    Dio dio = Dio();
+    try {
+      response = await dio
+          .post('$server/dcc-api/m/v2/notificationbooking/count', data: {
+        "email": profileMe['email'],
+      });
+      if (response.statusCode == 200) {
+        if (response.data['status'] == 'S') {
+          var modelNotiCount = response.data['objectData'];
+          setState(() {
+            notiCount = modelNotiCount['total'];
+          });
+          return response.data['objectData'];
+        }
+      }
+    } catch (e) {
+      logE(e);
+    }
+    return [];
   }
 }
