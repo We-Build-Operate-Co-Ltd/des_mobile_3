@@ -53,6 +53,7 @@ class _HomePageState extends State<HomePage> {
 
   int addBadger = 0;
   int currentTabIndex = 0;
+  int viewAdd = 4;
 
   String? profileCode = "";
   String? profileUserName = "";
@@ -235,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                     // onLoading: _onLoading,
                     child: ListView(
                       padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).padding.top + 10,
+                        top: MediaQuery.of(context).padding.top + 5,
                         right: 15,
                         left: 15,
                       ),
@@ -247,154 +248,163 @@ class _HomePageState extends State<HomePage> {
                           builder: (_, snapshot) {
                             if (snapshot.hasData) {
                               if (snapshot.data.length == 0)
-                                return const SizedBox();
-                              return Column(
-                                children: [
-                                  SizedBox(
-                                    height: 180,
-                                    child: CarouselSlider(
-                                      options: CarouselOptions(
-                                        aspectRatio: 4,
-                                        enlargeCenterPage: true,
-                                        scrollDirection: Axis.horizontal,
-                                        viewportFraction: 0.9,
-                                        autoPlay: true,
-                                        enlargeFactor: 0.4,
-                                        enlargeStrategy:
-                                            CenterPageEnlargeStrategy.zoom,
-                                        onPageChanged: (index, reason) {
-                                          setState(() {
-                                            _currentBanner = index;
-                                          });
-                                        },
-                                      ),
-                                      items: snapshot.data.map<Widget>(
-                                        (item) {
-                                          int index =
-                                              snapshot.data.indexOf(item);
-                                          return GestureDetector(
-                                            onTap: () {
-                                              if (snapshot.data[_currentBanner]
-                                                      ['action'] ==
-                                                  'out') {
-                                                if (snapshot
-                                                        .data[_currentBanner]
-                                                    ['isPostHeader']) {
-                                                  var path = snapshot
+                                return const SizedBox(height: 200);
+                              return Container(
+                                height: 200,
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 180,
+                                      child: CarouselSlider(
+                                        options: CarouselOptions(
+                                          aspectRatio: 4,
+                                          enlargeCenterPage: true,
+                                          scrollDirection: Axis.horizontal,
+                                          viewportFraction: 0.9,
+                                          autoPlay: true,
+                                          enlargeFactor: 0.4,
+                                          enlargeStrategy:
+                                              CenterPageEnlargeStrategy.zoom,
+                                          onPageChanged: (index, reason) {
+                                            setState(() {
+                                              _currentBanner = index;
+                                            });
+                                          },
+                                        ),
+                                        items: snapshot.data.map<Widget>(
+                                          (item) {
+                                            int index =
+                                                snapshot.data.indexOf(item);
+                                            return GestureDetector(
+                                              onTap: () {
+                                                if (snapshot.data[
+                                                            _currentBanner]
+                                                        ['action'] ==
+                                                    'out') {
+                                                  if (snapshot
                                                           .data[_currentBanner]
-                                                      ['linkUrl'];
-                                                  if (profileCode != '') {
-                                                    var splitCheck = path
-                                                        .split('')
-                                                        .reversed
-                                                        .join();
-                                                    if (splitCheck[0] != "/") {
-                                                      path = path + "/";
+                                                      ['isPostHeader']) {
+                                                    var path = snapshot.data[
+                                                            _currentBanner]
+                                                        ['linkUrl'];
+                                                    if (profileCode != '') {
+                                                      var splitCheck = path
+                                                          .split('')
+                                                          .reversed
+                                                          .join();
+                                                      if (splitCheck[0] !=
+                                                          "/") {
+                                                        path = path + "/";
+                                                      }
+                                                      var codeReplae = "B" +
+                                                          profileCode!
+                                                              .replaceAll(
+                                                                  '-', '') +
+                                                          snapshot.data[
+                                                                  _currentBanner]
+                                                                  ['code']
+                                                              .replaceAll(
+                                                                  '-', '');
+                                                      // launchUrl(Uri.parse('$path$codeReplae'),
+                                                      //     mode:
+                                                      //         LaunchMode.externalApplication);
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (_) =>
+                                                              WebViewInAppPage(
+                                                            url:
+                                                                "$path$codeReplae",
+                                                            title: snapshot
+                                                                        .data[
+                                                                    _currentBanner]
+                                                                ['title'],
+                                                          ),
+                                                        ),
+                                                      );
                                                     }
-                                                    var codeReplae = "B" +
-                                                        profileCode!.replaceAll(
-                                                            '-', '') +
-                                                        snapshot.data[
-                                                                _currentBanner]
-                                                                ['code']
-                                                            .replaceAll(
-                                                                '-', '');
-                                                    // launchUrl(Uri.parse('$path$codeReplae'),
-                                                    //     mode:
-                                                    //         LaunchMode.externalApplication);
+                                                  } else
+                                                    // launchUrl(
+                                                    //     Uri.parse(snapshot
+                                                    //         .data[_currentBanner]['linkUrl']),
+                                                    //     mode: LaunchMode.externalApplication);
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
                                                         builder: (_) =>
                                                             WebViewInAppPage(
-                                                          url:
-                                                              "$path$codeReplae",
+                                                          url: snapshot.data[
+                                                                  _currentBanner]
+                                                              ['linkUrl'],
                                                           title: snapshot.data[
                                                                   _currentBanner]
                                                               ['title'],
                                                         ),
                                                       ),
                                                     );
-                                                  }
-                                                } else
-                                                  // launchUrl(
-                                                  //     Uri.parse(snapshot
-                                                  //         .data[_currentBanner]['linkUrl']),
-                                                  //     mode: LaunchMode.externalApplication);
+                                                } else if (snapshot.data[
+                                                            _currentBanner]
+                                                        ['action'] ==
+                                                    'in') {
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                      builder: (_) =>
-                                                          WebViewInAppPage(
-                                                        url: snapshot.data[
-                                                                _currentBanner]
-                                                            ['linkUrl'],
-                                                        title: snapshot.data[
-                                                                _currentBanner]
-                                                            ['title'],
+                                                      builder: (context) =>
+                                                          DetailPage(
+                                                        slug: 'mock',
+                                                        model: snapshot.data[
+                                                            _currentBanner],
                                                       ),
                                                     ),
                                                   );
-                                              } else if (snapshot
-                                                          .data[_currentBanner]
-                                                      ['action'] ==
-                                                  'in') {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        DetailPage(
-                                                      slug: 'mock',
-                                                      model: snapshot
-                                                          .data[_currentBanner],
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                            },
-                                            child: ClipRRect(
-                                              borderRadius: _currentBanner ==
-                                                      index
-                                                  ? BorderRadius.all(
-                                                      Radius.circular(20))
-                                                  : BorderRadius.circular(0),
-                                              child: CachedNetworkImage(
-                                                imageUrl: item['imageUrl'],
-                                                fit: BoxFit.cover,
-                                                width: double.infinity,
-                                                height: double.infinity,
+                                                }
+                                              },
+                                              child: ClipRRect(
+                                                borderRadius: _currentBanner ==
+                                                        index
+                                                    ? BorderRadius.all(
+                                                        Radius.circular(20))
+                                                    : BorderRadius.circular(0),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: item['imageUrl'],
+                                                  fit: BoxFit.cover,
+                                                  width: double.infinity,
+                                                  height: double.infinity,
+                                                ),
                                               ),
-                                            ),
-                                          );
-                                        },
-                                      ).toList(),
+                                            );
+                                          },
+                                        ).toList(),
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: snapshot.data.map<Widget>((url) {
-                                      int index = snapshot.data.indexOf(url);
-                                      return Container(
-                                        width: _currentBanner == index
-                                            ? 17.5
-                                            : 7.0,
-                                        height: 7.0,
-                                        margin: EdgeInsets.all(2.0),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          color: _currentBanner == index
-                                              ? Color(0XFFBD4BF7)
-                                              : Color(0XFFDDDDDD),
-                                        ),
-                                      );
-                                    }).toList(),
-                                  ),
-                                ],
+                                    SizedBox(height: 5),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children:
+                                          snapshot.data.map<Widget>((url) {
+                                        int index = snapshot.data.indexOf(url);
+                                        return Container(
+                                          width: _currentBanner == index
+                                              ? 17.5
+                                              : 7.0,
+                                          height: 7.0,
+                                          margin: EdgeInsets.all(2.0),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            color: _currentBanner == index
+                                                ? Color(0XFFBD4BF7)
+                                                : Color(0XFFDDDDDD),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ],
+                                ),
                               );
                             } else {
-                              return const SizedBox();
+                              return const SizedBox(height: 200);
                             }
                           },
                         ),
@@ -486,7 +496,7 @@ class _HomePageState extends State<HomePage> {
                                               ThemeModeThird.dark
                                           ? 'assets/images/data_warehouse_d.png'
                                           : 'assets/images/data_warehouse_d-y.png',
-                                  'คลังข้อมูล',
+                                  'คลังข้อมูล\nการเรียนรู้',
                                   type: 'serviceforyou',
                                   code: 'knowledge',
                                 ),
@@ -506,7 +516,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Text(
                           'หลักสูตรฝึกอบรม',
                           style: TextStyle(
@@ -706,10 +716,11 @@ class _HomePageState extends State<HomePage> {
                                           crossAxisSpacing: 15,
                                           mainAxisSpacing: 15),
                                   physics: const ClampingScrollPhysics(),
-                                  // itemCount: snapshot.data!.length,
-                                  itemCount: (snapshot.data.length >= 4
-                                      ? 4
-                                      : snapshot.data.length),
+                                  itemCount:
+                                      [...snapshot.data].take(viewAdd).length,
+                                  // itemCount: (snapshot.data.length >= 4
+                                  //     ? 4
+                                  //     : snapshot.data.length),
                                   itemBuilder: (context, index) =>
                                       containerRecommendedClass(
                                           snapshot.data![index]),
@@ -719,7 +730,45 @@ class _HomePageState extends State<HomePage> {
                             return const SizedBox();
                           },
                         ),
-                        Container(),
+                        const SizedBox(height: 15),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              viewAdd += 4;
+                            });
+                          },
+                          child: Container(
+                            height: 45,
+                            decoration: BoxDecoration(
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.white
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                              borderRadius: BorderRadius.circular(25),
+                              border: Border.all(
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Theme.of(context).custom.b325f8_w_fffd57
+                                    : Colors.black,
+                              ),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'ดูเพิ่มเติม',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Theme.of(context).custom.b325f8_w_fffd57
+                                    : Colors.black,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
                         SizedBox(
                             height: 20 + MediaQuery.of(context).padding.bottom),
                       ],

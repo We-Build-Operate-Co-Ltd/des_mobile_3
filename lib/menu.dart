@@ -7,6 +7,7 @@ import 'package:des/booking_service.dart';
 import 'package:des/detail.dart';
 import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
+import 'package:des/notification_booking.dart';
 import 'package:des/policy.dart';
 import 'package:des/shared/dcc.dart';
 import 'package:des/shared/extension.dart';
@@ -309,8 +310,8 @@ class _MenuState extends State<Menu> {
           children: [
             _buildTap(0, 'หน้าหลัก', 'assets/images/home.png'),
             _buildTap(1, 'จองใช้บริการ', 'assets/images/calendar_menu.png'),
-            _buildTap(2, 'การเรียน', 'assets/images/re_skill.png'),
-            _buildTap(3, 'การเรียน', 'assets/images/noti_menu.png'),
+            _buildTap(2, 'Re-Skill', 'assets/images/re_skill.png'),
+            _buildTap(3, 'แจ้งเตือน', 'assets/images/noti_menu.png'),
             _buildTap(4, 'สมาชิก', _imageProfile, isNetwork: true),
           ],
         ),
@@ -458,6 +459,7 @@ class _MenuState extends State<Menu> {
       homePage,
       BookingServicePage(),
       LearningPage(),
+      NotificationBookingPage(),
       profilePage,
     ];
     super.initState();
@@ -614,4 +616,3 @@ class _MenuState extends State<Menu> {
     print(dataValue);
   }
 }
-
