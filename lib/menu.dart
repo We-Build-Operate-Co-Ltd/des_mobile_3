@@ -10,6 +10,7 @@ import 'package:des/login_first.dart';
 import 'package:des/notification_booking.dart';
 import 'package:des/notification_list.dart';
 import 'package:des/policy.dart';
+import 'package:des/shared/counterNotifier.dart';
 import 'package:des/shared/dcc.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/notification_service.dart';
@@ -21,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:des/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'shared/config.dart';
@@ -395,25 +397,29 @@ class _MenuState extends State<Menu> {
                           width: 30,
                           color: color,
                         )
-                  : title == "แจ้งเตือน" && notiCount > 0
-                      ? badges.Badge(
-                          badgeContent: Text(
-                            notiCount.toString(),
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          child: Image.asset(
-                            pathImage,
-                            height: 30,
-                            width: 30,
-                            color: color,
-                          ),
-                        )
-                      : Image.asset(
-                          pathImage,
-                          height: 30,
-                          width: 30,
-                          color: color,
-                        ),
+                  : Consumer<CounterNotifier>(
+                      builder: (context, counterNotifier, child) {
+                        return title == "แจ้งเตือน" && notiCount > 0
+                            ? badges.Badge(
+                                badgeContent: Text(
+                                  counterNotifier.counter.toString(),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                child: Image.asset(
+                                  pathImage,
+                                  height: 30,
+                                  width: 30,
+                                  color: color,
+                                ),
+                              )
+                            : Image.asset(
+                                pathImage,
+                                height: 30,
+                                width: 30,
+                                color: color,
+                              );
+                      },
+                    ),
             ),
           ),
         ),
@@ -541,6 +547,7 @@ class _MenuState extends State<Menu> {
         _callRead();
         _buildMainPopUp();
       }
+
       _currentPage = index;
     });
   }

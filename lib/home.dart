@@ -4,9 +4,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:des/detail.dart';
 import 'package:des/find_job.dart';
 import 'package:des/fund.dart';
+import 'package:des/menu.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/notification_list.dart';
 import 'package:des/report_problem.dart';
+import 'package:des/shared/counterNotifier.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
@@ -19,6 +21,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'dart:ui' as ui show ImageFilter;
 
@@ -45,6 +48,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // final _counter = CounterModel(0);
   final storage = const FlutterSecureStorage();
   DateTime? currentBackPressTime;
   final RefreshController _refreshController =
@@ -201,34 +205,39 @@ class _HomePageState extends State<HomePage> {
                         //   ),
                         // );
                       },
-                      child: notiCount > 0
-                          ? badges.Badge(
-                              badgeContent: Text(
-                                notiCount.toString(),
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              child: Image.asset(
-                                MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? 'assets/images/notification.png'
-                                    : MyApp.themeNotifier.value ==
-                                            ThemeModeThird.dark
-                                        ? 'assets/images/notification_d.png'
-                                        : 'assets/images/notification_d-y.png',
-                                height: 35,
-                                width: 35,
-                              ),
-                            )
-                          : Image.asset(
-                              MyApp.themeNotifier.value == ThemeModeThird.light
-                                  ? 'assets/images/notification.png'
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? 'assets/images/notification_d.png'
-                                      : 'assets/images/notification_d-y.png',
-                              height: 35,
-                              width: 35,
-                            ),
+                      child: Consumer<CounterNotifier>(
+                        builder: (context, counterNotifier, child) {
+                          return notiCount > 0
+                              ? badges.Badge(
+                                  badgeContent: Text(
+                                    counterNotifier.counter.toString(),
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  child: Image.asset(
+                                    MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? 'assets/images/notification.png'
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? 'assets/images/notification_d.png'
+                                            : 'assets/images/notification_d-y.png',
+                                    height: 35,
+                                    width: 35,
+                                  ),
+                                )
+                              : Image.asset(
+                                  MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? 'assets/images/notification.png'
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? 'assets/images/notification_d.png'
+                                          : 'assets/images/notification_d-y.png',
+                                  height: 35,
+                                  width: 35,
+                                );
+                        },
+                      ),
                     ),
                   ],
                 ),

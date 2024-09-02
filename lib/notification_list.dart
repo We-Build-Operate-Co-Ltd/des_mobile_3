@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:des/category_selector.dart';
 import 'package:des/detail.dart';
+import 'package:des/shared/counterNotifier.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
@@ -8,6 +9,7 @@ import 'package:dio/dio.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'shared/config.dart';
@@ -95,6 +97,8 @@ class _NotificationListState extends State<NotificationListPage> {
       'title': 'ยังไม่อ่าน',
     },
   ];
+
+  var _counter = new CounterNotifier();
 
   @override
   void dispose() {
@@ -252,7 +256,7 @@ class _NotificationListState extends State<NotificationListPage> {
         };
       }).toList();
       // logWTF('list');
-      logWTF(list);
+      // logWTF(list);
       DateTime startOfWeek = now.subtract(Duration(days: now.weekday + 1));
       DateTime endOfWeek = startOfWeek.add(Duration(days: 7));
 
@@ -267,6 +271,7 @@ class _NotificationListState extends State<NotificationListPage> {
                 startOfWeek.isBefore(x['date']) && endOfWeek.isAfter(x['date']))
             .length;
         notiCount7 = list.where((x) => x['totalDays'] >= 7).length;
+        _counter.increment(notiCountNotRead);
         switch (_typeSelected) {
           case 1:
             list = list.where((x) => x['status'] == "N").toList();
@@ -388,6 +393,7 @@ class _NotificationListState extends State<NotificationListPage> {
 
   @override
   Widget build(BuildContext context) {
+    _counter = Provider.of<CounterNotifier>(context, listen: false);
     return Stack(
       children: <Widget>[
         Image.asset(
