@@ -40,7 +40,7 @@ class CusInpuDecoration {
       InputDecoration(
         label: Text(hintText),
         labelStyle: const TextStyle(
-          color: Color(0x807209B7),
+          color: Color(0xFF707070),
           fontSize: 12,
         ),
         alignLabelWithHint: true,
@@ -58,13 +58,15 @@ class CusInpuDecoration {
               : const Icon(Icons.visibility, size: 18),
         ),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: Colors.transparent,
         contentPadding: const EdgeInsets.only(left: 19, right: 19, bottom: 4),
         border: InputBorder.none,
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFFDDDDDD)),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
+          borderSide: BorderSide(color: Color(0xFFB325F8)),
         ),
-        enabledBorder: const OutlineInputBorder(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(color: Color(0xFFDDDDDD)),
         ),
         errorStyle: const TextStyle(
