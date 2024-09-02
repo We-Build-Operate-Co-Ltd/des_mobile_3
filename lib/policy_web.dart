@@ -78,7 +78,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 16),
             GestureDetector(
               onTap: () async {
                 // FocusScope.of(context).unfocus();
@@ -89,8 +89,8 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                 width: double.infinity,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(7),
+                  color: Color(0xFFB325F8),
+                  borderRadius: BorderRadius.circular(23),
                   boxShadow: const [
                     BoxShadow(
                       blurRadius: 4,
