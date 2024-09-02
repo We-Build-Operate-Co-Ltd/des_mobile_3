@@ -125,12 +125,12 @@ class _HomePageState extends State<HomePage> {
           body: Column(
             children: [
               Container(
+                height: 100,
                 padding: EdgeInsets.only(
                   top: MediaQuery.of(context).padding.top + 10,
                   right: 15,
                   left: 15,
                 ),
-                margin: EdgeInsets.only(bottom: 10),
                 child: Row(
                   children: [
                     Image.asset(
@@ -193,12 +193,13 @@ class _HomePageState extends State<HomePage> {
                       onTap: () {
                         // Fluttertoast.showToast(
                         //     msg: '''ยังไม่เปิดให้ใช้บริการ''');
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => NotificationBookingPage(),
-                          ),
-                        );
+                        widget.changePage!(3);
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => NotificationBookingPage(),
+                        //   ),
+                        // );
                       },
                       child: notiCount > 0
                           ? badges.Badge(
@@ -237,7 +238,9 @@ class _HomePageState extends State<HomePage> {
                   height: MediaQuery.of(context).size.height,
                   padding: EdgeInsets.only(top: 24),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.white
+                        : Colors.black,
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(24)),
                     boxShadow: [
@@ -1189,23 +1192,28 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<dynamic> _readNotiCount() async {
-    var profileMe = await ManageStorage.read('profileMe') ?? '';
+    var profileMe = await ManageStorage.readDynamic('profileMe');
+    // setState(() {
+    //   notiCount = int.parse(ManageStorage.read("notiCount") ?? 0);
+    // });
     Response<dynamic> response;
     Dio dio = Dio();
     try {
-      response = await dio
-          .post('$server/dcc-api/m/v2/notificationbooking/count', data: {
-        "email": profileMe['email'],
-      });
-      if (response.statusCode == 200) {
-        if (response.data['status'] == 'S') {
-          var modelNotiCount = response.data['objectData'];
-          setState(() {
-            notiCount = modelNotiCount['total'];
-          });
-          return response.data['objectData'];
-        }
+      Response response = await Dio().post(
+        '$server/dcc-api/m/v2/notificationbooking/read',
+        data: {
+          'email': profileMe['email'],
+        },
+      );
+
+      // if (response.statusCode == 200) {
+      if (response.data['status'] == 'S') {
+        var modelNotiCount = [...response.data['objectData']];
+        setState(() {
+          notiCount = modelNotiCount.where((x) => x['status'] == "N").length;
+        });
       }
+      // }
     } catch (e) {
       logE(e);
     }

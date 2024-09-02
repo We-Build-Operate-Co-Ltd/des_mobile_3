@@ -8,6 +8,7 @@ import 'package:des/detail.dart';
 import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
 import 'package:des/notification_booking.dart';
+import 'package:des/notification_list.dart';
 import 'package:des/policy.dart';
 import 'package:des/shared/dcc.dart';
 import 'package:des/shared/extension.dart';
@@ -473,7 +474,8 @@ class _MenuState extends State<Menu> {
       homePage,
       BookingServicePage(),
       LearningPage(),
-      NotificationBookingPage(),
+      // NotificationBookingPage(),
+      NotificationListPage(changePage: _changePage),
       profilePage,
     ];
     super.initState();
@@ -549,7 +551,7 @@ class _MenuState extends State<Menu> {
     setState(() => _imageProfile = img);
     setState(() {
       if (_profileCode != '') {
-        pages[3] = profilePage;
+        pages[4] = profilePage;
       }
     });
   }
@@ -632,23 +634,25 @@ class _MenuState extends State<Menu> {
   }
 
   Future<dynamic> _readNotiCount() async {
-    var profileMe = await ManageStorage.read('profileMe') ?? '';
-    Response<dynamic> response;
+    var profileMe = await ManageStorage.readDynamic('profileMe');
+    // Response<dynamic> response;
     Dio dio = Dio();
     try {
-      response = await dio
-          .post('$server/dcc-api/m/v2/notificationbooking/count', data: {
-        "email": profileMe['email'],
-      });
-      if (response.statusCode == 200) {
-        if (response.data['status'] == 'S') {
-          var modelNotiCount = response.data['objectData'];
-          setState(() {
-            notiCount = modelNotiCount['total'];
-          });
-          return response.data['objectData'];
-        }
+      Response response = await Dio().post(
+        '$server/dcc-api/m/v2/notificationbooking/read',
+        data: {
+          'email': profileMe['email'],
+        },
+      );
+
+      // if (response.statusCode == 200) {
+      if (response.data['status'] == 'S') {
+        var modelNotiCount = [...response.data['objectData']];
+        setState(() {
+          notiCount = modelNotiCount.where((x) => x['status'] == "N").length;
+        });
       }
+      // }
     } catch (e) {
       logE(e);
     }
