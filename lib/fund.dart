@@ -998,21 +998,21 @@ class _FundPageState extends State<FundPage> {
     );
   }
 
-  String? _indexRank = '';
+  dynamic? _indexRank = '';
 
   _buildItemInvestor(dynamic data, index) {
     return InkWell(
       onTap: () async {
         setState(() {
-          _indexRank = data.toString();
+          _indexRank = data;
         });
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => FundDetailPage(
-                    indexRank: _indexRank!,
-                  )),
+            builder: (_) => FundDetailPage(indexRank: _indexRank!),
+          ),
         );
+        print('-------------_indexRank--------------${_indexRank}');
       },
       child: Container(
         padding: EdgeInsets.symmetric(
