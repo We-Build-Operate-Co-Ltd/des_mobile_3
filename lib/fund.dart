@@ -494,138 +494,141 @@ class _FundPageState extends State<FundPage> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (context) => Align(
-        alignment: Alignment.topCenter,
-        child: Container(
-          padding: EdgeInsets.all(20),
-          height: MediaQuery.of(context).size.height * 0.8,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.0)),
-          ),
-          child: Column(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              ListTile(
-                leading: Text(''),
-                title: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'กรองแหล่งทุน',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w500,
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Color(0xFFB325F8)
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
+      builder: (context) => StatefulBuilder(
+        builder: (BuildContext context, StateSetter MysetState) => Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+            padding: EdgeInsets.all(20),
+            height: MediaQuery.of(context).size.height * 0.8,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius:
+                  BorderRadius.vertical(bottom: Radius.circular(25.0)),
+            ),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                ListTile(
+                  leading: Text(''),
+                  title: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'กรองแหล่งทุน',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFFB325F8)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                      ),
                     ),
                   ),
-                ),
-                trailing: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    width: 35.0,
-                    height: 35.0,
-                    margin: EdgeInsets.all(5),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Image.asset(
-                        'assets/images/back-x.png',
-                        // color: Colors.white,
+                  trailing: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      width: 35.0,
+                      height: 35.0,
+                      margin: EdgeInsets.all(5),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Image.asset(
+                          'assets/images/back-x.png',
+                          // color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                height: 50,
-                child: TextField(
-                  onChanged: (text) {
-                    print("First text field: $text");
-                    setState(() {
-                      _filtter(text);
-                    });
-                  },
-                  style: TextStyle(
-                    color: const Color(0xff020202),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: 0.5,
-                  ),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color(0xfff1f1f1),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                    hintText: 'พิมพ์คำค้นหา',
-                    hintStyle: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0.5,
-                        decorationThickness: 6),
-                    prefixIcon: const Icon(Icons.search),
-                    prefixIconColor: Colors.black,
-                  ),
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'หมวดหมู่แหล่งทุน',
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontFamily: 'Kanit',
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-              SizedBox(height: 12),
-              _buildCategory(),
-              SizedBox(height: 12),
-              GestureDetector(
-                onTap: () {},
-                child: Container(
+                SizedBox(
                   height: 50,
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFB325F8),
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: const [
-                      BoxShadow(
-                        blurRadius: 4,
-                        color: Color(0x40F3D2FF),
-                        offset: Offset(0, 4),
-                      )
-                    ],
-                  ),
-                  child: const Text(
-                    'ค้นหาแหล่งทุน',
+                  child: TextField(
+                    onChanged: (text) {
+                      print("First text field: $text");
+                      setState(() {
+                        _filtter(text);
+                      });
+                    },
                     style: TextStyle(
-                      fontSize: 16,
+                      color: const Color(0xff020202),
+                      fontSize: 14,
                       fontWeight: FontWeight.w400,
-                      color: Colors.white,
+                      letterSpacing: 0.5,
+                    ),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: const Color(0xfff1f1f1),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
+                      hintText: 'พิมพ์คำค้นหา',
+                      hintStyle: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.5,
+                          decorationThickness: 6),
+                      prefixIcon: const Icon(Icons.search),
+                      prefixIconColor: Colors.black,
                     ),
                   ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 12,
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'หมวดหมู่แหล่งทุน',
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'Kanit',
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
+                SizedBox(height: 12),
+                _buildCategory(MysetState),
+                SizedBox(height: 12),
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    height: 50,
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFB325F8),
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: const [
+                        BoxShadow(
+                          blurRadius: 4,
+                          color: Color(0x40F3D2FF),
+                          offset: Offset(0, 4),
+                        )
+                      ],
+                    ),
+                    child: const Text(
+                      'ค้นหาแหล่งทุน',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -927,7 +930,7 @@ class _FundPageState extends State<FundPage> {
     );
   }
 
-  _buildCategory() {
+  _buildCategory(StateSetter MysetState) {
     return ListView.separated(
       shrinkWrap: true,
       padding: EdgeInsets.zero,
@@ -936,7 +939,7 @@ class _FundPageState extends State<FundPage> {
       separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (_, __) => GestureDetector(
         onTap: () {
-          setState(() {
+          MysetState(() {
             _categoryModel[__]['selected'] = !(_categoryModel[__]['selected']);
           });
         },
