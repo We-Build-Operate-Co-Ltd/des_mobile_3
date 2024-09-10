@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/fund_detail.dart';
+import 'package:des/menu.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
@@ -131,11 +132,6 @@ class _FundPageState extends State<FundPage> {
   ];
 
   void _handleSearch(String input) {
-    //   print('---------------$input');
-    //   _investor = [..._investorTemp]
-    //       .where((element) => element['annoucement'].contains(input))
-    //       .toList();
-
     _investor = [..._investorTemp]
         .where((element) => element['annoucement'].contains(input))
         .toList();
@@ -356,7 +352,7 @@ class _FundPageState extends State<FundPage> {
                                   Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'แหล่งทุนทั้งหมด',
+                                      'แหล่งทุนทั้งหมด ',
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 15,
@@ -364,7 +360,20 @@ class _FundPageState extends State<FundPage> {
                                       ),
                                     ),
                                   ),
-                                  _buildListInvestor(),
+                                  _investor.length != 0
+                                      ? _buildListInvestor()
+                                      : Text(
+                                          ' ไม่พบข้อมูล ',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            // fontWeight: FontWeight.w400,
+                                            fontSize: 20,
+                                            // color: Color(0xFFB325F8),
+
+                                            // color:
+                                            //     Colors.black.withOpacity(0.5),
+                                          ),
+                                        ),
                                   SizedBox(height: 20),
                                   GestureDetector(
                                     onTap: () {
@@ -750,39 +759,38 @@ class _FundPageState extends State<FundPage> {
 
   _buildListFundCategory() {
     return Container(
-      height: 25,
-      child: ListView.separated(
-        padding: EdgeInsets.symmetric(horizontal: 15),
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (_, __) => GestureDetector(
-          onTap: () {
-            setState(() => _typeSelected = __);
-            // _model = [];
-            // _callReadByJobCategory(_typeSelected, '');
-          },
-          child: Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-              color: __ == _typeSelected
-                  ? Color(0xFFB325F8)
-                  : Color(0xFFB325F8).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(17.5),
-            ),
-            child: Text(
-              cateFund[__],
-              style: TextStyle(
+        height: 25,
+        child: ListView.separated(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (_, __) => GestureDetector(
+            onTap: () {
+              setState(() => _typeSelected = __);
+              // _model = [];
+              // _callReadByJobCategory(_typeSelected, '');
+            },
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
                 color: __ == _typeSelected
-                    ? Colors.white
-                    : Color(0xFFB325F8).withOpacity(0.5),
+                    ? Color(0xFFB325F8)
+                    : Color(0xFFB325F8).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(17.5),
+              ),
+              child: Text(
+                cateFund[__],
+                style: TextStyle(
+                  color: __ == _typeSelected
+                      ? Colors.white
+                      : Color(0xFFB325F8).withOpacity(0.5),
+                ),
               ),
             ),
           ),
-        ),
-        separatorBuilder: (_, __) => const SizedBox(width: 5),
-        itemCount: cateFund.length,
-      ),
-    );
+          separatorBuilder: (_, __) => const SizedBox(width: 5),
+          itemCount: cateFund.length,
+        ));
   }
 
   _buildCategory(StateSetter MysetState) {
@@ -858,155 +866,155 @@ class _FundPageState extends State<FundPage> {
 
   _buildItemInvestor(dynamic data, index) {
     return InkWell(
-      onTap: () async {
-        setState(() {
-          // _indexRank = data;
-          data['catName'] = listCat.firstWhereOrNull(
-              (x) => x['cateId'] == data['category'])['nameTh'];
-        });
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => FundDetailPage(model: data!),
-          ),
-        );
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                height: 180,
-                width: 320,
-                decoration: BoxDecoration(
-                  // color: Color(0xFFB325F8),
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: Image.asset('assets/images/03.png'),
-              ),
+        onTap: () async {
+          setState(() {
+            // _indexRank = data;
+            data['catName'] = listCat.firstWhereOrNull(
+                (x) => x['cateId'] == data['category'])['nameTh'];
+          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => FundDetailPage(model: data!),
             ),
-            SizedBox(
-              height: 12,
-            ),
-            Text(
-              data['annoucement'],
-              style: TextStyle(
-                  fontFamily: 'Kanit',
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFFB325F8)),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Row(
-              children: [
-                Container(
-                  width: 22,
-                  height: 22,
+          );
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  height: 180,
+                  width: 320,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(7.0),
-                    color: Color(0xFFB325F8),
+                    // color: Color(0xFFB325F8),
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Image.asset('assets/images/work.png'),
-                  ),
+                  child: Image.asset('assets/images/03.png'),
                 ),
-                SizedBox(
-                  width: 6,
-                ),
-                Expanded(
-                  child: Text(
-                    data['companyName'],
-                    style: TextStyle(
-                      fontFamily: 'Kanit',
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black,
-                      overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Text(
+                data['annoucement'],
+                style: TextStyle(
+                    fontFamily: 'Kanit',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFFB325F8)),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: 22,
+                    height: 22,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(7.0),
+                      color: Color(0xFFB325F8),
                     ),
-                    maxLines: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Image.asset('assets/images/work.png'),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 6,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 22,
-                        height: 22,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(7.0),
-                          color: Color(0xFFB325F8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: Image.asset('assets/images/calendar_menu.png'),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 6,
-                      ),
-                      Text(
-                        DateFormat('dd/MM/yyyy').format(
-                          DateTime.parse(data['announceDate']),
-                        ),
-                        style: TextStyle(
-                          fontFamily: 'Kanit',
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
+                  SizedBox(
+                    width: 6,
                   ),
-                ),
-                Expanded(
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 22,
-                        height: 22,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(7.0),
-                          color: Color(0xFFB325F8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: Image.asset('assets/images/eye.png'),
-                        ),
+                  Expanded(
+                    child: Text(
+                      data['companyName'],
+                      style: TextStyle(
+                        fontFamily: 'Kanit',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        '120',
-                        style: TextStyle(
-                          fontFamily: 'Kanit',
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
+                      maxLines: 2,
+                    ),
                   ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
+                ],
+              ),
+              SizedBox(
+                height: 6,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 22,
+                          height: 22,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7.0),
+                            color: Color(0xFFB325F8),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child:
+                                Image.asset('assets/images/calendar_menu.png'),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 6,
+                        ),
+                        Text(
+                          DateFormat('dd/MM/yyyy').format(
+                            DateTime.parse(data['announceDate']),
+                          ),
+                          style: TextStyle(
+                            fontFamily: 'Kanit',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 22,
+                          height: 22,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7.0),
+                            color: Color(0xFFB325F8),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Image.asset('assets/images/eye.png'),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          '120',
+                          style: TextStyle(
+                            fontFamily: 'Kanit',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ));
   }
 
   _category() async {
@@ -1027,34 +1035,6 @@ class _FundPageState extends State<FundPage> {
       ).toList();
     });
   }
-  // _category() async {
-  //   Dio dio = Dio();
-  //   try {
-  //     var response = await dio.get(
-  //       'https://dcc.onde.go.th/dcc-api/api/masterdata/announcement/category',
-  //     );
-  //     if (response.statusCode == 200) {
-  //       List<dynamic> data = response.data;
-  //       setState(() {
-  //         // กำหนดค่าทั้ง listCat และ listCatTemp
-  //         listCat = data.map((item) {
-  //           return {
-  //             ...item,
-  //             'selected': false,
-  //           };
-  //         }).toList();
-  //         listCatTemp = List.from(
-  //             listCat); // ใช้ List.from เพื่อป้องกันการอ้างอิงค่าเดียวกัน
-  //       });
-  //     } else {
-  //       // ถ้า API ไม่ได้สถานะ 200
-  //       print('Failed to load categories, status code: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     // จัดการกับ error ถ้ามีการเชื่อมต่อผิดพลาด
-  //     print('Error: $e');
-  //   }
-  // }
 
   _callReadInvestor() async {
     Dio dio = new Dio();
