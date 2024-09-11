@@ -25,6 +25,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'fund.dart';
 import 'shared/config.dart';
 import 'main.dart';
 import 'package:badges/badges.dart' as badges;
@@ -483,6 +484,7 @@ class _MenuState extends State<Menu> {
       // NotificationBookingPage(),
       NotificationListPage(changePage: _changePage),
       profilePage,
+      FundPage(),
     ];
     super.initState();
   }
