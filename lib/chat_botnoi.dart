@@ -85,14 +85,23 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
           ),
           child: Row(
             children: [
-              InkWell(
+              GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
                 },
-                child: Image.asset(
-                  'assets/images/back.png',
-                  height: 40,
-                  width: 40,
+                child: Container(
+                  width: 35.0,
+                  height: 35.0,
+                  margin: EdgeInsets.all(5),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Image.asset(
+                      'assets/images/back_profile.png',
+                      // color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
               Expanded(
