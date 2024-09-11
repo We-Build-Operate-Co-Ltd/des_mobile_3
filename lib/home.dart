@@ -1359,7 +1359,8 @@ class _HomePageState extends State<HomePage> {
     } else if (param == 'job') {
       Navigator.push(context, MaterialPageRoute(builder: (_) => FindJobPage()));
     } else if (param == 'fund') {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => FundPage()));
+      // Navigator.push(context, MaterialPageRoute(builder: (_) => FundPage()));
+      widget.changePage!(5);
     } else if (param == 'skill') {
       Navigator.push(
         context,
