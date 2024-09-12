@@ -326,12 +326,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
         lineBottom(),
         GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => BookingServicePage(),
-              ),
-            );
+            widget.changePage!(1);
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (_) => BookingServicePage(),
+            //   ),
+            // );
           },
           child: _buildRow('การจองของฉัน'),
         ),
