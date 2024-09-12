@@ -184,7 +184,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
       child: Container(
         height: 40,
         width: 40,
-        padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+        padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           color: buttonTheme,

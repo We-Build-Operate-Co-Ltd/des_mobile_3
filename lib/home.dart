@@ -1363,25 +1363,28 @@ class _HomePageState extends State<HomePage> {
       // Navigator.push(context, MaterialPageRoute(builder: (_) => FundPage()));
       widget.changePage!(5);
     } else if (param == 'skill') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => MyClassAllPage(
-            title: 'ระบบส่งเสริม Re-skill',
-          ),
-        ),
-      );
-      // buildModalWaiting(context);
+      widget.changePage!(2);
+
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (_) => MyClassAllPage(
+      //       title: 'ระบบส่งเสริม Re-skill',
+      //     ),
+      //   ),
+      // );
     } else if (param == 'knowledge') {
+      widget.changePage!(2);
+
       // buildModalWaiting(context);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => MyClassAllPage(
-            title: 'คลังข้อมูล',
-          ),
-        ),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (_) => MyClassAllPage(
+      //       title: 'คลังข้อมูล',
+      //     ),
+      //   ),
+      // );
     } else if (param == 'report') {
       Navigator.of(context).push(
         MaterialPageRoute(

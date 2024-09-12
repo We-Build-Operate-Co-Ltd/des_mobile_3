@@ -435,7 +435,7 @@ class _MyCoursePageState extends State<MyCoursePage> {
       child: Container(
         height: 40,
         width: 40,
-        padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+        padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           color: buttonTheme,
@@ -513,7 +513,7 @@ class _MyCoursePageState extends State<MyCoursePage> {
           child: Container(
             height: 35,
             width: 35,
-            padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+            padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 color: MyApp.themeNotifier.value == ThemeModeThird.light

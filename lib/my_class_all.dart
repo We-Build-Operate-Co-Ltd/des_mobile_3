@@ -19,9 +19,10 @@ import 'course_detail.dart';
 import 'main.dart';
 
 class MyClassAllPage extends StatefulWidget {
-  MyClassAllPage({Key? key, this.title}) : super(key: key);
+  MyClassAllPage({Key? key, this.title, this.changePage}) : super(key: key);
 
   final title;
+  Function? changePage;
 
   @override
   _MyClassAllPageState createState() => _MyClassAllPageState();
@@ -423,8 +424,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                                       ),
                                     ),
                                     const SizedBox(height: 20),
-                                    if(_cateTypeSelected == 0)
-                                    _lmsCategory(),
+                                    if (_cateTypeSelected == 0) _lmsCategory(),
                                     const SizedBox(height: 10),
                                     lineBottom(),
                                     const SizedBox(height: 20),
@@ -781,7 +781,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
         ),
         const SizedBox(height: 20),
         _buildListModel(),
-        const SizedBox(height: 50),
+        const SizedBox(height: 120),
       ],
     );
   }
@@ -1081,7 +1081,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             ),
           ),
         ),
-        const SizedBox(height: 50),
+        const SizedBox(height: 120),
       ],
     );
   }
@@ -1418,7 +1418,9 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
       children: [
         InkWell(
           onTap: () {
-            Navigator.pop(context);
+            widget.changePage!(0);
+
+            // Navigator.pop(context);
             // Navigator.push(
             //   context,
             //   MaterialPageRoute(
@@ -1429,7 +1431,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
           child: Container(
             height: 35,
             width: 35,
-            padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+            padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 color: MyApp.themeNotifier.value == ThemeModeThird.light
@@ -1505,11 +1507,10 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
         itemBuilder: (_, __) => GestureDetector(
           onTap: () => setState(() {
             _cateTypeSelected = __;
-            if(_cateTypeSelected == 0){
+            if (_cateTypeSelected == 0) {
               textEternalSearch = '';
               _filterEternal();
-            }
-            else{
+            } else {
               textSearch = '';
               _filter();
             }

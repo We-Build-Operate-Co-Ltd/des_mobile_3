@@ -113,37 +113,37 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     physics: ClampingScrollPhysics(),
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // InkWell(
-                          //   onTap: () {
-
-                          //   },
-                          //   child: Container(
-                          //     height: 35,
-                          //     width: 35,
-                          //     padding: EdgeInsets.all(6),
-                          //     decoration: BoxDecoration(
-                          //       borderRadius: BorderRadius.circular(8),
-                          //       color: MyApp.themeNotifier.value ==
-                          //               ThemeModeThird.light
-                          //           ? Color(0xFFB325F8)
-                          //           : Colors.black,
-                          //       border: Border.all(
-                          //         color: MyApp.themeNotifier.value ==
-                          //                 ThemeModeThird.light
-                          //             ? Color(0xFFB325F8)
-                          //             : MyApp.themeNotifier.value ==
-                          //                     ThemeModeThird.dark
-                          //                 ? Colors.white
-                          //                 : Color(0xFFFFFD57),
-                          //       ),
-                          //     ),
-                          //     child: Image.asset(
-                          //       'assets/images/back_arrow.png',
-                          //     ),
-                          //   ),
-                          // ),
+                          InkWell(
+                            onTap: () {
+                              widget.changePage!(0);
+                            },
+                            child: Container(
+                              height: 35,
+                              width: 35,
+                              padding: EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFFB325F8)
+                                    : Colors.black,
+                                border: Border.all(
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Color(0xFFB325F8)
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
+                                ),
+                              ),
+                              child: Image.asset(
+                                'assets/images/back_arrow.png',
+                              ),
+                            ),
+                          ),
                           InkWell(
                             onTap: () {
                               Navigator.push(

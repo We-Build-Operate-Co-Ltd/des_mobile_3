@@ -7,6 +7,7 @@ import 'package:des/booking_service.dart';
 import 'package:des/detail.dart';
 import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
+import 'package:des/my_class_all.dart';
 import 'package:des/notification_booking.dart';
 import 'package:des/notification_list.dart';
 import 'package:des/policy.dart';
@@ -481,7 +482,7 @@ class _MenuState extends State<Menu> {
       // SizedBox(),
       homePage,
       BookingServicePage(),
-      LearningPage(),
+      MyClassAllPage(changePage: _changePage),
       // NotificationBookingPage(),
       NotificationListPage(changePage: _changePage),
       profilePage,
