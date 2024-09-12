@@ -111,12 +111,7 @@ class _ReportProblemPageState extends State<ReportProblemPage> {
                                       Align(
                                         alignment: Alignment.centerRight,
                                         child: GestureDetector(
-                                          onTap: () => Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (_) => ContactPage(),
-                                            ),
-                                          ),
+                                          onTap: () => {widget.changePage!(7)},
                                           child: Image.asset(
                                               'assets/images/arrow_next.png'),
                                         ),

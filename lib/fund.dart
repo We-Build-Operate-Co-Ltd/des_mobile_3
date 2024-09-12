@@ -38,7 +38,7 @@ class _FundPageState extends State<FundPage> {
   dynamic _investorTemp = [];
   List<dynamic> listCat = [];
   int _typeSelected = 0;
-  bool _loadingSubmit = false;
+  bool _loadingWidget = true;
   int i = 2;
 
   List<dynamic> cateFund = [
@@ -255,12 +255,12 @@ class _FundPageState extends State<FundPage> {
                                   height: 50,
                                   child: TextField(
                                     controller: _searchController,
-                                    // onChanged: (text) {
-                                    //   print("First text field: $text");
-                                    //   setState(() {
-                                    //     _filtter(text);
-                                    //   });
-                                    // },
+                                    onChanged: (text) {
+                                      // print("First text field: $text");
+                                      // setState(() {
+                                      //   _filtter(text);
+                                      // });
+                                    },
                                     style: TextStyle(
                                       color: const Color(0xff020202),
                                       fontSize: 14,
@@ -269,10 +269,26 @@ class _FundPageState extends State<FundPage> {
                                     ),
                                     decoration: InputDecoration(
                                       filled: true,
-                                      fillColor: const Color(0xfff1f1f1),
+                                      fillColor: Colors.white,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide(
+                                            color: Color(0xFFDDDDDD)),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide(
+                                            width: 1.0,
+                                            color: Color(
+                                                0xFFDDDDDD) // Border color when focused
+                                            ),
+                                      ),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
-                                        borderSide: BorderSide.none,
+                                        borderSide: BorderSide(
+                                            color: Color(
+                                                0xFFDDDDDD) // Default border color
+                                            ),
                                       ),
                                       hintText: 'พิมพ์คำค้นหา',
                                       hintStyle: TextStyle(
@@ -303,6 +319,7 @@ class _FundPageState extends State<FundPage> {
                                 GestureDetector(
                                   onTap: () {
                                     _handleSearch(_searchController.text);
+                                    _searchController.clear();
                                   },
                                   child: Container(
                                     height: 50,
@@ -343,16 +360,35 @@ class _FundPageState extends State<FundPage> {
                                     ),
                                   ),
                                 ),
-                                _investor.length != 0
-                                    ? _buildListInvestor()
-                                    : Text(
-                                        ' ไม่พบข้อมูล ',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 20,
+                                if (_loadingWidget)
+                                  Center(
+                                    child: CircularProgressIndicator(
+                                      color: Color(0xFFB325F8),
+                                    ),
+                                  )
+                                else
+                                  _investor.length != 0
+                                      ? _buildListInvestor() // แสดงรายการนักลงทุนถ้ามีข้อมูล
+                                      : Center(
+                                          child: Text(
+                                            'ไม่พบข้อมูล',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                            ),
+                                          ),
                                         ),
-                                      ),
                                 SizedBox(height: 20),
+                                // _investor.length != 0
+                                //     ? _buildListInvestor()
+                                //     : Text(
+                                //         ' ไม่พบข้อมูล ',
+                                //         textAlign: TextAlign.center,
+                                //         style: TextStyle(
+                                //           fontSize: 20,
+                                //         ),
+                                //       ),
+                                // SizedBox(height: 20),
                                 GestureDetector(
                                   onTap: () {
                                     setState(() {
@@ -473,10 +509,24 @@ class _FundPageState extends State<FundPage> {
                       ),
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: const Color(0xfff1f1f1),
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(color: Color(0xFFDDDDDD)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              width: 1.0,
+                              color:
+                                  Color(0xFFDDDDDD) // Border color when focused
+                              ),
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
+                          borderSide: BorderSide(
+                              color: Color(0xFFDDDDDD) // Default border color
+                              ),
                         ),
                         hintText: 'พิมพ์คำค้นหา',
                         hintStyle: TextStyle(
@@ -517,8 +567,6 @@ class _FundPageState extends State<FundPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      print(
-                          '----------------23------------${listCat.where((e) => e['selected']).map((m) => m['cateId'])}');
                       _investor = [..._investorTemp]
                           .where((element) =>
                               element['annoucement']
@@ -528,12 +576,13 @@ class _FundPageState extends State<FundPage> {
                                   .map((m) => m['cateId'])
                                   .contains(element['category']))
                           .toList();
-
-                      print('----------------24------------${[
-                        ..._investor
-                      ].length}');
-                      // _searchFilterController.clear();
+                      _searchFilterController.clear();
                       Navigator.pop(context);
+                      // print(
+                      //     '----------------23------------${listCat.where((e) => e['selected']).map((m) => m['cateId'])}');
+                      // print('----------------24------------${[
+                      //   ..._investor
+                      // ].length}');
                     },
                     child: Container(
                       height: 50,
@@ -780,7 +829,7 @@ class _FundPageState extends State<FundPage> {
       itemBuilder: (_, __) => GestureDetector(
         onTap: () {
           MysetState(() {
-            print('----cateId------${listCat[__]['cateId']}');
+            // print('----cateId------${listCat[__]['cateId']}');
 
             listCat[__]['selected'] = !(listCat[__]['selected']);
           });
@@ -1000,6 +1049,7 @@ class _FundPageState extends State<FundPage> {
         'https://dcc.onde.go.th/dcc-api/api/masterdata/announcement/category');
 
     setState(() {
+      _loadingWidget = true;
       listCat = response.data;
 
       listCat = (response.data as List).map(
@@ -1013,7 +1063,21 @@ class _FundPageState extends State<FundPage> {
     });
   }
 
+  // _callReadInvestor() async {
+  //   Dio dio = new Dio();
+  //   var response = await dio
+  //       .get('https://dcc.onde.go.th/dcc-api/api/InvestorAnnoucement/portal');
+
+  //   setState(() {
+  //     _investor = response.data;
+  //     _investorTemp = response.data;
+  //   });
+  // }
   _callReadInvestor() async {
+    setState(() {
+      _loadingWidget = true; // เริ่มโหลดข้อมูล
+    });
+
     Dio dio = new Dio();
     var response = await dio
         .get('https://dcc.onde.go.th/dcc-api/api/InvestorAnnoucement/portal');
@@ -1021,19 +1085,19 @@ class _FundPageState extends State<FundPage> {
     setState(() {
       _investor = response.data;
       _investorTemp = response.data;
+      _loadingWidget = false; // โหลดข้อมูลเสร็จแล้ว
     });
   }
+  // _filtter(param) async {
+  //   var temp = _tempModel
+  //       .where((dynamic e) => e['annoucement']
+  //           .toString()
+  //           .toUpperCase()
+  //           .contains(param.toString().toUpperCase()))
+  //       .toList();
 
-  _filtter(param) async {
-    var temp = _tempModel
-        .where((dynamic e) => e['annoucement']
-            .toString()
-            .toUpperCase()
-            .contains(param.toString().toUpperCase()))
-        .toList();
-
-    setState(() {
-      _model = temp;
-    });
-  }
+  //   setState(() {
+  //     _model = temp;
+  //   });
+  // }
 }

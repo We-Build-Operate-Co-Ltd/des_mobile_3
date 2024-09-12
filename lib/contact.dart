@@ -20,7 +20,7 @@ class _ContactPageState extends State<ContactPage> {
   late TextEditingController _searchController;
   Future<dynamic>? _futureModel;
   Future<dynamic>? _futureCategoryModel;
-  String _categoryCode = '01';
+  String _categoryCode = '';
 
   @override
   Widget build(BuildContext context) {
@@ -73,20 +73,16 @@ class _ContactPageState extends State<ContactPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.pop(context);
+                                      widget.changePage!(6);
+                                      // Navigator.pop(context);
                                     },
                                     child: Container(
                                       width: 35.0,
                                       height: 35.0,
                                       margin: EdgeInsets.all(5),
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Image.asset(
-                                          'assets/images/back_profile.png',
-                                          // color: Colors.white,
-                                        ),
+                                      child: Image.asset(
+                                        'assets/images/back_profile.png',
+                                        // color: Colors.white,
                                       ),
                                     ),
                                   ),

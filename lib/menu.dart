@@ -490,6 +490,7 @@ class _MenuState extends State<Menu> {
       profilePage,
       FundPage(changePage: _changePage),
       ReportProblemPage(changePage: _changePage),
+      ContactPage(changePage: _changePage),
     ];
     super.initState();
   }

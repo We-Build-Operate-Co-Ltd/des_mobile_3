@@ -1362,7 +1362,7 @@ class _HomePageState extends State<HomePage> {
     } else if (param == 'fund') {
       // Navigator.push(context, MaterialPageRoute(builder: (_) => FundPage()));
       widget.changePage!(5);
-    } else if (param == 'reportProblemPage') {
+    } else if (param == 'report') {
       widget.changePage!(6);
     } else if (param == 'skill') {
       widget.changePage!(2);
