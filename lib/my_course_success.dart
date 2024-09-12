@@ -399,7 +399,7 @@ class _MyCourseSuccessPageState extends State<MyCourseSuccessPage> {
         ),
         const SizedBox(height: 30),
         Container(
-          height: 153,
+          height: 143,
           width: 180,
           padding: EdgeInsets.symmetric(vertical: 25),
           decoration: BoxDecoration(
@@ -451,7 +451,7 @@ class _MyCourseSuccessPageState extends State<MyCourseSuccessPage> {
           },
           child: Container(
             width: double.infinity,
-            height: 50,
+            height: 40,
             alignment: Alignment.center,
             margin: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
@@ -491,7 +491,7 @@ class _MyCourseSuccessPageState extends State<MyCourseSuccessPage> {
           },
           child: Container(
             width: double.infinity,
-            height: 50,
+            height: 40,
             alignment: Alignment.center,
             margin: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(

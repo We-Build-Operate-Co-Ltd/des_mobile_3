@@ -336,7 +336,7 @@ class _MyCoursePageState extends State<MyCoursePage> {
         ),
         const SizedBox(height: 30),
         Container(
-          height: 153,
+          height: 143,
           width: 180,
           padding: EdgeInsets.symmetric(vertical: 25),
           decoration: BoxDecoration(
@@ -394,7 +394,7 @@ class _MyCoursePageState extends State<MyCoursePage> {
           },
           child: Container(
             width: double.infinity,
-            height: 50,
+            height: 40,
             alignment: Alignment.center,
             margin: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
@@ -425,6 +425,7 @@ class _MyCoursePageState extends State<MyCoursePage> {
             ),
           ),
         ),
+        SizedBox(height: 50),
       ],
     );
   }
