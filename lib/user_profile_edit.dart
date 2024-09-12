@@ -98,7 +98,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             key: 'profileMe',
           );
           setState(() => _loadingSubmit = false);
-          _dialog(text: 'อัพเดตข้อมูลเรียบร้อยแล้ว');
+          _dialogUpdateSuccess();
         } else {
           setState(() => _loadingSubmit = false);
           logE(response);
@@ -181,295 +181,303 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
 
   @override
   Widget build(BuildContext context) {
+    double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        flexibleSpace: _buildHead(),
-        automaticallyImplyLeading: false,
-      ),
       backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
           ? Colors.white
           : Colors.black,
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: ListView(
-          controller: scrollController,
-          shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
-          padding: const EdgeInsets.all(15.0),
-          children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                _modalImagePicker();
-              },
-              child: Center(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Stack(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 25),
+              height: 1000,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/new_bg.png"),
+                  alignment: Alignment.topCenter,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: SingleChildScrollView(
                 child: Container(
-                  height: 120,
-                  width: 120,
-                  padding: EdgeInsets.zero,
-                  child: Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(60),
-                        child: _imageFile != null
-                            ? Image.file(
-                                File(_imageFile!.path),
-                                fit: BoxFit.cover,
-                                height: 120,
-                                width: 120,
-                              )
-                            : Image.memory(
-                                base64Decode(_imageProfile),
-                                fit: BoxFit.cover,
-                                height: 120,
-                                width: 120,
-                                errorBuilder: (_, __, ___) => Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(60),
-                                    border: Border.all(
-                                      width: 1,
-                                      color: Color(0xFFA924F0),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'แก้ไขรูปภาพ',
-                                    style: TextStyle(),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                      ),
-                      Positioned(
-                          bottom: 5,
-                          right: 5,
+                  alignment: Alignment.bottomCenter,
+                  // height:  MediaQuery.of(context).size.height * .650,
+                  height: deviceHeight * 0.8,
+                  padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+                  decoration: BoxDecoration(
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.white
+                        : Colors.black,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20)),
+                  ),
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    physics: ClampingScrollPhysics(),
+                    children: <Widget>[
+                      _buildHead(),
+                      SizedBox(height: 15),
+                      GestureDetector(
+                        onTap: () {
+                          _modalImagePicker();
+                        },
+                        child: Center(
                           child: Container(
-                            height: 25,
-                            padding: EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
+                            height: 120,
+                            width: 120,
+                            padding: EdgeInsets.zero,
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(60),
+                                  child: _imageFile != null
+                                      ? Image.file(
+                                          File(_imageFile!.path),
+                                          fit: BoxFit.cover,
+                                          height: 120,
+                                          width: 120,
+                                        )
+                                      : Image.memory(
+                                          base64Decode(_imageProfile),
+                                          fit: BoxFit.cover,
+                                          height: 120,
+                                          width: 120,
+                                          errorBuilder: (_, __, ___) =>
+                                              Container(
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(60),
+                                              border: Border.all(
+                                                width: 1,
+                                                color: Color(0xFFA924F0),
+                                              ),
+                                            ),
+                                            child: Text(
+                                              'แก้ไขรูปภาพ',
+                                              style: TextStyle(),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                ),
+                                Positioned(
+                                    bottom: 5,
+                                    right: 5,
+                                    child: Container(
+                                      height: 25,
+                                      padding: EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.light
+                                              ? Color(0xFF7A4CB1)
+                                              : Colors.black,
+                                          border: Border.all(
+                                            width: 1,
+                                            style: BorderStyle.solid,
+                                            color: MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.light
+                                                ? Color(0xFF7A4CB1)
+                                                : MyApp.themeNotifier.value ==
+                                                        ThemeModeThird.dark
+                                                    ? Colors.white
+                                                    : Color(0xFFFFFD57),
+                                          )),
+                                      child: Image.asset(
+                                        'assets/images/camera.png',
+                                        color: MyApp.themeNotifier.value ==
+                                                ThemeModeThird.light
+                                            ? Colors.white
+                                            : MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.dark
+                                                ? Colors.white
+                                                : Color(0xFFFFFD57),
+                                        // height: 25,
+                                      ),
+                                    )),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 32),
+                      TextFormField(
+                        controller: txtFirstName,
+                        decoration: _decorationBase(
+                          context,
+                          hintText: 'ชื่อ',
+                          readOnly: true,
+                        ),
+                        style: TextStyle(color: Theme.of(context).custom.b_w_y),
+                        readOnly: true,
+                        cursorColor: MyApp.themeNotifier.value ==
+                                ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                      ),
+                      SizedBox(height: 15),
+                      TextFormField(
+                        controller: txtLastName,
+                        decoration: _decorationBase(
+                          context,
+                          hintText: 'นามสกุล',
+                          readOnly: true,
+                        ),
+                        readOnly: true,
+                        style: TextStyle(
+                          fontFamily: 'Kanit',
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        ),
+                        cursorColor: MyApp.themeNotifier.value ==
+                                ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                      ),
+                      SizedBox(height: 15),
+                      SizedBox(height: 30),
+                      Text(
+                        'การติดต่อ',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Kanit',
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        controller: txtPhone,
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                          LengthLimitingTextInputFormatter(10),
+                        ],
+                        decoration:
+                            _decorationBase(context, hintText: 'เบอร์โทรศัพท์'),
+                        style: TextStyle(
+                          color: Theme.of(context).custom.b_w_y,
+                        ),
+                        cursorColor: MyApp.themeNotifier.value ==
+                                ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.black
+                                : Color(0xFFFFFD57),
+                      ),
+                      SizedBox(height: 15),
+                      TextFormField(
+                        controller: txtEmail,
+                        readOnly: true,
+                        decoration: _decorationBase(
+                          context,
+                          hintText: 'อีเมล',
+                          readOnly: true,
+                        ),
+                        style: TextStyle(
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        ),
+                        cursorColor: MyApp.themeNotifier.value ==
+                                ThemeModeThird.light
+                            ? Color(0xFF7A4CB1)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                      ),
+                      SizedBox(height: 40),
+                      Stack(
+                        children: [
+                          GestureDetector(
+                            onTap: () => submit(),
+                            child: Container(
+                              margin: EdgeInsets.only(top: 20),
+                              height: 50,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
                                 color: MyApp.themeNotifier.value ==
                                         ThemeModeThird.light
-                                    ? Color(0xFF7A4CB1)
+                                    ? Color(0xFFB325F8)
                                     : Colors.black,
                                 border: Border.all(
-                                  width: 1,
-                                  style: BorderStyle.solid,
                                   color: MyApp.themeNotifier.value ==
                                           ThemeModeThird.light
-                                      ? Color(0xFF7A4CB1)
+                                      ? Color(0xFFB325F8)
                                       : MyApp.themeNotifier.value ==
                                               ThemeModeThird.dark
                                           ? Colors.white
                                           : Color(0xFFFFFD57),
-                                )),
-                            child: Image.asset(
-                              'assets/images/camera.png',
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.white
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                'บันทึกข้อมูล',
+                                style: TextStyle(
+                                  fontFamily: 'Kanit',
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
                                       ? Colors.white
-                                      : Color(0xFFFFFD57),
-                              // height: 25,
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
+                                  fontSize: 16,
+                                ),
+                              ),
                             ),
-                          )),
+                          ),
+                          if (_loadingSubmit)
+                            Positioned.fill(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                            ),
+                        ],
+                      )
                     ],
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 32),
-            TextFormField(
-              controller: txtFirstName,
-              decoration: _decorationBase(
-                context,
-                hintText: 'ชื่อ',
-                readOnly: true,
-              ),
-              style: TextStyle(color: Theme.of(context).custom.b_w_y),
-              readOnly: true,
-              cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Color(0xFF7A4CB1)
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
-            ),
-            SizedBox(height: 15),
-            TextFormField(
-              controller: txtLastName,
-              decoration: _decorationBase(
-                context,
-                hintText: 'นามสกุล',
-                readOnly: true,
-              ),
-              readOnly: true,
-              style: TextStyle(
-                fontFamily: 'Kanit',
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Colors.black
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
-              ),
-              cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Color(0xFF7A4CB1)
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
-            ),
-            SizedBox(height: 15),
-            SizedBox(height: 30),
-            Text(
-              'การติดต่อ',
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'Kanit',
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Colors.black
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
-              ),
-            ),
-            SizedBox(height: 10),
-            TextFormField(
-              controller: txtPhone,
-              keyboardType: TextInputType.phone,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                LengthLimitingTextInputFormatter(10),
-              ],
-              decoration: _decorationBase(context, hintText: 'เบอร์โทรศัพท์'),
-              style: TextStyle(
-                color: Theme.of(context).custom.b_w_y,
-              ),
-              cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Color(0xFF7A4CB1)
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.black
-                      : Color(0xFFFFFD57),
-            ),
-            SizedBox(height: 15),
-            TextFormField(
-              controller: txtEmail,
-              readOnly: true,
-              decoration: _decorationBase(
-                context,
-                hintText: 'อีเมล',
-                readOnly: true,
-              ),
-              style: TextStyle(
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Colors.black
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
-              ),
-              cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Color(0xFF7A4CB1)
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
-            ),
-            SizedBox(height: 40),
-            Stack(
-              children: [
-                GestureDetector(
-                  onTap: () => submit(),
-                  child: Container(
-                    margin: EdgeInsets.only(top: 20),
-                    height: 50,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Color(0xFF7A4CB1)
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      'บันทึก',
-                      style: TextStyle(
-                        fontFamily: 'Kanit',
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Colors.white
-                            : Colors.black,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-                if (_loadingSubmit)
-                  Positioned.fill(
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                  ),
-              ],
-            )
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildHead() {
-    return Container(
-      height: 60 + MediaQuery.of(context).padding.top,
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.only(
-        left: 15,
-        right: 15,
-        top: MediaQuery.of(context).padding.top,
-      ),
-      color: MyApp.themeNotifier.value == ThemeModeThird.light
-          ? Colors.white
-          : Colors.black,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Container(
-              height: 40,
-              width: 40,
-              padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFF7A4CB1)
-                      : Colors.black,
-                  border: Border.all(
-                    width: 1,
-                    style: BorderStyle.solid,
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Color(0xFF7A4CB1)
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
-                  )),
-              child: Image.asset(
-                'assets/images/back_arrow.png',
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -655,6 +663,134 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
           );
         });
       },
+    );
+  }
+
+  Widget _buildHead() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            height: 35,
+            width: 35,
+            padding: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFFB325F8)
+                    : Colors.black,
+                border: Border.all(
+                  width: 1,
+                  style: BorderStyle.solid,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFB325F8)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                )),
+            child: Image.asset(
+              'assets/images/back_arrow.png',
+            ),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.all(5),
+          child: Text(
+            'แก้ไขข้อมูลส่วนตัว',
+            style: TextStyle(
+              fontSize: 24,
+              fontFamily: 'Kanit',
+              fontWeight: FontWeight.w500,
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFFB325F8)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  _dialogUpdateSuccess() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) => StatefulBuilder(
+        builder: (BuildContext context, StateSetter mSetState) {
+          return WillPopScope(
+            onWillPop: () => Future.value(false),
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              elevation: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SizedBox(
+                  height: 210,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Image.asset(
+                        'assets/images/update_success.png',
+                        height: 80,
+                        width: 80,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'บันทึกข้อมูลสำเร็จ!',
+                        style: TextStyle(
+                          color: Color(0xFF19AA6A),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        'บันทึกข้อมูลส่วนตัวที่คุณแก้ไขเรียบร้อยแล้ว',
+                        style: TextStyle(
+                          color: Color(0xFF000000),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 120,
+                          decoration: BoxDecoration(
+                            color: Color(0xFFB325F8),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'ตกลง',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

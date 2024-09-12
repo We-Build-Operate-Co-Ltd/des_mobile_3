@@ -8,6 +8,7 @@ import 'package:des/contact.dart';
 import 'package:des/detail.dart';
 import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
+import 'package:des/my_class_all.dart';
 import 'package:des/notification_booking.dart';
 import 'package:des/notification_list.dart';
 import 'package:des/policy.dart';
@@ -17,6 +18,7 @@ import 'package:des/shared/extension.dart';
 import 'package:des/shared/notification_service.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
+import 'package:des/user_profile_bk.dart';
 import 'package:des/user_profile.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -482,7 +484,7 @@ class _MenuState extends State<Menu> {
       // SizedBox(),
       homePage,
       BookingServicePage(),
-      LearningPage(),
+      MyClassAllPage(changePage: _changePage),
       // NotificationBookingPage(),
       NotificationListPage(changePage: _changePage),
       profilePage,

@@ -27,6 +27,7 @@ import 'dart:ui' as ui show ImageFilter;
 
 import 'chat_botnoi.dart';
 import 'course_detail.dart';
+import 'my_class_all_bk.dart';
 import 'my_class_all.dart';
 import 'notification_booking.dart';
 import 'shared/config.dart';
@@ -1364,25 +1365,28 @@ class _HomePageState extends State<HomePage> {
     } else if (param == 'reportProblemPage') {
       widget.changePage!(6);
     } else if (param == 'skill') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => MyClassAllPage(
-            title: 'ระบบส่งเสริม Re-skill',
-          ),
-        ),
-      );
-      // buildModalWaiting(context);
+      widget.changePage!(2);
+
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (_) => MyClassAllPage(
+      //       title: 'ระบบส่งเสริม Re-skill',
+      //     ),
+      //   ),
+      // );
     } else if (param == 'knowledge') {
+      widget.changePage!(2);
+
       // buildModalWaiting(context);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => MyClassAllPage(
-            title: 'คลังข้อมูล',
-          ),
-        ),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (_) => MyClassAllPage(
+      //       title: 'คลังข้อมูล',
+      //     ),
+      //   ),
+      // );
     } else if (param == 'report') {
       widget.changePage!(6);
       // Navigator.of(context).push(

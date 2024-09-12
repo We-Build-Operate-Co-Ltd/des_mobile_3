@@ -101,7 +101,8 @@ dependencies:
   url_launcher: ^6.1.6
   webview_flutter: ^2.0.13
   connectivity_plus: ^3.0.6
-  
+  top_modal_sheet: ^2.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
