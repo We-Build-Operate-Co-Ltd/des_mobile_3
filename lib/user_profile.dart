@@ -24,21 +24,21 @@ import 'history_of_apply_job.dart';
 import 'main.dart';
 import 'shared/dcc.dart';
 
-class UserProfileNewPage extends StatefulWidget {
-  UserProfileNewPage({
+class UserProfilePage extends StatefulWidget {
+  UserProfilePage({
     Key? key,
     this.changePage,
   }) : super(key: key);
-  late _UserProfilePageState userProfileNewPageState;
+  late _UserProfilePageState UserProfilePageState;
   Function? changePage;
 
   @override
-  State<UserProfileNewPage> createState() => _UserProfilePageState();
+  State<UserProfilePage> createState() => _UserProfilePageState();
 
-  getState() => userProfileNewPageState;
+  getState() => UserProfilePageState;
 }
 
-class _UserProfilePageState extends State<UserProfileNewPage> {
+class _UserProfilePageState extends State<UserProfilePage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
