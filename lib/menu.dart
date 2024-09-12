@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:des/booking_service.dart';
+import 'package:des/contact.dart';
 import 'package:des/detail.dart';
 import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
@@ -26,6 +27,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'fund.dart';
+import 'report_problem.dart';
 import 'shared/config.dart';
 import 'main.dart';
 import 'package:badges/badges.dart' as badges;
@@ -484,7 +486,8 @@ class _MenuState extends State<Menu> {
       // NotificationBookingPage(),
       NotificationListPage(changePage: _changePage),
       profilePage,
-      FundPage(),
+      FundPage(changePage: _changePage),
+      ReportProblemPage(changePage: _changePage),
     ];
     super.initState();
   }

@@ -7,7 +7,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'shared/theme_data.dart';
 
 class ContactPage extends StatefulWidget {
-  // const ContactPage({super.key, required this.category});
+  ContactPage({super.key, this.changePage});
+  Function? changePage;
 
   // final String category;
 
@@ -19,10 +20,16 @@ class _ContactPageState extends State<ContactPage> {
   late TextEditingController _searchController;
   Future<dynamic>? _futureModel;
   Future<dynamic>? _futureCategoryModel;
-  String _categoryCode = '';
+  String _categoryCode = '01';
 
   @override
   Widget build(BuildContext context) {
+    List<dynamic> categoryList = MockContact.mockContactCategoryList();
+
+    // Find the category that matches _categoryCode
+    var selectedCategory = categoryList.firstWhere(
+      (category) => category['code'] == _categoryCode,
+    );
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -47,114 +54,118 @@ class _ContactPageState extends State<ContactPage> {
                   ),
                   child: Container(
                     alignment: Alignment.bottomCenter,
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
+                    child: Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color:
+                              MyApp.themeNotifier.value == ThemeModeThird.light
+                                  ? Colors.white
+                                  : Colors.black,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20)),
                         ),
-                      ),
-                      elevation: 5,
-                      child: Container(
-                          padding: EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Colors.white
-                                : Colors.black,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.8,
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Container(
-                                        width: 35.0,
-                                        height: 35.0,
-                                        margin: EdgeInsets.all(5),
-                                        child: InkWell(
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Image.asset(
-                                            'assets/images/back_profile.png',
-                                            // color: Colors.white,
-                                          ),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      width: 35.0,
+                                      height: 35.0,
+                                      margin: EdgeInsets.all(5),
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Image.asset(
+                                          'assets/images/back_profile.png',
+                                          // color: Colors.white,
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      'เบอร์ติดต่อ',
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w500,
-                                        color: MyApp.themeNotifier.value ==
-                                                ThemeModeThird.light
-                                            ? Color(0xFFB325F8)
-                                            : MyApp.themeNotifier.value ==
-                                                    ThemeModeThird.dark
-                                                ? Colors.white
-                                                : Color(0xFFFFFD57),
-                                      ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'เบอร์ติดต่อ',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w500,
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Color(0xFFB325F8)
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Color(0xFFFFFD57),
                                     ),
-                                  ],
-                                ),
-                                SizedBox(height: 12),
-                                SizedBox(
-                                  height: 25,
-                                  width: double.infinity,
-                                  child: FutureBuilder(
-                                    future: _futureCategoryModel,
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        return ListView.separated(
-                                          scrollDirection: Axis.horizontal,
-                                          physics: ClampingScrollPhysics(),
-                                          itemBuilder: (_, index) =>
-                                              _builditemCategory(
-                                                  snapshot.data[index]),
-                                          separatorBuilder: (_, __) =>
-                                              const SizedBox(width: 10),
-                                          itemCount: snapshot.data.length,
-                                        );
-                                      } else {
-                                        return const SizedBox();
-                                      }
-                                    },
                                   ),
+                                ],
+                              ),
+                              SizedBox(height: 12),
+                              SizedBox(
+                                height: 25,
+                                width: double.infinity,
+                                child: FutureBuilder(
+                                  future: _futureCategoryModel,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return ListView.separated(
+                                        scrollDirection: Axis.horizontal,
+                                        physics: ClampingScrollPhysics(),
+                                        itemBuilder: (_, index) =>
+                                            _builditemCategory(
+                                                snapshot.data[index]),
+                                        separatorBuilder: (_, __) =>
+                                            const SizedBox(width: 10),
+                                        itemCount: snapshot.data.length,
+                                      );
+                                    } else {
+                                      return const SizedBox();
+                                    }
+                                  },
                                 ),
-                                Expanded(
-                                  child: FutureBuilder<dynamic>(
-                                    future: _futureModel,
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        return ListView.separated(
-                                          padding: EdgeInsets.only(top: 15),
-                                          itemBuilder: (_, index) =>
-                                              _buildItem(snapshot.data[index]),
-                                          separatorBuilder: (_, __) =>
-                                              const SizedBox(height: 10),
-                                          itemCount: snapshot.data.length,
-                                        );
-                                      } else {
-                                        return Center(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      }
-                                    },
-                                  ),
-                                )
-                              ],
-                            ),
-                          )),
-                    ),
+                              ),
+                              SizedBox(height: 12),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  ' ${selectedCategory['title']} (${selectedCategory['total']})',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFFB325F8)),
+                                ),
+                              ),
+                              Expanded(
+                                child: FutureBuilder<dynamic>(
+                                  future: _futureModel,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return ListView.separated(
+                                        padding: EdgeInsets.only(top: 15),
+                                        itemBuilder: (_, index) =>
+                                            _buildItem(snapshot.data[index]),
+                                        separatorBuilder: (_, __) =>
+                                            const SizedBox(height: 10),
+                                        itemCount: snapshot.data.length,
+                                      );
+                                    } else {
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                        )),
                   ),
                 ),
               ),

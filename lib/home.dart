@@ -1361,6 +1361,8 @@ class _HomePageState extends State<HomePage> {
     } else if (param == 'fund') {
       // Navigator.push(context, MaterialPageRoute(builder: (_) => FundPage()));
       widget.changePage!(5);
+    } else if (param == 'reportProblemPage') {
+      widget.changePage!(6);
     } else if (param == 'skill') {
       Navigator.push(
         context,
@@ -1382,11 +1384,12 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     } else if (param == 'report') {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => ReportProblemPage(),
-        ),
-      );
+      widget.changePage!(6);
+      // Navigator.of(context).push(
+      //   MaterialPageRoute(
+      //     builder: (context) => ReportProblemPage(),
+      //   ),
+      // );
     } else if (param == 'chat') {
       Navigator.of(context).push(
         MaterialPageRoute(
