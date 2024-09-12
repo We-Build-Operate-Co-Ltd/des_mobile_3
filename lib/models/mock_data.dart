@@ -144,6 +144,7 @@ class MockContact {
     String ranCode = String.fromCharCodes(Iterable.generate(
         12, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
     String img = 'http://122.155.223.63/td-doc/images/des/des_hall.png';
+
     List<dynamic> cat01 = [
       {
         'code': ranCode,
@@ -189,6 +190,7 @@ class MockContact {
         'description': '',
       },
     ];
+
     List<dynamic> cat03 = [
       {
         'code': ranCode,

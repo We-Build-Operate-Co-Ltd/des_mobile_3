@@ -59,11 +59,25 @@ class _RegisterPageState extends State<RegisterPage> {
     {'code': '4', 'title': '55 - 64 ปี', 'value': '55 - 64 ปี'},
     {'code': '5', 'title': '65 ปีขึ้นไป', 'value': '65 ปีขึ้นไป'},
   ];
+  List<dynamic> _typeuser = [
+    {
+      'key': '',
+      'value': 'ประเภทผู้ใช้งาน',
+    },
+    {
+      'key': '1',
+      'value': 'ผู้ฝช้งานทั่วไป',
+    },
+    {
+      'key': '2',
+      'value': 'เจ้ากน้าที่ศูนย์',
+    },
+  ];
 
   List<dynamic> _careerList = [
     {
       'key': '',
-      'value': 'เลือกอาชีพ',
+      'value': 'อาชีพ',
     },
     {
       'key': '1',
@@ -111,6 +125,7 @@ class _RegisterPageState extends State<RegisterPage> {
       'value': 'อื่นๆ',
     },
   ];
+
   List<dynamic> _favoriteList = [
     {
       'selected': false,
@@ -157,6 +172,7 @@ class _RegisterPageState extends State<RegisterPage> {
   String _gender = 'ชาย';
   String _ageRange = '15-20 ปี';
   String _careerSelected = '';
+  String __typeuserSelected = '';
   String _favoriteSelected = '';
 
   bool passwordVisibility = true;
@@ -211,21 +227,23 @@ class _RegisterPageState extends State<RegisterPage> {
             image: DecorationImage(
               image: AssetImage(
                 MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? "assets/images/bg_login_page.png"
-                    : "assets/images/bg_login_page-dark.png",
+                    ? "assets/images/BG.png"
+                    : "",
               ),
               fit: BoxFit.cover,
             ),
           ),
           child: Container(
-            padding: EdgeInsets.all(10),
-            alignment: Alignment.center,
+            alignment: Alignment.bottomCenter,
             child: Card(
               color: MyApp.themeNotifier.value == ThemeModeThird.light
                   ? Colors.white
                   : Colors.black,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                ),
               ),
               elevation: 5,
               child: Container(
@@ -238,7 +256,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: SizedBox(
-                  height: 559,
+                  height: 700,
                   child: FadingEdgeScrollView.fromScrollView(
                     gradientFractionOnEnd: 1.0,
                     gradientFractionOnStart: 0.3,
@@ -248,52 +266,52 @@ class _RegisterPageState extends State<RegisterPage> {
                       physics: ClampingScrollPhysics(),
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                width: 35.0,
+                                height: 35.0,
+                                margin: EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Image.asset(
+                                    'assets/images/back_profile.png',
+                                    // color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 10),
                             Text(
                               'สมัครสมาชิก',
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 24,
                                 fontWeight: FontWeight.w500,
                                 color: MyApp.themeNotifier.value ==
                                         ThemeModeThird.light
-                                    ? Colors.black
+                                    ? Color(0xFFB325F8)
                                     : MyApp.themeNotifier.value ==
                                             ThemeModeThird.dark
                                         ? Colors.white
                                         : Color(0xFFFFFD57),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                height: 25,
-                                width: 25,
-                                alignment: Alignment.center,
-                                child: Image.asset(
-                                  'assets/images/close_noti_list.png',
-                                  height: 18.52,
-                                  width: 18.52,
-                                  color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Colors.black
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.white
-                                          : Color(0xFFFFFD57),
-                                ),
-                              ),
-                            ),
                           ],
                         ),
-                        Text(
-                          'กรุณากรอกข้อมูลด้านล่างให้ครบเพื่อสมัครสมาชิก',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            color: Theme.of(context).custom.b_w_y,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 55),
+                          child: Text(
+                            'กรุณากรอกข้อมูลด้านล่างให้ครบเพื่อสมัครสมาชิก',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                              color: Theme.of(context).custom.b_w_y,
+                            ),
                           ),
                         ),
                         Form(
@@ -423,7 +441,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   String pattern = r'(^(?:[+0]9)?[0-9]{9,10}$)';
                                   RegExp regex = new RegExp(pattern);
                                   if (model!.isEmpty) {
-                                    return 'กรุณากรอกชื่อ.';
+                                    return 'กรุณากรอกหมายเลขโทรศัพท์.';
                                   } else if (!regex.hasMatch(model)) {
                                     return 'กรุณากรอกรูปแบบเบอร์ติดต่อให้ถูกต้อง.';
                                   } else {
@@ -431,7 +449,20 @@ class _RegisterPageState extends State<RegisterPage> {
                                   }
                                 },
                               ),
-                              SizedBox(height: 10),
+
+                              if (configRegister.toString() == "1")
+                                SizedBox(height: 10),
+                              if (configRegister.toString() == "1")
+                                _dropdown(
+                                  data: _careerList,
+                                  value: _careerSelected,
+                                  onChanged: (String value) {
+                                    setState(() {
+                                      _careerSelected = value;
+                                    });
+                                  },
+                                ),
+
                               // TextFormField(
                               //   controller: txtFirstName,
                               //   decoration: _decorationRegisterMember(
@@ -473,7 +504,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               //     }
                               //   },
                               // ),
-                              // SizedBox(height: 10),
+                              SizedBox(height: 10),
                               if (configRegister.toString() == "1")
                                 Text(
                                   'เพศ',
@@ -524,30 +555,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                         .toList(),
                                   ),
                                 ),
-                              if (configRegister.toString() == "1")
-                                SizedBox(height: 10),
-                              if (configRegister.toString() == "1")
-                                Text(
-                                  'อาชีพ',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500,
-                                    color: Theme.of(context).custom.b_W_fffd57,
-                                  ),
-                                ),
-                              if (configRegister.toString() == "1")
-                                SizedBox(height: 10),
-                              if (configRegister.toString() == "1")
-                                _dropdown(
-                                  data: _careerList,
-                                  value: _careerSelected,
-                                  onChanged: (String value) {
-                                    setState(() {
-                                      _careerSelected = value;
-                                    });
-                                  },
-                                ),
-                              SizedBox(height: 10),
+                              // if (configRegister.toString() == "1")
+                              //   SizedBox(height: 10),
+                              // if (configRegister.toString() == "1")
+                              // Text(
+                              //   'อาชีพ',
+                              //   style: TextStyle(
+                              //     fontSize: 13,
+                              //     fontWeight: FontWeight.w500,
+                              //     color: Theme.of(context).custom.b_W_fffd57,
+                              //   ),
+                              // ),
+                              // SizedBox(height: 10),
                               Text(
                                 'สิ่งที่สนใจ',
                                 style: TextStyle(
@@ -695,6 +714,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Fluttertoast.showToast(msg: 'กรุณาเลือกอาชีพ');
                   return;
                 }
+
                 if (_favoriteList.any((element) => element['selected'])) {
                   _submitRegister();
                 } else {
@@ -847,11 +867,14 @@ class _RegisterPageState extends State<RegisterPage> {
         ],
       ),
       child: DropdownButtonFormField(
-        icon: Image.asset(
-          'assets/images/arrow_down.png',
-          width: 16,
-          height: 8,
-          color: Theme.of(context).custom.b325f8_w_fffd57,
+        icon: Padding(
+          padding: EdgeInsets.only(right: 10),
+          child: Image.asset(
+            'assets/images/Drop1.png',
+            width: 16,
+            height: 8,
+            //  color: Theme.of(context).custom.b325f8_w_fffd57,
+          ),
         ),
         style: TextStyle(
           fontSize: 14,

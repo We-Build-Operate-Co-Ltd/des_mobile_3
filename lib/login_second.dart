@@ -170,6 +170,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                                 return null;
                               },
                             ),
+
                           if (_username.isNotEmpty) ...[
                             Row(
                               children: [
@@ -272,6 +273,7 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                               },
                             ),
                           ],
+
                           SizedBox(height: 10),
                           _buildButton(),
                           // SizedBox(height: 30),

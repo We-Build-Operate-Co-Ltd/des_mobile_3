@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:des/shared/counterNotifier.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/notification_service.dart';
 import 'package:des/shared/theme_data.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 
@@ -40,7 +42,12 @@ Future<void> main() async {
   HttpOverrides.global = MyHttpOverrides();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(const MyApp());
+    runApp(
+      ChangeNotifierProvider(
+        create: (context) => CounterNotifier(),
+        child: const MyApp(),
+      ),
+    );
   });
   // runApp(MyApp());
 }

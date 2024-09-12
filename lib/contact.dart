@@ -1,12 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:des/main.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ContactPage extends StatefulWidget {
-  const ContactPage({super.key, required this.category});
+import 'shared/theme_data.dart';
 
-  final String category;
+class ContactPage extends StatefulWidget {
+  // const ContactPage({super.key, required this.category});
+
+  // final String category;
 
   @override
   State<ContactPage> createState() => _ContactPageState();
@@ -24,128 +27,170 @@ class _ContactPageState extends State<ContactPage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          automaticallyImplyLeading: false,
-          flexibleSpace: Container(
-            width: double.infinity,
-            color: Colors.white,
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 20,
-              left: 15,
-              right: 15,
-            ),
-            child: Row(
-              children: [
-                _backButton(context),
-                Expanded(
-                  child: Text(
-                    'เบอร์ติดต่อ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
+        body: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              backgroundColor: Colors.transparent,
+              body: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? "assets/images/BG.png"
+                                : ""),
+                        fit: BoxFit.cover),
+                  ),
+                  child: Container(
+                    alignment: Alignment.bottomCenter,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        ),
+                      ),
+                      elevation: 5,
+                      child: Container(
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.white
+                                : Colors.black,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.8,
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Container(
+                                        width: 35.0,
+                                        height: 35.0,
+                                        margin: EdgeInsets.all(5),
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Image.asset(
+                                            'assets/images/back_profile.png',
+                                            // color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      'เบอร์ติดต่อ',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w500,
+                                        color: MyApp.themeNotifier.value ==
+                                                ThemeModeThird.light
+                                            ? Color(0xFFB325F8)
+                                            : MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.dark
+                                                ? Colors.white
+                                                : Color(0xFFFFFD57),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 12),
+                                SizedBox(
+                                  height: 25,
+                                  width: double.infinity,
+                                  child: FutureBuilder(
+                                    future: _futureCategoryModel,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return ListView.separated(
+                                          scrollDirection: Axis.horizontal,
+                                          physics: ClampingScrollPhysics(),
+                                          itemBuilder: (_, index) =>
+                                              _builditemCategory(
+                                                  snapshot.data[index]),
+                                          separatorBuilder: (_, __) =>
+                                              const SizedBox(width: 10),
+                                          itemCount: snapshot.data.length,
+                                        );
+                                      } else {
+                                        return const SizedBox();
+                                      }
+                                    },
+                                  ),
+                                ),
+                                Expanded(
+                                  child: FutureBuilder<dynamic>(
+                                    future: _futureModel,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return ListView.separated(
+                                          padding: EdgeInsets.only(top: 15),
+                                          itemBuilder: (_, index) =>
+                                              _buildItem(snapshot.data[index]),
+                                          separatorBuilder: (_, __) =>
+                                              const SizedBox(height: 10),
+                                          itemCount: snapshot.data.length,
+                                        );
+                                      } else {
+                                        return Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          )),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                SizedBox(width: 40),
-              ],
-            ),
-          ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-              SizedBox(
-                height: 35,
-                child: TextFormField(
-                  controller: _searchController,
-                  keyboardType: TextInputType.text,
-                  onEditingComplete: () {
-                    FocusScope.of(context).unfocus();
-                    _callRead();
-                  },
-                  decoration: _decorationSearch(
-                    context,
-                    hintText: 'ค้นหาเบอร์ติดต่อ',
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
-              SizedBox(
-                height: 25,
-                width: double.infinity,
-                child: FutureBuilder(
-                  future: _futureCategoryModel,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        physics: ClampingScrollPhysics(),
-                        itemBuilder: (_, index) =>
-                            _builditemCategory(snapshot.data[index]),
-                        separatorBuilder: (_, __) => const SizedBox(width: 10),
-                        itemCount: snapshot.data.length,
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  },
-                ),
-              ),
-              Expanded(
-                child: FutureBuilder<dynamic>(
-                  future: _futureModel,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.separated(
-                        padding: EdgeInsets.only(top: 15),
-                        itemBuilder: (_, index) =>
-                            _buildItem(snapshot.data[index]),
-                        separatorBuilder: (_, __) => const SizedBox(height: 10),
-                        itemCount: snapshot.data.length,
-                      );
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
-                ),
-              )
-            ],
-          ),
-        ),
+            )),
       ),
     );
   }
 
   Widget _builditemCategory(dynamic model) {
     bool thisItem = model['code'] == _categoryCode;
-    return GestureDetector(
-      onTap: () => setState(() {
-        _categoryCode = model['code'];
-        _callRead();
-      }),
-      child: Container(
-        height: 25,
-        alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(
-          color: thisItem ? Color(0xFFB325F8) : Color(0x1AB325F8),
-          borderRadius: BorderRadius.circular(12.5),
-        ),
-        child: Text(
-          model['title'],
-          style: TextStyle(
-            color: thisItem ? Colors.white : Color(0x80B325F8),
-            fontSize: 13,
-            fontWeight: thisItem ? FontWeight.w500 : FontWeight.w400,
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () => setState(() {
+            _categoryCode = model['code'];
+            _callRead();
+          }),
+          child: Container(
+            height: 25,
+            alignment: Alignment.center,
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              color: thisItem ? Color(0xFFB325F8) : Color(0x1AB325F8),
+              borderRadius: BorderRadius.circular(12.5),
+            ),
+            child: Text(
+              model['title'],
+              style: TextStyle(
+                color: thisItem ? Colors.white : Color(0x80B325F8),
+                fontSize: 13,
+                fontWeight: thisItem ? FontWeight.w500 : FontWeight.w400,
+              ),
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 
@@ -187,7 +232,7 @@ class _ContactPageState extends State<ContactPage> {
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF7A4CB1),
+                      color: Color(0xFFB325F8),
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -211,7 +256,7 @@ class _ContactPageState extends State<ContactPage> {
                     ),
                   ]),
               child: Image.asset(
-                'assets/images/phone_purple.png',
+                'assets/images/Icon zocial-call.png',
                 height: 22.7,
                 width: 22.7,
               ),
@@ -222,61 +267,52 @@ class _ContactPageState extends State<ContactPage> {
     );
   }
 
-  Widget _backButton(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Image.asset(
-        'assets/images/back.png',
-        height: 40,
-        width: 40,
-      ),
-    );
+  Widget _buildText(dynamic model) {
+    return Text(model['title']);
   }
 
-  static InputDecoration _decorationSearch(context, {String hintText = ''}) =>
-      InputDecoration(
-        label: Text(hintText),
-        labelStyle: const TextStyle(
-          color: Color(0xFF707070),
-          fontSize: 12,
-        ),
-        // hintText: hintText,
-        filled: true,
-        fillColor: Colors.transparent,
-        prefixIcon: Container(
-          padding: EdgeInsets.all(9),
-          child: Image.asset(
-            'assets/images/search.png',
-            color: Color(0xFF707070),
-          ),
-        ),
-        contentPadding: const EdgeInsets.fromLTRB(15.0, 2.0, 2.0, 2.0),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          borderSide: BorderSide(
-            color: Colors.black.withOpacity(0.2),
-          ),
-        ),
-        errorStyle: const TextStyle(
-          fontWeight: FontWeight.normal,
-          fontSize: 10.0,
-        ),
-      );
+  // static InputDecoration _decorationSearch(context, {String hintText = ''}) =>
+  //     InputDecoration(
+  //       label: Text(hintText),
+  //       labelStyle: const TextStyle(
+  //         color: Color(0xFF707070),
+  //         fontSize: 12,
+  //       ),
+  //       // hintText: hintText,
+  //       filled: true,
+  //       fillColor: Colors.transparent,
+  //       prefixIcon: Container(
+  //         padding: EdgeInsets.all(9),
+  //         child: Image.asset(
+  //           'assets/images/search.png',
+  //           color: Color(0xFF707070),
+  //         ),
+  //       ),
+  //       contentPadding: const EdgeInsets.fromLTRB(15.0, 2.0, 2.0, 2.0),
+  //       border: OutlineInputBorder(
+  //         borderRadius: BorderRadius.circular(20.0),
+  //         borderSide: BorderSide(color: Theme.of(context).primaryColor),
+  //       ),
+  //       focusedBorder: OutlineInputBorder(
+  //         borderRadius: BorderRadius.circular(20.0),
+  //         borderSide: BorderSide(color: Theme.of(context).primaryColor),
+  //       ),
+  //       enabledBorder: OutlineInputBorder(
+  //         borderRadius: BorderRadius.circular(20.0),
+  //         borderSide: BorderSide(
+  //           color: Colors.black.withOpacity(0.2),
+  //         ),
+  //       ),
+  //       errorStyle: const TextStyle(
+  //         fontWeight: FontWeight.normal,
+  //         fontSize: 10.0,
+  //       ),
+  //     );
 
   @override
   void initState() {
     _searchController = TextEditingController(text: '');
-    _categoryCode = widget.category;
+    // _categoryCode = widget.category;
     _callReadCategory();
     _callRead();
     super.initState();

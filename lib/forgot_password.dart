@@ -26,117 +26,154 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       },
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: Center(
-          child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                  MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? "assets/images/bg_login_page.png"
-                      : "assets/images/bg_login_page-dark.png",
-                ),
-                fit: BoxFit.cover,
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? "assets/images/BG.png"
+                    : "",
               ),
+              fit: BoxFit.cover,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // SizedBox(height: 120),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Card(
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Colors.white
-                        : Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              // SizedBox(height: 120),
+              Container(
+                height: 700,
+                child: Card(
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
+                      : Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15),
                     ),
-                    elevation: 5,
-                    child: Container(
-                      padding: EdgeInsets.all(20),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'ลืมรหัสผ่าน',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500,
-                                      color: MyApp.themeNotifier.value ==
-                                              ThemeModeThird.light
-                                          ? Colors.black
-                                          : MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.dark
-                                              ? Colors.white
-                                              : Color(0xFFFFFD57),
-                                    ),
-                                  ),
-                                  GestureDetector(
+                  ),
+                  elevation: 5,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.white
+                          : Colors.black,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                      ),
+                    ),
+                    padding: EdgeInsets.all(20),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  width: 35.0,
+                                  height: 35.0,
+                                  margin: EdgeInsets.all(5),
+                                  child: InkWell(
                                     onTap: () {
                                       Navigator.pop(context);
                                     },
                                     child: Image.asset(
-                                      'assets/images/close_noti_list.png',
-                                      height: 18.52,
-                                      width: 18.52,
-                                      color: MyApp.themeNotifier.value ==
-                                              ThemeModeThird.light
-                                          ? Colors.black
-                                          : MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.dark
-                                              ? Colors.white
-                                              : Color(0xFFFFFD57),
+                                      'assets/images/back_profile.png',
+                                      // color: Colors.white,
                                     ),
                                   ),
-                                ],
+                                ),
                               ),
+                              SizedBox(width: 10),
                               Text(
-                                'กรุณากรอกอีเมลเพื่อทำการรับรหัสเพื่อรีเซ็ตข้อมูลใหม่',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
-                                  color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Colors.black
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.white
-                                          : Color(0xFFFFFD57),
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              TextFormField(
-                                controller: _emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                decoration: _decorationRegisterMember(
-                                  context,
-                                  hintText: 'อีเมล',
-                                ),
+                                'ลืมรหัสผ่าน',
                                 style: TextStyle(
                                   fontFamily: 'Kanit',
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w500,
                                   color: MyApp.themeNotifier.value ==
                                           ThemeModeThird.light
-                                      ? Colors.black
+                                      ? Color(0xFFB325F8)
                                       : MyApp.themeNotifier.value ==
                                               ThemeModeThird.dark
                                           ? Colors.white
                                           : Color(0xFFFFFD57),
                                 ),
-                                cursorColor: MyApp.themeNotifier.value ==
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 55),
+                            child: Text(
+                              'กรุณากรอกอีเมลเพื่อรีเซ็ตข้อมูลใหม่',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                color: MyApp.themeNotifier.value ==
                                         ThemeModeThird.light
-                                    ? Color(0xFF7A4CB1)
+                                    ? Colors.black
                                     : MyApp.themeNotifier.value ==
                                             ThemeModeThird.dark
                                         ? Colors.white
                                         : Color(0xFFFFFD57),
-                                onFieldSubmitted: (value) {
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          TextFormField(
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: _decorationRegisterMember(
+                              context,
+                              hintText: 'อีเมล',
+                            ),
+                            style: TextStyle(
+                              fontFamily: 'Kanit',
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.black
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                            ),
+                            cursorColor: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFB325F8)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                            onFieldSubmitted: (value) {
+                              FocusScope.of(context).unfocus();
+                              final form = _formKey.currentState;
+                              if (form!.validate()) {
+                                form.save();
+                                _send();
+                              }
+                            },
+                            validator: (_emailController) {
+                              if (_emailController!.isEmpty) {
+                                return 'กรุณากรอก' + 'อีเมล' + '.';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.53),
+                          Stack(
+                            children: [
+                              InkWell(
+                                onTap: () async {
                                   FocusScope.of(context).unfocus();
                                   final form = _formKey.currentState;
                                   if (form!.validate()) {
@@ -144,78 +181,57 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                     _send();
                                   }
                                 },
-                                validator: (_emailController) {
-                                  if (_emailController!.isEmpty) {
-                                    return 'กรุณากรอก' + 'อีเมล' + '.';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              SizedBox(height: 20),
-                              Stack(
-                                children: [
-                                  InkWell(
-                                    onTap: () async {
-                                      FocusScope.of(context).unfocus();
-                                      final form = _formKey.currentState;
-                                      if (form!.validate()) {
-                                        form.save();
-                                        _send();
-                                      }
-                                    },
-                                    child: Container(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10),
-                                      alignment: Alignment.center,
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(23),
-                                        color: MyApp.themeNotifier.value ==
-                                                ThemeModeThird.light
-                                            ? Color(0xFF7A4CB1)
-                                            : MyApp.themeNotifier.value ==
-                                                    ThemeModeThird.dark
-                                                ? Colors.white
-                                                : Color(0xFFFFFD57),
-                                      ),
-                                      child: Text(
-                                        "รับรหัส",
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.light
-                                              ? Colors.white
-                                              : Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  alignment: Alignment.center,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(23),
+                                    color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Color(0xFFB325F8)
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
+                                  ),
+                                  child: Text(
+                                    "รับรหัส",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  if (_loading)
-                                    Positioned.fill(
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(23),
-                                          color: Colors.white.withOpacity(0.4),
-                                        ),
-                                        child: SizedBox(
-                                          height: 20,
-                                          width: 20,
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                      ),
-                                    ),
-                                ],
+                                ),
                               ),
-                            ]),
+                              if (_loading)
+                                Positioned.fill(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(23),
+                                      color: Colors.white.withOpacity(0.4),
+                                    ),
+                                    child: SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          )
+                        ],
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -256,7 +272,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(
             color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Color(0xFF7A4CB1)
+                ? Color(0xFFB325F8)
                 : MyApp.themeNotifier.value == ThemeModeThird.dark
                     ? Colors.white
                     : Color(0xFFFFFD57),

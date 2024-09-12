@@ -4,13 +4,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:des/detail.dart';
 import 'package:des/find_job.dart';
 import 'package:des/fund.dart';
-import 'package:des/menu.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/notification_list.dart';
 import 'package:des/report_problem.dart';
-import 'package:des/shared/counterNotifier.dart';
-import 'package:des/shared/extension.dart';
-import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -21,20 +17,17 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'dart:ui' as ui show ImageFilter;
 
 import 'chat_botnoi.dart';
 import 'course_detail.dart';
-import 'my_class_all_bk.dart';
 import 'my_class_all.dart';
 import 'notification_booking.dart';
 import 'shared/config.dart';
 import 'main.dart';
 import 'shared/notification_service.dart';
 import 'webview_inapp.dart';
-import 'package:badges/badges.dart' as badges;
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
@@ -49,7 +42,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // final _counter = CounterModel(0);
   final storage = const FlutterSecureStorage();
   DateTime? currentBackPressTime;
   final RefreshController _refreshController =
@@ -59,9 +51,8 @@ class _HomePageState extends State<HomePage> {
   List<dynamic>? dataCharts1;
   int? notificationCount = 0;
 
-  int notiCount = 0;
+  int addBadger = 0;
   int currentTabIndex = 0;
-  int viewAdd = 4;
 
   String? profileCode = "";
   String? profileUserName = "";
@@ -116,705 +107,679 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Image.asset(
-          "assets/images/new_bg.png",
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          fit: BoxFit.cover,
-        ),
-        Scaffold(
-          // backgroundColor: Theme.of(context).custom.primary,
-          backgroundColor: Colors.transparent,
-          body: Column(
-            children: [
-              Container(
-                height: 100,
-                padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).padding.top + 10,
-                  right: 15,
-                  left: 15,
-                ),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/Owl-10.png',
-                      height: 39,
-                      width: 48,
+    return Scaffold(
+      backgroundColor: Theme.of(context).custom.primary,
+      body: SmartRefresher(
+        enablePullDown: true,
+        enablePullUp: false,
+        controller: _refreshController,
+        onRefresh: onRefresh,
+        // onLoading: _onLoading,
+        child: ListView(
+          padding: EdgeInsets.only(
+            top: MediaQuery.of(context).padding.top + 10,
+            right: 15,
+            left: 15,
+          ),
+          shrinkWrap: true,
+          physics: const ClampingScrollPhysics(),
+          children: [
+            SizedBox(
+              height: 40,
+              child: Row(
+                children: [
+                  Image.asset(
+                    'assets/images/logo.png',
+                    height: 39,
+                    width: 48,
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    'ศูนย์ดิจิทัลชุมชน',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFF7A4CB1)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                      fontWeight: FontWeight.w700,
                     ),
-                    const SizedBox(width: 5),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'ศูนย์ดิจิทัลชุมชน',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Colors.white
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                            fontWeight: FontWeight.w600,
+                  ),
+                  const Expanded(child: SizedBox()),
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: () {
+                      buildModalSwitch(context);
+                    },
+                    child: Image.asset(
+                      MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? 'assets/images/icon_blind.png'
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? 'assets/images/icon_blind_d.png'
+                              : 'assets/images/icon_blind_d-y.png',
+                      height: 35,
+                      width: 35,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: () {
+                      // Fluttertoast.showToast(
+                      //     msg: '''ยังไม่เปิดให้ใช้บริการ''');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NotificationBookingPage(),
+                        ),
+                      );
+                    },
+                    child: Image.asset(
+                      MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? 'assets/images/notification.png'
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? 'assets/images/notification_d.png'
+                              : 'assets/images/notification_d-y.png',
+                      height: 35,
+                      width: 35,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFF53327A).withOpacity(.5)
+                        : Colors.black,
+                    blurRadius: 10,
+                    offset: Offset(0, 5), // changes position of shadow
+                  ),
+                ],
+                image: DecorationImage(
+                  image: AssetImage(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/card_purple_v2.png'
+                        : 'assets/images/card_black.png',
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => MyClassAllPage(
+                            title: 'คอร์สเรียนของคุณ',
                           ),
                         ),
-                        Text(
-                          'Digital Community Center',
-                          style: TextStyle(
-                            fontSize: 11,
+                      );
+                    },
+                    child: Container(
+                      // alignment: Alignment.centerLeft,
+                      height: 35,
+                      // width: MediaQuery.of(context).size.width - 100,
+                      decoration: BoxDecoration(
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.white
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Colors.black,
+                        borderRadius: BorderRadius.circular(46),
+                      ),
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 15),
+                          Image.asset(
+                            'assets/images/search.png',
+                            height: 16,
+                            width: 16,
                             color: MyApp.themeNotifier.value ==
                                     ThemeModeThird.light
-                                ? Colors.white
+                                ? Color(0xFF7A4CB1)
                                 : MyApp.themeNotifier.value ==
                                         ThemeModeThird.dark
-                                    ? Colors.white
+                                    ? Colors.black
                                     : Color(0xFFFFFD57),
-                            fontWeight: FontWeight.w600,
+                          ),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: Text(
+                              'ค้นหาคอร์สเรียน',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF7A4CB1)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.black
+                                        : Color(0xFFFFFD57),
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Container(
+                    height: 100,
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      scrollDirection: Axis.horizontal,
+                      physics: const ClampingScrollPhysics(),
+                      children: [
+                        // Container(
+                        //   width: 85,
+                        //   height: 85,
+                        //   child: columnButton(
+                        //     MyApp.themeNotifier.value == ThemeModeThird.light
+                        //         ? 'assets/images/icon_devcourse.png'
+                        //         : MyApp.themeNotifier.value ==
+                        //                 ThemeModeThird.dark
+                        //             ? 'assets/images/icon_devcourse.png'
+                        //             : 'assets/images/icon_devcourse.png',
+                        //     'DevCourse',
+                        //     code: 'devcourse',
+                        //   ),
+                        // ),
+                        Container(
+                          width: 85,
+                          // color: Colors.black,
+                          child: columnButton(
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/icon_market.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/icon_market.png'
+                                    : 'assets/images/icon_market.png',
+                            '''ด้านการพัฒนาผลิตภัณฑ์และการสื่อสารทางการตลาด''',
+                            code: 'market',
+                          ),
+                        ),
+                        Container(
+                          width: 85,
+                          height: 85,
+                          child: columnButton(
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/icon_digital.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/icon_digital.png'
+                                    : 'assets/images/icon_digital.png',
+                            'ด้านดิจิทัล',
+                            code: 'digital',
+                          ),
+                        ),
+                        Container(
+                          width: 75,
+                          child: columnButton(
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/icon_travel.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/icon_travel.png'
+                                    : 'assets/images/icon_travel.png',
+                            'ด้านการท่องเที่ยวเชิงการแพทย์และสุขภาพ',
+                            code: 'btn4',
+                          ),
+                        ),
+                        Container(
+                          width: 75,
+                          child: columnButton(
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/care_old.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/care_old_d.png'
+                                    : 'assets/images/care_old_d-y.png',
+                            'ด้านการดูแลผู้สูงอายุ',
+                            code: 'btn3',
+                          ),
+                        ),
+                        Container(
+                          width: 85,
+                          height: 85,
+                          child: columnButton(
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/modern_farmer.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/modern_farmer_d.png'
+                                    : 'assets/images/modern_farmer_d-y.png',
+                            'ด้านการเกษตรสมัยใหม่',
+                            code: 'btn1',
+                          ),
+                        ),
+                        Container(
+                          width: 75,
+                          child: columnButton(
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/community_business.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? 'assets/images/community_business_d.png'
+                                    : 'assets/images/community_business_d-y.png',
+                            'ด้านการจัดการธุรกิจชุมชน',
+                            code: 'btn2',
                           ),
                         ),
                       ],
                     ),
-                    const Expanded(child: SizedBox()),
-                    const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () {
-                        buildModalSwitch(context);
-                      },
-                      child: Image.asset(
-                        MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? 'assets/images/icon_blind.png'
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? 'assets/images/icon_blind_d.png'
-                                : 'assets/images/icon_blind_d-y.png',
-                        height: 35,
-                        width: 35,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () {
-                        // Fluttertoast.showToast(
-                        //     msg: '''ยังไม่เปิดให้ใช้บริการ''');
-                        widget.changePage!(3);
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => NotificationBookingPage(),
-                        //   ),
-                        // );
-                      },
-                      child: Consumer<CounterNotifier>(
-                        builder: (context, counterNotifier, child) {
-                          return notiCount > 0
-                              ? badges.Badge(
-                                  badgeContent: Text(
-                                    counterNotifier.counter.toString(),
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  child: Image.asset(
-                                    MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? 'assets/images/notification.png'
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? 'assets/images/notification_d.png'
-                                            : 'assets/images/notification_d-y.png',
-                                    height: 35,
-                                    width: 35,
-                                  ),
-                                )
-                              : Image.asset(
-                                  MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? 'assets/images/notification.png'
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? 'assets/images/notification_d.png'
-                                          : 'assets/images/notification_d-y.png',
-                                  height: 35,
-                                  width: 35,
-                                );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                  // Row(
+                  //   children: [
+                  //     Flexible(
+                  //       flex: 1,
+                  //       fit: FlexFit.tight,
+                  //       child: columnButton(
+                  //         MyApp.themeNotifier.value == ThemeModeThird.light
+                  //             ? 'assets/images/modern_farmer.png'
+                  //             : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  //                 ? 'assets/images/modern_farmer_d.png'
+                  //                 : 'assets/images/modern_farmer_d-y.png',
+                  //         'เกษตรกรสมัยใหม่',
+                  //         code: 'btn1',
+                  //       ),
+                  //     ),
+                  //     Flexible(
+                  //       flex: 1,
+                  //       fit: FlexFit.tight,
+                  //       child: columnButton(
+                  //         MyApp.themeNotifier.value == ThemeModeThird.light
+                  //             ? 'assets/images/community_business.png'
+                  //             : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  //                 ? 'assets/images/community_business_d.png'
+                  //                 : 'assets/images/community_business_d-y.png',
+                  //         'ธุรกิจชุมชน',
+                  //         code: 'btn2',
+                  //       ),
+                  //     ),
+                  //     Flexible(
+                  //       fit: FlexFit.tight,
+                  //       flex: 1,
+                  //       child: columnButton(
+                  //         MyApp.themeNotifier.value == ThemeModeThird.light
+                  //             ? 'assets/images/care_old.png'
+                  //             : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  //                 ? 'assets/images/care_old_d.png'
+                  //                 : 'assets/images/care_old_d-y.png',
+                  //         'ดูแลผู้สูงอายุ',
+                  //         code: 'btn3',
+                  //       ),
+                  //     ),
+                  //     Flexible(
+                  //       flex: 1,
+                  //       fit: FlexFit.tight,
+                  //       child: columnButton(
+                  //         MyApp.themeNotifier.value == ThemeModeThird.light
+                  //             ? 'assets/images/more.png'
+                  //             : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  //                 ? 'assets/images/more_d.png'
+                  //                 : 'assets/images/more_d-y.png',
+                  //         'ท่องเที่ยว',
+                  //         code: 'btn4',
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                ],
               ),
-              Expanded(
-                child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  padding: EdgeInsets.only(top: 24),
-                  decoration: BoxDecoration(
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Colors.white
-                        : Colors.black,
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(24)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF000000).withOpacity(0.10),
-                        spreadRadius: 0,
-                        blurRadius: 10,
-                        offset:
-                            const Offset(0, 0), // changes position of shadow
+            ),
+            const SizedBox(height: 25),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'บริการสำหรับคุณ',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: Theme.of(context).custom.b_w_y,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _determinePosition();
+                    // ปิดก่อน ios เด้ง
+                    // if (latLng != null)
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (_) => PoiPage(latLng: latLng!),
+                    //     ),
+                    //   );
+                  },
+                  child: Row(
+                    children: [
+                      Image.asset('assets/images/vector.png', height: 10),
+                      const SizedBox(width: 3),
+                      Text(
+                        '${currentLocation}',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          color: Theme.of(context).custom.b_w_y,
+                        ),
                       ),
                     ],
                   ),
-                  child: SmartRefresher(
-                    enablePullDown: true,
-                    enablePullUp: false,
-                    controller: _refreshController,
-                    onRefresh: onRefresh,
-                    // onLoading: _onLoading,
-                    child: ListView(
-                      padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).padding.top + 5,
-                        right: 15,
-                        left: 15,
-                      ),
-                      shrinkWrap: true,
-                      physics: const ClampingScrollPhysics(),
-                      children: [
-                        FutureBuilder(
-                          future: _futureBanner,
-                          builder: (_, snapshot) {
-                            if (snapshot.hasData) {
-                              if (snapshot.data.length == 0)
-                                return const SizedBox(height: 200);
-                              return Container(
-                                height: 200,
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 180,
-                                      child: CarouselSlider(
-                                        options: CarouselOptions(
-                                          aspectRatio: 4,
-                                          enlargeCenterPage: true,
-                                          scrollDirection: Axis.horizontal,
-                                          viewportFraction: 0.9,
-                                          autoPlay: true,
-                                          enlargeFactor: 0.4,
-                                          enlargeStrategy:
-                                              CenterPageEnlargeStrategy.zoom,
-                                          onPageChanged: (index, reason) {
-                                            setState(() {
-                                              _currentBanner = index;
-                                            });
-                                          },
-                                        ),
-                                        items: snapshot.data.map<Widget>(
-                                          (item) {
-                                            int index =
-                                                snapshot.data.indexOf(item);
-                                            return GestureDetector(
-                                              onTap: () {
-                                                if (snapshot.data[
-                                                            _currentBanner]
-                                                        ['action'] ==
-                                                    'out') {
-                                                  if (snapshot
-                                                          .data[_currentBanner]
-                                                      ['isPostHeader']) {
-                                                    var path = snapshot.data[
-                                                            _currentBanner]
-                                                        ['linkUrl'];
-                                                    if (profileCode != '') {
-                                                      var splitCheck = path
-                                                          .split('')
-                                                          .reversed
-                                                          .join();
-                                                      if (splitCheck[0] !=
-                                                          "/") {
-                                                        path = path + "/";
-                                                      }
-                                                      var codeReplae = "B" +
-                                                          profileCode!
-                                                              .replaceAll(
-                                                                  '-', '') +
-                                                          snapshot.data[
-                                                                  _currentBanner]
-                                                                  ['code']
-                                                              .replaceAll(
-                                                                  '-', '');
-                                                      // launchUrl(Uri.parse('$path$codeReplae'),
-                                                      //     mode:
-                                                      //         LaunchMode.externalApplication);
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (_) =>
-                                                              WebViewInAppPage(
-                                                            url:
-                                                                "$path$codeReplae",
-                                                            title: snapshot
-                                                                        .data[
-                                                                    _currentBanner]
-                                                                ['title'],
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }
-                                                  } else
-                                                    // launchUrl(
-                                                    //     Uri.parse(snapshot
-                                                    //         .data[_currentBanner]['linkUrl']),
-                                                    //     mode: LaunchMode.externalApplication);
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (_) =>
-                                                            WebViewInAppPage(
-                                                          url: snapshot.data[
-                                                                  _currentBanner]
-                                                              ['linkUrl'],
-                                                          title: snapshot.data[
-                                                                  _currentBanner]
-                                                              ['title'],
-                                                        ),
-                                                      ),
-                                                    );
-                                                } else if (snapshot.data[
-                                                            _currentBanner]
-                                                        ['action'] ==
-                                                    'in') {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          DetailPage(
-                                                        slug: 'mock',
-                                                        model: snapshot.data[
-                                                            _currentBanner],
-                                                      ),
-                                                    ),
-                                                  );
-                                                }
-                                              },
-                                              child: ClipRRect(
-                                                borderRadius: _currentBanner ==
-                                                        index
-                                                    ? BorderRadius.all(
-                                                        Radius.circular(20))
-                                                    : BorderRadius.circular(0),
-                                                child: CachedNetworkImage(
-                                                  imageUrl: item['imageUrl'],
-                                                  fit: BoxFit.cover,
-                                                  width: double.infinity,
-                                                  height: double.infinity,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ).toList(),
-                                      ),
-                                    ),
-                                    SizedBox(height: 5),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children:
-                                          snapshot.data.map<Widget>((url) {
-                                        int index = snapshot.data.indexOf(url);
-                                        return Container(
-                                          width: _currentBanner == index
-                                              ? 17.5
-                                              : 7.0,
-                                          height: 7.0,
-                                          margin: EdgeInsets.all(2.0),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            color: _currentBanner == index
-                                                ? Color(0XFFBD4BF7)
-                                                : Color(0XFFDDDDDD),
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
+            Container(
+              height: 100,
+              child: ListView(
+                padding: EdgeInsets.zero,
+                scrollDirection: Axis.horizontal,
+                physics: const ClampingScrollPhysics(),
+                children: [
+                  columnButton(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/reserve_service.png'
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? 'assets/images/reserve_service_d.png'
+                            : 'assets/images/reserve_service_d-y.png',
+                    'จองใช้บริการ',
+                    type: 'serviceforyou',
+                    code: 'booking',
+                  ),
+                  columnButton(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/find_job.png'
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? 'assets/images/find_job_d.png'
+                            : 'assets/images/find_job_d-y.png',
+                    'จับคู่งาน',
+                    type: 'serviceforyou',
+                    code: 'job',
+                  ),
+                  columnButton(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/funding_source.png'
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? 'assets/images/funding_source_d.png'
+                            : 'assets/images/funding_source_d-y.png',
+                    '''สรรหา
+                    แหล่งทุน''',
+                    type: 'serviceforyou',
+                    code: 'fund',
+                  ),
+                  columnButton(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/reskill.png'
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? 'assets/images/reskill_d.png'
+                            : 'assets/images/reskill_d-y.png',
+                    '''ระบบส่งเสริม
+                    Re-skill''',
+                    type: 'serviceforyou',
+                    code: 'skill',
+                  ),
+                  columnButton(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/chat2.png'
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? 'assets/images/chat2_d.png'
+                            : 'assets/images/chat2_d-y.png',
+                    'สนทนา',
+                    type: 'serviceforyou',
+                    code: 'chat',
+                  ),
+                  columnButton(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/data_warehouse.png'
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? 'assets/images/data_warehouse_d.png'
+                            : 'assets/images/data_warehouse_d-y.png',
+                    'คลังข้อมูล',
+                    type: 'serviceforyou',
+                    code: 'knowledge',
+                  ),
+                  columnButton(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/report_problem.png'
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? 'assets/images/report_problem_d.png'
+                            : 'assets/images/report_problem_d-y.png',
+                    'แจ้งปัญหา',
+                    type: 'serviceforyou',
+                    code: 'report',
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Text(
+                //   'คอร์สกำลังเรียน',
+                //   style: TextStyle(
+                //     fontSize: 15,
+                //     fontWeight: FontWeight.w400,
+                //     color: Theme.of(context).custom.b_w_y,
+                //   ),
+                // ),
+                // Text(
+                //   'ดูทั้งหมด',
+                //   style: TextStyle(
+                //     fontSize: 13,
+                //     fontWeight: FontWeight.w400,
+                //   ),
+                // ),
+              ],
+            ),
+            // FutureBuilder(
+            //   future: Future.value(mockDataList),
+            //   builder: (_, snapshot) {
+            //     if (snapshot.hasData) {
+            //       return Column(
+            //         children: [
+            //           const SizedBox(height: 10),
+            //           containerStudy(snapshot.data![0], 50),
+            //           const SizedBox(height: 10),
+            //           containerStudy(snapshot.data![1], 80),
+            //           const SizedBox(height: 24),
+            //         ],
+            //       );
+            //     } else {
+            //       return Container();
+            //     }
+            //   },
+            // ),
+            FutureBuilder(
+              future: _futureBanner,
+              builder: (_, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data.length == 0) return const SizedBox();
+                  return Stack(
+                    children: [
+                      SizedBox(
+                        height: 180,
+                        child: CarouselSlider(
+                          options: CarouselOptions(
+                            aspectRatio: 4,
+                            enlargeCenterPage: true,
+                            scrollDirection: Axis.horizontal,
+                            viewportFraction: 0.9,
+                            autoPlay: true,
+                            enlargeFactor: 0.4,
+                            enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                _currentBanner = index;
+                              });
+                            },
+                          ),
+                          items: snapshot.data.map<Widget>(
+                            (item) {
+                              int index = snapshot.data.indexOf(item);
+                              return GestureDetector(
+                                onTap: () {
+                                  if (snapshot.data[_currentBanner]['action'] ==
+                                      'out') {
+                                    if (snapshot.data[_currentBanner]
+                                        ['isPostHeader']) {
+                                      var path = snapshot.data[_currentBanner]
+                                          ['linkUrl'];
+                                      if (profileCode != '') {
+                                        var splitCheck =
+                                            path.split('').reversed.join();
+                                        if (splitCheck[0] != "/") {
+                                          path = path + "/";
+                                        }
+                                        var codeReplae = "B" +
+                                            profileCode!.replaceAll('-', '') +
+                                            snapshot.data[_currentBanner]
+                                                    ['code']
+                                                .replaceAll('-', '');
+                                        // launchUrl(Uri.parse('$path$codeReplae'),
+                                        //     mode:
+                                        //         LaunchMode.externalApplication);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => WebViewInAppPage(
+                                              url: "$path$codeReplae",
+                                              title:
+                                                  snapshot.data[_currentBanner]
+                                                      ['title'],
+                                            ),
                                           ),
                                         );
-                                      }).toList(),
-                                    ),
-                                  ],
+                                      }
+                                    } else
+                                      // launchUrl(
+                                      //     Uri.parse(snapshot
+                                      //         .data[_currentBanner]['linkUrl']),
+                                      //     mode: LaunchMode.externalApplication);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => WebViewInAppPage(
+                                            url: snapshot.data[_currentBanner]
+                                                ['linkUrl'],
+                                            title: snapshot.data[_currentBanner]
+                                                ['title'],
+                                          ),
+                                        ),
+                                      );
+                                  } else if (snapshot.data[_currentBanner]
+                                          ['action'] ==
+                                      'in') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailPage(
+                                          slug: 'mock',
+                                          model: snapshot.data[_currentBanner],
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: ClipRRect(
+                                  borderRadius: _currentBanner == index
+                                      ? BorderRadius.all(Radius.circular(20))
+                                      : BorderRadius.circular(0),
+                                  child: CachedNetworkImage(
+                                    imageUrl: item['imageUrl'],
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                  ),
                                 ),
                               );
-                            } else {
-                              return const SizedBox(height: 200);
-                            }
-                          },
+                            },
+                          ).toList(),
                         ),
-                        SizedBox(height: 20),
-                        Center(
-                          child: Text(
-                            'บริการสำหรับคุณ',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Theme.of(context).custom.b325f8_w_fffd57,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                columnButton(
-                                  MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? 'assets/images/chat2.png'
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? 'assets/images/chat2_d.png'
-                                          : 'assets/images/chat2_d-y.png',
-                                  'สนทนา',
-                                  type: 'serviceforyou',
-                                  code: 'chat',
-                                ),
-                                columnButton(
-                                  MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? 'assets/images/reserve_service.png'
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? 'assets/images/reserve_service_d.png'
-                                          : 'assets/images/reserve_service_d-y.png',
-                                  'จองใช้บริการ',
-                                  type: 'serviceforyou',
-                                  code: 'booking',
-                                ),
-                                columnButton(
-                                  MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? 'assets/images/find_job.png'
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? 'assets/images/find_job_d.png'
-                                          : 'assets/images/find_job_d-y.png',
-                                  'จับคู่งาน',
-                                  type: 'serviceforyou',
-                                  code: 'job',
-                                ),
-                                columnButton(
-                                  MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? 'assets/images/reskill.png'
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? 'assets/images/reskill_d.png'
-                                          : 'assets/images/reskill_d-y.png',
-                                  'ระบบส่งเสริม\nRe-skill',
-                                  type: 'serviceforyou',
-                                  code: 'skill',
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                columnButton(
-                                  MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? 'assets/images/funding_source.png'
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? 'assets/images/funding_source_d.png'
-                                          : 'assets/images/funding_source_d-y.png',
-                                  'สรรหา\nแหล่งทุน',
-                                  type: 'serviceforyou',
-                                  code: 'fund',
-                                ),
-                                columnButton(
-                                  MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? 'assets/images/data_warehouse.png'
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? 'assets/images/data_warehouse_d.png'
-                                          : 'assets/images/data_warehouse_d-y.png',
-                                  'คลังข้อมูล\nการเรียนรู้',
-                                  type: 'serviceforyou',
-                                  code: 'knowledge',
-                                ),
-                                columnButton(
-                                  MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? 'assets/images/report_problem.png'
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? 'assets/images/report_problem_d.png'
-                                          : 'assets/images/report_problem_d-y.png',
-                                  'แจ้งปัญหา',
-                                  type: 'serviceforyou',
-                                  code: 'report',
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          'หลักสูตรฝึกอบรม',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            color: Theme.of(context).custom.b325f8_w_fffd57,
-                          ),
-                        ),
-                        Text(
-                          'ไม่หยุดที่จะเรียนรู้ คอร์สหลากหลาย เรียนได้ทุกที่ทุกเวลา',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Theme.of(context).custom.b325f8_w_fffd57,
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => MyClassAllPage(
-                                  title: 'คอร์สเรียนของคุณ',
-                                ),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        left: 0,
+                        right: 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: mockBannerList.map<Widget>((url) {
+                            int index = mockBannerList.indexOf(url);
+                            return Container(
+                              width: _currentBanner == index ? 17.5 : 7.0,
+                              height: 7.0,
+                              margin: EdgeInsets.all(2.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.white,
                               ),
                             );
-                          },
-                          child: Container(
-                            // alignment: Alignment.centerLeft,
-                            height: 50,
-                            // width: MediaQuery.of(context).size.width - 100,
-                            decoration: BoxDecoration(
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.white
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Colors.black,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: Color(0XFFDDDDDD),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                const SizedBox(width: 15),
-                                Image.asset(
-                                  'assets/images/search.png',
-                                  height: 16,
-                                  width: 16,
-                                  color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Colors.black
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.black
-                                          : Color(0xFFFFFD57),
-                                ),
-                                const SizedBox(width: 15),
-                                Expanded(
-                                  child: Text(
-                                    'ค้นหาคอร์สเรียน',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: MyApp.themeNotifier.value ==
-                                              ThemeModeThird.light
-                                          ? Color(0XFF707070)
-                                          : MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.dark
-                                              ? Colors.black
-                                              : Color(0xFFFFFD57),
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 15),
-                              ],
-                            ),
-                          ),
+                          }).toList(),
                         ),
-                        const SizedBox(height: 15),
-                        Container(
-                          height: 180,
-                          child: ListView(
-                            padding: EdgeInsets.zero,
-                            scrollDirection: Axis.horizontal,
-                            physics: const ClampingScrollPhysics(),
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  rowButton(
-                                    MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? 'assets/images/icon_market.png'
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? 'assets/images/icon_market.png'
-                                            : 'assets/images/icon_market.png',
-                                    'ด้านการพัฒนาผลิตภัณฑ์\nและการสื่อสารทางการตลาด',
-                                    code: 'market',
-                                  ),
-                                  SizedBox(height: 10),
-                                  rowButton(
-                                    MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? 'assets/images/icon_digital.png'
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? 'assets/images/icon_digital.png'
-                                            : 'assets/images/icon_digital.png',
-                                    'ด้านดิจิทัล',
-                                    code: 'digital',
-                                  ),
-                                  SizedBox(height: 10),
-                                  rowButton(
-                                    MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? 'assets/images/icon_travel.png'
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? 'assets/images/icon_travel.png'
-                                            : 'assets/images/icon_travel.png',
-                                    'ด้านการท่องเที่ยว\nเชิงการแพทย์และสุขภาพ',
-                                    code: 'btn4',
-                                  ),
-                                ],
-                              ),
-                              SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  rowButton(
-                                    MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? 'assets/images/care_old.png'
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? 'assets/images/care_old_d.png'
-                                            : 'assets/images/care_old_d-y.png',
-                                    'ด้านการดูแลผู้สูงอายุ',
-                                    code: 'btn3',
-                                  ),
-                                  SizedBox(height: 10),
-                                  rowButton(
-                                    MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? 'assets/images/modern_farmer.png'
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? 'assets/images/modern_farmer_d.png'
-                                            : 'assets/images/modern_farmer_d-y.png',
-                                    'ด้านการเกษตรสมัยใหม่',
-                                    code: 'btn1',
-                                  ),
-                                  SizedBox(height: 10),
-                                  rowButton(
-                                    MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? 'assets/images/community_business.png'
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? 'assets/images/community_business_d.png'
-                                            : 'assets/images/community_business_d-y.png',
-                                    'ด้านการจัดการธุรกิจชุมชน',
-                                    code: 'btn2',
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'คอร์สแนะนำ',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: Theme.of(context).custom.b325f8_w_fffd57,
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        FutureBuilder(
-                          future: _futureNews,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              if (snapshot.data!.length > 0) {
-                                return GridView.builder(
-                                  padding: EdgeInsets.zero,
-                                  shrinkWrap: true,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          childAspectRatio: 10 / 11.5,
-                                          crossAxisSpacing: 15,
-                                          mainAxisSpacing: 15),
-                                  physics: const ClampingScrollPhysics(),
-                                  itemCount:
-                                      [...snapshot.data].take(viewAdd).length,
-                                  // itemCount: (snapshot.data.length >= 4
-                                  //     ? 4
-                                  //     : snapshot.data.length),
-                                  itemBuilder: (context, index) =>
-                                      containerRecommendedClass(
-                                          snapshot.data![index]),
-                                );
-                              }
-                            }
-                            return const SizedBox();
-                          },
-                        ),
-                        const SizedBox(height: 15),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              viewAdd += 4;
-                            });
-                          },
-                          child: Container(
-                            height: 45,
-                            decoration: BoxDecoration(
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.white
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
-                              borderRadius: BorderRadius.circular(25),
-                              border: Border.all(
-                                color: MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? Theme.of(context).custom.b325f8_w_fffd57
-                                    : Colors.black,
-                              ),
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              'ดูเพิ่มเติม',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? Theme.of(context).custom.b325f8_w_fffd57
-                                    : Colors.black,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                            height: 20 + MediaQuery.of(context).padding.bottom),
-                      ],
-                    ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              },
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Text(
+                  'คอร์สแนะนำ',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            FutureBuilder(
+              future: _futureNews,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.length > 0) {
+                    return GridView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 10 / 11.5,
+                          crossAxisSpacing: 15,
+                          mainAxisSpacing: 15),
+                      physics: const ClampingScrollPhysics(),
+                      // itemCount: snapshot.data!.length,
+                      itemCount: (snapshot.data.length >= 4
+                          ? 4
+                          : snapshot.data.length),
+                      itemBuilder: (context, index) =>
+                          containerRecommendedClass(snapshot.data![index]),
+                    );
+                  }
+                }
+                return const SizedBox();
+              },
+            ),
+            Container(),
+            SizedBox(height: 20 + MediaQuery.of(context).padding.bottom),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -1050,7 +1015,7 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
-                      // height: 0.5,
+                      height: 0.5,
                       color: MyApp.themeNotifier.value == ThemeModeThird.light
                           ? Colors.black
                           : MyApp.themeNotifier.value == ThemeModeThird.dark
@@ -1090,54 +1055,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget rowButton(String image, String title, {String code = ''}) {
-    //serviceforyou ใช้สำหรับ บริการสำหรับคุณ
-    return Row(
-      children: [
-        GestureDetector(
-          onTap: () {
-            _callOpenPage(code);
-          },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Image.asset(
-              image,
-              height: 45,
-              width: 45,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        SizedBox(width: 10),
-        SizedBox(
-          height: 40,
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-              // height: 0.5,
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Colors.black
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
-              // Theme.of(context).custom.bwy,
-            ),
-          ),
-        ),
-        const SizedBox(height: 5),
-      ],
-    );
-  }
-
   void _callRead() async {
     fontStorageValue = await storage.read(key: 'switchSizeFont') ?? 'ปกติ';
     colorStorageValue = await storage.read(key: 'switchColor') ?? 'ปกติ';
     FirebaseMessaging.instance.getToken().then((token) async {
       print('token: $token');
     });
-    _readNotiCount();
+
     setState(() {
       _futureBanner = _readBanner();
       // _futureNews = _readGetCourse();
@@ -1199,35 +1123,6 @@ class _HomePageState extends State<HomePage> {
     });
 
     // return Future.value(response);
-  }
-
-  Future<dynamic> _readNotiCount() async {
-    var profileMe = await ManageStorage.readDynamic('profileMe');
-    // setState(() {
-    //   notiCount = int.parse(ManageStorage.read("notiCount") ?? 0);
-    // });
-    Response<dynamic> response;
-    Dio dio = Dio();
-    try {
-      Response response = await Dio().post(
-        '$server/dcc-api/m/v2/notificationbooking/read',
-        data: {
-          'email': profileMe['email'],
-        },
-      );
-
-      // if (response.statusCode == 200) {
-      if (response.data['status'] == 'S') {
-        var modelNotiCount = [...response.data['objectData']];
-        setState(() {
-          notiCount = modelNotiCount.where((x) => x['status'] == "N").length;
-        });
-      }
-      // }
-    } catch (e) {
-      logE(e);
-    }
-    return [];
   }
 
   Future<List<dynamic>> _readBanner() async {
@@ -1360,8 +1255,7 @@ class _HomePageState extends State<HomePage> {
     } else if (param == 'job') {
       Navigator.push(context, MaterialPageRoute(builder: (_) => FindJobPage()));
     } else if (param == 'fund') {
-      // Navigator.push(context, MaterialPageRoute(builder: (_) => FundPage()));
-      widget.changePage!(5);
+      Navigator.push(context, MaterialPageRoute(builder: (_) => FundPage()));
     } else if (param == 'skill') {
       Navigator.push(
         context,
