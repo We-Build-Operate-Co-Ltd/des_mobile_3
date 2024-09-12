@@ -24,15 +24,15 @@ import 'chat_botnoi.dart';
 import 'main.dart';
 import 'webview_inapp.dart';
 
-class UserProfileSettingPage extends StatefulWidget {
-  const UserProfileSettingPage({Key? key}) : super(key: key);
+class UserProfileBookingPage extends StatefulWidget {
+  const UserProfileBookingPage({Key? key}) : super(key: key);
 
   @override
-  State<UserProfileSettingPage> createState() =>
-      _UserProfileSettingPageState();
+  State<UserProfileBookingPage> createState() =>
+      _UserProfileBookingPageState();
 }
 
-class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
+class _UserProfileBookingPageState extends State<UserProfileBookingPage> {
   final storage = const FlutterSecureStorage();
   String _imageProfile = '';
   String _firstName = '';
@@ -75,9 +75,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
                   height: deviceHeight * 0.8,
                   padding: EdgeInsets.only(top: 20, left: 20, right: 20),
                   decoration: BoxDecoration(
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Colors.white
-                        : Colors.black,
+                    color: Colors.white,
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(20)),
                   ),
@@ -87,61 +85,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
                     children: [
                       _buildHead(),
                       const SizedBox(height: 30),
-                      _buildRowAboutAccount(),
-                      const SizedBox(height: 30),
-                      _buildRowHelp(),
-                      const SizedBox(height: 70),
-                      Center(
-                        child: GestureDetector(
-                          onTap: () => logout(),
-                          child: Container(
-                            height: 32,
-                            width: 145,
-                            decoration: BoxDecoration(
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Color(0xFFB325F8).withOpacity(0.10)
-                                  : Color(0xFF292929),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/logout.png',
-                                  height: 18.75,
-                                  width: 15,
-                                  color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Color(0xFFB325F8)
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.white
-                                          : Color(0xFFFFFD57),
-                                ),
-                                const SizedBox(width: 10),
-                                Text(
-                                  'ออกจากระบบ',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontFamily: 'Kanit',
-                                    fontWeight: FontWeight.w400,
-                                    color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color(0xFFB325F8)
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.white
-                                            : Color(0xFFFFFD57),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      //
+                     
                     ],
                   ),
                 ),
@@ -180,7 +124,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
           ),
           child: _buildRow('ศูนย์ช่วยเหลือ'),
         ),
-        lineBottom(),
+        // const SizedBox(height: 10),
         InkWell(
           child: _buildRow('เกี่ยวกับ'),
           onTap: () => Navigator.of(context).push(
@@ -189,7 +133,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
             ),
           ),
         ),
-        lineBottom(),
+        // const SizedBox(height: 10),
         GestureDetector(
           onTap: () => Navigator.push(
             context,
@@ -202,7 +146,6 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
           ),
           child: _buildRow('นโยบาย'),
         ),
-        lineBottom(),
       ],
     );
   }
@@ -240,20 +183,6 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
           child: _buildRow('เปลี่ยนรหัสผ่าน'),
         ),
         lineBottom(),
-        // if (!_hasThaiD)
-        //   InkWell(
-        //     splashColor: Colors.transparent,
-        //     highlightColor: Colors.transparent,
-        //     focusColor: Colors.transparent,
-        //     onTap: () => Navigator.push(
-        //       context,
-        //       MaterialPageRoute(
-        //         builder: (builder) => const VerifyMainPage(),
-        //       ),
-        //     ),
-        //     child: _buildRow('ยืนยันตัวตน'),
-        //   ),
-        // if (!_hasThaiD) lineBottom(),
         InkWell(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
@@ -307,7 +236,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        InkWell(
+         InkWell(
           onTap: () {
             Navigator.pop(context);
           },
@@ -337,17 +266,12 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
         Container(
           margin: EdgeInsets.all(5),
           child: Text(
-            'ตั้งค่า',
+            'การจองของฉัน',
             style: TextStyle(
-              fontSize: 24,
-              fontFamily: 'Kanit',
-              fontWeight: FontWeight.w500,
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Color(0xFFB325F8)
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
-            ),
+                fontSize: 24,
+                fontFamily: 'Kanit',
+                fontWeight: FontWeight.w500,
+                color: Color(0xFFB325F8)),
           ),
         ),
       ],
