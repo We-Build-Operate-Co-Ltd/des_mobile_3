@@ -6,6 +6,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:des/booking_service.dart';
 import 'package:des/contact.dart';
 import 'package:des/detail.dart';
+import 'package:des/find_job.dart';
 import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
 import 'package:des/my_class_all.dart';
@@ -491,6 +492,7 @@ class _MenuState extends State<Menu> {
       FundPage(changePage: _changePage),
       ReportProblemPage(changePage: _changePage),
       ContactPage(changePage: _changePage),
+      FindJobPage(changePage: _changePage),
     ];
     super.initState();
   }

@@ -1661,6 +1661,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.8.0"
+  top_modal_sheet:
+    dependency: "direct main"
+    description:
+      name: top_modal_sheet
+      sha256: "404249c2cec151a5872197601bce2913ff88bb3b714ddae0223756308e7ccf08"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   tuple:
     dependency: transitive
     description:

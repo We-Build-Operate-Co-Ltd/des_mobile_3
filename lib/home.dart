@@ -1358,7 +1358,8 @@ class _HomePageState extends State<HomePage> {
     } else if (param == 'booking') {
       widget.changePage!(1);
     } else if (param == 'job') {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => FindJobPage()));
+      // Navigator.push(context, MaterialPageRoute(builder: (_) => FindJobPage()));
+      widget.changePage!(8);
     } else if (param == 'fund') {
       // Navigator.push(context, MaterialPageRoute(builder: (_) => FundPage()));
       widget.changePage!(5);
