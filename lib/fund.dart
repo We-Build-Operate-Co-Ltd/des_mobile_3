@@ -292,6 +292,7 @@ class _FundPageState extends State<FundPage> {
                                       ),
                                       hintText: 'พิมพ์คำค้นหา',
                                       hintStyle: TextStyle(
+                                        color: Colors.black,
                                         fontSize: 15,
                                         fontWeight: FontWeight.w400,
                                         letterSpacing: 0.5,
@@ -530,6 +531,7 @@ class _FundPageState extends State<FundPage> {
                         ),
                         hintText: 'พิมพ์คำค้นหา',
                         hintStyle: TextStyle(
+                          color: Colors.black,
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
                           letterSpacing: 0.5,
