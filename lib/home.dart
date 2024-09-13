@@ -1092,13 +1092,13 @@ class _HomePageState extends State<HomePage> {
 
   Widget rowButton(String image, String title, {String code = ''}) {
     //serviceforyou ใช้สำหรับ บริการสำหรับคุณ
-    return Row(
-      children: [
-        GestureDetector(
-          onTap: () {
-            _callOpenPage(code);
-          },
-          child: ClipRRect(
+    return InkWell(
+      onTap: () {
+        _callOpenPage(code);
+      },
+      child: Row(
+        children: [
+          ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: Image.asset(
               image,
@@ -1107,27 +1107,27 @@ class _HomePageState extends State<HomePage> {
               fit: BoxFit.cover,
             ),
           ),
-        ),
-        SizedBox(width: 10),
-        SizedBox(
-          height: 40,
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-              // height: 0.5,
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Colors.black
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
-              // Theme.of(context).custom.bwy,
+          SizedBox(width: 10),
+          SizedBox(
+            height: 40,
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+                // height: 0.5,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+                // Theme.of(context).custom.bwy,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 5),
-      ],
+          const SizedBox(height: 5),
+        ],
+      ),
     );
   }
 

@@ -112,7 +112,7 @@ class _BookingServiceSearchResultPageState
         Navigator.pop(context);
       },
       child: Image.asset(
-        'assets/images/back.png',
+        'assets/images/back_arrow.png',
         height: 40,
         width: 40,
       ),
