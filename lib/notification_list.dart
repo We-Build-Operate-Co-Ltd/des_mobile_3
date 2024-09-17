@@ -1095,85 +1095,79 @@ class _NotificationListState extends State<NotificationListPage> {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15.0))),
         backgroundColor: Color(0xFFFFFFFF),
-        titlePadding: EdgeInsets.all(0),
+        titlePadding: EdgeInsets.all(30),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                icon: Icon(
-                  Icons.close,
-                  color: Color(0xFF7A4CB1),
-                  size: 35,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
+                alignment: Alignment.center,
+                child: Image.asset('assets/images/warning.png')),
+            SizedBox(height: 20),
             Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 50),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
                   alignment: Alignment.center,
-                  child: Text(
-                    totalSelected > 0
-                        ? 'เปลี่ยน ' +
-                            totalSelected.toString() +
-                            ' รายการที่เลือก เป็นอ่านแล้วใช่หรือไม่'
-                        : textDialogUpdate(selectedCategoryDays),
+                  child: RichText(
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Color(0xFF7A4CB1),
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: totalSelected > 0
+                              ? 'เปลี่ยน ' +
+                                  totalSelected.toString() +
+                                  ' รายการที่เลือก\n'
+                              : textDialogUpdate(selectedCategoryDays) + '\n',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Kanit',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                        TextSpan(
+                          text: totalSelected > 0
+                              ? 'ออกจากแจ้งเตือนใช่หรือไม่'
+                              : 'คุณยืนยันที่จะทำเครื่องหมาย\nอ่านแล้วทั้งหมด ในหมวดนี้ใช่หรือไม่',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Kanit',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15, // ขนาดเล็กกว่าสำหรับบรรทัดที่สอง
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+                  // child: Text(
+                  //   totalSelected > 0
+                  //       ? 'เปลี่ยน ' +
+                  //           totalSelected.toString() +
+                  //           ' รายการที่เลือก เป็นอ่านแล้วใช่หรือไม่'
+                  //       : textDialogUpdate(selectedCategoryDays),
+                  //   textAlign: TextAlign.center,
+                  //   style: TextStyle(
+                  //       color: Color(0xFF7A4CB1),
+                  //       fontSize: 18,
+                  //       fontWeight: FontWeight.bold),
+                  // ),
                 ),
               ),
             ),
           ],
         ),
         actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                width: (MediaQuery.of(context).size.width / 100) * 30,
-                margin: EdgeInsets.symmetric(vertical: 20.0),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.all(10)),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Color(0xFFFFFFFF)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(color: Color(0xFFB7B7B7))))),
-                  child: Text(
-                    "ยกเลิก",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Kanit',
-                        color: Color(0xFFB7B7B7)),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-              SizedBox(width: 20),
-              Container(
-                width: (MediaQuery.of(context).size.width / 100) * 30,
-                margin: EdgeInsets.symmetric(vertical: 20.0),
+                height: 45,
+                width: double.infinity,
                 child: Material(
                   elevation: 5.0,
-                  borderRadius: BorderRadius.circular(10),
-                  color: Color(0xFF7A4CB1),
+                  borderRadius: BorderRadius.circular(22.5),
+                  color: Color(0xFFB325F8),
                   child: MaterialButton(
                     height: 30,
                     onPressed: () async {
@@ -1233,9 +1227,134 @@ class _NotificationListState extends State<NotificationListPage> {
                         setState(() => _loadingWidget = false);
                         logE(e);
                       }
+                      _DialogSuccessUpdatee();
                     },
                     child: Text(
-                      'ใช่',
+                      'ยืนยัน',
+                      style: TextStyle(
+                        fontSize: 17.0,
+                        color: Color(0xFFFFFFFF),
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'Kanit',
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Container(
+                height: 45,
+                width: double.infinity,
+                // width: (MediaQuery.of(context).size.width / 100) * 30,
+                // margin: EdgeInsets.symmetric(vertical: 20.0),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.all(10)),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Color(0xFFFFFFFF)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(22.5),
+                              side: BorderSide(
+                                  color: Color(0xFFB325F8).withOpacity(0.5))))),
+                  child: Text(
+                    "ยกเลิก",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'Kanit',
+                        color: Color(0xFFB325F8)),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _DialogSuccessUpdatee() {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0))),
+        backgroundColor: Colors.white,
+        titlePadding: EdgeInsets.all(30),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Align(
+                alignment: Alignment.center,
+                child: Image.asset('assets/images/success.png')),
+            SizedBox(height: 12),
+            Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'สำเร็จ!\n',
+                              style: TextStyle(
+                                color: Color(0xFF19AA6A),
+                                fontFamily: 'Kanit',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            ),
+                            TextSpan(
+                              text:
+                                  'ทำเครื่องหมาย อ่านแล้วทั้งหมด \nในหมวดนี้เรียบร้อยแล้ว',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Kanit',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 15, // ขนาดเล็กกว่าสำหรับบรรทัดที่สอง
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                height: 45,
+                width: double.infinity,
+                child: Material(
+                  elevation: 5.0,
+                  borderRadius: BorderRadius.circular(22.5),
+                  color: Color(0xFFB325F8),
+                  child: MaterialButton(
+                    height: 30,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'ตกลง',
                       style: TextStyle(
                         fontSize: 17.0,
                         color: Color(0xFFFFFFFF),
@@ -1258,42 +1377,65 @@ class _NotificationListState extends State<NotificationListPage> {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(15.0))),
-        backgroundColor: Color(0xFFFFFFFF),
-        titlePadding: EdgeInsets.all(0),
+            borderRadius: BorderRadius.all(Radius.circular(16.0))),
+        backgroundColor: Colors.white,
+        titlePadding: EdgeInsets.all(30),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                icon: Icon(
-                  Icons.close,
-                  color: Color(0xFF7A4CB1),
-                  size: 35,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
+                alignment: Alignment.center,
+                child: Image.asset('assets/images/warning.png')),
+            SizedBox(height: 12),
             Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 50),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
                   alignment: Alignment.center,
-                  child: Text(
-                    totalSelected > 0
-                        ? 'ลบ ' +
-                            totalSelected.toString() +
-                            ' รายการที่เลือก ออกจากแจ้งเตือนใช่หรือไม่'
-                        : textDialogDelete(selectedCategoryDays),
+                  child:
+                      // Text(
+                      //   totalSelected > 0
+                      //       ? 'ลบ ' +
+                      //           totalSelected.toString() +
+                      //           ' รายการที่เลือก ออกจากแจ้งเตือนใช่หรือไม่'
+                      //       : textDialogDelete(selectedCategoryDays),
+                      //   textAlign: TextAlign.center,
+                      //   style: TextStyle(
+                      //       color: Colors.black,
+                      //       fontSize: 18,
+                      //       fontWeight: FontWeight.bold),
+                      // ),
+                      RichText(
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Color(0xFF7A4CB1),
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: totalSelected > 0
+                              ? 'ลบ ' +
+                                  totalSelected.toString() +
+                                  ' รายการที่เลือก\n'
+                              : textDialogDelete(selectedCategoryDays) + '\n',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Kanit',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                        TextSpan(
+                          text: totalSelected > 0
+                              ? 'ออกจากแจ้งเตือนใช่หรือไม่'
+                              : 'คุณยืนยันที่จะลบแจ้งเตือนทั้งหมด\nในหมวดนี้ใช่หรือไม่',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Kanit',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15, // ขนาดเล็กกว่าสำหรับบรรทัดที่สอง
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -1301,44 +1443,16 @@ class _NotificationListState extends State<NotificationListPage> {
           ],
         ),
         actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                width: (MediaQuery.of(context).size.width / 100) * 30,
-                margin: EdgeInsets.symmetric(vertical: 20.0),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.all(10)),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Color(0xFFFFFFFF)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(color: Color(0xFFB7B7B7))))),
-                  child: Text(
-                    "ยกเลิก",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Kanit',
-                        color: Color(0xFFB7B7B7)),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-              SizedBox(width: 20),
-              Container(
-                width: (MediaQuery.of(context).size.width / 100) * 30,
-                margin: EdgeInsets.symmetric(vertical: 20.0),
+                height: 45,
+                width: double.infinity,
                 child: Material(
                   elevation: 5.0,
-                  borderRadius: BorderRadius.circular(10),
-                  color: Color(0xFF7A4CB1),
+                  borderRadius: BorderRadius.circular(22.5),
+                  color: Color(0xFFB325F8),
                   child: MaterialButton(
                     height: 30,
                     onPressed: () async {
@@ -1359,9 +1473,132 @@ class _NotificationListState extends State<NotificationListPage> {
                         setState(() => _loadingWidget = false);
                         logE(e);
                       }
+                      _DialogSuccessDelete();
                     },
                     child: Text(
-                      'ใช่',
+                      'ยืนยัน',
+                      style: TextStyle(
+                        fontSize: 17.0,
+                        color: Color(0xFFFFFFFF),
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'Kanit',
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Container(
+                height: 45,
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.all(10)),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Color(0xFFFFFFFF)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(22.5),
+                              side: BorderSide(
+                                  color: Color(0xFFB325F8).withOpacity(0.5))))),
+                  child: Text(
+                    "ยกเลิก",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'Kanit',
+                        color: Color(0xFFB325F8)),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _DialogSuccessDelete() {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0))),
+        backgroundColor: Colors.white,
+        titlePadding: EdgeInsets.symmetric(vertical: 30, horizontal: 60),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Align(
+                alignment: Alignment.center,
+                child: Image.asset('assets/images/success.png')),
+            SizedBox(height: 12),
+            Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'สำเร็จ!\n',
+                              style: TextStyle(
+                                color: Color(0xFF19AA6A),
+                                fontFamily: 'Kanit',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            ),
+                            TextSpan(
+                              text:
+                                  'ลบแจ้งเตือนทั้งหมด \nในหมวดนี้เรียบร้อยแล้ว',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Kanit',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 15, // ขนาดเล็กกว่าสำหรับบรรทัดที่สอง
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                height: 45,
+                width: double.infinity,
+                child: Material(
+                  elevation: 5.0,
+                  borderRadius: BorderRadius.circular(22.5),
+                  color: Color(0xFFB325F8),
+                  child: MaterialButton(
+                    height: 30,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'ตกลง',
                       style: TextStyle(
                         fontSize: 17.0,
                         color: Color(0xFFFFFFFF),
@@ -1430,7 +1667,7 @@ class _NotificationListState extends State<NotificationListPage> {
         }
       default:
         {
-          return "ลบรายการทั้งหมด ออกจากแจ้งเตือนใช่หรือไม่";
+          return "ลบทั้งหมดใช่หรือไม่  ";
         }
     }
   }
@@ -1457,7 +1694,7 @@ class _NotificationListState extends State<NotificationListPage> {
         }
       default:
         {
-          return "เปลี่ยนรายการทั้งหมด เป็นอ่านแล้วใช่หรือไม่";
+          return "อ่านแล้วทั้งหมดใช่หรือไม่";
         }
     }
   }

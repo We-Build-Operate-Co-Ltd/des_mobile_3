@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutUsPage extends StatefulWidget {
   AboutUsPage({
@@ -28,8 +29,8 @@ class _AboutUsPageState extends State<AboutUsPage> {
     //  themeColor
     if (MyApp.themeNotifier.value == ThemeModeThird.light) {
       backgroundTheme = Colors.white;
-      colorTheme = Color(0xFF7A4CB1);
-      buttonTheme = Color(0xFF7A4CB1);
+      colorTheme = Color(0xFFB325F8);
+      buttonTheme = Color(0xFFB325F8);
       textTheme = Colors.black;
     } else if (MyApp.themeNotifier.value == ThemeModeThird.dark) {
       backgroundTheme = Colors.black;
@@ -48,126 +49,131 @@ class _AboutUsPageState extends State<AboutUsPage> {
 
   @override
   Widget build(BuildContext context) {
+    double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: backgroundTheme,
-      body: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Image.asset(
-              'assets/images/bg_logo_about_us.png',
-              width: 290,
-              height: 186,
-              alignment: Alignment.centerRight,
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Stack(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 25),
+              height: 1000,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/new_bg.png"),
+                  alignment: Alignment.topCenter,
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
-          ),
-          Positioned.fill(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).padding.top + 15,
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: _backButton(context),
-                ),
-                Image.asset(
-                  'assets/images/logo_about_us.png',
-                  height: 100,
-                  width: 100,
-                ),
-                SizedBox(height: 15),
-                Text(
-                  'ศูนย์ดิจิทัลชุมชน',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: colorTheme,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Center(
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: SingleChildScrollView(
                   child: Container(
-                    height: 20,
-                    width: 170,
-                    padding: EdgeInsets.all(3),
-                    decoration: BoxDecoration(
+                alignment: Alignment.bottomCenter,
+                height: deviceHeight * 0.8,
+                padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+                decoration: BoxDecoration(
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.white
+                        : Colors.black,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  physics: ClampingScrollPhysics(),
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: _backButton(context),
+                    ),
+                    SizedBox(height: 30),
+                    Text(
+                      'ศูนย์ดิจิทัลชุมชน',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
                         color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Color(0xFFFEF7FF)
-                            : Colors.black,
-                        borderRadius: BorderRadius.circular(12.5),
-                        border: Border.all(
-                          color:
-                              MyApp.themeNotifier.value == ThemeModeThird.light
-                                  ? Color(0xFFFEF7FF)
-                                  : colorTheme,
-                        )),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          'assets/images/pin_about_us.png',
-                          height: 11,
-                          width: 11,
-                          color: textTheme,
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 30),
+                    rowContactInformation(
+                        'อาคารรัฐประศาสนภักดี ศูนย์ราชการเฉลิมพระเกียรติ 80 พรรษา ถนนแจ้งวัฒนะ แขวงทุ่งสองห้อง เขตหลักสี่ กรุงเทพฯ 10210',
+                        'assets/images/about_us_mark.png'),
+                    SizedBox(height: 15),
+                    rowContactInformation(
+                        '02-114-8592', 'assets/images/about_us_phone.png'),
+                    SizedBox(height: 15),
+                    rowContactInformation(
+                        'www.dcc.onde.go.th', 'assets/images/about_us_web.png'),
+                    SizedBox(height: 30),
+                    Text(
+                      'ช่องทางการติดต่อ',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    rowSocialMedia(),
+                    SizedBox(height: 30),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: SizedBox(
+                        height: 195,
+                        child: googleMap(
+                          double.parse('13.88261'),
+                          double.parse('100.56487'),
                         ),
-                        SizedBox(width: 5),
-                        Text(
-                          '120 หมู่ 3 เขตหลักสี่ กรุงเทพ 10210',
-                          style: TextStyle(
-                            color: textTheme,
-                            fontSize: 9,
-                            fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(height: 60),
+                  ],
+                ),
+              )),
+            ),
+            Stack(
+              alignment: Alignment.topCenter,
+              children: <Widget>[
+                Positioned(
+                  top: 100,
+                  child: Container(
+                    height: 168,
+                    width: 168,
+                    child: GestureDetector(
+                      child: Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.asset(
+                            "assets/images/avatar_about_us.png",
+                            fit: BoxFit.fill,
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'ช่องทางติดต่อ',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: textTheme,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 15),
-                rowContactInformation('เบอร์โทรติดต่อ', '02 123 4568',
-                    'assets/images/contact_number_about_us.png'),
-                SizedBox(height: 15),
-                rowContactInformation(
-                    'Facebook Page',
-                    'ศูนย์ดิจิทัลชุมชน ศูนย์ราชการฯ',
-                    'assets/images/facebook_about_us.png'),
-                SizedBox(height: 15),
-                rowContactInformation('อีเมล', 'dcc@onde.go.th',
-                    'assets/images/email_about_us.png'),
-                SizedBox(height: 15),
-                rowContactInformation('เว็บไซต์', 'dcc.onde.go.th/home',
-                    'assets/images/website_about_us.png'),
-                SizedBox(height: 25),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: SizedBox(
-                    height: 195,
-                    child: googleMap(
-                      double.parse('13.88261'),
-                      double.parse('100.56487'),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 60),
               ],
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -178,7 +184,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
       child: Container(
         height: 40,
         width: 40,
-        padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+        padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           color: buttonTheme,
@@ -220,18 +226,12 @@ class _AboutUsPageState extends State<AboutUsPage> {
     );
   }
 
-  Widget rowContactInformation(String title, String title2, String image) {
+  Widget rowContactInformation(String title, String image) {
     return Row(
       children: [
         Container(
-          padding: EdgeInsets.all(7),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(45),
-            border: Border.all(color: colorTheme),
-            color: buttonTheme,
-          ),
-          height: 45,
-          width: 45,
+          height: 50,
+          width: 50,
           child: Image.asset(image),
         ),
         SizedBox(width: 15),
@@ -244,49 +244,77 @@ class _AboutUsPageState extends State<AboutUsPage> {
                 title,
                 style: TextStyle(
                   fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                  color: textTheme,
-                ),
-              ),
-              Text(
-                title2,
-                style: TextStyle(
-                  fontSize: 15,
                   fontWeight: FontWeight.w500,
                   color: textTheme,
                 ),
-              )
-            ],
-          ),
-        ),
-        SizedBox(width: 15),
-        Container(
-          height: 45,
-          width: 45,
-          padding: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            color: backgroundTheme,
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Colors.transparent
-                  : colorTheme,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.15),
-                blurRadius: 4,
-                offset: Offset(0, 4),
               ),
             ],
-          ),
-          child: Image.asset(
-            'assets/images/next_arrow_about_us.png',
-            color: colorTheme,
           ),
         ),
       ],
     );
   }
-  //
+
+  Widget _socialButton({
+    String image = '',
+    Function? onTap,
+  }) {
+    return InkWell(
+      onTap: () {
+        onTap!();
+      },
+      child: Container(
+        height: 50,
+        width: 50,
+        child: Image.asset(image),
+      ),
+    );
+  }
+
+  Widget rowSocialMedia() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _socialButton(
+            onTap: () {
+              launchUrl(Uri.parse('https://www.youtube.com/@onde_go_th6218'),
+                  mode: LaunchMode.externalApplication);
+            },
+            image: 'assets/images/about_us_yt.png'),
+        _socialButton(
+            onTap: () async {
+              launchUrl(Uri.parse('https://www.facebook.com/ONDE.GO.TH/'),
+                  mode: LaunchMode.externalApplication);
+            },
+            image: 'assets/images/about_us_fb.png'),
+        _socialButton(
+            onTap: () async {
+              final Uri emailUri = Uri(
+                scheme: 'mailto',
+                path: 'dcc-platform@onde.go.th',
+              );
+              launchUrl(emailUri);
+            },
+            image: 'assets/images/about_us_gmail.png'),
+        _socialButton(
+            onTap: () async {
+              launchUrl(Uri.parse('https://x.com/onde_go_th'),
+                  mode: LaunchMode.externalApplication);
+            },
+            image: 'assets/images/about_us_x.png'),
+        _socialButton(
+            onTap: () async {
+              launchUrl(Uri.parse('https://www.instagram.com/onde_go_th/'),
+                  mode: LaunchMode.externalApplication);
+            },
+            image: 'assets/images/about_us_ig.png'),
+        _socialButton(
+            onTap: () async {
+              launchUrl(Uri.parse('https://line.me/R/ti/p/@223hnckq'),
+                  mode: LaunchMode.externalApplication);
+            },
+            image: 'assets/images/about_us_line.png'),
+      ],
+    );
+  }
 }

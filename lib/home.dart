@@ -27,6 +27,7 @@ import 'dart:ui' as ui show ImageFilter;
 
 import 'chat_botnoi.dart';
 import 'course_detail.dart';
+import 'my_class_all_bk.dart';
 import 'my_class_all.dart';
 import 'notification_booking.dart';
 import 'shared/config.dart';
@@ -1091,13 +1092,13 @@ class _HomePageState extends State<HomePage> {
 
   Widget rowButton(String image, String title, {String code = ''}) {
     //serviceforyou ใช้สำหรับ บริการสำหรับคุณ
-    return Row(
-      children: [
-        GestureDetector(
-          onTap: () {
-            _callOpenPage(code);
-          },
-          child: ClipRRect(
+    return InkWell(
+      onTap: () {
+        _callOpenPage(code);
+      },
+      child: Row(
+        children: [
+          ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: Image.asset(
               image,
@@ -1106,27 +1107,27 @@ class _HomePageState extends State<HomePage> {
               fit: BoxFit.cover,
             ),
           ),
-        ),
-        SizedBox(width: 10),
-        SizedBox(
-          height: 40,
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-              // height: 0.5,
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Colors.black
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
-              // Theme.of(context).custom.bwy,
+          SizedBox(width: 10),
+          SizedBox(
+            height: 40,
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+                // height: 0.5,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+                // Theme.of(context).custom.bwy,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 5),
-      ],
+          const SizedBox(height: 5),
+        ],
+      ),
     );
   }
 
@@ -1357,35 +1358,43 @@ class _HomePageState extends State<HomePage> {
     } else if (param == 'booking') {
       widget.changePage!(1);
     } else if (param == 'job') {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => FindJobPage()));
+      // Navigator.push(context, MaterialPageRoute(builder: (_) => FindJobPage()));
+      widget.changePage!(8);
     } else if (param == 'fund') {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => FundPage()));
-    } else if (param == 'skill') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => MyClassAllPage(
-            title: 'ระบบส่งเสริม Re-skill',
-          ),
-        ),
-      );
-      // buildModalWaiting(context);
-    } else if (param == 'knowledge') {
-      // buildModalWaiting(context);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => MyClassAllPage(
-            title: 'คลังข้อมูล',
-          ),
-        ),
-      );
+      // Navigator.push(context, MaterialPageRoute(builder: (_) => FundPage()));
+      widget.changePage!(5);
     } else if (param == 'report') {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => ReportProblemPage(),
-        ),
-      );
+      widget.changePage!(6);
+    } else if (param == 'skill') {
+      widget.changePage!(2);
+
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (_) => MyClassAllPage(
+      //       title: 'ระบบส่งเสริม Re-skill',
+      //     ),
+      //   ),
+      // );
+    } else if (param == 'knowledge') {
+      widget.changePage!(2);
+
+      // buildModalWaiting(context);
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (_) => MyClassAllPage(
+      //       title: 'คลังข้อมูล',
+      //     ),
+      //   ),
+      // );
+    } else if (param == 'report') {
+      widget.changePage!(6);
+      // Navigator.of(context).push(
+      //   MaterialPageRoute(
+      //     builder: (context) => ReportProblemPage(),
+      //   ),
+      // );
     } else if (param == 'chat') {
       Navigator.of(context).push(
         MaterialPageRoute(

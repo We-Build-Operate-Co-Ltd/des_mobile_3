@@ -4,9 +4,12 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:des/booking_service.dart';
+import 'package:des/contact.dart';
 import 'package:des/detail.dart';
+import 'package:des/find_job.dart';
 import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
+import 'package:des/my_class_all.dart';
 import 'package:des/notification_booking.dart';
 import 'package:des/notification_list.dart';
 import 'package:des/policy.dart';
@@ -16,6 +19,7 @@ import 'package:des/shared/extension.dart';
 import 'package:des/shared/notification_service.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
+import 'package:des/user_profile_bk.dart';
 import 'package:des/user_profile.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +29,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'fund.dart';
+import 'report_problem.dart';
 import 'shared/config.dart';
 import 'main.dart';
 import 'package:badges/badges.dart' as badges;
@@ -479,10 +485,14 @@ class _MenuState extends State<Menu> {
       // SizedBox(),
       homePage,
       BookingServicePage(catSelectedWidget: '0',),
-      LearningPage(),
+      MyClassAllPage(changePage: _changePage),
       // NotificationBookingPage(),
       NotificationListPage(changePage: _changePage),
       profilePage,
+      FundPage(changePage: _changePage),
+      ReportProblemPage(changePage: _changePage),
+      ContactPage(changePage: _changePage),
+      FindJobPage(changePage: _changePage),
     ];
     super.initState();
   }

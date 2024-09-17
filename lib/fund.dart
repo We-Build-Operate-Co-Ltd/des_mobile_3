@@ -1,9 +1,14 @@
+import 'dart:ffi';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/fund_detail.dart';
+import 'package:des/menu.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -11,19 +16,29 @@ import 'main.dart';
 import 'shared/config.dart';
 
 class FundPage extends StatefulWidget {
-  const FundPage({super.key});
+  FundPage({super.key, this.changePage});
+  Function? changePage;
 
   @override
-  State<FundPage> createState() => _FundPageState();
+  _FundPageState createState() => _FundPageState();
+
+  getState() => _FundPageState;
+
+  // @override
+  // State<FundPage> createState() => _FundPageState();
 }
 
 class _FundPageState extends State<FundPage> {
+  TextEditingController _searchController = TextEditingController();
+  TextEditingController _searchFilterController = TextEditingController();
+
   dynamic _model = [];
   dynamic _tempModel = [];
-  dynamic _categoryModel = [];
   dynamic _investor = [];
-
+  dynamic _investorTemp = [];
+  List<dynamic> listCat = [];
   int _typeSelected = 0;
+  bool _loadingWidget = true;
   int i = 2;
 
   List<dynamic> cateFund = [
@@ -31,7 +46,6 @@ class _FundPageState extends State<FundPage> {
     'แหล่งทุนภายนอก',
     'ความรู้ด้านการเงินและการลงทุน',
   ];
-
   List<dynamic> _fundExternal = [
     {
       'code': '0',
@@ -77,7 +91,6 @@ class _FundPageState extends State<FundPage> {
       'linkUrl': 'https://tedfund.mhesi.go.th/index.php#',
     },
   ];
-
   List<dynamic> _fundFinancial = [
     {
       'code': '0',
@@ -124,12 +137,16 @@ class _FundPageState extends State<FundPage> {
     },
   ];
 
+  void _handleSearch(String input) {
+    _investor = [..._investorTemp]
+        .where((element) => element['annoucement'].contains(input))
+        .toList();
+  }
+
   @override
   void initState() {
-    _callRead();
     _category();
     _callReadInvestor();
-
     super.initState();
   }
 
@@ -160,235 +177,257 @@ class _FundPageState extends State<FundPage> {
           ),
           child: Container(
             alignment: Alignment.bottomCenter,
-            child: Card(
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Colors.white
-                  : Colors.black,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  topRight: Radius.circular(15),
-                ),
+            child: Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.white
+                    : Colors.black,
+                borderRadius: BorderRadius.circular(20),
               ),
-              elevation: 5,
-              child: Container(
-                padding:
-                    EdgeInsets.only(top: 25, left: 20, right: 20, bottom: 20),
-                decoration: BoxDecoration(
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Colors.white
-                      : Colors.black,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    physics: ClampingScrollPhysics(),
-                    children: [
-                      Row(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.8,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      child: Column(
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              width: 35.0,
-                              height: 35.0,
-                              margin: EdgeInsets.all(5),
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.pop(context);
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () => {
+                                  widget.changePage!(0),
+                                  // Navigator.pop(context),
                                 },
-                                child: Image.asset(
-                                  'assets/images/back_profile.png',
-                                  // color: Colors.white,
+                                child: Container(
+                                  width: 35.0,
+                                  height: 35.0,
+                                  margin: EdgeInsets.all(5),
+                                  child: Image.asset(
+                                    'assets/images/back_profile.png',
+                                    // color: Colors.white,
+                                  ),
                                 ),
                               ),
-                            ),
+                              SizedBox(width: 10),
+                              Text(
+                                'สรรหาแหล่งทุน',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w500,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Color(0xFFB325F8)
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 10),
-                          Text(
-                            'สรรหาแหล่งทุน',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w500,
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Color(0xFFB325F8)
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
-                            ),
-                          ),
+                          SizedBox(height: 20),
+                          _buildListFundCategory(),
                         ],
                       ),
-                      SizedBox(height: 20),
-                      _buildListFundCategory(),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Text(
-                          cateFund[_typeSelected],
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            color: Color(0xFFB325F8),
+                    ),
+                    SizedBox(height: 12),
+                    Expanded(
+                      child: ListView(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        physics: ClampingScrollPhysics(),
+                        children: [
+                          Text(
+                            cateFund[_typeSelected],
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                              color: Color(0xFFB325F8),
+                            ),
                           ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      if (_typeSelected == 0)
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 50,
-                              // width: double.infinity,
-                              child: TextField(
-                                onChanged: (text) {
-                                  print("First text field: $text");
-                                  setState(() {
-                                    _filtter(text);
-                                  });
-                                },
-                                style: TextStyle(
-                                  color: const Color(0xff020202),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  letterSpacing: 0.5,
-                                ),
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: const Color(0xfff1f1f1),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  hintText: 'พิมพ์คำค้นหา',
-                                  hintStyle: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: 0.5,
-                                    decorationThickness: 6,
-                                  ),
-                                  prefixIcon: const Icon(Icons.search),
-                                  prefixIconColor: Colors.black,
-                                  suffixIcon: Align(
-                                    widthFactor: 1.0,
-                                    heightFactor: 1.0,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        _showModelBottonSheetFund(context);
-                                      },
-                                      child: Image.asset(
-                                          'assets/images/filter.png'),
+                          SizedBox(height: 20),
+                          if (_typeSelected == 0)
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 50,
+                                  child: TextField(
+                                    controller: _searchController,
+                                    onChanged: (text) {
+                                      // print("First text field: $text");
+                                      // setState(() {
+                                      //   _filtter(text);
+                                      // });
+                                    },
+                                    style: TextStyle(
+                                      color: const Color(0xff020202),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 0.5,
+                                    ),
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide(
+                                            color: Color(0xFFDDDDDD)),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide(
+                                            width: 1.0,
+                                            color: Color(
+                                                0xFFDDDDDD) // Border color when focused
+                                            ),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide(
+                                            color: Color(
+                                                0xFFDDDDDD) // Default border color
+                                            ),
+                                      ),
+                                      hintText: 'พิมพ์คำค้นหา',
+                                      hintStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w400,
+                                        letterSpacing: 0.5,
+                                        decorationThickness: 6,
+                                      ),
+                                      prefixIcon: const Icon(Icons.search),
+                                      prefixIconColor: Colors.black,
+                                      suffixIcon: Align(
+                                        widthFactor: 1.0,
+                                        heightFactor: 1.0,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            _showModelBottonSheetFund(context);
+                                          },
+                                          child: Image.asset(
+                                              'assets/images/filter.png'),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                height: 50,
-                                width: double.infinity,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFB325F8),
-                                  borderRadius: BorderRadius.circular(24),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      blurRadius: 4,
-                                      color: Color(0x40F3D2FF),
-                                      offset: Offset(0, 4),
-                                    )
-                                  ],
+                                SizedBox(
+                                  height: 20,
                                 ),
-                                child: const Text(
-                                  'ค้นหาแหล่งทุน',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white,
+                                GestureDetector(
+                                  onTap: () {
+                                    _handleSearch(_searchController.text);
+                                    _searchController.clear();
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    width: double.infinity,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFFB325F8),
+                                      borderRadius: BorderRadius.circular(24),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          blurRadius: 4,
+                                          color: Color(0x40F3D2FF),
+                                          offset: Offset(0, 4),
+                                        )
+                                      ],
+                                    ),
+                                    child: const Text(
+                                      'ค้นหาแหล่งทุน',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            Container(
-                              height: 2,
-                              color: Color(0xFFDDDDDD),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'แหล่งทุนทั้งหมด',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                  color: Color(0xFFB325F8),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            _buildListInvestor(),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  i += 5;
-                                });
-                              },
-                              child: Container(
-                                height: 50,
-                                width: double.infinity,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(24),
-                                  border: Border.all(
-                                    color: Color(0xFFB325F8),
+                                SizedBox(height: 30),
+                                Container(height: 2, color: Color(0xFFDDDDDD)),
+                                SizedBox(height: 20),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'แหล่งทุนทั้งหมด ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15,
+                                      color: Color(0xFFB325F8),
+                                    ),
                                   ),
                                 ),
-                                child: const Text(
-                                  'ดูเพิ่มเติ',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xFFB325F8),
+                                if (_loadingWidget)
+                                  Center(
+                                    child: CircularProgressIndicator(
+                                      color: Color(0xFFB325F8),
+                                    ),
+                                  )
+                                else
+                                  _investor.length != 0
+                                      ? _buildListInvestor() // แสดงรายการนักลงทุนถ้ามีข้อมูล
+                                      : Center(
+                                          child: Text(
+                                            'ไม่พบข้อมูล',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        ),
+                                SizedBox(height: 20),
+                                // _investor.length != 0
+                                //     ? _buildListInvestor()
+                                //     : Text(
+                                //         ' ไม่พบข้อมูล ',
+                                //         textAlign: TextAlign.center,
+                                //         style: TextStyle(
+                                //           fontSize: 20,
+                                //         ),
+                                //       ),
+                                // SizedBox(height: 20),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      i += 5;
+                                    });
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    width: double.infinity,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(24),
+                                      border: Border.all(
+                                        color: Color(0xFFB325F8),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      'ดูเพิ่มเติม',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        color: Color(0xFFB325F8),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                                SizedBox(
+                                  height: 60,
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                          ],
-                        ),
-
-                      // if (_typeSelected == 0) _buildList(),
-                      if (_typeSelected == 1) _buildListExternal(),
-                      if (_typeSelected == 2) _buildListFinancial(),
-                    ],
-                  ),
+                          if (_typeSelected == 1) _buildListExternal(),
+                          if (_typeSelected == 2) _buildListFinancial(),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -396,344 +435,197 @@ class _FundPageState extends State<FundPage> {
         ),
       ),
     );
-
-    // Scaffold(
-    //     backgroundColor: Theme.of(context).custom.w_b_b,
-    //     appBar: AppBar(
-    //       backgroundColor: Theme.of(context).custom.w_b_b,
-    //       automaticallyImplyLeading: false,
-    //       flexibleSpace: Container(
-    //         width: double.infinity,
-    //         padding: EdgeInsets.only(
-    //           top: MediaQuery.of(context).padding.top + 10,
-    //           left: 15,
-    //           right: 15,
-    //         ),
-    //         child: Row(
-    //           children: [
-    //             InkWell(
-    //               onTap: () {
-    //                 Navigator.pop(context);
-    //               },
-    //               child: Image.asset(
-    //                 'assets/images/back.png',
-    //                 height: 40,
-    //                 width: 40,
-    //               ),
-    //             ),
-    //             Expanded(
-    //               child: Text(
-    //                 'ค้นหาแหล่งทุน',
-    //                 style: TextStyle(
-    //                   fontSize: 20,
-    //                   fontWeight: FontWeight.w500,
-    //                   color: Theme.of(context).custom.b_w_y,
-    //                 ),
-    //                 textAlign: TextAlign.center,
-    //               ),
-    //             ),
-    //             SizedBox(width: 40),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //     body: ListView(
-    //       physics: BouncingScrollPhysics(),
-    //       children: [
-    //         SizedBox(height: 20),
-    //         _buildListFundCategory(),
-    //         SizedBox(height: 20),
-    //         if (_typeSelected == 0)
-    //           Padding(
-    //             padding: EdgeInsets.symmetric(horizontal: 15),
-    //             child: SizedBox(
-    //               height: 45,
-    //               width: 360,
-    //               child:
-    //                TextField(
-    //                 onChanged: (text) {
-    //                   print("First text field: $text");
-    //                   setState(() {
-    //                     _filtter(text);
-    //                   });
-    //                 },
-    //                 style: TextStyle(
-    //                   color: const Color(0xff020202),
-    //                   fontSize: 14,
-    //                   fontWeight: FontWeight.w400,
-    //                   letterSpacing: 0.5,
-    //                 ),
-    //                 decoration: InputDecoration(
-    //                   filled: true,
-    //                   fillColor: const Color(0xfff1f1f1),
-    //                   border: OutlineInputBorder(
-    //                     borderRadius: BorderRadius.circular(8),
-    //                     borderSide: BorderSide.none,
-    //                   ),
-    //                   hintStyle: TextStyle(
-    //                       color: const Color(0xffb2b2b2),
-    //                       fontSize: 13,
-    //                       fontWeight: FontWeight.w400,
-    //                       letterSpacing: 0.5,
-    //                       decorationThickness: 6),
-    //                   prefixIcon: const Icon(Icons.search),
-    //                   prefixIconColor: Colors.black,
-    //                 ),
-    //               ),
-    //             ),
-    //           ),
-    //         SizedBox(height: 20),
-    //         if (_typeSelected == 0) _buildList(),
-    //         if (_typeSelected == 1) _buildListExternal(),
-    //         if (_typeSelected == 2) _buildListFinancial(),
-    //       ],
-    //     ));
   }
 
   Future<dynamic> _showModelBottonSheetFund(BuildContext context) {
-    return showModalBottomSheet(
+    return showGeneralDialog(
       context: context,
-      isScrollControlled: true,
-      builder: (context) => StatefulBuilder(
-        builder: (BuildContext context, StateSetter MysetState) => Align(
+      barrierDismissible: true,
+      barrierLabel: '',
+      transitionDuration: Duration(milliseconds: 300),
+      pageBuilder: (context, animation1, animation2) {
+        return Align(
           alignment: Alignment.topCenter,
-          child: Container(
-            padding: EdgeInsets.all(20),
-            height: MediaQuery.of(context).size.height * 0.8,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius:
-                  BorderRadius.vertical(bottom: Radius.circular(25.0)),
-            ),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                ListTile(
-                  leading: Text(''),
-                  title: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'กรองแหล่งทุน',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Color(0xFFB325F8)
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? Colors.white
-                                : Color(0xFFFFFD57),
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              padding: EdgeInsets.all(20),
+              height: MediaQuery.of(context).size.height * 0.75,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius:
+                    BorderRadius.vertical(bottom: Radius.circular(24.0)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.045),
+                  ListTile(
+                    leading: Text(''),
+                    title: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'กรองแหล่งทุน',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFFB325F8)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        ),
                       ),
                     ),
-                  ),
-                  trailing: GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      width: 35.0,
-                      height: 35.0,
-                      margin: EdgeInsets.all(5),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Image.asset(
-                          'assets/images/back-x.png',
-                          // color: Colors.white,
+                    trailing: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 35.0,
+                        height: 35.0,
+                        margin: EdgeInsets.all(5),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Image.asset('assets/images/back-x.png'),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  height: 50,
-                  child: TextField(
-                    onChanged: (text) {
-                      print("First text field: $text");
-                      setState(() {
-                        _filtter(text);
-                      });
-                    },
-                    style: TextStyle(
-                      color: const Color(0xff020202),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: 0.5,
-                    ),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: const Color(0xfff1f1f1),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
+                  SizedBox(height: 12),
+                  SizedBox(
+                    height: 50,
+                    child: TextField(
+                      onChanged: (value) {},
+                      controller: _searchFilterController,
+                      style: TextStyle(
+                        color: const Color(0xff020202),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        letterSpacing: 0.5,
                       ),
-                      hintText: 'พิมพ์คำค้นหา',
-                      hintStyle: TextStyle(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(color: Color(0xFFDDDDDD)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              width: 1.0,
+                              color:
+                                  Color(0xFFDDDDDD) // Border color when focused
+                              ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: Color(0xFFDDDDDD) // Default border color
+                              ),
+                        ),
+                        hintText: 'พิมพ์คำค้นหา',
+                        hintStyle: TextStyle(
+                          color: Colors.black,
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
                           letterSpacing: 0.5,
-                          decorationThickness: 6),
-                      prefixIcon: const Icon(Icons.search),
-                      prefixIconColor: Colors.black,
+                          decorationThickness: 6,
+                        ),
+                        prefixIcon: const Icon(Icons.search),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'หมวดหมู่แหล่งทุน',
-                    style: TextStyle(
+                  SizedBox(height: 12),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'หมวดหมู่แหล่งทุน',
+                      style: TextStyle(
                         fontSize: 15,
                         fontFamily: 'Kanit',
-                        fontWeight: FontWeight.w500),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
-                ),
-                SizedBox(height: 12),
-                _buildCategory(MysetState),
-                SizedBox(height: 12),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    height: 50,
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFB325F8),
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 4,
-                          color: Color(0x40F3D2FF),
-                          offset: Offset(0, 4),
-                        )
+                  SizedBox(height: 12),
+                  Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      children: [
+                        StatefulBuilder(
+                          builder: (context, MysetState) {
+                            return _buildCategory(MysetState);
+                          },
+                        ),
+                        SizedBox(height: 20),
                       ],
                     ),
-                    child: const Text(
-                      'ค้นหาแหล่งทุน',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                      ),
-                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      backgroundColor: Colors.transparent, // ทำให้พื้นหลังโปร่งใส
-    );
-  }
-
-  _buildList() {
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: BouncingScrollPhysics(),
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      itemBuilder: (context, index) => _buildItem(_model[index]),
-      itemCount: _model.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 10),
-    );
-  }
-
-  _buildItem(dynamic data) {
-    return Container(
-      height: 120,
-      decoration: BoxDecoration(
-        color: Theme.of(context).custom.w_b_b,
-        borderRadius: BorderRadius.circular(4),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            blurRadius: 10,
-            offset: Offset(0, 3),
-          )
-        ],
-      ),
-      child: Stack(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: Image.asset(
-                  'assets/icon.png',
-                  height: 120,
-                  width: 120,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        data['annoucement'],
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Theme.of(context).custom.b_w_y,
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          data['target'],
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).custom.f70f70_w_fffd57,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            data['announceDate']
-                                .toString()
-                                .replaceAll('T00:00:00', ''),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Theme.of(context).custom.b325f8_w_fffd57,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            'สนใจเข้าร่วม',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Theme.of(context).custom.b325f8_w_fffd57,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                  GestureDetector(
+                    onTap: () {
+                      _investor = [..._investorTemp]
+                          .where((element) =>
+                              element['annoucement']
+                                  .contains(_searchFilterController.text) &&
+                              listCat
+                                  .where((e) => e['selected'])
+                                  .map((m) => m['cateId'])
+                                  .contains(element['category']))
+                          .toList();
+                      _searchFilterController.clear();
+                      Navigator.pop(context);
+                      // print(
+                      //     '----------------23------------${listCat.where((e) => e['selected']).map((m) => m['cateId'])}');
+                      // print('----------------24------------${[
+                      //   ..._investor
+                      // ].length}');
+                    },
+                    child: Container(
+                      height: 50,
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFB325F8),
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 4,
+                            color: Color(0x40F3D2FF),
+                            offset: Offset(0, 4),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
+                      child: const Text(
+                        'ค้นหาแหล่งทุน',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
-            ],
+            ),
           ),
-        ],
-      ),
+        );
+      },
+      transitionBuilder: (context, animation1, animation2, child) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: Offset(0, -1), // เลื่อนลงมาจากข้างบน
+            end: Offset(0, 0),
+          ).animate(animation1),
+          child: child,
+        );
+      },
     );
   }
 
@@ -895,39 +787,38 @@ class _FundPageState extends State<FundPage> {
 
   _buildListFundCategory() {
     return Container(
-      height: 25,
-      child: ListView.separated(
-        padding: EdgeInsets.symmetric(horizontal: 15),
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (_, __) => GestureDetector(
-          onTap: () {
-            setState(() => _typeSelected = __);
-            // _model = [];
-            // _callReadByJobCategory(_typeSelected, '');
-          },
-          child: Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-              color: __ == _typeSelected
-                  ? Color(0xFFB325F8)
-                  : Color(0xFFB325F8).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(17.5),
-            ),
-            child: Text(
-              cateFund[__],
-              style: TextStyle(
+        height: 25,
+        child: ListView.separated(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (_, __) => GestureDetector(
+            onTap: () {
+              setState(() => _typeSelected = __);
+              // _model = [];
+              // _callReadByJobCategory(_typeSelected, '');
+            },
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
                 color: __ == _typeSelected
-                    ? Colors.white
-                    : Color(0xFFB325F8).withOpacity(0.5),
+                    ? Color(0xFFB325F8)
+                    : Color(0xFFB325F8).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(17.5),
+              ),
+              child: Text(
+                cateFund[__],
+                style: TextStyle(
+                  color: __ == _typeSelected
+                      ? Colors.white
+                      : Color(0xFFB325F8).withOpacity(0.5),
+                ),
               ),
             ),
           ),
-        ),
-        separatorBuilder: (_, __) => const SizedBox(width: 5),
-        itemCount: cateFund.length,
-      ),
-    );
+          separatorBuilder: (_, __) => const SizedBox(width: 5),
+          itemCount: cateFund.length,
+        ));
   }
 
   _buildCategory(StateSetter MysetState) {
@@ -935,12 +826,14 @@ class _FundPageState extends State<FundPage> {
       shrinkWrap: true,
       padding: EdgeInsets.zero,
       physics: ClampingScrollPhysics(),
-      itemCount: _categoryModel.length,
+      itemCount: listCat.length,
       separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (_, __) => GestureDetector(
         onTap: () {
           MysetState(() {
-            _categoryModel[__]['selected'] = !(_categoryModel[__]['selected']);
+            // print('----cateId------${listCat[__]['cateId']}');
+
+            listCat[__]['selected'] = !(listCat[__]['selected']);
           });
         },
         child: Padding(
@@ -961,7 +854,7 @@ class _FundPageState extends State<FundPage> {
                   margin: EdgeInsets.all(2),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(2),
-                      color: _categoryModel[__]['selected']
+                      color: listCat[__]['selected']
                           ? Theme.of(context).custom.b325f8_w_fffd57
                           : Theme.of(context).custom.w_b_b),
                 ),
@@ -969,7 +862,7 @@ class _FundPageState extends State<FundPage> {
               SizedBox(width: 6),
               Expanded(
                 child: Text(
-                  '${_categoryModel[__]['nameTh']}',
+                  '${listCat[__]['nameTh']}',
                   style: TextStyle(
                     fontSize: 13,
                     color: Theme.of(context).custom.b_W_fffd57,
@@ -987,6 +880,7 @@ class _FundPageState extends State<FundPage> {
 
   _buildListInvestor() {
     return ListView.separated(
+      padding: EdgeInsets.zero,
       shrinkWrap: true,
       physics: BouncingScrollPhysics(),
       itemBuilder: (context, index) =>
@@ -998,175 +892,157 @@ class _FundPageState extends State<FundPage> {
     );
   }
 
-  dynamic? _indexRank = '';
-
   _buildItemInvestor(dynamic data, index) {
     return InkWell(
-      onTap: () async {
-        setState(() {
-          _indexRank = data;
-        });
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => FundDetailPage(indexRank: _indexRank!),
-          ),
-        );
-        print('-------------_indexRank--------------${_indexRank}');
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: 20,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 180,
-              width: 320,
-              decoration: BoxDecoration(
-                // color: Color(0xFFB325F8),
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Image.asset('assets/images/03.png'),
+        onTap: () async {
+          setState(() {
+            // _indexRank = data;
+            data['catName'] = listCat.firstWhereOrNull(
+                (x) => x['cateId'] == data['category'])['nameTh'];
+          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => FundDetailPage(model: data!),
             ),
-            SizedBox(
-              height: 12,
-            ),
-            Text(
-              data['annoucement'],
-              style: TextStyle(
-                  fontFamily: 'Kanit',
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFFB325F8)),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Row(
-              children: [
-                Container(
-                  width: 22,
-                  height: 22,
+          );
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  height: 180,
+                  width: 320,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(7.0),
-                    color: Color(0xFFB325F8),
+                    // color: Color(0xFFB325F8),
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Image.asset('assets/images/work.png'),
-                  ),
+                  child: Image.asset('assets/images/03.png'),
                 ),
-                SizedBox(
-                  width: 6,
-                ),
-                Text(
-                  data['companyName'],
-                  style: TextStyle(
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Text(
+                data['annoucement'],
+                style: TextStyle(
                     fontFamily: 'Kanit',
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFFB325F8)),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: 22,
+                    height: 22,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(7.0),
+                      color: Color(0xFFB325F8),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Image.asset('assets/images/work.png'),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 6,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 22,
-                        height: 22,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(7.0),
-                          color: Color(0xFFB325F8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: Image.asset('assets/images/calendar_menu.png'),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 6,
-                      ),
-                      Text(
-                        DateFormat('dd/MM/yyyy').format(
-                          DateTime.parse(data['announceDate']),
-                        ),
-                        style: TextStyle(
-                          fontFamily: 'Kanit',
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
+                  SizedBox(
+                    width: 6,
                   ),
-                ),
-                Expanded(
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 22,
-                        height: 22,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(7.0),
-                          color: Color(0xFFB325F8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: Image.asset('assets/images/eye.png'),
-                        ),
+                  Expanded(
+                    child: Text(
+                      data['companyName'],
+                      style: TextStyle(
+                        fontFamily: 'Kanit',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        '120',
-                        style: TextStyle(
-                          fontFamily: 'Kanit',
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
+                      maxLines: 2,
+                    ),
                   ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  _callRead() async {
-    Dio dio = new Dio();
-    var response = await dio
-        .get('http://dcc-portal.webview.co/dcc-api/api/InvestorAnnoucement/');
-
-    setState(() {
-      _model = response.data;
-      _tempModel = response.data;
-    });
-  }
-
-  _callReadInvestor() async {
-    Dio dio = new Dio();
-    var response = await dio
-        .get('https://dcc.onde.go.th/dcc-api/api/InvestorAnnoucement/portal');
-
-    setState(() {
-      _investor = response.data;
-    });
+                ],
+              ),
+              SizedBox(
+                height: 6,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 22,
+                          height: 22,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7.0),
+                            color: Color(0xFFB325F8),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child:
+                                Image.asset('assets/images/calendar_menu.png'),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 6,
+                        ),
+                        Text(
+                          DateFormat('dd/MM/yyyy').format(
+                            DateTime.parse(data['announceDate']),
+                          ),
+                          style: TextStyle(
+                            fontFamily: 'Kanit',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 22,
+                          height: 22,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7.0),
+                            color: Color(0xFFB325F8),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Image.asset('assets/images/eye.png'),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          '120',
+                          style: TextStyle(
+                            fontFamily: 'Kanit',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ));
   }
 
   _category() async {
@@ -1175,27 +1051,55 @@ class _FundPageState extends State<FundPage> {
         'https://dcc.onde.go.th/dcc-api/api/masterdata/announcement/category');
 
     setState(() {
-      // Map the API response and add a 'selected' field initialized to false
-      _categoryModel = (response.data as List).map((item) {
-        return {
-          ...item,
-          'selected':
-              false, // Adding the 'selected' field with a default value of false
-        };
-      }).toList();
+      _loadingWidget = true;
+      listCat = response.data;
+
+      listCat = (response.data as List).map(
+        (item) {
+          return {
+            ...item,
+            'selected': false,
+          };
+        },
+      ).toList();
     });
   }
 
-  _filtter(param) async {
-    var temp = _tempModel
-        .where((dynamic e) => e['annoucement']
-            .toString()
-            .toUpperCase()
-            .contains(param.toString().toUpperCase()))
-        .toList();
+  // _callReadInvestor() async {
+  //   Dio dio = new Dio();
+  //   var response = await dio
+  //       .get('https://dcc.onde.go.th/dcc-api/api/InvestorAnnoucement/portal');
+
+  //   setState(() {
+  //     _investor = response.data;
+  //     _investorTemp = response.data;
+  //   });
+  // }
+  _callReadInvestor() async {
+    setState(() {
+      _loadingWidget = true; // เริ่มโหลดข้อมูล
+    });
+
+    Dio dio = new Dio();
+    var response = await dio
+        .get('https://dcc.onde.go.th/dcc-api/api/InvestorAnnoucement/portal');
 
     setState(() {
-      _model = temp;
+      _investor = response.data;
+      _investorTemp = response.data;
+      _loadingWidget = false; // โหลดข้อมูลเสร็จแล้ว
     });
   }
+  // _filtter(param) async {
+  //   var temp = _tempModel
+  //       .where((dynamic e) => e['annoucement']
+  //           .toString()
+  //           .toUpperCase()
+  //           .contains(param.toString().toUpperCase()))
+  //       .toList();
+
+  //   setState(() {
+  //     _model = temp;
+  //   });
+  // }
 }
