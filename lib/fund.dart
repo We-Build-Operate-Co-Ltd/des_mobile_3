@@ -645,7 +645,7 @@ class _FundPageState extends State<FundPage> {
   _buildItemExternal(dynamic data) {
     return InkWell(
       onTap: () {
-        launchUrl(Uri.parse(data['linkUrl']),
+        launchUrl(Uri.parse(data['linkUrl'] ?? ''),
             mode: LaunchMode.externalApplication);
       },
       child: Container(
@@ -832,7 +832,6 @@ class _FundPageState extends State<FundPage> {
         onTap: () {
           MysetState(() {
             // print('----cateId------${listCat[__]['cateId']}');
-
             listCat[__]['selected'] = !(listCat[__]['selected']);
           });
         },
@@ -1065,16 +1064,6 @@ class _FundPageState extends State<FundPage> {
     });
   }
 
-  // _callReadInvestor() async {
-  //   Dio dio = new Dio();
-  //   var response = await dio
-  //       .get('https://dcc.onde.go.th/dcc-api/api/InvestorAnnoucement/portal');
-
-  //   setState(() {
-  //     _investor = response.data;
-  //     _investorTemp = response.data;
-  //   });
-  // }
   _callReadInvestor() async {
     setState(() {
       _loadingWidget = true; // เริ่มโหลดข้อมูล
@@ -1090,16 +1079,17 @@ class _FundPageState extends State<FundPage> {
       _loadingWidget = false; // โหลดข้อมูลเสร็จแล้ว
     });
   }
-  // _filtter(param) async {
-  //   var temp = _tempModel
-  //       .where((dynamic e) => e['annoucement']
-  //           .toString()
-  //           .toUpperCase()
-  //           .contains(param.toString().toUpperCase()))
-  //       .toList();
 
-  //   setState(() {
-  //     _model = temp;
-  //   });
-  // }
+  _filtter(param) async {
+    var temp = _tempModel
+        .where((dynamic e) => e['annoucement']
+            .toString()
+            .toUpperCase()
+            .contains(param.toString().toUpperCase()))
+        .toList();
+
+    setState(() {
+      _model = temp;
+    });
+  }
 }

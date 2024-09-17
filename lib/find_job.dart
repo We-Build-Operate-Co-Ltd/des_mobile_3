@@ -4,6 +4,7 @@ import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -74,7 +75,10 @@ class _FindJobPageState extends State<FindJobPage> {
       "education": "",
     },
   ];
-
+  List<dynamic> _salatyModel = [];
+  List<dynamic> _selectedSalaty = [];
+  List<dynamic> _jobTypeModel = [];
+  List<dynamic> _selectedJobType = [];
   dynamic _categoryModel = [];
   int _typeSelected = 0;
   int _cateSelected = 0;
@@ -118,6 +122,8 @@ class _FindJobPageState extends State<FindJobPage> {
     _callRead();
     _callReadJobType();
     _callReadChangwat();
+    _callCategorySalary();
+    _callCategorJobTypy();
 
     super.initState();
   }
@@ -184,6 +190,7 @@ class _FindJobPageState extends State<FindJobPage> {
                           _buildHead(),
                           SizedBox(height: 20),
                           _buildListJobCategory(),
+
                           SizedBox(height: 20),
                           // _buildListCategory(),
                           Expanded(
@@ -413,7 +420,9 @@ class _FindJobPageState extends State<FindJobPage> {
         SizedBox(height: 15),
         _buildSearch(
           _searchController,
-          () {},
+          () {
+            _showModelBottonSheetFind(context);
+          },
         ),
         SizedBox(height: 15),
         _dropdown(
@@ -459,6 +468,7 @@ class _FindJobPageState extends State<FindJobPage> {
                 // data: _modelType,
                 value: _changwatRefNo,
                 onChanged: (value) {
+                  // print('------เลือกจังหวัด-------${value}');
                   _changwatRefNo = value;
                   _amphoeRefNo = 0;
                   _callReadAmphoe(value);
@@ -484,6 +494,7 @@ class _FindJobPageState extends State<FindJobPage> {
                 // data: _modelType,
                 value: _amphoeRefNo,
                 onChanged: (value) {
+                  // print('------เลือกอำเภอ-------${value}');
                   setState(() {
                     _amphoeRefNo = value;
                   });
@@ -529,7 +540,9 @@ class _FindJobPageState extends State<FindJobPage> {
         SizedBox(height: 15),
         Container(
           child: Text(
-            'ตำแหน่งงานทั้งหมด',
+            catFindJob2[_typeSelected2],
+
+            // 'ตำแหน่งงานทั้งหมด',
             style: TextStyle(
               color: Theme.of(context).custom.b325f8_w_fffd57,
               fontFamily: 'Kanit',
@@ -579,7 +592,7 @@ class _FindJobPageState extends State<FindJobPage> {
                 // color: Color(0xFFB325F8),
                 borderRadius: BorderRadius.circular(24),
               ),
-              child: Image.asset('assets/images/03.png'),
+              child: Image.asset('assets/images/jobkk11576.png'),
             ),
           ),
           const SizedBox(height: 10),
@@ -588,6 +601,7 @@ class _FindJobPageState extends State<FindJobPage> {
             style: TextStyle(
               fontSize: 16,
               color: Theme.of(context).custom.b325f8_w_fffd57,
+              fontWeight: FontWeight.w500,
             ),
           ),
           const SizedBox(height: 10),
@@ -751,7 +765,9 @@ class _FindJobPageState extends State<FindJobPage> {
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           // itemBuilder: (_, __) => _buildItemJob(MockFindJob.data[__]),
           itemBuilder: (_, __) => _buildItemJobExternal(_modelExternal2[__]),
-          separatorBuilder: (_, __) => const SizedBox(height: 10),
+          separatorBuilder: (_, __) => const Divider(
+            color: Color(0xFFDDDDDD),
+          ),
           itemCount: _modelExternal2.length,
         ),
       ],
@@ -761,53 +777,57 @@ class _FindJobPageState extends State<FindJobPage> {
   _buildItemJobExternal(dynamic data) {
     return InkWell(
       onTap: () {
-        launchUrl(
-            Uri.parse(
-              data?['linkUrl'] ?? '',
-            ),
+        launchUrl(Uri.parse(data?['linkUrl'] ?? ''),
             mode: LaunchMode.externalApplication);
       },
       child: Container(
-        padding: EdgeInsets.all(10),
+        height: 120,
         decoration: BoxDecoration(
           color: Theme.of(context).custom.w_b_b,
-          borderRadius: BorderRadius.circular(3),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              blurRadius: 10,
-              offset: Offset(0, 3),
-            )
-          ],
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Stack(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                  child: Image.network(
-                    data?['imageUrl'] ?? '',
-                    height: 80,
-                    width: 80,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    width: 160.8,
+                    height: 95,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Color(0xFFDDDDDD),
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                      // color: Color(0xFFDDDDDD),
+                    ),
+                    child: Image.network(
+                      data?['imageUrl'] ?? '',
+                      height: 80,
+                      width: 80,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        data?['jobpositionName'] ?? '',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Theme.of(context).custom.b_w_y,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          data?['jobpositionName'] ?? '',
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Theme.of(context).custom.b_w_y,
+                              overflow: TextOverflow.ellipsis),
+                          maxLines: 4,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -855,10 +875,45 @@ class _FindJobPageState extends State<FindJobPage> {
           ),
         ),
         SizedBox(height: 15),
-        _buildSearch(
-          _searchResumeController,
-          () {},
+
+        SizedBox(
+          height: 50,
+          child: TextField(
+            controller: _searchResumeController,
+            style: TextStyle(
+              color: const Color(0xff020202),
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              letterSpacing: 0.5,
+            ),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: const Color(0xffFFFFFF),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0XFFDDDDDD), width: 1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Color(0XFFDDDDDD), width: 1),
+              ),
+              hintText: 'พิมพ์คำค้นหา',
+              hintStyle: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+                // letterSpacing: 0.5,
+                // decorationThickness: 6,
+                color: Color(0XFF000000),
+              ),
+              prefixIcon: const Icon(Icons.search),
+              prefixIconColor: Colors.black,
+            ),
+          ),
         ),
+        // _buildSearch(
+        //   _searchResumeController,
+        //   () {},
+        // ),
         SizedBox(height: 15),
         _dropdown(
           hintText: "เลือกประเภทงาน",
@@ -877,6 +932,7 @@ class _FindJobPageState extends State<FindJobPage> {
           // data: _modelType,
           value: _typeRefNoResume,
           onChanged: (value) {
+            // print('-------เลือกประเภทงาน---------${value}');
             setState(() {
               _typeRefNoResume = value;
             });
@@ -903,6 +959,7 @@ class _FindJobPageState extends State<FindJobPage> {
                 // data: _modelType,
                 value: _changwatRefNoResume,
                 onChanged: (value) {
+                  // print('--------เลือกจังหวัด2--------${value}');
                   _changwatRefNoResume = value;
                   _amphoeRefNoResume = 0;
                   _callReadAmphoe(value);
@@ -929,6 +986,7 @@ class _FindJobPageState extends State<FindJobPage> {
                 value: _amphoeRefNoResume,
                 onChanged: (value) {
                   setState(() {
+                    // print('--------เลือกอำเภอ2--------${value}');
                     _amphoeRefNoResume = value;
                   });
                 },
@@ -1259,6 +1317,354 @@ class _FindJobPageState extends State<FindJobPage> {
     );
   }
 
+  Future<dynamic> _showModelBottonSheetFind(BuildContext context) {
+    return showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: '',
+      transitionDuration: Duration(milliseconds: 300),
+      pageBuilder: (context, animation1, animation2) {
+        return Align(
+          alignment: Alignment.topCenter,
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              padding: EdgeInsets.all(20),
+              height: MediaQuery.of(context).size.height * 0.9,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius:
+                    BorderRadius.vertical(bottom: Radius.circular(24.0)),
+              ),
+              child: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setModalState) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.045),
+                      ListTile(
+                        leading: Text(''),
+                        title: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            'กรองตำแหน่งงาน',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w500,
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFFB325F8)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                            ),
+                          ),
+                        ),
+                        trailing: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: 35.0,
+                            height: 35.0,
+                            margin: EdgeInsets.all(5),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Image.asset('assets/images/back-x.png'),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      SizedBox(
+                        height: 50,
+                        child: TextField(
+                          controller: _searchController,
+                          style: TextStyle(
+                            color: const Color(0xff020202),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 0.5,
+                          ),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: const Color(0xffFFFFFF),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color(0XFFDDDDDD), width: 1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                  color: Color(0XFFDDDDDD), width: 1),
+                            ),
+                            hintText: 'พิมพ์คำค้นหา',
+                            hintStyle: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                              // letterSpacing: 0.5,
+                              // decorationThickness: 6,
+                              color: Color(0XFF000000),
+                            ),
+                            prefixIcon: const Icon(Icons.search),
+                            prefixIconColor: Colors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      _dropdown(
+                        hintText: "เลือกประเภทงาน",
+                        data: _modelType.map((item) {
+                          return DropdownMenuItem(
+                            value: item['jobCateId'],
+                            child: Text(
+                              '${item['nameTh']}',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).custom.b_W_fffd57,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        // data: _modelType,
+                        value: _typeRefNo,
+                        onChanged: (value) {
+                          // print('----------เลือกประเภทงาน3----------${value}');
+                          setState(() {
+                            _typeRefNo = value;
+                          });
+                        },
+                      ),
+                      SizedBox(height: 15),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _dropdown(
+                              hintText: "เลือกจังหวัด",
+                              data: _modelChangwat.map((item) {
+                                return DropdownMenuItem(
+                                  value: item['value'],
+                                  child: Text(
+                                    '${item['label']}',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color:
+                                          Theme.of(context).custom.b_W_fffd57,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                              // data: _modelType,
+                              value: _changwatRefNo,
+                              onChanged: (value) {
+                                setModalState(() {
+                                  _changwatRefNo = value;
+                                  _amphoeRefNo = 0;
+                                  _callReadAmphoe1(value, setModalState);
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: _dropdown(
+                              hintText: "เลือกอำเภอ",
+                              data: _modelAmphoe.map((item) {
+                                return DropdownMenuItem(
+                                  value: item['value'],
+                                  child: Text(
+                                    '${item['label']}',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color:
+                                          Theme.of(context).custom.b_W_fffd57,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                              // data: _modelType,
+                              value: _amphoeRefNo,
+                              onChanged: (value) {
+                                // print('------เลือกอำเภอ3-------${value}');
+                                setModalState(() {
+                                  _amphoeRefNo = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 12),
+                      Expanded(
+                        child: ListView(
+                          padding: EdgeInsets.zero,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'ลักษณะงาน',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: 'Kanit',
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 12),
+                            StatefulBuilder(
+                              builder: (context, MysetState) {
+                                return _buildCategory(
+                                    MysetState, _jobTypeModel, 'nameTh');
+                              },
+                            ),
+                            SizedBox(
+                              height: 12,
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'ช่วงเงินเดือนที่ต้องการ',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: 'Kanit',
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 12),
+                            StatefulBuilder(
+                              builder: (context, MysetState) {
+                                return _buildCategory(
+                                    MysetState, _salatyModel, 'salary');
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      GestureDetector(
+                        onTap: () {
+                          _handleSearch();
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          height: 50,
+                          width: double.infinity,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Color(0xFFB325F8),
+                            borderRadius: BorderRadius.circular(24),
+                            boxShadow: const [
+                              BoxShadow(
+                                blurRadius: 4,
+                                color: Color(0x40F3D2FF),
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: const Text(
+                            'ค้นหาตำแหน่งงาน',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (context, animation1, animation2, child) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: Offset(0, -1), // เลื่อนลงมาจากข้างบน
+            end: Offset(0, 0),
+          ).animate(animation1),
+          child: child,
+        );
+      },
+    );
+  }
+
+  _buildCategory(StateSetter MysetState, List<dynamic> data, String textname) {
+    return ListView.separated(
+      shrinkWrap: true,
+      padding: EdgeInsets.zero,
+      physics: ClampingScrollPhysics(),
+      itemCount: data.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 8),
+      itemBuilder: (_, __) => GestureDetector(
+        onTap: () {
+          MysetState(() {
+            // print('----cateId------${listCat[__]['cateId']}');
+            data[__]['selected'] = !(data[__]['selected']);
+
+            if (data[__]['selected']) {
+              _selectedJobType.add(data[__]['jobtId']);
+              _selectedSalaty.add(data[__]['salaryId']);
+            } else {
+              _selectedJobType.remove(data[__]['jobtId']);
+              _selectedSalaty.remove(data[__]['salaryId']);
+            }
+            // print(
+            //     '--------_selectedJobType------${_selectedJobType.toString()}');
+            // print('-----_selectedSalaty---------${_selectedSalaty.toString()}');
+          });
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Row(
+            children: [
+              Container(
+                height: 20,
+                width: 20,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 1,
+                    color: Theme.of(context).custom.b325f8_w_fffd57,
+                  ),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+                child: Container(
+                  margin: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: data[__]['selected']
+                          ? Theme.of(context).custom.b325f8_w_fffd57
+                          : Theme.of(context).custom.w_b_b),
+                ),
+              ),
+              SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  '${data[__][textname]}',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Theme.of(context).custom.b_W_fffd57,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   static InputDecoration _decorationDropdown(context, {String hintText = ''}) =>
       InputDecoration(
         label: Text(hintText),
@@ -1373,7 +1779,6 @@ class _FindJobPageState extends State<FindJobPage> {
         },
       ),
     );
-
     setState(() {
       if (_typeSelected == 0) {
         _modelAmphoe = [
@@ -1392,6 +1797,32 @@ class _FindJobPageState extends State<FindJobPage> {
           ...response.data
         ];
       }
+    });
+  }
+
+  _callReadAmphoe1(value, StateSetter setModalState) async {
+    var accessToken = await ManageStorage.read('accessToken') ?? '';
+    Dio dio = new Dio();
+    var response = await dio.post(
+      'https://dcc.onde.go.th/dcc-api/api/masterdata/amphoe',
+      data: {
+        "filters": [value]
+      },
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+        },
+      ),
+    );
+    setModalState(() {
+      _modelAmphoe = [
+        {
+          "value": 0,
+          "label": "เลือกอำเภอ",
+        },
+        ...response.data
+      ];
+      _amphoeRefNo = 0; // รีเซ็ตค่าอำเภอ
     });
   }
 
@@ -1456,6 +1887,60 @@ class _FindJobPageState extends State<FindJobPage> {
     // print(_model.toString());
   }
 
+  _callCategorySalary() async {
+    Dio dio = Dio();
+    var response =
+        await dio.get('https://dcc.onde.go.th/dcc-api/api/Job/GetJobSalaryMS');
+
+    // print('---------_callCategorySalary------------${response.data}');
+
+    // Check if the response is a Map and contains a 'data' key
+    if (response.data is Map<String, dynamic> &&
+        response.data['data'] is List) {
+      setState(() {
+        // Extract the list from 'data'
+        _salatyModel = (response.data['data'] as List).map(
+          (item) {
+            return {
+              ...item,
+              'selected': false, // Add 'selected' field
+            };
+          },
+        ).toList();
+      });
+    } else {
+      print("Unexpected response structure");
+    }
+  }
+
+  _callCategorJobTypy() async {
+    Dio dio = Dio();
+    var response =
+        await dio.get('https://dcc.onde.go.th/dcc-api/api/Job/GetJobTypeMS');
+
+    // print('---------_callCategorJobTypy------------${response.data}');
+
+    // Check if the response is a Map and contains a 'data' key
+    if (response.data is Map<String, dynamic> &&
+        response.data['data'] is List) {
+      setState(() {
+        // Extract the list from 'data'
+        _jobTypeModel = (response.data['data'] as List).map(
+          (item) {
+            return {
+              ...item,
+              'selected': false, // Add 'selected' field
+            };
+          },
+        ).toList();
+      });
+    } else {
+      print("Unexpected response structure");
+    }
+  }
+
+  // print(_model.toString());
+
   _getJobCate(param) {
     // logWTF(param);
     var title = "";
@@ -1509,23 +1994,23 @@ class _FindJobPageState extends State<FindJobPage> {
 
   _handleSearch() async {
     Dio dio = new Dio();
-    if (_typeSelected2 == 0) {
+    if (_typeSelected == 0 && _typeSelected2 == 0) {
       var response = await dio.get(
-          'https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?${(_searchController.text ?? "") == "" ? 'search=' : 'search=${_searchController.text}'}${_typeRefNo == 0 ? '' : '&catId=$_typeRefNo'}${_changwatRefNo == 0 ? '' : '&provinceId=$_changwatRefNo'}${_amphoeRefNo == 0 ? '' : '&amphoeId=$_amphoeRefNo'}');
+          'https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?${(_searchController.text ?? "") == "" ? 'search=' : 'search=${_searchController.text}'}${_typeRefNo == 0 ? '' : '&catId=$_typeRefNo'}${_changwatRefNo == 0 ? '' : '&provinceId=$_changwatRefNo'}${_amphoeRefNo == 0 ? '' : '&amphoeId=$_amphoeRefNo'} ${_selectedJobType.isEmpty ? '' : '&_selectedJobType=$_selectedJobType.join(",")'}  ${_selectedSalaty.isEmpty ? '' : '&_selectedSalaty=$_selectedSalaty.join(",")'}');
 
       setState(() {
         _model = response.data['data'];
       });
-    } else if (_typeSelected2 == 1) {
+    } else if (_typeSelected == 0 && _typeSelected2 == 1) {
       var response = await dio.get(
-          'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?${(_searchController.text ?? "") == "" ? 'search=' : 'search=${_searchController.text}'}${_typeRefNo == 0 ? '' : '&catId=$_typeRefNo'}${_changwatRefNo == 0 ? '' : '&provinceId=$_changwatRefNo'}${_amphoeRefNo == 0 ? '' : '&amphoeId=$_amphoeRefNo'}');
+          'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?${(_searchController.text ?? "") == "" ? 'search=' : 'search=${_searchController.text}'}${_typeRefNo == 0 ? '' : '&catId=$_typeRefNo'}${_changwatRefNo == 0 ? '' : '&provinceId=$_changwatRefNo'}${_amphoeRefNo == 0 ? '' : '&amphoeId=$_amphoeRefNo'} ${_selectedJobType.isEmpty ? '' : '&_selectedJobType=$_selectedJobType.join(",")'}  ${_selectedSalaty.isEmpty ? '' : '&_selectedSalaty=$_selectedSalaty.join(",")'}');
 
       setState(() {
         _modelExternal = response.data;
       });
-    } else if (_typeSelected2 == 2) {
+    } else if (_typeSelected == 2) {
       var response = await dio.get(
-          'https://dcc.onde.go.th/dcc-api/api/Resume/resumes?${(_searchController.text ?? "") == "" ? 'keyword=' : 'keyword=${_searchController.text}'}${_typeRefNo == 0 ? '' : '&catId=$_typeRefNo'}${_changwatRefNo == 0 ? '' : '&provinceId=$_changwatRefNo'}${_amphoeRefNo == 0 ? '' : '&amphoeId=$_amphoeRefNo'}');
+          'https://dcc.onde.go.th/dcc-api/api/Resume/resumes?${(_searchResumeController.text ?? "") == "" ? 'keyword=' : 'keyword=${_searchResumeController.text}'}${_typeRefNoResume == 0 ? '' : '&catId=$_typeRefNoResume'}${_changwatRefNoResume == 0 ? '' : '&provinceId=$_changwatRefNoResume'}${_amphoeRefNoResume == 0 ? '' : '&amphoeId=$_amphoeRefNoResume'}');
 
       setState(() {
         _modelResume = response.data['data'];
