@@ -1,7 +1,10 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:des/booking_service_edit.dart';
+import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
+import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +16,9 @@ import 'package:intl/intl.dart';
 import 'package:des/booking_service_confirm.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'booking_service.dart';
 import 'main.dart';
+import 'menu.dart';
 
 class BookingServiceDetailPage extends StatefulWidget {
   const BookingServiceDetailPage({
@@ -66,177 +71,593 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
   String _bookingTypeRefNo = '';
   late List<dynamic> _modelType;
   bool _loadingDropdownType = false;
+  bool _loadingSubmit = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        flexibleSpace: Container(
-          width: double.infinity,
-          color: Colors.white,
-          padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top + 20,
-            left: 15,
-            right: 15,
-          ),
-          child: Row(
-            children: [
-              _backButton(context),
-              Expanded(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+    return GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          extendBody: true,
+          // backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+          //     ? Colors.white
+          //     : Colors.black,
+          body: Container(
+            padding: EdgeInsets.only(top: 130),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/BG.png"),
+                fit: BoxFit.cover,
               ),
-              SizedBox(width: 40),
-            ],
-          ),
-        ),
-      ),
-      body: Stack(
-        children: [
-          SizedBox(
-            height: double.infinity,
-            width: double.infinity,
-          ),
-          Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.1,
-            right: 0,
-            child: Image.asset(
-              'assets/images/logo_2o.png',
-              width: 290,
+            ),
+            child: Container(
+              padding: EdgeInsets.fromLTRB(24, 24, 24, 24),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(24),
+                      topRight: Radius.circular(24)),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 10,
+                      offset: Offset(0, -2),
+                    ),
+                  ]),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Image.asset(
+                          'assets/images/back_arrow.png',
+                          width: 35,
+                          height: 35,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      Expanded(
+                          child: Text(
+                        "แก้ไขการจอง",
+                        style: TextStyle(
+                            fontSize: 24,
+                            color: Theme.of(context).custom.b325f8_w_fffd57,
+                            fontWeight: FontWeight.w500),
+                      )),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Expanded(
+                    child: _detailContent(),
+                  ),
+                ],
+              ),
             ),
           ),
-          Positioned.fill(
-            child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        ));
+
+    // Scaffold(
+    //   backgroundColor: Colors.white,
+    //   appBar: AppBar(
+    //     backgroundColor: Colors.white,
+    //     automaticallyImplyLeading: false,
+    //     flexibleSpace: Container(
+    //       width: double.infinity,
+    //       color: Colors.white,
+    //       padding: EdgeInsets.only(
+    //         top: MediaQuery.of(context).padding.top + 20,
+    //         left: 15,
+    //         right: 15,
+    //       ),
+    //       child: Row(
+    //         children: [
+    //           _backButton(context),
+    //           Expanded(
+    //             child: Text(
+    //               title,
+    //               style: TextStyle(
+    //                 fontSize: 20,
+    //                 fontWeight: FontWeight.w500,
+    //               ),
+    //               textAlign: TextAlign.center,
+    //             ),
+    //           ),
+    //           SizedBox(width: 40),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    //   body: Stack(
+    //     children: [
+    //       SizedBox(
+    //         height: double.infinity,
+    //         width: double.infinity,
+    //       ),
+    //       Positioned(
+    //         bottom: MediaQuery.of(context).size.height * 0.1,
+    //         right: 0,
+    //         child: Image.asset(
+    //           'assets/images/logo_2o.png',
+    //           width: 290,
+    //         ),
+    //       ),
+    //       Positioned.fill(
+    //         child: ListView(
+    //           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+    //           children: [
+    //             ClipRRect(
+    //               borderRadius: BorderRadius.circular(15),
+    //               child: SizedBox(
+    //                 width: double.infinity,
+    //                 height: 194,
+    //                 child: CachedNetworkImage(
+    //                   imageUrl: _model['imageUrl'] ?? '',
+    //                   fit: BoxFit.cover,
+    //                   errorWidget: (context, url, error) =>
+    //                       Image.asset('assets/images/logo.png'),
+    //                 ),
+    //               ),
+    //             ),
+    //             SizedBox(height: 15),
+    //             Text(
+    //               '${_model?['centerName'] ?? '-'}',
+    //               style: TextStyle(
+    //                 fontSize: 20,
+    //                 fontWeight: FontWeight.w500,
+    //               ),
+    //             ),
+    //             SizedBox(height: 10),
+    //             Align(
+    //               alignment: Alignment.centerLeft,
+    //               child: widget.repeat
+    //                   ? Container(
+    //                       width: 153,
+    //                       padding:
+    //                           EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+    //                       decoration: BoxDecoration(
+    //                         color: Color(0xFFEEEEEE),
+    //                         borderRadius: BorderRadius.circular(15),
+    //                       ),
+    //                       child: Row(
+    //                         children: [
+    //                           Icon(
+    //                             Icons.calendar_month_rounded,
+    //                             color: Color(0xFF707070),
+    //                             size: 15,
+    //                           ),
+    //                           SizedBox(width: 5),
+    //                           Text(
+    //                             'ใช้บริการล่าสุดเมื่อ 15/01/66',
+    //                             style: TextStyle(
+    //                               color: Color(0xFF707070),
+    //                               fontSize: 9,
+    //                               fontWeight: FontWeight.w400,
+    //                             ),
+    //                           ),
+    //                         ],
+    //                       ),
+    //                     )
+    //                   : Container(
+    //                       padding:
+    //                           EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+    //                       decoration: BoxDecoration(
+    //                         color: Color(0xFFB325F8).withOpacity(.1),
+    //                         borderRadius: BorderRadius.circular(15),
+    //                       ),
+    //                       child: Text(
+    //                         '${_model['slotCount']} เครื่อง',
+    //                         style: TextStyle(
+    //                           color: Color(0xFFB325F8),
+    //                           fontSize: 9,
+    //                           fontWeight: FontWeight.w400,
+    //                         ),
+    //                       ),
+    //                     ),
+    //             ),
+    //             SizedBox(height: 20),
+    //             Text(
+    //               'การติดต่อ',
+    //               style: TextStyle(
+    //                 fontSize: 15,
+    //                 fontWeight: FontWeight.w500,
+    //               ),
+    //             ),
+    //             SizedBox(height: 25),
+    //             Row(
+    //               mainAxisAlignment: MainAxisAlignment.spaceAround,
+    //               children: [
+    //                 _itemContact(
+    //                   image: 'assets/images/vector.png',
+    //                   title: 'แสดงแผนที่',
+    //                 ),
+    //                 _itemContact(
+    //                   image: 'assets/images/call_phone.png',
+    //                   title: 'เบอร์ติดต่อ',
+    //                   onTap: () async {
+    //                     launchUrl(
+    //                       Uri(scheme: 'tel', path: _model?['centerTel'] ?? ''),
+    //                     );
+    //                   },
+    //                 ),
+    //                 _itemContact(
+    //                   image: 'assets/images/facebook.png',
+    //                   title: 'Facebook',
+    //                   color: Color(0xFF227BEF),
+    //                   onTap: () async {
+    //                     launchUrl(
+    //                       Uri.parse(_model?['centerFacebook'] ?? ''),
+    //                     );
+    //                   },
+    //                 )
+    //               ],
+    //             ),
+    //             SizedBox(height: 30),
+    //             Text(
+    //               _model['centerAdd'],
+    //               style: TextStyle(fontSize: 14),
+    //             ),
+    //             SizedBox(height: 20),
+    //             _buildWhiteSpace(),
+    //           ],
+    //         ),
+    //       ),
+    //       _buildSubmitContainer(),
+    //     ],
+    //   ),
+    // );
+  }
+
+  _detailContent() {
+    return Stack(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            textForm(
+                label: 'ศูนย์ดิจิทัลชุมชนที่จอง',
+                detail: widget.model['centerName']),
+            SizedBox(height: 12),
+            textForm(label: 'วันที่ใช้บริการ', detail: widget.date),
+            SizedBox(height: 12),
+            textForm(
+                label: 'เวลาที่จอง',
+                detail: '${widget.startTime} - ${widget.endTime} น.'),
+            SizedBox(height: 12),
+            textForm(label: 'รูปแบบการจอง', detail: widget.model['typeName']),
+            // Expanded(child: SizedBox())
+            const Spacer(),
+            Column(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 194,
-                    child: CachedNetworkImage(
-                      imageUrl: _model['imageUrl'] ?? '',
-                      fit: BoxFit.cover,
-                      errorWidget: (context, url, error) =>
-                          Image.asset('assets/images/logo.png'),
+                GestureDetector(
+                  onTap: () {
+                    // Navigator.pop(context);
+                    _dialogCancelBooking();
+                  },
+                  child: Container(
+                    // height: 40,
+                    padding: EdgeInsets.symmetric(vertical: 13),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Theme.of(context).custom.b325f8_w_fffd57_OVF50,
+                      ),
+                      borderRadius: BorderRadius.circular(25),
                     ),
-                  ),
-                ),
-                SizedBox(height: 15),
-                Text(
-                  '${_model?['centerName'] ?? '-'}',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
+                    alignment: Alignment.center,
+                    child: Text(
+                      'ยกเลิกการจอง',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Theme.of(context).custom.b325f8_w_fffd57,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                 ),
                 SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: widget.repeat
-                      ? Container(
-                          width: 153,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                GestureDetector(
+                  onTap: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BookingServiceEditPage(
+                          model: widget.model,
+                          edit: widget.edit,
+                          repeat: widget.repeat,
+                          repeatCurrentDay: false,
+                          date: widget.date,
+                          startTime: widget.model['startTime'],
+                          endTime: widget.model['endTime'],
+                          phone: widget.model['phone'],
+                          remark: widget.model['remark'],
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 13),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).custom.b325f8_w_fffd57,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      'เลื่อนการจอง',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Theme.of(context).custom.w_b_b,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+        if (_loadingSubmit)
+          Positioned.fill(
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: SizedBox(
+                height: 60,
+                width: 60,
+                child: CircularProgressIndicator(
+                  color: Theme.of(context).custom.b325f8_w_fffd57,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  _dialogCancelBooking() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SizedBox(
+              // height: 127,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/images/warning.png',
+                    width: 77.5,
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    'ยกเลิกการจอง',
+                    style: TextStyle(
+                      color: Theme.of(context).custom.b_w_y,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    'คุณยืนยันที่จะยกเลิกการจองในวันที่\n${widget.date.split(' ').join()} (${widget.model['startTime']}-${widget.model['endTime']} น.) ใช่หรือไม่',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                      color: Theme.of(context).custom.b_w_y,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 10),
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                          _cancelBooking();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 13),
                           decoration: BoxDecoration(
-                            color: Color(0xFFEEEEEE),
-                            borderRadius: BorderRadius.circular(15),
+                            color: Theme.of(context).custom.b325f8_w_fffd57,
+                            borderRadius: BorderRadius.circular(25),
                           ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.calendar_month_rounded,
-                                color: Color(0xFF707070),
-                                size: 15,
-                              ),
-                              SizedBox(width: 5),
-                              Text(
-                                'ใช้บริการล่าสุดเมื่อ 15/01/66',
-                                style: TextStyle(
-                                  color: Color(0xFF707070),
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFB325F8).withOpacity(.1),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
+                          alignment: Alignment.center,
                           child: Text(
-                            '${_model['slotCount']} เครื่อง',
+                            'ยืนยัน',
                             style: TextStyle(
-                              color: Color(0xFFB325F8),
-                              fontSize: 9,
-                              fontWeight: FontWeight.w400,
+                              fontSize: 15,
+                              color: Theme.of(context).custom.w_b_b,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'การติดต่อ',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 25),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _itemContact(
-                      image: 'assets/images/vector.png',
-                      title: 'แสดงแผนที่',
-                    ),
-                    _itemContact(
-                      image: 'assets/images/call_phone.png',
-                      title: 'เบอร์ติดต่อ',
-                      onTap: () async {
-                        launchUrl(
-                          Uri(scheme: 'tel', path: _model?['centerTel'] ?? ''),
-                        );
-                      },
-                    ),
-                    _itemContact(
-                      image: 'assets/images/facebook.png',
-                      title: 'Facebook',
-                      color: Color(0xFF227BEF),
-                      onTap: () async {
-                        launchUrl(
-                          Uri.parse(_model?['centerFacebook'] ?? ''),
-                        );
-                      },
-                    )
-                  ],
-                ),
-                SizedBox(height: 30),
-                Text(
-                  _model['centerAdd'],
-                  style: TextStyle(fontSize: 14),
-                ),
-                SizedBox(height: 20),
-                _buildWhiteSpace(),
-              ],
+                      ),
+                      SizedBox(height: 10),
+                      GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 13),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Theme.of(context)
+                                  .custom
+                                  .b325f8_w_fffd57_OVF50,
+                            ),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'ย้อนกลับ',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Theme.of(context).custom.b325f8_w_fffd57,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
-          _buildSubmitContainer(),
-        ],
+        );
+      },
+    );
+  }
+
+  _dialogCancelSuccess() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) => WillPopScope(
+        onWillPop: () => Future.value(false),
+        child: Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          backgroundColor: Theme.of(context).custom.w_b_b,
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: SizedBox(
+              // height: 127,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/images/check.png',
+                    width: 77.5,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'ยกเลิกการจองสำเร็จ!',
+                    style: TextStyle(
+                      color: Theme.of(context).custom.C19AA6A_w_fffd57,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  GestureDetector(
+                    onTap: () => {
+                      // Navigator.of(context).pushAndRemoveUntil(
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const Menu(),
+                      //   ),
+                      //   (Route<dynamic> route) => false,
+                      // ),
+                      Navigator.pop(context),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BookingServicePage(
+                            catSelectedWidget: '2',
+                            
+                          ),
+                        ),
+                      ),
+                      // BookingServicePage(catSelectedWidget: '0',)._callRead()
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 13),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).custom.b325f8_w_fffd57,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'ดูรายการประวัติการจอง',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Theme.of(context).custom.w_b_b,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
+    );
+  }
+
+  _cancelBooking() async {
+    // cancel
+    try {
+      if (widget.model['bookingno'] == null) {
+        return;
+      }
+      setState(() => _loadingSubmit = true);
+      var accessToken = await ManageStorage.read('accessToken') ?? '';
+      // final String baseUrl = 'http://dcc-portal.webview.co/dcc-api';
+      Response response = await Dio().put('$ondeURL/api/Booking/Cancel?bookingNo=${widget.model['bookingno']}', options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+          },
+        ),);
+      setState(() => _loadingSubmit = false);
+
+      if (response.data['success']) {
+        _dialogCancelSuccess();
+      } else {
+        Fluttertoast.showToast(msg: response.data['errorMessage']);
+      }
+    } on DioError catch (e) {
+      setState(() => _loadingSubmit = false);
+      var err = e.toString();
+      if (e.response!.statusCode != 200) {
+        // err = e.response!.data['message'];
+        print('----------1234 >>>>>>>> : ${e.response}');
+      }
+      Fluttertoast.showToast(msg: err);
+    }
+  }
+
+  Widget textForm({label, detail}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label.toString(),
+          style: TextStyle(
+              color: Theme.of(context).custom.f70f70_w_fffd57, fontSize: 13),
+        ),
+        SizedBox(height: 3),
+        Text(
+          detail.toString(),
+          style: TextStyle(
+            color: Theme.of(context).custom.b_w_y,
+            fontSize: 15,
+          ),
+          maxLines: 2,
+        ),
+      ],
     );
   }
 
@@ -366,194 +787,190 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
             child: ListView(
               shrinkWrap: true,
               children: [
-                    GestureDetector(
-                      onTap: () => dialogOpenPickerDate(),
-                      child: AbsorbPointer(
-                        child: TextFormField(
-                          controller: txtDate,
-                          style: const TextStyle(
-                            color: Color(0xFF7A4CB1),
-                            fontWeight: FontWeight.normal,
-                            fontFamily: 'Kanit',
-                            fontSize: 15.0,
-                          ),
-                          decoration: _decorationDate(
-                            context,
-                            hintText: 'วันที่ใช้บริการ',
-                          ),
-                          validator: (model) {
-                            if (model!.isEmpty) {
-                              return 'กรุณากรอกวันเดือนปีเกิด.';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => dialogOpenPickerTime('start'),
-                            child: AbsorbPointer(
-                              child: TextFormField(
-                                controller: txtStartTime,
-                                style: const TextStyle(
-                                  color: Color(0xFF7A4CB1),
-                                  fontWeight: FontWeight.normal,
-                                  fontFamily: 'Kanit',
-                                  fontSize: 15.0,
-                                ),
-                                decoration: _decorationTime(
-                                  context,
-                                  hintText: 'เวลาเริ่ม',
-                                ),
-                                validator: (model) {
-                                  if (model!.isEmpty) {
-                                    return 'กรุณาเลือกเวลาเริ่ม';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => dialogOpenPickerTime('end'),
-                            child: AbsorbPointer(
-                              child: TextFormField(
-                                controller: txtEndTime,
-                                style: const TextStyle(
-                                  color: Color(0xFF7A4CB1),
-                                  fontWeight: FontWeight.normal,
-                                  fontFamily: 'Kanit',
-                                  fontSize: 15.0,
-                                ),
-                                decoration: _decorationTime(
-                                  context,
-                                  hintText: 'เวลาเลิก',
-                                ),
-                                validator: (model) {
-                                  if (model!.isEmpty) {
-                                    return 'กรุณาเลือกเวลาเลิก';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 15),
-                    TextFormField(
-                      controller: txtPhone,
-                      keyboardType: TextInputType.phone,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                        LengthLimitingTextInputFormatter(10),
-                      ],
-                      decoration:
-                          _decorationBase(context, hintText: 'เบอร์ติดต่อ'),
-                      style: TextStyle(
+                GestureDetector(
+                  onTap: () => dialogOpenPickerDate(),
+                  child: AbsorbPointer(
+                    child: TextFormField(
+                      controller: txtDate,
+                      style: const TextStyle(
                         color: Color(0xFF7A4CB1),
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'Kanit',
+                        fontSize: 15.0,
                       ),
-                      cursorColor:
-                          MyApp.themeNotifier.value == ThemeModeThird.light
-                              ? Color(0xFF7A4CB1)
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? Colors.black
-                                  : Color(0xFFFFFD57),
-                    ),
-                    SizedBox(height: 15),
-                    if (!widget.edit)
-                      _dropdown(
-                        data: _modelType,
-                        value: _bookingTypeRefNo,
-                        onChanged: (String value) {
-                          setState(() {
-                            _bookingTypeRefNo = value;
-                          });
-                        },
+                      decoration: _decorationDate(
+                        context,
+                        hintText: 'วันที่ใช้บริการ',
                       ),
-                    SizedBox(height: 10),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'หมวดหมู่การใช้งาน',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    _buildBookingCategory(),
-                                        SizedBox(height: 10),
-
-                    Expanded(child: SizedBox()),
-                    GestureDetector(
-                      onTap: () {
-                        if (txtDate.text.isEmpty ||
-                            txtStartTime.text.isEmpty ||
-                            txtEndTime.text.isEmpty) {
-                          Fluttertoast.showToast(
-                              msg: 'เลือกวันเวลาที่ต้องการจอง');
-                        } else {
-                          if (_bookingTypeRefNo.isEmpty && !widget.edit) {
-                            Fluttertoast.showToast(msg: 'เลือกรูปแบบการจอง');
-                            return;
-                          }
-
-                          int bookingNo = 0;
-                          if (widget.edit) {
-                            bookingNo = widget.model?['bookingno'] ?? 0;
-                          }
-
-                          if (widget.repeat) {
-                            bookingNo = 0;
-                          }
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => BookingServiceConfirmPage(
-                                centerId: widget.model['centerId'],
-                                centerName: widget.model['centerName'],
-                                edit: widget.edit,
-                                date: txtDate.text,
-                                startTime: txtStartTime.text,
-                                endTime: txtEndTime.text,
-                                bookingTypeRefNo: _bookingTypeRefNo,
-                                bookingno: bookingNo,
-                                phone: txtPhone.text,
-                                remark: _modelBookingCategory,
-                              ),
-                            ),
-                          );
+                      validator: (model) {
+                        if (model!.isEmpty) {
+                          return 'กรุณากรอกวันเดือนปีเกิด.';
                         }
+                        return null;
                       },
-                      child: Container(
-                        height: 45,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF7A4CB1),
-                          borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15),
+                Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => dialogOpenPickerTime('start'),
+                        child: AbsorbPointer(
+                          child: TextFormField(
+                            controller: txtStartTime,
+                            style: const TextStyle(
+                              color: Color(0xFF7A4CB1),
+                              fontWeight: FontWeight.normal,
+                              fontFamily: 'Kanit',
+                              fontSize: 15.0,
+                            ),
+                            decoration: _decorationTime(
+                              context,
+                              hintText: 'เวลาเริ่ม',
+                            ),
+                            validator: (model) {
+                              if (model!.isEmpty) {
+                                return 'กรุณาเลือกเวลาเริ่ม';
+                              }
+                              return null;
+                            },
+                          ),
                         ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          titleSubmit,
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(width: 15),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => dialogOpenPickerTime('end'),
+                        child: AbsorbPointer(
+                          child: TextFormField(
+                            controller: txtEndTime,
+                            style: const TextStyle(
+                              color: Color(0xFF7A4CB1),
+                              fontWeight: FontWeight.normal,
+                              fontFamily: 'Kanit',
+                              fontSize: 15.0,
+                            ),
+                            decoration: _decorationTime(
+                              context,
+                              hintText: 'เวลาเลิก',
+                            ),
+                            validator: (model) {
+                              if (model!.isEmpty) {
+                                return 'กรุณาเลือกเวลาเลิก';
+                              }
+                              return null;
+                            },
                           ),
                         ),
                       ),
                     )
                   ],
+                ),
+                SizedBox(height: 15),
+                TextFormField(
+                  controller: txtPhone,
+                  keyboardType: TextInputType.phone,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    LengthLimitingTextInputFormatter(10),
+                  ],
+                  decoration: _decorationBase(context, hintText: 'เบอร์ติดต่อ'),
+                  style: TextStyle(
+                    color: Color(0xFF7A4CB1),
+                  ),
+                  cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFF7A4CB1)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.black
+                          : Color(0xFFFFFD57),
+                ),
+                SizedBox(height: 15),
+                if (!widget.edit)
+                  _dropdown(
+                    data: _modelType,
+                    value: _bookingTypeRefNo,
+                    onChanged: (String value) {
+                      setState(() {
+                        _bookingTypeRefNo = value;
+                      });
+                    },
+                  ),
+                SizedBox(height: 10),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'หมวดหมู่การใช้งาน',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                _buildBookingCategory(),
+                SizedBox(height: 10),
+                Expanded(child: SizedBox()),
+                GestureDetector(
+                  onTap: () {
+                    if (txtDate.text.isEmpty ||
+                        txtStartTime.text.isEmpty ||
+                        txtEndTime.text.isEmpty) {
+                      Fluttertoast.showToast(msg: 'เลือกวันเวลาที่ต้องการจอง');
+                    } else {
+                      if (_bookingTypeRefNo.isEmpty && !widget.edit) {
+                        Fluttertoast.showToast(msg: 'เลือกรูปแบบการจอง');
+                        return;
+                      }
+
+                      int bookingNo = 0;
+                      if (widget.edit) {
+                        bookingNo = widget.model?['bookingno'] ?? 0;
+                      }
+
+                      if (widget.repeat) {
+                        bookingNo = 0;
+                      }
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BookingServiceConfirmPage(
+                            centerId: widget.model['centerId'],
+                            centerName: widget.model['centerName'],
+                            edit: widget.edit,
+                            date: txtDate.text,
+                            startTime: txtStartTime.text,
+                            endTime: txtEndTime.text,
+                            bookingTypeRefNo: _bookingTypeRefNo,
+                            bookingno: bookingNo,
+                            phone: txtPhone.text,
+                            remark: _modelBookingCategory,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  child: Container(
+                    height: 45,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF7A4CB1),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      titleSubmit,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                )
+              ],
             )),
       );
   }
