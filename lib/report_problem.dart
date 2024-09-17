@@ -103,46 +103,44 @@ class _ReportProblemPageState extends State<ReportProblemPage> {
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               child: Column(
                                 children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('เบอร์ติดต่อ'),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: GestureDetector(
-                                          onTap: () => {widget.changePage!(7)},
+                                  InkWell(
+                                    onTap: () => {widget.changePage!(7)},
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text('เบอร์ติดต่อ'),
+                                        Align(
+                                          alignment: Alignment.centerRight,
                                           child: Image.asset(
                                               'assets/images/arrow_next.png'),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(height: 12),
                                   Container(
                                       height: 1, color: Color(0xFFEEEEEE)),
                                   SizedBox(height: 12),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('สนทนา'),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: GestureDetector(
-                                          onTap: () =>
-                                              Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ChatBotNoiPage(),
-                                              // builder: (context) => ChatPage(),
-                                            ),
-                                          ),
+                                  InkWell(
+                                    onTap: () => Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => ChatBotNoiPage(),
+                                        // builder: (context) => ChatPage(),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text('สนทนา'),
+                                        Align(
+                                          alignment: Alignment.centerRight,
                                           child: Image.asset(
                                               'assets/images/arrow_next.png'),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(height: 12),
                                   Container(
