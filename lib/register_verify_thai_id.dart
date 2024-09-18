@@ -87,27 +87,21 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
                 ),
               ),
               Positioned(
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  child: Card(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
-                      ),
-                    ),
-                    elevation: 5,
-                    child: Container(
-                      padding: EdgeInsets.only(
-                          top: 25, left: 20, right: 25, bottom: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.6,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        ),
                       ),
-                      child: SizedBox(
-                          width: double.infinity,
-                          height: 500,
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(25),
                           child: Column(
                             children: [
                               Row(
@@ -153,42 +147,49 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
                                     fontWeight: FontWeight.w400,
                                     color: Colors.black),
                               ),
-                              SizedBox(
-                                  height: MediaQuery.of(context).size.height *
-                                      0.25),
-                              GestureDetector(
-                                onTap: () async {
-                                  _callThaiID();
-                                },
-                                child: Container(
-                                  height: 50,
-                                  width: double.infinity,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFFB325F8),
-                                    borderRadius: BorderRadius.circular(23),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        blurRadius: 4,
-                                        color: Color(0x40F3D2FF),
-                                        offset: Offset(0, 4),
-                                      )
-                                    ],
-                                  ),
-                                  child: const Text(
-                                    'เริ่มยืนยันตัวตน',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.white,
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        _callThaiID();
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        width: double.infinity,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFFB325F8),
+                                          borderRadius:
+                                              BorderRadius.circular(23),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              blurRadius: 4,
+                                              color: Color(0x40F3D2FF),
+                                              offset: Offset(0, 4),
+                                            )
+                                          ],
+                                        ),
+                                        child: const Text(
+                                          'เริ่มยืนยันตัวตน',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
                               ),
                             ],
-                          )),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               )
             ],

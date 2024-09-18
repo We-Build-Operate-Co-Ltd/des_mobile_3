@@ -56,6 +56,7 @@ class _UserProfileChangePasswordPageState
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Theme.of(context).custom.w_b_b,
         body: Form(
           key: _formKey,
@@ -233,7 +234,7 @@ class _UserProfileChangePasswordPageState
                                   ? Colors.white
                                   : Color(0xFFFFFD57),
                         ),
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(22.5),
                       ),
                       child: Text(
                         'บันทึกข้อมูล',
@@ -270,40 +271,38 @@ class _UserProfileChangePasswordPageState
           child: Container(
             height: 35,
             width: 35,
-            padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFFB325F8)
-                    : Colors.black,
-                border: Border.all(
-                  width: 1,
-                  style: BorderStyle.solid,
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFFB325F8)
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57),
-                )),
+            // padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+            // decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(8),
+            //     color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //         ? Color(0xFFB325F8)
+            //         : Colors.black,
+            //     border: Border.all(
+            //       width: 1,
+            //       style: BorderStyle.solid,
+            //       color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //           ? Color(0xFFB325F8)
+            //           : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //               ? Colors.white
+            //               : Color(0xFFFFFD57),
+            //     )),
             child: Image.asset(
               'assets/images/back_arrow.png',
             ),
           ),
         ),
-        Container(
-          margin: EdgeInsets.all(5),
-          child: Text(
-            'เปลี่ยนรหัสผ่าน',
-            style: TextStyle(
-              fontSize: 24,
-              fontFamily: 'Kanit',
-              fontWeight: FontWeight.w500,
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Color(0xFFB325F8)
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
-            ),
+        SizedBox(width: 10),
+        Text(
+          'เปลี่ยนรหัสผ่าน',
+          style: TextStyle(
+            fontSize: 24,
+            fontFamily: 'Kanit',
+            fontWeight: FontWeight.w500,
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFFB325F8)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
           ),
         ),
       ],
@@ -339,7 +338,7 @@ class _UserProfileChangePasswordPageState
               : const Icon(Icons.visibility),
         ),
         suffixIconColor: MyApp.themeNotifier.value == ThemeModeThird.light
-            ? Color(0xFF7A4CB1)
+            ? Color(0xFFB325F8)
             : MyApp.themeNotifier.value == ThemeModeThird.dark
                 ? Colors.white
                 : Color(0xFFFFFD57),
@@ -376,70 +375,147 @@ class _UserProfileChangePasswordPageState
         ),
       );
 
+  // _dialogSuccess() {
+  //   showDialog(
+  //     barrierDismissible: false,
+  //     context: context,
+  //     builder: (BuildContext context) => WillPopScope(
+  //       onWillPop: () => Future.value(false),
+  //       child: Dialog(
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(10),
+  //         ),
+  //         elevation: 0,
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(20.0),
+  //           child: SizedBox(
+  //             height: 127,
+  //             width: MediaQuery.of(context).size.width,
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //               children: [
+  //                 Text(
+  //                   'เปลี่ยนรหัสผ่านสำเร็จ',
+  //                   style: TextStyle(
+  //                     color: Color(0xFF7A4CB1),
+  //                     fontSize: 20,
+  //                     fontWeight: FontWeight.w500,
+  //                   ),
+  //                 ),
+  //                 Text(
+  //                   '',
+  //                   style: TextStyle(
+  //                     fontSize: 15,
+  //                     fontWeight: FontWeight.w400,
+  //                   ),
+  //                   textAlign: TextAlign.center,
+  //                 ),
+  //                 SizedBox(height: 10),
+  //                 GestureDetector(
+  //                   onTap: () {
+  //                     Navigator.pop(context);
+  //                     Navigator.pop(context);
+  //                   },
+  //                   child: Container(
+  //                     height: 40,
+  //                     width: 95,
+  //                     decoration: BoxDecoration(
+  //                       color: Color(0xFF7A4CB1),
+  //                       borderRadius: BorderRadius.circular(25),
+  //                     ),
+  //                     alignment: Alignment.center,
+  //                     child: Text(
+  //                       'ตกลง',
+  //                       style: TextStyle(
+  //                         fontSize: 15,
+  //                         color: Colors.white,
+  //                         fontWeight: FontWeight.w500,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 )
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
   _dialogSuccess() {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (BuildContext context) => WillPopScope(
-        onWillPop: () => Future.value(false),
-        child: Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          elevation: 0,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SizedBox(
-              height: 127,
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'เปลี่ยนรหัสผ่านสำเร็จ',
-                    style: TextStyle(
-                      color: Color(0xFF7A4CB1),
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    '',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 95,
-                      decoration: BoxDecoration(
-                        color: Color(0xFF7A4CB1),
-                        borderRadius: BorderRadius.circular(25),
+      builder: (BuildContext context) => StatefulBuilder(
+        builder: (BuildContext context, StateSetter mSetState) {
+          return WillPopScope(
+            onWillPop: () => Future.value(false),
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              elevation: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SizedBox(
+                  height: 230,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Image.asset(
+                        'assets/images/update_success.png',
+                        height: 80,
+                        width: 80,
                       ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        'ตกลง',
+                      SizedBox(height: 10),
+                      Text(
+                        'เปลี่ยนรหัสผ่านสำเร็จ!',
                         style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
+                          color: Color(0xFF19AA6A),
+                          fontSize: 20,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ),
-                  )
-                ],
+                      Text(
+                        'บันทึกรหัสผ่านที่คุณแก้ไขเรียบร้อยแล้ว',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(0xFF000000),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 120,
+                          decoration: BoxDecoration(
+                            color: Color(0xFFB325F8),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'ตกลง',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

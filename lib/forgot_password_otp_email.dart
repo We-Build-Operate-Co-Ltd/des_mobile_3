@@ -51,82 +51,153 @@ class _ForgotPasswordOTPEmailPageState
           ),
           child: Align(
             alignment: Alignment.bottomCenter,
-            child: Card(
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Colors.white
-                  : Colors.black,
-              shape: RoundedRectangleBorder(
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.8,
+              decoration: BoxDecoration(
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.white
+                    : Colors.black,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  topRight: Radius.circular(15),
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
               ),
-              elevation: 5,
-              child: Container(
-                height: 700,
-                decoration: BoxDecoration(
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Colors.white
-                      : Colors.black,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15),
-                  ),
-                ),
-                padding: EdgeInsets.all(20),
-                // alignment: Alignment.center,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              width: 35.0,
-                              height: 35.0,
-                              margin: EdgeInsets.all(5),
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Image.asset(
-                                  'assets/images/back_profile.png',
-                                  // color: Colors.white,
-                                ),
+              padding: EdgeInsets.all(20),
+              // alignment: Alignment.center,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: 35.0,
+                            height: 35.0,
+                            margin: EdgeInsets.all(5),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Image.asset(
+                                'assets/images/back_profile.png',
+                                // color: Colors.white,
                               ),
                             ),
                           ),
-                          SizedBox(width: 12),
-                          Text(
-                            'กรอกรหัส OTP',
-                            style: TextStyle(
-                              fontFamily: "Kanit",
-                              fontSize: 24,
-                              fontWeight: FontWeight.w500,
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Color(0xFFB325F8)
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 55),
-                        child: Text(
-                          'กรุณากรอกรหัส OTP ที่ท่านได้รับผ่านอีเมล',
+                        ),
+                        SizedBox(width: 12),
+                        Text(
+                          'กรอกรหัส OTP',
                           style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
+                            fontFamily: "Kanit",
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFB325F8)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 55),
+                      child: Text(
+                        'กรุณากรอกรหัส OTP ที่ท่านได้รับผ่านอีเมล',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    PinCodeTextField(
+                      appContext: context,
+                      controller: txtNumber1,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      length: 6,
+                      obscureText: false,
+                      obscuringCharacter: '*',
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      blinkWhenObscuring: true,
+                      animationType: AnimationType.fade,
+                      validator: (v) {
+                        if (v!.length < 6) {
+                          return "";
+                        } else {
+                          return null;
+                        }
+                      },
+                      pinTheme: PinTheme(
+                        inactiveColor: Color(
+                            0xFFEEEEEE), // สีของเส้นขอบช่องที่ไม่ได้ใช้งาน
+                        activeColor:
+                            Color(0xFFEEEEEE), //สีของเส้นขอบช่องที่กำลังใช้งาน
+                        selectedColor:
+                            Color(0xFFB325F8), //สีพื้นหลังของช่องที่ถูกเลือก
+                        // disabledColor: Colors.white,
+                        activeFillColor: Color(
+                            0xFFEEEEEE), // สีพื้นหลังของช่องที่กำลังใช้งาน
+                        selectedFillColor:
+                            Color(0xFFEEEEEE), //สีพื้นหลังของช่องที่ถูกเลือก
+                        inactiveFillColor: Color(
+                            0xFFEEEEEE), // สีพื้นหลังของช่องที่ไม่ได้ใช้งาน
+                        shape: PinCodeFieldShape.box,
+                        borderRadius: BorderRadius.circular(12),
+                        fieldHeight: 50.42,
+                        fieldWidth: 50.42,
+                      ),
+                      textStyle: TextStyle(
+                          color: Color(
+                              0xFF7A4CB1), // เปลี่ยนสีของข้อความที่กรอกเป็นสีน้ำเงิน
+                          fontSize: 32, // ขนาดของข้อความ
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Kanit' // ความหนาของข้อความ
+                          ),
+                      backgroundColor: Colors.transparent,
+                      cursorColor: Colors.black,
+                      animationDuration: const Duration(milliseconds: 300),
+                      enableActiveFill: true,
+                      keyboardType: TextInputType.number,
+                      // onCompleted: (v) async {
+                      //   if (await _validateOTP()) {
+                      //     if (!mounted) return;
+                      //     await submitForgotPassword();
+                      //   } else {
+                      //     Fluttertoast.showToast(msg: 'OTP ไม่ถูกต้อง');
+                      //   }
+                      // },
+                      onChanged: (value) {
+                        debugPrint(value);
+                        setState(() {
+                          // currentText = value;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    Center(
+                      child: GestureDetector(
+                        onTap: () => _requestOTP(),
+                        child: Text(
+                          'ท่านต้องการรับรหัสใหม่',
+                          style: TextStyle(
+                            fontSize: 13,
+                            decoration: TextDecoration.underline,
                             color: MyApp.themeNotifier.value ==
                                     ThemeModeThird.light
                                 ? Colors.black
@@ -137,137 +208,51 @@ class _ForgotPasswordOTPEmailPageState
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      PinCodeTextField(
-                        appContext: context,
-                        controller: txtNumber1,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        length: 6,
-                        obscureText: false,
-                        obscuringCharacter: '*',
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        blinkWhenObscuring: true,
-                        animationType: AnimationType.fade,
-                        validator: (v) {
-                          if (v!.length < 6) {
-                            return "";
-                          } else {
-                            return null;
-                          }
-                        },
-                        pinTheme: PinTheme(
-                          inactiveColor: Color(
-                              0xFFEEEEEE), // สีของเส้นขอบช่องที่ไม่ได้ใช้งาน
-                          activeColor: Color(
-                              0xFFEEEEEE), //สีของเส้นขอบช่องที่กำลังใช้งาน
-                          selectedColor:
-                              Color(0xFFB325F8), //สีพื้นหลังของช่องที่ถูกเลือก
-                          // disabledColor: Colors.white,
-                          activeFillColor: Color(
-                              0xFFEEEEEE), // สีพื้นหลังของช่องที่กำลังใช้งาน
-                          selectedFillColor:
-                              Color(0xFFEEEEEE), //สีพื้นหลังของช่องที่ถูกเลือก
-                          inactiveFillColor: Color(
-                              0xFFEEEEEE), // สีพื้นหลังของช่องที่ไม่ได้ใช้งาน
-                          shape: PinCodeFieldShape.box,
-                          borderRadius: BorderRadius.circular(12),
-                          fieldHeight: 50.42,
-                          fieldWidth: 50.42,
-                        ),
-                        textStyle: TextStyle(
-                            color: Color(
-                                0xFF7A4CB1), // เปลี่ยนสีของข้อความที่กรอกเป็นสีน้ำเงิน
-                            fontSize: 32, // ขนาดของข้อความ
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Kanit' // ความหนาของข้อความ
-                            ),
-                        backgroundColor: Colors.transparent,
-                        cursorColor: Colors.black,
-                        animationDuration: const Duration(milliseconds: 300),
-                        enableActiveFill: true,
-                        keyboardType: TextInputType.number,
-                        // onCompleted: (v) async {
+                    ),
+                    Expanded(
+                      child: SizedBox(height: 20),
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        FocusScope.of(context).unfocus();
+                        await _submitForgotPassword();
+                        // if (txtNumber1.text.isNotEmpty) {
                         //   if (await _validateOTP()) {
-                        //     if (!mounted) return;
-                        //     await submitForgotPassword();
+                        //     await _submitForgotPassword();
                         //   } else {
                         //     Fluttertoast.showToast(msg: 'OTP ไม่ถูกต้อง');
                         //   }
-                        // },
-                        onChanged: (value) {
-                          debugPrint(value);
-                          setState(() {
-                            // currentText = value;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      Center(
-                        child: GestureDetector(
-                          onTap: () => _requestOTP(),
-                          child: Text(
-                            'ท่านต้องการรับรหัสใหม่',
-                            style: TextStyle(
-                              fontSize: 13,
-                              decoration: TextDecoration.underline,
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.black
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
-                            ),
-                          ),
+                        // } else {
+                        //   Fluttertoast.showToast(msg: 'OTP ไม่ครบ');
+                        // }
+                      },
+                      child: Container(
+                        height: 45,
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.symmetric(horizontal: 15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(23),
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFFB325F8)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
                         ),
-                      ),
-                      Expanded(
-                        child: SizedBox(height: 20),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          FocusScope.of(context).unfocus();
-                          await _submitForgotPassword();
-                          // if (txtNumber1.text.isNotEmpty) {
-                          //   if (await _validateOTP()) {
-                          //     await _submitForgotPassword();
-                          //   } else {
-                          //     Fluttertoast.showToast(msg: 'OTP ไม่ถูกต้อง');
-                          //   }
-                          // } else {
-                          //   Fluttertoast.showToast(msg: 'OTP ไม่ครบ');
-                          // }
-                        },
-                        child: Container(
-                          height: 50,
-                          alignment: Alignment.center,
-                          margin: const EdgeInsets.symmetric(horizontal: 15),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(23),
+                        child: Text(
+                          'ดำเนินการต่อ',
+                          style: TextStyle(
+                            fontSize: 16,
                             color: MyApp.themeNotifier.value ==
                                     ThemeModeThird.light
-                                ? Color(0xFFB325F8)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                          ),
-                          child: Text(
-                            'ดำเนินการต่อ',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
+                                ? Colors.white
+                                : Colors.black,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

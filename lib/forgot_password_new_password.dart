@@ -69,113 +69,104 @@ class _ForgotPasswordNewPasswordPageState
               children: [
                 Container(
                   height: 700,
-                  child: Card(
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Colors.white
-                        : Colors.black,
-                    shape: RoundedRectangleBorder(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.white
+                          : Colors.black,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(15),
                         topRight: Radius.circular(15),
                       ),
                     ),
-                    elevation: 5,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Colors.white
-                            : Colors.black,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
-                        ),
-                      ),
-                      padding: EdgeInsets.all(20),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Container(
-                                    width: 35.0,
-                                    height: 35.0,
-                                    margin: EdgeInsets.all(5),
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Image.asset(
-                                        'assets/images/back_profile.png',
-                                        // color: Colors.white,
-                                      ),
+                    padding: EdgeInsets.all(20),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  width: 35.0,
+                                  height: 35.0,
+                                  margin: EdgeInsets.all(5),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Image.asset(
+                                      'assets/images/back_profile.png',
+                                      // color: Colors.white,
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 10),
-                                Text(
-                                  'รีเซ็ตรหัสผ่าน',
-                                  style: TextStyle(
-                                    fontFamily: 'Kanit',
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w500,
-                                    color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color(0xFFB325F8)
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.white
-                                            : Color(0xFFFFFD57),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 55),
-                              child: Text(
-                                'กรุณากรอกข้อมูลเพื่อรีเซ็ตข้อมูลใหม่',
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                'รีเซ็ตรหัสผ่าน',
                                 style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Kanit',
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w500,
                                   color: MyApp.themeNotifier.value ==
                                           ThemeModeThird.light
-                                      ? Colors.black
+                                      ? Color(0xFFB325F8)
                                       : MyApp.themeNotifier.value ==
                                               ThemeModeThird.dark
                                           ? Colors.white
                                           : Color(0xFFFFFD57),
                                 ),
                               ),
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 55),
+                            child: Text(
+                              'กรุณากรอกข้อมูลเพื่อรีเซ็ตข้อมูลใหม่',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.black
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                              ),
                             ),
-                            SizedBox(height: 10),
-                            _buildFeildPassword(
-                              controller: _passwordController,
-                              hint: 'รหัสผ่านใหม่',
-                              inputFormatters: InputFormatTemple.password(),
-                              validateString: _passwordStringValidate,
-                              visibility: _visibilityPassword,
-                              suffixTap: () {
-                                setState(() {
-                                  _visibilityPassword = !_visibilityPassword;
-                                });
-                              },
-                              validator: (value) {
-                                var result = ValidateForm.password(value!);
-                                setState(() {
-                                  _passwordStringValidate = result ?? '';
-                                });
-                                return result == null ? null : '';
-                              },
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.50,
-                            ),
-                            Stack(
+                          ),
+                          SizedBox(height: 10),
+                          _buildFeildPassword(
+                            controller: _passwordController,
+                            hint: 'รหัสผ่านใหม่',
+                            inputFormatters: InputFormatTemple.password(),
+                            validateString: _passwordStringValidate,
+                            visibility: _visibilityPassword,
+                            suffixTap: () {
+                              setState(() {
+                                _visibilityPassword = !_visibilityPassword;
+                              });
+                            },
+                            validator: (value) {
+                              var result = ValidateForm.password(value!);
+                              setState(() {
+                                _passwordStringValidate = result ?? '';
+                              });
+                              return result == null ? null : '';
+                            },
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.50,
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 GestureDetector(
                                   onTap: () async {
@@ -187,7 +178,7 @@ class _ForgotPasswordNewPasswordPageState
                                     }
                                   },
                                   child: Container(
-                                    height: 50,
+                                    height: 45,
                                     width: double.infinity,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
@@ -211,20 +202,20 @@ class _ForgotPasswordNewPasswordPageState
                                     ),
                                   ),
                                 ),
-                                if (_loadingSubmit)
-                                  const Positioned.fill(
-                                    child: Center(
-                                      child: SizedBox(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    ),
-                                  ),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                          if (_loadingSubmit)
+                            const Positioned.fill(
+                              child: Center(
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   ),
@@ -459,8 +450,9 @@ class _ForgotPasswordNewPasswordPageState
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24.0),
+            borderRadius: BorderRadius.circular(22.5),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,

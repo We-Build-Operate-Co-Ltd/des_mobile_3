@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
           body: Column(
             children: [
               Container(
-                height: 100,
+                height: 105,
                 padding: EdgeInsets.only(
                   top: MediaQuery.of(context).padding.top + 10,
                   right: 15,

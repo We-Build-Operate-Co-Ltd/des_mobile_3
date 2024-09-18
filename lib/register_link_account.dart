@@ -55,7 +55,7 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         extendBody: true,
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         body: Container(
           height: double.infinity,
           alignment: Alignment.center,
@@ -71,148 +71,135 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
           ),
           child: Align(
             alignment: Alignment.bottomCenter,
-            child: Card(
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Colors.white
-                  : Colors.black,
-              shape: RoundedRectangleBorder(
+            child: Container(
+              decoration: BoxDecoration(
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.white
+                    : Colors.black,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(15),
                   topRight: Radius.circular(15),
                 ),
               ),
-              elevation: 5,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Colors.white
-                      : Colors.black,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15),
-                  ),
-                ),
-                // color: Colors.white,
-                height: 700,
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            width: 35.0,
-                            height: 35.0,
-                            margin: EdgeInsets.all(5),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Image.asset(
-                                'assets/images/back_profile.png',
-                                // color: Colors.white,
-                              ),
+              // color: Colors.white,
+              height: 700,
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: 35.0,
+                          height: 35.0,
+                          margin: EdgeInsets.all(5),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Image.asset(
+                              'assets/images/back_profile.png',
+                              // color: Colors.white,
                             ),
                           ),
                         ),
-                        SizedBox(width: 12),
-                        Text(
-                          'เชื่อมต่อบัญชี ${widget.category}',
-                          style: TextStyle(
-                            fontFamily: "Kanit",
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500,
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFFB325F8)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 55),
-                      child: Text(
-                        'ระบบกำลังเชื่อมต่อบัญช ${widget.category} \nกับอีเมล ${widget.email} \nกรุณากรอกรหัสผ่านเพื่อเข้าสู่ระบบ',
+                      ),
+                      SizedBox(width: 12),
+                      Text(
+                        'เชื่อมต่อบัญชี ${widget.category}',
                         style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    _buildFeildPassword(
-                      controller: _passwordController,
-                      hint: 'รหัสผ่าน',
-                      inputFormatters: InputFormatTemple.password(),
-                      validateString: _passwordStringValidate,
-                      visibility: _visibilityPassword,
-                      suffixTap: () {
-                        setState(() {
-                          _visibilityPassword = !_visibilityPassword;
-                        });
-                      },
-                      validator: (value) {
-                        var result = ValidateForm.password(value!);
-                        setState(() {
-                          _passwordStringValidate = result ?? '';
-                        });
-                        return result == null ? null : '';
-                      },
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.46),
-                    GestureDetector(
-                      onTap: () => _submit(),
-                      child: Container(
-                        height: 50,
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFB325F8),
-                          // _loadingSubmit
-                          //     ? Theme.of(context).primaryColor.withOpacity(0.8)
-                          //     : Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(23),
-                          boxShadow: const [
-                            BoxShadow(
-                              blurRadius: 4,
-                              color: Color(0x40F3D2FF),
-                              offset: Offset(0, 4),
-                            )
-                          ],
+                          fontFamily: "Kanit",
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFFB325F8)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
                         ),
-                        child: Stack(
-                          children: [
-                            const Text(
-                              'ยืนยัน',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.white,
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 55),
+                    child: Text(
+                      'ระบบกำลังเชื่อมต่อบัญช ${widget.category} \nกับอีเมล ${widget.email} \nกรุณากรอกรหัสผ่านเพื่อเข้าสู่ระบบ',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  _buildFeildPassword(
+                    controller: _passwordController,
+                    hint: 'รหัสผ่าน',
+                    inputFormatters: InputFormatTemple.password(),
+                    validateString: _passwordStringValidate,
+                    visibility: _visibilityPassword,
+                    suffixTap: () {
+                      setState(() {
+                        _visibilityPassword = !_visibilityPassword;
+                      });
+                    },
+                    validator: (value) {
+                      var result = ValidateForm.password(value!);
+                      setState(() {
+                        _passwordStringValidate = result ?? '';
+                      });
+                      return result == null ? null : '';
+                    },
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.46),
+                  GestureDetector(
+                    onTap: () => _submit(),
+                    child: Container(
+                      height: 50,
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFB325F8),
+                        // _loadingSubmit
+                        //     ? Theme.of(context).primaryColor.withOpacity(0.8)
+                        //     : Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(23),
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 4,
+                            color: Color(0x40F3D2FF),
+                            offset: Offset(0, 4),
+                          )
+                        ],
+                      ),
+                      child: Stack(
+                        children: [
+                          const Text(
+                            'ยืนยัน',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            ),
+                          ),
+                          if (_loadingSubmit)
+                            const Positioned.fill(
+                              child: Center(
+                                child: SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator()),
                               ),
                             ),
-                            if (_loadingSubmit)
-                              const Positioned.fill(
-                                child: Center(
-                                  child: SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator()),
-                                ),
-                              ),
-                          ],
-                        ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

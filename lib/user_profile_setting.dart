@@ -28,8 +28,7 @@ class UserProfileSettingPage extends StatefulWidget {
   const UserProfileSettingPage({Key? key}) : super(key: key);
 
   @override
-  State<UserProfileSettingPage> createState() =>
-      _UserProfileSettingPageState();
+  State<UserProfileSettingPage> createState() => _UserProfileSettingPageState();
 }
 
 class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
@@ -365,15 +364,15 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
             onWillPop: () => Future.value(false),
             child: Dialog(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(24),
               ),
               elevation: 0,
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(30.0),
                 child: Stack(
                   children: [
                     SizedBox(
-                      height: 127,
+                      height: 140,
                       width: MediaQuery.of(context).size.width,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -381,7 +380,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
                           Text(
                             'คุณต้องการขอลบบัญชีหรือไม่',
                             style: TextStyle(
-                              color: Color(0xFF7A4CB1),
+                              color: Color(0xFFB325F8),
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
                             ),
@@ -414,7 +413,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
                                 },
                                 child: Container(
                                   height: 40,
-                                  width: 95,
+                                  width: 120,
                                   decoration: BoxDecoration(
                                     color: Color(0xFF707070),
                                     borderRadius: BorderRadius.circular(25),
@@ -438,9 +437,9 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
                                 },
                                 child: Container(
                                   height: 40,
-                                  width: 95,
+                                  width: 120,
                                   decoration: BoxDecoration(
-                                    color: Color(0xFF7A4CB1),
+                                    color: Color(0xFFB325F8),
                                     borderRadius: BorderRadius.circular(25),
                                   ),
                                   alignment: Alignment.center,
@@ -480,6 +479,72 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
     );
   }
 
+  // _dialogDeleteAccountSuccess() {
+  //   showDialog(
+  //     barrierDismissible: false,
+  //     context: context,
+  //     builder: (BuildContext context) => StatefulBuilder(
+  //       builder: (BuildContext context, StateSetter mSetState) {
+  //         return WillPopScope(
+  //           onWillPop: () => Future.value(false),
+  //           child: Dialog(
+  //             shape: RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.circular(10),
+  //             ),
+  //             elevation: 0,
+  //             child: Padding(
+  //               padding: const EdgeInsets.all(20.0),
+  //               child: SizedBox(
+  //                 height: 127,
+  //                 width: MediaQuery.of(context).size.width,
+  //                 child: Column(
+  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                   children: [
+  //                     Image.asset(
+  //                       'assets/images/check_purple.png',
+  //                       height: 40,
+  //                     ),
+  //                     Text(
+  //                       'ยื่นขอยกเลิกบัญชีสำเร็จ',
+  //                       style: TextStyle(
+  //                         color: Color(0xFF7A4CB1),
+  //                         fontSize: 20,
+  //                         fontWeight: FontWeight.w500,
+  //                       ),
+  //                     ),
+  //                     SizedBox(height: 10),
+  //                     GestureDetector(
+  //                       onTap: () {
+  //                         Navigator.pop(context);
+  //                       },
+  //                       child: Container(
+  //                         height: 40,
+  //                         width: 95,
+  //                         decoration: BoxDecoration(
+  //                           color: Color(0xFF7A4CB1),
+  //                           borderRadius: BorderRadius.circular(25),
+  //                         ),
+  //                         alignment: Alignment.center,
+  //                         child: Text(
+  //                           'ตกลง',
+  //                           style: TextStyle(
+  //                             fontSize: 15,
+  //                             color: Colors.white,
+  //                             fontWeight: FontWeight.w500,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     )
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
   _dialogDeleteAccountSuccess() {
     showDialog(
       barrierDismissible: false,
@@ -490,27 +555,37 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
             onWillPop: () => Future.value(false),
             child: Dialog(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(24),
               ),
               elevation: 0,
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: SizedBox(
-                  height: 127,
+                  height: 210,
                   width: MediaQuery.of(context).size.width,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Image.asset(
-                        'assets/images/check_purple.png',
-                        height: 40,
+                        'assets/images/update_success.png',
+                        height: 80,
+                        width: 80,
                       ),
+                      SizedBox(height: 10),
                       Text(
-                        'ยื่นขอยกเลิกบัญชีสำเร็จ',
+                        'ยื่นขอยกเลิกบัญชีสำเร็จ!',
                         style: TextStyle(
-                          color: Color(0xFF7A4CB1),
+                          color: Color(0xFF19AA6A),
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        'ยื่นขอยกเลิกบัญชีของคุณเรียบร้อยแล้ว',
+                        style: TextStyle(
+                          color: Color(0xFF000000),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                       SizedBox(height: 10),
@@ -520,9 +595,9 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
                         },
                         child: Container(
                           height: 40,
-                          width: 95,
+                          width: 230,
                           decoration: BoxDecoration(
-                            color: Color(0xFF7A4CB1),
+                            color: Color(0xFFB325F8),
                             borderRadius: BorderRadius.circular(25),
                           ),
                           alignment: Alignment.center,
