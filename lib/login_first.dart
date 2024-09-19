@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:des/forgot_password.dart';
+import 'package:des/home.dart';
 import 'package:des/login_second.dart';
 import 'package:des/menu.dart';
 import 'package:des/register.dart';
@@ -24,8 +25,11 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart' as fb;
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twitter_login/twitter_login.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'shared/config.dart';
 import 'main.dart';
@@ -462,7 +466,9 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                                 SizedBox(height: 10),
                               if (configLoginSocial.toString() == "1")
                                 InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    _callThaiID();
+                                  },
                                   child: _buildButtonLoginSocial(
                                     'assets/images/Rectangle 7803.png',
                                     color: MyApp.themeNotifier.value ==
@@ -1492,6 +1498,128 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     }
   }
 
+  _callThaiID() async {
+    try {
+      String responseType = 'code';
+      String clientId = 'TVE4MVpwQWNrc0NxSzNLWXFQYjVmdGFTdFgxNVN3bU4';
+      String client_secret =
+          'cjhOVEpmdk03NUZydFlCU3B0bHhwb2t3SkhSbFZnWjJOQm9lMkx3Mg';
+      String redirectUri = 'https://decms.dcc.onde.go.th/auth';
+      String base = 'https://imauth.bora.dopa.go.th/api/v2/oauth2/auth/';
+      // Random string for state, '1' for login.
+      // String state = '1${getRandomString()}';
+      String state = 'mobile';
+      String scope =
+          'pid given_name family_name address birthdate gender openid';
+      String parameter =
+          '?response_type=$responseType&client_id=$clientId&redirect_uri=$redirectUri&scope=$scope&state=$state';
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('thaiDState', state);
+      await prefs.setString(
+          'thaiDAction', 'login'); // Set state to 'login' instead of 'create'
+      await launchUrl(
+        Uri.parse('$base$parameter'),
+        mode: LaunchMode.externalApplication,
+      );
+      _callLogin();
+    } catch (ex) {
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+    }
+  }
+
+  _getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      await prefs.remove('thaiDCode');
+      await prefs.remove('thaiDState');
+
+      String clientId = 'TVE4MVpwQWNrc0NxSzNLWXFQYjVmdGFTdFgxNVN3bU4';
+      String clientSecret =
+          'cjhOVEpmdk03NUZydFlCU3B0bHhwb2t3SkhSbFZnWjJOQm9lMkx3Mg';
+      String credentials = "$clientId:$clientSecret";
+      String encoded = base64Url.encode(utf8.encode(credentials));
+
+      Dio dio = Dio();
+
+      var formData = FormData.fromMap({
+        "grant_type": "authorization_code",
+        "redirect_uri": "https://decms.dcc.onde.go.th/auth",
+        "code": _thaiDCode
+      });
+
+      var res = await dio.post(
+        'https://imauth.bora.dopa.go.th/api/v2/oauth2/token/',
+        data: formData,
+        options: Options(
+          validateStatus: (_) => true,
+          contentType: 'application/x-www-form-urlencoded',
+          responseType: ResponseType.json,
+          headers: {
+            'Content-type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic $encoded',
+          },
+        ),
+      );
+
+      // Decode token to get user info
+      Map<String, dynamic> idData = JwtDecoder.decode(res.data['id_token']);
+
+      // Prepare data for login instead of registration
+      _userData['thaiID'] = {
+        'pid': idData['pid'],
+        'name': idData['given_name'],
+        'family_name': idData['family_name'],
+        'birthdate': idData['birthdate'],
+        'address': idData['address']['formatted'],
+        'gender': idData['gender'],
+      };
+
+      // Use _login instead of _register for login process
+      _login();
+    } catch (e) {
+      await prefs.remove('thaiDCode');
+      await prefs.remove('thaiDState');
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+    }
+  }
+
+  _login() async {
+    setState(() => _loadingSubmit = true);
+    try {
+      var response = await Dio().post(
+        '$server/dcc-api/m/register/check/login/social/guest', // Replace with your actual login API
+        data: _userData,
+      );
+
+      setState(() {
+        _loadingSubmit = false;
+      });
+      if (response.statusCode == 200) {
+        if (response.data['status'] == 'S') {
+          print('Login success, navigating to HomePage');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
+        } else {
+          Fluttertoast.showToast(
+              msg: response.data['message'] ?? 'เกิดข้อผิดพลาด');
+        }
+      } else {
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      }
+    } catch (e) {
+      print('Error: $e');
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      setState(() {
+        _loadingSubmit = false;
+      });
+    }
+  }
+
+  dynamic _userData = {};
+  String _thaiDCode = '';
+
   _getTokenKeycloak({String username = '', String password = ''}) async {
     try {
       // get token
@@ -2309,6 +2437,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   }
 
   void _callReadConfig() async {
+    print('>>>>>>>>>123456>>>>>>>>');
     var response = await Dio().get(
         '$server/py-api/dcc/config/login_social/' + versionNumber.toString());
     // print(response);
