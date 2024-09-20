@@ -23,6 +23,13 @@ class ThemeColorData extends ChangeNotifier {
   Color f70f70_w_fffd57;
   Color f70f70_292929_292929;
   Color eeba33_292929_292929;
+  Color f7cafce;
+  Color f796dc3;
+  Color b325f8_b_b_OVF10;
+  Color b325f8_w_fffd57_OVF50;
+  Color C19AA6A_w_fffd57;
+  Color DDDDDD_b_b;
+  Color DDD_w_fffd57;
 
   ThemeColorData(
       {required this.primary,
@@ -44,7 +51,15 @@ class ThemeColorData extends ChangeNotifier {
       required this.f70f70_b_b,
       required this.f70f70_w_fffd57,
       required this.f70f70_292929_292929,
-      required this.eeba33_292929_292929});
+      required this.eeba33_292929_292929,
+      required this.f7cafce,
+      required this.f796dc3, 
+      required this.b325f8_b_b_OVF10,
+      required this.b325f8_w_fffd57_OVF50,
+      required this.C19AA6A_w_fffd57,
+      required this.DDDDDD_b_b,
+      required this.DDD_w_fffd57
+      });
 
   Future<void> swapTheme(ThemeModeThird selectedTheme) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -74,14 +89,24 @@ final themeLight = ThemeColorData(
     b325f8_w_fffd57: Color(0xFFb325f8),
     b325f8_w_g: Color(0xFFb325f8),
     b_W_fffd57: Colors.black,
-    A4CB1_w_fffd57: Color(0xFF7A4CB1),
+    A4CB1_w_fffd57: Color(0xFFB325F8),
     eeba33_b_b: Color(0xFFeeba33),
     w_w_fffd57: Colors.white,
     g05_w01_w01: Colors.grey.withOpacity(0.5),
     f70f70_b_b: Color(0xFF707070),
     f70f70_w_fffd57: Color(0xFF707070),
     f70f70_292929_292929: Color(0xFF707070),
-    eeba33_292929_292929: Color(0xFFeeba33));
+    eeba33_292929_292929: Color(0xFFeeba33),
+    f7cafce: Color(0xFF7CAFCE),
+    f796dc3: Color(0xFF796DC3),
+    b325f8_b_b_OVF10: Color(0xFFb325f8).withOpacity(0.10),
+    b325f8_w_fffd57_OVF50: Color(0xFFb325f8).withOpacity(0.50),
+    C19AA6A_w_fffd57: Color(0xFF19AA6A),
+    DDDDDD_b_b: Color(0xFFDDDDDD),
+    DDD_w_fffd57: Color(0xFFDDDDDD),
+    );
+
+    
 final themeDark = ThemeColorData(
     primary: Color(0xFF000000),
     b_w_y: Color(0xFFFFFFFF),
@@ -102,7 +127,15 @@ final themeDark = ThemeColorData(
     f70f70_b_b: Colors.black,
     f70f70_w_fffd57: Colors.white,
     f70f70_292929_292929: Color(0xFf292929),
-    eeba33_292929_292929: Color(0xFf292929));
+    eeba33_292929_292929: Color(0xFf292929),
+    f7cafce: Color(0xFF000000),
+    f796dc3: Color(0xFF000000),
+    b325f8_b_b_OVF10: Color(0xFF000000),
+    b325f8_w_fffd57_OVF50: Colors.white,
+    C19AA6A_w_fffd57: Colors.white,
+    DDDDDD_b_b: Colors.black,
+    DDD_w_fffd57: Colors.white,
+    );
 final themeBlindness = ThemeColorData(
     primary: Color(0xFF000000),
     b_w_y: Colors.yellow,
@@ -123,7 +156,15 @@ final themeBlindness = ThemeColorData(
     f70f70_b_b: Colors.black,
     f70f70_w_fffd57: Color(0xFFfffd57),
     f70f70_292929_292929: Color(0xFf292929),
-    eeba33_292929_292929: Color(0xFf292929));
+    eeba33_292929_292929: Color(0xFf292929),
+    f7cafce: Color(0xFF000000),
+    f796dc3: Color(0xFF000000),
+    b325f8_b_b_OVF10: Color(0xFF000000),
+    b325f8_w_fffd57_OVF50: Color(0xFFfffd57),
+    C19AA6A_w_fffd57: Color(0xFFfffd57),
+    DDDDDD_b_b: Colors.black,
+    DDD_w_fffd57: Color(0xFFfffd57),
+    );
 
 // ref: https://stackoverflow.com/questions/54139924/flutter-how-do-i-change-theme-brightness-at-runtime
 // use it with "Theme.of(context).custom"
@@ -190,3 +231,4 @@ class _ChangeDarkModeState extends State<ChangeDarkMode> {
     );
   }
 }
+

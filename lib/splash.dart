@@ -125,27 +125,60 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      extendBody: true,
-      body: Container(
-        alignment: Alignment.bottomCenter,
-        child: Image.network(
-          _urlImage,
-          width: double.infinity,
-          height: double.infinity,
-          fit: BoxFit.fill,
-          errorBuilder: (context, error, stackTrace) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  height: 100,
-                ),
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/BG.png"),
+                //  alignment: Alignment.topCenter,
+                fit: BoxFit.cover,
               ),
-            );
-          },
-        ),
+            ),
+          ),
+          Positioned(
+            left: 35,
+            // right: 0,
+            top: 220,
+            // bottom: 0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'ยินดีต้อนรับสู่',
+                  style: TextStyle(
+                      fontSize: 22,
+                      fontFamily: 'Kanit',
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600),
+                ),
+                Text(
+                  'ศูนย์ดิจิทัลชุมชน\nDCC Platform',
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontFamily: 'Kanit',
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+              right: -50,
+              bottom: -35,
+              child: Container(
+                height: 370,
+                width: 370,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/Owl-8 2.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              )),
+        ],
       ),
     );
   }

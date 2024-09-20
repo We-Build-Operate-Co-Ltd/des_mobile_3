@@ -4,25 +4,36 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:des/booking_service.dart';
+import 'package:des/contact.dart';
 import 'package:des/detail.dart';
+import 'package:des/find_job.dart';
 import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
+import 'package:des/my_class_all.dart';
+import 'package:des/notification_booking.dart';
+import 'package:des/notification_list.dart';
 import 'package:des/policy.dart';
+import 'package:des/shared/counterNotifier.dart';
 import 'package:des/shared/dcc.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/notification_service.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
+import 'package:des/user_profile_bk.dart';
 import 'package:des/user_profile.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:des/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'fund.dart';
+import 'report_problem.dart';
 import 'shared/config.dart';
 import 'main.dart';
+import 'package:badges/badges.dart' as badges;
 
 class Menu extends StatefulWidget {
   const Menu({
@@ -38,7 +49,7 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   DateTime? currentBackPressTime;
   dynamic futureNotificationTire;
-  int addBadger = 0;
+  int notiCount = 0;
   int _currentPage = 0;
   String _profileCode = '';
   String _imageProfile = '';
@@ -284,15 +295,23 @@ class _MenuState extends State<Menu> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: Container(
-        height: 55 + MediaQuery.of(context).padding.bottom,
+        height: 66 + MediaQuery.of(context).padding.bottom,
         decoration: BoxDecoration(
-          color: Theme.of(context).custom.primary,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+          // color: Theme.of(context).custom.primary,
+          gradient: LinearGradient(
+            colors: [
+              Theme.of(context).custom.f7cafce,
+              Theme.of(context).custom.f796dc3
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          // borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFFD8D8D8).withOpacity(0.29),
+              color: const Color(0xFF000000).withOpacity(0.10),
               spreadRadius: 0,
-              blurRadius: 6,
+              blurRadius: 4,
               offset: const Offset(0, -3), // changes position of shadow
             ),
           ],
@@ -300,9 +319,10 @@ class _MenuState extends State<Menu> {
         child: Row(
           children: [
             _buildTap(0, 'หน้าหลัก', 'assets/images/home.png'),
-            _buildTap(1, 'จองใช้บริการ', 'assets/images/computer.png'),
-            _buildTap(2, 'การเรียน', 'assets/images/learning.png'),
-            _buildTap(3, 'สมาชิก', _imageProfile, isNetwork: true),
+            _buildTap(1, 'จองใช้บริการ', 'assets/images/calendar_menu.png'),
+            _buildTap(2, 'Re-Skill', 'assets/images/re_skill.png'),
+            _buildTap(3, 'แจ้งเตือน', 'assets/images/noti_menu.png'),
+            _buildTap(4, 'สมาชิก', _imageProfile, isNetwork: true),
           ],
         ),
       ),
@@ -320,20 +340,18 @@ class _MenuState extends State<Menu> {
     if (_currentPage == index) {
       if ((MyApp.themeNotifier.value == ThemeModeThird.light) ||
           (MyApp.themeNotifier.value == ThemeModeThird.dark)) {
-        color = const Color(0xFF7A4CB1);
+        color = Colors.white;
       } else {
         color = Theme.of(context).custom.b_w_y;
       }
     } else {
       if (MyApp.themeNotifier.value == ThemeModeThird.light) {
-        color = Theme.of(context).custom.f70f70_y;
+        color = Theme.of(context).custom.w_w_y;
       } else {
         color = Colors.white;
       }
     }
-    // Color color = _currentPage == index
-    //     ? const Color(0xFF7A4CB1)
-    //     : Theme.of(context).custom.bwy;
+
     return Flexible(
       key: key,
       flex: 1,
@@ -350,57 +368,64 @@ class _MenuState extends State<Menu> {
             child: Container(
               width: double.infinity,
               height: double.infinity,
-              padding: const EdgeInsets.only(
-                top: 5,
-              ),
-              child: Column(
-                children: [
-                  isNetwork
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: pathImage != ''
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Image.memory(
-                                    base64Decode(_imageProfile),
-                                    fit: BoxFit.cover,
-                                    height: 30,
-                                    width: 30,
-                                    errorBuilder: (_, __, ___) => Image.asset(
-                                      "assets/images/profile_empty.png",
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                )
-                              : Image.asset(
-                                  'assets/images/profile_empty.png',
+              padding: EdgeInsets.all(10),
+              margin: EdgeInsets.all(10),
+              decoration: _currentPage == index
+                  ? BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFFFFFFFF).withOpacity(0.50),
+                          // spreadRadius: 0,
+                          // blurRadius: 0,
+                          // offset:
+                          //     const Offset(0, 0), // changes position of shadow
+                        ),
+                      ],
+                    )
+                  : null,
+              // borderRadius: BorderRadius.circular(15),
+              child: isNetwork
+                  ? pathImage != ''
+                      ? Image.memory(
+                          base64Decode(_imageProfile),
+                          fit: BoxFit.cover,
+                          height: 30,
+                          width: 30,
+                          errorBuilder: (_, __, ___) => Image.asset(
+                            "assets/images/profile_menu.png",
+                            fit: BoxFit.fill,
+                          ),
+                        )
+                      : Image.asset(
+                          'assets/images/profile_menu.png',
+                          height: 30,
+                          width: 30,
+                          color: color,
+                        )
+                  : Consumer<CounterNotifier>(
+                      builder: (context, counterNotifier, child) {
+                        return title == "แจ้งเตือน" && notiCount > 0
+                            ? badges.Badge(
+                                badgeContent: Text(
+                                  counterNotifier.counter.toString(),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                child: Image.asset(
+                                  pathImage,
                                   height: 30,
                                   width: 30,
                                   color: color,
                                 ),
-                        )
-                      : Image.asset(
-                          pathImage,
-                          height: 30,
-                          width: 30,
-                          color: color,
-                        ),
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        fontFamily: 'Kanit',
-                        fontSize: 15,
-                        color: color,
-                        fontWeight: _currentPage == index
-                            ? FontWeight.w500
-                            : FontWeight.w300,
-                      ),
-                      textAlign: TextAlign.center,
+                              )
+                            : Image.asset(
+                                pathImage,
+                                height: 30,
+                                width: 30,
+                                color: color,
+                              );
+                      },
                     ),
-                  ),
-                ],
-              ),
             ),
           ),
         ),
@@ -459,9 +484,15 @@ class _MenuState extends State<Menu> {
       // SizedBox(),
       // SizedBox(),
       homePage,
-      BookingServicePage(),
-      LearningPage(),
+      BookingServicePage(catSelectedWidget: '0',),
+      MyClassAllPage(changePage: _changePage),
+      // NotificationBookingPage(),
+      NotificationListPage(changePage: _changePage),
       profilePage,
+      FundPage(changePage: _changePage),
+      ReportProblemPage(changePage: _changePage),
+      ContactPage(changePage: _changePage),
+      FindJobPage(changePage: _changePage),
     ];
     super.initState();
   }
@@ -526,16 +557,18 @@ class _MenuState extends State<Menu> {
         _callRead();
         _buildMainPopUp();
       }
+
       _currentPage = index;
     });
   }
 
   _callRead() async {
     var img = await DCCProvider.getImageProfile();
+    _readNotiCount();
     setState(() => _imageProfile = img);
     setState(() {
       if (_profileCode != '') {
-        pages[3] = profilePage;
+        pages[4] = profilePage;
       }
     });
   }
@@ -587,8 +620,7 @@ class _MenuState extends State<Menu> {
     DateTime date = new DateTime(now.year, now.month, now.day);
 
     if (dataValue != null) {
-      var index =
-          dataValue.indexWhere((c) => c['profileCode'] == _profileCode);
+      var index = dataValue.indexWhere((c) => c['profileCode'] == _profileCode);
 
       if (index == -1) {
         dataValue.add({
@@ -616,5 +648,31 @@ class _MenuState extends State<Menu> {
       value: jsonEncode(dataValue),
     );
     print(dataValue);
+  }
+
+  Future<dynamic> _readNotiCount() async {
+    var profileMe = await ManageStorage.readDynamic('profileMe');
+    // Response<dynamic> response;
+    Dio dio = Dio();
+    try {
+      Response response = await Dio().post(
+        '$server/dcc-api/m/v2/notificationbooking/read',
+        data: {
+          'email': profileMe['email'],
+        },
+      );
+
+      // if (response.statusCode == 200) {
+      if (response.data['status'] == 'S') {
+        var modelNotiCount = [...response.data['objectData']];
+        setState(() {
+          notiCount = modelNotiCount.where((x) => x['status'] == "N").length;
+        });
+      }
+      // }
+    } catch (e) {
+      logE(e);
+    }
+    return [];
   }
 }

@@ -298,7 +298,7 @@ class _HistoryOfServiceReservationsState
   //           children: [
   //             InkWell(
   //               onTap: () => Navigator.pop(context),
-  //               child: Image.asset('assets/images/back.png',
+  //               child: Image.asset('assets/images/back_arrow.png',
   //                   height: 40, width: 40),
   //             ),
   //             SizedBox(width: 34),

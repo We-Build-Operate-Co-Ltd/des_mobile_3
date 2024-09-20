@@ -134,5 +134,7 @@
 	<true/>
 	<key>kTCCServiceMediaLibrary</key>
 	<string>DCC Platform MediaLibrary Usage</string>
+	<key>EnableBackgroundLocationUpdates</key>
+  	<true/>
 </dict>
 </plist>

@@ -59,11 +59,25 @@ class _RegisterPageState extends State<RegisterPage> {
     {'code': '4', 'title': '55 - 64 ปี', 'value': '55 - 64 ปี'},
     {'code': '5', 'title': '65 ปีขึ้นไป', 'value': '65 ปีขึ้นไป'},
   ];
+  List<dynamic> _typeuser = [
+    {
+      'key': '',
+      'value': 'ประเภทผู้ใช้งาน',
+    },
+    {
+      'key': '1',
+      'value': 'ผู้ฝช้งานทั่วไป',
+    },
+    {
+      'key': '2',
+      'value': 'เจ้ากน้าที่ศูนย์',
+    },
+  ];
 
   List<dynamic> _careerList = [
     {
       'key': '',
-      'value': 'เลือกอาชีพ',
+      'value': 'อาชีพ',
     },
     {
       'key': '1',
@@ -111,6 +125,7 @@ class _RegisterPageState extends State<RegisterPage> {
       'value': 'อื่นๆ',
     },
   ];
+
   List<dynamic> _favoriteList = [
     {
       'selected': false,
@@ -157,6 +172,7 @@ class _RegisterPageState extends State<RegisterPage> {
   String _gender = 'ชาย';
   String _ageRange = '15-20 ปี';
   String _careerSelected = '';
+  String __typeuserSelected = '';
   String _favoriteSelected = '';
 
   bool passwordVisibility = true;
@@ -211,84 +227,77 @@ class _RegisterPageState extends State<RegisterPage> {
             image: DecorationImage(
               image: AssetImage(
                 MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? "assets/images/bg_login_page.png"
-                    : "assets/images/bg_login_page-dark.png",
+                    ? "assets/images/BG.png"
+                    : "",
               ),
               fit: BoxFit.cover,
             ),
           ),
           child: Container(
-            padding: EdgeInsets.all(10),
-            alignment: Alignment.center,
-            child: Card(
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Colors.white
-                  : Colors.black,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              elevation: 5,
-              child: Container(
-                padding:
-                    EdgeInsets.only(top: 25, left: 20, right: 25, bottom: 20),
-                decoration: BoxDecoration(
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Colors.white
-                      : Colors.black,
-                  borderRadius: BorderRadius.circular(20),
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              padding:
+                  EdgeInsets.only(top: 25, left: 20, right: 25, bottom: 20),
+              decoration: BoxDecoration(
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.white
+                    : Colors.black,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
-                child: SizedBox(
-                  height: 559,
-                  child: FadingEdgeScrollView.fromScrollView(
-                    gradientFractionOnEnd: 1.0,
-                    gradientFractionOnStart: 0.3,
-                    child: ListView(
-                      controller: _scrollController,
-                      padding: EdgeInsets.zero,
-                      physics: ClampingScrollPhysics(),
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'สมัครสมาชิก',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                                color: MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? Colors.black
-                                    : MyApp.themeNotifier.value ==
-                                            ThemeModeThird.dark
-                                        ? Colors.white
-                                        : Color(0xFFFFFD57),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                height: 25,
-                                width: 25,
-                                alignment: Alignment.center,
+              ),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.8,
+                child: FadingEdgeScrollView.fromScrollView(
+                  gradientFractionOnEnd: 1.0,
+                  gradientFractionOnStart: 0.3,
+                  child: ListView(
+                    controller: _scrollController,
+                    padding: EdgeInsets.zero,
+                    physics: ClampingScrollPhysics(),
+                    children: [
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              width: 35.0,
+                              height: 35.0,
+                              margin: EdgeInsets.all(5),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
                                 child: Image.asset(
-                                  'assets/images/close_noti_list.png',
-                                  height: 18.52,
-                                  width: 18.52,
-                                  color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Colors.black
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.white
-                                          : Color(0xFFFFFD57),
+                                  'assets/images/back_profile.png',
+                                  // color: Colors.white,
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                        Text(
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'สมัครสมาชิก',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w500,
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFFB325F8)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 55),
+                        child: Text(
                           'กรุณากรอกข้อมูลด้านล่างให้ครบเพื่อสมัครสมาชิก',
                           style: TextStyle(
                             fontSize: 13,
@@ -296,24 +305,62 @@ class _RegisterPageState extends State<RegisterPage> {
                             color: Theme.of(context).custom.b_w_y,
                           ),
                         ),
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 10),
+                      ),
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 10),
+                            TextFormField(
+                              readOnly: (widget.model?['email'] ?? '') != ''
+                                  ? true
+                                  : false,
+                              controller: txtEmail,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[0-9a-zA-Z@!#$%?*~^<>._.-]'))
+                              ],
+                              decoration: _decorationRegisterMember(
+                                context,
+                                hintText: 'อีเมล',
+                              ),
+                              style: TextStyle(
+                                fontFamily: 'Kanit',
+                                color: Theme.of(context).custom.b_w_y,
+                              ),
+                              cursorColor:
+                                  Theme.of(context).custom.b325f8_w_fffd57,
+                              validator: (model) {
+                                String pattern =
+                                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                RegExp regex = new RegExp(pattern);
+                                if (model!.isEmpty) {
+                                  return 'กรุณากรอกชื่อ.';
+                                } else if (!regex.hasMatch(model)) {
+                                  return 'กรุณากรอกรูปแบบอีเมลให้ถูกต้อง.';
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                            if (widget.category.isEmpty) SizedBox(height: 10),
+                            if (widget.category.isEmpty)
                               TextFormField(
-                                readOnly: (widget.model?['email'] ?? '') != ''
-                                    ? true
-                                    : false,
-                                controller: txtEmail,
+                                controller: txtPassword,
+                                obscureText: passwordVisibility,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.allow(
-                                      RegExp(r'[0-9a-zA-Z@!#$%?*~^<>._.-]'))
+                                      RegExp(r'[0-9a-zA-Z@!#$%?*~^<>._.-]')),
                                 ],
-                                decoration: _decorationRegisterMember(
+                                decoration: _decorationPasswordMember(
                                   context,
-                                  hintText: 'อีเมล',
+                                  labelText: 'รหัสผ่าน',
+                                  hintText:
+                                      'รหัสผ่านต้องเป็นตัวอักษร a-z, A-Z และ 0-9 ความยาวขั้นต่ำ 6 ตัวอักษร',
+                                  visibility: passwordVisibility,
+                                  suffixTap: () => setState(() =>
+                                      passwordVisibility = !passwordVisibility),
                                 ),
                                 style: TextStyle(
                                   fontFamily: 'Kanit',
@@ -321,97 +368,29 @@ class _RegisterPageState extends State<RegisterPage> {
                                 ),
                                 cursorColor:
                                     Theme.of(context).custom.b325f8_w_fffd57,
-                                validator: (model) {
-                                  String pattern =
-                                      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                                  RegExp regex = new RegExp(pattern);
-                                  if (model!.isEmpty) {
-                                    return 'กรุณากรอกชื่อ.';
-                                  } else if (!regex.hasMatch(model)) {
-                                    return 'กรุณากรอกรูปแบบอีเมลให้ถูกต้อง.';
-                                  } else {
-                                    return null;
-                                  }
+                                validator: (value) {
+                                  var result = ValidateForm.password(value!);
+                                  return result == null ? null : result;
                                 },
                               ),
-                              if (widget.category.isEmpty) SizedBox(height: 10),
-                              if (widget.category.isEmpty)
-                                TextFormField(
-                                  controller: txtPassword,
-                                  obscureText: passwordVisibility,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9a-zA-Z@!#$%?*~^<>._.-]')),
-                                  ],
-                                  decoration: _decorationPasswordMember(
-                                    context,
-                                    labelText: 'รหัสผ่าน',
-                                    hintText:
-                                        'รหัสผ่านต้องเป็นตัวอักษร a-z, A-Z และ 0-9 ความยาวขั้นต่ำ 6 ตัวอักษร',
-                                    visibility: passwordVisibility,
-                                    suffixTap: () => setState(() =>
-                                        passwordVisibility =
-                                            !passwordVisibility),
-                                  ),
-                                  style: TextStyle(
-                                    fontFamily: 'Kanit',
-                                    color: Theme.of(context).custom.b_w_y,
-                                  ),
-                                  cursorColor:
-                                      Theme.of(context).custom.b325f8_w_fffd57,
-                                  validator: (value) {
-                                    var result = ValidateForm.password(value!);
-                                    return result == null ? null : result;
-                                  },
-                                ),
-                              if (widget.category.isEmpty) SizedBox(height: 10),
-                              if (widget.category.isEmpty)
-                                TextFormField(
-                                  controller: txtConPassword,
-                                  obscureText: confirmPasswordVisibility,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9a-zA-Z@!#$%?*~^<>._.-]')),
-                                  ],
-                                  decoration: _decorationPasswordMember(
-                                    context,
-                                    labelText: 'ยืนยันรหัสผ่าน',
-                                    hintText:
-                                        'รหัสผ่านต้องเป็นตัวอักษร a-z, A-Z และ 0-9 ความยาวขั้นต่ำ 6 ตัวอักษร',
-                                    visibility: confirmPasswordVisibility,
-                                    suffixTap: () => setState(() =>
-                                        confirmPasswordVisibility =
-                                            !confirmPasswordVisibility),
-                                  ),
-                                  style: TextStyle(
-                                    fontFamily: 'Kanit',
-                                    color: Theme.of(context).custom.b_W_fffd57,
-                                  ),
-                                  cursorColor:
-                                      Theme.of(context).custom.b325f8_w_fffd57,
-                                  validator: (model) {
-                                    if (model!.isEmpty) {
-                                      return 'กรุณากรอกยืนยันรหัสผ่าน.';
-                                    } else if (txtPassword.text !=
-                                        txtConPassword.text) {
-                                      return 'กรุณากรอกรหัสผ่านให้ตรงกัน.';
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                ),
-                              SizedBox(height: 10),
+                            if (widget.category.isEmpty) SizedBox(height: 10),
+                            if (widget.category.isEmpty)
                               TextFormField(
-                                controller: txtPhone,
-                                keyboardType: TextInputType.number,
+                                controller: txtConPassword,
+                                obscureText: confirmPasswordVisibility,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.allow(
-                                      RegExp(r'[0-9]')),
-                                  LengthLimitingTextInputFormatter(10),
+                                      RegExp(r'[0-9a-zA-Z@!#$%?*~^<>._.-]')),
                                 ],
-                                decoration: _decorationRegisterMember(
+                                decoration: _decorationPasswordMember(
                                   context,
-                                  hintText: 'หมายเลขโทรศัพท์',
+                                  labelText: 'ยืนยันรหัสผ่าน',
+                                  hintText:
+                                      'รหัสผ่านต้องเป็นตัวอักษร a-z, A-Z และ 0-9 ความยาวขั้นต่ำ 6 ตัวอักษร',
+                                  visibility: confirmPasswordVisibility,
+                                  suffixTap: () => setState(() =>
+                                      confirmPasswordVisibility =
+                                          !confirmPasswordVisibility),
                                 ),
                                 style: TextStyle(
                                   fontFamily: 'Kanit',
@@ -420,193 +399,222 @@ class _RegisterPageState extends State<RegisterPage> {
                                 cursorColor:
                                     Theme.of(context).custom.b325f8_w_fffd57,
                                 validator: (model) {
-                                  String pattern = r'(^(?:[+0]9)?[0-9]{9,10}$)';
-                                  RegExp regex = new RegExp(pattern);
                                   if (model!.isEmpty) {
-                                    return 'กรุณากรอกชื่อ.';
-                                  } else if (!regex.hasMatch(model)) {
-                                    return 'กรุณากรอกรูปแบบเบอร์ติดต่อให้ถูกต้อง.';
+                                    return 'กรุณากรอกยืนยันรหัสผ่าน.';
+                                  } else if (txtPassword.text !=
+                                      txtConPassword.text) {
+                                    return 'กรุณากรอกรหัสผ่านให้ตรงกัน.';
                                   } else {
                                     return null;
                                   }
                                 },
                               ),
+                            SizedBox(height: 10),
+                            TextFormField(
+                              controller: txtPhone,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[0-9]')),
+                                LengthLimitingTextInputFormatter(10),
+                              ],
+                              decoration: _decorationRegisterMember(
+                                context,
+                                hintText: 'หมายเลขโทรศัพท์',
+                              ),
+                              style: TextStyle(
+                                fontFamily: 'Kanit',
+                                color: Theme.of(context).custom.b_W_fffd57,
+                              ),
+                              cursorColor:
+                                  Theme.of(context).custom.b325f8_w_fffd57,
+                              validator: (model) {
+                                String pattern = r'(^(?:[+0]9)?[0-9]{9,10}$)';
+                                RegExp regex = new RegExp(pattern);
+                                if (model!.isEmpty) {
+                                  return 'กรุณากรอกหมายเลขโทรศัพท์.';
+                                } else if (!regex.hasMatch(model)) {
+                                  return 'กรุณากรอกรูปแบบเบอร์ติดต่อให้ถูกต้อง.';
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+
+                            if (configRegister.toString() == "1")
                               SizedBox(height: 10),
-                              // TextFormField(
-                              //   controller: txtFirstName,
-                              //   decoration: _decorationRegisterMember(
-                              //     context,
-                              //     hintText: 'ชื่อ',
-                              //   ),
-                              //   style: TextStyle(
-                              //     fontFamily: 'Kanit',
-                              //     color: Theme.of(context).custom.b_W_fffd57,
-                              //   ),
-                              //   cursorColor:
-                              //       Theme.of(context).custom.b325f8_w_fffd57,
-                              //   validator: (model) {
-                              //     if (model!.isEmpty) {
-                              //       return 'กรุณากรอกชื่อ.';
-                              //     } else {
-                              //       return null;
-                              //     }
-                              //   },
-                              // ),
-                              // SizedBox(height: 10),
-                              // TextFormField(
-                              //   controller: txtLastName,
-                              //   decoration: _decorationRegisterMember(
-                              //     context,
-                              //     hintText: 'นามสกุล',
-                              //   ),
-                              //   style: TextStyle(
-                              //     fontFamily: 'Kanit',
-                              //     color: Theme.of(context).custom.b_W_fffd57,
-                              //   ),
-                              //   cursorColor:
-                              //       Theme.of(context).custom.b325f8_w_fffd57,
-                              //   validator: (model) {
-                              //     if (model!.isEmpty) {
-                              //       return 'กรุณากรอกนามสกุล.';
-                              //     } else {
-                              //       return null;
-                              //     }
-                              //   },
-                              // ),
-                              // SizedBox(height: 10),
-                              if (configRegister.toString() == "1")
-                                Text(
-                                  'เพศ',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500,
-                                    color: Theme.of(context).custom.b_W_fffd57,
-                                  ),
-                                ),
-                              if (configRegister.toString() == "1")
-                                SizedBox(height: 6),
-                              if (configRegister.toString() == "1")
-                                SizedBox(
-                                  height: 20,
-                                  width: double.infinity,
-                                  child: ListView.separated(
-                                    scrollDirection: Axis.horizontal,
-                                    padding: EdgeInsets.zero,
-                                    separatorBuilder: (_, __) =>
-                                        SizedBox(width: 25),
-                                    itemBuilder: (_, index) =>
-                                        _radioGender(_genderList[index]),
-                                    itemCount: _genderList.length,
-                                  ),
-                                ),
-                              if (configRegister.toString() == "1")
-                                SizedBox(height: 20),
-                              if (configRegister.toString() == "1")
-                                Text(
-                                  'ช่วงอายุ',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500,
-                                    color: Theme.of(context).custom.b_W_fffd57,
-                                  ),
-                                ),
-                              if (configRegister.toString() == "1")
-                                SizedBox(height: 6),
-                              if (configRegister.toString() == "1")
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: Wrap(
-                                    runSpacing: 11,
-                                    spacing: 8,
-                                    children: _ageRangeList
-                                        .map<Widget>(
-                                            (dynamic e) => _radioAgeRange(e))
-                                        .toList(),
-                                  ),
-                                ),
-                              if (configRegister.toString() == "1")
-                                SizedBox(height: 10),
-                              if (configRegister.toString() == "1")
-                                Text(
-                                  'อาชีพ',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500,
-                                    color: Theme.of(context).custom.b_W_fffd57,
-                                  ),
-                                ),
-                              if (configRegister.toString() == "1")
-                                SizedBox(height: 10),
-                              if (configRegister.toString() == "1")
-                                _dropdown(
-                                  data: _careerList,
-                                  value: _careerSelected,
-                                  onChanged: (String value) {
-                                    setState(() {
-                                      _careerSelected = value;
-                                    });
-                                  },
-                                ),
-                              SizedBox(height: 10),
+                            if (configRegister.toString() == "1")
+                              _dropdown(
+                                data: _careerList,
+                                value: _careerSelected,
+                                onChanged: (String value) {
+                                  setState(() {
+                                    _careerSelected = value;
+                                  });
+                                },
+                              ),
+
+                            // TextFormField(
+                            //   controller: txtFirstName,
+                            //   decoration: _decorationRegisterMember(
+                            //     context,
+                            //     hintText: 'ชื่อ',
+                            //   ),
+                            //   style: TextStyle(
+                            //     fontFamily: 'Kanit',
+                            //     color: Theme.of(context).custom.b_W_fffd57,
+                            //   ),
+                            //   cursorColor:
+                            //       Theme.of(context).custom.b325f8_w_fffd57,
+                            //   validator: (model) {
+                            //     if (model!.isEmpty) {
+                            //       return 'กรุณากรอกชื่อ.';
+                            //     } else {
+                            //       return null;
+                            //     }
+                            //   },
+                            // ),
+                            // SizedBox(height: 10),
+                            // TextFormField(
+                            //   controller: txtLastName,
+                            //   decoration: _decorationRegisterMember(
+                            //     context,
+                            //     hintText: 'นามสกุล',
+                            //   ),
+                            //   style: TextStyle(
+                            //     fontFamily: 'Kanit',
+                            //     color: Theme.of(context).custom.b_W_fffd57,
+                            //   ),
+                            //   cursorColor:
+                            //       Theme.of(context).custom.b325f8_w_fffd57,
+                            //   validator: (model) {
+                            //     if (model!.isEmpty) {
+                            //       return 'กรุณากรอกนามสกุล.';
+                            //     } else {
+                            //       return null;
+                            //     }
+                            //   },
+                            // ),
+                            SizedBox(height: 10),
+                            if (configRegister.toString() == "1")
                               Text(
-                                'สิ่งที่สนใจ',
+                                'เพศ',
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500,
                                   color: Theme.of(context).custom.b_W_fffd57,
                                 ),
                               ),
-                              SizedBox(height: 10),
-                              _buildFavorites(),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        CheckboxListTile(
-                            contentPadding: EdgeInsets.all(0),
-                            controlAffinity: ListTileControlAffinity.leading,
-                            title: Text(
-                              'ฉันยอมรับการให้ข้อมูล',
+                            if (configRegister.toString() == "1")
+                              SizedBox(height: 6),
+                            if (configRegister.toString() == "1")
+                              SizedBox(
+                                height: 20,
+                                width: double.infinity,
+                                child: ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  padding: EdgeInsets.zero,
+                                  separatorBuilder: (_, __) =>
+                                      SizedBox(width: 25),
+                                  itemBuilder: (_, index) =>
+                                      _radioGender(_genderList[index]),
+                                  itemCount: _genderList.length,
+                                ),
+                              ),
+                            if (configRegister.toString() == "1")
+                              SizedBox(height: 20),
+                            if (configRegister.toString() == "1")
+                              Text(
+                                'ช่วงอายุ',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                  color: Theme.of(context).custom.b_W_fffd57,
+                                ),
+                              ),
+                            if (configRegister.toString() == "1")
+                              SizedBox(height: 6),
+                            if (configRegister.toString() == "1")
+                              SizedBox(
+                                width: double.infinity,
+                                child: Wrap(
+                                  runSpacing: 11,
+                                  spacing: 8,
+                                  children: _ageRangeList
+                                      .map<Widget>(
+                                          (dynamic e) => _radioAgeRange(e))
+                                      .toList(),
+                                ),
+                              ),
+                            // if (configRegister.toString() == "1")
+                            //   SizedBox(height: 10),
+                            // if (configRegister.toString() == "1")
+                            // Text(
+                            //   'อาชีพ',
+                            //   style: TextStyle(
+                            //     fontSize: 13,
+                            //     fontWeight: FontWeight.w500,
+                            //     color: Theme.of(context).custom.b_W_fffd57,
+                            //   ),
+                            // ),
+                            // SizedBox(height: 10),
+                            Text(
+                              'สิ่งที่สนใจ',
                               style: TextStyle(
+                                fontSize: 13,
                                 fontWeight: FontWeight.w500,
                                 color: Theme.of(context).custom.b_W_fffd57,
                               ),
                             ),
-                            subtitle: Text(
-                              'ยอมรับการให้ข้อมูลเพื่อสมัครสมาชิก เพื่อให้เป็นไปตามหลักข้อกำหนดในการเก็บข้อมูลส่วนบุคคล',
-                              style: TextStyle(
-                                color: Theme.of(context).custom.f70f70_y,
+                            SizedBox(height: 10),
+                            _buildFavorites(),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      CheckboxListTile(
+                          contentPadding: EdgeInsets.all(0),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          title: Text(
+                            'ฉันยอมรับการให้ข้อมูล',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).custom.b_W_fffd57,
+                            ),
+                          ),
+                          subtitle: Text(
+                            'ยอมรับการให้ข้อมูลเพื่อสมัครสมาชิก เพื่อให้เป็นไปตามหลักข้อกำหนดในการเก็บข้อมูลส่วนบุคคล',
+                            style: TextStyle(
+                              color: Theme.of(context).custom.f70f70_y,
+                            ),
+                          ),
+                          activeColor: Theme.of(context).custom.b325f8_w_fffd57,
+                          side: BorderSide(
+                            color: Theme.of(context).custom.b325f8_w_fffd57,
+                          ),
+                          enabled: true,
+                          checkColor: Theme.of(context).custom.w_292929,
+                          checkboxShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          value: chbAcceptPDPA,
+                          onChanged: (p0) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const PolicyWebPage(),
                               ),
-                            ),
-                            activeColor:
-                                Theme.of(context).custom.b325f8_w_fffd57,
-                            side: BorderSide(
-                              color: Theme.of(context).custom.b325f8_w_fffd57,
-                            ),
-                            enabled: true,
-                            checkColor: Theme.of(context).custom.w_292929,
-                            checkboxShape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            value: chbAcceptPDPA,
-                            onChanged: (p0) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const PolicyWebPage(),
-                                ),
-                              ).then((value) {
-                                if (value) {
-                                  setState(() {
-                                    chbAcceptPDPA = true;
-                                  });
-                                }
-                              });
-                            }),
-                        SizedBox(height: 40),
-                        _buildButtonRegister(),
-                      ],
-                    ),
+                            ).then((value) {
+                              if (value) {
+                                setState(() {
+                                  chbAcceptPDPA = true;
+                                });
+                              }
+                            });
+                          }),
+                      SizedBox(height: 40),
+                      _buildButtonRegister(),
+                    ],
                   ),
                 ),
               ),
@@ -695,6 +703,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Fluttertoast.showToast(msg: 'กรุณาเลือกอาชีพ');
                   return;
                 }
+
                 if (_favoriteList.any((element) => element['selected'])) {
                   _submitRegister();
                 } else {
@@ -847,11 +856,14 @@ class _RegisterPageState extends State<RegisterPage> {
         ],
       ),
       child: DropdownButtonFormField(
-        icon: Image.asset(
-          'assets/images/arrow_down.png',
-          width: 16,
-          height: 8,
-          color: Theme.of(context).custom.b325f8_w_fffd57,
+        icon: Padding(
+          padding: EdgeInsets.only(right: 10),
+          child: Image.asset(
+            'assets/images/Drop1.png',
+            width: 16,
+            height: 8,
+            //  color: Theme.of(context).custom.b325f8_w_fffd57,
+          ),
         ),
         style: TextStyle(
           fontSize: 14,

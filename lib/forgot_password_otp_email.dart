@@ -34,94 +34,98 @@ class _ForgotPasswordOTPEmailPageState
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         body: Container(
           height: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           alignment: Alignment.center,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage(
                 MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? "assets/images/bg_login_page.png"
-                    : "assets/images/bg_login_page-dark.png",
+                    ? "assets/images/BG.png"
+                    : "",
               ),
               fit: BoxFit.cover,
             ),
           ),
-          child: Card(
-            color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Colors.white
-                : Colors.black,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            elevation: 5,
+          child: Align(
+            alignment: Alignment.bottomCenter,
             child: Container(
-              height: 300,
+              height: MediaQuery.of(context).size.height * 0.8,
+              decoration: BoxDecoration(
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.white
+                    : Colors.black,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
               padding: EdgeInsets.all(20),
-              alignment: Alignment.center,
+              // alignment: Alignment.center,
               child: Form(
                 key: _formKey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  // mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: 35.0,
+                            height: 35.0,
+                            margin: EdgeInsets.all(5),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Image.asset(
+                                'assets/images/back_profile.png',
+                                // color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 12),
                         Text(
-                          'กรอกรหัส',
+                          'กรอกรหัส OTP',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontFamily: "Kanit",
+                            fontSize: 24,
                             fontWeight: FontWeight.w500,
                             color: MyApp.themeNotifier.value ==
                                     ThemeModeThird.light
-                                ? Colors.black
+                                ? Color(0xFFB325F8)
                                 : MyApp.themeNotifier.value ==
                                         ThemeModeThird.dark
                                     ? Colors.white
                                     : Color(0xFFFFFD57),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            // logWTF('close');
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            height: 30,
-                            width: 30,
-                            alignment: Alignment.center,
-                            child: Image.asset(
-                              'assets/images/close_noti_list.png',
-                              height: 18.52,
-                              width: 18.52,
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.black
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
-                            ),
-                          ),
-                        ),
                       ],
                     ),
-                    Text(
-                      'กรุณากรอกรหัสที่ท่านได้รับผ่านอีเมล',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Colors.black
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? Colors.white
-                                : Color(0xFFFFFD57),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 55),
+                      child: Text(
+                        'กรุณากรอกรหัส OTP ที่ท่านได้รับผ่านอีเมล',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 20),
                     PinCodeTextField(
                       appContext: context,
                       controller: txtNumber1,
@@ -140,18 +144,31 @@ class _ForgotPasswordOTPEmailPageState
                         }
                       },
                       pinTheme: PinTheme(
-                        inactiveColor: Color(0xFF707070),
-                        activeColor: Theme.of(context).primaryColor,
-                        selectedColor: Theme.of(context).primaryColor,
+                        inactiveColor: Color(
+                            0xFFEEEEEE), // สีของเส้นขอบช่องที่ไม่ได้ใช้งาน
+                        activeColor:
+                            Color(0xFFEEEEEE), //สีของเส้นขอบช่องที่กำลังใช้งาน
+                        selectedColor:
+                            Color(0xFFB325F8), //สีพื้นหลังของช่องที่ถูกเลือก
                         // disabledColor: Colors.white,
-                        selectedFillColor: Colors.white,
-                        inactiveFillColor: Color(0xFFEEEEEE),
+                        activeFillColor: Color(
+                            0xFFEEEEEE), // สีพื้นหลังของช่องที่กำลังใช้งาน
+                        selectedFillColor:
+                            Color(0xFFEEEEEE), //สีพื้นหลังของช่องที่ถูกเลือก
+                        inactiveFillColor: Color(
+                            0xFFEEEEEE), // สีพื้นหลังของช่องที่ไม่ได้ใช้งาน
                         shape: PinCodeFieldShape.box,
-                        borderRadius: BorderRadius.circular(15),
-                        fieldHeight: 45.2,
-                        fieldWidth: 45.2,
-                        activeFillColor: Color(0xFFEEEEEE),
+                        borderRadius: BorderRadius.circular(12),
+                        fieldHeight: 50.42,
+                        fieldWidth: 50.42,
                       ),
+                      textStyle: TextStyle(
+                          color: Color(
+                              0xFF7A4CB1), // เปลี่ยนสีของข้อความที่กรอกเป็นสีน้ำเงิน
+                          fontSize: 32, // ขนาดของข้อความ
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Kanit' // ความหนาของข้อความ
+                          ),
                       backgroundColor: Colors.transparent,
                       cursorColor: Colors.black,
                       animationDuration: const Duration(milliseconds: 300),
@@ -210,14 +227,15 @@ class _ForgotPasswordOTPEmailPageState
                         // }
                       },
                       child: Container(
-                        height: 50,
+                        height: 45,
+                        width: double.infinity,
                         alignment: Alignment.center,
                         margin: const EdgeInsets.symmetric(horizontal: 15),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(22.5),
+                          borderRadius: BorderRadius.circular(23),
                           color: MyApp.themeNotifier.value ==
                                   ThemeModeThird.light
-                              ? Color(0xFF7A4CB1)
+                              ? Color(0xFFB325F8)
                               : MyApp.themeNotifier.value == ThemeModeThird.dark
                                   ? Colors.white
                                   : Color(0xFFFFFD57),
