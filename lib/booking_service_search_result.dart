@@ -483,32 +483,29 @@ class _BookingServiceSearchResultPageState
 
   _callRead() async {
     var url = '';
-    setState(() async {
-      if (widget.mode == '1' && (widget.search != '' || (widget.filter['provinceSelected'] != '' && widget.filter['provinceSelected'] != '0') || widget.filter['districtTitleSelected'] != '')) {
-        url =
-            'GetSearchCenterLocation?textSearch=${widget.search}&chId=${widget.filter['provinceSelected']}&assetType=${widget.filter['bookingType']}&amName=${widget.filter['districtTitleSelected']}';
-      } else {
-        await getLocation();
-        url =
-            'GetCenterLocation?latitude=${latitude}}&longitude=${longitude}';
-      }
-    });
+    if (widget.mode == '1' &&
+        (widget.search != '' ||
+            (widget.filter['provinceSelected'] != '' &&
+                widget.filter['provinceSelected'] != '0') ||
+            widget.filter['districtTitleSelected'] != '')) {
+      url =
+          'GetSearchCenterLocation?textSearch=${widget.search}&chId=${widget.filter['provinceSelected']}&assetType=${widget.filter['bookingType']}&amName=${widget.filter['districtTitleSelected']}';
+    } else {
+      await getLocation();
+      url = 'GetCenterLocation?latitude=${latitude}&longitude=${longitude}';
+    }
 
     print('======== url >> $url');
     try {
       Response response = await Dio().get('$ondeURL/api/DataManagement/$url');
-      // https://dcc.onde.go.th/dcc-api
-      // https://dcc.onde.go.th/dcc-api/api/DataManagement/GetCenterLocation?latitude=13.798181&longitude=100.5602547
 
-      // logWTF(response.data);
-      if (response.data.isNotEmpty) {
+      if (response.data != null && response.data['data'] != null) {
         setState(() {
           _filterModelCenter = response.data['data'];
           print('>>>>>>>>>>>>> ${response.data['data']}');
         });
       }
       setState(() => _loadingBookingStatus = LoadingBookingStatus.success);
-      // logWTF('search :: ${widget.search}');
     } on DioError catch (e) {
       setState(() => _loadingBookingStatus = LoadingBookingStatus.fail);
       Fluttertoast.showToast(msg: e.response!.data['message']);
@@ -518,15 +515,18 @@ class _BookingServiceSearchResultPageState
   }
 
   getLocation() async {
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((value) => {
-              setState(() {
-                latitude = value.latitude.toString();
-                longitude = value.longitude.toString();
-              })
-            });
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+      setState(() {
+        latitude = position.latitude.toString();
+        longitude = position.longitude.toString();
+      });
+    } catch (e) {
+      // Handle error, maybe show a toast or alert
+      Fluttertoast.showToast(msg: 'Unable to fetch location: $e');
+    }
   }
-
 
   trimTime(time) {
     List<String> tileModel = time.split(':');
