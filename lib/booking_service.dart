@@ -951,7 +951,6 @@ class _BookingServicePageState extends State<BookingServicePage>
                     "longitude": ''
                   }
                 }),
-            
             await Navigator.push(
               context,
               MaterialPageRoute(
@@ -1242,7 +1241,6 @@ class _BookingServicePageState extends State<BookingServicePage>
     );
   }
 
-  
   Widget _itemCategory(model) {
     return GestureDetector(
       onTap: () => setState(() {
@@ -2697,7 +2695,11 @@ class _BookingServicePageState extends State<BookingServicePage>
             ),
             decoration: _decorationDropdown(context),
             isExpanded: true,
-            value: value,
+            // value: value,
+            value: value != null &&
+                    data.any((item) => item['value'].toString() == value)
+                ? value
+                : null, // Ensure value is in items
             dropdownColor: Theme.of(context).custom.w_b_b,
             // validator: (value) =>
             //     value == '' || value == null ? 'กรุณาเลือก' : null,

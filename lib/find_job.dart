@@ -541,7 +541,6 @@ class _FindJobPageState extends State<FindJobPage> {
         Container(
           child: Text(
             catFindJob2[_typeSelected2],
-
             // 'ตำแหน่งงานทั้งหมด',
             style: TextStyle(
               color: Theme.of(context).custom.b325f8_w_fffd57,
@@ -551,23 +550,208 @@ class _FindJobPageState extends State<FindJobPage> {
             ),
           ),
         ),
-        ListView.separated(
-          shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
-          padding: EdgeInsets.symmetric(vertical: 10),
-          // itemBuilder: (_, __) => _buildItemJob(MockFindJob.data[__]),
-          itemBuilder: (_, __) => _typeSelected2 == 0
-              ? _buildItemJob(_model[__])
-              : _buildItemJob(_modelExternal[__]),
-          separatorBuilder: (_, __) => const SizedBox(height: 10),
-          itemCount:
-              _typeSelected2 == 0 ? _model.length : _modelExternal.length,
-        ),
+        _typeSelected2 == 0
+            ? _model.length == 0
+                ? Center(child: Text('ไม่พบข้อมูล'))
+                : ListView.separated(
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    // itemBuilder: (_, __) => _buildItemJob(MockFindJob.data[__]),
+                    itemBuilder: (_, __) => _buildItemJob2(_model[__]),
+                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    itemCount: _model.length)
+            : _modelExternal.length == 0
+                ? Center(child: Text('ไม่พบข้อมูล'))
+                : ListView.separated(
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    // itemBuilder: (_, __) => _buildItemJob(MockFindJob.data[__]),
+                    itemBuilder: (_, __) => _buildItemJob(_modelExternal[__]),
+                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    itemCount: _modelExternal.length)
       ],
     );
   }
 
   _buildItemJob(dynamic data) {
+    return InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FindJobDetailPage(
+                model: data,
+              ),
+            ),
+          );
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Center(
+              child: Container(
+                // height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  // color: Color(0xFFB325F8),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Image.asset('assets/images/jobkk11576.png'),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              data?['jobpositionName'] ?? '',
+              style: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).custom.b325f8_w_fffd57,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Container(
+                  width: 22,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(7.0),
+                    color: Color(0xFFB325F8),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Image.asset('assets/images/work.png'),
+                  ),
+                ),
+                SizedBox(
+                  width: 6,
+                ),
+                Expanded(
+                  child: Text(
+                    data?['employername'] ?? '',
+                    style: TextStyle(
+                      fontFamily: 'Kanit',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    maxLines: 2,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Container(
+                  width: 22,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(7.0),
+                    color: Color(0xFFB325F8),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Image.asset('assets/images/icon-map-marker.png'),
+                  ),
+                ),
+                SizedBox(
+                  width: 6,
+                ),
+                Expanded(
+                  child: Text(
+                    'ไม่ระบุ',
+                    style: TextStyle(
+                      fontFamily: 'Kanit',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    maxLines: 2,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Container(
+                  width: 22,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(7.0),
+                    color: Color(0xFFB325F8),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Image.asset('assets/images/icon-money.png'),
+                  ),
+                ),
+                SizedBox(
+                  width: 6,
+                ),
+                Expanded(
+                  child: Text(
+                    'ไม่ระบุ',
+                    style: TextStyle(
+                      fontFamily: 'Kanit',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    maxLines: 2,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Container(
+                  width: 22,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(7.0),
+                    color: Color(0xFFB325F8),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Image.asset('assets/images/icon-word.png'),
+                  ),
+                ),
+                SizedBox(
+                  width: 6,
+                ),
+                Expanded(
+                  child: Text(
+                    'ไม่ระบุ',
+                    style: TextStyle(
+                      fontFamily: 'Kanit',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    maxLines: 2,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            ContainerLine(),
+            const SizedBox(height: 10),
+          ],
+        ));
+  }
+
+  _buildItemJob2(dynamic data) {
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -597,7 +781,7 @@ class _FindJobPageState extends State<FindJobPage> {
           ),
           const SizedBox(height: 10),
           Text(
-            data?['jobpositionName'] ?? '',
+            data?['positionName'] ?? '',
             style: TextStyle(
               fontSize: 16,
               color: Theme.of(context).custom.b325f8_w_fffd57,
@@ -624,7 +808,7 @@ class _FindJobPageState extends State<FindJobPage> {
               ),
               Expanded(
                 child: Text(
-                  data['employername'],
+                  data['companyname'] ?? '',
                   style: TextStyle(
                     fontFamily: 'Kanit',
                     fontSize: 13,
@@ -750,7 +934,7 @@ class _FindJobPageState extends State<FindJobPage> {
         Container(
           margin: EdgeInsets.only(left: 15),
           child: Text(
-            'ตำแหน่งงานภายนอก',
+            'แหล่งงานภายนอก',
             style: TextStyle(
               color: Theme.of(context).custom.b325f8_w_fffd57,
               fontFamily: 'Kanit',
@@ -1038,15 +1222,17 @@ class _FindJobPageState extends State<FindJobPage> {
             ),
           ),
         ),
-        ListView.separated(
-          shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
-          padding: EdgeInsets.symmetric(vertical: 10),
-          // itemBuilder: (_, __) => _buildItemJob(MockFindJob.data[__]),
-          itemBuilder: (_, __) => _buildItemJobResume(_modelResume[__]),
-          separatorBuilder: (_, __) => const SizedBox(height: 10),
-          itemCount: _modelResume.length,
-        ),
+        _modelResume.length != 0
+            ? ListView.separated(
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                padding: EdgeInsets.symmetric(vertical: 10),
+                // itemBuilder: (_, __) => _buildItemJob(MockFindJob.data[__]),
+                itemBuilder: (_, __) => _buildItemJobResume(_modelResume[__]),
+                separatorBuilder: (_, __) => const SizedBox(height: 10),
+                itemCount: _modelResume.length,
+              )
+            : Center(child: Text('ไม่พบข้อมูล'))
       ],
     );
   }
@@ -2003,10 +2189,10 @@ class _FindJobPageState extends State<FindJobPage> {
       });
     } else if (_typeSelected == 0 && _typeSelected2 == 1) {
       var response = await dio.get(
-          'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?${(_searchController.text ?? "") == "" ? 'search=' : 'search=${_searchController.text}'}${_typeRefNo == 0 ? '' : '&catId=$_typeRefNo'}${_changwatRefNo == 0 ? '' : '&provinceId=$_changwatRefNo'}${_amphoeRefNo == 0 ? '' : '&amphoeId=$_amphoeRefNo'} ${_selectedJobType.isEmpty ? '' : '&_selectedJobType=$_selectedJobType.join(",")'}  ${_selectedSalaty.isEmpty ? '' : '&_selectedSalaty=$_selectedSalaty.join(",")'}');
+          'https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?${(_searchController.text ?? "") == "" ? 'search=' : 'search=${_searchController.text}'}${_typeRefNo == 0 ? '' : '&catId=$_typeRefNo'}${_changwatRefNo == 0 ? '' : '&provinceId=$_changwatRefNo'}${_amphoeRefNo == 0 ? '' : '&amphoeId=$_amphoeRefNo'} ${_selectedJobType.isEmpty ? '' : '&_selectedJobType=$_selectedJobType.join(",")'}  ${_selectedSalaty.isEmpty ? '' : '&_selectedSalaty=$_selectedSalaty.join(",")'}');
 
       setState(() {
-        _modelExternal = response.data;
+        _modelExternal = response.data['data'];
       });
     } else if (_typeSelected == 2) {
       var response = await dio.get(
