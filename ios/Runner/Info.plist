@@ -38,6 +38,17 @@
 				<string>com.googleusercontent.apps.949874182161-5jgngor16524p76qlckqhdk4l8hkgvih</string>
 			</array>
 		</dict>
+		<!-- เพิ่มรายการสำหรับ dcc:thaid deeplink -->
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>DccThaID</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>dcc</string> <!-- นี่คือ scheme ของ deeplink (dcc) -->
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>

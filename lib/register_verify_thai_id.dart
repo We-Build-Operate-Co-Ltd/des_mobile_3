@@ -321,7 +321,8 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
       String clientId = 'TVE4MVpwQWNrc0NxSzNLWXFQYjVmdGFTdFgxNVN3bU4';
       String client_secret =
           'cjhOVEpmdk03NUZydFlCU3B0bHhwb2t3SkhSbFZnWjJOQm9lMkx3Mg';
-      String redirectUri = 'https://decms.dcc.onde.go.th/auth';
+      // String redirectUri = 'https://decms.dcc.onde.go.th/auth';
+      String redirectUri = 'https://dlapp.we-builds.com/dcc-thaid';
       String base = 'https://imauth.bora.dopa.go.th/api/v2/oauth2/auth/';
 
       //random string, 1 = use for admin,2 = use for guest.
@@ -365,7 +366,8 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
 
       var formData = FormData.fromMap({
         "grant_type": "authorization_code",
-        "redirect_uri": "https://decms.dcc.onde.go.th/auth",
+        // "redirect_uri": "https://decms.dcc.onde.go.th/auth",
+        "redirect_uri": 'https://dlapp.we-builds.com/dcc-thaid',
         "code":
             "ZGJlNWUzMmQtOWUxMS00NGVkLTk1ZjQtOTU0MzJlNjU4N2NjI2ZhYzFlMDg3LTJjOGMtNGNjYy05MDhlLWJmMDIzNTllNTg5ZA"
       });
@@ -375,7 +377,8 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
         // data: formData,
         data: {
           "grant_type": "authorization_code",
-          "redirect_uri": "https://decms.dcc.onde.go.th/auth",
+          // "redirect_uri": "https://decms.dcc.onde.go.th/auth",
+          "redirect_uri": 'https://dlapp.we-builds.com/dcc-thaid',
           "code": _thiaDCode
         },
         options: Options(
