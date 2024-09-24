@@ -138,7 +138,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
 
         _tempModelRecommend
             .where((dynamic e) =>
-                e['course_Name']
+                e['name']
                     .toString()
                     .toUpperCase()
                     .contains(textSearch.toString().toUpperCase()) &&
@@ -146,7 +146,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                     .toString()
                     .toUpperCase()
                     .contains(cateSearch.toString().toUpperCase()) &&
-                e['course_Cat_Id']
+                e['id']
                     .toString()
                     .toUpperCase()
                     .contains(cateCourseSearch.toString().toUpperCase()))
