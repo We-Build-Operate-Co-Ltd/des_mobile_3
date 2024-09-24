@@ -42,7 +42,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST -->
                 <data
-                android:scheme="dccadmin"
+                android:scheme="dcc"
                 android:host="thaid" />
             </intent-filter>
         </activity>

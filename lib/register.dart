@@ -1003,12 +1003,13 @@ class _RegisterPageState extends State<RegisterPage> {
         'lineID': widget.model?['lineID'] ?? '',
         'googleID': widget.model?['googleID'] ?? '',
         'xID': widget.model?['xID'] ?? '',
-        'imageUrl': "",
+        'imageUrl': widget.model?['imageUrl'] ?? '',
         'category': "guest",
+        'category2': widget.category,
         'birthDay': "",
         'status': "N",
         'platform': Platform.operatingSystem.toString(),
-        'countUnit': "[]"
+        'countUnit': "[]",
       };
 
       logWTF(criteria);

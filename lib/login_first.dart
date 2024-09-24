@@ -313,8 +313,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                           SizedBox(height: 20),
                           InkWell(
                             onTap: () async {
-                              print(
-                                  '------------------------------------------');
                               FocusScope.of(context).unfocus();
                               final form = _formKey.currentState;
                               if (form!.validate()) {
@@ -1866,10 +1864,10 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   }
 
   void _callLoginGoogle() async {
+    setState(() => _loadingSubmit = true);
     try {
       UserCredential obj = await signInWithGoogle();
 
-      logWTF(obj);
       if (obj != null) {
         var model = {
           "username": obj.user!.uid,
@@ -1881,15 +1879,12 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         };
         _callLoginSocial(model, 'google');
       } else {
-        logE('obj :: ');
-        logE(obj);
-        // setState(() => _loadingSubmit = false);
+        setState(() => _loadingSubmit = false);
         Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
     } catch (e) {
-      logE(e);
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-      // setState(() => _loadingSubmit = false);
+      setState(() => _loadingSubmit = false);
     }
   }
 
@@ -1950,6 +1945,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     logWTF('_callLoginSocial');
     try {
       if (param != null) {
+        txtEmail.text = param['email'];
         Dio dio = Dio();
         var check = await dio.post(
           '$server/dcc-api/m/register/check/login/social/guest',
@@ -2013,7 +2009,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           );
           await ManageStorage.createProfile(
             value: response.data['objectData'],
-            key: 'guest',
+            key: type,
           );
 
           setState(() => _loadingSubmit = false);
@@ -2027,7 +2023,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         } else {
           setState(() => _loadingSubmit = false);
           String usernameDup = await _checkDuplicateUser();
-          logWTF(usernameDup);
           if (usernameDup.isNotEmpty) {
             Navigator.push(
               context,
@@ -2346,7 +2341,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           );
           await ManageStorage.createProfile(
             value: response.data['objectData'],
-            key: 'guest',
+            key: type,
           );
 
           setState(() => _loadingSubmit = false);
