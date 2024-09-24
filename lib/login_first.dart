@@ -70,9 +70,21 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   bool _obscureTextPassword = true;
   String _passwordStringValidate = '';
   dynamic configLoginSocial = 0;
+  String _thiaDCode = '';
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      setState(() {
+        _thiaDCode = prefs.getString('thaiDCode') ?? '';
+        if (_thiaDCode.isNotEmpty) {
+          _loadingSubmit = true;
+          _getToken();
+        }
+      });
+    });
     txtEmail = TextEditingController(text: '');
     txtPassword = TextEditingController(text: '');
     ;
@@ -1502,11 +1514,12 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       String clientId = 'TVE4MVpwQWNrc0NxSzNLWXFQYjVmdGFTdFgxNVN3bU4';
       String client_secret =
           'cjhOVEpmdk03NUZydFlCU3B0bHhwb2t3SkhSbFZnWjJOQm9lMkx3Mg';
-      String redirectUri = 'https://decms.dcc.onde.go.th/auth';
+      // String redirectUri = 'https://decms.dcc.onde.go.th/auth';
+      String redirectUri = 'https://dlapp.we-builds.com/dcc-thaid';
       String base = 'https://imauth.bora.dopa.go.th/api/v2/oauth2/auth/';
       // Random string for state, '1' for login.
-      // String state = '1${getRandomString()}';
-      String state = 'mobile';
+      String state = '1${getRandomString()}';
+      // String state = 'mobile';
       String scope =
           'pid given_name family_name address birthdate gender openid';
       String parameter =
@@ -1519,7 +1532,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         Uri.parse('$base$parameter'),
         mode: LaunchMode.externalApplication,
       );
-      _callLogin();
+      // _callLogin();
     } catch (ex) {
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
@@ -1541,8 +1554,9 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
 
       var formData = FormData.fromMap({
         "grant_type": "authorization_code",
-        "redirect_uri": "https://decms.dcc.onde.go.th/auth",
-        "code": _thaiDCode
+        // "redirect_uri": "https://decms.dcc.onde.go.th/auth",
+        "redirect_uri": 'https://dlapp.we-builds.com/dcc-thaid',
+        "code": _thiaDCode
       });
 
       var res = await dio.post(
@@ -1571,6 +1585,10 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         'address': idData['address']['formatted'],
         'gender': idData['gender'],
       };
+      _userData['firstName'] = idData['given_name'];
+      _userData['lastName'] = idData['family_name'];
+      _userData['sex'] = idData['gender'];
+      _userData['idcard'] = idData['pid'];
 
       // Use _login instead of _register for login process
       _login();
@@ -1585,7 +1603,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     setState(() => _loadingSubmit = true);
     try {
       var response = await Dio().post(
-        '$server/dcc-api/m/register/check/login/social/guest', // Replace with your actual login API
+        '$server/dcc-api/m/register/login/idCard', // Replace with your actual login API
         data: _userData,
       );
 
@@ -1594,15 +1612,82 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       });
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
-          print('Login success, navigating to HomePage');
+          // logWTF('token');
+          txtEmail.text = response.data['objectData']['email'];
+          txtPassword.text = response.data['objectData']['password'];
+
+          String accessToken = await _getTokenKeycloak(
+            username: txtEmail.text.trim(),
+            password: txtPassword.text,
+          );
+
+          if (accessToken == 'invalid_grant' || accessToken == '') {
+            Fluttertoast.showToast(
+                msg: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
+                gravity: ToastGravity.CENTER);
+            setState(() => _loadingSubmit = false);
+            return;
+            // กรอกรหัสผ่าน
+          }
+
+          dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
+
+          if (responseKeyCloak == null) {
+            return;
+          }
+
+          dynamic responseProfileMe = await _getProfileMe(accessToken);
+          if (responseProfileMe == null) {
+            return;
+          }
+          dynamic responseUser = await _getUserProfile();
+
+          if (responseUser?['message'] == 'code_not_found') {
+            // logWTF('create');
+            var create = await _createUserProfile(responseProfileMe['data']);
+            if (create == null) {
+              return;
+            }
+            responseUser = await _getUserProfile();
+          }
+
+          if (responseUser == null) {
+            Fluttertoast.showToast(msg: responseUser['message']);
+            return;
+          }
+          if (responseUser?['status'] == "F") {
+            Fluttertoast.showToast(msg: responseUser['message']);
+            return;
+          }
+
+          await ManageStorage.createSecureStorage(
+            value: accessToken,
+            key: 'accessToken',
+          );
+          await ManageStorage.createSecureStorage(
+            value: json.encode(responseKeyCloak),
+            key: 'loginData',
+          );
+          await ManageStorage.createSecureStorage(
+            value: json.encode(responseProfileMe?['data']),
+            key: 'profileMe',
+          );
+
+          // logWTF(responseUser);
+          await ManageStorage.createProfile(
+            value: responseUser['objectData'][0],
+            key: 'guest',
+          );
+
+          setState(() => _loadingSubmit = false);
+          if (!mounted) return;
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(
+              builder: (context) => const Menu(),
+            ),
           );
-        } else {
-          Fluttertoast.showToast(
-              msg: response.data['message'] ?? 'เกิดข้อผิดพลาด');
-        }
+        } else {}
       } else {
         Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
@@ -1616,7 +1701,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   }
 
   dynamic _userData = {};
-  String _thaiDCode = '';
 
   _getTokenKeycloak({String username = '', String password = ''}) async {
     try {
