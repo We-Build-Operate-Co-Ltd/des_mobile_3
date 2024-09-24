@@ -86,6 +86,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
 
   @override
   void initState() {
+    _callReadRecomment();
     _get_category();
     _get_LmsCategory();
     _callReadCouseEternal();
@@ -93,9 +94,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
 
     // _get_course();
     // _get_course();
-
     // _callRead();
-    _callReadRecomment();
 
     myCourse = new MyCoursePage(
       callBack: () {
@@ -184,7 +183,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   }
 
   _callReadRecomment() async {
-    var response = await Dio().get('$ondeURL/api/Lms/GetRecommendCourse');
+    var response = await Dio().get('$server/py-api/dcc/lms/recomend');
 
     setState(() {
       _modelRecommend = Future.value(response.data);
@@ -286,9 +285,9 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                 child: SingleChildScrollView(
                   child: Container(
                     alignment: Alignment.bottomCenter,
-                    // height:  MediaQuery.of(context).size.height * .650,
+                    // height: MediaQuery.of(context).size.height * 0.8,
                     width: 350,
-                    height: deviceHeight * 0.75,
+                    height: deviceHeight * 0.8,
                     padding: EdgeInsets.only(top: 20, left: 20, right: 20),
                     decoration: BoxDecoration(
                       color: MyApp.themeNotifier.value == ThemeModeThird.light
@@ -854,14 +853,24 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   Widget containerRecommendedClass(dynamic model) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => CourseDetailNewPage(
-        //       model: model,
-        //     ),
-        //   ),
-        // );
+        var data = {
+          'course_id': model?['id'] ?? '',
+          "course_name": model?['name'] ?? '',
+          "course_cat_id": model?['course_cat_id'] ?? '',
+          "cover_image": model?['docs'] ?? '',
+          "description": model['details'] ?? '',
+          "created_at": model['created_at'] ?? '',
+          "category_name": model['cat_name'] ?? '',
+          "certificate": model['certificate'] ?? '',
+        };
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CourseDetailPage(
+              model: data,
+            ),
+          ),
+        );
       },
       child: Container(
         // elevation: 4,
@@ -892,9 +901,10 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
                 ),
-                child: (model?['course_Thumbnail_Url'] ?? '') != ''
+                child: (model?['docs'] ?? '') != ''
                     ? CachedNetworkImage(
-                        imageUrl: '${model['course_Thumbnail_Url']}',
+                        imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
+                            model?['docs'],
                         height: 120,
                         width: double.infinity,
                         fit: BoxFit.cover,
@@ -912,7 +922,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                   alignment: Alignment.topLeft,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
-                    model?['course_Name'] ?? '',
+                    model?['name'] ?? '',
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
@@ -931,7 +941,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                         height: 24, width: 24),
                     const SizedBox(width: 8),
                     Text(
-                      model?['course_Duration'],
+                      model?['course_duration'],
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w400,

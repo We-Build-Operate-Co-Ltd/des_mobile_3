@@ -119,7 +119,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                           : "assets/images/bg_login_first_page-dark.png",
                     ),
                     alignment: Alignment.topCenter,
-                    fit: BoxFit.contain,
+                    fit: BoxFit.fill,
                   ),
                 ),
               ),
@@ -137,6 +137,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                                 ? "assets/images/Owl-8 2.png"
                                 : "",
                           ),
+                          // fit: BoxFit.contain,
                         ))
                   ],
                 ),

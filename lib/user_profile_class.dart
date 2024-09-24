@@ -215,7 +215,7 @@ class _UserProfileClassPageState extends State<UserProfileClassPage> {
           child: Container(
             height: 35,
             width: 35,
-            padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+            // padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 color: MyApp.themeNotifier.value == ThemeModeThird.light

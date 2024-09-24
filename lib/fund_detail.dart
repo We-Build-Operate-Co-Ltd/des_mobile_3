@@ -67,12 +67,7 @@ class _FundDetailPageState extends State<FundDetailPage> {
               child: ListView(
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(
-                      left: 20,
-                      right: 20,
-                      top: 20,
-                      bottom: 100,
-                    ),
+                    padding: EdgeInsets.all(20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -328,58 +323,58 @@ class _FundDetailPageState extends State<FundDetailPage> {
                 ],
               ),
             ),
-            SizedBox(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                      padding: EdgeInsets.only(left: 20, right: 20),
-                      height: 100,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(24.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.15),
-                            blurRadius: 4,
-                            offset: Offset(0, -4),
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            height: 50,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Color(0xFFB325F8),
-                              borderRadius: BorderRadius.circular(24),
-                              boxShadow: const [
-                                BoxShadow(
-                                  blurRadius: 4,
-                                  color: Color(0x40F3D2FF),
-                                  offset: Offset(0, -4),
-                                )
-                              ],
-                            ),
-                            child: Center(
-                              child: const Text(
-                                'สนใจเข้าร่วม',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )),
-                ],
-              ),
-            )
+            // SizedBox(
+            //   child: Column(
+            //     mainAxisAlignment: MainAxisAlignment.end,
+            //     children: [
+            //       Container(
+            //           padding: EdgeInsets.only(left: 20, right: 20),
+            //           height: 100,
+            //           width: double.infinity,
+            //           decoration: BoxDecoration(
+            //             color: Colors.white,
+            //             borderRadius: BorderRadius.circular(24.0),
+            //             boxShadow: [
+            //               BoxShadow(
+            //                 color: Colors.black.withOpacity(0.15),
+            //                 blurRadius: 4,
+            //                 offset: Offset(0, -4),
+            //               ),
+            //             ],
+            //           ),
+            //           child: Center(
+            //             child: GestureDetector(
+            //               onTap: () {},
+            //               child: Container(
+            //                 height: 50,
+            //                 width: double.infinity,
+            //                 decoration: BoxDecoration(
+            //                   color: Color(0xFFB325F8),
+            //                   borderRadius: BorderRadius.circular(24),
+            //                   boxShadow: const [
+            //                     BoxShadow(
+            //                       blurRadius: 4,
+            //                       color: Color(0x40F3D2FF),
+            //                       offset: Offset(0, -4),
+            //                     )
+            //                   ],
+            //                 ),
+            //                 child: Center(
+            //                   child: const Text(
+            //                     'สนใจเข้าร่วม',
+            //                     style: TextStyle(
+            //                       fontSize: 16,
+            //                       fontWeight: FontWeight.w400,
+            //                       color: Colors.white,
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ),
+            //             ),
+            //           )),
+            //     ],
+            //   ),
+            // )
           ],
         ),
       ),
