@@ -4,6 +4,7 @@ import 'package:des/shared/theme_data.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -80,8 +81,8 @@ class _AboutUsPageState extends State<AboutUsPage> {
                 padding: EdgeInsets.only(top: 20, left: 20, right: 20),
                 decoration: BoxDecoration(
                   color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Colors.white
-                        : Colors.black,
+                      ? Colors.white
+                      : Colors.black,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
                 child: ListView(
@@ -94,15 +95,15 @@ class _AboutUsPageState extends State<AboutUsPage> {
                     ),
                     SizedBox(height: 30),
                     Text(
-                      'ศูนย์ดิจิทัลชุมชน',
+                      'ศูนย์ดิจิsvfsfdbdทัลชุมชน',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 20,
                         color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Colors.black
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
+                            ? Colors.black
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -114,8 +115,18 @@ class _AboutUsPageState extends State<AboutUsPage> {
                     rowContactInformation(
                         '02-114-8592', 'assets/images/about_us_phone.png'),
                     SizedBox(height: 15),
-                    rowContactInformation(
-                        'www.dcc.onde.go.th', 'assets/images/about_us_web.png'),
+                    // rowContactInformationSocial(
+                    //     'www.dcc.onde.go.th', 'assets/images/about_us_web.png'),
+
+                    rowContactInformationSocial(
+                      title: 'www.dcc.onde.go.th',
+                      image: 'assets/images/about_us_web.png',
+                      onTap: () async {
+                        launchUrl(Uri.parse('https://dcc.onde.go.th/'),
+                            mode: LaunchMode.externalApplication);
+                      },
+                    ),
+
                     SizedBox(height: 30),
                     Text(
                       'ช่องทางการติดต่อ',
@@ -123,10 +134,10 @@ class _AboutUsPageState extends State<AboutUsPage> {
                       style: TextStyle(
                         fontSize: 13,
                         color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Colors.black
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
+                            ? Colors.black
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -252,6 +263,44 @@ class _AboutUsPageState extends State<AboutUsPage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget rowContactInformationSocial({
+    required String title,
+    required String image,
+    Function? onTap,
+  }) {
+    return InkWell(
+      onTap: () {
+        onTap!();
+      },
+      child: Row(
+        children: [
+          Container(
+            height: 50,
+            width: 50,
+            child: Image.asset(image),
+          ),
+          SizedBox(width: 15),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: textTheme,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
