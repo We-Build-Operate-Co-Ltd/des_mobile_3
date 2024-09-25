@@ -8,6 +8,7 @@ import 'package:des/login_second.dart';
 import 'package:des/menu.dart';
 import 'package:des/register.dart';
 import 'package:des/register_link_account.dart';
+import 'package:des/register_thaid.dart';
 import 'package:des/shared/apple_firebase.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/line.dart';
@@ -1578,6 +1579,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       Map<String, dynamic> idData = JwtDecoder.decode(res.data['id_token']);
 
       // Prepare data for login instead of registration
+      var _userData = {};
       _userData['thaiID'] = {
         'pid': idData['pid'],
         'name': idData['given_name'],
@@ -1592,7 +1594,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       _userData['idcard'] = idData['pid'];
 
       // Use _login instead of _register for login process
-      _login();
+      _login(_userData);
     } catch (e) {
       await prefs.remove('thaiDCode');
       await prefs.remove('thaiDState');
@@ -1600,12 +1602,12 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     }
   }
 
-  _login() async {
+  _login(param) async {
     setState(() => _loadingSubmit = true);
     try {
       var response = await Dio().post(
         '$server/dcc-api/m/register/login/idCard', // Replace with your actual login API
-        data: _userData,
+        data: param,
       );
 
       setState(() {
@@ -1688,7 +1690,14 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
               builder: (context) => const Menu(),
             ),
           );
-        } else {}
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => RegisterThaidPage(model: param, category: ""),
+            ),
+          );
+        }
       } else {
         Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
@@ -1700,8 +1709,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       });
     }
   }
-
-  dynamic _userData = {};
 
   _getTokenKeycloak({String username = '', String password = ''}) async {
     try {
