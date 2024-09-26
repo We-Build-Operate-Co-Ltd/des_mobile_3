@@ -160,6 +160,7 @@ class _FundPageState extends State<FundPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
+      extendBody: true,
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -319,8 +320,10 @@ class _FundPageState extends State<FundPage> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    _handleSearch(_searchController.text);
-                                    _searchController.clear();
+                                    setState(() {
+                                      _handleSearch(_searchController.text);
+                                      _searchController.clear();
+                                    });
                                   },
                                   child: Container(
                                     height: 50,
@@ -373,10 +376,6 @@ class _FundPageState extends State<FundPage> {
                                       : Center(
                                           child: Text(
                                             'ไม่พบข้อมูล',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                            ),
                                           ),
                                         ),
                                 SizedBox(height: 20),
@@ -569,17 +568,19 @@ class _FundPageState extends State<FundPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      _investor = [..._investorTemp]
-                          .where((element) =>
-                              element['annoucement']
-                                  .contains(_searchFilterController.text) &&
-                              listCat
-                                  .where((e) => e['selected'])
-                                  .map((m) => m['cateId'])
-                                  .contains(element['category']))
-                          .toList();
-                      _searchFilterController.clear();
+                      setState(() {
+                        _investor = [..._investorTemp]
+                            .where((element) =>
+                                element['annoucement']
+                                    .contains(_searchFilterController.text) ||
+                                listCat
+                                    .where((e) => e['selected'])
+                                    .map((m) => m['cateId'])
+                                    .contains(element['category']))
+                            .toList();
+                      });
                       Navigator.pop(context);
+                      _searchFilterController.clear();
                       // print(
                       //     '----------------23------------${listCat.where((e) => e['selected']).map((m) => m['cateId'])}');
                       // print('----------------24------------${[

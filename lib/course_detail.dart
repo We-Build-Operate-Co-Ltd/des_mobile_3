@@ -117,6 +117,10 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           ),
         ),
         SizedBox(height: 20),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        //   child: Text('data'),
+        // ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
@@ -175,6 +179,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               //     ],
               //   ),
               // ),
+
               const Expanded(child: SizedBox()),
               InkWell(
                 onTap: () => _callShare(widget.model),
@@ -183,7 +188,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                   width: 30,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: buttonTheme,
+                    color: Theme.of(context).custom.b325f8_w_fffd57,
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(color: colorTheme),
                   ),
@@ -242,7 +247,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                 ),
                 child: Container(
                   color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xD953327A)
+                      ? Color(0xFFB325F8).withOpacity(0.75)
                       : Colors.black,
                   padding: EdgeInsets.only(
                     top: MediaQuery.of(context).padding.top + 10,
@@ -360,9 +365,9 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             alignment: Alignment.center,
             margin: EdgeInsets.symmetric(horizontal: 15),
             decoration: BoxDecoration(
-              color: buttonTheme,
+              color: Theme.of(context).custom.b325f8_w_fffd57,
               borderRadius: BorderRadius.circular(22.5),
-              border: Border.all(color: colorTheme),
+              // border: Border.all(color: colorTheme),
             ),
             child: Text(
               'เริ่มเรียน',
@@ -385,12 +390,12 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       child: Container(
         height: 40,
         width: 40,
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: buttonTheme,
-          border: Border.all(color: colorTheme),
-        ),
+        // // padding: EdgeInsets.all(5),
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(8),
+        //   color: buttonTheme,
+        //   border: Border.all(color: colorTheme),
+        // ),
         child: Image.asset(
           'assets/images/back_arrow.png',
         ),
@@ -402,8 +407,8 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
   void initState() {
     if (MyApp.themeNotifier.value == ThemeModeThird.light) {
       backgroundTheme = Colors.white;
-      colorTheme = Color(0xFF7A4CB1);
-      buttonTheme = Color(0xFF7A4CB1);
+      colorTheme = Color(0xFFB325F8);
+      buttonTheme = Color(0xFFB325F8);
       textTheme = Colors.black;
     } else if (MyApp.themeNotifier.value == ThemeModeThird.dark) {
       backgroundTheme = Colors.black;

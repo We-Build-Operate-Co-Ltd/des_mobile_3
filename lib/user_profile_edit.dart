@@ -763,7 +763,13 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                       SizedBox(height: 10),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pop(context);
+                          // Navigator.pop(context);
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => const Menu(),
+                            ),
+                            (Route<dynamic> route) => false,
+                          );
                         },
                         child: Container(
                           height: 40,

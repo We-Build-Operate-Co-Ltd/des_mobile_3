@@ -484,7 +484,9 @@ class _MenuState extends State<Menu> {
       // SizedBox(),
       // SizedBox(),
       homePage,
-      BookingServicePage(catSelectedWidget: '0',),
+      BookingServicePage(
+        catSelectedWidget: '0',
+      ),
       MyClassAllPage(changePage: _changePage),
       // NotificationBookingPage(),
       NotificationListPage(changePage: _changePage),

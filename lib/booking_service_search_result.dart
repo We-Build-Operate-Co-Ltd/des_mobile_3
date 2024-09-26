@@ -123,7 +123,7 @@ class _BookingServiceSearchResultPageState
               child: Text(
                 widget.mode == '1'
                     ? '(${widget.filter['provinceTitleSelected']}, ${widget.filter['districtTitleSelected']})'
-                    : 'รัศมีไม่เกิน 300 กิโลเมตร',
+                    : 'รัศมีไม่เกิน 30 กิโลเมตร',
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 15,
@@ -140,7 +140,7 @@ class _BookingServiceSearchResultPageState
               ),
             ),
             Expanded(
-              child: _list(),
+              child: _list() ?? '',
             ),
           ],
         ));

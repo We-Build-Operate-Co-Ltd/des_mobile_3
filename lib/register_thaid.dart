@@ -9,6 +9,7 @@ import 'package:des/shared/line.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/register_verify_thai_id.dart';
+import 'package:des/verify_complete.dart';
 import 'package:dio/dio.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +20,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'shared/config.dart';
 import 'main.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key, this.model, this.category = ''});
+class RegisterThaidPage extends StatefulWidget {
+  const RegisterThaidPage({super.key, this.model, this.category = ''});
   final dynamic model;
   final String category;
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<RegisterThaidPage> createState() => _RegisterThaidPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterThaidPageState extends State<RegisterThaidPage> {
   final _formKey = GlobalKey<FormState>();
 
   String _passwordStringValidate = '';
@@ -495,32 +496,32 @@ class _RegisterPageState extends State<RegisterPage> {
                             //     }
                             //   },
                             // ),
-                            SizedBox(height: 10),
-                            if (configRegister.toString() == "1")
-                              Text(
-                                'เพศ',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  color: Theme.of(context).custom.b_W_fffd57,
-                                ),
-                              ),
-                            if (configRegister.toString() == "1")
-                              SizedBox(height: 6),
-                            if (configRegister.toString() == "1")
-                              SizedBox(
-                                height: 20,
-                                width: double.infinity,
-                                child: ListView.separated(
-                                  scrollDirection: Axis.horizontal,
-                                  padding: EdgeInsets.zero,
-                                  separatorBuilder: (_, __) =>
-                                      SizedBox(width: 25),
-                                  itemBuilder: (_, index) =>
-                                      _radioGender(_genderList[index]),
-                                  itemCount: _genderList.length,
-                                ),
-                              ),
+                            // SizedBox(height: 10),
+                            // if (configRegister.toString() == "1")
+                            //   Text(
+                            //     'เพศ',
+                            //     style: TextStyle(
+                            //       fontSize: 13,
+                            //       fontWeight: FontWeight.w500,
+                            //       color: Theme.of(context).custom.b_W_fffd57,
+                            //     ),
+                            //   ),
+                            // if (configRegister.toString() == "1")
+                            //   SizedBox(height: 6),
+                            // if (configRegister.toString() == "1")
+                            //   SizedBox(
+                            //     height: 20,
+                            //     width: double.infinity,
+                            //     child: ListView.separated(
+                            //       scrollDirection: Axis.horizontal,
+                            //       padding: EdgeInsets.zero,
+                            //       separatorBuilder: (_, __) =>
+                            //           SizedBox(width: 25),
+                            //       itemBuilder: (_, index) =>
+                            //           _radioGender(_genderList[index]),
+                            //       itemCount: _genderList.length,
+                            //     ),
+                            //   ),
                             if (configRegister.toString() == "1")
                               SizedBox(height: 20),
                             if (configRegister.toString() == "1")
@@ -557,7 +558,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             //     color: Theme.of(context).custom.b_W_fffd57,
                             //   ),
                             // ),
-                            // SizedBox(height: 10),
+                            SizedBox(height: 10),
                             Text(
                               'สิ่งที่สนใจ',
                               style: TextStyle(
@@ -987,15 +988,16 @@ class _RegisterPageState extends State<RegisterPage> {
         'email': txtEmail.text,
         'password': txtPassword.text,
         'phone': txtPhone.text,
-        'firstName': txtFirstName.text,
-        'lastName': txtLastName.text,
-        'sex': _gender,
+        // 'firstName': txtFirstName.text,
+        // 'lastName': txtLastName.text,
+        // 'sex': _gender,
         'age': int.parse(_ageRange),
         'ageRange': _ageRangeList
             .firstWhere((element) => element['code'] == _ageRange)['title'],
-        'username': widget.category.isNotEmpty
-            ? widget.model['username']
-            : txtEmail.text,
+        'username': txtEmail.text,
+        // 'username': widget.category.isNotEmpty
+        //     ? widget.model['username']
+        //     : txtEmail.text,
         'career': _careerSelected,
         'favorites': favorites,
         'facebookID': widget.model?['facebookID'] ?? '',
@@ -1010,23 +1012,30 @@ class _RegisterPageState extends State<RegisterPage> {
         'status': "N",
         'platform': Platform.operatingSystem.toString(),
         'countUnit': "[]",
+        'thaiID': widget.model?['thaiID'] ?? {},
+        'firstName': widget.model?['firstName'] ?? '',
+        'lastName': widget.model?['lastName'] ?? '',
+        'sex': widget.model?['sex'] ?? '',
+        'idcard': widget.model?['idcard'] ?? '',
+        'hasThaiD': true,
       };
 
       logWTF(criteria);
 
-      setState(() => _loading = false);
+      // setState(() => _loading = false);
       await ManageStorage.createSecureStorage(
         key: 'tempRegister',
         value: json.encode(criteria),
       );
 
       if (!mounted) return;
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => RegisterVerifyThaiIDPage(),
-        ),
-      );
+      _register(criteria);
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (_) => RegisterVerifyThaiIDPage(),
+      //   ),
+      // );
     } catch (e) {
       logE(e);
       setState(() => _loading = false);
@@ -1214,6 +1223,46 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() {
       configRegister = response;
     });
+  }
+
+  _register(_userData) async {
+    setState(() => _loading = true);
+    try {
+      var response = await Dio().post(
+        '$server/dcc-api/m/Register/create',
+        data: _userData,
+      );
+
+      setState(() {
+        _loading = false;
+      });
+
+      if (response.statusCode == 200) {
+        if (response.data['status'] == 'S') {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => const VerifyCompletePage(),
+              transitionDuration: const Duration(milliseconds: 200),
+              transitionsBuilder: (_, a, __, c) =>
+                  FadeTransition(opacity: a, child: c),
+            ),
+          );
+        } else {
+          logE(response.data['message']);
+          Fluttertoast.showToast(
+              msg: response.data['message'] ?? 'เกิดข้อผิดพลาด');
+        }
+      } else {
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      }
+    } catch (e) {
+      logE(e);
+      setState(() {
+        _loading = false;
+      });
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+    }
   }
 
 //

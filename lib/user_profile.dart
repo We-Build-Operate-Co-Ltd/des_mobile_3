@@ -70,238 +70,245 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Theme.of(context).custom.primary,
       resizeToAvoidBottomInset: false,
       extendBody: true,
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Stack(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 25),
-              height: 1000,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/new_bg.png"),
-                  alignment: Alignment.topCenter,
-                  fit: BoxFit.cover,
+      body: SmartRefresher(
+        enablePullDown: true,
+        enablePullUp: false,
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Stack(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 25),
+                height: 1000,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/new_bg.png"),
+                    alignment: Alignment.topCenter,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: SingleChildScrollView(
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  // height:  MediaQuery.of(context).size.height * .650,
-                  height: deviceHeight * 0.8,
-                  padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-                  decoration: BoxDecoration(
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Colors.white
-                        : Colors.black,
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(20)),
-                  ),
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    physics: ClampingScrollPhysics(),
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              widget.changePage!(0);
-                            },
-                            child: Container(
-                              height: 35,
-                              width: 35,
-                              padding: EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? Color(0xFFB325F8)
-                                    : Colors.black,
-                                border: Border.all(
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: SingleChildScrollView(
+                  child: Container(
+                    alignment: Alignment.bottomCenter,
+                    // height:  MediaQuery.of(context).size.height * .650,
+                    height: deviceHeight * 0.8,
+                    padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+                    decoration: BoxDecoration(
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.white
+                          : Colors.black,
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(20)),
+                    ),
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      physics: ClampingScrollPhysics(),
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                widget.changePage!(0);
+                              },
+                              child: Container(
+                                height: 35,
+                                width: 35,
+                                padding: EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
                                   color: MyApp.themeNotifier.value ==
                                           ThemeModeThird.light
                                       ? Color(0xFFB325F8)
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.white
-                                          : Color(0xFFFFFD57),
+                                      : Colors.black,
+                                  border: Border.all(
+                                    color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Color(0xFFB325F8)
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
+                                  ),
                                 ),
-                              ),
-                              child: Image.asset(
-                                'assets/images/back_arrow.png',
+                                child: Image.asset(
+                                  'assets/images/back_arrow.png',
+                                ),
                               ),
                             ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      UserProfileSettingPage(),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              height: 35,
-                              width: 35,
-                              padding: EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? Color(0xFFB325F8)
-                                    : Colors.black,
-                                border: Border.all(
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        UserProfileSettingPage(),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                height: 35,
+                                width: 35,
+                                padding: EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
                                   color: MyApp.themeNotifier.value ==
                                           ThemeModeThird.light
                                       ? Color(0xFFB325F8)
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.white
-                                          : Color(0xFFFFFD57),
+                                      : Colors.black,
+                                  border: Border.all(
+                                    color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Color(0xFFB325F8)
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
+                                  ),
+                                ),
+                                child: Image.asset(
+                                  'assets/images/setting_icon.png',
                                 ),
                               ),
-                              child: Image.asset(
-                                'assets/images/setting_icon.png',
-                              ),
                             ),
-                          ),
-                          // Container(
-                          //   width: 35.0,
-                          //   height: 35.0,
-                          //   margin: EdgeInsets.all(5),
-                          //   child: InkWell(
-                          //     onTap: () {
-                          //       Navigator.push(
-                          //         context,
-                          //         MaterialPageRoute(
-                          //           builder: (context) =>
-                          //               UserProfileSettingNewPage(),
-                          //         ),
-                          //       );
-                          //     },
-                          //     child: Image.asset(
-                          //       'assets/images/setting_profile.png',
-                          //       // color: Colors.white,
-                          //     ),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                      SizedBox(height: 60),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              '${_firstName} ${_lastName}',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                                color: MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? Colors.black
-                                    : MyApp.themeNotifier.value ==
-                                            ThemeModeThird.dark
-                                        ? Colors.white
-                                        : Color(0xFFFFFD57),
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          if (_isVerify)
+                            // Container(
+                            //   width: 35.0,
+                            //   height: 35.0,
+                            //   margin: EdgeInsets.all(5),
+                            //   child: InkWell(
+                            //     onTap: () {
+                            //       Navigator.push(
+                            //         context,
+                            //         MaterialPageRoute(
+                            //           builder: (context) =>
+                            //               UserProfileSettingNewPage(),
+                            //         ),
+                            //       );
+                            //     },
+                            //     child: Image.asset(
+                            //       'assets/images/setting_profile.png',
+                            //       // color: Colors.white,
+                            //     ),
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                        SizedBox(height: 60),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
                             Container(
                               alignment: Alignment.center,
-                              width: 75,
-                              height: 20,
-                              decoration: BoxDecoration(
-                                color: MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? Color.fromARGB(255, 37, 248, 79)
-                                        .withOpacity(0.10)
-                                    : Color(0xFF292929),
-                                borderRadius: BorderRadius.circular(12.5),
-                              ),
                               child: Text(
-                                'ยืนยันตัวตนแล้ว',
+                                '${_firstName} ${_lastName}',
                                 style: TextStyle(
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.w400,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
                                   color: MyApp.themeNotifier.value ==
                                           ThemeModeThird.light
-                                      ? Color.fromARGB(255, 12, 168, 33)
+                                      ? Colors.black
                                       : MyApp.themeNotifier.value ==
                                               ThemeModeThird.dark
                                           ? Colors.white
                                           : Color(0xFFFFFD57),
                                 ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      if (!_isVerify) _buildVerifyYourIdentity(),
-                      const SizedBox(height: 30),
-                      _buildRowAboutAccount(),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Stack(
-              alignment: Alignment.topCenter,
-              children: <Widget>[
-                Positioned(
-                  top: 100,
-                  child: Container(
-                    height: 168,
-                    width: 168,
-                    child: GestureDetector(
-                      child: _imageProfile != ''
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: Image.memory(
-                                base64Decode(_imageProfile),
-                                fit: BoxFit.cover,
-                                height: 168,
-                                width: 168,
-                                errorBuilder: (_, __, ___) => Image.asset(
-                                  "assets/images/avatar_empty.png",
-                                  fit: BoxFit.fill,
+                            SizedBox(height: 10),
+                            if (_isVerify)
+                              Container(
+                                alignment: Alignment.center,
+                                width: 75,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Color.fromARGB(255, 37, 248, 79)
+                                          .withOpacity(0.10)
+                                      : Color(0xFF292929),
+                                  borderRadius: BorderRadius.circular(12.5),
+                                ),
+                                child: Text(
+                                  'ยืนยันตัวตนแล้ว',
+                                  style: TextStyle(
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w400,
+                                    color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Color.fromARGB(255, 12, 168, 33)
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
+                                  ),
                                 ),
                               ),
-                            )
-                          : Padding(
-                              padding: EdgeInsets.all(10.0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(50),
-                                child: Image.asset(
-                                  "assets/images/avatar_empty.png",
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        if (!_isVerify) _buildVerifyYourIdentity(),
+                        const SizedBox(height: 30),
+                        _buildRowAboutAccount(),
+                      ],
                     ),
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+              Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  Positioned(
+                    top: 100,
+                    child: Container(
+                      height: 168,
+                      width: 168,
+                      child: GestureDetector(
+                        child: _imageProfile != ''
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: Image.memory(
+                                  base64Decode(_imageProfile),
+                                  fit: BoxFit.cover,
+                                  height: 168,
+                                  width: 168,
+                                  errorBuilder: (_, __, ___) => Image.asset(
+                                    "assets/images/avatar_empty.png",
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              )
+                            : Padding(
+                                padding: EdgeInsets.all(10.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: Image.asset(
+                                    "assets/images/avatar_empty.png",
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -550,14 +557,18 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   void _getUser() async {
+    var img = await DCCProvider.getImageProfile();
+
+    setState(() {
+      _imageProfile = img;
+    });
+
     var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
     setState(() {
       _firstName = profileMe['firstnameTh'];
       _lastName = profileMe['lastnameTh'];
       _isVerify = profileMe['isVerify'] == 1 ? true : false;
     });
-    var img = await DCCProvider.getImageProfile();
-    setState(() => _imageProfile = img);
   }
 
   void _onLoading() async {
