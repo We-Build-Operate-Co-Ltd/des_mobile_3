@@ -538,18 +538,18 @@ class _HomePageState extends State<HomePage> {
                                   type: 'serviceforyou',
                                   code: 'fund',
                                 ),
-                                columnButton(
-                                  MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? 'assets/images/data_warehouse.png'
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? 'assets/images/data_warehouse_d.png'
-                                          : 'assets/images/data_warehouse_d-y.png',
-                                  'คลังข้อมูล\nการเรียนรู้',
-                                  type: 'serviceforyou',
-                                  code: 'knowledge',
-                                ),
+                                // columnButton(
+                                //   MyApp.themeNotifier.value ==
+                                //           ThemeModeThird.light
+                                //       ? 'assets/images/data_warehouse.png'
+                                //       : MyApp.themeNotifier.value ==
+                                //               ThemeModeThird.dark
+                                //           ? 'assets/images/data_warehouse_d.png'
+                                //           : 'assets/images/data_warehouse_d-y.png',
+                                //   'คลังข้อมูล\nการเรียนรู้',
+                                //   type: 'serviceforyou',
+                                //   code: 'knowledge',
+                                // ),
                                 columnButton(
                                   MyApp.themeNotifier.value ==
                                           ThemeModeThird.light
@@ -562,7 +562,8 @@ class _HomePageState extends State<HomePage> {
                                   type: 'serviceforyou',
                                   code: 'report',
                                 ),
-                                Container(width: 80)
+                                Container(width: 80),
+                                Container(width: 80),
                               ],
                             ),
                           ],
