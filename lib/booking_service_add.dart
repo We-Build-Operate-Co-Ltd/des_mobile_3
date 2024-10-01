@@ -239,43 +239,45 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
                   padding: EdgeInsets.zero,
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    widget.mode == '1' ?
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: (widget.model['photoBase64'] ?? '') != ''
-                          ? Image.memory(
-                              base64Decode(widget.model['photoBase64']),
-                              height: 180,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.asset(
-                              'assets/images/banner_mock.jpg',
-                              height: 180,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                    ) :
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: (widget.model['photo'] ?? '') != ''
-                          ? Image.memory(
-                              base64Decode(widget.model['photo']),
-                              height: 180,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.asset(
-                              'assets/images/banner_mock.jpg',
-                              height: 180,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                    ),
+                    widget.mode == '1'
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: (widget.model['photoBase64'] ?? '') != ''
+                                ? Image.memory(
+                                    base64Decode(widget.model['photoBase64']),
+                                    height: 180,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset(
+                                    'assets/images/banner_mock.jpg',
+                                    height: 180,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: (widget.model['photo'] ?? '') != ''
+                                ? Image.memory(
+                                    base64Decode(widget.model['photo']),
+                                    height: 180,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset(
+                                    'assets/images/banner_mock.jpg',
+                                    height: 180,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                          ),
                     SizedBox(height: 16),
                     textForm(
-                        label: 'คุณกำลังจอง:',
-                        detail: '${widget.mode == '1' ? (widget.model['centerName'] ?? '') : (widget.model['center_Name'] ?? '')}', ),
+                      label: 'คุณกำลังจอง:',
+                      detail:
+                          '${widget.mode == '1' ? (widget.model['centerName'] ?? '') : (widget.model['center_Name'] ?? '')}',
+                    ),
                     SizedBox(height: 12),
                   ],
                 ),
@@ -413,24 +415,19 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
                   children: [
                     textForm2(
                       label: 'ศูนย์ดิจิทัลชุมชนที่จอง',
-                      detail: '${widget.mode == '1' ? (widget.model['centerName'] ?? '') : (widget.model['center_Name'] ?? '')}',
+                      detail:
+                          '${widget.mode == '1' ? (widget.model['centerName'] ?? '') : (widget.model['center_Name'] ?? '')}',
                     ),
                     SizedBox(height: 16),
-                    textForm2(
-                      label: 'วันที่ใช้บริการ',
-                      detail: txtDate.text
-                    ),
+                    textForm2(label: 'วันที่ใช้บริการ', detail: txtDate.text),
                     SizedBox(height: 16),
                     textForm2(
-                      label: 'เวลาที่จอง',
-                      detail: '${txtStartTime.text} - ${txtEndTime.text} น.'
-                    ),
+                        label: 'เวลาที่จอง',
+                        detail: '${txtStartTime.text} - ${txtEndTime.text} น.'),
                     SizedBox(height: 16),
-                    textForm2(
-                      label: 'รูปแบบการจอง',
-                      detail: _bookingTypeTitle
-                      // detail: widget.model.toString()
-                    ),
+                    textForm2(label: 'รูปแบบการจอง', detail: _bookingTypeTitle
+                        // detail: widget.model.toString()
+                        ),
                   ],
                 ),
               ),
@@ -472,7 +469,6 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
               ),
             ],
           ),
-        
         if (_loadingSubmit)
           Positioned.fill(
             child: Container(
@@ -653,7 +649,6 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
                         MaterialPageRoute(
                           builder: (_) => BookingServicePage(
                             catSelectedWidget: '2',
-                            
                           ),
                         ),
                       ),
@@ -825,7 +820,8 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
             onChanged: (String value) {
               setState(() {
                 _bookingTypeRefNo = value;
-                _bookingTypeTitle = _modelType.firstWhereOrNull((e) => e['refNo'] == value)['typeName'];
+                _bookingTypeTitle = _modelType
+                    .firstWhereOrNull((e) => e['refNo'] == value)['typeName'];
               });
             },
           ),
@@ -842,7 +838,6 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
         ),
         SizedBox(height: 10),
         _buildBookingCategory(),
-        
       ],
     );
   }
@@ -878,24 +873,22 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
         Text(
           label.toString(),
           style: TextStyle(
-              color: Theme.of(context).custom.f70f70_w_fffd57,
-              fontSize: 13,
+            color: Theme.of(context).custom.f70f70_w_fffd57,
+            fontSize: 13,
           ),
         ),
         SizedBox(height: 3),
         Text(
           detail.toString(),
           style: TextStyle(
-            color: Theme.of(context).custom.b_W_fffd57,
-            fontSize: 15,
-            fontWeight: FontWeight.w500
-          ),
+              color: Theme.of(context).custom.b_W_fffd57,
+              fontSize: 15,
+              fontWeight: FontWeight.w500),
           maxLines: 3,
         ),
       ],
     );
   }
-
 
   Widget _backButton(BuildContext context) {
     return InkWell(
@@ -1240,31 +1233,29 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
           child: Row(
             children: [
               Container(
-                height: 20,
-                width: 20,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Theme.of(context).custom.b325f8_w_fffd57,
+                  height: 20,
+                  width: 20,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Theme.of(context).custom.b325f8_w_fffd57,
+                    ),
+                    borderRadius: BorderRadius.circular(2),
                   ),
-                  borderRadius: BorderRadius.circular(2),
-                ),
-                child: Icon(
-                  Icons.check,
-                  size: 16,
-                  color: _modelBookingCategory[__]['selected']
+                  child: Icon(Icons.check,
+                      size: 16,
+                      color: _modelBookingCategory[__]['selected']
                           ? Theme.of(context).custom.b325f8_w_fffd57
-                          : Color(0xFFFFFFFF)
-                )
-                // Container(
-                //   margin: EdgeInsets.all(2),
-                //   decoration: BoxDecoration(
-                //       borderRadius: BorderRadius.circular(2),
-                //       color: _modelBookingCategory[__]['selected']
-                //           ? Color(0xFFA06CD5)
-                //           : Color(0xFFFFFFFF)),
-                // ),
-              ),
+                          : Color(0xFFFFFFFF))
+                  // Container(
+                  //   margin: EdgeInsets.all(2),
+                  //   decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(2),
+                  //       color: _modelBookingCategory[__]['selected']
+                  //           ? Color(0xFFA06CD5)
+                  //           : Color(0xFFFFFFFF)),
+                  // ),
+                  ),
               SizedBox(width: 6),
               Expanded(
                 child: Text(
@@ -1372,11 +1363,15 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
         contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
-          borderSide: BorderSide(color: Theme.of(context).custom.b325f8_w_fffd57,),
+          borderSide: BorderSide(
+            color: Theme.of(context).custom.b325f8_w_fffd57,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
-          borderSide: BorderSide(color: Theme.of(context).custom.b325f8_w_fffd57,),
+          borderSide: BorderSide(
+            color: Theme.of(context).custom.b325f8_w_fffd57,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
@@ -1408,11 +1403,15 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
         suffixIcon: const Icon(Icons.calendar_today, size: 17),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
-          borderSide: BorderSide(color: Theme.of(context).custom.b325f8_w_fffd57,),
+          borderSide: BorderSide(
+            color: Theme.of(context).custom.b325f8_w_fffd57,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
-          borderSide: BorderSide(color: Theme.of(context).custom.b325f8_w_fffd57,),
+          borderSide: BorderSide(
+            color: Theme.of(context).custom.b325f8_w_fffd57,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
@@ -1444,11 +1443,15 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
         suffixIcon: const Icon(Icons.access_time_rounded, size: 17),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
-          borderSide: BorderSide(color: Theme.of(context).custom.b325f8_w_fffd57,),
+          borderSide: BorderSide(
+            color: Theme.of(context).custom.b325f8_w_fffd57,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
-          borderSide: BorderSide(color: Theme.of(context).custom.b325f8_w_fffd57,),
+          borderSide: BorderSide(
+            color: Theme.of(context).custom.b325f8_w_fffd57,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
@@ -1828,7 +1831,8 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
       var data = {
         "bookingDate": tempDate,
         "bookingSlotType": recordId,
-        "centerId": '${widget.mode == '1' ? (widget.model?['centerId'] ?? '') : (widget.model?['center_Id'] ?? '')}',
+        "centerId":
+            '${widget.mode == '1' ? (widget.model?['centerId'] ?? '') : (widget.model?['center_Id'] ?? '')}',
         "startTime": txtStartTime.text,
         "endTime": txtEndTime.text,
         "userEmail": profileMe['email'],
@@ -1873,5 +1877,4 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
       Fluttertoast.showToast(msg: err);
     }
   }
-
 }

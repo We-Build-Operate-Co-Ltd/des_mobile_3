@@ -28,8 +28,7 @@ class UserProfileBookingPage extends StatefulWidget {
   const UserProfileBookingPage({Key? key}) : super(key: key);
 
   @override
-  State<UserProfileBookingPage> createState() =>
-      _UserProfileBookingPageState();
+  State<UserProfileBookingPage> createState() => _UserProfileBookingPageState();
 }
 
 class _UserProfileBookingPageState extends State<UserProfileBookingPage> {
@@ -85,7 +84,6 @@ class _UserProfileBookingPageState extends State<UserProfileBookingPage> {
                     children: [
                       _buildHead(),
                       const SizedBox(height: 30),
-                     
                     ],
                   ),
                 ),
@@ -236,7 +234,7 @@ class _UserProfileBookingPageState extends State<UserProfileBookingPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-         InkWell(
+        InkWell(
           onTap: () {
             Navigator.pop(context);
           },

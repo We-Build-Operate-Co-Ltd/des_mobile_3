@@ -1031,7 +1031,10 @@ class _BookingServicePageState extends State<BookingServicePage>
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.pop(context);
+                              setState(() {
+                                catSelected = '0';
+                              });
+                              // Navigator.pop(context);
                               // _cancelBooking();
                             },
                             child: Container(
@@ -1053,7 +1056,11 @@ class _BookingServicePageState extends State<BookingServicePage>
                           ),
                           SizedBox(height: 16),
                           GestureDetector(
-                            onTap: () => Navigator.pop(context),
+                            onTap: () {
+                              setState(() {
+                                catSelected = '0';
+                              });
+                            },
                             child: Container(
                               padding: EdgeInsets.symmetric(vertical: 13),
                               decoration: BoxDecoration(
@@ -1157,7 +1164,9 @@ class _BookingServicePageState extends State<BookingServicePage>
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.pop(context);
+                              setState(() {
+                                catSelected = '0';
+                              });
                               // _cancelBooking();
                             },
                             child: Container(

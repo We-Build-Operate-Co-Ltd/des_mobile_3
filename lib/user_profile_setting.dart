@@ -193,9 +193,11 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => WebViewInAppPage(
-                url: 'https://decms.dcc.onde.go.th/privacy-policy/pp.html',
-                title: 'นโยบาย',
+              builder: (_) => Container(
+                child: WebViewInAppPage(
+                  url: 'https://decms.dcc.onde.go.th/privacy-policy/pp.html',
+                  title: 'นโยบาย',
+                ),
               ),
             ),
           ),

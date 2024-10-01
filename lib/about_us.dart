@@ -95,7 +95,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                     ),
                     SizedBox(height: 30),
                     Text(
-                      'ศูนย์ดิจิsvfsfdbdทัลชุมชน',
+                      'ศูนย์ดิจิทัลชุมชน',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 20,

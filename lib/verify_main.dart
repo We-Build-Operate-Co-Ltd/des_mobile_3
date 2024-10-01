@@ -72,7 +72,7 @@ class VerifyMainPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 25,
                 color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFF53327A)
+                    ? Color(0xFFB325F8)
                     : MyApp.themeNotifier.value == ThemeModeThird.dark
                         ? Colors.white
                         : Color(0xFFFFFD57),
@@ -259,7 +259,7 @@ class VerifyMainPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 25,
                 color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFF53327A)
+                    ? Color(0xFFB325F8)
                     : MyApp.themeNotifier.value == ThemeModeThird.dark
                         ? Colors.white
                         : Color(0xFFFFFD57),
@@ -274,7 +274,7 @@ class VerifyMainPage extends StatelessWidget {
                   width: 5,
                   decoration: BoxDecoration(
                     color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Color(0xFF53327A)
+                        ? Color(0xFFB325F8)
                         : Color(0xFF707070),
                     borderRadius: BorderRadius.circular(2.5),
                   ),
@@ -304,7 +304,7 @@ class VerifyMainPage extends StatelessWidget {
                   width: 5,
                   decoration: BoxDecoration(
                     color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Color(0xFF53327A)
+                        ? Color(0xFFB325F8)
                         : Color(0xFF707070),
                     borderRadius: BorderRadius.circular(2.5),
                   ),
