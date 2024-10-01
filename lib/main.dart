@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:des/login_first.dart';
 import 'package:des/shared/counterNotifier.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/notification_service.dart';
@@ -92,6 +93,9 @@ class _MyAppState extends State<MyApp> {
               'thaiDCode',
               uri.queryParameters['code'].toString(),
             );
+              if (action == 'login') {
+              navigatorKey.currentState!.pushReplacementNamed('/loginFirst');
+            }
             if (action == 'create') {
               navigatorKey.currentState!
                   .pushReplacementNamed('/registerVerifyThaiId');
@@ -130,6 +134,8 @@ class _MyAppState extends State<MyApp> {
             '/registerVerifyThaiId': (BuildContext context) =>
                 const RegisterVerifyThaiIDPage(),
             '/verifyThaiId': (BuildContext context) => const VerifyThaiIDPage(),
+            '/loginFirst': (BuildContext context) =>
+                const LoginFirstPage(),
           },
           theme: FlexThemeData.light(
             fontFamily: 'kanit',
