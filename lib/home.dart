@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
           body: Column(
             children: [
               Container(
-                height: 105,
+                height: 125,
                 padding: EdgeInsets.only(
                   top: MediaQuery.of(context).padding.top + 10,
                   right: 15,
@@ -458,6 +458,7 @@ class _HomePageState extends State<HomePage> {
                         Column(
                           children: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 columnButton(
                                   MyApp.themeNotifier.value ==
@@ -510,6 +511,7 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 columnButton(
                                   MyApp.themeNotifier.value ==
@@ -547,6 +549,7 @@ class _HomePageState extends State<HomePage> {
                                   type: 'serviceforyou',
                                   code: 'report',
                                 ),
+                                Container(width: 80)
                               ],
                             ),
                           ],
@@ -682,7 +685,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ],
                               ),
-                              SizedBox(width: 10),
+                              SizedBox(width: 20),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -1097,6 +1100,7 @@ class _HomePageState extends State<HomePage> {
         _callOpenPage(code);
       },
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
@@ -1107,7 +1111,7 @@ class _HomePageState extends State<HomePage> {
               fit: BoxFit.cover,
             ),
           ),
-          SizedBox(width: 10),
+          SizedBox(width: 20),
           SizedBox(
             height: 40,
             child: Text(
