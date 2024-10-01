@@ -506,7 +506,10 @@ class _FindJobPageState extends State<FindJobPage> {
         SizedBox(height: 15),
         GestureDetector(
           onTap: () {
+            // print(
+            //     '---------_searchController----------${_searchController.text}');
             _handleSearch();
+            _searchController.clear();
           },
           child: Container(
             height: 50,
@@ -581,9 +584,8 @@ class _FindJobPageState extends State<FindJobPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => FindJobDetailPage(
-                model: data,
-              ),
+              builder: (context) =>
+                  FindJobDetailPage(model: data, typeselect2: _typeSelected2),
             ),
           );
         },
@@ -759,6 +761,7 @@ class _FindJobPageState extends State<FindJobPage> {
           MaterialPageRoute(
             builder: (context) => FindJobDetailPage(
               model: data,
+              typeselect2: _typeSelected2,
             ),
           ),
         );
@@ -1182,6 +1185,7 @@ class _FindJobPageState extends State<FindJobPage> {
         GestureDetector(
           onTap: () {
             _handleSearch();
+            _searchResumeController.clear();
           },
           child: Container(
             height: 50,

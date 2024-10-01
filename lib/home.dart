@@ -38,7 +38,10 @@ import 'package:badges/badges.dart' as badges;
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
-  HomePage({super.key, this.changePage});
+  HomePage({
+    super.key,
+    this.changePage,
+  });
   late _HomePageState homeCentralPageState;
   Function? changePage;
 
@@ -47,6 +50,16 @@ class HomePage extends StatefulWidget {
 
   getState() => homeCentralPageState;
 }
+
+// class MyClassAllPage extends StatefulWidget {
+//   MyClassAllPage({Key? key, this.title, this.changePage}) : super(key: key);
+
+//   final title;
+//   Function? changePage;
+
+//   @override
+//   _MyClassAllPageState createState() => _MyClassAllPageState();
+// }
 
 class _HomePageState extends State<HomePage> {
   // final _counter = CounterModel(0);
@@ -574,14 +587,15 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(height: 15),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => MyClassAllPage(
-                                  title: 'คอร์สเรียนของคุณ',
-                                ),
-                              ),
-                            );
+                            widget.changePage!(2);
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (_) => MyClassAllPage(
+                            //       title: 'คอร์สเรียนของคุณ',
+                            //     ),
+                            //   ),
+                            // );
                           },
                           child: Container(
                             // alignment: Alignment.centerLeft,
@@ -773,6 +787,9 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             setState(() {
                               viewAdd += 4;
+
+                              print(
+                                  '-------------viewAdd  ------------ ${viewAdd}');
                             });
                           },
                           child: Container(
@@ -1380,19 +1397,21 @@ class _HomePageState extends State<HomePage> {
       //     ),
       //   ),
       // );
-    } else if (param == 'knowledge') {
-      widget.changePage!(2);
+    }
+    // else if (param == 'knowledge') {
+    //   widget.changePage!(2);
 
-      // buildModalWaiting(context);
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (_) => MyClassAllPage(
-      //       title: 'คลังข้อมูล',
-      //     ),
-      //   ),
-      // );
-    } else if (param == 'report') {
+    //   // buildModalWaiting(context);
+    //   // Navigator.push(
+    //   //   context,
+    //   //   MaterialPageRoute(
+    //   //     builder: (_) => MyClassAllPage(
+    //   //       title: 'คลังข้อมูล',
+    //   //     ),
+    //   //   ),
+    //   // );
+    // }
+    else if (param == 'report') {
       widget.changePage!(6);
       // Navigator.of(context).push(
       //   MaterialPageRoute(

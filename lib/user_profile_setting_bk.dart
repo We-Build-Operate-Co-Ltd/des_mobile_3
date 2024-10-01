@@ -26,7 +26,8 @@ class UserProfileSettingBkPage extends StatefulWidget {
   const UserProfileSettingBkPage({Key? key}) : super(key: key);
 
   @override
-  State<UserProfileSettingBkPage> createState() => _UserProfileSettingBkPageState();
+  State<UserProfileSettingBkPage> createState() =>
+      _UserProfileSettingBkPageState();
 }
 
 class _UserProfileSettingBkPageState extends State<UserProfileSettingBkPage> {

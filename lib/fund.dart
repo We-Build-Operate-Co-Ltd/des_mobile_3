@@ -572,7 +572,7 @@ class _FundPageState extends State<FundPage> {
                         _investor = [..._investorTemp]
                             .where((element) =>
                                 element['annoucement']
-                                    .contains(_searchFilterController.text) ||
+                                    .contains(_searchFilterController.text) &&
                                 listCat
                                     .where((e) => e['selected'])
                                     .map((m) => m['cateId'])

@@ -32,6 +32,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   Dio dio = Dio();
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  final TextEditingController _searchController = TextEditingController();
   List<dynamic> _typeList = [
     'ค้นหาคอร์ส',
     'คอร์สเรียนของคุณ',
@@ -330,6 +331,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                                       height: 45,
                                       width: 360,
                                       child: TextField(
+                                        controller: _searchController,
                                         onChanged: (text) {
                                           // print("First text field: $text");
                                           setState(() {
@@ -1429,6 +1431,13 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
         InkWell(
           onTap: () {
             widget.changePage!(0);
+            setState(() {
+              _searchController.clear(); // เคลียร์ข้อความใน TextField
+              textSearch = ''; // รีเซ็ตค่าตัวแปรที่ใช้ค้นหา
+              textEternalSearch = '';
+            });
+
+            // print('--------------------------------------');
 
             // Navigator.pop(context);
             // Navigator.push(
