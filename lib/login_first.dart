@@ -1914,7 +1914,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         // Registered Callback URLs in TwitterApp
         // Android is a deeplink
         // iOS is a URLScheme
-        redirectURI: 'dccadmin://thaid',
+        redirectURI: 'dcc://thaid',
       );
       final obj = await twitterLogin.login();
       switch (obj.status) {
