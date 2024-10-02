@@ -374,27 +374,27 @@ class VerifyMainPage extends StatelessWidget {
         onTap: () {
           Navigator.pop(context);
         },
-        child: Container(
-          height: 40,
-          width: 40,
-          padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Color(0xFF7A4CB1)
-                  : Colors.black,
-              border: Border.all(
-                width: 1,
-                style: BorderStyle.solid,
+         child: Container(
+            height: 35,
+            width: 35,
+            padding: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
                 color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFF7A4CB1)
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
-              )),
-          child: Image.asset(
-            'assets/images/back_arrow.png',
-          ),
+                    ? Color(0xFFB325F8)
+                    : Colors.black,
+                border: Border.all(
+                  width: 1,
+                  style: BorderStyle.solid,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFB325F8)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                )),
+            child: Image.asset(
+              'assets/images/back_arrow.png',
+            ),
         ),
       ),
     );
