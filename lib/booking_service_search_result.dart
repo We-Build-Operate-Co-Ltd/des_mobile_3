@@ -46,104 +46,105 @@ class _BookingServiceSearchResultPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          automaticallyImplyLeading: false,
-          flexibleSpace: Container(
-            width: double.infinity,
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 10,
-              left: 15,
-              right: 15,
-            ),
-            child: Row(
-              children: [
-                _backButton(context),
-                Expanded(
-                  child: Text(
-                    'ผลการค้นหา',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    textAlign: TextAlign.center,
+        automaticallyImplyLeading: false,
+        flexibleSpace: Container(
+          width: double.infinity,
+          padding: EdgeInsets.only(
+            top: MediaQuery.of(context).padding.top + 10,
+            left: 15,
+            right: 15,
+          ),
+          child: Row(
+            children: [
+              _backButton(context),
+              Expanded(
+                child: Text(
+                  'ผลการค้นหา',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
                   ),
+                  textAlign: TextAlign.center,
                 ),
-                SizedBox(width: 40),
-              ],
-            ),
+              ),
+              SizedBox(width: 40),
+            ],
           ),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 16,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: RichText(
-                // textAlign: textAlign,
-                text: TextSpan(
-                  text: widget.mode == '1' ? 'ผลการค้นหา: ' : 'ศูนย์ใกล้ฉัน: ',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 15,
-                    color: Theme.of(context).custom.b325f8_w_fffd57,
-                    fontFamily: 'Kanit',
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: 'พบ ${_filterModelCenter.length} ศูนย์',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                        color: Theme.of(context).custom.b_w_y,
-                        fontFamily: 'Kanit',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            widget.mode == '1'
-                ? widget.filter['provinceSelected'] != ''
-                    ? SizedBox(
-                        height: 5,
-                      )
-                    : Container()
-                : widget.filter['latitude'] != ''
-                    ? SizedBox(
-                        height: 5,
-                      )
-                    : Container(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                widget.mode == '1'
-                    ? '(${widget.filter['provinceTitleSelected']}, ${widget.filter['districtTitleSelected']})'
-                    : 'รัศมีไม่เกิน 30 กิโลเมตร',
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 16,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: RichText(
+              // textAlign: textAlign,
+              text: TextSpan(
+                text: widget.mode == '1' ? 'ผลการค้นหา: ' : 'ศูนย์ใกล้ฉัน: ',
                 style: TextStyle(
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.w500,
                   fontSize: 15,
-                  color: Theme.of(context).custom.b_w_y,
+                  color: Theme.of(context).custom.b325f8_w_fffd57,
                   fontFamily: 'Kanit',
                 ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'พบ ${_filterModelCenter.length} ศูนย์',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15,
+                      color: Theme.of(context).custom.b_w_y,
+                      fontFamily: 'Kanit',
+                    ),
+                  ),
+                ],
               ),
             ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-              child: Divider(
-                color: Theme.of(context).custom.DDD_w_fffd57,
-                height: 1,
+          ),
+          widget.mode == '1'
+              ? widget.filter['provinceSelected'] != ''
+                  ? SizedBox(
+                      height: 5,
+                    )
+                  : Container()
+              : widget.filter['latitude'] != ''
+                  ? SizedBox(
+                      height: 5,
+                    )
+                  : Container(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              widget.mode == '1'
+                  ? '(${widget.filter['provinceTitleSelected']}, ${widget.filter['districtTitleSelected']})'
+                  : 'รัศมีไม่เกิน 30 กิโลเมตร',
+              style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 15,
+                color: Theme.of(context).custom.b_w_y,
+                fontFamily: 'Kanit',
               ),
             ),
-            Expanded(
-              child: _list() ?? '',
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+            child: Divider(
+              color: Theme.of(context).custom.DDD_w_fffd57,
+              height: 1,
             ),
-          ],
-        ));
+          ),
+          Expanded(
+            child: _list() ?? '',
+          ),
+        ],
+      ),
+    );
   }
 
   _list() {
@@ -195,23 +196,10 @@ class _BookingServiceSearchResultPageState
     }
   }
 
-  Widget _backButton(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Image.asset(
-        'assets/images/back_arrow.png',
-        height: 40,
-        width: 40,
-      ),
-    );
-  }
-
   Widget _item(model, index) {
     return GestureDetector(
       onTap: () {
-        // logWTF(model);
+        logWTF(model);
       },
       child: Container(
         color: Colors.white,
@@ -475,6 +463,19 @@ class _BookingServiceSearchResultPageState
     );
   }
 
+  Widget _backButton(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.pop(context);
+      },
+      child: Image.asset(
+        'assets/images/back_arrow.png',
+        height: 40,
+        width: 40,
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -490,7 +491,9 @@ class _BookingServiceSearchResultPageState
             widget.filter['districtTitleSelected'] != '')) {
       url =
           'GetSearchCenterLocation?textSearch=${widget.search}&chId=${widget.filter['provinceSelected']}&assetType=${widget.filter['bookingType']}&amName=${widget.filter['districtTitleSelected']}';
+      // print('---------------1--------');
     } else {
+      // print('---------------2--------');
       await getLocation();
       url = 'GetCenterLocation?latitude=${latitude}&longitude=${longitude}';
     }
@@ -502,7 +505,7 @@ class _BookingServiceSearchResultPageState
       if (response.data != null && response.data['data'] != null) {
         setState(() {
           _filterModelCenter = response.data['data'];
-          print('>>>>>>>>>>>>> ${response.data['data']}');
+          print('>>>>>>>>>>>>> response ${response.data['data']}');
         });
       }
       setState(() => _loadingBookingStatus = LoadingBookingStatus.success);
@@ -523,7 +526,6 @@ class _BookingServiceSearchResultPageState
         longitude = position.longitude.toString();
       });
     } catch (e) {
-      // Handle error, maybe show a toast or alert
       Fluttertoast.showToast(msg: 'Unable to fetch location: $e');
     }
   }

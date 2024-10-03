@@ -891,11 +891,39 @@ class _BookingServicePageState extends State<BookingServicePage>
         ),
         SizedBox(height: 16),
         GestureDetector(
+          // onTap: () {
+          //   FocusScope.of(context).unfocus();
+          //   var startTime = _currentPage == 0 ? txtStartTime.text : '';
+          //   var endTime = _currentPage == 0 ? txtEndTime.text : '';
+          //   var search = _searchController.text;
+          //   Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (_) => BookingServiceSearchResultPage(
+          //         date: txtDate.text,
+          //         startTime: startTime,
+          //         endTime: endTime,
+          //         search: search,
+          //         filter: filter,
+          //         mode: (filter == null || filter.isEmpty) ? '2' : '1',
+          //       ),
+          //     ),
+          //   );
+          // },
           onTap: () {
             FocusScope.of(context).unfocus();
+
             var startTime = _currentPage == 0 ? txtStartTime.text : '';
             var endTime = _currentPage == 0 ? txtEndTime.text : '';
             var search = _searchController.text;
+            bool isFilterEmpty = (filter['provinceSelected'] == '0' ||
+                    filter['provinceTitleSelected'].isEmpty) &&
+                (filter['districtSelected'] == '0' ||
+                    filter['districtTitleSelected'].isEmpty) &&
+                filter['bookingType'].isEmpty &&
+                filter['latitude'].isEmpty &&
+                filter['longitude'].isEmpty;
+
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -905,7 +933,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                   endTime: endTime,
                   search: search,
                   filter: filter,
-                  mode: '1',
+                  mode: isFilterEmpty ? '2' : '1',
                 ),
               ),
             );

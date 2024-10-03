@@ -1435,6 +1435,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
               _searchController.clear(); // เคลียร์ข้อความใน TextField
               textSearch = ''; // รีเซ็ตค่าตัวแปรที่ใช้ค้นหา
               textEternalSearch = '';
+              _filter();
             });
 
             // print('--------------------------------------');

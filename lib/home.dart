@@ -536,18 +536,18 @@ class _HomePageState extends State<HomePage> {
                                   type: 'serviceforyou',
                                   code: 'fund',
                                 ),
-                                columnButton(
-                                  MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? 'assets/images/data_warehouse.png'
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? 'assets/images/data_warehouse_d.png'
-                                          : 'assets/images/data_warehouse_d-y.png',
-                                  'คลังข้อมูล\nการเรียนรู้',
-                                  type: 'serviceforyou',
-                                  code: 'knowledge',
-                                ),
+                                // columnButton(
+                                //   MyApp.themeNotifier.value ==
+                                //           ThemeModeThird.light
+                                //       ? 'assets/images/data_warehouse.png'
+                                //       : MyApp.themeNotifier.value ==
+                                //               ThemeModeThird.dark
+                                //           ? 'assets/images/data_warehouse_d.png'
+                                //           : 'assets/images/data_warehouse_d-y.png',
+                                //   'คลังข้อมูล\nการเรียนรู้',
+                                //   type: 'serviceforyou',
+                                //   code: 'knowledge',
+                                // ),
                                 columnButton(
                                   MyApp.themeNotifier.value ==
                                           ThemeModeThird.light
@@ -767,6 +767,7 @@ class _HomePageState extends State<HomePage> {
                                   physics: const ClampingScrollPhysics(),
                                   itemCount:
                                       [...snapshot.data].take(viewAdd).length,
+
                                   // itemCount: (snapshot.data.length >= 4
                                   //     ? 4
                                   //     : snapshot.data.length),
