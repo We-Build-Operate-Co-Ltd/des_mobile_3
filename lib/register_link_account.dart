@@ -317,6 +317,13 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
           'googleID': widget.model?['googleID'] ?? '',
           'xID': widget.model?['xID'] ?? '',
           'facebookID': widget.model?['facebookID'] ?? '',
+
+        //   'firstName': responseProfileMe?['data']?['firstnameTh'] ?? '',
+        //  'lastName': responseProfileMe?['data']?['lastnameTh'] ?? '',
+        //  'idcard': responseProfileMe?['data']?['idcard'] ?? '',
+        //  'email': responseProfileMe?['data']?['email'] ?? '',
+        //  'phone': responseProfileMe?['data']?['phonenumber'] ?? '',
+        //  'ageRange': responseProfileMe?['data']?['ageRange'] ?? '',
         };
         logWTF(param);
         Response response = await Dio().post(
@@ -335,7 +342,7 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
           // );
         } else {
           setState(() => _loadingSubmit = false);
-          Fluttertoast.showToast(msg: '');
+          Fluttertoast.showToast(msg: response.data['message']);
           //error
         }
       } catch (e) {

@@ -23,6 +23,7 @@ import 'shared/config.dart';
 import 'history_of_apply_job.dart';
 import 'main.dart';
 import 'shared/dcc.dart';
+import 'package:des/verify_thai_id_new.dart';
 
 class UserProfilePage extends StatefulWidget {
   UserProfilePage({
@@ -398,10 +399,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Widget _buildVerifyYourIdentity() {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (builder) => VerifyMainPage()),
-        );
+          Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => VerifyThaiIDNewPage(),
+        ),
+      );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (builder) => VerifyMainPage()),
+        // );
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12.5),
