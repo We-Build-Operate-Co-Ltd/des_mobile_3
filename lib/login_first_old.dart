@@ -3,12 +3,10 @@
 import 'dart:convert';
 
 import 'package:des/forgot_password.dart';
-import 'package:des/home.dart';
 import 'package:des/login_second.dart';
 import 'package:des/menu.dart';
 import 'package:des/register.dart';
 import 'package:des/register_link_account.dart';
-import 'package:des/register_thaid.dart';
 import 'package:des/shared/apple_firebase.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/line.dart';
@@ -26,11 +24,8 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart' as fb;
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twitter_login/twitter_login.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'shared/config.dart';
 import 'main.dart';
@@ -71,21 +66,9 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   bool _obscureTextPassword = true;
   String _passwordStringValidate = '';
   dynamic configLoginSocial = 0;
-  String _thiaDCode = '';
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      setState(() {
-        _thiaDCode = prefs.getString('thaiDCode') ?? '';
-        if (_thiaDCode.isNotEmpty) {
-          _loadingSubmit = true;
-          _getToken();
-        }
-      });
-    });
     txtEmail = TextEditingController(text: '');
     txtPassword = TextEditingController(text: '');
     ;
@@ -128,34 +111,14 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                   image: DecorationImage(
                     image: AssetImage(
                       MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? "assets/images/BG.png"
+                          ? "assets/images/bg_login_first_page.png"
                           : "assets/images/bg_login_first_page-dark.png",
                     ),
                     alignment: Alignment.topCenter,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
-              // Logo
-              Container(
-                child: Stack(
-                  children: [
-                    Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        child: Image(
-                          image: AssetImage(
-                            MyApp.themeNotifier.value == ThemeModeThird.light
-                                ? "assets/images/Owl-8 2.png"
-                                : "",
-                          ),
-                          // fit: BoxFit.contain,
-                        ))
-                  ],
-                ),
-              ),
-
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -165,11 +128,11 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                     alignment: Alignment.bottomCenter,
                     // height:  MediaQuery.of(context).size.height * .650,
                     height: (deviceHeight >= 500 && deviceHeight < 800)
-                        ? 300
+                        ? 400
                         : (deviceHeight >= 800)
-                            ? 500
+                            ? 600
                             : deviceHeight * 0.2,
-                    padding: EdgeInsets.only(top: 20, left: 40, right: 40),
+                    padding: EdgeInsets.only(top: 20, left: 20, right: 20),
                     decoration: BoxDecoration(
                       color: MyApp.themeNotifier.value == ThemeModeThird.light
                           ? Colors.white
@@ -188,8 +151,9 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                           //   height: 35,
                           //   alignment: Alignment.centerLeft,
                           // ),
+
                           Container(
-                            height: 60,
+                            height: 40,
                             // margin: const EdgeInsets.symmetric(vertical: 15),
                             child: Stack(
                               children: [
@@ -197,13 +161,12 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                                   child: Text(
                                     'เข้าสู่ระบบ',
                                     style: TextStyle(
-                                      fontFamily: 'Kanit',
-                                      fontSize: 28,
+                                      fontSize: 20,
                                       height: 1,
                                       fontWeight: FontWeight.w500,
                                       color: MyApp.themeNotifier.value ==
                                               ThemeModeThird.light
-                                          ? Color(0xFFBD4BF7)
+                                          ? Colors.black
                                           : MyApp.themeNotifier.value ==
                                                   ThemeModeThird.dark
                                               ? Colors.white
@@ -247,6 +210,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                               ],
                             ),
                           ),
+
                           SizedBox(height: 10),
                           TextFormField(
                             controller: txtEmail,
@@ -256,7 +220,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                             ],
                             decoration: _decorationRegisterMember(
                               context,
-                              hintText: 'อีเมล ',
+                              hintText: 'อีเมล',
                             ),
                             style: TextStyle(
                               fontFamily: 'Kanit',
@@ -270,7 +234,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                             ),
                             cursorColor: MyApp.themeNotifier.value ==
                                     ThemeModeThird.light
-                                ? Color(0xFFB325F8)
+                                ? Color(0xFF7A4CB1)
                                 : MyApp.themeNotifier.value ==
                                         ThemeModeThird.dark
                                     ? Colors.white
@@ -289,71 +253,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                             },
                           ),
                           SizedBox(height: 10),
-                          TextFormField(
-                            controller: txtPassword,
-                            obscureText: passwordVisibility,
-                            decoration: _decorationPasswordMember(context,
-                                hintText: 'รหัสผ่าน',
-                                visibility: passwordVisibility, suffixTap: () {
-                              setState(() {
-                                passwordVisibility = !passwordVisibility;
-                              });
-                            }),
-                            style: TextStyle(
-                              fontFamily: 'Kanit',
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Colors.black
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
-                            ),
-                            cursorColor: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFF7A4CB1)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'กรอกรหัสผ่าน';
-                              }
-                              return null;
-                            },
-                          ),
-                          SizedBox(height: 20),
-                          InkWell(
-                            onTap: () async {
-                              FocusScope.of(context).unfocus();
-                              final form = _formKey.currentState;
-                              if (form!.validate()) {
-                                form.save();
-                                if (await connectInternet()) {
-                                  _callLogin();
-                                }
-                              }
-                              /*------------------------------------------------*/
-                              // final form = _formKey.currentState;
-                              // if (form!.validate()) {
-                              //   form.save();
-
-                              //   print('_callUser');
-                              //   _callUser();
-                              // }
-                            },
-                            child: _buildButtonLogin(
-                              '',
-                              'เข้าสู่ระบบ',
-                              color: Theme.of(context).custom.A4CB1_w_fffd57,
-                              colorTitle: Theme.of(context).custom.w_b_b,
-                              colorBorder:
-                                  Theme.of(context).custom.A4CB1_w_fffd57,
-                            ),
-                          ),
-
-                          SizedBox(height: 15),
                           Align(
                             alignment: Alignment.centerRight,
                             child: GestureDetector(
@@ -375,7 +274,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                                     fontWeight: FontWeight.w400,
                                     color: MyApp.themeNotifier.value ==
                                             ThemeModeThird.light
-                                        ? Color(0xFF707070)
+                                        ? Color(0xFF7A4CB1)
                                         : MyApp.themeNotifier.value ==
                                                 ThemeModeThird.dark
                                             ? Colors.white
@@ -387,120 +286,137 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                               ),
                             ),
                           ),
+                          InkWell(
+                            onTap: () {
+                              final form = _formKey.currentState;
+                              if (form!.validate()) {
+                                form.save();
 
-                          if (configLoginSocial.toString() == "1") _buildOR(),
-                          SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              if (configLoginSocial.toString() == "1")
-                                SizedBox(height: 10),
-                              if (configLoginSocial.toString() == "1")
-                                InkWell(
-                                  onTap: () => _callLoginGoogle(),
-                                  child: _buildButtonLoginSocial(
-                                    'assets/images/logo_google_login_page.png',
-                                    colorBorder: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color(0xFFE4E4E4)
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.white
-                                            : Color(0xFFFFFD57),
-                                  ),
-                                ),
-                              if (configLoginSocial.toString() == "1")
-                                SizedBox(height: 10),
-                              if (configLoginSocial.toString() == "1")
-                                InkWell(
-                                  onTap: () => _callLoginFacebook(),
-                                  child: _buildButtonLoginSocial(
-                                    'assets/images/Icon awesome-facebook-f.png',
-                                    color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color(0xFF227BEF)
-                                        : Colors.black,
-                                    colorBorder: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color(0xFF227BEF)
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.white
-                                            : Color(0xFFFFFD57),
-                                  ),
-                                ),
-                              if (configLoginSocial.toString() == "1")
-                                SizedBox(height: 25),
-                              if (configLoginSocial.toString() == "1")
-                                InkWell(
-                                  onTap: () {
-                                    if (!openLine) {
-                                      openLine = true;
-                                      _callLoginLine();
-                                    }
-                                  },
-                                  child: _buildButtonLoginSocial(
-                                    'assets/images/line_circle.png',
-                                    color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color(0xFF06C755)
-                                        : Colors.black,
-                                    colorBorder: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color(0xFF06C755)
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.white
-                                            : Color(0xFFFFFD57),
-                                  ),
-                                ),
-                              if (configLoginSocial.toString() == "1")
-                                SizedBox(height: 10),
-                              if (configLoginSocial.toString() == "1")
-                                InkWell(
-                                  onTap: () => _callLoginX(),
-                                  child: _buildButtonLoginSocial(
-                                    'assets/images/X.png',
-                                    color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color(0xFF292929)
-                                        : Colors.black,
-                                    colorBorder: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color(0xFF292929)
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.white
-                                            : Color(0xFFFFFD57),
-                                  ),
-                                ),
-                              if (configLoginSocial.toString() == "1")
-                                SizedBox(height: 10),
-                              if (configLoginSocial.toString() == "1")
-                                InkWell(
-                                  onTap: () {
-                                    _callThaiID();
-                                  },
-                                  child: _buildButtonLoginSocial(
-                                    'assets/images/Rectangle 7803.png',
-                                    color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color(0xFF030650)
-                                        : Colors.black,
-                                    colorBorder: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color(0xFF030650)
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.white
-                                            : Color(0xFFFFFD57),
-                                  ),
-                                ),
-                            ],
+                                print('_callUser');
+                                _callUser();
+                              }
+                            },
+                            child: _buildButtonLogin(
+                              '',
+                              'ดำเนินการต่อ',
+                              color: Theme.of(context).custom.A4CB1_w_fffd57,
+                              colorTitle: Theme.of(context).custom.w_b_b,
+                              colorBorder:
+                                  Theme.of(context).custom.A4CB1_w_fffd57,
+                            ),
                           ),
-
+                          SizedBox(height: 30),
+                          if (configLoginSocial.toString() == "1") _buildOR(),
+                          if (configLoginSocial.toString() == "1")
+                            SizedBox(height: 25),
+                          if (configLoginSocial.toString() == "1")
+                            InkWell(
+                              onTap: () {
+                                if (!openLine) {
+                                  openLine = true;
+                                  _callLoginLine();
+                                }
+                              },
+                              child: _buildButtonLogin(
+                                'assets/images/line_circle.png',
+                                'เข้าใช้งานผ่าน Line',
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF06C755)
+                                    : Colors.black,
+                                colorTitle: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.white
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                                colorBorder: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF06C755)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                              ),
+                            ),
+                          if (configLoginSocial.toString() == "1")
+                            SizedBox(height: 10),
+                          if (configLoginSocial.toString() == "1")
+                            InkWell(
+                              onTap: () => _callLoginFacebook(),
+                              child: _buildButtonLogin(
+                                'assets/images/logo_facebook_login_page.png',
+                                'เข้าใช้งานผ่าน Facebook',
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF227BEF)
+                                    : Colors.black,
+                                colorTitle: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.white
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                                colorBorder: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF227BEF)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                              ),
+                            ),
+                          if (configLoginSocial.toString() == "1")
+                            SizedBox(height: 10),
+                          if (configLoginSocial.toString() == "1")
+                            InkWell(
+                              onTap: () => _callLoginGoogle(),
+                              child: _buildButtonLogin(
+                                'assets/images/logo_google_login_page.png',
+                                'เข้าใช้งานผ่าน Google',
+                                colorTitle: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.black
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                                colorBorder: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFFE4E4E4)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                              ),
+                            ),
+                          if (configLoginSocial.toString() == "1")
+                            SizedBox(height: 10),
+                          if (configLoginSocial.toString() == "1")
+                            InkWell(
+                              onTap: () => _callLoginX(),
+                              child: _buildButtonLogin(
+                                'assets/images/logo_x_twitter.png',
+                                'เข้าใช้งานผ่าน X',
+                                colorTitle: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.black
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                                colorBorder: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFFE4E4E4)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                              ),
+                            ),
                           SizedBox(height: 35),
-
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -575,7 +491,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                   ),
                 ),
               ),
-
               if (_loading)
                 Positioned.fill(
                   child: Container(
@@ -682,6 +597,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
             fontStorageValue = value;
           })
         });
+
     return InkWell(
       onTap: () {
         setState(
@@ -1111,54 +1027,25 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     );
   }
 
-  Widget _buildButtonLoginSocial(String image,
-      {Color colorBorder = Colors.transparent,
-      Color colorTitle = const Color(0xFF000000),
-      Color color = Colors.transparent,
-      double fontSize = 13}) {
-    return Container(
-      height: 50,
-      width: 50,
-      // padding: EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: colorBorder,
-        ),
-        borderRadius: BorderRadius.circular(12),
-        color: color,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (image.isNotEmpty)
-            Image.asset(
-              image,
-              height: 25,
-            ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildOR() {
     return Row(
       children: [
         Expanded(
           child: Container(
-            height: 2,
+            height: 1,
             color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Color(0xFFD4D4D4)
+                ? Color(0x4D707070)
                 : MyApp.themeNotifier.value == ThemeModeThird.dark
                     ? Colors.white
                     : Color(0xFFFFFD57),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 2),
           child: Text(
-            'หรือเข้าสู่ระบบด้วย',
+            'หรือ',
             style: TextStyle(
-              fontSize: 15,
+              fontSize: 13,
               fontWeight: FontWeight.w300,
               color: MyApp.themeNotifier.value == ThemeModeThird.light
                   ? Color(0xFF707070)
@@ -1170,9 +1057,9 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         ),
         Expanded(
           child: Container(
-            height: 2,
+            height: 1,
             color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Color(0xFFD4D4D4)
+                ? Color(0x4D707070)
                 : MyApp.themeNotifier.value == ThemeModeThird.dark
                     ? Colors.white
                     : Color(0xFFFFFD57),
@@ -1188,16 +1075,16 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         label: Text(hintText),
         labelStyle: TextStyle(
           color: MyApp.themeNotifier.value == ThemeModeThird.light
-              ? Colors.black
+              ? Color(0xFF707070)
               : MyApp.themeNotifier.value == ThemeModeThird.dark
                   ? Colors.white
                   : Color(0xFFFFFD57),
-          fontSize: 15,
+          fontSize: 12,
           fontWeight: FontWeight.normal,
         ),
         hintStyle: TextStyle(
           color: MyApp.themeNotifier.value == ThemeModeThird.light
-              ? Colors.black
+              ? Color(0xFF707070)
               : MyApp.themeNotifier.value == ThemeModeThird.dark
                   ? Colors.white
                   : Color(0xFFFFFD57),
@@ -1216,7 +1103,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(
             color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Color(0xFFB325F8)
+                ? Color(0xFF7A4CB1)
                 : MyApp.themeNotifier.value == ThemeModeThird.dark
                     ? Colors.white
                     : Color(0xFFFFFD57),
@@ -1226,8 +1113,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(
             color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Color(0xFFDDDDDD)
-                // Colors.black.withOpacity(0.2)
+                ? Colors.black.withOpacity(0.2)
                 : MyApp.themeNotifier.value == ThemeModeThird.dark
                     ? Color(0xFF707070)
                     : Color(0xFFFFFD57),
@@ -1241,479 +1127,333 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
 
   // login guest -----
 
-  // void _callUser() async {
-  //   FocusScope.of(context).unfocus();
-  //   setState(() {
-  //     _category = 'guest';
-  //     _username = txtEmail.text.trim();
-  //   });
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (_) =>
-  //           LoginSecondPage(username: _username!, imageUrl: _imageUrl!),
-  //     ),
-  //   );
-  //   return;
-  //   if (txtEmail.text.isEmpty && _category == 'guest') {
-  //     return showDialog(
-  //       barrierDismissible: false,
-  //       context: context,
-  //       builder: (BuildContext context) => new CupertinoAlertDialog(
-  //         title: new Text(
-  //           'กรุณากรอกชื่อผู้ใช้',
-  //           style: TextStyle(
-  //             fontSize: 16,
-  //             fontFamily: 'Kanit',
-  //             color: Colors.black,
-  //             fontWeight: FontWeight.normal,
-  //           ),
-  //         ),
-  //         content: Text(" "),
-  //         actions: [
-  //           CupertinoDialogAction(
-  //             isDefaultAction: true,
-  //             child: new Text(
-  //               "ตกลง",
-  //               style: TextStyle(
-  //                 fontSize: 13,
-  //                 fontFamily: 'Kanit',
-  //                 color: Color(0xFF000070),
-  //                 fontWeight: FontWeight.normal,
-  //               ),
-  //             ),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //         ],
-  //       ),
-  //     );
-  //   } else {
-  //     _loading = true;
-  //     Response<dynamic> response;
-  //     try {
-  //       print('------');
-  //       response = await Dio().post('$server/dcc-api/m/register/read', data: {
-  //         'username': txtEmail.text.trim(),
-  //         'category': _category.toString(),
-  //       });
-  //     } catch (ex) {
-  //       setState(() {
-  //         _loading = false;
-  //       });
-  //       Fluttertoast.showToast(msg: 'error');
-  //       return null;
-  //     }
-  //     setState(() {
-  //       _loading = false;
-  //     });
-  //     print(response.data.toString());
-  //     if (response.data['status'] == 'S') {
-  //       List<dynamic> result = response.data['objectData'];
-  //       if (result.length > 0) {
-  //         setState(() {
-  //           _username = txtEmail.text.trim();
-  //           // _imageUrl = response.data['objectData'][0]['imageUrl'] ?? '';
-  //         });
-  //         txtEmail.clear();
-  //         Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (_) =>
-  //                 LoginSecondPage(username: _username!, imageUrl: _imageUrl!),
-  //           ),
-  //         );
-  //       } else {
-  //         showDialog(
-  //           barrierDismissible: false,
-  //           context: context,
-  //           builder: (BuildContext context) => new CupertinoAlertDialog(
-  //             title: new Text(
-  //               'ชื่อผู้ใช้งาน ไม่พบในระบบ',
-  //               style: TextStyle(
-  //                 fontSize: 16,
-  //                 fontFamily: 'Kanit',
-  //                 color: Colors.black,
-  //                 fontWeight: FontWeight.normal,
-  //               ),
-  //             ),
-  //             content: Text(" "),
-  //             actions: [
-  //               CupertinoDialogAction(
-  //                 isDefaultAction: true,
-  //                 child: new Text(
-  //                   "ตกลง",
-  //                   style: TextStyle(
-  //                     fontSize: 13,
-  //                     fontFamily: 'Kanit',
-  //                     color: Color(0xFF000070),
-  //                     fontWeight: FontWeight.normal,
-  //                   ),
-  //                 ),
-  //                 onPressed: () {
-  //                   FocusScope.of(context).unfocus();
-  //                   new TextEditingController().clear();
-  //                   Navigator.of(context).pop();
-  //                 },
-  //               ),
-  //             ],
-  //           ),
-  //         );
-  //       }
-  //     } else {
-  //       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-  //     }
-  //   }
-  // }
-
-  void _callLogin() async {
-    try {
-      setState(() => _loadingSubmit = true);
-
-      // logWTF('token');
-      String accessToken = await _getTokenKeycloak(
-        username: txtEmail.text.trim(),
-        password: txtPassword.text,
-      );
-
-      if (accessToken == 'invalid_grant' || accessToken == '') {
-        Fluttertoast.showToast(
-            msg: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง', gravity: ToastGravity.CENTER);
-        setState(() => _loadingSubmit = false);
-        return;
-        // กรอกรหัสผ่าน
-      }
-
-      // logWTF('key cloak');
-      dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
-      // logWTF('responseKeyCloak');
-      // logWTF(responseKeyCloak);
-
-      if (responseKeyCloak == null) {
-        return;
-      }
-
-      dynamic responseProfileMe = await _getProfileMe(accessToken);
-      // logWTF('responseProfileMe');
-      // logWTF(responseProfileMe);
-      if (responseProfileMe == null) {
-        return;
-      }
-
-      // check isStaff
-      // if (responseProfileMe['data']['isMember'] == 0) {
-      //   Fluttertoast.showToast(msg: 'บัญชีนี้ไม่ได้เป็นสมาชิก');
-      //   setState(() => _loadingSubmit = false);
-      //   return;
-      // }
-
-      dynamic responseUser = await _getUserProfile();
-      // logWTF('responseUser');
-      // logWTF(responseUser);
-
-      if (responseUser?['message'] == 'code_not_found') {
-        // logWTF('create');
-        var create = await _createUserProfile(responseProfileMe['data']);
-        if (create == null) {
-          return;
-        }
-        responseUser = await _getUserProfile();
-      }
-
-      if (responseUser == null) {
-        Fluttertoast.showToast(msg: responseUser['message']);
-        return;
-      }
-      if (responseUser?['status'] == "F") {
-        Fluttertoast.showToast(msg: responseUser['message']);
-        return;
-      }
-
-      await ManageStorage.createSecureStorage(
-        value: accessToken,
-        key: 'accessToken',
-      );
-      await ManageStorage.createSecureStorage(
-        value: json.encode(responseKeyCloak),
-        key: 'loginData',
-      );
-      await ManageStorage.createSecureStorage(
-        value: json.encode(responseProfileMe?['data']),
-        key: 'profileMe',
-      );
-
-      // logWTF(responseUser);
-      await ManageStorage.createProfile(
-        value: responseUser['objectData'][0],
-        key: 'guest',
-      );
-
-      setState(() => _loadingSubmit = false);
-      if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const Menu(),
+  void _callUser() async {
+    FocusScope.of(context).unfocus();
+    setState(() {
+      _category = 'guest';
+      _username = txtEmail.text.trim();
+    });
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            LoginSecondPage(username: _username!, imageUrl: _imageUrl!),
+      ),
+    );
+    return;
+    if (txtEmail.text.isEmpty && _category == 'guest') {
+      return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => new CupertinoAlertDialog(
+          title: new Text(
+            'กรุณากรอกชื่อผู้ใช้',
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: 'Kanit',
+              color: Colors.black,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+          content: Text(" "),
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              child: new Text(
+                "ตกลง",
+                style: TextStyle(
+                  fontSize: 13,
+                  fontFamily: 'Kanit',
+                  color: Color(0xFF000070),
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         ),
       );
-    } catch (e) {
-      setState(() => _loadingSubmit = false);
-      // logE(e);
-      Fluttertoast.showToast(msg: e.toString());
-      // Fluttertoast.showToast(
-      //     msg: 'รหัสผ่านหรืออีเมลไม่ถูกต้อง', gravity: ToastGravity.CENTER);
-    }
-  }
+    } else {
+      _loading = true;
+      Response<dynamic> response;
+      try {
+        print('------');
 
-  _createUserProfile(param) async {
-    logD(param);
-    try {
-      logWTF('create');
-      var data = {
-        'username': txtEmail.text.trim(),
-        // 'password': txtPassword.text,
-        'idcard': param['idcard'] ?? "",
-        'category': 'guest',
-        'email': _username,
-        // 'phone': param?['phonenumber'] ?? '',
-        // 'gender': param?['gender'] ?? '',
-        // 'uuid': param['uuid'],
-        // 'firstName': param['firstnameTh'],
-        // 'lastName': param['lastnameTh'],
-        // 'age': param['ageRange'],
-        // 'career': param?['jobName'] ?? '',
-        // 'favorites': param?['lmsCat'] ?? '',
-        // 'centerCode': param['centerId'].toString(),
-        'status': 'N',
-        'hasThaiD': false,
-      };
-      logE(data);
-      Response response = await Dio()
-          .post('$server/dcc-api/m/register/link/account/create', data: data);
-
-      if (response.statusCode == 200) {
-        return response.data['objectData'];
-      } else {
-        Fluttertoast.showToast(msg: response.data['error_description']);
+        response = await Dio().post('$server/dcc-api/m/register/read', data: {
+          'username': txtEmail.text.trim(),
+          'category': _category.toString(),
+        });
+      } catch (ex) {
+        setState(() {
+          _loading = false;
+        });
+        Fluttertoast.showToast(msg: 'error');
         return null;
       }
-    } on DioError catch (e) {
-      setState(() => _loadingSubmit = false);
-      String err = e.error.toString();
-      if (e.response != null) {
-        err = e.response!.data['title'].toString();
-      }
-      logE(err);
-      Fluttertoast.showToast(msg: err);
-      return null;
-    }
-  }
-
-  _callThaiID() async {
-    try {
-      String responseType = 'code';
-      String clientId = 'TVE4MVpwQWNrc0NxSzNLWXFQYjVmdGFTdFgxNVN3bU4';
-      String client_secret =
-          'cjhOVEpmdk03NUZydFlCU3B0bHhwb2t3SkhSbFZnWjJOQm9lMkx3Mg';
-      // String redirectUri = 'https://decms.dcc.onde.go.th/auth';
-      String redirectUri = 'https://dlapp.we-builds.com/dcc-thaid';
-      String base = 'https://imauth.bora.dopa.go.th/api/v2/oauth2/auth/';
-      // Random string for state, '1' for login.
-      String state = '1${getRandomString()}';
-      // String state = 'mobile';
-      String scope =
-          'pid given_name family_name address birthdate gender openid';
-      String parameter =
-          '?response_type=$responseType&client_id=$clientId&redirect_uri=$redirectUri&scope=$scope&state=$state';
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('thaiDState', state);
-      await prefs.setString(
-          'thaiDAction', 'login'); // Set state to 'login' instead of 'create'
-      await launchUrl(
-        Uri.parse('$base$parameter'),
-        mode: LaunchMode.externalApplication,
-      );
-      // _callLogin();
-    } catch (ex) {
-      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-    }
-  }
-
-  _getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    try {
-      await prefs.remove('thaiDCode');
-      await prefs.remove('thaiDState');
-
-      String clientId = 'TVE4MVpwQWNrc0NxSzNLWXFQYjVmdGFTdFgxNVN3bU4';
-      String clientSecret =
-          'cjhOVEpmdk03NUZydFlCU3B0bHhwb2t3SkhSbFZnWjJOQm9lMkx3Mg';
-      String credentials = "$clientId:$clientSecret";
-      String encoded = base64Url.encode(utf8.encode(credentials));
-
-      Dio dio = Dio();
-
-      var formData = FormData.fromMap({
-        "grant_type": "authorization_code",
-        // "redirect_uri": "https://decms.dcc.onde.go.th/auth",
-        "redirect_uri": 'https://dlapp.we-builds.com/dcc-thaid',
-        "code": _thiaDCode
-      });
-
-      var res = await dio.post(
-        'https://imauth.bora.dopa.go.th/api/v2/oauth2/token/',
-        data: formData,
-        options: Options(
-          validateStatus: (_) => true,
-          contentType: 'application/x-www-form-urlencoded',
-          responseType: ResponseType.json,
-          headers: {
-            'Content-type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Basic $encoded',
-          },
-        ),
-      );
-
-      // Decode token to get user info
-      Map<String, dynamic> idData = JwtDecoder.decode(res.data['id_token']);
-
-      // Prepare data for login instead of registration
-      var _userData = {};
-      _userData['thaiID'] = {
-        'pid': idData['pid'],
-        'name': idData['given_name'],
-        'family_name': idData['family_name'],
-        'birthdate': idData['birthdate'],
-        'address': idData['address']['formatted'],
-        'gender': idData['gender'],
-      };
-      _userData['firstName'] = idData['given_name'];
-      _userData['lastName'] = idData['family_name'];
-      _userData['sex'] = idData['gender'];
-      _userData['idcard'] = idData['pid'];
-
-      // Use _login instead of _register for login process
-      _login(_userData);
-    } catch (e) {
-      await prefs.remove('thaiDCode');
-      await prefs.remove('thaiDState');
-      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-    }
-  }
-
-  _login(param) async {
-    setState(() => _loadingSubmit = true);
-    try {
-      var response = await Dio().post(
-        '$server/dcc-api/m/register/login/idCard', // Replace with your actual login API
-        data: param,
-      );
 
       setState(() {
-        _loadingSubmit = false;
+        _loading = false;
       });
-      if (response.statusCode == 200) {
-        if (response.data['status'] == 'S') {
-          // logWTF('token');
-          txtEmail.text = response.data['objectData']['email'];
-          txtPassword.text = response.data['objectData']['password'];
 
-          String accessToken = await _getTokenKeycloak(
-            username: txtEmail.text.trim(),
-            password: txtPassword.text,
-          );
-
-          if (accessToken == 'invalid_grant' || accessToken == '') {
-            Fluttertoast.showToast(
-                msg: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
-                gravity: ToastGravity.CENTER);
-            setState(() => _loadingSubmit = false);
-            return;
-            // กรอกรหัสผ่าน
-          }
-
-          dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
-
-          if (responseKeyCloak == null) {
-            return;
-          }
-
-          dynamic responseProfileMe = await _getProfileMe(accessToken);
-          if (responseProfileMe == null) {
-            return;
-          }
-          dynamic responseUser = await _getUserProfile();
-
-          if (responseUser?['message'] == 'code_not_found') {
-            // logWTF('create');
-            var create = await _createUserProfile(responseProfileMe['data']);
-            if (create == null) {
-              return;
-            }
-            responseUser = await _getUserProfile();
-          }
-
-          if (responseUser == null) {
-            Fluttertoast.showToast(msg: responseUser['message']);
-            return;
-          }
-          if (responseUser?['status'] == "F") {
-            Fluttertoast.showToast(msg: responseUser['message']);
-            return;
-          }
-
-          await ManageStorage.createSecureStorage(
-            value: accessToken,
-            key: 'accessToken',
-          );
-          await ManageStorage.createSecureStorage(
-            value: json.encode(responseKeyCloak),
-            key: 'loginData',
-          );
-          await ManageStorage.createSecureStorage(
-            value: json.encode(responseProfileMe?['data']),
-            key: 'profileMe',
-          );
-
-          // logWTF(responseUser);
-          await ManageStorage.createProfile(
-            value: responseUser['objectData'][0],
-            key: 'guest',
-          );
-
-          setState(() => _loadingSubmit = false);
-          if (!mounted) return;
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const Menu(),
-            ),
-          );
-        } else {
+      print(response.data.toString());
+      if (response.data['status'] == 'S') {
+        List<dynamic> result = response.data['objectData'];
+        if (result.length > 0) {
+          setState(() {
+            _username = txtEmail.text.trim();
+            // _imageUrl = response.data['objectData'][0]['imageUrl'] ?? '';
+          });
+          txtEmail.clear();
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => RegisterThaidPage(model: param, category: ""),
+              builder: (_) =>
+                  LoginSecondPage(username: _username!, imageUrl: _imageUrl!),
+            ),
+          );
+        } else {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (BuildContext context) => new CupertinoAlertDialog(
+              title: new Text(
+                'ชื่อผู้ใช้งาน ไม่พบในระบบ',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Kanit',
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+              content: Text(" "),
+              actions: [
+                CupertinoDialogAction(
+                  isDefaultAction: true,
+                  child: new Text(
+                    "ตกลง",
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontFamily: 'Kanit',
+                      color: Color(0xFF000070),
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  onPressed: () {
+                    FocusScope.of(context).unfocus();
+                    new TextEditingController().clear();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
             ),
           );
         }
       } else {
         Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
+    }
+  }
+
+  void _callLoginFacebook() async {
+    final fb.LoginResult result = await fb.FacebookAuth.instance
+        .login(); // by default we request the email and the public profile
+    // or FacebookAuth.i.login()
+    if (result.status == fb.LoginStatus.success) {
+      // you are logged
+      final fb.AccessToken? accessToken = result.accessToken;
+
+      if (accessToken != null) {
+        // user is logged
+        print(accessToken.toString());
+        final userData = await fb.FacebookAuth.i.getUserData();
+        print(userData['email'].toString());
+
+        try {
+          setState(() => _loadingSubmit = true);
+
+          // var model = {
+          //   "username": userData['email'].toString(),
+          //   "email": userData['email'].toString(),
+          //   "imageUrl": userData['picture']['data']['url'].toString(),
+          //   "firstName": userData['name'].toString(),
+          //   "lastName": '',
+          //   "facebookID": userData['id'].toString()
+          // };
+
+          var model = {
+            "username": userData['id'].toString(),
+            "email": userData['email'].toString(),
+            "imageUrl": userData['picture']['data']['url'].toString(),
+            "firstName": userData['name'].toString(),
+            "lastName": '',
+            "facebookID": userData['id'].toString()
+          };
+          _callLoginSocial(model, 'facebook');
+        } catch (e) {
+          // setState(() => _loadingSubmit = false);
+        }
+      }
+    } else {
+      print(result.status);
+      print(result.message);
+    }
+
+    // var obj = await signInWithFacebook();
+
+    // logWTF(obj.toString());
+    // // print(obj.user.displayName);
+    // // print(obj.user.uid);
+    // if (obj != null) {
+    //   var model = {
+    //     "username": obj.user.uid.toString(),
+    //     "email": obj.user.email,
+    //     "imageUrl":
+    //         obj.user.photoURL != null ? obj.user.photoURL + "?width=9999" : '',
+    //     "firstName": obj.user.displayName,
+    //     "lastName": '',
+    //     "facebookID": obj.user.uid.toString(),
+    //   };
+    //   _callLoginSocial(model, 'facebook');
+    // } else {
+    //   Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+    // }
+  }
+
+  void _callLoginX() async {
+    try {
+      final twitterLogin = TwitterLogin(
+        // Consumer API keys
+        apiKey: 'VZWc4305qtisGTva2z52ue5A3',
+        // Consumer API Secret keys
+        apiSecretKey: 'WlBAmdIiGgUsDRJ0w2JuoFKrvh34CAwlC4l3ChzQhkHlt6Qd1W',
+        // Registered Callback URLs in TwitterApp
+        // Android is a deeplink
+        // iOS is a URLScheme
+        redirectURI: 'dccadmin://thaid',
+      );
+      final obj = await twitterLogin.login();
+      switch (obj.status) {
+        case TwitterLoginStatus.loggedIn:
+          // success
+          logWTF(obj.user!.id);
+          logWTF(obj.user!.name);
+          break;
+        case TwitterLoginStatus.cancelledByUser:
+          // cancel
+          break;
+        case TwitterLoginStatus.error:
+          // error
+          break;
+        case null:
+          break;
+      }
+
+      if (obj != null) {
+        var model = {
+          "username": obj.user!.id.toString(),
+          "email": obj.user!.email.toLowerCase(),
+          "imageUrl": obj.user!.thumbnailImage,
+          "firstName": obj.user!.name,
+          "lastName": '',
+          "xID": obj.user!.id.toString()
+        };
+        _callLoginSocial(model, 'x');
+      } else {
+        logE('obj :: ');
+        logE(obj);
+        // setState(() => _loadingSubmit = false);
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      }
     } catch (e) {
-      print('Error: $e');
+      Fluttertoast.showToast(msg: 'ยกเลิก');
+    }
+  }
+
+  void _callLoginGoogle() async {
+    try {
+      UserCredential obj = await signInWithGoogle();
+
+      logWTF(obj);
+      if (obj != null) {
+        var model = {
+          "username": obj.user!.uid,
+          "email": obj.user!.email,
+          "imageUrl": obj.user!.photoURL ?? '',
+          "firstName": obj.user!.displayName,
+          "lastName": '',
+          "googleID": obj.user!.uid
+        };
+        _callLoginSocial(model, 'google');
+      } else {
+        logE('obj :: ');
+        logE(obj);
+        // setState(() => _loadingSubmit = false);
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      }
+    } catch (e) {
+      logE(e);
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-      setState(() {
-        _loadingSubmit = false;
-      });
+      // setState(() => _loadingSubmit = false);
+    }
+  }
+
+  void _callLoginLine() async {
+    try {
+      LoginResult? obj = await loginLine();
+      openLine = false;
+      logWTF(obj!.data);
+
+      if (obj != null) {
+        final idToken = obj.accessToken.idToken;
+        final userEmail = (idToken != null)
+            ? idToken['email'] != null
+                ? idToken['email']
+                : ''
+            : '';
+        var model = {
+          "username": obj.userProfile!.userId.toString(),
+          "email": userEmail,
+          "imageUrl": (obj.userProfile!.pictureUrl != '' &&
+                  obj.userProfile!.pictureUrl != null)
+              ? obj.userProfile!.pictureUrl
+              : '',
+          "firstName": obj.userProfile!.displayName,
+          "lastName": '',
+          "lineID": obj.userProfile!.userId.toString()
+        };
+        _callLoginSocial(model, 'line');
+      } else {
+        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'ยกเลิก');
+    }
+  }
+
+  void _callLoginApple() async {
+    try {
+      var obj = await signInWithApple();
+
+      var model = {
+        "username": obj.user!.email ?? obj.user!.uid,
+        "email": obj.user!.email ?? '',
+        "imageUrl": '',
+        "firstName": obj.user!.email,
+        "lastName": '',
+        "appleID": obj.user!.uid
+      };
+
+      _callLoginSocial(model, 'apple');
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }
 
   _getTokenKeycloak({String username = '', String password = ''}) async {
     try {
       // get token
-
       Response response = await Dio().post(
         '$ssoURL/realms/$keycloakReaml/protocol/openid-connect/token',
         data: {
@@ -1821,213 +1561,18 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   }
 
   _getUserProfile() async {
-    Response response = await Dio().post(
-      '$server/dcc-api/m/register/read',
-      data: {
-        'username': txtEmail.text.trim(),
+    Response response =
+        await Dio().post('$server/dcc-api/m/register/read', data: {
+      'username': _username,
+      // 'category': 'guest',
+    });
 
-        // 'category': 'guest',
-      },
-    );
-    print("----------_getUserProfile------------${response}");
     if (response.statusCode == 200) {
-      return response.data;
+      return response.data['objectData'];
     } else {
       logE(response.data);
       Fluttertoast.showToast(msg: response.data['error_description']);
       return null;
-    }
-  }
-
-  void _callLoginFacebook() async {
-    final fb.LoginResult result = await fb.FacebookAuth.instance
-        .login(); // by default we request the email and the public profile
-    // or FacebookAuth.i.login()
-    if (result.status == fb.LoginStatus.success) {
-      // you are logged
-      final fb.AccessToken? accessToken = result.accessToken;
-
-      if (accessToken != null) {
-        // user is logged
-        print(accessToken.toString());
-        final userData = await fb.FacebookAuth.i.getUserData();
-        print(userData['email'].toString());
-
-        try {
-          setState(() => _loadingSubmit = true);
-
-          // var model = {
-          //   "username": userData['email'].toString(),
-          //   "email": userData['email'].toString(),
-          //   "imageUrl": userData['picture']['data']['url'].toString(),
-          //   "firstName": userData['name'].toString(),
-          //   "lastName": '',
-          //   "facebookID": userData['id'].toString()
-          // };
-
-          var model = {
-            "username": userData['id'].toString(),
-            "email": userData['email'].toString(),
-            "imageUrl": userData['picture']['data']['url'].toString(),
-            "firstName": userData['name'].toString(),
-            "lastName": '',
-            "facebookID": userData['id'].toString()
-          };
-          _callLoginSocial(model, 'facebook');
-        } catch (e) {
-          // setState(() => _loadingSubmit = false);
-        }
-      }
-    } else {
-      print(result.status);
-      print(result.message);
-    }
-
-    // var obj = await signInWithFacebook();
-
-    // logWTF(obj.toString());
-    // // print(obj.user.displayName);
-    // // print(obj.user.uid);
-    // if (obj != null) {
-    //   var model = {
-    //     "username": obj.user.uid.toString(),
-    //     "email": obj.user.email,
-    //     "imageUrl":
-    //         obj.user.photoURL != null ? obj.user.photoURL + "?width=9999" : '',
-    //     "firstName": obj.user.displayName,
-    //     "lastName": '',
-    //     "facebookID": obj.user.uid.toString(),
-    //   };
-    //   _callLoginSocial(model, 'facebook');
-    // } else {
-    //   Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-    // }
-  }
-
-  void _callLoginX() async {
-    try {
-      final twitterLogin = TwitterLogin(
-        // Consumer API keys
-        apiKey: 'VZWc4305qtisGTva2z52ue5A3',
-        // Consumer API Secret keys
-        apiSecretKey: 'WlBAmdIiGgUsDRJ0w2JuoFKrvh34CAwlC4l3ChzQhkHlt6Qd1W',
-        // Registered Callback URLs in TwitterApp
-        // Android is a deeplink
-        // iOS is a URLScheme
-        redirectURI: 'dcc://thaid',
-      );
-      final obj = await twitterLogin.login();
-      switch (obj.status) {
-        case TwitterLoginStatus.loggedIn:
-          // success
-          logWTF(obj.user!.id);
-          logWTF(obj.user!.name);
-          break;
-        case TwitterLoginStatus.cancelledByUser:
-          // cancel
-          break;
-        case TwitterLoginStatus.error:
-          // error
-          break;
-        case null:
-          break;
-      }
-
-      if (obj != null) {
-        var model = {
-          "username": obj.user!.id.toString(),
-          "email": obj.user!.email.toLowerCase(),
-          "imageUrl": obj.user!.thumbnailImage,
-          "firstName": obj.user!.name,
-          "lastName": '',
-          "xID": obj.user!.id.toString()
-        };
-        _callLoginSocial(model, 'x');
-      } else {
-        logE('obj :: ');
-        logE(obj);
-        // setState(() => _loadingSubmit = false);
-        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-      }
-    } catch (e) {
-      Fluttertoast.showToast(msg: 'ยกเลิก');
-    }
-  }
-
-  void _callLoginGoogle() async {
-    setState(() => _loadingSubmit = true);
-    try {
-      UserCredential obj = await signInWithGoogle();
-
-      if (obj != null) {
-        var model = {
-          "username": obj.user!.uid,
-          "email": obj.user!.email,
-          "imageUrl": obj.user!.photoURL ?? '',
-          "firstName": obj.user!.displayName,
-          "lastName": '',
-          "googleID": obj.user!.uid
-        };
-        _callLoginSocial(model, 'google');
-      } else {
-        setState(() => _loadingSubmit = false);
-        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-      }
-    } catch (e) {
-      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-      setState(() => _loadingSubmit = false);
-    }
-  }
-
-  void _callLoginLine() async {
-    try {
-      LoginResult? obj = await loginLine();
-      openLine = false;
-      logWTF(obj!.data);
-
-      if (obj != null) {
-        final idToken = obj.accessToken.idToken;
-        final userEmail = (idToken != null)
-            ? idToken['email'] != null
-                ? idToken['email']
-                : ''
-            : '';
-        var model = {
-          "username": obj.userProfile!.userId.toString(),
-          "email": userEmail,
-          "imageUrl": (obj.userProfile!.pictureUrl != '' &&
-                  obj.userProfile!.pictureUrl != null)
-              ? obj.userProfile!.pictureUrl
-              : '',
-          "firstName": obj.userProfile!.displayName,
-          "lastName": '',
-          "lineID": obj.userProfile!.userId.toString()
-        };
-        _callLoginSocial(model, 'line');
-      } else {
-        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-      }
-    } catch (e) {
-      Fluttertoast.showToast(msg: 'ยกเลิก');
-    }
-  }
-
-  void _callLoginApple() async {
-    try {
-      var obj = await signInWithApple();
-
-      var model = {
-        "username": obj.user!.email ?? obj.user!.uid,
-        "email": obj.user!.email ?? '',
-        "imageUrl": '',
-        "firstName": obj.user!.email,
-        "lastName": '',
-        "appleID": obj.user!.uid
-      };
-
-      _callLoginSocial(model, 'apple');
-    } catch (e) {
-      Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }
 
@@ -2036,7 +1581,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     logWTF('_callLoginSocial');
     try {
       if (param != null) {
-        txtEmail.text = param['email'];
         Dio dio = Dio();
         var check = await dio.post(
           '$server/dcc-api/m/register/check/login/social/guest',
@@ -2100,7 +1644,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           );
           await ManageStorage.createProfile(
             value: response.data['objectData'],
-            key: type,
+            key: 'guest',
           );
 
           setState(() => _loadingSubmit = false);
@@ -2114,6 +1658,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         } else {
           setState(() => _loadingSubmit = false);
           String usernameDup = await _checkDuplicateUser();
+          logWTF(usernameDup);
           if (usernameDup.isNotEmpty) {
             Navigator.push(
               context,
@@ -2286,31 +1831,18 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     Function? suffixTap,
   }) =>
       InputDecoration(
-        label: Text(hintText),
+        label: Text(labelText),
         labelStyle: TextStyle(
-          color: Colors.black,
-          fontSize: 15,
-          fontWeight: FontWeight.normal,
-        ),
-        // hintStyle: TextStyle(
-        //   color: Theme.of(context).custom.f70f70_w_fffd57,
-        //   fontSize: 12,
-        //   fontWeight: FontWeight.normal,
-        // ),
-        // hintText: hintText,
-        hintStyle: TextStyle(
-          color: MyApp.themeNotifier.value == ThemeModeThird.light
-              ? Colors.black
-              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                  ? Colors.white
-                  : Color(0xFFFFFD57),
+          color: Theme.of(context).custom.f70f70_w_fffd57,
           fontSize: 12,
           fontWeight: FontWeight.normal,
         ),
-        // hintText: hintText,
-        filled: true,
-        fillColor: Colors.transparent,
-
+        hintStyle: TextStyle(
+          color: Theme.of(context).custom.f70f70_w_fffd57,
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+        hintText: hintText,
         suffixIcon: GestureDetector(
           onTap: () {
             suffixTap!();
@@ -2320,11 +1852,12 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
               : const Icon(Icons.visibility),
         ),
         suffixIconColor: MyApp.themeNotifier.value == ThemeModeThird.light
-            ? Color(0xFFB325F8)
+            ? Color(0xFF7A4CB1)
             : MyApp.themeNotifier.value == ThemeModeThird.dark
                 ? Colors.white
                 : Color(0xFFFFFD57),
-
+        filled: true,
+        fillColor: Colors.transparent,
         contentPadding: const EdgeInsets.fromLTRB(15.0, 5.0, 5.0, 5.0),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
@@ -2334,7 +1867,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           borderRadius: BorderRadius.circular(7.0),
           borderSide: BorderSide(
             color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Color(0xFFB325F8)
+                ? Color(0xFF7A4CB1)
                 : MyApp.themeNotifier.value == ThemeModeThird.dark
                     ? Colors.white
                     : Color(0xFFFFFD57),
@@ -2432,7 +1965,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           );
           await ManageStorage.createProfile(
             value: response.data['objectData'],
-            key: type,
+            key: 'guest',
           );
 
           setState(() => _loadingSubmit = false);
@@ -2524,7 +2057,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   }
 
   void _callReadConfig() async {
-    // print('>>>>>>>>>123456>>>>>>>>');
     var response = await Dio().get(
         '$server/py-api/dcc/config/login_social/' + versionNumber.toString());
     // print(response);
