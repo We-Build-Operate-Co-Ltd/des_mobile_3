@@ -1443,6 +1443,11 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         key: 'profileMe',
       );
 
+      await ManageStorage.createSecureStorage(
+        value: txtPassword.text,
+        key: 'password',
+      );
+
       // logWTF(responseUser);
       await ManageStorage.createProfile(
         value: responseUser['objectData'][0],

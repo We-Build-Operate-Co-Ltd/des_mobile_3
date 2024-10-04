@@ -557,7 +557,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             //     color: Theme.of(context).custom.b_W_fffd57,
                             //   ),
                             // ),
-                            // SizedBox(height: 10),
+                            SizedBox(height: 10),
                             Text(
                               'สิ่งที่สนใจ',
                               style: TextStyle(

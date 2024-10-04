@@ -8,6 +8,7 @@ import 'package:des/shared/theme_data.dart';
 import 'package:des/splash.dart';
 import 'package:des/register_verify_thai_id.dart';
 import 'package:des/verify_thai_id.dart';
+import 'package:des/verify_thai_id_new.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/foundation.dart';
@@ -102,6 +103,10 @@ class _MyAppState extends State<MyApp> {
             }
             if (action == 'update') {
               navigatorKey.currentState!.pushReplacementNamed('/verifyThaiId');
+            }
+            if (action == 'updateNew') {
+              navigatorKey.currentState!
+                  .pushReplacementNamed('/verifyThaiIdNew');
             }
           } else {
             // clear data.
