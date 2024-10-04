@@ -93,7 +93,7 @@ class _MyAppState extends State<MyApp> {
               'thaiDCode',
               uri.queryParameters['code'].toString(),
             );
-              if (action == 'login') {
+            if (action == 'login') {
               navigatorKey.currentState!.pushReplacementNamed('/loginFirst');
             }
             if (action == 'create') {
@@ -134,8 +134,7 @@ class _MyAppState extends State<MyApp> {
             '/registerVerifyThaiId': (BuildContext context) =>
                 const RegisterVerifyThaiIDPage(),
             '/verifyThaiId': (BuildContext context) => const VerifyThaiIDPage(),
-            '/loginFirst': (BuildContext context) =>
-                const LoginFirstPage(),
+            '/loginFirst': (BuildContext context) => const LoginFirstPage(),
           },
           theme: FlexThemeData.light(
             fontFamily: 'kanit',

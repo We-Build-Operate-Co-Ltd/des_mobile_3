@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:des/shared/theme_data.dart';
 import 'package:des/verify_otp_phone_input.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +76,7 @@ class _VerifyThaiIDPageState extends State<VerifyThaiIDPage> {
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w700,
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).custom.b325f8_w_g,
                 ),
                 textAlign: TextAlign.start,
               ),
@@ -98,7 +99,7 @@ class _VerifyThaiIDPageState extends State<VerifyThaiIDPage> {
                       width: double.infinity,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).custom.b325f8_w_g,
                         borderRadius: BorderRadius.circular(7),
                         boxShadow: const [
                           BoxShadow(

@@ -147,7 +147,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                     .toString()
                     .toUpperCase()
                     .contains(cateSearch.toString().toUpperCase()) &&
-                e['id']
+                e['course_cat_id']
                     .toString()
                     .toUpperCase()
                     .contains(cateCourseSearch.toString().toUpperCase()))
@@ -864,7 +864,9 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
           "created_at": model['created_at'] ?? '',
           "category_name": model['cat_name'] ?? '',
           "certificate": model['certificate'] ?? '',
+          "course_duration": model['course_duration'] ?? '',
         };
+        logWTF(data);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -1126,7 +1128,27 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
 
   containerCouseEternal(dynamic model) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        // var data = {
+        //   'course_id': model?['id'] ?? '',
+        //   "course_name": model?['name'] ?? '',
+        //   "course_cat_id": model?['course_cat_id'] ?? '',
+        //   "cover_image": model?['docs'] ?? '',
+        //   "description": model['details'] ?? '',
+        //   "created_at": model['created_at'] ?? '',
+        //   "category_name": model['cat_name'] ?? '',
+        //   "certificate": model['certificate'] ?? '',
+        // };
+        // logWTF(data);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CourseDetailNewPage(
+              model: model,
+            ),
+          ),
+        );
+      },
       child: Container(
         height: 250,
         width: 200,
@@ -1432,10 +1454,10 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
           onTap: () {
             widget.changePage!(0);
             setState(() {
-              _searchController.clear(); // เคลียร์ข้อความใน TextField
-              textSearch = ''; // รีเซ็ตค่าตัวแปรที่ใช้ค้นหา
+              _searchController.clear();
+              textSearch = '';
               textEternalSearch = '';
-              _filter();
+              // _filter();
             });
 
             // print('--------------------------------------');
@@ -1575,6 +1597,9 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                       setState(() {
                         if (cateCourseSearch != element['id']) {
                           cateCourseSearch = element['id'];
+                          print('----------------${element['id']}');
+                          print(
+                              '----------cateCourseSearch------${cateCourseSearch}');
                         } else {
                           cateCourseSearch = '';
                         }

@@ -55,7 +55,20 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
             child: Row(
               children: [
                 _backButton(context),
-                const SizedBox(width: 40),
+                const SizedBox(width: 20),
+                Text(
+                  'รายละเอียดคอร์ส',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontFamily: 'Kanit',
+                    fontWeight: FontWeight.w500,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFB325F8)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  ),
+                ),
               ],
             ),
           ),
@@ -77,7 +90,7 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
               builder: (context) {
                 return ImageViewer(
                   initialIndex: 0,
-                  imageProviders: [widget.model['course_Thumbnail_Url']]
+                  imageProviders: [widget.model['url']]
                       .map<ImageProvider<Object>>((e) => NetworkImage(e))
                       .toList(),
                 );
@@ -91,8 +104,8 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(17.5),
               child: CachedNetworkImage(
-                imageUrl: (widget.model?['course_Thumbnail_Url'] ?? '') != ''
-                    ? widget.model['course_Thumbnail_Url']
+                imageUrl: (widget.model?['thumbnailLink'] ?? '') != ''
+                    ? widget.model['thumbnailLink']
                     : '',
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
@@ -106,7 +119,7 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: Text(
-            widget.model?['course_Name'] ?? '',
+            widget.model?['title'] ?? '',
             style: TextStyle(
                 color: textTheme,
                 fontSize: 18,
@@ -114,7 +127,19 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
                 fontWeight: FontWeight.w500),
           ),
         ),
-        SizedBox(height: 10),
+
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Text(
+            widget.model?['subject'] ?? '',
+            style: TextStyle(
+                color: textTheme,
+                fontSize: 16,
+                fontFamily: 'Kanit',
+                fontWeight: FontWeight.w400),
+          ),
+        ),
+        // SizedBox(height: 10),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Row(
@@ -124,12 +149,12 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
               Container(
                 height: 25,
                 width: 25,
-                child: Image.asset('assets/images/about_us_mark.png'),
+                child: Image.asset('assets/images/course_time.png'),
               ),
               SizedBox(width: 15),
               Expanded(
                 child: Text(
-                  widget.model?['course_Cat_Id'] ?? '',
+                  widget.model?['duration'] ?? '',
                   style: TextStyle(
                       color: textTheme,
                       fontSize: 13,
@@ -147,11 +172,11 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                height: 25,
-                width: 25,
-                child: Image.asset('assets/images/about_us_mark.png'),
-              ),
+              // Container(
+              //   height: 25,
+              //   width: 25,
+              //   child: Image.asset('assets/images/about_us_mark.png'),
+              // ),
               SizedBox(width: 15),
               Expanded(
                 child: Text(
@@ -166,9 +191,11 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
             ],
           ),
         ),
-        const SizedBox(height: 20),
-        lineBottom(),
-        const SizedBox(height: 150),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: lineBottom(),
+        ),
+        const SizedBox(height: 85),
         InkWell(
           onTap: () async {
             var loginData = await ManageStorage.readDynamic('loginData');
@@ -181,7 +208,7 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
                 builder: (_) => WebViewInAppPage(
                   url:
                       'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}',
-                  title: widget.model?['course_name'] ?? '',
+                  title: widget.model?['subject'] ?? '',
                 ),
               ),
             );
@@ -197,7 +224,7 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
             alignment: Alignment.center,
             margin: EdgeInsets.symmetric(horizontal: 15),
             decoration: BoxDecoration(
-              color: buttonTheme,
+              color: Theme.of(context).custom.b325f8_w_g,
               borderRadius: BorderRadius.circular(22.5),
               border: Border.all(color: colorTheme),
             ),
@@ -222,12 +249,12 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
       child: Container(
         height: 40,
         width: 40,
-        padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: buttonTheme,
-          border: Border.all(color: colorTheme),
-        ),
+        // padding: EdgeInsets.fromLTRB(10, 7, 13, 7),
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(8),
+        //   color: buttonTheme,
+        //   border: Border.all(color: colorTheme),
+        // ),
         child: Image.asset(
           'assets/images/back_arrow.png',
         ),

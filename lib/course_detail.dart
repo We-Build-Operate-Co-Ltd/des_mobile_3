@@ -55,7 +55,20 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             child: Row(
               children: [
                 _backButton(context),
-                const SizedBox(width: 40),
+                const SizedBox(width: 20),
+                Text(
+                  'รายละเอียดคอร์ส',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontFamily: 'Kanit',
+                    fontWeight: FontWeight.w500,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFB325F8)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  ),
+                ),
               ],
             ),
           ),
@@ -104,83 +117,27 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             ),
           ),
         ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          margin: const EdgeInsets.only(right: 50, top: 10),
-          child: Text(
-            widget.model?['course_name'] ?? '',
-            style: TextStyle(
-              color: textTheme,
-              fontSize: 20,
-              fontFamily: 'Kanit',
-            ),
-          ),
-        ),
-        SizedBox(height: 20),
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        //   child: Text('data'),
-        // ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              // Container(
-              //   padding: EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-              //   decoration: BoxDecoration(
-              //     color: buttonTheme,
-              //     borderRadius: BorderRadius.circular(12.5),
-              //     border: Border.all(color: colorTheme),
-              //   ),
-              //   child: Row(
-              //     children: const [
-              //       Icon(
-              //         Icons.access_time_outlined,
-              //         size: 10,
-              //         color: Colors.white,
-              //       ),
-              //       SizedBox(width: 5),
-              //       Text(
-              //         '3 ชั่วโมง',
-              //         style: TextStyle(
-              //           fontSize: 9,
-              //           color: Colors.white,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // const SizedBox(width: 5),
-              // Container(
-              //   padding: EdgeInsets.symmetric(
-              //     horizontal: 9,
-              //     vertical: 3,
-              //   ),
-              //   decoration: BoxDecoration(
-              //     color: buttonTheme,
-              //     borderRadius: BorderRadius.circular(12.5),
-              //     border: Border.all(color: colorTheme),
-              //   ),
-              //   child: Row(
-              //     children: [
-              //       Image.asset(
-              //         'assets/images/book.png',
-              //         height: 10,
-              //         width: 8.41,
-              //       ),
-              //       const SizedBox(width: 5),
-              //       const Text(
-              //         '4 บทเรียน',
-              //         style: TextStyle(
-              //           fontSize: 9,
-              //           color: Colors.white,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-
-              const Expanded(child: SizedBox()),
+              Expanded(
+                  child: Row(
+                children: [
+                  Image.asset('assets/images/course_time.png',
+                      height: 25, width: 25),
+                  const SizedBox(width: 8),
+                  Text(
+                    widget.model?['course_duration'] ?? '',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                      color: Theme.of(context).custom.b_w_y,
+                    ),
+                  ),
+                ],
+              )),
               InkWell(
                 onTap: () => _callShare(widget.model),
                 child: Container(
@@ -202,11 +159,106 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             ],
           ),
         ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          // margin: const EdgeInsets.only(right: 50, top: 10),
+          child: Text(
+            widget.model?['course_name'] ?? '',
+            style: TextStyle(
+              color: textTheme,
+              fontSize: 20,
+              fontFamily: 'Kanit',
+            ),
+          ),
+        ),
+        // SizedBox(height: 20),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 10),
+        //   child: Row(
+        //     children: [
+        //       Container(
+        //         padding: EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+        //         decoration: BoxDecoration(
+        //           color: buttonTheme,
+        //           borderRadius: BorderRadius.circular(12.5),
+        //           border: Border.all(color: colorTheme),
+        //         ),
+        //         child: Row(
+        //           children: [
+        //             Icon(
+        //               Icons.access_time_outlined,
+        //               size: 10,
+        //               color: Colors.white,
+        //             ),
+        //             SizedBox(width: 5),
+        //             Text(
+        //               widget.model?['course_duration'] ?? '',
+        //               // '3 ชั่วโมง',
+        //               style: TextStyle(
+        //                 fontSize: 9,
+        //                 color: Colors.white,
+        //               ),
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //       // const SizedBox(width: 5),
+        //       // Container(
+        //       //   padding: EdgeInsets.symmetric(
+        //       //     horizontal: 9,
+        //       //     vertical: 3,
+        //       //   ),
+        //       //   decoration: BoxDecoration(
+        //       //     color: buttonTheme,
+        //       //     borderRadius: BorderRadius.circular(12.5),
+        //       //     border: Border.all(color: colorTheme),
+        //       //   ),
+        //       //   child: Row(
+        //       //     children: [
+        //       //       Image.asset(
+        //       //         'assets/images/book.png',
+        //       //         height: 10,
+        //       //         width: 8.41,
+        //       //       ),
+        //       //       const SizedBox(width: 5),
+        //       //       const Text(
+        //       //         '4 บทเรียน',
+        //       //         style: TextStyle(
+        //       //           fontSize: 9,
+        //       //           color: Colors.white,
+        //       //         ),
+        //       //       ),
+        //       //     ],
+        //       //   ),
+        //       // ),
+        //       // const Expanded(child: SizedBox()),
+        //       // InkWell(
+        //       //   onTap: () => _callShare(widget.model),
+        //       //   child: Container(
+        //       //     height: 30,
+        //       //     width: 30,
+        //       //     alignment: Alignment.center,
+        //       //     decoration: BoxDecoration(
+        //       //       color: Theme.of(context).custom.b325f8_w_fffd57,
+        //       //       borderRadius: BorderRadius.circular(15),
+        //       //       border: Border.all(color: colorTheme),
+        //       //     ),
+        //       //     child: Image.asset(
+        //       //       'assets/images/share.png',
+        //       //       width: 14.83,
+        //       //       height: 13.38,
+        //       //     ),
+        //       //   ),
+        //       // ),
+        //     ],
+        //   ),
+        // ),
+
         SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.only(
-            right: 10,
-            left: 10,
+            right: 20,
+            left: 20,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,10 +271,11 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+              // lineBottom(),
               Text(
                 widget.model?['description'] ?? '',
                 style: TextStyle(
-                  color: textTheme,
+                  color: Color(0xFF707070),
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
                   overflow: TextOverflow.ellipsis,
@@ -230,112 +283,115 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                 textAlign: TextAlign.left,
                 maxLines: 3,
               ),
+              // SizedBox(height: 10),
+              // lineBottom()
             ],
           ),
         ),
-        GestureDetector(
-          onTap: () => showDialog(
-            context: context,
-            useSafeArea: false,
-            barrierColor: Colors.transparent,
-            builder: (_) => Material(
-              color: Color.fromARGB(0, 255, 255, 255),
-              child: BackdropFilter(
-                filter: ui.ImageFilter.blur(
-                  sigmaX: 5.0,
-                  sigmaY: 5.0,
-                ),
-                child: Container(
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFFB325F8).withOpacity(0.75)
-                      : Colors.black,
-                  padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top + 10,
-                    right: 10,
-                    bottom: 5,
-                    left: 10,
-                  ),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: FadingEdgeScrollView.fromScrollView(
-                          child: ListView(
-                            controller: _scController,
-                            padding: EdgeInsets.zero,
-                            children: [
-                              SizedBox(height: 40),
-                              Center(
-                                child: Text(
-                                  'รายละเอียด',
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500,
-                                    color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Colors.white
-                                        : textTheme,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                widget.model['description'],
-                                style: TextStyle(
-                                  color: Colors.white.withOpacity(0.8),
-                                ),
-                              ),
-                              const SizedBox(height: 40),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: GestureDetector(
-                          onTap: () => Navigator.pop(context),
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: buttonTheme,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: colorTheme),
-                            ),
-                            child: Image.asset(
-                              'assets/images/close_noti_list.png',
-                              color: Colors.white,
-                              height: 23.15,
-                              width: 23.15,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 38),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  'อ่านทั้งหมด',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: colorTheme,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  maxLines: 4,
-                ),
-              ),
-              SizedBox(height: 5),
-            ],
-          ),
-        ),
+        // GestureDetector(
+        //   onTap: () => showDialog(
+        //     context: context,
+        //     useSafeArea: false,
+        //     barrierColor: Colors.transparent,
+        //     builder: (_) => Material(
+        //       color: Color.fromARGB(0, 255, 255, 255),
+        //       child: BackdropFilter(
+        //         filter: ui.ImageFilter.blur(
+        //           sigmaX: 5.0,
+        //           sigmaY: 5.0,
+        //         ),
+        //         child: Container(
+        //           color: MyApp.themeNotifier.value == ThemeModeThird.light
+        //               ? Color(0xFFB325F8).withOpacity(0.75)
+        //               : Colors.black,
+        //           padding: EdgeInsets.only(
+        //             top: MediaQuery.of(context).padding.top + 10,
+        //             right: 10,
+        //             bottom: 5,
+        //             left: 10,
+        //           ),
+        //           child: Column(
+        //             children: [
+        //               Expanded(
+        //                 child: FadingEdgeScrollView.fromScrollView(
+        //                   child: ListView(
+        //                     controller: _scController,
+        //                     padding: EdgeInsets.zero,
+        //                     children: [
+        //                       SizedBox(height: 40),
+        //                       Center(
+        //                         child: Text(
+        //                           'รายละเอียด',
+        //                           style: TextStyle(
+        //                             fontSize: 17,
+        //                             fontWeight: FontWeight.w500,
+        //                             color: MyApp.themeNotifier.value ==
+        //                                     ThemeModeThird.light
+        //                                 ? Colors.white
+        //                                 : textTheme,
+        //                           ),
+        //                         ),
+        //                       ),
+        //                       SizedBox(height: 10),
+        //                       Text(
+        //                         widget.model['description'],
+        //                         style: TextStyle(
+        //                           color: Colors.white.withOpacity(0.8),
+        //                         ),
+        //                       ),
+        //                       const SizedBox(height: 40),
+        //                     ],
+        //                   ),
+        //                 ),
+        //               ),
+        //               Center(
+        //                 child: GestureDetector(
+        //                   onTap: () => Navigator.pop(context),
+        //                   child: Container(
+        //                     height: 40,
+        //                     width: 40,
+        //                     alignment: Alignment.center,
+        //                     decoration: BoxDecoration(
+        //                       color: buttonTheme,
+        //                       borderRadius: BorderRadius.circular(10),
+        //                       border: Border.all(color: colorTheme),
+        //                     ),
+        //                     child: Image.asset(
+        //                       'assets/images/close_noti_list.png',
+        //                       color: Colors.white,
+        //                       height: 23.15,
+        //                       width: 23.15,
+        //                     ),
+        //                   ),
+        //                 ),
+        //               ),
+        //               const SizedBox(height: 38),
+        //             ],
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        //   child: Column(
+        //     crossAxisAlignment: CrossAxisAlignment.start,
+        //     children: [
+        //       Padding(
+        //         padding: const EdgeInsets.symmetric(horizontal: 10),
+        //         child: Text(
+        //           'อ่านทั้งหมด',
+        //           style: TextStyle(
+        //             fontSize: 13,
+        //             color: colorTheme,
+        //             overflow: TextOverflow.ellipsis,
+        //           ),
+        //           maxLines: 4,
+        //         ),
+        //       ),
+        //       SizedBox(height: 5),
+        //     ],
+        //   ),
+        // ),
+
         const SizedBox(height: 85),
         InkWell(
           onTap: () async {
@@ -434,5 +490,19 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
 🚩🚩 🚩🚩''',
         linkUrl: param['imageUrl'],
         chooserTitle: 'Example Chooser Title');
+  }
+
+  lineBottom() {
+    return Container(
+      // padding: EdgeInsets.symmetric(vertical: 5),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Color(0xFFEEEEEE),
+            width: 2.0,
+          ),
+        ),
+      ),
+    );
   }
 }

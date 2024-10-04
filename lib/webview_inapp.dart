@@ -45,7 +45,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
           flexibleSpace: Container(
             width: double.infinity,
             padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 10,
+              top: MediaQuery.of(context).padding.top + 2,
               left: 15,
               right: 15,
             ),
@@ -78,35 +78,37 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
           ),
         ),
         body: Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
             child: Column(children: <Widget>[
-          Expanded(
-            child: Container(
-              child: InAppWebView(
-                initialUrlRequest:
-                    URLRequest(url: Uri.parse(scanFaceWeb ?? '')),
-                initialOptions: InAppWebViewGroupOptions(
-                  crossPlatform: InAppWebViewOptions(
-                    mediaPlaybackRequiresUserGesture: false,
-                    // debuggingEnabled: true,
+              Expanded(
+                child: Container(
+                  child: InAppWebView(
+                    initialUrlRequest:
+                        URLRequest(url: Uri.parse(scanFaceWeb ?? '')),
+                    initialOptions: InAppWebViewGroupOptions(
+                      crossPlatform: InAppWebViewOptions(
+                        mediaPlaybackRequiresUserGesture: false,
+                        // debuggingEnabled: true,
+                      ),
+                    ),
+                    onWebViewCreated: (InAppWebViewController controller) {
+                      // _webViewController = controller;
+                    },
+                    androidOnPermissionRequest:
+                        (InAppWebViewController controller, String origin,
+                            List<String> resources) async {
+                      return PermissionRequestResponse(
+                          resources: resources,
+                          action: PermissionRequestResponseAction.GRANT);
+                    },
+                    onReceivedServerTrustAuthRequest:
+                        (controller, challenge) async {
+                      return ServerTrustAuthResponse(
+                          action: ServerTrustAuthResponseAction.PROCEED);
+                    },
                   ),
                 ),
-                onWebViewCreated: (InAppWebViewController controller) {
-                  // _webViewController = controller;
-                },
-                androidOnPermissionRequest: (InAppWebViewController controller,
-                    String origin, List<String> resources) async {
-                  return PermissionRequestResponse(
-                      resources: resources,
-                      action: PermissionRequestResponseAction.GRANT);
-                },
-                onReceivedServerTrustAuthRequest:
-                    (controller, challenge) async {
-                  return ServerTrustAuthResponse(
-                      action: ServerTrustAuthResponseAction.PROCEED);
-                },
               ),
-            ),
-          ),
-        ])));
+            ])));
   }
 }

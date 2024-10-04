@@ -13,6 +13,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'dart:ui' as ui show ImageFilter;
 
+import 'course_detail_new.dart';
 import 'webview_inapp.dart';
 
 // ignore: must_be_immutable
@@ -41,28 +42,26 @@ class _CourseEternalPageState extends State<CourseEternalPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundTheme,
-      appBar: AppBar(
         backgroundColor: backgroundTheme,
-        automaticallyImplyLeading: false,
-        flexibleSpace: Container(
-          width: double.infinity,
-          height: 60 + MediaQuery.of(context).padding.top,
-          color: backgroundTheme,
-          padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top,
-            left: 15,
-            right: 15,
+        appBar: AppBar(
+          backgroundColor: backgroundTheme,
+          automaticallyImplyLeading: false,
+          flexibleSpace: Container(
+            width: double.infinity,
+            height: 60 + MediaQuery.of(context).padding.top,
+            color: backgroundTheme,
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).padding.top,
+              left: 15,
+              right: 15,
+            ),
+            child: _buildHead(),
           ),
-          child: _buildHead(),
         ),
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(vertical: 30,horizontal: 15),
-        child: _buildListModel(),
-      )
-      
-    );
+        body: Container(
+          padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+          child: _buildListModel(),
+        ));
   }
 
   _buildListModel() {
@@ -95,7 +94,14 @@ class _CourseEternalPageState extends State<CourseEternalPage> {
   Widget containerEternal(dynamic model) {
     return GestureDetector(
       onTap: () {
-        
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CourseDetailNewPage(
+              model: model,
+            ),
+          ),
+        );
       },
       child: Container(
         color: Theme.of(context).custom.primary,
@@ -263,7 +269,6 @@ class _CourseEternalPageState extends State<CourseEternalPage> {
         InkWell(
           onTap: () {
             Navigator.pop(context);
-          
           },
           child: Container(
             height: 35,
