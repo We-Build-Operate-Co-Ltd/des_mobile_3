@@ -323,7 +323,7 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
           Stack(
             children: [
               _buildBookingForm(),
-              const Spacer(),
+              // const Spacer(),
               Positioned(
                 bottom: 0,
                 child: Container(
@@ -409,7 +409,7 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
               SizedBox(
                 height: double.infinity,
                 child: ListView(
-                  shrinkWrap: true,
+                  shrinkWrap: false,
                   padding: EdgeInsets.zero,
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

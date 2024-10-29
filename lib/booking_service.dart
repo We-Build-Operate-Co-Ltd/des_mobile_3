@@ -742,15 +742,18 @@ class _BookingServicePageState extends State<BookingServicePage>
         Container(
           height: 50,
           child: Autocomplete<String>(
+            initialValue: _searchController.value,
             fieldViewBuilder: (BuildContext context,
                 TextEditingController controller,
                 FocusNode focusNode,
                 VoidCallback onFieldSubmitted) {
+                  
               return TextFormField(
                 decoration: _decorationSearch(
                   context,
                   hintText: 'พิมพ์คำค้นหา',
                 ),
+                
                 controller: controller,
                 focusNode: focusNode,
                 style: TextStyle(
@@ -763,6 +766,18 @@ class _BookingServicePageState extends State<BookingServicePage>
                 ),
                 onFieldSubmitted: (String value) {
                   onFieldSubmitted();
+                },
+                onChanged: (value) {
+                  setState(() {
+                    filter['provinceSelected'] = '0';
+                    filter['provinceSelectedTitle'] = '';
+                    filter['districtSelected'] = '0';
+                    filter['districtSelectedTitle'] = '';
+                    districtList.clear();
+                    districtList = [
+                      {"label": 'เลือกอำเภอ', "value": '0'}
+                    ];
+                  });
                 },
               );
             },
@@ -777,6 +792,14 @@ class _BookingServicePageState extends State<BookingServicePage>
             onSelected: (String selection) {
               setState(() {
                 _searchController.text = selection;
+                filter['provinceSelected'] = '0';
+                filter['provinceSelectedTitle'] = '';
+                filter['districtSelected'] = '0';
+                filter['districtSelectedTitle'] = '';
+                districtList.clear();
+                districtList = [
+                  {"label": 'เลือกอำเภอ', "value": '0'}
+                ];
               });
             },
           ),
@@ -797,7 +820,7 @@ class _BookingServicePageState extends State<BookingServicePage>
             Expanded(
               child: _dropdown(
                 data: provinceList,
-                value: '0',
+                value: filter['provinceSelected'],
                 onChanged: (p0) {
                   setState(() {
                     filter['provinceTitleSelected'] =
@@ -805,7 +828,13 @@ class _BookingServicePageState extends State<BookingServicePage>
                             (e) => e['value'] == int.parse(p0))['label'];
                     filter['provinceSelected'] = p0;
                   });
+                  _searchController.clear();
+                  districtList.clear();
+                  districtList = [
+                    {"label": 'เลือกอำเภอ', "value": '0'}
+                  ];
                   _callReadDistrict();
+                  print('>>>>>>> ${_searchController}');
                 },
               ),
               // GestureDetector(
@@ -916,13 +945,13 @@ class _BookingServicePageState extends State<BookingServicePage>
             var startTime = _currentPage == 0 ? txtStartTime.text : '';
             var endTime = _currentPage == 0 ? txtEndTime.text : '';
             var search = _searchController.text;
-            bool isFilterEmpty = (filter['provinceSelected'] == '0' ||
-                    filter['provinceTitleSelected'].isEmpty) &&
-                (filter['districtSelected'] == '0' ||
-                    filter['districtTitleSelected'].isEmpty) &&
-                filter['bookingType'].isEmpty &&
-                filter['latitude'].isEmpty &&
-                filter['longitude'].isEmpty;
+            bool isFilterEmpty = (filter['provinceSelected'] == '0') &&
+                (filter['districtSelected'] == '0');
+            // &&
+            // filter['bookingType'].isEmpty
+            // &&
+            // filter['latitude'].isEmpty &&
+            // filter['longitude'].isEmpty;
 
             Navigator.push(
               context,
@@ -2678,6 +2707,10 @@ class _BookingServicePageState extends State<BookingServicePage>
       await dio.get('$ondeURL/api/masterdata/changwat').then((value) => {
             setState(() {
               provinceList.addAll(value.data);
+              districtList.clear();
+              districtList = [
+                {"label": 'เลือกอำเภอ', "value": '0'}
+              ];
             })
           });
     } catch (e) {
