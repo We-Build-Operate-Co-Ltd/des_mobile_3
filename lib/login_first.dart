@@ -121,7 +121,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           child: Stack(
             children: [
               Container(
-                height: 1000,
+                height: MediaQuery.of(context).size.height,
                 // height: 300,
                 // alignment: Alignment.topCenter,
                 decoration: BoxDecoration(
@@ -145,6 +145,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                         left: 0,
                         right: 0,
                         child: Image(
+                          height: MediaQuery.of(context).size.height * 0.35,
                           image: AssetImage(
                             MyApp.themeNotifier.value == ThemeModeThird.light
                                 ? "assets/images/Owl-8 2.png"
@@ -163,12 +164,12 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                 child: SingleChildScrollView(
                   child: Container(
                     alignment: Alignment.bottomCenter,
-                    // height:  MediaQuery.of(context).size.height * .650,
-                    height: (deviceHeight >= 500 && deviceHeight < 800)
-                        ? 300
-                        : (deviceHeight >= 800)
-                            ? 500
-                            : deviceHeight * 0.2,
+                    height:  MediaQuery.of(context).size.height * 0.650,
+                    // height: (deviceHeight >= 500 && deviceHeight < 800)
+                    //     ? 300
+                    //     : (deviceHeight >= 800)
+                    //         ? 500
+                    //         : deviceHeight * 0.2,
                     padding: EdgeInsets.only(top: 20, left: 40, right: 40),
                     decoration: BoxDecoration(
                       color: MyApp.themeNotifier.value == ThemeModeThird.light
