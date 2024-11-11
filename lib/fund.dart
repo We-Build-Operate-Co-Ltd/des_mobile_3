@@ -171,7 +171,7 @@ class _FundPageState extends State<FundPage> {
               image: AssetImage(
                 MyApp.themeNotifier.value == ThemeModeThird.light
                     ? "assets/images/BG.png"
-                    : "",
+                    : "assets/images/2024/BG_Blackwhite.jpg",
               ),
               fit: BoxFit.cover,
             ),
@@ -205,24 +205,32 @@ class _FundPageState extends State<FundPage> {
                                   height: 35.0,
                                   margin: EdgeInsets.all(5),
                                   child: Image.asset(
-                                    'assets/images/back_profile.png',
-                                    // color: Colors.white,
-                                  ),
+                                      MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? 'assets/images/back_profile.png'
+                                          : "assets/images/2024/back_balckwhite.png"
+                                      // color: Colors.white,
+                                      ),
                                 ),
                               ),
                               SizedBox(width: 10),
-                              Text(
-                                'สรรหาแหล่งทุน',
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w500,
-                                  color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Color(0xFFB325F8)
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.white
-                                          : Color(0xFFFFFD57),
+                              Flexible(
+                                child: Text(
+                                  'สรรหาแหล่งทุน',
+                                  style: TextStyle(
+                                    fontSize:
+                                        MyApp.fontKanit.value == FontKanit.small
+                                            ? 24
+                                            : 22,
+                                    fontWeight: FontWeight.w500,
+                                    color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Color(0xFFB325F8)
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
+                                  ),
                                 ),
                               ),
                             ],
@@ -242,10 +250,15 @@ class _FundPageState extends State<FundPage> {
                           Text(
                             cateFund[_typeSelected],
                             style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                              color: Color(0xFFB325F8),
-                            ),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFFBD4BF7)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57)),
                           ),
                           SizedBox(height: 20),
                           if (_typeSelected == 0)
@@ -263,26 +276,49 @@ class _FundPageState extends State<FundPage> {
                                       // });
                                     },
                                     style: TextStyle(
-                                      color: const Color(0xff020202),
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Colors.black
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Color(0xFFFFFD57),
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
                                       letterSpacing: 0.5,
                                     ),
                                     decoration: InputDecoration(
                                       filled: true,
-                                      fillColor: Colors.white,
+                                      fillColor: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Colors.white
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.black
+                                              : Colors.black,
                                       focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
                                         borderSide: BorderSide(
-                                            color: Color(0xFFDDDDDD)),
+                                            color: MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.light
+                                                ? Color(0xFFBD4BF7)
+                                                : MyApp.themeNotifier.value ==
+                                                        ThemeModeThird.dark
+                                                    ? Colors.white
+                                                    : Color(0xFFFFFD57),
+                                            width: 1),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
                                       enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
                                         borderSide: BorderSide(
-                                            width: 1.0,
-                                            color: Color(
-                                                0xFFDDDDDD) // Border color when focused
-                                            ),
+                                            color: MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.light
+                                                ? Color(0xFFBD4BF7)
+                                                : MyApp.themeNotifier.value ==
+                                                        ThemeModeThird.dark
+                                                    ? Colors.white
+                                                    : Color(0xFFFFFD57),
+                                            width: 1),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
@@ -293,14 +329,27 @@ class _FundPageState extends State<FundPage> {
                                       ),
                                       hintText: 'พิมพ์คำค้นหา',
                                       hintStyle: TextStyle(
-                                        color: Colors.black,
+                                        color: MyApp.themeNotifier.value ==
+                                                ThemeModeThird.light
+                                            ? Color(0xFFBD4BF7)
+                                            : MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.dark
+                                                ? Colors.white
+                                                : Color(0xFFFFFD57),
                                         fontSize: 15,
                                         fontWeight: FontWeight.w400,
                                         letterSpacing: 0.5,
                                         decorationThickness: 6,
                                       ),
                                       prefixIcon: const Icon(Icons.search),
-                                      prefixIconColor: Colors.black,
+                                      prefixIconColor:
+                                          MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.light
+                                              ? Color(0xFFBD4BF7)
+                                              : MyApp.themeNotifier.value ==
+                                                      ThemeModeThird.dark
+                                                  ? Colors.white
+                                                  : Color(0xFFFFFD57),
                                       suffixIcon: Align(
                                         widthFactor: 1.0,
                                         heightFactor: 1.0,
@@ -308,8 +357,14 @@ class _FundPageState extends State<FundPage> {
                                           onTap: () {
                                             _showModelBottonSheetFund(context);
                                           },
-                                          child: Image.asset(
-                                              'assets/images/filter.png'),
+                                          child: Image.asset(MyApp
+                                                      .themeNotifier.value ==
+                                                  ThemeModeThird.light
+                                              ? 'assets/images/filter.png'
+                                              : MyApp.themeNotifier.value ==
+                                                      ThemeModeThird.dark
+                                                  ? "assets/images/2024/filter_w.png"
+                                                  : "assets/images/2024/filter_y.png"),
                                         ),
                                       ),
                                     ),
@@ -330,7 +385,15 @@ class _FundPageState extends State<FundPage> {
                                     width: double.infinity,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      color: Color(0xFFB325F8),
+                                      color:
+                                          // ? Color(0xFFB325F8)
+                                          MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.light
+                                              ? Color(0xFFBD4BF7)
+                                              : MyApp.themeNotifier.value ==
+                                                      ThemeModeThird.dark
+                                                  ? Colors.white
+                                                  : Color(0xFFFFFD57),
                                       borderRadius: BorderRadius.circular(24),
                                       boxShadow: const [
                                         BoxShadow(
@@ -340,12 +403,18 @@ class _FundPageState extends State<FundPage> {
                                         )
                                       ],
                                     ),
-                                    child: const Text(
+                                    child: Text(
                                       'ค้นหาแหล่งทุน',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
-                                        color: Colors.white,
+                                        color: MyApp.themeNotifier.value ==
+                                                ThemeModeThird.light
+                                            ? Color(0xFFBD4BF7)
+                                            : MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.dark
+                                                ? Colors.black
+                                                : Colors.black,
                                       ),
                                     ),
                                   ),
@@ -360,14 +429,26 @@ class _FundPageState extends State<FundPage> {
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 15,
-                                      color: Color(0xFFB325F8),
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Color(0xFFBD4BF7)
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Color(0xFFFFFD57),
                                     ),
                                   ),
                                 ),
                                 if (_loadingWidget)
                                   Center(
                                     child: CircularProgressIndicator(
-                                      color: Color(0xFFB325F8),
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Color(0xFFBD4BF7)
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Color(0xFFFFFD57),
                                     ),
                                   )
                                 else
@@ -400,22 +481,42 @@ class _FundPageState extends State<FundPage> {
                                     width: double.infinity,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Color(0xFFBD4BF7)
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Colors.black,
                                       borderRadius: BorderRadius.circular(24),
                                       border: Border.all(
-                                        color: Color(0xFFB325F8),
+                                        width: 1.0,
+                                        color: MyApp.themeNotifier.value ==
+                                                ThemeModeThird.light
+                                            ? Color(0xFFBD4BF7)
+                                            : MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.dark
+                                                ? Colors.white
+                                                : Color(0xFFFFFD57),
                                       ),
                                     ),
-                                    child: const Text(
+                                    child: Text(
                                       'ดูเพิ่มเติม',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
-                                        color: Color(0xFFB325F8),
+                                        color: MyApp.themeNotifier.value ==
+                                                ThemeModeThird.light
+                                            ? Colors.white
+                                            : MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.dark
+                                                ? Colors.black
+                                                : Color(0xFFFFFD57),
                                       ),
                                     ),
                                   ),
                                 ),
+
                                 SizedBox(
                                   height: 60,
                                 ),
@@ -452,7 +553,11 @@ class _FundPageState extends State<FundPage> {
               height: MediaQuery.of(context).size.height * 0.75,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.white
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.black
+                        : Colors.black,
                 borderRadius:
                     BorderRadius.vertical(bottom: Radius.circular(24.0)),
               ),
@@ -490,7 +595,10 @@ class _FundPageState extends State<FundPage> {
                           onTap: () {
                             Navigator.pop(context);
                           },
-                          child: Image.asset('assets/images/back-x.png'),
+                          child: Image.asset(
+                              MyApp.themeNotifier.value == ThemeModeThird.light
+                                  ? 'assets/images/back-x.png'
+                                  : "assets/images/2024/exit_new.png"),
                         ),
                       ),
                     ),
@@ -502,14 +610,23 @@ class _FundPageState extends State<FundPage> {
                       onChanged: (value) {},
                       controller: _searchFilterController,
                       style: TextStyle(
-                        color: const Color(0xff020202),
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.black
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         letterSpacing: 0.5,
                       ),
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: MyApp.themeNotifier.value ==
+                                ThemeModeThird.light
+                            ? Colors.white
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.black
+                                : Colors.black,
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(color: Color(0xFFDDDDDD)),
@@ -517,26 +634,50 @@ class _FundPageState extends State<FundPage> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                              width: 1.0,
-                              color:
-                                  Color(0xFFDDDDDD) // Border color when focused
-                              ),
+                            width: 1.0,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFBD4BF7)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                          ),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                              color: Color(0xFFDDDDDD) // Default border color
-                              ),
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFBD4BF7)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                          ),
                         ),
                         hintText: 'พิมพ์คำค้นหา',
                         hintStyle: TextStyle(
-                          color: Colors.black,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
                           letterSpacing: 0.5,
                           decorationThickness: 6,
                         ),
-                        prefixIcon: const Icon(Icons.search),
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        ),
                       ),
                     ),
                   ),
@@ -549,6 +690,11 @@ class _FundPageState extends State<FundPage> {
                         fontSize: 15,
                         fontFamily: 'Kanit',
                         fontWeight: FontWeight.w500,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFFBD4BF7)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       ),
                     ),
                   ),
@@ -592,7 +738,11 @@ class _FundPageState extends State<FundPage> {
                       width: double.infinity,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: Color(0xFFB325F8),
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFFBD4BF7)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: const [
                           BoxShadow(
@@ -602,12 +752,17 @@ class _FundPageState extends State<FundPage> {
                           ),
                         ],
                       ),
-                      child: const Text(
+                      child: Text(
                         'ค้นหาแหล่งทุน',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
-                          color: Colors.white,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.white
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.black
+                                  : Colors.black,
                         ),
                       ),
                     ),
@@ -650,7 +805,11 @@ class _FundPageState extends State<FundPage> {
             mode: LaunchMode.externalApplication);
       },
       child: Container(
-        height: 120,
+        height: MyApp.fontKanit.value == FontKanit.small
+            ? 120
+            : MyApp.fontKanit.value == FontKanit.medium
+                ? 150
+                : 180,
         decoration: BoxDecoration(
           color: Theme.of(context).custom.w_b_b,
           borderRadius: BorderRadius.circular(10),
@@ -664,22 +823,32 @@ class _FundPageState extends State<FundPage> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Container(
-                    width: 160.8,
-                    height: 95,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Color(0xFFDDDDDD),
+                      width: 160.8,
+                      height: 95,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xFFDDDDDD),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        // color: Color(0xFFDDDDDD),
                       ),
-                      borderRadius: BorderRadius.circular(10),
-                      // color: Color(0xFFDDDDDD),
-                    ),
-                    child: CachedNetworkImage(
-                      imageUrl: data['imageUrl'],
-                      width: 120,
-                      height: 120,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+                      child: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? CachedNetworkImage(
+                              imageUrl: data['imageUrl'],
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.contain,
+                            )
+                          : ColorFiltered(
+                              colorFilter: ColorFilter.mode(
+                                  Colors.grey, BlendMode.saturation),
+                              child: CachedNetworkImage(
+                                imageUrl: data['imageUrl'],
+                                width: 120,
+                                height: 120,
+                                fit: BoxFit.contain,
+                              ),
+                            )),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -688,13 +857,16 @@ class _FundPageState extends State<FundPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          data['title'],
-                          style: TextStyle(
-                              fontSize: 16,
+                        Flexible(
+                          child: Text(
+                            data['title'],
+                            style: TextStyle(
+                              fontSize: 14,
                               color: Theme.of(context).custom.b_w_y,
-                              overflow: TextOverflow.ellipsis),
-                          maxLines: 4,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 4,
+                          ),
                         ),
                       ],
                     ),
@@ -788,7 +960,11 @@ class _FundPageState extends State<FundPage> {
 
   _buildListFundCategory() {
     return Container(
-        height: 25,
+        height: MyApp.fontKanit.value == FontKanit.small
+            ? 25
+            : MyApp.fontKanit.value == FontKanit.medium
+                ? 35
+                : 45,
         child: ListView.separated(
           padding: EdgeInsets.symmetric(horizontal: 15),
           scrollDirection: Axis.horizontal,
@@ -803,17 +979,30 @@ class _FundPageState extends State<FundPage> {
               padding: EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
                 color: __ == _typeSelected
-                    ? Color(0xFFB325F8)
+                    // ? Color(0xFFB325F8)
+                    ? MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFBD4BF7)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57)
                     : Color(0xFFB325F8).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(17.5),
               ),
               child: Text(
                 cateFund[__],
                 style: TextStyle(
-                  color: __ == _typeSelected
-                      ? Colors.white
-                      : Color(0xFFB325F8).withOpacity(0.5),
-                ),
+                    color: __ == _typeSelected
+                        ? MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.white
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.black
+                                : Colors.black
+                        // : Color(0xFFB325F8).withOpacity(0.5),
+                        : MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFFB325F8).withOpacity(0.5)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57)),
               ),
             ),
           ),

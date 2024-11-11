@@ -75,6 +75,8 @@ class _HomePageState extends State<HomePage> {
   int notiCount = 0;
   int currentTabIndex = 0;
   int viewAdd = 4;
+  double _hight = 30.0;
+  double _width = 30.0;
 
   String? profileCode = "";
   String? profileUserName = "";
@@ -132,7 +134,9 @@ class _HomePageState extends State<HomePage> {
     return Stack(
       children: <Widget>[
         Image.asset(
-          "assets/images/new_bg.png",
+          MyApp.themeNotifier.value == ThemeModeThird.light
+              ? "assets/images/BG.png"
+              : "assets/images/2024/BG_Blackwhite.jpg",
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           fit: BoxFit.cover,
@@ -142,118 +146,261 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.transparent,
           body: Column(
             children: [
-              Container(
-                height: 125,
-                padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).padding.top + 10,
-                  right: 15,
-                  left: 15,
-                ),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/Owl-10.png',
-                      height: 39,
-                      width: 48,
-                    ),
-                    const SizedBox(width: 5),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              IntrinsicHeight(
+                child: Container(
+                  // height: 125,
+                  height: MyApp.fontKanit.value != FontKanit.small &&
+                          MyApp.fontKanit.value != FontKanit.medium
+                      ? 150
+                      : 125,
+                  padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).padding.top + 10,
+                    right: 15,
+                    left: 15,
+                  ),
+                  child: Expanded(
+                    child: Row(
                       children: [
-                        Text(
-                          'ศูนย์ดิจิทัลชุมชน',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Colors.white
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                            fontWeight: FontWeight.w600,
+                        Expanded(
+                          flex: 1,
+                          child: Image.asset(
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/Owl-10.png'
+                                : "assets/images/2024/Owl-10_blackwhite.png",
+                            height: 39,
+                            width: 48,
                           ),
                         ),
-                        Text(
-                          'Digital Community Center',
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Colors.white
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                            fontWeight: FontWeight.w600,
+                        const SizedBox(width: 5),
+                        Expanded(
+                          flex: 5,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Wrap(
+                                direction: Axis.horizontal,
+                                spacing: 8.0, // ระยะห่างระหว่าง widget
+                                runSpacing: 4.0,
+                                children: [
+                                  Text(
+                                    'ศูนย์ดิจิทัลชุมชน',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Colors.white
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Color(0xFFFFFD57),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    // overflow:
+                                    //     TextOverflow.visible, // ป้องกันการตัดคำ
+                                    maxLines: 2,
+                                  ),
+                                  Text(
+                                    'Digital Community Center',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Colors.white
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Color(0xFFFFFD57),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    // maxLines: 1,
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Flexible(
+                          flex: 2,
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            child: Wrap(
+                              direction: Axis.horizontal,
+                              spacing: 8.0, // ระยะห่างระหว่าง widget
+                              runSpacing: 4.0,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    buildModalSwitch(context);
+                                  },
+                                  child: Image.asset(
+                                    MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? 'assets/images/icon_blind.png'
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? 'assets/images/icon_blind_d.png'
+                                            : 'assets/images/icon_blind_d-y.png',
+                                    height: _hight,
+                                    width: _width,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    widget.changePage!(3);
+                                  },
+                                  child: Consumer<CounterNotifier>(
+                                    builder: (context, counterNotifier, child) {
+                                      return notiCount > 0
+                                          ? badges.Badge(
+                                              badgeContent: Text(
+                                                counterNotifier.counter
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              child: Image.asset(
+                                                MyApp.themeNotifier.value ==
+                                                        ThemeModeThird.light
+                                                    ? 'assets/images/notification.png'
+                                                    : MyApp.themeNotifier
+                                                                .value ==
+                                                            ThemeModeThird.dark
+                                                        ? 'assets/images/notification_d.png'
+                                                        : 'assets/images/notification_d-y.png',
+                                                height: _hight,
+                                                width: _width,
+                                              ),
+                                            )
+                                          : Image.asset(
+                                              MyApp.themeNotifier.value ==
+                                                      ThemeModeThird.light
+                                                  ? 'assets/images/notification.png'
+                                                  : MyApp.themeNotifier.value ==
+                                                          ThemeModeThird.dark
+                                                      ? 'assets/images/notification_d.png'
+                                                      : 'assets/images/notification_d-y.png',
+                                              height: _hight,
+                                              width: _width,
+                                            );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    const Expanded(child: SizedBox()),
-                    const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () {
-                        buildModalSwitch(context);
-                      },
-                      child: Image.asset(
-                        MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? 'assets/images/icon_blind.png'
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? 'assets/images/icon_blind_d.png'
-                                : 'assets/images/icon_blind_d-y.png',
-                        height: 35,
-                        width: 35,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () {
-                        // Fluttertoast.showToast(
-                        //     msg: '''ยังไม่เปิดให้ใช้บริการ''');
-                        widget.changePage!(3);
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => NotificationBookingPage(),
-                        //   ),
-                        // );
-                      },
-                      child: Consumer<CounterNotifier>(
-                        builder: (context, counterNotifier, child) {
-                          return notiCount > 0
-                              ? badges.Badge(
-                                  badgeContent: Text(
-                                    counterNotifier.counter.toString(),
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  child: Image.asset(
-                                    MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? 'assets/images/notification.png'
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? 'assets/images/notification_d.png'
-                                            : 'assets/images/notification_d-y.png',
-                                    height: 35,
-                                    width: 35,
-                                  ),
-                                )
-                              : Image.asset(
-                                  MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? 'assets/images/notification.png'
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? 'assets/images/notification_d.png'
-                                          : 'assets/images/notification_d-y.png',
-                                  height: 35,
-                                  width: 35,
-                                );
-                        },
-                      ),
-                    ),
-                  ],
+                  ),
+                  // child: Row(
+                  //   children: [
+                  //     Image.asset(
+                  //       MyApp.themeNotifier.value == ThemeModeThird.light
+                  //           ? 'assets/images/Owl-10.png'
+                  //           : "assets/images/2024/Owl-10_blackwhite.png",
+                  //       height: 39,
+                  //       width: 48,
+                  //     ),
+                  //     const SizedBox(width: 5),
+                  //     Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text(
+                  //           'ศูนย์ดิจิทัลชุมชน',
+                  //           style: TextStyle(
+                  //             fontSize: 18,
+                  //             color: MyApp.themeNotifier.value ==
+                  //                     ThemeModeThird.light
+                  //                 ? Colors.white
+                  //                 : MyApp.themeNotifier.value ==
+                  //                         ThemeModeThird.dark
+                  //                     ? Colors.white
+                  //                     : Color(0xFFFFFD57),
+                  //             fontWeight: FontWeight.w600,
+                  //           ),
+                  //         ),
+                  //         Text(
+                  //           'Digital Community Center',
+                  //           style: TextStyle(
+                  //             fontSize: 11,
+                  //             color: MyApp.themeNotifier.value ==
+                  //                     ThemeModeThird.light
+                  //                 ? Colors.white
+                  //                 : MyApp.themeNotifier.value ==
+                  //                         ThemeModeThird.dark
+                  //                     ? Colors.white
+                  //                     : Color(0xFFFFFD57),
+                  //             fontWeight: FontWeight.w600,
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     const Expanded(child: SizedBox()),
+                  //     const SizedBox(width: 10),
+                  //     GestureDetector(
+                  //       onTap: () {
+                  //         buildModalSwitch(context);
+                  //       },
+                  //       child: Image.asset(
+                  //         MyApp.themeNotifier.value == ThemeModeThird.light
+                  //             ? 'assets/images/icon_blind.png'
+                  //             : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  //                 ? 'assets/images/icon_blind_d.png'
+                  //                 : 'assets/images/icon_blind_d-y.png',
+                  //         height: 35,
+                  //         width: 35,
+                  //       ),
+                  //     ),
+                  //     const SizedBox(width: 10),
+                  //     GestureDetector(
+                  //       onTap: () {
+                  //         // Fluttertoast.showToast(
+                  //         //     msg: '''ยังไม่เปิดให้ใช้บริการ''');
+                  //         widget.changePage!(3);
+                  //         // Navigator.push(
+                  //         //   context,
+                  //         //   MaterialPageRoute(
+                  //         //     builder: (context) => NotificationBookingPage(),
+                  //         //   ),
+                  //         // );
+                  //       },
+                  //       child: Consumer<CounterNotifier>(
+                  //         builder: (context, counterNotifier, child) {
+                  //           return notiCount > 0
+                  //               ? badges.Badge(
+                  //                   badgeContent: Text(
+                  //                     counterNotifier.counter.toString(),
+                  //                     style: TextStyle(color: Colors.white),
+                  //                   ),
+                  //                   child: Image.asset(
+                  //                     MyApp.themeNotifier.value ==
+                  //                             ThemeModeThird.light
+                  //                         ? 'assets/images/notification.png'
+                  //                         : MyApp.themeNotifier.value ==
+                  //                                 ThemeModeThird.dark
+                  //                             ? 'assets/images/notification_d.png'
+                  //                             : 'assets/images/notification_d-y.png',
+                  //                     height: 35,
+                  //                     width: 35,
+                  //                   ),
+                  //                 )
+                  //               : Image.asset(
+                  //                   MyApp.themeNotifier.value ==
+                  //                           ThemeModeThird.light
+                  //                       ? 'assets/images/notification.png'
+                  //                       : MyApp.themeNotifier.value ==
+                  //                               ThemeModeThird.dark
+                  //                           ? 'assets/images/notification_d.png'
+                  //                           : 'assets/images/notification_d-y.png',
+                  //                   height: 35,
+                  //                   width: 35,
+                  //                 );
+                  //         },
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ),
               ),
               Expanded(
@@ -301,6 +448,131 @@ class _HomePageState extends State<HomePage> {
                                 height: 200,
                                 child: Column(
                                   children: [
+                                    // SizedBox(
+                                    //   height: 180,
+                                    //   child: CarouselSlider(
+                                    //     options: CarouselOptions(
+                                    //       aspectRatio: 4,
+                                    //       enlargeCenterPage: true,
+                                    //       scrollDirection: Axis.horizontal,
+                                    //       viewportFraction: 0.9,
+                                    //       autoPlay: true,
+                                    //       enlargeFactor: 0.4,
+                                    //       enlargeStrategy:
+                                    //           CenterPageEnlargeStrategy.zoom,
+                                    //       onPageChanged: (index, reason) {
+                                    //         setState(() {
+                                    //           _currentBanner = index;
+                                    //         });
+                                    //       },
+                                    //     ),
+                                    //     items: snapshot.data.map<Widget>(
+                                    //       (item) {
+                                    //         int index =
+                                    //             snapshot.data.indexOf(item);
+                                    //         return GestureDetector(
+                                    //           onTap: () {
+                                    //             if (snapshot.data[
+                                    //                         _currentBanner]
+                                    //                     ['action'] ==
+                                    //                 'out') {
+                                    //               if (snapshot
+                                    //                       .data[_currentBanner]
+                                    //                   ['isPostHeader']) {
+                                    //                 var path = snapshot.data[
+                                    //                         _currentBanner]
+                                    //                     ['linkUrl'];
+                                    //                 if (profileCode != '') {
+                                    //                   var splitCheck = path
+                                    //                       .split('')
+                                    //                       .reversed
+                                    //                       .join();
+                                    //                   if (splitCheck[0] !=
+                                    //                       "/") {
+                                    //                     path = path + "/";
+                                    //                   }
+                                    //                   var codeReplae = "B" +
+                                    //                       profileCode!
+                                    //                           .replaceAll(
+                                    //                               '-', '') +
+                                    //                       snapshot.data[
+                                    //                               _currentBanner]
+                                    //                               ['code']
+                                    //                           .replaceAll(
+                                    //                               '-', '');
+                                    //                   // launchUrl(Uri.parse('$path$codeReplae'),
+                                    //                   //     mode:
+                                    //                   //         LaunchMode.externalApplication);
+                                    //                   Navigator.push(
+                                    //                     context,
+                                    //                     MaterialPageRoute(
+                                    //                       builder: (_) =>
+                                    //                           WebViewInAppPage(
+                                    //                         url:
+                                    //                             "$path$codeReplae",
+                                    //                         title: snapshot
+                                    //                                     .data[
+                                    //                                 _currentBanner]
+                                    //                             ['title'],
+                                    //                       ),
+                                    //                     ),
+                                    //                   );
+                                    //                 }
+                                    //               } else
+                                    //                 // launchUrl(
+                                    //                 //     Uri.parse(snapshot
+                                    //                 //         .data[_currentBanner]['linkUrl']),
+                                    //                 //     mode: LaunchMode.externalApplication);
+                                    //                 Navigator.push(
+                                    //                   context,
+                                    //                   MaterialPageRoute(
+                                    //                     builder: (_) =>
+                                    //                         WebViewInAppPage(
+                                    //                       url: snapshot.data[
+                                    //                               _currentBanner]
+                                    //                           ['linkUrl'],
+                                    //                       title: snapshot.data[
+                                    //                               _currentBanner]
+                                    //                           ['title'],
+                                    //                     ),
+                                    //                   ),
+                                    //                 );
+                                    //             } else if (snapshot.data[
+                                    //                         _currentBanner]
+                                    //                     ['action'] ==
+                                    //                 'in') {
+                                    //               Navigator.push(
+                                    //                 context,
+                                    //                 MaterialPageRoute(
+                                    //                   builder: (context) =>
+                                    //                       DetailPage(
+                                    //                     slug: 'mock',
+                                    //                     model: snapshot.data[
+                                    //                         _currentBanner],
+                                    //                   ),
+                                    //                 ),
+                                    //               );
+                                    //             }
+                                    //           },
+                                    //           child: ClipRRect(
+                                    //             borderRadius: _currentBanner ==
+                                    //                     index
+                                    //                 ? BorderRadius.all(
+                                    //                     Radius.circular(20))
+                                    //                 : BorderRadius.circular(0),
+                                    //             child: CachedNetworkImage(
+                                    //               imageUrl: item['imageUrl'],
+                                    //               fit: BoxFit.cover,
+                                    //               width: double.infinity,
+                                    //               height: double.infinity,
+                                    //             ),
+                                    //           ),
+                                    //         );
+                                    //       },
+                                    //     ).toList(),
+                                    //   ),
+                                    // ),
+
                                     SizedBox(
                                       height: 180,
                                       child: CarouselSlider(
@@ -319,112 +591,120 @@ class _HomePageState extends State<HomePage> {
                                             });
                                           },
                                         ),
-                                        items: snapshot.data.map<Widget>(
-                                          (item) {
-                                            int index =
-                                                snapshot.data.indexOf(item);
-                                            return GestureDetector(
-                                              onTap: () {
-                                                if (snapshot.data[
-                                                            _currentBanner]
-                                                        ['action'] ==
-                                                    'out') {
-                                                  if (snapshot
+                                        items:
+                                            snapshot.data.map<Widget>((item) {
+                                          int index =
+                                              snapshot.data.indexOf(item);
+                                          return GestureDetector(
+                                            onTap: () {
+                                              if (snapshot.data[_currentBanner]
+                                                      ['action'] ==
+                                                  'out') {
+                                                if (snapshot
+                                                        .data[_currentBanner]
+                                                    ['isPostHeader']) {
+                                                  var path = snapshot
                                                           .data[_currentBanner]
-                                                      ['isPostHeader']) {
-                                                    var path = snapshot.data[
-                                                            _currentBanner]
-                                                        ['linkUrl'];
-                                                    if (profileCode != '') {
-                                                      var splitCheck = path
-                                                          .split('')
-                                                          .reversed
-                                                          .join();
-                                                      if (splitCheck[0] !=
-                                                          "/") {
-                                                        path = path + "/";
-                                                      }
-                                                      var codeReplae = "B" +
-                                                          profileCode!
-                                                              .replaceAll(
-                                                                  '-', '') +
-                                                          snapshot.data[
-                                                                  _currentBanner]
-                                                                  ['code']
-                                                              .replaceAll(
-                                                                  '-', '');
-                                                      // launchUrl(Uri.parse('$path$codeReplae'),
-                                                      //     mode:
-                                                      //         LaunchMode.externalApplication);
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (_) =>
-                                                              WebViewInAppPage(
-                                                            url:
-                                                                "$path$codeReplae",
-                                                            title: snapshot
-                                                                        .data[
-                                                                    _currentBanner]
-                                                                ['title'],
-                                                          ),
-                                                        ),
-                                                      );
+                                                      ['linkUrl'];
+                                                  if (profileCode != '') {
+                                                    var splitCheck = path
+                                                        .split('')
+                                                        .reversed
+                                                        .join();
+                                                    if (splitCheck[0] != "/") {
+                                                      path = path + "/";
                                                     }
-                                                  } else
-                                                    // launchUrl(
-                                                    //     Uri.parse(snapshot
-                                                    //         .data[_currentBanner]['linkUrl']),
-                                                    //     mode: LaunchMode.externalApplication);
+                                                    var codeReplae = "B" +
+                                                        profileCode!.replaceAll(
+                                                            '-', '') +
+                                                        snapshot.data[
+                                                                _currentBanner]
+                                                                ['code']
+                                                            .replaceAll(
+                                                                '-', '');
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
                                                         builder: (_) =>
                                                             WebViewInAppPage(
-                                                          url: snapshot.data[
-                                                                  _currentBanner]
-                                                              ['linkUrl'],
+                                                          url:
+                                                              "$path$codeReplae",
                                                           title: snapshot.data[
                                                                   _currentBanner]
                                                               ['title'],
                                                         ),
                                                       ),
                                                     );
-                                                } else if (snapshot.data[
-                                                            _currentBanner]
-                                                        ['action'] ==
-                                                    'in') {
+                                                  }
+                                                } else {
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          DetailPage(
-                                                        slug: 'mock',
-                                                        model: snapshot.data[
-                                                            _currentBanner],
+                                                      builder: (_) =>
+                                                          WebViewInAppPage(
+                                                        url: snapshot.data[
+                                                                _currentBanner]
+                                                            ['linkUrl'],
+                                                        title: snapshot.data[
+                                                                _currentBanner]
+                                                            ['title'],
                                                       ),
                                                     ),
                                                   );
                                                 }
-                                              },
-                                              child: ClipRRect(
-                                                borderRadius: _currentBanner ==
-                                                        index
-                                                    ? BorderRadius.all(
-                                                        Radius.circular(20))
-                                                    : BorderRadius.circular(0),
-                                                child: CachedNetworkImage(
-                                                  imageUrl: item['imageUrl'],
-                                                  fit: BoxFit.cover,
-                                                  width: double.infinity,
-                                                  height: double.infinity,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ).toList(),
+                                              } else if (snapshot
+                                                          .data[_currentBanner]
+                                                      ['action'] ==
+                                                  'in') {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DetailPage(
+                                                      slug: 'mock',
+                                                      model: snapshot
+                                                          .data[_currentBanner],
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            child: ClipRRect(
+                                              borderRadius: _currentBanner ==
+                                                      index
+                                                  ? BorderRadius.all(
+                                                      Radius.circular(20))
+                                                  : BorderRadius.circular(0),
+                                              child: MyApp.themeNotifier
+                                                          .value ==
+                                                      ThemeModeThird.light
+                                                  ? CachedNetworkImage(
+                                                      imageUrl:
+                                                          item['imageUrl'],
+                                                      fit: BoxFit.cover,
+                                                      width: double.infinity,
+                                                      height: double.infinity,
+                                                    )
+                                                  : ColorFiltered(
+                                                      colorFilter:
+                                                          ColorFilter.mode(
+                                                        Colors.grey,
+                                                        BlendMode.saturation,
+                                                      ),
+                                                      child: CachedNetworkImage(
+                                                        imageUrl:
+                                                            item['imageUrl'],
+                                                        fit: BoxFit.cover,
+                                                        width: double.infinity,
+                                                        height: double.infinity,
+                                                      ),
+                                                    ),
+                                            ),
+                                          );
+                                        }).toList(),
                                       ),
                                     ),
+
                                     SizedBox(height: 5),
                                     Row(
                                       mainAxisAlignment:
@@ -470,8 +750,8 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(height: 15),
                         Column(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            Wrap(
+                              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 columnButton(
                                   MyApp.themeNotifier.value ==
@@ -521,11 +801,6 @@ class _HomePageState extends State<HomePage> {
                                   type: 'serviceforyou',
                                   code: 'skill',
                                 ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
                                 columnButton(
                                   MyApp.themeNotifier.value ==
                                           ThemeModeThird.light
@@ -562,10 +837,16 @@ class _HomePageState extends State<HomePage> {
                                   type: 'serviceforyou',
                                   code: 'report',
                                 ),
-                                Container(width: 80),
-                                Container(width: 80),
                               ],
                             ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            //   children: [
+
+                            //     Container(width: 80),
+                            //     Container(width: 80),
+                            //   ],
+                            // ),
                           ],
                         ),
                         const SizedBox(height: 20),
@@ -669,8 +950,8 @@ class _HomePageState extends State<HomePage> {
                                         ? 'assets/images/icon_market.png'
                                         : MyApp.themeNotifier.value ==
                                                 ThemeModeThird.dark
-                                            ? 'assets/images/icon_market.png'
-                                            : 'assets/images/icon_market.png',
+                                            ? 'assets/images/2024/con_market_d.png'
+                                            : 'assets/images/2024/con_market_d_y.png',
                                     'ด้านการพัฒนาผลิตภัณฑ์\nและการสื่อสารทางการตลาด',
                                     code: 'market',
                                   ),
@@ -681,8 +962,8 @@ class _HomePageState extends State<HomePage> {
                                         ? 'assets/images/icon_digital.png'
                                         : MyApp.themeNotifier.value ==
                                                 ThemeModeThird.dark
-                                            ? 'assets/images/icon_digital.png'
-                                            : 'assets/images/icon_digital.png',
+                                            ? 'assets/images/2024/digital_d.png'
+                                            : 'assets/images/2024/digital_d_y.png',
                                     'ด้านดิจิทัล',
                                     code: 'digital',
                                   ),
@@ -693,8 +974,8 @@ class _HomePageState extends State<HomePage> {
                                         ? 'assets/images/icon_travel.png'
                                         : MyApp.themeNotifier.value ==
                                                 ThemeModeThird.dark
-                                            ? 'assets/images/icon_travel.png'
-                                            : 'assets/images/icon_travel.png',
+                                            ? 'assets/images/2024/icon_travel_d.png'
+                                            : 'assets/images/2024/icon_travel_d_y.png',
                                     'ด้านการท่องเที่ยว\nเชิงการแพทย์และสุขภาพ',
                                     code: 'btn4',
                                   ),
@@ -765,7 +1046,14 @@ class _HomePageState extends State<HomePage> {
                                   gridDelegate:
                                       SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 2,
-                                          childAspectRatio: 10 / 11.5,
+                                          childAspectRatio:
+                                              MyApp.fontKanit.value ==
+                                                      FontKanit.small
+                                                  ? 10 / 12.5
+                                                  : MyApp.fontKanit.value ==
+                                                          FontKanit.medium
+                                                      ? 10 / 13
+                                                      : 10 / 14,
                                           crossAxisSpacing: 15,
                                           mainAxisSpacing: 15),
                                   physics: const ClampingScrollPhysics(),
@@ -887,25 +1175,38 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                ),
-                child: (model?['docs'] ?? '') != ''
-                    ? CachedNetworkImage(
-                        imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
-                            model?['docs'],
-                        height: 120,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      )
-                    : Image.asset(
-                        'assets/icon.png',
-                        height: 120,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-              ),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                  child: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? (model?['docs'] ?? '') != ''
+                          ? CachedNetworkImage(
+                              imageUrl:
+                                  'https://lms.dcc.onde.go.th/uploads/course/' +
+                                      model?['docs'],
+                              height: 120,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(
+                              'assets/icon.png',
+                              height: 120,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            )
+                      : ColorFiltered(
+                          colorFilter: ColorFilter.mode(
+                              Colors.grey, BlendMode.saturation),
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                'https://lms.dcc.onde.go.th/uploads/course/' +
+                                    model?['docs'],
+                            height: 120,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        )),
               const SizedBox(height: 9),
               Expanded(
                 child: Container(
@@ -927,9 +1228,16 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(8),
                 child: Row(
                   children: [
-                    Image.asset('assets/images/time_home_page.png',
-                        height: 24, width: 24),
+                    Image.asset(
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? 'assets/images/time_home_page.png'
+                            : 'assets/images/2024/time_home_page_blackwhite.png',
+                        height: 24,
+                        width: 24),
+
                     const SizedBox(width: 8),
+
+                    // assets/images/2024/time_home_page_blackwhite.png
                     Text(
                       model?['course_duration'],
                       style: TextStyle(
@@ -1048,6 +1356,7 @@ class _HomePageState extends State<HomePage> {
           ? BoxConstraints(minWidth: 80, maxWidth: 100)
           : null,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           GestureDetector(
             onTap: () {
@@ -1066,7 +1375,7 @@ class _HomePageState extends State<HomePage> {
           SizedBox(height: type == 'serviceforyou' ? 7 : 5),
           type == 'serviceforyou'
               ? SizedBox(
-                  height: 40,
+                  // height: 40,
                   child: Text(
                     title,
                     style: TextStyle(
@@ -1081,6 +1390,7 @@ class _HomePageState extends State<HomePage> {
                       // Theme.of(context).custom.bwy,
                     ),
                     textAlign: TextAlign.center,
+                    maxLines: 4,
                   ),
                 )
               : GestureDetector(
@@ -1551,12 +1861,17 @@ class _HomePageState extends State<HomePage> {
             setState(
               () {
                 if (title == "ปกติ") {
-                  // MyApp.themeNotifier.value = ThemeModeThird.light;
-                  MyApp.fontKanit.value = FontKanit.small;
+                  MyApp.fontKanit.value = FontKanit.small; // ขนาดเล็ก
+                  _hight = 30.0;
+                  _width = 30.0;
                 } else if (title == "ปานกลาง") {
-                  MyApp.fontKanit.value = FontKanit.medium;
+                  MyApp.fontKanit.value = FontKanit.medium; // ขนาดกลาง
+                  _hight = 35.0;
+                  _width = 35.0;
                 } else {
-                  MyApp.fontKanit.value = FontKanit.large;
+                  MyApp.fontKanit.value = FontKanit.large; // ขนาดใหญ่
+                  _hight = 40.0;
+                  _width = 40.0;
                 }
               },
             );

@@ -759,7 +759,12 @@ class _HomePageState extends State<HomePage> {
                       shrinkWrap: true,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
-                          childAspectRatio: 10 / 11.5,
+                          childAspectRatio:
+                              MyApp.fontKanit.value == FontKanit.small
+                                  ? 10 / 12.5
+                                  : MyApp.fontKanit.value == FontKanit.medium
+                                      ? 10 / 13
+                                      : 10 / 14,
                           crossAxisSpacing: 15,
                           mainAxisSpacing: 15),
                       physics: const ClampingScrollPhysics(),

@@ -138,10 +138,12 @@ class _FindJobPageState extends State<FindJobPage> {
     return Stack(
       children: <Widget>[
         Image.asset(
-          "assets/images/new_bg.png",
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          fit: BoxFit.cover,
+          MyApp.themeNotifier.value == ThemeModeThird.light
+              ? "assets/images/BG.png"
+              : "assets/images/2024/BG_Blackwhite.jpg",
+          // height: MediaQuery.of(context).size.height,
+          // width: MediaQuery.of(context).size.width,
+          // fit: BoxFit.cover,
         ),
         Scaffold(
           // backgroundColor: Theme.of(context).custom.w_b_b,
@@ -250,7 +252,9 @@ class _FindJobPageState extends State<FindJobPage> {
                   height: 40,
                   width: 40,
                   child: Image.asset(
-                    'assets/images/back_arrow.png',
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/back_arrow.png'
+                        : "assets/images/2024/back_balckwhite.png",
                   ),
                 ),
               ),
@@ -299,26 +303,33 @@ class _FindJobPageState extends State<FindJobPage> {
             alignment: Alignment.center,
             padding: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? __ == _typeSelected
-                      ? Color(0xFFB325F8)
-                      : Color(0xFFB325F8).withOpacity(0.1)
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+              color: __ == _typeSelected
+                  // ? Color(0xFFB325F8)
+                  ? MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFBD4BF7)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57)
+                  : MyApp.themeNotifier.value == ThemeModeThird.light
                       ? Colors.white
-                      : Color(0xFFFFFD57),
+                      : Colors.black,
               borderRadius: BorderRadius.circular(17.5),
             ),
             child: Text(
               catFindJob[__],
               style: TextStyle(
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? __ == _typeSelected
-                        ? Colors.white
-                        : Color(0xFFB325F8).withOpacity(0.5)
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.black
-                        : Colors.black,
-              ),
+                  color: __ == _typeSelected
+                      ? MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.white
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.black
+                              : Colors.black
+                      // : Color(0xFFB325F8).withOpacity(0.5),
+                      : MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFFB325F8)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57)),
             ),
           ),
         ),
@@ -343,26 +354,33 @@ class _FindJobPageState extends State<FindJobPage> {
             alignment: Alignment.center,
             padding: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? __ == _typeSelected2
-                      ? Color(0xFFB325F8)
-                      : Color(0xFFB325F8).withOpacity(0.1)
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+              color: __ == _typeSelected2
+                  // ? Color(0xFFB325F8)
+                  ? MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFBD4BF7)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57)
+                  : MyApp.themeNotifier.value == ThemeModeThird.light
                       ? Colors.white
-                      : Color(0xFFFFFD57),
+                      : Colors.black,
               borderRadius: BorderRadius.circular(17.5),
             ),
             child: Text(
               catFindJob2[__],
               style: TextStyle(
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? __ == _typeSelected2
-                        ? Colors.white
-                        : Color(0xFFB325F8).withOpacity(0.5)
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.black
-                        : Colors.black,
-              ),
+                  color: __ == _typeSelected2
+                      ? MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.white
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.black
+                              : Colors.black
+                      // : Color(0xFFB325F8).withOpacity(0.5),
+                      : MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFFB325F8)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57)),
             ),
           ),
         ),
@@ -430,11 +448,15 @@ class _FindJobPageState extends State<FindJobPage> {
           data: _modelType.map((item) {
             return DropdownMenuItem(
               value: item['jobCateId'],
-              child: Text(
-                '${item['nameTh']}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Theme.of(context).custom.b_W_fffd57,
+              child: Container(
+                height: 50,
+                child: Text(
+                  '${item['nameTh']}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).custom.b_W_fffd57,
+                  ),
+                  maxLines: 1,
                 ),
               ),
             );
@@ -456,11 +478,15 @@ class _FindJobPageState extends State<FindJobPage> {
                 data: _modelChangwat.map((item) {
                   return DropdownMenuItem(
                     value: item['value'],
-                    child: Text(
-                      '${item['label']}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).custom.b_W_fffd57,
+                    child: Container(
+                      height: 50,
+                      child: Text(
+                        '${item['label']}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).custom.b_W_fffd57,
+                        ),
+                        maxLines: 1,
                       ),
                     ),
                   );
@@ -482,11 +508,15 @@ class _FindJobPageState extends State<FindJobPage> {
                 data: _modelAmphoe.map((item) {
                   return DropdownMenuItem(
                     value: item['value'],
-                    child: Text(
-                      '${item['label']}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).custom.b_W_fffd57,
+                    child: Container(
+                      height: 50,
+                      child: Text(
+                        '${item['label']}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).custom.b_W_fffd57,
+                        ),
+                        maxLines: 1,
                       ),
                     ),
                   );
@@ -495,9 +525,11 @@ class _FindJobPageState extends State<FindJobPage> {
                 value: _amphoeRefNo,
                 onChanged: (value) {
                   // print('------เลือกอำเภอ-------${value}');
-                  setState(() {
-                    _amphoeRefNo = value;
-                  });
+                  setState(
+                    () {
+                      _amphoeRefNo = value;
+                    },
+                  );
                 },
               ),
             ),
@@ -516,7 +548,11 @@ class _FindJobPageState extends State<FindJobPage> {
             width: double.infinity,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: Color(0xFFB325F8),
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFFBD4BF7)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
               borderRadius: BorderRadius.circular(24),
               boxShadow: const [
                 BoxShadow(
@@ -526,13 +562,16 @@ class _FindJobPageState extends State<FindJobPage> {
                 )
               ],
             ),
-            child: const Text(
+            child: Text(
               'ค้นหาตำแหน่งงาน',
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: Colors.white,
-              ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.black
+                          : Colors.black),
             ),
           ),
         ),
@@ -555,7 +594,18 @@ class _FindJobPageState extends State<FindJobPage> {
         ),
         _typeSelected2 == 0
             ? _model.length == 0
-                ? Center(child: Text('ไม่พบข้อมูล'))
+                ? Center(
+                    child: Text(
+                      'ไม่พบข้อมูล',
+                      style: TextStyle(
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.black
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                      ),
+                    ),
+                  )
                 : ListView.separated(
                     shrinkWrap: true,
                     physics: ClampingScrollPhysics(),
@@ -565,7 +615,18 @@ class _FindJobPageState extends State<FindJobPage> {
                     separatorBuilder: (_, __) => const SizedBox(height: 10),
                     itemCount: _model.length)
             : _modelExternal.length == 0
-                ? Center(child: Text('ไม่พบข้อมูล'))
+                ? Center(
+                    child: Text(
+                      'ไม่พบข้อมูล',
+                      style: TextStyle(
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.black
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
+                      ),
+                    ),
+                  )
                 : ListView.separated(
                     shrinkWrap: true,
                     physics: ClampingScrollPhysics(),
@@ -602,7 +663,15 @@ class _FindJobPageState extends State<FindJobPage> {
                   // color: Color(0xFFB325F8),
                   borderRadius: BorderRadius.circular(24),
                 ),
-                child: Image.asset('assets/images/jobkk11576.png'),
+                child: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Image.asset('assets/images/jobkk11576.png')
+                    : ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                          Colors.grey,
+                          BlendMode.saturation,
+                        ),
+                        child: Image.asset('assets/images/jobkk11576.png'),
+                      ),
               ),
             ),
             const SizedBox(height: 10),
@@ -610,7 +679,11 @@ class _FindJobPageState extends State<FindJobPage> {
               data?['jobpositionName'] ?? '',
               style: TextStyle(
                 fontSize: 16,
-                color: Theme.of(context).custom.b325f8_w_fffd57,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFFBD4BF7)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -622,11 +695,19 @@ class _FindJobPageState extends State<FindJobPage> {
                   height: 22,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(7.0),
-                    color: Color(0xFFB325F8),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFBD4BF7)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Image.asset('assets/images/work.png'),
+                    child: Image.asset(
+                      MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? 'assets/images/work.png'
+                          : "assets/images/2024/work.png",
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -634,12 +715,16 @@ class _FindJobPageState extends State<FindJobPage> {
                 ),
                 Expanded(
                   child: Text(
-                    data?['employername'] ?? '',
+                    data?['employername'] ?? 'ไม่ระบุ',
                     style: TextStyle(
                       fontFamily: 'Kanit',
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
-                      color: Colors.black,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                       overflow: TextOverflow.ellipsis,
                     ),
                     maxLines: 2,
@@ -655,11 +740,18 @@ class _FindJobPageState extends State<FindJobPage> {
                   height: 22,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(7.0),
-                    color: Color(0xFFB325F8),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFBD4BF7)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Image.asset('assets/images/icon-map-marker.png'),
+                    child: Image.asset(
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? 'assets/images/icon-map-marker.png'
+                            : "assets/images/2024/icon-map-marker.png"),
                   ),
                 ),
                 SizedBox(
@@ -672,7 +764,11 @@ class _FindJobPageState extends State<FindJobPage> {
                       fontFamily: 'Kanit',
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
-                      color: Colors.black,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                       overflow: TextOverflow.ellipsis,
                     ),
                     maxLines: 2,
@@ -688,11 +784,18 @@ class _FindJobPageState extends State<FindJobPage> {
                   height: 22,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(7.0),
-                    color: Color(0xFFB325F8),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFBD4BF7)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Image.asset('assets/images/icon-money.png'),
+                    child: Image.asset(
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? 'assets/images/icon-money.png'
+                            : "assets/images/2024/icon-money.png"),
                   ),
                 ),
                 SizedBox(
@@ -705,7 +808,11 @@ class _FindJobPageState extends State<FindJobPage> {
                       fontFamily: 'Kanit',
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
-                      color: Colors.black,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                       overflow: TextOverflow.ellipsis,
                     ),
                     maxLines: 2,
@@ -721,11 +828,18 @@ class _FindJobPageState extends State<FindJobPage> {
                   height: 22,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(7.0),
-                    color: Color(0xFFB325F8),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFBD4BF7)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Image.asset('assets/images/icon-word.png'),
+                    child: Image.asset(
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? 'assets/images/icon-word.png'
+                            : "assets/images/2024/icon-word.png"),
                   ),
                 ),
                 SizedBox(
@@ -738,7 +852,11 @@ class _FindJobPageState extends State<FindJobPage> {
                       fontFamily: 'Kanit',
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
-                      color: Colors.black,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                       overflow: TextOverflow.ellipsis,
                     ),
                     maxLines: 2,
@@ -1068,16 +1186,40 @@ class _FindJobPageState extends State<FindJobPage> {
           child: TextField(
             controller: _searchResumeController,
             style: TextStyle(
-              color: const Color(0xff020202),
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Colors.black
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
               fontSize: 14,
               fontWeight: FontWeight.w400,
               letterSpacing: 0.5,
             ),
             decoration: InputDecoration(
               filled: true,
-              fillColor: const Color(0xffFFFFFF),
+              fillColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Colors.white
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.black
+                      : Colors.black,
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0XFFDDDDDD), width: 1),
+                borderSide: BorderSide(
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFBD4BF7)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                    width: 1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFBD4BF7)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                    width: 1),
                 borderRadius: BorderRadius.circular(10),
               ),
               border: OutlineInputBorder(
@@ -1090,10 +1232,18 @@ class _FindJobPageState extends State<FindJobPage> {
                 fontWeight: FontWeight.w400,
                 // letterSpacing: 0.5,
                 // decorationThickness: 6,
-                color: Color(0XFF000000),
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFFBD4BF7)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
               ),
               prefixIcon: const Icon(Icons.search),
-              prefixIconColor: Colors.black,
+              prefixIconColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFFBD4BF7)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
             ),
           ),
         ),
@@ -1107,11 +1257,15 @@ class _FindJobPageState extends State<FindJobPage> {
           data: _modelType.map((item) {
             return DropdownMenuItem(
               value: item['jobCateId'],
-              child: Text(
-                '${item['nameTh']}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Theme.of(context).custom.b_W_fffd57,
+              child: Container(
+                height: 50,
+                child: Text(
+                  '${item['nameTh']}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).custom.b_W_fffd57,
+                  ),
+                  maxLines: 1,
                 ),
               ),
             );
@@ -1134,11 +1288,15 @@ class _FindJobPageState extends State<FindJobPage> {
                 data: _modelChangwat.map((item) {
                   return DropdownMenuItem(
                     value: item['value'],
-                    child: Text(
-                      '${item['label']}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).custom.b_W_fffd57,
+                    child: Container(
+                      height: 50,
+                      child: Text(
+                        '${item['label']}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).custom.b_W_fffd57,
+                        ),
+                        maxLines: 1,
                       ),
                     ),
                   );
@@ -1160,11 +1318,15 @@ class _FindJobPageState extends State<FindJobPage> {
                 data: _modelAmphoeResume.map((item) {
                   return DropdownMenuItem(
                     value: item['value'],
-                    child: Text(
-                      '${item['label']}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).custom.b_W_fffd57,
+                    child: Container(
+                      height: 50,
+                      child: Text(
+                        '${item['label']}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).custom.b_W_fffd57,
+                        ),
+                        maxLines: 1,
                       ),
                     ),
                   );
@@ -1192,7 +1354,11 @@ class _FindJobPageState extends State<FindJobPage> {
             width: double.infinity,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: Color(0xFFB325F8),
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFFBD4BF7)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
               borderRadius: BorderRadius.circular(24),
               boxShadow: const [
                 BoxShadow(
@@ -1202,13 +1368,16 @@ class _FindJobPageState extends State<FindJobPage> {
                 )
               ],
             ),
-            child: const Text(
+            child: Text(
               'ค้นหาเรซูเม่',
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: Colors.white,
-              ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.black
+                          : Colors.black),
             ),
           ),
         ),
@@ -1236,7 +1405,18 @@ class _FindJobPageState extends State<FindJobPage> {
                 separatorBuilder: (_, __) => const SizedBox(height: 10),
                 itemCount: _modelResume.length,
               )
-            : Center(child: Text('ไม่พบข้อมูล'))
+            : Center(
+                child: Text(
+                  'ไม่พบข้อมูล',
+                  style: TextStyle(
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  ),
+                ),
+              )
       ],
     );
   }
@@ -1290,7 +1470,11 @@ class _FindJobPageState extends State<FindJobPage> {
                     fontFamily: 'Kanit',
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
-                    color: Colors.black,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                     overflow: TextOverflow.ellipsis,
                   ),
                   maxLines: 2,
@@ -1323,7 +1507,11 @@ class _FindJobPageState extends State<FindJobPage> {
                     fontFamily: 'Kanit',
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
-                    color: Colors.black,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                     overflow: TextOverflow.ellipsis,
                   ),
                   maxLines: 2,
@@ -1399,16 +1587,40 @@ class _FindJobPageState extends State<FindJobPage> {
       child: TextField(
         controller: textController,
         style: TextStyle(
-          color: const Color(0xff020202),
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Colors.black
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
           fontSize: 14,
           fontWeight: FontWeight.w400,
           letterSpacing: 0.5,
         ),
         decoration: InputDecoration(
           filled: true,
-          fillColor: const Color(0xffFFFFFF),
+          fillColor: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Colors.white
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.black
+                  : Colors.black,
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFFBD4BF7)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+                width: 1),
+            borderRadius: BorderRadius.circular(10),
+          ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0XFFDDDDDD), width: 1),
+            borderSide: BorderSide(
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFFBD4BF7)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+                width: 1),
             borderRadius: BorderRadius.circular(10),
           ),
           border: OutlineInputBorder(
@@ -1416,15 +1628,24 @@ class _FindJobPageState extends State<FindJobPage> {
             borderSide: BorderSide(color: Color(0XFFDDDDDD), width: 1),
           ),
           hintText: 'พิมพ์คำค้นหา',
+          contentPadding: EdgeInsets.symmetric(vertical: 12),
           hintStyle: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w400,
             // letterSpacing: 0.5,
             // decorationThickness: 6,
-            color: Color(0XFF000000),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFFBD4BF7)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
           ),
           prefixIcon: const Icon(Icons.search),
-          prefixIconColor: Colors.black,
+          prefixIconColor: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFFBD4BF7)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
           suffixIcon: GestureDetector(
             onTap: () {
               onTap();
@@ -1432,7 +1653,12 @@ class _FindJobPageState extends State<FindJobPage> {
             child: Align(
               widthFactor: 1.0,
               heightFactor: 1.0,
-              child: Image.asset('assets/images/filter.png'),
+              child:
+                  Image.asset(MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? 'assets/images/filter.png'
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? "assets/images/2024/filter_w.png"
+                          : "assets/images/2024/filter_y.png"),
             ),
           ),
         ),
@@ -1448,7 +1674,7 @@ class _FindJobPageState extends State<FindJobPage> {
     String hintText = "",
   }) {
     return Container(
-      height: 50,
+      height: 60,
       width: double.infinity,
       decoration: BoxDecoration(
         color: Theme.of(context).custom.w_b_b,
@@ -1475,17 +1701,29 @@ class _FindJobPageState extends State<FindJobPage> {
             fontWeight: FontWeight.w400,
             // letterSpacing: 0.5,
             // decorationThickness: 6,
-            color: Color(0XFF000000),
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
           ),
+          // overflow: TextOverflow.ellipsis,
+          maxLines: 1,
         ),
         style: TextStyle(
           fontSize: 14,
           color: Theme.of(context).custom.b_W_fffd57,
         ),
+
         decoration: _decorationDropdown(context),
+        isDense: false,
         isExpanded: true,
         value: value,
-        // dropdownColor: Colors.black,//Theme.of(context).custom.w_b_b,
+        dropdownColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Colors.white
+            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                ? Colors.black
+                : Colors.black, //Theme.of(context).custom.w_b_b,
         // iconDisabledColor: Colors.red,
         onChanged: (dynamic newValue) {
           onChanged!(newValue);
@@ -1523,7 +1761,11 @@ class _FindJobPageState extends State<FindJobPage> {
               height: MediaQuery.of(context).size.height * 0.9,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.white
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.black
+                        : Colors.black,
                 borderRadius:
                     BorderRadius.vertical(bottom: Radius.circular(24.0)),
               ),
@@ -1532,8 +1774,8 @@ class _FindJobPageState extends State<FindJobPage> {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.045),
+                      // SizedBox(
+                      //     height: MediaQuery.of(context).size.height * 0.045),
                       ListTile(
                         leading: Text(''),
                         title: Align(
@@ -1541,7 +1783,7 @@ class _FindJobPageState extends State<FindJobPage> {
                           child: Text(
                             'กรองตำแหน่งงาน',
                             style: TextStyle(
-                              fontSize: 24,
+                              fontSize: 18,
                               fontWeight: FontWeight.w500,
                               color: MyApp.themeNotifier.value ==
                                       ThemeModeThird.light
@@ -1565,7 +1807,12 @@ class _FindJobPageState extends State<FindJobPage> {
                               onTap: () {
                                 Navigator.pop(context);
                               },
-                              child: Image.asset('assets/images/back-x.png'),
+                              child: Image.asset(
+                                MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? 'assets/images/back-x.png'
+                                    : "assets/images/2024/exit_new.png",
+                              ),
                             ),
                           ),
                         ),
@@ -1576,17 +1823,55 @@ class _FindJobPageState extends State<FindJobPage> {
                         child: TextField(
                           controller: _searchController,
                           style: TextStyle(
-                            color: const Color(0xff020202),
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             letterSpacing: 0.5,
                           ),
                           decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 8),
                             filled: true,
-                            fillColor: const Color(0xffFFFFFF),
+                            fillColor: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.white
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.black
+                                    : Colors.black,
+                            // enabledBorder: OutlineInputBorder(
+                            //   borderSide: BorderSide(
+                            //       color: Color(0XFFDDDDDD), width: 1),
+                            //   borderRadius: BorderRadius.circular(10),
+                            // ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                  color: Color(0XFFDDDDDD), width: 1),
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Color(0xFFBD4BF7)
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
+                                  width: 1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Color(0xFFBD4BF7)
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
+                                  width: 1),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             border: OutlineInputBorder(
@@ -1600,10 +1885,22 @@ class _FindJobPageState extends State<FindJobPage> {
                               fontWeight: FontWeight.w400,
                               // letterSpacing: 0.5,
                               // decorationThickness: 6,
-                              color: Color(0XFF000000),
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFFBD4BF7)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                             ),
                             prefixIcon: const Icon(Icons.search),
-                            prefixIconColor: Colors.black,
+                            prefixIconColor: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFBD4BF7)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                           ),
                         ),
                       ),
@@ -1613,11 +1910,15 @@ class _FindJobPageState extends State<FindJobPage> {
                         data: _modelType.map((item) {
                           return DropdownMenuItem(
                             value: item['jobCateId'],
-                            child: Text(
-                              '${item['nameTh']}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).custom.b_W_fffd57,
+                            child: Container(
+                              height: 50,
+                              child: Text(
+                                '${item['nameTh']}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context).custom.b_W_fffd57,
+                                ),
+                                maxLines: 1,
                               ),
                             ),
                           );
@@ -1640,12 +1941,16 @@ class _FindJobPageState extends State<FindJobPage> {
                               data: _modelChangwat.map((item) {
                                 return DropdownMenuItem(
                                   value: item['value'],
-                                  child: Text(
-                                    '${item['label']}',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color:
-                                          Theme.of(context).custom.b_W_fffd57,
+                                  child: Container(
+                                    height: 50,
+                                    child: Text(
+                                      '${item['label']}',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color:
+                                            Theme.of(context).custom.b_W_fffd57,
+                                      ),
+                                      maxLines: 1,
                                     ),
                                   ),
                                 );
@@ -1668,12 +1973,16 @@ class _FindJobPageState extends State<FindJobPage> {
                               data: _modelAmphoe.map((item) {
                                 return DropdownMenuItem(
                                   value: item['value'],
-                                  child: Text(
-                                    '${item['label']}',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color:
-                                          Theme.of(context).custom.b_W_fffd57,
+                                  child: Container(
+                                    height: 50,
+                                    child: Text(
+                                      '${item['label']}',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color:
+                                            Theme.of(context).custom.b_W_fffd57,
+                                      ),
+                                      maxLines: 1,
                                     ),
                                   ),
                                 );
@@ -1700,6 +2009,13 @@ class _FindJobPageState extends State<FindJobPage> {
                               child: Text(
                                 'ลักษณะงาน',
                                 style: TextStyle(
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Colors.black
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                                   fontSize: 15,
                                   fontFamily: 'Kanit',
                                   fontWeight: FontWeight.w500,
@@ -1724,6 +2040,13 @@ class _FindJobPageState extends State<FindJobPage> {
                                   fontSize: 15,
                                   fontFamily: 'Kanit',
                                   fontWeight: FontWeight.w500,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Colors.black
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                                 ),
                               ),
                             ),
@@ -1748,7 +2071,13 @@ class _FindJobPageState extends State<FindJobPage> {
                           width: double.infinity,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: Color(0xFFB325F8),
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFBD4BF7)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                             borderRadius: BorderRadius.circular(24),
                             boxShadow: const [
                               BoxShadow(
@@ -1758,13 +2087,18 @@ class _FindJobPageState extends State<FindJobPage> {
                               ),
                             ],
                           ),
-                          child: const Text(
+                          child: Text(
                             'ค้นหาตำแหน่งงาน',
                             style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.white,
-                            ),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.white
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.black
+                                        : Colors.black),
                           ),
                         ),
                       )
@@ -1842,7 +2176,11 @@ class _FindJobPageState extends State<FindJobPage> {
                   '${data[__][textname]}',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Theme.of(context).custom.b_W_fffd57,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.black
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -1869,14 +2207,26 @@ class _FindJobPageState extends State<FindJobPage> {
         // hintText: hintText,
         filled: true,
         fillColor: Colors.transparent,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
-          borderSide: const BorderSide(color: Color(0xFFE6B82C)),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFFBD4BF7)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
-          borderSide: const BorderSide(color: Color(0xFFE6B82C)),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFFBD4BF7)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),

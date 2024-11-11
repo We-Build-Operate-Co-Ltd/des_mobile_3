@@ -2,6 +2,8 @@ import 'package:des/shared/theme_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
+import 'main.dart';
+
 class WebViewInAppPage extends StatefulWidget {
   const WebViewInAppPage({super.key, this.url, this.title});
   final String? url;
@@ -56,7 +58,9 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                     Navigator.pop(context);
                   },
                   child: Image.asset(
-                    'assets/images/back_arrow.png',
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/back_arrow.png'
+                        : 'assets/images/2024/back_balckwhite.png',
                     height: 40,
                     width: 40,
                   ),

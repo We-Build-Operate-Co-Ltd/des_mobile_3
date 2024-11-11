@@ -2,6 +2,7 @@ import 'package:des/chat.dart';
 import 'package:des/contact.dart';
 import 'package:des/contact_category.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 
 import 'chat_botnoi.dart';
 import 'main.dart';
@@ -33,20 +34,32 @@ class _ReportProblemPageState extends State<ReportProblemPage> {
                 image: AssetImage(
                   MyApp.themeNotifier.value == ThemeModeThird.light
                       ? "assets/images/BG.png"
-                      : "",
+                      : "assets/images/2024/BG_Blackwhite.jpg",
                 ),
                 fit: BoxFit.cover,
               ),
             ),
             child: Stack(
               children: [
-                Positioned(
-                  top: 130,
-                  right: 30,
-                  child: Image(
-                    image: AssetImage('assets/images/Owl-6 3.png'),
-                  ),
-                ),
+                MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Positioned(
+                        top: 130,
+                        right: 30,
+                        child: Image(
+                          image: AssetImage('assets/images/Owl-6 3.png'),
+                        ),
+                      )
+                    : Positioned(
+                        top: 100,
+                        right: 10,
+                        child: Container(
+                          height: 300,
+                          width: 300,
+                          child: Image(
+                            image: AssetImage('assets/images/2024/owl_6.png'),
+                          ),
+                        ),
+                      ),
                 Positioned(
                   child: Container(
                     alignment: Alignment.bottomCenter,
@@ -75,7 +88,10 @@ class _ReportProblemPageState extends State<ReportProblemPage> {
                                   height: 35.0,
                                   margin: EdgeInsets.all(5),
                                   child: Image.asset(
-                                    'assets/images/back_profile.png',
+                                    MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? 'assets/images/back_profile.png'
+                                        : "assets/images/2024/back_balckwhite.png",
                                     // color: Colors.white,
                                   ),
                                 ),
@@ -109,18 +125,43 @@ class _ReportProblemPageState extends State<ReportProblemPage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('เบอร์ติดต่อ'),
+                                        Text(
+                                          'เบอร์ติดต่อ',
+                                          style: TextStyle(
+                                            color: MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.light
+                                                ? Colors.black
+                                                : MyApp.themeNotifier.value ==
+                                                        ThemeModeThird.dark
+                                                    ? Colors.white
+                                                    : Color(0xFFFFFD57),
+                                          ),
+                                        ),
                                         Align(
                                           alignment: Alignment.centerRight,
-                                          child: Image.asset(
-                                              'assets/images/arrow_next.png'),
+                                          child: Image.asset(MyApp
+                                                      .themeNotifier.value ==
+                                                  ThemeModeThird.light
+                                              ? 'assets/images/arrow_next.png'
+                                              : MyApp.themeNotifier.value ==
+                                                      ThemeModeThird.dark
+                                                  ? "assets/images/2024/arrow_next_w.png"
+                                                  : "assets/images/2024/arrow_next_y.png"),
                                         ),
                                       ],
                                     ),
                                   ),
                                   SizedBox(height: 12),
                                   Container(
-                                      height: 1, color: Color(0xFFEEEEEE)),
+                                    height: 1,
+                                    color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Colors.black
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
+                                  ),
                                   SizedBox(height: 12),
                                   InkWell(
                                     onTap: () => Navigator.of(context).push(
@@ -133,18 +174,43 @@ class _ReportProblemPageState extends State<ReportProblemPage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('สนทนา'),
+                                        Text(
+                                          'สนทนา',
+                                          style: TextStyle(
+                                            color: MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.light
+                                                ? Colors.black
+                                                : MyApp.themeNotifier.value ==
+                                                        ThemeModeThird.dark
+                                                    ? Colors.white
+                                                    : Color(0xFFFFFD57),
+                                          ),
+                                        ),
                                         Align(
                                           alignment: Alignment.centerRight,
-                                          child: Image.asset(
-                                              'assets/images/arrow_next.png'),
+                                          child: Image.asset(MyApp
+                                                      .themeNotifier.value ==
+                                                  ThemeModeThird.light
+                                              ? 'assets/images/arrow_next.png'
+                                              : MyApp.themeNotifier.value ==
+                                                      ThemeModeThird.dark
+                                                  ? "assets/images/2024/arrow_next_w.png"
+                                                  : "assets/images/2024/arrow_next_y.png"),
                                         ),
                                       ],
                                     ),
                                   ),
                                   SizedBox(height: 12),
                                   Container(
-                                      height: 1, color: Color(0xFFEEEEEE)),
+                                    height: 1,
+                                    color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Colors.black
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
+                                  ),
                                 ],
                               ),
                             )

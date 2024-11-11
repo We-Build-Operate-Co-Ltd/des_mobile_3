@@ -68,7 +68,7 @@ class _FindJobPageState extends State<FindJobPage> {
               ),
               Expanded(
                 child: Text(
-                  'จับคู่งาน',
+                  'จับหหอคู่งาน',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,

@@ -56,17 +56,20 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
               children: [
                 _backButton(context),
                 const SizedBox(width: 20),
-                Text(
-                  'รายละเอียดคอร์ส',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontFamily: 'Kanit',
-                    fontWeight: FontWeight.w500,
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Color(0xFFB325F8)
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
+                Flexible(
+                  child: Text(
+                    'รายละเอียดคอร์ส',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Kanit',
+                      fontWeight: FontWeight.w500,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFFB325F8)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                    ),
+                    maxLines: 2,
                   ),
                 ),
               ],
@@ -149,7 +152,11 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
               Container(
                 height: 25,
                 width: 25,
-                child: Image.asset('assets/images/course_time.png'),
+                child: Image.asset(
+                  MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? 'assets/images/course_time.png'
+                      : "assets/images/2024/time_home_page_blackwhite.png",
+                ),
               ),
               SizedBox(width: 15),
               Expanded(
@@ -196,44 +203,51 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
           child: lineBottom(),
         ),
         const SizedBox(height: 85),
-        InkWell(
-          onTap: () async {
-            var loginData = await ManageStorage.readDynamic('loginData');
-            var accessToken = await ManageStorage.read('accessToken');
-            logWTF(
-                'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}');
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => WebViewInAppPage(
-                  url:
-                      'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}',
-                  title: widget.model?['subject'] ?? '',
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: InkWell(
+            onTap: () async {
+              var loginData = await ManageStorage.readDynamic('loginData');
+              var accessToken = await ManageStorage.read('accessToken');
+              logWTF(
+                  'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => WebViewInAppPage(
+                    url:
+                        'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}',
+                    title: widget.model?['subject'] ?? '',
+                  ),
                 ),
-              ),
-            );
+              );
 
-            // launchUrl(
-            //   Uri.parse(
-            //       'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['id']}'),
-            //   mode: LaunchMode.externalApplication,
-            // );
-          },
-          child: Container(
-            height: 45,
-            alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(horizontal: 15),
-            decoration: BoxDecoration(
-              color: Theme.of(context).custom.b325f8_w_g,
-              borderRadius: BorderRadius.circular(22.5),
-              border: Border.all(color: colorTheme),
-            ),
-            child: Text(
-              'ลงทะเบียนเรียน',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
+              // launchUrl(
+              //   Uri.parse(
+              //       'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['id']}'),
+              //   mode: LaunchMode.externalApplication,
+              // );
+            },
+            child: Container(
+              height: 45,
+              alignment: Alignment.center,
+              margin: EdgeInsets.symmetric(horizontal: 15),
+              decoration: BoxDecoration(
+                color: Theme.of(context).custom.b325f8_w_g,
+                borderRadius: BorderRadius.circular(22.5),
+                border: Border.all(color: colorTheme),
+              ),
+              child: Text(
+                'ลงทะเบียนเรียน',
+                style: TextStyle(
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.black
+                          : Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ),
@@ -256,7 +270,9 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
         //   border: Border.all(color: colorTheme),
         // ),
         child: Image.asset(
-          'assets/images/back_arrow.png',
+          MyApp.themeNotifier.value == ThemeModeThird.light
+              ? "assets/images/back_arrow.png"
+              : "assets/images/2024/back_balckwhite.png",
         ),
       ),
     );

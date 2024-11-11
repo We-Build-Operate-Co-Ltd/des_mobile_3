@@ -356,8 +356,12 @@ class _MyCourseSuccessPageState extends State<MyCourseSuccessPage> {
                 padding: const EdgeInsets.all(8),
                 child: Row(
                   children: [
-                    Image.asset('assets/images/course_time.png',
-                        height: 24, width: 24),
+                    Image.asset(
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? 'assets/images/course_time.png'
+                            : "assets/images/2024/time_home_page_blackwhite.png",
+                        height: 24,
+                        width: 24),
                     const SizedBox(width: 8),
                     Text(
                       model?['duration'],
@@ -381,7 +385,7 @@ class _MyCourseSuccessPageState extends State<MyCourseSuccessPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-         Container(
+        Container(
           alignment: Alignment.topLeft,
           child: Text(
             'คอร์สสำเร็จ (0)',
@@ -444,84 +448,83 @@ class _MyCourseSuccessPageState extends State<MyCourseSuccessPage> {
           ),
         ),
         const SizedBox(height: 20),
-        if(widget.page != 'profile')
-         GestureDetector(
-          onTap: () {
-             widget.callBack!(1);
-          },
-          child: Container(
-            width: double.infinity,
-            height: 40,
-            alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFFB325F8)
-                    : Colors.black,
-                border: Border.all(
-                  width: 1,
-                  style: BorderStyle.solid,
+        if (widget.page != 'profile')
+          GestureDetector(
+            onTap: () {
+              widget.callBack!(1);
+            },
+            child: Container(
+              width: double.infinity,
+              height: 40,
+              alignment: Alignment.center,
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
                   color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFFB325F8).withOpacity(0.5)
+                      ? Color(0xFFB325F8)
+                      : Colors.black,
+                  border: Border.all(
+                    width: 1,
+                    style: BorderStyle.solid,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFB325F8).withOpacity(0.5)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  )),
+              child: Text(
+                'ไปยังคอร์สเรียนของคุณ',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
                       : MyApp.themeNotifier.value == ThemeModeThird.dark
                           ? Colors.white
                           : Color(0xFFFFFD57),
-                )),
-            child: Text(
-              'ไปยังคอร์สเรียนของคุณ',
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Colors.white
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
+                ),
               ),
             ),
           ),
-        ),
         const SizedBox(height: 10),
-                if(widget.page != 'profile')
-
-        GestureDetector(
-          onTap: () {
-            widget.callBack!(0);
-          },
-          child: Container(
-            width: double.infinity,
-            height: 40,
-            alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFFB325F8)
-                    : Colors.black,
-                border: Border.all(
-                  width: 1,
-                  style: BorderStyle.solid,
+        if (widget.page != 'profile')
+          GestureDetector(
+            onTap: () {
+              widget.callBack!(0);
+            },
+            child: Container(
+              width: double.infinity,
+              height: 40,
+              alignment: Alignment.center,
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
                   color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFFB325F8).withOpacity(0.5)
+                      ? Color(0xFFB325F8)
+                      : Colors.black,
+                  border: Border.all(
+                    width: 1,
+                    style: BorderStyle.solid,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFB325F8).withOpacity(0.5)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  )),
+              child: Text(
+                'ค้นหาคอร์ส',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
                       : MyApp.themeNotifier.value == ThemeModeThird.dark
                           ? Colors.white
                           : Color(0xFFFFFD57),
-                )),
-            child: Text(
-              'ค้นหาคอร์ส',
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Colors.white
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
+                ),
               ),
             ),
           ),
-        ),
       ],
     );
   }

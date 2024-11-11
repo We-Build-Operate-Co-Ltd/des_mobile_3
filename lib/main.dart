@@ -160,7 +160,7 @@ class _MyAppState extends State<MyApp> {
                           ? 1.0
                           : currentMode == FontKanit.medium
                               ? 1.5
-                              : 2.0),
+                              : 1.95),
                   child: child!,
                 );
               },

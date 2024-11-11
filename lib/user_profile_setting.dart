@@ -57,7 +57,11 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
               height: 1000,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage("assets/images/new_bg.png"),
+                  image: AssetImage(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? "assets/images/BG.png"
+                        : "assets/images/2024/BG_Blackwhite.jpg",
+                  ),
                   alignment: Alignment.topCenter,
                   fit: BoxFit.cover,
                 ),
@@ -94,8 +98,16 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
                         child: GestureDetector(
                           onTap: () => logout(),
                           child: Container(
-                            height: 32,
-                            width: 145,
+                            height: MyApp.fontKanit.value == FontKanit.small
+                                ? 40
+                                : MyApp.fontKanit.value == FontKanit.medium
+                                    ? 45
+                                    : 50,
+                            width: MyApp.fontKanit.value == FontKanit.small
+                                ? 145
+                                : MyApp.fontKanit.value == FontKanit.medium
+                                    ? 185
+                                    : 225,
                             decoration: BoxDecoration(
                               color: MyApp.themeNotifier.value ==
                                       ThemeModeThird.light
@@ -315,23 +327,25 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
           child: Container(
             height: 35,
             width: 35,
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFFB325F8)
-                    : Colors.black,
-                border: Border.all(
-                  width: 1,
-                  style: BorderStyle.solid,
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFFB325F8)
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57),
-                )),
+            // padding: EdgeInsets.all(5),
+            // decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(8),
+            //     color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //         ? Color(0xFFB325F8)
+            //         : Colors.black,
+            //     border: Border.all(
+            //       width: 1,
+            //       style: BorderStyle.solid,
+            //       color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //           ? Color(0xFFB325F8)
+            //           : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //               ? Colors.white
+            //               : Color(0xFFFFFD57),
+            //     )),
             child: Image.asset(
-              'assets/images/back_arrow.png',
+              MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? 'assets/images/back_arrow.png'
+                  : "assets/images/2024/back_balckwhite.png",
             ),
           ),
         ),

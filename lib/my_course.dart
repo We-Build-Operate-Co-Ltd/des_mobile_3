@@ -293,8 +293,12 @@ class _MyCoursePageState extends State<MyCoursePage> {
                 padding: const EdgeInsets.all(8),
                 child: Row(
                   children: [
-                    Image.asset('assets/images/course_time.png',
-                        height: 24, width: 24),
+                    Image.asset(
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? 'assets/images/course_time.png'
+                            : "assets/images/2024/time_home_page_blackwhite.png",
+                        height: 24,
+                        width: 24),
                     const SizedBox(width: 8),
                     Text(
                       model?['duration'],
@@ -381,50 +385,50 @@ class _MyCoursePageState extends State<MyCoursePage> {
           ),
         ),
         const SizedBox(height: 20),
-        if(widget.page != 'profile')
-        GestureDetector(
-          onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (_) => MyClassAllNewPage(),
-            //   ),
-            // );
-            widget.callBack!();
-          },
-          child: Container(
-            width: double.infinity,
-            height: 40,
-            alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFFB325F8)
-                    : Colors.black,
-                border: Border.all(
-                  width: 1,
-                  style: BorderStyle.solid,
+        if (widget.page != 'profile')
+          GestureDetector(
+            onTap: () {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (_) => MyClassAllNewPage(),
+              //   ),
+              // );
+              widget.callBack!();
+            },
+            child: Container(
+              width: double.infinity,
+              height: 40,
+              alignment: Alignment.center,
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
                   color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFFB325F8).withOpacity(0.5)
+                      ? Color(0xFFB325F8)
+                      : Colors.black,
+                  border: Border.all(
+                    width: 1,
+                    style: BorderStyle.solid,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFB325F8).withOpacity(0.5)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  )),
+              child: Text(
+                'ค้นหาคอร์ส',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
                       : MyApp.themeNotifier.value == ThemeModeThird.dark
                           ? Colors.white
                           : Color(0xFFFFFD57),
-                )),
-            child: Text(
-              'ค้นหาคอร์ส',
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Colors.white
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
+                ),
               ),
             ),
           ),
-        ),
         SizedBox(height: 50),
       ],
     );
@@ -476,7 +480,7 @@ class _MyCoursePageState extends State<MyCoursePage> {
     var response = await Dio().get('$ondeURL/api/Lms/GetCouseExternal');
 
     setState(() {
-            // _modelMyCourse = Future.value(response.data);
+      // _modelMyCourse = Future.value(response.data);
 
       _modelMyCourse = Future.value({});
     });
@@ -530,7 +534,9 @@ class _MyCoursePageState extends State<MyCoursePage> {
                           : Color(0xFFFFFD57),
                 )),
             child: Image.asset(
-              'assets/images/back_arrow.png',
+              MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? 'assets/images/back_arrow.png'
+                  : "assets/images/2024/back_balckwhite.png",
             ),
           ),
         ),

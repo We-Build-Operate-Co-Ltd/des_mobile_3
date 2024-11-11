@@ -273,7 +273,11 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                 height: double.infinity,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage("assets/images/new_bg.png"),
+                    image: AssetImage(
+                      MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? "assets/images/BG.png"
+                          : "assets/images/2024/BG_Blackwhite.jpg",
+                    ),
                     alignment: Alignment.topCenter,
                     fit: BoxFit.cover,
                   ),
@@ -798,7 +802,12 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 10 / 11.5,
+                  // childAspectRatio: 10 / 14,
+                  childAspectRatio: MyApp.fontKanit.value == FontKanit.small
+                      ? 10 / 12.5
+                      : MyApp.fontKanit.value == FontKanit.medium
+                          ? 10 / 13
+                          : 10 / 14,
                   crossAxisSpacing: 15,
                   mainAxisSpacing: 15),
               physics: const ClampingScrollPhysics(),
@@ -835,10 +844,16 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
               padding: EdgeInsets.zero,
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 10 / 11.5,
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 15),
+                crossAxisCount: 2,
+                // childAspectRatio: 10 / 11.5,
+                childAspectRatio: MyApp.fontKanit.value == FontKanit.small
+                    ? 10 / 12.5
+                    : MyApp.fontKanit.value == FontKanit.medium
+                        ? 10 / 13
+                        : 10 / 14,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
               physics: const ClampingScrollPhysics(),
               // itemCount: snapshot.data!.length,
               itemCount: snapshot.data!.length,
@@ -905,19 +920,35 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
                 ),
-                child: (model?['docs'] ?? '') != ''
-                    ? CachedNetworkImage(
-                        imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
-                            model?['docs'],
-                        height: 120,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      )
-                    : Image.asset(
-                        'assets/icon.png',
-                        height: 120,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
+                child: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? (model?['docs'] ?? '') != ''
+                        ? CachedNetworkImage(
+                            imageUrl:
+                                'https://lms.dcc.onde.go.th/uploads/course/' +
+                                    model?['docs'],
+                            height: 120,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.asset(
+                            'assets/icon.png',
+                            height: 120,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          )
+                    : ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                          Colors.grey,
+                          BlendMode.saturation,
+                        ),
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              'https://lms.dcc.onde.go.th/uploads/course/' +
+                                  model?['docs'],
+                          height: 120,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
                       ),
               ),
               const SizedBox(height: 9),
@@ -932,17 +963,21 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                       fontWeight: FontWeight.w400,
                       color: Theme.of(context).custom.b_w_y,
                     ),
-                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8),
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   children: [
-                    Image.asset('assets/images/course_time.png',
-                        height: 24, width: 24),
+                    Image.asset(
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? 'assets/images/course_time.png'
+                            : "assets/images/2024/time_home_page_blackwhite.png",
+                        height: 24,
+                        width: 24),
                     const SizedBox(width: 8),
                     Text(
                       model?['course_duration'],
@@ -1176,18 +1211,36 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
                 ),
-                child: (model?['thumbnailLink'] ?? '') != ''
-                    ? CachedNetworkImage(
-                        imageUrl: '${model['thumbnailLink']}',
-                        height: 120,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      )
-                    : Image.asset(
-                        'assets/icon.png',
-                        height: 120,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
+                child: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? (model?['thumbnailLink'] ?? '') != ''
+                        ? CachedNetworkImage(
+                            imageUrl: '${model['thumbnailLink']}',
+                            height: 120,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.asset(
+                            'assets/icon.png',
+                            height: 120,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          )
+                    : ColorFiltered(
+                        colorFilter:
+                            ColorFilter.mode(Colors.grey, BlendMode.saturation),
+                        child: (model?['thumbnailLink'] ?? '') != ''
+                            ? CachedNetworkImage(
+                                imageUrl: '${model['thumbnailLink']}',
+                                height: 120,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                'assets/icon.png',
+                                height: 120,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              ),
                       ),
               ),
               const SizedBox(height: 9),
@@ -1211,8 +1264,12 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                 padding: const EdgeInsets.all(8),
                 child: Row(
                   children: [
-                    Image.asset('assets/images/course_time.png',
-                        height: 24, width: 24),
+                    Image.asset(
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? 'assets/images/course_time.png'
+                            : "assets/images/2024/time_home_page_blackwhite.png",
+                        height: 24,
+                        width: 24),
                     const SizedBox(width: 8),
                     Text(
                       model?['duration'],
@@ -1316,8 +1373,12 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                 padding: const EdgeInsets.all(8),
                 child: Row(
                   children: [
-                    Image.asset('assets/images/course_time.png',
-                        height: 24, width: 24),
+                    Image.asset(
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? 'assets/images/course_time.png'
+                            : "assets/images/2024/time_home_page_blackwhite.png",
+                        height: 24,
+                        width: 24),
                     const SizedBox(width: 8),
                     Text(
                       model['period'].toString(),
@@ -1471,34 +1532,35 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             // );
           },
           child: Container(
-            height: 35,
-            width: 35,
+            height: 40,
+            width: 40,
             padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFFB325F8)
-                    : Colors.black,
-                border: Border.all(
-                  width: 1,
-                  style: BorderStyle.solid,
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFFB325F8)
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57),
-                )),
+            // decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(8),
+            //     color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //         ? Color(0xFFB325F8)
+            //         : Colors.black,
+            //     border: Border.all(
+            //       width: 1,
+            //       style: BorderStyle.solid,
+            //       color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //           ? Color(0xFFB325F8)
+            //           : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //               ? Colors.white
+            //               : Color(0xFFFFFD57),
+            //     )),
             child: Image.asset(
-              'assets/images/back_arrow.png',
+              MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? 'assets/images/back_arrow.png'
+                  : 'assets/images/2024/back_balckwhite.png',
             ),
           ),
         ),
-        Container(
-          margin: EdgeInsets.all(5),
+        Flexible(
           child: Text(
             'ระบบส่งเสริม Re-skill',
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 16,
               fontFamily: 'Kanit',
               fontWeight: FontWeight.w500,
               color: MyApp.themeNotifier.value == ThemeModeThird.light
@@ -1507,6 +1569,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                       ? Colors.white
                       : Color(0xFFFFFD57),
             ),
+            maxLines: 2,
           ),
         ),
       ],
@@ -1524,14 +1587,33 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             alignment: Alignment.center,
             padding: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
+              color: __ == _typeSelected
+                  // ? Color(0xFFB325F8)
+                  ? MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFBD4BF7)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57)
+                  : MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
+                      : Colors.black,
               borderRadius: BorderRadius.circular(17.5),
-              color: __ == _typeSelected ? Color(0xFFB325F8) : Colors.white,
             ),
             child: Text(
               _typeList[__],
               style: TextStyle(
-                color: __ == _typeSelected ? Colors.white : Colors.black,
-              ),
+                  color: __ == _typeSelected
+                      ? MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.white
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.black
+                              : Colors.black
+                      // : Color(0xFFB325F8).withOpacity(0.5),
+                      : MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFFB325F8).withOpacity(0.5)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57)),
             ),
           ),
         ),
@@ -1560,15 +1642,53 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
           child: Container(
             alignment: Alignment.center,
             padding: EdgeInsets.symmetric(horizontal: 10),
+            // decoration: BoxDecoration(
+            //   borderRadius: BorderRadius.circular(17.5),
+            //   color: __ == _cateTypeSelected
+            //       ? MyApp.themeNotifier.value == ThemeModeThird.light
+            //           ? Color(0xFFBD4BF7)
+            //           : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //               ? Colors.white
+            //               : Color(0xFFFFFD57)
+            //       : Colors.white,
+            // ),
             decoration: BoxDecoration(
+              color: __ == _cateTypeSelected
+                  // ? Color(0xFFB325F8)
+                  ? MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFBD4BF7)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57)
+                  : MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
+                      : Colors.black,
               borderRadius: BorderRadius.circular(17.5),
-              color: __ == _cateTypeSelected ? Color(0xFFB325F8) : Colors.white,
             ),
             child: Text(
               _cateTypeList[__],
+              // style: TextStyle(
+              //   color: __ == _cateTypeSelected
+              //       ? MyApp.themeNotifier.value == ThemeModeThird.light
+              //           ? Colors.white
+              //           : MyApp.themeNotifier.value == ThemeModeThird.dark
+              //               ? Colors.black
+              //               : Colors.black
+              //       : Colors.black,
+              // ),
               style: TextStyle(
-                color: __ == _cateTypeSelected ? Colors.white : Colors.black,
-              ),
+                  color: __ == _cateTypeSelected
+                      ? MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.white
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.black
+                              : Colors.black
+                      // : Color(0xFFB325F8).withOpacity(0.5),
+                      : MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFFB325F8).withOpacity(0.5)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57)),
             ),
           ),
         ),
@@ -1590,7 +1710,16 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
               .map(
                 (element) => Container(
                   width: 250,
-                  height: 60,
+                  // height: MyApp.fontKanit.value != FontKanit.small &&
+                  //         MyApp.fontKanit.value != FontKanit.medium
+                  //     ? 90
+                  //     : 66,
+                  height: MyApp.fontKanit.value == FontKanit.small
+                      ? 60
+                      : MyApp.fontKanit.value == FontKanit.medium
+                          ? 94
+                          : 118,
+
                   padding: EdgeInsets.all(5),
                   child: InkWell(
                     onTap: () {
@@ -1630,15 +1759,26 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   Widget rowContactInformation(String title, String image, String id) {
     return Row(
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: CachedNetworkImage(
-            imageUrl: image,
-            height: 50,
-            width: 50,
-            fit: BoxFit.cover,
-          ),
-        ),
+        MyApp.themeNotifier.value == ThemeModeThird.light
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: CachedNetworkImage(
+                  imageUrl: image,
+                  height: 50,
+                  width: 50,
+                  fit: BoxFit.cover,
+                ),
+              )
+            : ColorFiltered(
+                colorFilter:
+                    ColorFilter.mode(Colors.grey, BlendMode.saturation),
+                child: CachedNetworkImage(
+                  imageUrl: image,
+                  height: 50,
+                  width: 50,
+                  fit: BoxFit.cover,
+                ),
+              ),
         SizedBox(width: 15),
         Expanded(
           child: Column(
@@ -1665,6 +1805,8 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                               ? Colors.white
                               : Color(0xFFFFFD57),
                 ),
+                // overflow: TextOverflow.ellipsis,
+                maxLines: 3,
               ),
             ],
           ),

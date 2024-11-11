@@ -74,10 +74,16 @@ class _CourseEternalPageState extends State<CourseEternalPage> {
               padding: EdgeInsets.zero,
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 10 / 12.5,
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 15),
+                crossAxisCount: 2,
+                // childAspectRatio: 10 / 12.5,
+                childAspectRatio: MyApp.fontKanit.value == FontKanit.small
+                    ? 10 / 12.5
+                    : MyApp.fontKanit.value == FontKanit.medium
+                        ? 10 / 13
+                        : 10 / 14,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
               physics: const ClampingScrollPhysics(),
               // itemCount: snapshot.data!.length,
               itemCount: snapshot.data!.length,
@@ -108,9 +114,6 @@ class _CourseEternalPageState extends State<CourseEternalPage> {
         child: Container(
           decoration: BoxDecoration(
             color: Theme.of(context).custom.primary,
-            // border: Border.all(
-            //   color: Theme.of(context).custom.b_w_y,
-            // ),
             boxShadow: [
               BoxShadow(
                 color: Color.fromARGB(0, 0, 0, 0).withOpacity(0.15),
@@ -127,24 +130,43 @@ class _CourseEternalPageState extends State<CourseEternalPage> {
           child: Column(
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                ),
-                child: (model?['thumbnailLink'] ?? '') != ''
-                    ? CachedNetworkImage(
-                        imageUrl: '${model['thumbnailLink']}',
-                        height: 120,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      )
-                    : Image.asset(
-                        'assets/icon.png',
-                        height: 120,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-              ),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                  child: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? (model?['thumbnailLink'] ?? '') != ''
+                          ? CachedNetworkImage(
+                              imageUrl: '${model['thumbnailLink']}',
+                              height: 120,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(
+                              'assets/icon.png',
+                              height: 120,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            )
+                      : ColorFiltered(
+                          colorFilter: ColorFilter.mode(
+                            Colors.grey,
+                            BlendMode.saturation,
+                          ),
+                          child: (model?['thumbnailLink'] ?? '') != ''
+                              ? CachedNetworkImage(
+                                  imageUrl: '${model['thumbnailLink']}',
+                                  height: 120,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset(
+                                  'assets/icon.png',
+                                  height: 120,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                        )),
               const SizedBox(height: 9),
               Expanded(
                 child: Container(
@@ -166,8 +188,12 @@ class _CourseEternalPageState extends State<CourseEternalPage> {
                 padding: const EdgeInsets.all(8),
                 child: Row(
                   children: [
-                    Image.asset('assets/images/course_time.png',
-                        height: 24, width: 24),
+                    Image.asset(
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? 'assets/images/course_time.png'
+                            : "assets/images/2024/time_home_page_blackwhite.png",
+                        height: 24,
+                        width: 24),
                     const SizedBox(width: 8),
                     Text(
                       model?['duration'],
@@ -193,14 +219,16 @@ class _CourseEternalPageState extends State<CourseEternalPage> {
       child: Container(
         height: 40,
         width: 40,
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: buttonTheme,
-          border: Border.all(color: colorTheme),
-        ),
+        // padding: EdgeInsets.all(5),
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(8),
+        //   color: buttonTheme,
+        //   border: Border.all(color: colorTheme),
+        // ),
         child: Image.asset(
-          'assets/images/back_arrow.png',
+          MyApp.themeNotifier.value == ThemeModeThird.light
+              ? "assets/images/back_arrow.png"
+              : "assets/images/2024/back_balckwhite.png",
         ),
       ),
     );
@@ -271,35 +299,36 @@ class _CourseEternalPageState extends State<CourseEternalPage> {
             Navigator.pop(context);
           },
           child: Container(
-            height: 35,
-            width: 35,
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFFB325F8)
-                    : Colors.black,
-                border: Border.all(
-                  width: 1,
-                  style: BorderStyle.solid,
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFFB325F8)
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57),
-                )),
+            height: 40,
+            width: 40,
+            // padding: EdgeInsets.all(5),
+            // decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(8),
+            //     color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //         ? Color(0xFFB325F8)
+            //         : Colors.black,
+            //     border: Border.all(
+            //       width: 1,
+            //       style: BorderStyle.solid,
+            //       color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //           ? Color(0xFFB325F8)
+            //           : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //               ? Colors.white
+            //               : Color(0xFFFFFD57),
+            //     )),
             child: Image.asset(
-              'assets/images/back_arrow.png',
+              MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? 'assets/images/back_arrow.png'
+                  : "assets/images/2024/back_balckwhite.png",
             ),
           ),
         ),
-        SizedBox(width: 10),
-        Container(
-          margin: EdgeInsets.all(5),
+        SizedBox(width: 12),
+        Flexible(
           child: Text(
             'สถาบันคุณวุฒิวิชาชีพ',
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 16,
               fontFamily: 'Kanit',
               fontWeight: FontWeight.w500,
               color: MyApp.themeNotifier.value == ThemeModeThird.light
@@ -308,6 +337,7 @@ class _CourseEternalPageState extends State<CourseEternalPage> {
                       ? Colors.white
                       : Color(0xFFFFFD57),
             ),
+            maxLines: 2,
           ),
         ),
       ],

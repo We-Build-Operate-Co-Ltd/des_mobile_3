@@ -189,11 +189,7 @@ enum ThemeModeThird {
   blindness,
 }
 
-enum FontKanit {
-  small,
-  medium,
-  large,
-}
+enum FontKanit { small, medium, large }
 
 class ChangeDarkMode extends StatefulWidget {
   const ChangeDarkMode({Key? key}) : super(key: key);

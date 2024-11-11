@@ -49,13 +49,14 @@ class _ContactPageState extends State<ContactPage> {
                         image: AssetImage(
                             MyApp.themeNotifier.value == ThemeModeThird.light
                                 ? "assets/images/BG.png"
-                                : ""),
+                                : "assets/images/2024/BG_Blackwhite.jpg"),
                         fit: BoxFit.cover),
                   ),
                   child: Container(
                     alignment: Alignment.bottomCenter,
                     child: Container(
-                        padding: EdgeInsets.all(20),
+                        padding: EdgeInsets.only(
+                            top: 20, left: 20, right: 20, bottom: 60),
                         decoration: BoxDecoration(
                           color:
                               MyApp.themeNotifier.value == ThemeModeThird.light
@@ -81,9 +82,12 @@ class _ContactPageState extends State<ContactPage> {
                                       height: 35.0,
                                       margin: EdgeInsets.all(5),
                                       child: Image.asset(
-                                        'assets/images/back_profile.png',
-                                        // color: Colors.white,
-                                      ),
+                                          MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.light
+                                              ? 'assets/images/back_profile.png'
+                                              : "assets/images/2024/back_balckwhite.png"
+                                          // color: Colors.white,
+                                          ),
                                     ),
                                   ),
                                   SizedBox(width: 10),
@@ -105,7 +109,11 @@ class _ContactPageState extends State<ContactPage> {
                               ),
                               SizedBox(height: 12),
                               SizedBox(
-                                height: 25,
+                                height: MyApp.fontKanit.value == FontKanit.small
+                                    ? 25
+                                    : MyApp.fontKanit.value == FontKanit.medium
+                                        ? 35
+                                        : 45,
                                 width: double.infinity,
                                 child: FutureBuilder(
                                   future: _futureCategoryModel,
@@ -133,9 +141,16 @@ class _ContactPageState extends State<ContactPage> {
                                 child: Text(
                                   ' ${selectedCategory['title']} (${selectedCategory['total']})',
                                   style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xFFB325F8)),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Color(0xFFBD4BF7)
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
+                                  ),
                                 ),
                               ),
                               Expanded(
@@ -180,17 +195,39 @@ class _ContactPageState extends State<ContactPage> {
             _callRead();
           }),
           child: Container(
-            height: 25,
+            height: MyApp.fontKanit.value == FontKanit.small
+                ? 25
+                : MyApp.fontKanit.value == FontKanit.medium
+                    ? 35
+                    : 45,
             alignment: Alignment.center,
             padding: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
-              color: thisItem ? Color(0xFFB325F8) : Color(0x1AB325F8),
+              color: thisItem
+                  ? MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFBD4BF7)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57)
+                  : MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
+                      : Colors.black,
               borderRadius: BorderRadius.circular(12.5),
             ),
             child: Text(
               model['title'],
               style: TextStyle(
-                color: thisItem ? Colors.white : Color(0x80B325F8),
+                color: thisItem
+                    ? MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.white
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.black
+                            : Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFBD4BF7)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                 fontSize: 13,
                 fontWeight: thisItem ? FontWeight.w500 : FontWeight.w400,
               ),
@@ -206,7 +243,11 @@ class _ContactPageState extends State<ContactPage> {
       onTap: () => launchUrl(Uri.parse('tel:${model['phone']}'),
           mode: LaunchMode.externalApplication),
       child: SizedBox(
-        height: 45,
+        height: MyApp.fontKanit.value == FontKanit.small
+            ? 45
+            : MyApp.fontKanit.value == FontKanit.medium
+                ? 65
+                : 85,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -228,9 +269,13 @@ class _ContactPageState extends State<ContactPage> {
                   Text(
                     model['title'],
                     style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                    ),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.black
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Colors.white),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -239,7 +284,11 @@ class _ContactPageState extends State<ContactPage> {
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFFB325F8),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFFBD4BF7)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -253,17 +302,27 @@ class _ContactPageState extends State<ContactPage> {
               alignment: Alignment.center,
               padding: EdgeInsets.all(5),
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFBD4BF7)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
                       blurRadius: 4,
-                      color: Color(0xFFEEEEEE),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFFBD4BF7)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                       offset: Offset(0, 3),
                     ),
                   ]),
               child: Image.asset(
-                'assets/images/Icon zocial-call.png',
+                MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? 'assets/images/Icon zocial-call.png'
+                    : "assets/images/2024/Icon zocial-call_black.png",
                 height: 22.7,
                 width: 22.7,
               ),

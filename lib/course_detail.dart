@@ -56,17 +56,20 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               children: [
                 _backButton(context),
                 const SizedBox(width: 20),
-                Text(
-                  'รายละเอียดคอร์ส',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontFamily: 'Kanit',
-                    fontWeight: FontWeight.w500,
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Color(0xFFB325F8)
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
+                Flexible(
+                  child: Text(
+                    'รายละเอียดคอร์ส',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Kanit',
+                      fontWeight: FontWeight.w500,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFFB325F8)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                    ),
+                    maxLines: 2,
                   ),
                 ),
               ],
@@ -88,13 +91,32 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             showCupertinoDialog(
               context: context,
               builder: (context) {
-                return ImageViewer(
-                  initialIndex: 0,
-                  imageProviders: [
-                    'https://lms.dcc.onde.go.th/uploads/course/' +
-                        widget.model['cover_image']
-                  ].map<ImageProvider<Object>>((e) => NetworkImage(e)).toList(),
-                );
+                return MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? ImageViewer(
+                        initialIndex: 0,
+                        imageProviders: [
+                          'https://lms.dcc.onde.go.th/uploads/course/' +
+                              widget.model['cover_image']
+                        ]
+                            .map<ImageProvider<Object>>((e) => NetworkImage(e))
+                            .toList(),
+                      )
+                    : ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                          Colors.grey,
+                          BlendMode.saturation,
+                        ),
+                        child: ImageViewer(
+                          initialIndex: 0,
+                          imageProviders: [
+                            'https://lms.dcc.onde.go.th/uploads/course/' +
+                                widget.model['cover_image']
+                          ]
+                              .map<ImageProvider<Object>>(
+                                  (e) => NetworkImage(e))
+                              .toList(),
+                        ),
+                      );
               },
             );
           },
@@ -104,61 +126,80 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(17.5),
-              child: CachedNetworkImage(
-                imageUrl: (widget.model?['cover_image'] ?? '') != ''
-                    ? 'https://lms.dcc.onde.go.th/uploads/course/' +
-                        widget.model['cover_image']
-                    : '',
-                width: MediaQuery.of(context).size.width,
-                fit: BoxFit.cover,
-                errorWidget: (context, url, error) =>
-                    Image.asset('assets/images/logo.png'),
-              ),
+              child: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? CachedNetworkImage(
+                      imageUrl: (widget.model?['cover_image'] ?? '') != ''
+                          ? 'https://lms.dcc.onde.go.th/uploads/course/' +
+                              widget.model['cover_image']
+                          : '',
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.cover,
+                      errorWidget: (context, url, error) =>
+                          Image.asset('assets/images/logo.png'),
+                    )
+                  : ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                        Colors.grey,
+                        BlendMode.saturation,
+                      ),
+                      child: CachedNetworkImage(
+                        imageUrl: (widget.model?['cover_image'] ?? '') != ''
+                            ? 'https://lms.dcc.onde.go.th/uploads/course/' +
+                                widget.model['cover_image']
+                            : '',
+                        width: MediaQuery.of(context).size.width,
+                        fit: BoxFit.cover,
+                        errorWidget: (context, url, error) =>
+                            Image.asset('assets/images/logo.png'),
+                      )),
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                  child: Row(
-                children: [
-                  Image.asset('assets/images/course_time.png',
-                      height: 25, width: 25),
-                  const SizedBox(width: 8),
-                  Text(
-                    widget.model?['course_duration'] ?? '',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: Theme.of(context).custom.b_w_y,
-                    ),
-                  ),
-                ],
-              )),
-              InkWell(
-                onTap: () => _callShare(widget.model),
-                child: Container(
-                  height: 30,
-                  width: 30,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).custom.b325f8_w_fffd57,
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: colorTheme),
-                  ),
-                  child: Image.asset(
-                    'assets/images/share.png',
-                    width: 14.83,
-                    height: 13.38,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //     children: [
+        //       Expanded(
+        //           child: Row(
+        //         children: [
+        //           Image.asset('assets/images/course_time.png',
+        //               height: 25, width: 25),
+        //           const SizedBox(width: 8),
+        //           Text(
+        //             widget.model?['course_duration'] ?? '',
+        //             style: TextStyle(
+        //               fontSize: 15,
+        //               fontWeight: FontWeight.w400,
+        //               color: MyApp.themeNotifier.value == ThemeModeThird.light
+        //                   ? Colors.white
+        //                   : Colors.black,
+        //             ),
+        //           ),
+        //         ],
+        //       )),
+        //       InkWell(
+        //         onTap: () => _callShare(widget.model),
+        //         child: Container(
+        //           height: 30,
+        //           width: 30,
+        //           alignment: Alignment.center,
+        //           decoration: BoxDecoration(
+        //             color: Theme.of(context).custom.b325f8_w_fffd57,
+        //             borderRadius: BorderRadius.circular(15),
+        //             border: Border.all(color: colorTheme),
+        //           ),
+        //           child: Image.asset(
+        //             'assets/images/share.png',
+        //             width: 14.83,
+        //             height: 13.38,
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        SizedBox(height: 20),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           // margin: const EdgeInsets.only(right: 50, top: 10),
@@ -428,7 +469,9 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             child: Text(
               'เริ่มเรียน',
               style: TextStyle(
-                color: Colors.white,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.white
+                    : Colors.black,
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
               ),
@@ -446,15 +489,9 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       child: Container(
         height: 40,
         width: 40,
-        // // padding: EdgeInsets.all(5),
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(8),
-        //   color: buttonTheme,
-        //   border: Border.all(color: colorTheme),
-        // ),
-        child: Image.asset(
-          'assets/images/back_arrow.png',
-        ),
+        child: Image.asset(MyApp.themeNotifier.value == ThemeModeThird.light
+            ? 'assets/images/back_arrow.png'
+            : 'assets/images/2024/back_balckwhite.png'),
       ),
     );
   }

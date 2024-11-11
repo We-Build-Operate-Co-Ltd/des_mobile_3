@@ -45,23 +45,24 @@ class _MyCourseCategorySearchPageState
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: backgroundTheme,
-        appBar:  PreferredSize(
+        appBar: PreferredSize(
           preferredSize: Size.fromHeight(70.0), // here the desired height
           child: AppBar(
-          backgroundColor: backgroundTheme,
-          automaticallyImplyLeading: false,
-          flexibleSpace: Container(
-            width: double.infinity,
-            height: 80 + MediaQuery.of(context).padding.top,
-            color: backgroundTheme,
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top,
-              left: 15,
-              right: 15,
+            backgroundColor: backgroundTheme,
+            automaticallyImplyLeading: false,
+            flexibleSpace: Container(
+              width: double.infinity,
+              height: 80 + MediaQuery.of(context).padding.top,
+              color: backgroundTheme,
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top,
+                left: 15,
+                right: 15,
+              ),
+              child: _buildHead(),
             ),
-            child: _buildHead(),
           ),
-        ),),
+        ),
         body: Container(
           padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
           child: _buildListModel(),
@@ -79,7 +80,11 @@ class _MyCourseCategorySearchPageState
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 10 / 12.5,
+                  childAspectRatio: MyApp.fontKanit.value == FontKanit.small
+                      ? 10 / 12.5
+                      : MyApp.fontKanit.value == FontKanit.medium
+                          ? 10 / 13
+                          : 10 / 14,
                   crossAxisSpacing: 15,
                   mainAxisSpacing: 15),
               physics: const ClampingScrollPhysics(),
@@ -172,8 +177,12 @@ class _MyCourseCategorySearchPageState
                 padding: const EdgeInsets.all(8),
                 child: Row(
                   children: [
-                    Image.asset('assets/images/course_time.png',
-                        height: 24, width: 24),
+                    Image.asset(
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? 'assets/images/course_time.png'
+                            : "assets/images/2024/time_home_page_blackwhite.png",
+                        height: 24,
+                        width: 24),
                     const SizedBox(width: 8),
                     Text(
                       model?['course_Duration'],

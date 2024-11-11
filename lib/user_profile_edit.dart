@@ -197,7 +197,11 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
               height: 1000,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage("assets/images/new_bg.png"),
+                  image: AssetImage(
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? "assets/images/BG.png"
+                        : "assets/images/2024/BG_Blackwhite.jpg",
+                  ),
                   alignment: Alignment.topCenter,
                   fit: BoxFit.cover,
                 ),
@@ -212,7 +216,8 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                   alignment: Alignment.bottomCenter,
                   // height:  MediaQuery.of(context).size.height * .650,
                   height: deviceHeight * 0.8,
-                  padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+                  padding:
+                      EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
                   decoration: BoxDecoration(
                     color: MyApp.themeNotifier.value == ThemeModeThird.light
                         ? Colors.white
@@ -354,7 +359,6 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                                 : Color(0xFFFFFD57),
                       ),
                       SizedBox(height: 15),
-                      SizedBox(height: 30),
                       Text(
                         'การติดต่อ',
                         style: TextStyle(
@@ -413,7 +417,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                                 ? Colors.white
                                 : Color(0xFFFFFD57),
                       ),
-                      SizedBox(height: 40),
+                      SizedBox(height: 20),
                       Stack(
                         children: [
                           GestureDetector(
@@ -675,41 +679,46 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
             Navigator.pop(context);
           },
           child: Container(
-            height: 35,
-            width: 35,
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFFB325F8)
-                    : Colors.black,
-                border: Border.all(
-                  width: 1,
-                  style: BorderStyle.solid,
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFFB325F8)
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57),
-                )),
+            height: 40,
+            width: 40,
+            // padding: EdgeInsets.all(5),
+            // decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(8),
+            //     color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //         ? Color(0xFFB325F8)
+            //         : Colors.black,
+            //     border: Border.all(
+            //       width: 1,
+            //       style: BorderStyle.solid,
+            //       color: MyApp.themeNotifier.value == ThemeModeThird.light
+            //           ? Color(0xFFB325F8)
+            //           : MyApp.themeNotifier.value == ThemeModeThird.dark
+            //               ? Colors.white
+            //               : Color(0xFFFFFD57),
+            //     )),
             child: Image.asset(
-              'assets/images/back_arrow.png',
+              MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? 'assets/images/back_arrow.png'
+                  : "assets/images/2024/back_balckwhite.png",
             ),
           ),
         ),
         Container(
           margin: EdgeInsets.all(5),
-          child: Text(
-            'แก้ไขข้อมูลส่วนตัว',
-            style: TextStyle(
-              fontSize: 24,
-              fontFamily: 'Kanit',
-              fontWeight: FontWeight.w500,
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Color(0xFFB325F8)
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
+          child: Flexible(
+            child: Text(
+              'แก้ไขข้อมูลส่วนตัว',
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: 'Kanit',
+                fontWeight: FontWeight.w500,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFFB325F8)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+              maxLines: 2,
             ),
           ),
         ),

@@ -397,7 +397,9 @@ class _NotificationListState extends State<NotificationListPage> {
     return Stack(
       children: <Widget>[
         Image.asset(
-          "assets/images/new_bg.png",
+          MyApp.themeNotifier.value == ThemeModeThird.light
+              ? "assets/images/new_bg.png"
+              : "assets/images/2024/BG_Blackwhite.jpg",
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           fit: BoxFit.cover,
@@ -765,7 +767,9 @@ class _NotificationListState extends State<NotificationListPage> {
                   height: 40,
                   width: 40,
                   child: Image.asset(
-                    'assets/images/back_arrow.png',
+                    MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? 'assets/images/back_arrow.png'
+                        : "assets/images/2024/back_balckwhite.png",
                   ),
                 ),
               ),
@@ -826,8 +830,16 @@ class _NotificationListState extends State<NotificationListPage> {
       },
       child: Container(
         alignment: Alignment.center,
-        width: 145,
-        height: 40,
+        width: MyApp.fontKanit.value == FontKanit.small
+            ? 145
+            : MyApp.fontKanit.value == FontKanit.medium
+                ? 155
+                : 165,
+        height: MyApp.fontKanit.value == FontKanit.small
+            ? 40
+            : MyApp.fontKanit.value == FontKanit.medium
+                ? 45
+                : 50,
         decoration: BoxDecoration(
             border: Border.all(
                 width: 1, style: BorderStyle.solid, color: borderColor),
@@ -1046,7 +1058,7 @@ class _NotificationListState extends State<NotificationListPage> {
                         fontSize: 13,
                       ),
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
+                      maxLines: 6,
                     ),
                   ),
                 ],
@@ -1770,7 +1782,11 @@ class _NotificationListState extends State<NotificationListPage> {
 
   Widget _buildListNotiCategory() {
     return Container(
-      height: 35,
+      height: MyApp.fontKanit.value == FontKanit.small
+          ? 35
+          : MyApp.fontKanit.value == FontKanit.medium
+              ? 45
+              : 55,
       child: ListView.separated(
         padding: EdgeInsets.symmetric(horizontal: 15),
         scrollDirection: Axis.horizontal,
@@ -1788,25 +1804,33 @@ class _NotificationListState extends State<NotificationListPage> {
               margin: EdgeInsets.only(right: 10),
               decoration: new BoxDecoration(
                 borderRadius: new BorderRadius.circular(40),
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? __ == _typeSelected
-                        ? Color(0xFFB325F8)
-                        : Color(0xFFB325F8).withOpacity(0.1)
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                color: __ == _typeSelected
+                    // ? Color(0xFFB325F8)
+                    ? MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFBD4BF7)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57)
+                    : MyApp.themeNotifier.value == ThemeModeThird.light
                         ? Colors.white
-                        : Color(0xFFFFFD57),
+                        : Colors.black,
               ),
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
               child: Text(
                 '${cateNoti[__]} (${__ == 1 ? notiCountNotRead : __ == 2 ? notiCountThis : __ == 3 ? notiCount7 : notiCountAll})',
                 style: TextStyle(
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? __ == _typeSelected
+                  color: __ == _typeSelected
+                      ? MyApp.themeNotifier.value == ThemeModeThird.light
                           ? Colors.white
-                          : Color(0xFFB325F8).withOpacity(0.5)
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.black
-                          : Colors.black,
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.black
+                              : Colors.black
+                      // : Color(0xFFB325F8).withOpacity(0.5),
+                      : MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFFB325F8).withOpacity(0.5)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                   fontSize: 14.0,
                   fontWeight: FontWeight.normal,
                   letterSpacing: 1.2,

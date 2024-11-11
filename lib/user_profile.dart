@@ -92,7 +92,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 height: 1000,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage("assets/images/new_bg.png"),
+                    image: AssetImage(
+                      MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? "assets/images/BG.png"
+                          : "assets/images/2024/BG_Blackwhite.jpg",
+                    ),
                     alignment: Alignment.topCenter,
                     fit: BoxFit.cover,
                   ),
@@ -127,27 +131,30 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                 widget.changePage!(0);
                               },
                               child: Container(
-                                height: 35,
-                                width: 35,
-                                padding: EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Color(0xFFB325F8)
-                                      : Colors.black,
-                                  border: Border.all(
-                                    color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color(0xFFB325F8)
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.white
-                                            : Color(0xFFFFFD57),
-                                  ),
-                                ),
+                                height: 40,
+                                width: 40,
+                                // padding: EdgeInsets.all(6),
+                                // decoration: BoxDecoration(
+                                //   borderRadius: BorderRadius.circular(8),
+                                //   color: MyApp.themeNotifier.value ==
+                                //           ThemeModeThird.light
+                                //       ? Color(0xFFB325F8)
+                                //       : Colors.black,
+                                //   border: Border.all(
+                                //     color: MyApp.themeNotifier.value ==
+                                //             ThemeModeThird.light
+                                //         ? Color(0xFFB325F8)
+                                //         : MyApp.themeNotifier.value ==
+                                //                 ThemeModeThird.dark
+                                //             ? Colors.white
+                                //             : Color(0xFFFFFD57),
+                                //   ),
+                                // ),
                                 child: Image.asset(
-                                  'assets/images/back_arrow.png',
+                                  MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? 'assets/images/back_arrow.png'
+                                      : "assets/images/2024/back_balckwhite.png",
                                 ),
                               ),
                             ),
@@ -234,7 +241,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             if (_isVerify)
                               Container(
                                 alignment: Alignment.center,
-                                width: 75,
+                                width: MyApp.fontKanit.value == FontKanit.small
+                                    ? 75
+                                    : MyApp.fontKanit.value == FontKanit.medium
+                                        ? 100
+                                        : 125,
                                 height: 20,
                                 decoration: BoxDecoration(
                                   color: MyApp.themeNotifier.value ==
@@ -399,12 +410,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Widget _buildVerifyYourIdentity() {
     return GestureDetector(
       onTap: () {
-          Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => VerifyThaiIDNewPage(),
-        ),
-      );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => VerifyThaiIDNewPage(),
+          ),
+        );
         // Navigator.push(
         //   context,
         //   MaterialPageRoute(builder: (builder) => VerifyMainPage()),

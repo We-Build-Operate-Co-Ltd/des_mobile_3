@@ -575,7 +575,6 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                         MaterialPageRoute(
                           builder: (_) => BookingServicePage(
                             catSelectedWidget: '2',
-                            
                           ),
                         ),
                       ),
@@ -616,11 +615,14 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
       setState(() => _loadingSubmit = true);
       var accessToken = await ManageStorage.read('accessToken') ?? '';
       // final String baseUrl = 'http://dcc-portal.webview.co/dcc-api';
-      Response response = await Dio().put('$ondeURL/api/Booking/Cancel?bookingNo=${widget.model['bookingno']}', options: Options(
+      Response response = await Dio().put(
+        '$ondeURL/api/Booking/Cancel?bookingNo=${widget.model['bookingno']}',
+        options: Options(
           headers: {
             'Authorization': 'Bearer $accessToken',
           },
-        ),);
+        ),
+      );
       setState(() => _loadingSubmit = false);
 
       if (response.data['success']) {
