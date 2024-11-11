@@ -88,8 +88,8 @@ class _BookingServicePageState extends State<BookingServicePage>
 
   List<dynamic> bookingTypeList = [
     {"label": 'ทั้งหมด', "value": ''},
-    {"label": 'เครื่อง', "value": '1'},
-    {"label": 'ห้องประชุม', "value": '2'},
+    {"label": 'ห้องประชุม', "value": '1'},
+    {"label": 'เครื่องคอมพิวเตอร์', "value": '2'},
   ];
 
   @override
@@ -747,13 +747,15 @@ class _BookingServicePageState extends State<BookingServicePage>
                 TextEditingController controller,
                 FocusNode focusNode,
                 VoidCallback onFieldSubmitted) {
-                  
+              controller.addListener(() {
+                _searchController.text = controller.text;
+              });
+
               return TextFormField(
                 decoration: _decorationSearch(
                   context,
                   hintText: 'พิมพ์คำค้นหา',
                 ),
-                
                 controller: controller,
                 focusNode: focusNode,
                 style: TextStyle(
@@ -796,7 +798,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                 filter['provinceSelectedTitle'] = '';
                 filter['districtSelected'] = '0';
                 filter['districtSelectedTitle'] = '';
-                districtList.clear();
+                // districtList.clear();
                 districtList = [
                   {"label": 'เลือกอำเภอ', "value": '0'}
                 ];
@@ -811,6 +813,7 @@ class _BookingServicePageState extends State<BookingServicePage>
           onChanged: (p0) {
             setState(() {
               filter['bookingType'] = p0;
+              print('-----------------${filter['bookingType']}');
             });
           },
         ),
@@ -828,20 +831,18 @@ class _BookingServicePageState extends State<BookingServicePage>
                             (e) => e['value'] == int.parse(p0))['label'];
                     filter['provinceSelected'] = p0;
                   });
-                  _searchController.clear();
+
                   districtList.clear();
                   districtList = [
                     {"label": 'เลือกอำเภอ', "value": '0'}
                   ];
                   _callReadDistrict();
-                  print('>>>>>>> ${_searchController}');
                 },
               ),
               // GestureDetector(
               //   onTap: () {
               //     FocusScope.of(context).unfocus();
               //     // dialogOpenPickerTime('start');
-
               //   },
               //   child: AbsorbPointer(
               //     child: TextFormField(
@@ -920,50 +921,27 @@ class _BookingServicePageState extends State<BookingServicePage>
         ),
         SizedBox(height: 16),
         GestureDetector(
-          // onTap: () {
-          //   FocusScope.of(context).unfocus();
-          //   var startTime = _currentPage == 0 ? txtStartTime.text : '';
-          //   var endTime = _currentPage == 0 ? txtEndTime.text : '';
-          //   var search = _searchController.text;
-          //   Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (_) => BookingServiceSearchResultPage(
-          //         date: txtDate.text,
-          //         startTime: startTime,
-          //         endTime: endTime,
-          //         search: search,
-          //         filter: filter,
-          //         mode: (filter == null || filter.isEmpty) ? '2' : '1',
-          //       ),
-          //     ),
-          //   );
-          // },
           onTap: () {
             FocusScope.of(context).unfocus();
-
             var startTime = _currentPage == 0 ? txtStartTime.text : '';
             var endTime = _currentPage == 0 ? txtEndTime.text : '';
             var search = _searchController.text;
-            bool isFilterEmpty = (filter['provinceSelected'] == '0') &&
-                (filter['districtSelected'] == '0');
-            // &&
-            // filter['bookingType'].isEmpty
-            // &&
-            // filter['latitude'].isEmpty &&
-            // filter['longitude'].isEmpty;
+            // print('========search==========> ${search}');
+            // print('=======filter===========> ${filter}.');
 
+            // bool isFilterEmpty =
+            //     filter.values.every((value) => value == '' || value == '0');
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => BookingServiceSearchResultPage(
-                  date: txtDate.text,
-                  startTime: startTime,
-                  endTime: endTime,
-                  search: search,
-                  filter: filter,
-                  mode: isFilterEmpty ? '2' : '1',
-                ),
+                    date: txtDate.text,
+                    startTime: startTime,
+                    endTime: endTime,
+                    search: search,
+                    filter: filter,
+                    // mode: (isFilterEmpty && search.isEmpty) ? '2' : '1',
+                    mode: '1'),
               ),
             );
           },
@@ -999,9 +977,9 @@ class _BookingServicePageState extends State<BookingServicePage>
           onTap: () async => {
             setState(() => {
                   filter = {
-                    "provinceSelected": '',
+                    "provinceSelected": '0',
                     "provinceTitleSelected": '',
-                    "districtSelected": '',
+                    "districtSelected": '0',
                     "districtTitleSelected": '',
                     "bookingType": '',
                     "latitude": '',
@@ -2392,7 +2370,7 @@ class _BookingServicePageState extends State<BookingServicePage>
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
-    _searchController.dispose();
+    // _searchController.dispose();
     _animationController.dispose();
     super.dispose();
   }

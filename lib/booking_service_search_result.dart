@@ -150,8 +150,23 @@ class _BookingServiceSearchResultPageState
   _list() {
     if (_loadingBookingStatus == LoadingBookingStatus.loading) {
       return Center(
-        child: CircularProgressIndicator(
-          color: Theme.of(context).custom.b325f8_w_fffd57,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              color: Theme.of(context).custom.b325f8_w_fffd57,
+            ),
+            SizedBox(height: 12),
+            Text(
+              'กรุณารอสักครู่\n ระบบอยู่ระหว่างการค้นหาศูนย์',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).custom.b325f8_w_fffd57,
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+              ),
+            )
+          ],
         ),
       );
     } else if (_loadingBookingStatus == LoadingBookingStatus.success) {
@@ -484,38 +499,96 @@ class _BookingServiceSearchResultPageState
 
   _callRead() async {
     var url = '';
-    if (widget.mode == '1' &&
-        (widget.search != '' ||
-            (widget.filter['provinceSelected'] != '' &&
-                widget.filter['provinceSelected'] != '0') ||
-            widget.filter['districtTitleSelected'] != '')) {
+    print('------------moade-------------------------${widget.mode}');
+    print('------------search------------------------${widget.search}');
+    print(
+        '------------provinceSelected--------------${widget.filter['provinceSelected']}');
+    print(
+        '------------districtTitleSelected---------${widget.filter['districtTitleSelected']}');
+    print(
+        '------------bookingType-------------------${widget.filter['bookingType']}');
+
+    print(
+        '=======filter provinceSelected===== 1 ======> ${widget.filter['provinceSelected']}');
+
+    print(
+        '=======filter provinceSelected===== 2 ======> ${widget.filter['provinceSelected']}');
+
+    if (widget.mode == '1') {
       url =
-          'GetSearchCenterLocation?textSearch=${widget.search}&chId=${widget.filter['provinceSelected']}&assetType=${widget.filter['bookingType']}&amName=${widget.filter['districtTitleSelected']}';
-      // print('---------------1--------');
+          'GetSearchCenterLocation?textSearch=${widget.search ?? ''}&chId=${widget.filter['provinceSelected'] == '0' ? '' : widget.filter['provinceSelected']}&assetType=${widget.filter['bookingType'] ?? ''}&amName=${widget.filter['districtTitleSelected'] ?? ''}';
+
+      print('--------------mode-1---------');
     } else {
-      // print('---------------2--------');
+      print('--------------mode-2--------');
       await getLocation();
-      url = 'GetCenterLocation?latitude=${latitude}&longitude=${longitude}';
+      url = 'GetCenterLocation?latitude=$latitude&longitude=$longitude';
     }
 
-    print('======== url >> $url');
+    print('=============================>>>>>>>>    url >>>>>> $url');
     try {
       Response response = await Dio().get('$ondeURL/api/DataManagement/$url');
-
+      print('======================222=======>>>>>>>>    url >>>>>> ');
       if (response.data != null && response.data['data'] != null) {
         setState(() {
           _filterModelCenter = response.data['data'];
           print('>>>>>>>>>>>>> response ${response.data['data']}');
+          // logWTF(response.data['data']);
         });
       }
       setState(() => _loadingBookingStatus = LoadingBookingStatus.success);
     } on DioError catch (e) {
+      print('======================222333=======>>>>>>>>    url >>>>>> ');
       setState(() => _loadingBookingStatus = LoadingBookingStatus.fail);
       Fluttertoast.showToast(msg: e.response!.data['message']);
     } finally {
       setState(() => _loadingBookingStatus = LoadingBookingStatus.success);
     }
   }
+
+  // _callRead() async {
+  //   var url = '';
+  //   print('------------moade-------------------------${widget.mode}');
+  //   print('------------search------------------------${widget.search}');
+  //   print(
+  //       '------------provinceSelected--------------${widget.filter['provinceSelected']}');
+  //   print(
+  //       '------------districtTitleSelected---------${widget.filter['districtTitleSelected']}');
+
+  //   if (widget.mode == '1' &&
+  //       (widget.search.isNotEmpty ||
+  //           (widget.filter['provinceSelected'] != null &&
+  //               widget.filter['provinceSelected'] != '' &&
+  //               widget.filter['provinceSelected'] != '0') ||
+  //           (widget.filter['districtTitleSelected'] != null &&
+  //               widget.filter['districtTitleSelected'] != ''))) {
+  //     url =
+  //         'GetSearchCenterLocation?textSearch=${widget.search}&chId=${widget.filter['provinceSelected']}&assetType=${widget.filter['bookingType']}&amName=${widget.filter['districtTitleSelected']}';
+  //     print('---------------1------มีข้อมูล-----');
+  //   } else {
+  //     print('---------------2-----ไม่มีข้อมูล---');
+  //     await getLocation();
+  //     url = 'GetCenterLocation?latitude=$latitude&longitude=$longitude';
+  //   }
+  //   print('=============================>>>>>>>>    url >>>>>> $url');
+  //   try {
+  //     Response response = await Dio().get('$ondeURL/api/DataManagement/$url');
+
+  //     if (response.data != null && response.data['data'] != null) {
+  //       setState(() {
+  //         _filterModelCenter = response.data['data'];
+  //         print('>>>>>>>>>>>>> response ${response.data['data']}');
+  //         logWTF(response.data['data']);
+  //       });
+  //     }
+  //     setState(() => _loadingBookingStatus = LoadingBookingStatus.success);
+  //   } on DioError catch (e) {
+  //     setState(() => _loadingBookingStatus = LoadingBookingStatus.fail);
+  //     Fluttertoast.showToast(msg: e.response!.data['message']);
+  //   } finally {
+  //     setState(() => _loadingBookingStatus = LoadingBookingStatus.success);
+  //   }
+  // }
 
   getLocation() async {
     try {
