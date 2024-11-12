@@ -11,6 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'booking_service_add.dart';
+import 'main.dart';
 
 class BookingServiceSearchResultPage extends StatefulWidget {
   const BookingServiceSearchResultPage({
@@ -46,9 +47,17 @@ class _BookingServiceSearchResultPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+          ? Colors.white
+          : MyApp.themeNotifier.value == ThemeModeThird.dark
+              ? Colors.black
+              : Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Colors.white
+            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                ? Colors.black
+                : Colors.black,
         automaticallyImplyLeading: false,
         flexibleSpace: Container(
           width: double.infinity,
@@ -66,6 +75,11 @@ class _BookingServiceSearchResultPageState
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFBD4BF7)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -99,7 +113,11 @@ class _BookingServiceSearchResultPageState
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 15,
-                      color: Theme.of(context).custom.b_w_y,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFFBD4BF7)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                       fontFamily: 'Kanit',
                     ),
                   ),
@@ -217,7 +235,11 @@ class _BookingServiceSearchResultPageState
         logWTF(model);
       },
       child: Container(
-        color: Colors.white,
+        color: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Colors.white
+            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                ? Colors.black
+                : Colors.black,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -280,10 +302,14 @@ class _BookingServiceSearchResultPageState
             Row(
               children: [
                 Expanded(
-                    child: Row(
+                    child: Wrap(
                   children: [
                     Image.asset(
-                      'assets/images/time.png',
+                      MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? 'assets/images/time.png'
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? "assets/images/2024/time _w.png"
+                              : "assets/images/2024/time _y.png",
                       height: 22,
                       width: 22,
                       fit: BoxFit.cover,
@@ -310,7 +336,12 @@ class _BookingServiceSearchResultPageState
                     child: Row(
                   children: [
                     Image.asset(
-                      'assets/images/computer.png',
+                      // 'assets/images/computer.png',
+                      MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? 'assets/images/computer.png'
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? "assets/images/2024/computer_w.png"
+                              : "assets/images/2024/computer_y.png",
                       height: 22,
                       width: 22,
                       fit: BoxFit.cover,
@@ -332,7 +363,12 @@ class _BookingServiceSearchResultPageState
                     child: Row(
                   children: [
                     Image.asset(
-                      'assets/images/meeting room.png',
+                      // 'assets/images/meeting room.png',
+                      MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? 'assets/images/meeting room.png'
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? "assets/images/2024/meet-room-w.png"
+                              : "assets/images/2024/meet-room-y.png",
                       height: 22,
                       width: 22,
                       fit: BoxFit.cover,
@@ -368,7 +404,11 @@ class _BookingServiceSearchResultPageState
                         vertical: 13,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.white
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.black
+                                : Colors.black,
                         border: Border.all(
                           color: Theme.of(context).custom.b325f8_w_fffd57_OVF50,
                         ),
@@ -382,7 +422,12 @@ class _BookingServiceSearchResultPageState
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset(
-                            'assets/images/navigation.png',
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/navigation.png'
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? "assets/images/2024/navigation-w.png"
+                                    : "assets/images/2024/navigation-y.png",
                             height: 16,
                             width: 16,
                             fit: BoxFit.cover,
@@ -445,7 +490,9 @@ class _BookingServiceSearchResultPageState
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset(
-                            'assets/images/calendar.png',
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/calendar.png'
+                                : "assets/images/2024/calendar-b.png",
                             height: 16,
                             width: 16,
                             fit: BoxFit.cover,
@@ -484,7 +531,9 @@ class _BookingServiceSearchResultPageState
         Navigator.pop(context);
       },
       child: Image.asset(
-        'assets/images/back_arrow.png',
+        MyApp.themeNotifier.value == ThemeModeThird.light
+            ? 'assets/images/back_arrow.png'
+            : "assets/images/2024/back_balckwhite.png",
         height: 40,
         width: 40,
       ),

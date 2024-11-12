@@ -106,17 +106,25 @@ class _BookingServicePageState extends State<BookingServicePage>
             padding: EdgeInsets.only(top: 130),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/BG.png"),
+                image: AssetImage(
+                  MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? "assets/images/BG.png"
+                      : "assets/images/2024/BG_Blackwhite.jpg",
+                ),
                 fit: BoxFit.cover,
               ),
             ),
             child: Container(
-              padding: EdgeInsets.fromLTRB(24, 24, 24, 24),
+              padding: EdgeInsets.fromLTRB(24, 24, 24, 80),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(24),
                       topRight: Radius.circular(24)),
-                  color: Colors.white,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.black
+                          : Colors.black,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.3),
@@ -141,7 +149,9 @@ class _BookingServicePageState extends State<BookingServicePage>
                           ),
                         },
                         child: Image.asset(
-                          'assets/images/back_arrow.png',
+                          MyApp.themeNotifier.value == ThemeModeThird.light
+                              ? 'assets/images/back_profile.png'
+                              : "assets/images/2024/back_balckwhite.png",
                           width: 35,
                           height: 35,
                         ),
@@ -153,8 +163,14 @@ class _BookingServicePageState extends State<BookingServicePage>
                           child: Text(
                         "จองใช้บริการศูนย์\nดิจิทัลชุมชนและอุปกรณ์",
                         style: TextStyle(
-                            fontSize: 24,
-                            color: Theme.of(context).custom.b325f8_w_fffd57,
+                            fontSize: 18,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFBD4BF7)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                             fontWeight: FontWeight.w500),
                       )),
                     ],
@@ -187,7 +203,12 @@ class _BookingServicePageState extends State<BookingServicePage>
   catContentPage() {
     return Container(
       // height: double.infinity,
-      height: 40,
+      // height: 40,
+      height: MyApp.fontKanit.value == FontKanit.small
+          ? 40
+          : MyApp.fontKanit.value == FontKanit.medium
+              ? 45
+              : 50,
       child: SingleChildScrollView(
         padding: EdgeInsets.zero,
         physics: ClampingScrollPhysics(),
@@ -225,19 +246,48 @@ class _BookingServicePageState extends State<BookingServicePage>
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        // decoration: BoxDecoration(
+        //     color: catSelected == indexSelected
+        //         ? Theme.of(context).custom.b325f8_w_fffd57
+        //         : Theme.of(context).custom.b325f8_b_b_OVF10,
+        //     borderRadius: BorderRadius.circular(20)),
         decoration: BoxDecoration(
-            color: catSelected == indexSelected
-                ? Theme.of(context).custom.b325f8_w_fffd57
-                : Theme.of(context).custom.b325f8_b_b_OVF10,
-            borderRadius: BorderRadius.circular(20)),
+          color: catSelected == indexSelected
+              // ? Color(0xFFB325F8)
+              ? MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFFBD4BF7)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57)
+              : MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Colors.white
+                  : Colors.black,
+          borderRadius: BorderRadius.circular(17.5),
+        ),
+
         child: Text(
           title,
+          // style: TextStyle(
+          // color: catSelected == indexSelected
+          //     ? Theme.of(context).custom.w_b_b
+          //     : Theme.of(context).custom.b325f8_w_fffd57_OVF50,
+
+          //     fontSize: 13,
+          //     fontWeight: FontWeight.w500),
+
           style: TextStyle(
               color: catSelected == indexSelected
-                  ? Theme.of(context).custom.w_b_b
-                  : Theme.of(context).custom.b325f8_w_fffd57_OVF50,
-              fontSize: 13,
-              fontWeight: FontWeight.w500),
+                  ? MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.black
+                          : Colors.black
+                  // : Color(0xFFB325F8).withOpacity(0.5),
+                  : MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFB325F8).withOpacity(0.5)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57)),
         ),
       ),
     );
@@ -750,7 +800,6 @@ class _BookingServicePageState extends State<BookingServicePage>
               controller.addListener(() {
                 _searchController.text = controller.text;
               });
-
               return TextFormField(
                 decoration: _decorationSearch(
                   context,
@@ -1003,9 +1052,17 @@ class _BookingServicePageState extends State<BookingServicePage>
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 13),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Colors.white
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.black
+                      : Colors.black,
               border: Border.all(
-                color: Theme.of(context).custom.b325f8_w_fffd57_OVF50,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFFBD4BF7)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
               ),
               borderRadius: BorderRadius.circular(25),
             ),
@@ -1047,9 +1104,25 @@ class _BookingServicePageState extends State<BookingServicePage>
                     ? Column(
                         children: [
                           Image.asset(
-                            'assets/images/owl_3.png',
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/owl_3.png'
+                                : "",
                             height: 153,
                           ),
+
+                          // MyApp.themeNotifier.value == ThemeModeThird.light
+                          //     ? Image.asset(
+                          //         'assets/images/owl_3.png',
+                          //         height: 153,
+                          //       )
+                          //     : ColorFiltered(
+                          //         colorFilter: ColorFilter.mode(
+                          //             Colors.grey, BlendMode.saturation),
+                          //         child: Image.asset(
+                          //           'assets/images/owl_3.png',
+                          //           height: 153,
+                          //         ),
+                          //       ),
                           const SizedBox(
                             height: 16,
                           ),
@@ -1099,7 +1172,13 @@ class _BookingServicePageState extends State<BookingServicePage>
                             child: Container(
                               padding: EdgeInsets.symmetric(vertical: 13),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.white
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.black
+                                        : Colors.black,
                                 border: Border.all(
                                   color: Theme.of(context)
                                       .custom
@@ -1112,8 +1191,13 @@ class _BookingServicePageState extends State<BookingServicePage>
                                 'ค้นหาศูนย์ใกล้ฉัน',
                                 style: TextStyle(
                                   fontSize: 15,
-                                  color:
-                                      Theme.of(context).custom.b325f8_w_fffd57,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Color(0xFFBD4BF7)
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -1180,7 +1264,9 @@ class _BookingServicePageState extends State<BookingServicePage>
                     ? Column(
                         children: [
                           Image.asset(
-                            'assets/images/owl_3.png',
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/owl_3.png'
+                                : " ",
                             height: 153,
                           ),
                           const SizedBox(
@@ -1227,7 +1313,13 @@ class _BookingServicePageState extends State<BookingServicePage>
                             child: Container(
                               padding: EdgeInsets.symmetric(vertical: 13),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.white
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.black
+                                        : Colors.black,
                                 border: Border.all(
                                   color: Theme.of(context)
                                       .custom
@@ -1240,8 +1332,13 @@ class _BookingServicePageState extends State<BookingServicePage>
                                 'ค้นหาศูนย์ใกล้ฉัน',
                                 style: TextStyle(
                                   fontSize: 15,
-                                  color:
-                                      Theme.of(context).custom.b325f8_w_fffd57,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Color(0xFFBD4BF7)
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -1346,22 +1443,46 @@ class _BookingServicePageState extends State<BookingServicePage>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: (model['base64'] ?? '') != ''
-                ? Image.memory(
-                    base64Decode(model['base64']),
-                    height: 180,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  )
-                : Image.asset(
-                    'assets/images/banner_mock.jpg',
-                    height: 180,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+          MyApp.themeNotifier.value == ThemeModeThird.light
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: (model['base64'] ?? '') != ''
+                      ? Image.memory(
+                          base64Decode(model['base64']),
+                          height: 180,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset(
+                          'assets/images/banner_mock.jpg',
+                          height: 180,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                )
+              : ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                      Colors.grey,
+                      BlendMode.saturation,
+                    ),
+                    child: (model['base64'] ?? '') != ''
+                        ? Image.memory(
+                            base64Decode(model['base64']),
+                            height: 180,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.asset(
+                            'assets/images/banner_mock.jpg',
+                            height: 180,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
                   ),
-          ),
+                ),
+
           SizedBox(height: 15),
           Row(
             children: [
@@ -1458,7 +1579,7 @@ class _BookingServicePageState extends State<BookingServicePage>
               ),
             ),
           SizedBox(height: 12),
-          Row(
+          Wrap(
             children: [
               // Icon(
               //   Icons.calendar_month_rounded,
@@ -1470,7 +1591,11 @@ class _BookingServicePageState extends State<BookingServicePage>
               //   size: 15,
               // ),
               Image.asset(
-                'assets/images/time.png',
+                MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? 'assets/images/time.png'
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? "assets/images/2024/meeting_room_w.png"
+                        : "assets/images/2024/time _y.png",
                 width: 22,
               ),
               SizedBox(width: 5),
@@ -1486,6 +1611,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
                 ),
+                maxLines: 2,
               ),
               SizedBox(width: 6),
               Text(
@@ -2717,7 +2843,7 @@ class _BookingServicePageState extends State<BookingServicePage>
     return Stack(
       children: [
         Container(
-          height: 50,
+          height: 60,
           decoration: BoxDecoration(
             color: Theme.of(context).custom.w_b_b,
             borderRadius: BorderRadius.circular(7),
@@ -2742,6 +2868,7 @@ class _BookingServicePageState extends State<BookingServicePage>
               fontFamily: 'Kanit',
             ),
             decoration: _decorationDropdown(context),
+            isDense: false,
             isExpanded: true,
             // value: value,
             value: value != null &&
@@ -2763,6 +2890,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                     fontSize: 14,
                     color: Theme.of(context).custom.b_W_fffd57,
                   ),
+                  maxLines: 1,
                 ),
               );
             }).toList(),
