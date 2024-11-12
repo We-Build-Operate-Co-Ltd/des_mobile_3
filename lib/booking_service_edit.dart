@@ -87,7 +87,11 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
             padding: EdgeInsets.only(top: 130),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/BG.png"),
+                image: AssetImage(
+                  MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? "assets/images/BG.png"
+                      : "assets/images/2024/BG_Blackwhite.jpg",
+                ),
                 fit: BoxFit.cover,
               ),
             ),
@@ -97,7 +101,11 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(24),
                       topRight: Radius.circular(24)),
-                  color: Colors.white,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.black
+                          : Colors.black,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.3),
@@ -115,7 +123,9 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Image.asset(
-                          'assets/images/back_arrow.png',
+                          MyApp.themeNotifier.value == ThemeModeThird.light
+                              ? 'assets/images/back_arrow.png'
+                              : "assets/images/2024/back_balckwhite.png",
                           width: 35,
                           height: 35,
                         ),
@@ -128,7 +138,13 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
                         "เลื่อนการจอง",
                         style: TextStyle(
                             fontSize: 24,
-                            color: Theme.of(context).custom.b325f8_w_fffd57,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFBD4BF7)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                             fontWeight: FontWeight.w500),
                       )),
                     ],
@@ -144,7 +160,6 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
                           Expanded(
                             child: _buildBookingForm(),
                           ),
-                          
                           GestureDetector(
                             onTap: () {
                               if (txtDate.text.isEmpty ||
@@ -199,7 +214,13 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
                                 'ยืนยัน',
                                 style: TextStyle(
                                   fontSize: 15,
-                                  color: Theme.of(context).custom.w_b_b,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Colors.white
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.black
+                                          : Colors.black,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -402,15 +423,27 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 1,
-                      color: Color(0xFFA06CD5),
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFFBD4BF7)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                     borderRadius: BorderRadius.circular(2),
                   ),
                   child: Icon(Icons.check,
                       size: 16,
                       color: _modelBookingCategory[__]['selected']
-                          ? Color(0xFFA06CD5)
-                          : Color(0xFFFFFFFF))
+                          ? MyApp.themeNotifier.value == ThemeModeThird.light
+                              ? Color(0xFFBD4BF7)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57)
+                          : MyApp.themeNotifier.value == ThemeModeThird.light
+                              ? Colors.white
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.black
+                                  : Colors.black)
                   // Container(
                   //   margin: EdgeInsets.all(2),
                   //   decoration: BoxDecoration(
@@ -996,24 +1029,27 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
         "desc": "",
         "remark": bookingCategory
       };
-      
 
       setState(() => _loadingSubmit = true);
       print(data);
       // logWTF('model');
       // // ignore: unused_local_variable
-      var response = await Dio().put('$ondeURL/api/Booking/PostponeBooking', data: data, options: Options(
+      var response = await Dio().put(
+        '$ondeURL/api/Booking/PostponeBooking',
+        data: data,
+        options: Options(
           headers: {
             'Authorization': 'Bearer $accessToken',
           },
-        ),);
+        ),
+      );
       print('>>>>>>>>>>> $response');
       if (response.data['status'] == 200) {
         _sendNotification(title: 'postpone', date: tempDate);
-      // logWTF(response);
+        // logWTF(response);
         _dialogPostpone();
       }
-      
+
       setState(() => _loadingSubmit = false);
     } on DioError catch (e) {
       setState(() => _loadingSubmit = false);
@@ -1116,7 +1152,6 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
                         MaterialPageRoute(
                           builder: (_) => BookingServicePage(
                             catSelectedWidget: '1',
-                            
                           ),
                         ),
                       ),

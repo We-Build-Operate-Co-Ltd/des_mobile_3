@@ -76,74 +76,86 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          extendBody: true,
-          // backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
-          //     ? Colors.white
-          //     : Colors.black,
-          body: Container(
-            padding: EdgeInsets.only(top: 130),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/BG.png"),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Container(
-              padding: EdgeInsets.fromLTRB(24, 24, 24, 24),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(24),
-                      topRight: Radius.circular(24)),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 10,
-                      offset: Offset(0, -2),
-                    ),
-                  ]),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: Image.asset(
-                          'assets/images/back_arrow.png',
-                          width: 35,
-                          height: 35,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 16,
-                      ),
-                      Expanded(
-                          child: Text(
-                        "แก้ไขการจอง",
-                        style: TextStyle(
-                            fontSize: 24,
-                            color: Theme.of(context).custom.b325f8_w_fffd57,
-                            fontWeight: FontWeight.w500),
-                      )),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Expanded(
-                    child: _detailContent(),
-                  ),
-                ],
-              ),
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        extendBody: true,
+        // backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+        //     ? Colors.white
+        //     : Colors.black,
+        body: Container(
+          padding: EdgeInsets.only(top: 130),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                  MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? "assets/images/BG.png"
+                      : "assets/images/2024/BG_Blackwhite.jpg"),
+              fit: BoxFit.cover,
             ),
           ),
-        ));
+          child: Container(
+            padding: EdgeInsets.fromLTRB(24, 24, 24, 24),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(24)),
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.white
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.black
+                        : Colors.black,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 10,
+                    offset: Offset(0, -2),
+                  ),
+                ]),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Image.asset(
+                        // 'assets/images/back_arrow.png',
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? 'assets/images/back_arrow.png'
+                            : "assets/images/2024/back_balckwhite.png",
+
+                        width: 35,
+                        height: 35,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    Expanded(
+                        child: Text(
+                      "แก้ไขการจอง",
+                      style: TextStyle(
+                          fontSize: 24,
+                          color: Theme.of(context).custom.b325f8_w_fffd57,
+                          fontWeight: FontWeight.w500),
+                    )),
+                  ],
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Expanded(
+                  child: _detailContent(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
 
     // Scaffold(
     //   backgroundColor: Colors.white,
@@ -319,90 +331,95 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
   _detailContent() {
     return Stack(
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            textForm(
+        SingleChildScrollView(
+          // Add SingleChildScrollView to avoid infinite height issue
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              textForm(
                 label: 'ศูนย์ดิจิทัลชุมชนที่จอง',
-                detail: widget.model['centerName']),
-            SizedBox(height: 12),
-            textForm(label: 'วันที่ใช้บริการ', detail: widget.date),
-            SizedBox(height: 12),
-            textForm(
+                detail: widget.model['centerName'],
+              ),
+              SizedBox(height: 12),
+              textForm(label: 'วันที่ใช้บริการ', detail: widget.date),
+              SizedBox(height: 12),
+              textForm(
                 label: 'เวลาที่จอง',
-                detail: '${widget.startTime} - ${widget.endTime} น.'),
-            SizedBox(height: 12),
-            textForm(label: 'รูปแบบการจอง', detail: widget.model['typeName']),
-            // Expanded(child: SizedBox())
-            const Spacer(),
-            Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    // Navigator.pop(context);
-                    _dialogCancelBooking();
-                  },
-                  child: Container(
-                    // height: 40,
-                    padding: EdgeInsets.symmetric(vertical: 13),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Theme.of(context).custom.b325f8_w_fffd57_OVF50,
+                detail: '${widget.startTime} - ${widget.endTime} น.',
+              ),
+              SizedBox(height: 12),
+              textForm(label: 'รูปแบบการจอง', detail: widget.model['typeName']),
+              SizedBox(
+                  height: 20), // Replacing Spacer with SizedBox for spacing
+              Column(
+                children: [
+                  GestureDetector(
+                    onTap: _dialogCancelBooking,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 13),
+                      decoration: BoxDecoration(
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.white
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.black
+                                : Colors.black,
+                        border: Border.all(
+                          color: Theme.of(context).custom.b325f8_w_fffd57_OVF50,
+                        ),
+                        borderRadius: BorderRadius.circular(25),
                       ),
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'ยกเลิกการจอง',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Theme.of(context).custom.b325f8_w_fffd57,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => BookingServiceEditPage(
-                          model: widget.model,
-                          edit: widget.edit,
-                          repeat: widget.repeat,
-                          repeatCurrentDay: false,
-                          date: widget.date,
-                          startTime: widget.model['startTime'],
-                          endTime: widget.model['endTime'],
-                          phone: widget.model['phone'],
-                          remark: widget.model['remark'],
+                      alignment: Alignment.center,
+                      child: Text(
+                        'ยกเลิกการจอง',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Theme.of(context).custom.b325f8_w_fffd57,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 13),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).custom.b325f8_w_fffd57,
-                      borderRadius: BorderRadius.circular(25),
                     ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'เลื่อนการจอง',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Theme.of(context).custom.w_b_b,
-                        fontWeight: FontWeight.w500,
+                  ),
+                  SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BookingServiceEditPage(
+                            model: widget.model,
+                            edit: widget.edit,
+                            repeat: widget.repeat,
+                            repeatCurrentDay: false,
+                            date: widget.date,
+                            startTime: widget.model['startTime'],
+                            endTime: widget.model['endTime'],
+                            phone: widget.model['phone'],
+                            remark: widget.model['remark'],
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 13),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).custom.b325f8_w_fffd57,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'เลื่อนการจอง',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Theme.of(context).custom.w_b_b,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            )
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
         if (_loadingSubmit)
           Positioned.fill(
@@ -425,11 +442,125 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
     );
   }
 
+  // _detailContent() {
+  //   return Stack(
+  //     children: [
+  //       Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           textForm(
+  //               label: 'ศูนย์ดิจิทัลชุมชนที่จอง',
+  //               detail: widget.model['centerName']),
+  //           SizedBox(height: 12),
+  //           textForm(label: 'วันที่ใช้บริการ', detail: widget.date),
+  //           SizedBox(height: 12),
+  //           textForm(
+  //               label: 'เวลาที่จอง',
+  //               detail: '${widget.startTime} - ${widget.endTime} น.'),
+  //           SizedBox(height: 12),
+  //           textForm(label: 'รูปแบบการจอง', detail: widget.model['typeName']),
+  //           // Expanded(child: SizedBox())
+  //           const Spacer(),
+  //           Column(
+  //             children: [
+  //               GestureDetector(
+  //                 onTap: () {
+  //                   // Navigator.pop(context);
+  //                   _dialogCancelBooking();
+  //                 },
+  //                 child: Container(
+  //                   // height: 40,
+  //                   padding: EdgeInsets.symmetric(vertical: 13),
+  //                   decoration: BoxDecoration(
+  //                     color: Colors.white,
+  //                     border: Border.all(
+  //                       color: Theme.of(context).custom.b325f8_w_fffd57_OVF50,
+  //                     ),
+  //                     borderRadius: BorderRadius.circular(25),
+  //                   ),
+  //                   alignment: Alignment.center,
+  //                   child: Text(
+  //                     'ยกเลิกการจอง',
+  //                     style: TextStyle(
+  //                       fontSize: 15,
+  //                       color: Theme.of(context).custom.b325f8_w_fffd57,
+  //                       fontWeight: FontWeight.w500,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //               SizedBox(height: 10),
+  //               GestureDetector(
+  //                 onTap: () async {
+  //                   Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(
+  //                       builder: (_) => BookingServiceEditPage(
+  //                         model: widget.model,
+  //                         edit: widget.edit,
+  //                         repeat: widget.repeat,
+  //                         repeatCurrentDay: false,
+  //                         date: widget.date,
+  //                         startTime: widget.model['startTime'],
+  //                         endTime: widget.model['endTime'],
+  //                         phone: widget.model['phone'],
+  //                         remark: widget.model['remark'],
+  //                       ),
+  //                     ),
+  //                   );
+  //                 },
+  //                 child: Container(
+  //                   padding: EdgeInsets.symmetric(vertical: 13),
+  //                   decoration: BoxDecoration(
+  //                     color: Theme.of(context).custom.b325f8_w_fffd57,
+  //                     borderRadius: BorderRadius.circular(25),
+  //                   ),
+  //                   alignment: Alignment.center,
+  //                   child: Text(
+  //                     'เลื่อนการจอง',
+  //                     style: TextStyle(
+  //                       fontSize: 15,
+  //                       color: Theme.of(context).custom.w_b_b,
+  //                       fontWeight: FontWeight.w500,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           )
+  //         ],
+  //       ),
+  //       if (_loadingSubmit)
+  //         Positioned.fill(
+  //           child: Container(
+  //             alignment: Alignment.center,
+  //             decoration: BoxDecoration(
+  //               color: Colors.white.withOpacity(0.3),
+  //               borderRadius: BorderRadius.circular(25),
+  //             ),
+  //             child: SizedBox(
+  //               height: 60,
+  //               width: 60,
+  //               child: CircularProgressIndicator(
+  //                 color: Theme.of(context).custom.b325f8_w_fffd57,
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //     ],
+  //   );
+  // }
+
   _dialogCancelBooking() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
+          backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Colors.white
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.black
+                  : Colors.black,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
           ),
@@ -497,7 +628,13 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 13),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.white
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.black
+                                    : Colors.black,
                             border: Border.all(
                               color: Theme.of(context)
                                   .custom

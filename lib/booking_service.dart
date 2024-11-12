@@ -1109,20 +1109,6 @@ class _BookingServicePageState extends State<BookingServicePage>
                                 : "",
                             height: 153,
                           ),
-
-                          // MyApp.themeNotifier.value == ThemeModeThird.light
-                          //     ? Image.asset(
-                          //         'assets/images/owl_3.png',
-                          //         height: 153,
-                          //       )
-                          //     : ColorFiltered(
-                          //         colorFilter: ColorFilter.mode(
-                          //             Colors.grey, BlendMode.saturation),
-                          //         child: Image.asset(
-                          //           'assets/images/owl_3.png',
-                          //           height: 153,
-                          //         ),
-                          //       ),
                           const SizedBox(
                             height: 16,
                           ),
@@ -1594,7 +1580,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                 MyApp.themeNotifier.value == ThemeModeThird.light
                     ? 'assets/images/time.png'
                     : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? "assets/images/2024/meeting_room_w.png"
+                        ? "assets/images/2024/time _w.png"
                         : "assets/images/2024/time _y.png",
                 width: 22,
               ),
@@ -1697,7 +1683,13 @@ class _BookingServicePageState extends State<BookingServicePage>
                             vertical: 13,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.white
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.black
+                                    : Colors.black,
                             border: Border.all(
                               color: Theme.of(context)
                                   .custom
@@ -2326,7 +2318,13 @@ class _BookingServicePageState extends State<BookingServicePage>
                                 // height: 40,
                                 padding: EdgeInsets.symmetric(vertical: 13),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Colors.white
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.black
+                                          : Colors.black,
                                   border: Border.all(
                                     color: Theme.of(context)
                                         .custom

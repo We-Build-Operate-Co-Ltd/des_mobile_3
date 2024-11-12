@@ -190,7 +190,16 @@ class _BookingServiceSearchResultPageState
     } else if (_loadingBookingStatus == LoadingBookingStatus.success) {
       if (_filterModelCenter.length == 0) {
         return Center(
-          child: Text('ไม่พบข้อมูล'),
+          child: Text(
+            'ไม่พบข้อมูล',
+            style: TextStyle(
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFFBD4BF7)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
+            ),
+          ),
         );
       }
       return ListView.separated(
@@ -243,39 +252,76 @@ class _BookingServiceSearchResultPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            widget.mode == '1'
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: (model['photoBase64'] ?? '') != ''
-                        ? Image.memory(
-                            base64Decode(model['photoBase64']),
-                            height: 180,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
+            MyApp.themeNotifier.value == ThemeModeThird.light
+                ? widget.mode == '1'
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: (model['photoBase64'] ?? '') != ''
+                            ? Image.memory(
+                                base64Decode(model['photoBase64']),
+                                height: 180,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                'assets/images/banner_mock.jpg',
+                                height: 180,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              ),
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: (model['photo'] ?? '') != ''
+                            ? Image.memory(
+                                base64Decode(model['photo']),
+                                height: 180,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                'assets/images/banner_mock.jpg',
+                                height: 180,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              ),
+                      )
+                : ColorFiltered(
+                    colorFilter:
+                        ColorFilter.mode(Colors.grey, BlendMode.saturation),
+                    child: widget.mode == '1'
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: (model['photoBase64'] ?? '') != ''
+                                ? Image.memory(
+                                    base64Decode(model['photoBase64']),
+                                    height: 180,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset(
+                                    'assets/images/banner_mock.jpg',
+                                    height: 180,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
                           )
-                        : Image.asset(
-                            'assets/images/banner_mock.jpg',
-                            height: 180,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                  )
-                : ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: (model['photo'] ?? '') != ''
-                        ? Image.memory(
-                            base64Decode(model['photo']),
-                            height: 180,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          )
-                        : Image.asset(
-                            'assets/images/banner_mock.jpg',
-                            height: 180,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                  ),
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: (model['photo'] ?? '') != ''
+                                ? Image.memory(
+                                    base64Decode(model['photo']),
+                                    height: 180,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset(
+                                    'assets/images/banner_mock.jpg',
+                                    height: 180,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                          )),
             SizedBox(height: 16),
             Text(
               '${index + 1}. ${widget.mode == '1' ? (model?['centerName'] ?? '') : (model?['center_Name'] ?? '')}',
@@ -377,7 +423,7 @@ class _BookingServiceSearchResultPageState
                       width: 10,
                     ),
                     Text(
-                      '${model?['meeting_Room'] ?? ''} เครื่อง',
+                      '${model?['meeting_Room'] ?? ''} ห้องประชุม',
                       style: TextStyle(
                         color: Theme.of(context).custom.b_W_fffd57,
                         fontSize: 13,

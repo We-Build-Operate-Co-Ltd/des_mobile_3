@@ -101,7 +101,11 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
             padding: EdgeInsets.only(top: 130),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/BG.png"),
+                image: AssetImage(
+                  MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? "assets/images/BG.png"
+                      : "assets/images/2024/BG_Blackwhite.jpg",
+                ),
                 fit: BoxFit.cover,
               ),
             ),
@@ -111,7 +115,9 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(24),
                       topRight: Radius.circular(24)),
-                  color: Colors.white,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.white
+                      : Colors.black,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.3),
@@ -165,7 +171,10 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
             }
           },
           child: Image.asset(
-            'assets/images/back_arrow.png',
+            // 'assets/images/back_arrow.png',
+            MyApp.themeNotifier.value == ThemeModeThird.light
+                ? 'assets/images/back_arrow.png'
+                : "assets/images/2024/back_balckwhite.png",
             width: 35,
             height: 35,
           ),
@@ -833,6 +842,11 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w500,
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFFBD4BF7)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
             ),
           ),
         ),
@@ -1238,15 +1252,27 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 1,
-                      color: Theme.of(context).custom.b325f8_w_fffd57,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFFBD4BF7)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
                     ),
                     borderRadius: BorderRadius.circular(2),
                   ),
                   child: Icon(Icons.check,
                       size: 16,
                       color: _modelBookingCategory[__]['selected']
-                          ? Theme.of(context).custom.b325f8_w_fffd57
-                          : Color(0xFFFFFFFF))
+                          ? MyApp.themeNotifier.value == ThemeModeThird.light
+                              ? Color(0xFFBD4BF7)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57)
+                          : MyApp.themeNotifier.value == ThemeModeThird.light
+                              ? Colors.white
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.black
+                                  : Colors.black)
                   // Container(
                   //   margin: EdgeInsets.all(2),
                   //   decoration: BoxDecoration(
