@@ -1518,37 +1518,22 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
               _searchController.clear();
               textSearch = '';
               textEternalSearch = '';
-              // _filter();
+              _cateTypeSelected = 0; // reset category selection if applicable
+              _listFilterLenght = 0; // reset the length of filtered list
+
+              // Clear current search results
+              _modelRecommend = Future.value([]);
+              _modelCouseEternal = Future.value([]);
             });
 
-            // print('--------------------------------------');
-
-            // Navigator.pop(context);
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (_) => HomePage(),
-            //   ),
-            // );
+            // Reload initial data
+            _callReadRecomment();
+            _callReadCouseEternal();
           },
           child: Container(
             height: 40,
             width: 40,
             padding: EdgeInsets.all(5),
-            // decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(8),
-            //     color: MyApp.themeNotifier.value == ThemeModeThird.light
-            //         ? Color(0xFFB325F8)
-            //         : Colors.black,
-            //     border: Border.all(
-            //       width: 1,
-            //       style: BorderStyle.solid,
-            //       color: MyApp.themeNotifier.value == ThemeModeThird.light
-            //           ? Color(0xFFB325F8)
-            //           : MyApp.themeNotifier.value == ThemeModeThird.dark
-            //               ? Colors.white
-            //               : Color(0xFFFFFD57),
-            //     )),
             child: Image.asset(
               MyApp.themeNotifier.value == ThemeModeThird.light
                   ? 'assets/images/back_arrow.png'

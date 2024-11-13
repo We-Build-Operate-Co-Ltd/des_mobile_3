@@ -480,19 +480,22 @@ class _CourseDsdPageState extends State<CourseDsdPage> {
           ),
         ),
         SizedBox(width: 10),
-        Container(
-          margin: EdgeInsets.all(5),
-          child: Text(
-            'สถาบันคุณวุฒิวิชาชีพ',
-            style: TextStyle(
-              fontSize: 24,
-              fontFamily: 'Kanit',
-              fontWeight: FontWeight.w500,
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Color(0xFFB325F8)
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.all(5),
+            child: Text(
+              'สถาบันคุณวุฒิวิชาชีพ',
+              style: TextStyle(
+                fontSize: 20,
+                fontFamily: 'Kanit',
+                fontWeight: FontWeight.w500,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFFB325F8)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+              maxLines: 2,
             ),
           ),
         ),

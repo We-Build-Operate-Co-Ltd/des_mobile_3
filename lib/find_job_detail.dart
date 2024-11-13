@@ -132,7 +132,7 @@ class _FindJobDetailPageState extends State<FindJobDetailPage> {
                       height: 12,
                     ),
                     Text(
-                      widget.model['jobpositionName'] ?? '',
+                      widget.model['jobposition'] ?? '',
                       style: TextStyle(
                         fontFamily: 'Kanit',
                         fontSize: 18,

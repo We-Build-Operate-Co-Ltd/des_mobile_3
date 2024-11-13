@@ -82,6 +82,7 @@ class _FindJobPageState extends State<FindJobPage> {
   dynamic _categoryModel = [];
   int _typeSelected = 0;
   int _cateSelected = 0;
+  bool _isLoading = false;
 
   List<dynamic> catFindJob = [
     'ค้นหาตำแหน่งงาน',
@@ -192,9 +193,7 @@ class _FindJobPageState extends State<FindJobPage> {
                           _buildHead(),
                           SizedBox(height: 20),
                           _buildListJobCategory(),
-
                           SizedBox(height: 20),
-                          // _buildListCategory(),
                           Expanded(
                             child: SmartRefresher(
                               enablePullDown: false,
@@ -580,75 +579,88 @@ class _FindJobPageState extends State<FindJobPage> {
         SizedBox(height: 15),
         _buildListJobCategory2(),
         SizedBox(height: 15),
-        Container(
-          child: Text(
-            catFindJob2[_typeSelected2],
-            // 'ตำแหน่งงานทั้งหมด',
-            style: TextStyle(
-              color: Theme.of(context).custom.b325f8_w_fffd57,
-              fontFamily: 'Kanit',
-              fontWeight: FontWeight.w600,
-              fontSize: 15,
-            ),
+        Text(
+          catFindJob2[_typeSelected2],
+          style: TextStyle(
+            color: Theme.of(context).custom.b325f8_w_fffd57,
+            fontFamily: 'Kanit',
+            fontWeight: FontWeight.w600,
+            fontSize: 15,
           ),
         ),
-        _typeSelected2 == 0
-            ? _model.length == 0
-                ? Center(
-                    child: Text(
-                      'ไม่พบข้อมูล',
-                      style: TextStyle(
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Colors.black
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? Colors.white
-                                : Color(0xFFFFFD57),
-                      ),
-                    ),
-                  )
-                : ListView.separated(
-                    shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    // itemBuilder: (_, __) => _buildItemJob(MockFindJob.data[__]),
-                    itemBuilder: (_, __) => _buildItemJob2(_model[__]),
-                    separatorBuilder: (_, __) => const SizedBox(height: 10),
-                    itemCount: _model.length)
-            : _modelExternal.length == 0
-                ? Center(
-                    child: Text(
-                      'ไม่พบข้อมูล',
-                      style: TextStyle(
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Colors.black
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? Colors.white
-                                : Color(0xFFFFFD57),
-                      ),
-                    ),
-                  )
-                : ListView.separated(
-                    shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    // itemBuilder: (_, __) => _buildItemJob(MockFindJob.data[__]),
-                    itemBuilder: (_, __) => _buildItemJob(_modelExternal[__]),
-                    separatorBuilder: (_, __) => const SizedBox(height: 10),
-                    itemCount: _modelExternal.length)
+        _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : _typeSelected2 == 0
+                ? _model.length == 0
+                    ? Center(
+                        child: Text(
+                          'ไม่พบข้อมูล',
+                          style: TextStyle(
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                          ),
+                        ),
+                      )
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        physics: ClampingScrollPhysics(),
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        // itemBuilder: (_, __) => _buildItemJob(MockFindJob.data[__]),
+                        itemBuilder: (_, __) => _buildItemJob2(_model[__]),
+                        separatorBuilder: (_, __) => const SizedBox(height: 10),
+                        itemCount: _model.length)
+                : _modelExternal.length == 0
+                    ? Center(
+                        child: Text(
+                          'ไม่พบข้อมูล',
+                          style: TextStyle(
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                          ),
+                        ),
+                      )
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        physics: ClampingScrollPhysics(),
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        // itemBuilder: (_, __) => _buildItemJob(MockFindJob.data[__]),
+                        itemBuilder: (_, __) =>
+                            _buildItemJob(_modelExternal[__]),
+                        separatorBuilder: (_, __) => const SizedBox(height: 10),
+                        itemCount: _modelExternal.length)
       ],
     );
   }
 
   _buildItemJob(dynamic data) {
     return InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  FindJobDetailPage(model: data, typeselect2: _typeSelected2),
-            ),
-          );
+        // onTap: () {
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) =>
+        //         FindJobDetailPage(model: data, typeselect2: _typeSelected2),
+        //   ),
+        // );
+        // },
+        onTap: () async {
+          final Uri url = Uri.parse(
+              'https://xn--72c5abh2bf8icw0m9d.doe.go.th/job/detail/${data?['matchPosDoeId']}');
+
+          if (await canLaunchUrl(url)) {
+            await launchUrl(url);
+          } else {
+            throw 'Could not launch $url';
+          }
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -659,24 +671,26 @@ class _FindJobPageState extends State<FindJobPage> {
               child: Container(
                 // height: double.infinity,
                 width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.3,
                 decoration: BoxDecoration(
                   // color: Color(0xFFB325F8),
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Image.asset('assets/images/jobkk11576.png')
+                    ? Image.asset('assets/images/2024/logo_thai_jobs.png')
                     : ColorFiltered(
                         colorFilter: ColorFilter.mode(
                           Colors.grey,
                           BlendMode.saturation,
                         ),
-                        child: Image.asset('assets/images/jobkk11576.png'),
+                        child: Image.asset(
+                            'assets/images/2024/logo_thai_jobs.png'),
                       ),
               ),
             ),
             const SizedBox(height: 10),
             Text(
-              data?['jobpositionName'] ?? '',
+              data?['jobposition'] ?? '',
               style: TextStyle(
                 fontSize: 16,
                 color: MyApp.themeNotifier.value == ThemeModeThird.light
@@ -686,51 +700,6 @@ class _FindJobPageState extends State<FindJobPage> {
                         : Color(0xFFFFFD57),
                 fontWeight: FontWeight.w500,
               ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Container(
-                  width: 22,
-                  height: 22,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(7.0),
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Color(0xFFBD4BF7)
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Image.asset(
-                      MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? 'assets/images/work.png'
-                          : "assets/images/2024/work.png",
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 6,
-                ),
-                Expanded(
-                  child: Text(
-                    data?['employername'] ?? 'ไม่ระบุ',
-                    style: TextStyle(
-                      fontFamily: 'Kanit',
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Colors.black
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    maxLines: 2,
-                  ),
-                ),
-              ],
             ),
             const SizedBox(height: 10),
             Row(
@@ -759,7 +728,7 @@ class _FindJobPageState extends State<FindJobPage> {
                 ),
                 Expanded(
                   child: Text(
-                    'ไม่ระบุ',
+                    '${data?['provincename']} , ${data?['districtname']}',
                     style: TextStyle(
                       fontFamily: 'Kanit',
                       fontSize: 13,
@@ -790,64 +759,18 @@ class _FindJobPageState extends State<FindJobPage> {
                             ? Colors.white
                             : Color(0xFFFFFD57),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Image.asset(
-                        MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? 'assets/images/icon-money.png'
-                            : "assets/images/2024/icon-money.png"),
-                  ),
-                ),
-                SizedBox(
-                  width: 6,
-                ),
-                Expanded(
-                  child: Text(
-                    'ไม่ระบุ',
-                    style: TextStyle(
-                      fontFamily: 'Kanit',
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
+                  child: Icon(Icons.school_outlined,
+                      size: 18,
                       color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Colors.black
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    maxLines: 2,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Container(
-                  width: 22,
-                  height: 22,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(7.0),
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Color(0xFFBD4BF7)
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Image.asset(
-                        MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? 'assets/images/icon-word.png'
-                            : "assets/images/2024/icon-word.png"),
-                  ),
+                          ? Colors.white
+                          : Colors.black),
                 ),
                 SizedBox(
                   width: 6,
                 ),
                 Expanded(
                   child: Text(
-                    'ไม่ระบุ',
+                    '${data?["degreeidMin"]} ถึง ${data?['degreeidMax']}',
                     style: TextStyle(
                       fontFamily: 'Kanit',
                       fontSize: 13,
@@ -893,11 +816,21 @@ class _FindJobPageState extends State<FindJobPage> {
             child: Container(
               // height: double.infinity,
               width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.3,
               decoration: BoxDecoration(
                 // color: Color(0xFFB325F8),
                 borderRadius: BorderRadius.circular(24),
               ),
-              child: Image.asset('assets/images/jobkk11576.png'),
+              child: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Image.asset('assets/images/2024/logo_thai_jobs.png')
+                  : ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                        Colors.grey,
+                        BlendMode.saturation,
+                      ),
+                      child:
+                          Image.asset('assets/images/2024/logo_thai_jobs.png'),
+                    ),
             ),
           ),
           const SizedBox(height: 10),
@@ -2390,29 +2323,74 @@ class _FindJobPageState extends State<FindJobPage> {
     // print(_model.toString());
   }
 
+  // _callReadByJobCategory(index, param) async {
+  //   Dio dio = new Dio();
+  //   setState(() {
+  //     _isLoading = true; // Start loading
+  //   });
+  //   try {
+  //     if (index == 0) {
+  //       var response = await dio.get(
+  //           'http://dcc-portal.webview.co/dcc-api/api/Job/GetSearchJob?CatId=$param');
+  //       setState(() {
+  //         _model = response.data['data'];
+  //       });
+  //     } else if (index == 1) {
+  //       var response = await dio.get(
+  //           'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?search=$param');
+  //       setState(() {
+  //         _modelExternal = response.data;
+  //       });
+  //     } else if (index == 2) {
+  //       var response = await dio.get(
+  //           'https://dcc.onde.go.th/dcc-api/api/Resume/resumes?keyword=$param');
+  //       setState(() {
+  //         _modelResume = response.data['data'];
+  //       });
+  //     }
+  //   } catch (e) {
+  //     print("Error fetching data: $e");
+  //   } finally {
+  //     setState(() {
+  //       _isLoading = false; // End loading
+  //     });
+  //   }
+
+  //   // print(_model.toString());
+  // }
   _callReadByJobCategory(index, param) async {
-    Dio dio = new Dio();
-    if (index == 0) {
-      var response = await dio.get(
-          'http://dcc-portal.webview.co/dcc-api/api/Job/GetSearchJob?CatId=$param');
+    Dio dio = Dio();
+    setState(() {
+      _isLoading = true; // Start loading
+    });
+
+    try {
+      if (index == 0) {
+        var response = await dio.get(
+            'http://dcc-portal.webview.co/dcc-api/api/Job/GetSearchJob?CatId=$param');
+        setState(() {
+          _model = response.data['data'];
+        });
+      } else if (index == 1) {
+        var response = await dio.get(
+            'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?search=$param');
+        setState(() {
+          _modelExternal = response.data;
+        });
+      } else if (index == 2) {
+        var response = await dio.get(
+            'https://dcc.onde.go.th/dcc-api/api/Resume/resumes?keyword=$param');
+        setState(() {
+          _modelResume = response.data['data'];
+        });
+      }
+    } catch (e) {
+      print("Error fetching data: $e");
+    } finally {
       setState(() {
-        _model = response.data['data'];
-      });
-    } else if (index == 1) {
-      var response = await dio.get(
-          'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?search=$param');
-      setState(() {
-        _modelExternal = response.data;
-      });
-    } else if (index == 2) {
-      var response = await dio.get(
-          'https://dcc.onde.go.th/dcc-api/api/Resume/resumes?keyword=$param');
-      setState(() {
-        _modelResume = response.data['data'];
+        _isLoading = false; // End loading
       });
     }
-
-    // print(_model.toString());
   }
 
   _callCategoryRead() async {
