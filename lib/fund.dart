@@ -522,8 +522,12 @@ class _FundPageState extends State<FundPage> {
                                 ),
                               ],
                             ),
-                          if (_typeSelected == 1) _buildListExternal(),
-                          if (_typeSelected == 2) _buildListFinancial(),
+                          if (_typeSelected == 1)
+                            // _buildListExternal(),
+                            Center(child: Text("ไม่พบการค้นหา")),
+                          if (_typeSelected == 2)
+                            // _buildListFinancial(),
+                            Center(child: Text("ไม่พบการค้นหา"))
                         ],
                       ),
                     ),
@@ -800,84 +804,84 @@ class _FundPageState extends State<FundPage> {
 
   _buildItemExternal(dynamic data) {
     return InkWell(
-      onTap: () {
-        launchUrl(Uri.parse(data['linkUrl'] ?? ''),
-            mode: LaunchMode.externalApplication);
-      },
-      child: Container(
-        height: MyApp.fontKanit.value == FontKanit.small
-            ? 120
-            : MyApp.fontKanit.value == FontKanit.medium
-                ? 150
-                : 180,
-        decoration: BoxDecoration(
-          color: Theme.of(context).custom.w_b_b,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Stack(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                      width: 160.8,
-                      height: 95,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Color(0xFFDDDDDD),
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                        // color: Color(0xFFDDDDDD),
-                      ),
-                      child: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? CachedNetworkImage(
-                              imageUrl: data['imageUrl'],
-                              width: 120,
-                              height: 120,
-                              fit: BoxFit.contain,
-                            )
-                          : ColorFiltered(
-                              colorFilter: ColorFilter.mode(
-                                  Colors.grey, BlendMode.saturation),
-                              child: CachedNetworkImage(
-                                imageUrl: data['imageUrl'],
-                                width: 120,
-                                height: 120,
-                                fit: BoxFit.contain,
-                              ),
-                            )),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            data['title'],
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Theme.of(context).custom.b_w_y,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 4,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
+        // onTap: () {
+        //   launchUrl(Uri.parse(data['linkUrl'] ?? ''),
+        //       mode: LaunchMode.externalApplication);
+        // },
+        // child: Container(
+        //   height: MyApp.fontKanit.value == FontKanit.small
+        //       ? 120
+        //       : MyApp.fontKanit.value == FontKanit.medium
+        //           ? 150
+        //           : 180,
+        //   decoration: BoxDecoration(
+        //     color: Theme.of(context).custom.w_b_b,
+        //     borderRadius: BorderRadius.circular(10),
+        //   ),
+        //   child: Stack(
+        //     children: [
+        //       Row(
+        //         mainAxisAlignment: MainAxisAlignment.start,
+        //         // crossAxisAlignment: CrossAxisAlignment.start,
+        //         children: [
+        //           ClipRRect(
+        //             borderRadius: BorderRadius.circular(10),
+        //             child: Container(
+        //                 width: 160.8,
+        //                 height: 95,
+        //                 decoration: BoxDecoration(
+        //                   border: Border.all(
+        //                     color: Color(0xFFDDDDDD),
+        //                   ),
+        //                   borderRadius: BorderRadius.circular(10),
+        //                   // color: Color(0xFFDDDDDD),
+        //                 ),
+        //                 child: MyApp.themeNotifier.value == ThemeModeThird.light
+        //                     ? CachedNetworkImage(
+        //                         imageUrl: data['imageUrl'],
+        //                         width: 120,
+        //                         height: 120,
+        //                         fit: BoxFit.contain,
+        //                       )
+        //                     : ColorFiltered(
+        //                         colorFilter: ColorFilter.mode(
+        //                             Colors.grey, BlendMode.saturation),
+        //                         child: CachedNetworkImage(
+        //                           imageUrl: data['imageUrl'],
+        //                           width: 120,
+        //                           height: 120,
+        //                           fit: BoxFit.contain,
+        //                         ),
+        //                       )),
+        //           ),
+        //           const SizedBox(width: 10),
+        //           Expanded(
+        //             child: Padding(
+        //               padding: const EdgeInsets.all(8.0),
+        //               child: Column(
+        //                 crossAxisAlignment: CrossAxisAlignment.start,
+        //                 children: [
+        //                   Flexible(
+        //                     child: Text(
+        //                       data['title'],
+        //                       style: TextStyle(
+        //                         fontSize: 14,
+        //                         color: Theme.of(context).custom.b_w_y,
+        //                       ),
+        //                       overflow: TextOverflow.ellipsis,
+        //                       maxLines: 4,
+        //                     ),
+        //                   ),
+        //                 ],
+        //               ),
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        );
   }
 
   _buildListFinancial() {

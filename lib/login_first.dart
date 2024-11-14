@@ -89,6 +89,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     txtEmail = TextEditingController(text: '');
     txtPassword = TextEditingController(text: '');
     ;
+
     // _controller = AnimationController(
     //   vsync: this,
     //   duration: duration,
@@ -108,6 +109,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
@@ -129,7 +131,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                     image: AssetImage(
                       MyApp.themeNotifier.value == ThemeModeThird.light
                           ? "assets/images/BG.png"
-                          : "assets/images/bg_login_first_page-dark.png",
+                          : "assets/images/2024/BG_Blackwhite.jpg",
                     ),
                     alignment: Alignment.topCenter,
                     fit: BoxFit.fill,
@@ -149,7 +151,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                           image: AssetImage(
                             MyApp.themeNotifier.value == ThemeModeThird.light
                                 ? "assets/images/Owl-8 2.png"
-                                : "",
+                                : "assets/images/2024/Owl-8 2__Blackwhite.png",
                           ),
                           // fit: BoxFit.contain,
                         ))
@@ -164,7 +166,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                 child: SingleChildScrollView(
                   child: Container(
                     alignment: Alignment.bottomCenter,
-                    height:  MediaQuery.of(context).size.height * 0.650,
+                    height: MediaQuery.of(context).size.height * 0.650,
                     // height: (deviceHeight >= 500 && deviceHeight < 800)
                     //     ? 300
                     //     : (deviceHeight >= 800)
@@ -2294,7 +2296,11 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       InputDecoration(
         label: Text(hintText),
         labelStyle: TextStyle(
-          color: Colors.black,
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Colors.black
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
           fontSize: 15,
           fontWeight: FontWeight.normal,
         ),

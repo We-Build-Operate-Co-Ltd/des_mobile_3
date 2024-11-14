@@ -74,90 +74,107 @@ class _AboutUsPageState extends State<AboutUsPage> {
               bottom: 0,
               left: 0,
               right: 0,
-              child: SingleChildScrollView(
-                  child: Container(
-                alignment: Alignment.bottomCenter,
-                height: deviceHeight * 0.8,
-                padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-                decoration: BoxDecoration(
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Colors.white
-                      : Colors.black,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  physics: ClampingScrollPhysics(),
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: _backButton(context),
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    height: deviceHeight * 0.8,
+                    padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+                    decoration: BoxDecoration(
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.white
+                          : Colors.black,
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(20)),
                     ),
-                    SizedBox(height: 30),
-                    Text(
-                      'ศูนย์ดิจิทัลชุมชน',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Colors.black
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? Colors.white
-                                : Color(0xFFFFFD57),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    rowContactInformation(
-                        'อาคารรัฐประศาสนภักดี ศูนย์ราชการเฉลิมพระเกียรติ 80 พรรษา ถนนแจ้งวัฒนะ แขวงทุ่งสองห้อง เขตหลักสี่ กรุงเทพฯ 10210',
-                        'assets/images/about_us_mark.png'),
-                    SizedBox(height: 15),
-                    rowContactInformation(
-                        '02-114-8592', 'assets/images/about_us_phone.png'),
-                    SizedBox(height: 15),
-                    // rowContactInformationSocial(
-                    //     'www.dcc.onde.go.th', 'assets/images/about_us_web.png'),
-
-                    rowContactInformationSocial(
-                      title: 'www.dcc.onde.go.th',
-                      image: 'assets/images/about_us_web.png',
-                      onTap: () async {
-                        launchUrl(Uri.parse('https://dcc.onde.go.th/'),
-                            mode: LaunchMode.externalApplication);
-                      },
-                    ),
-
-                    SizedBox(height: 30),
-                    Text(
-                      'ช่องทางการติดต่อ',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Colors.black
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? Colors.white
-                                : Color(0xFFFFFD57),
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    rowSocialMedia(),
-                    SizedBox(height: 30),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: SizedBox(
-                        height: 195,
-                        child: googleMap(
-                          double.parse('13.88261'),
-                          double.parse('100.56487'),
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: _backButton(context),
                         ),
-                      ),
+                        SizedBox(height: 40),
+                        Text(
+                          'ศูนย์ดิจิทัลชุมชน',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Colors.black
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Expanded(
+                          child: ListView(
+                            children: [
+                              Column(
+                                children: [
+                                  rowContactInformation(
+                                      'อาคารรัฐประศาสนภักดี ศูนย์ราชการเฉลิมพระเกียรติ 80 พรรษา ถนนแจ้งวัฒนะ แขวงทุ่งสองห้อง เขตหลักสี่ กรุงเทพฯ 10210',
+                                      'assets/images/about_us_mark.png'),
+                                  SizedBox(height: 15),
+                                  rowContactInformation('02-114-8592',
+                                      'assets/images/about_us_phone.png'),
+                                  SizedBox(height: 15),
+                                  // rowContactInformationSocial(
+                                  //     'www.dcc.onde.go.th', 'assets/images/about_us_web.png'),
+
+                                  rowContactInformationSocial(
+                                    title: 'www.dcc.onde.go.th',
+                                    image: 'assets/images/about_us_web.png',
+                                    onTap: () async {
+                                      launchUrl(
+                                          Uri.parse('https://dcc.onde.go.th/'),
+                                          mode: LaunchMode.externalApplication);
+                                    },
+                                  ),
+
+                                  SizedBox(height: 30),
+                                  Text(
+                                    'ช่องทางการติดต่อ',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Colors.black
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Color(0xFFFFFD57),
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                  rowSocialMedia(),
+                                  SizedBox(height: 30),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: SizedBox(
+                                      height: 195,
+                                      child: googleMap(
+                                        double.parse('13.88261'),
+                                        double.parse('100.56487'),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 60),
+                      ],
                     ),
-                    SizedBox(height: 60),
-                  ],
-                ),
-              )),
+                  ),
+                ],
+              ),
             ),
             Stack(
               alignment: Alignment.topCenter,

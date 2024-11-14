@@ -536,6 +536,7 @@ class _UserProfileBookingPageState extends State<UserProfileBookingPage> {
 
   void logout() async {
     String profileCategory = await ManageStorage.read('profileCategory') ?? '';
+
     switch (profileCategory) {
       case 'facebook':
         logoutFacebook();

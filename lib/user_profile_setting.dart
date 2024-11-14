@@ -220,64 +220,65 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
     );
   }
 
+  Future<String?> getProfileCategory() async {
+    return await ManageStorage.read('profileCategory') as String?;
+  }
+
   Widget _buildRowAboutAccount() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'เกี่ยวกับบัญชี',
-          style: TextStyle(
-            fontSize: 17,
-            fontFamily: 'Kanit',
-            fontWeight: FontWeight.bold,
-            color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Colors.black
-                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                    ? Colors.white
-                    : Color(0xFFFFFD57),
-          ),
-        ),
-        const SizedBox(height: 5),
-        InkWell(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          focusColor: Colors.transparent,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (builder) => UserProfileChangePasswordPage(),
+    return FutureBuilder<String?>(
+      future: getProfileCategory(),
+      builder: (context, snapshot) {
+        final profileCategory = snapshot.data ?? '';
+        final showChangePassword = profileCategory != 'facebook' &&
+            profileCategory != 'google' &&
+            profileCategory != 'line';
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'เกี่ยวกับบัญชี',
+              style: TextStyle(
+                fontSize: 17,
+                fontFamily: 'Kanit',
+                fontWeight: FontWeight.bold,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.black
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
               ),
-            );
-          },
-          child: _buildRow('เปลี่ยนรหัสผ่าน'),
-        ),
-        lineBottom(),
-        // if (!_hasThaiD)
-        //   InkWell(
-        //     splashColor: Colors.transparent,
-        //     highlightColor: Colors.transparent,
-        //     focusColor: Colors.transparent,
-        //     onTap: () => Navigator.push(
-        //       context,
-        //       MaterialPageRoute(
-        //         builder: (builder) => const VerifyMainPage(),
-        //       ),
-        //     ),
-        //     child: _buildRow('ยืนยันตัวตน'),
-        //   ),
-        // if (!_hasThaiD) lineBottom(),
-        InkWell(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          focusColor: Colors.transparent,
-          onTap: () {
-            _dialogDeleteAccount();
-          },
-          child: _buildRow('ขอลบบัญชี'),
-        ),
-        lineBottom(),
-      ],
+            ),
+            const SizedBox(height: 5),
+            if (showChangePassword)
+              InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (builder) => UserProfileChangePasswordPage(),
+                    ),
+                  );
+                },
+                child: _buildRow('เปลี่ยนรหัสผ่าน'),
+              ),
+            if (showChangePassword) lineBottom(),
+            InkWell(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              focusColor: Colors.transparent,
+              onTap: () {
+                _dialogDeleteAccount();
+              },
+              child: _buildRow('ขอลบบัญชี'),
+            ),
+            lineBottom(),
+          ],
+        );
+      },
     );
   }
 
@@ -384,7 +385,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
               ),
               elevation: 0,
               child: Padding(
-                padding: const EdgeInsets.all(30.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Stack(
                   children: [
                     SizedBox(

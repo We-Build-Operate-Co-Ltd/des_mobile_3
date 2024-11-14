@@ -457,17 +457,19 @@ class _UserProfileSettingBkPageState extends State<UserProfileSettingBkPage> {
                 child: Stack(
                   children: [
                     SizedBox(
-                      height: 127,
+                      height: 150,
                       width: MediaQuery.of(context).size.width,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'คุณต้องการขอลบบัญชีหรือไม่',
-                            style: TextStyle(
-                              color: Color(0xFF7A4CB1),
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
+                          Center(
+                            child: Text(
+                              'คุณต้องการขอลบบัญชีหรือไม่',
+                              style: TextStyle(
+                                color: Color(0xFF7A4CB1),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                           Text(

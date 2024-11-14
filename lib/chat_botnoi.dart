@@ -12,6 +12,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import 'main.dart';
+
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -98,7 +100,9 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                       Navigator.pop(context);
                     },
                     child: Image.asset(
-                      'assets/images/back_profile.png',
+                      MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? 'assets/images/back_arrow.png'
+                          : "assets/images/2024/back_balckwhite.png",
                       // color: Colors.white,
                     ),
                   ),

@@ -108,13 +108,16 @@ class _FindJobPageState extends State<FindJobPage> {
   TextEditingController _searchFilterController = TextEditingController();
   int _typeRefNo = 0;
   int _changwatRefNo = 0;
+  String _changwatRefLabel = '';
   int _amphoeRefNo = 0;
+  String _amphoeReLabel = '';
 
   late List<dynamic> _modelAmphoeResume = [];
   TextEditingController _searchResumeController = TextEditingController();
   TextEditingController _searchFilterResumeController = TextEditingController();
   int _typeRefNoResume = 0;
   int _changwatRefNoResume = 0;
+
   int _amphoeRefNoResume = 0;
 
   @override
@@ -142,9 +145,9 @@ class _FindJobPageState extends State<FindJobPage> {
           MyApp.themeNotifier.value == ThemeModeThird.light
               ? "assets/images/BG.png"
               : "assets/images/2024/BG_Blackwhite.jpg",
-          // height: MediaQuery.of(context).size.height,
-          // width: MediaQuery.of(context).size.width,
-          // fit: BoxFit.cover,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          fit: BoxFit.cover,
         ),
         Scaffold(
           // backgroundColor: Theme.of(context).custom.w_b_b,
@@ -245,6 +248,17 @@ class _FindJobPageState extends State<FindJobPage> {
               InkWell(
                 onTap: () => {
                   widget.changePage!(0),
+
+                  setState(() {
+                    _searchController.clear();
+                    _modelExternal = Future.value([]);
+                    _changwatRefNo = 0;
+                    _amphoeRefNo = 0;
+                    _changwatRefLabel = '';
+                    _amphoeReLabel = '';
+                    _typeSelected2 = 0;
+                  }),
+                  // _callRead()
                   // Navigator.pop(context),
                 },
                 child: Container(
@@ -442,32 +456,37 @@ class _FindJobPageState extends State<FindJobPage> {
           },
         ),
         SizedBox(height: 15),
-        _dropdown(
-          hintText: "เลือกประเภทงาน",
-          data: _modelType.map((item) {
-            return DropdownMenuItem(
-              value: item['jobCateId'],
-              child: Container(
-                height: 50,
-                child: Text(
-                  '${item['nameTh']}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).custom.b_W_fffd57,
-                  ),
-                  maxLines: 1,
-                ),
-              ),
-            );
-          }).toList(),
-          // data: _modelType,
-          value: _typeRefNo,
-          onChanged: (value) {
-            setState(() {
-              _typeRefNo = value;
-            });
-          },
-        ),
+        _typeSelected2 != 1
+            ? _dropdown(
+                hintText: "เลือกประเภทงาน",
+                data: _modelType.map((item) {
+                  return DropdownMenuItem(
+                    value: item['jobCateId'],
+                    child: Container(
+                      height: 50,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '${item['nameTh']}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).custom.b_W_fffd57,
+                          ),
+                          maxLines: 1,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+                // data: _modelType,
+                value: _typeRefNo,
+                onChanged: (value) {
+                  setState(() {
+                    _typeRefNo = value;
+                  });
+                },
+              )
+            : Container(),
         SizedBox(height: 15),
         Row(
           children: [
@@ -479,13 +498,16 @@ class _FindJobPageState extends State<FindJobPage> {
                     value: item['value'],
                     child: Container(
                       height: 50,
-                      child: Text(
-                        '${item['label']}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context).custom.b_W_fffd57,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '${item['label']}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).custom.b_W_fffd57,
+                          ),
+                          maxLines: 1,
                         ),
-                        maxLines: 1,
                       ),
                     ),
                   );
@@ -493,8 +515,19 @@ class _FindJobPageState extends State<FindJobPage> {
                 // data: _modelType,
                 value: _changwatRefNo,
                 onChanged: (value) {
-                  // print('------เลือกจังหวัด-------${value}');
+                  print('------เลือกจังหวัด-------${value}');
+
+                  // Find the selected item by value
+                  var selectedItem = _modelChangwat
+                      .firstWhere((item) => item['value'] == value);
+
+                  // Store the selected value and label
                   _changwatRefNo = value;
+                  _changwatRefLabel = selectedItem['label'];
+
+                  // Print the selected label
+                  print('Selected Province Name: $_changwatRefLabel');
+
                   _amphoeRefNo = 0;
                   _callReadAmphoe(value);
                 },
@@ -509,13 +542,16 @@ class _FindJobPageState extends State<FindJobPage> {
                     value: item['value'],
                     child: Container(
                       height: 50,
-                      child: Text(
-                        '${item['label']}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context).custom.b_W_fffd57,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '${item['label']}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).custom.b_W_fffd57,
+                          ),
+                          maxLines: 1,
                         ),
-                        maxLines: 1,
                       ),
                     ),
                   );
@@ -523,12 +559,18 @@ class _FindJobPageState extends State<FindJobPage> {
                 // data: _modelType,
                 value: _amphoeRefNo,
                 onChanged: (value) {
-                  // print('------เลือกอำเภอ-------${value}');
-                  setState(
-                    () {
-                      _amphoeRefNo = value;
-                    },
-                  );
+                  var slelctamphoe =
+                      _modelAmphoe.firstWhere((item) => item['value'] == value);
+                  _amphoeRefNo = value;
+                  _amphoeReLabel = slelctamphoe['label'];
+                  print('------เลือกอำเภอ-------${value}');
+                  print('Selected amphoe Name: $_amphoeReLabel');
+
+                  // setState(
+                  //   () {
+                  //     _amphoeRefNo = value;
+                  //   },
+                  // );
                 },
               ),
             ),
@@ -537,10 +579,11 @@ class _FindJobPageState extends State<FindJobPage> {
         SizedBox(height: 15),
         GestureDetector(
           onTap: () {
-            // print(
-            //     '---------_searchController----------${_searchController.text}');
             _handleSearch();
-            _searchController.clear();
+            print(
+                '---------_searchController----------${_searchController.text}');
+
+            // _searchController.clear();
           },
           child: Container(
             height: 50,
@@ -1115,7 +1158,7 @@ class _FindJobPageState extends State<FindJobPage> {
         SizedBox(height: 15),
 
         SizedBox(
-          height: 50,
+          height: 60,
           child: TextField(
             controller: _searchResumeController,
             style: TextStyle(
@@ -1192,13 +1235,16 @@ class _FindJobPageState extends State<FindJobPage> {
               value: item['jobCateId'],
               child: Container(
                 height: 50,
-                child: Text(
-                  '${item['nameTh']}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).custom.b_W_fffd57,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '${item['nameTh']}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).custom.b_W_fffd57,
+                    ),
+                    maxLines: 1,
                   ),
-                  maxLines: 1,
                 ),
               ),
             );
@@ -1223,13 +1269,16 @@ class _FindJobPageState extends State<FindJobPage> {
                     value: item['value'],
                     child: Container(
                       height: 50,
-                      child: Text(
-                        '${item['label']}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context).custom.b_W_fffd57,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '${item['label']}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).custom.b_W_fffd57,
+                          ),
+                          maxLines: 1,
                         ),
-                        maxLines: 1,
                       ),
                     ),
                   );
@@ -1253,13 +1302,16 @@ class _FindJobPageState extends State<FindJobPage> {
                     value: item['value'],
                     child: Container(
                       height: 50,
-                      child: Text(
-                        '${item['label']}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context).custom.b_W_fffd57,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '${item['label']}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).custom.b_W_fffd57,
+                          ),
+                          maxLines: 1,
                         ),
-                        maxLines: 1,
                       ),
                     ),
                   );
@@ -1280,7 +1332,7 @@ class _FindJobPageState extends State<FindJobPage> {
         GestureDetector(
           onTap: () {
             _handleSearch();
-            _searchResumeController.clear();
+            // _searchResumeController.clear();
           },
           child: Container(
             height: 50,
@@ -1516,7 +1568,7 @@ class _FindJobPageState extends State<FindJobPage> {
 
   _buildSearch(TextEditingController textController, Function onTap) {
     return SizedBox(
-      height: 50,
+      height: 60,
       child: TextField(
         controller: textController,
         style: TextStyle(
@@ -1536,7 +1588,7 @@ class _FindJobPageState extends State<FindJobPage> {
               : MyApp.themeNotifier.value == ThemeModeThird.dark
                   ? Colors.black
                   : Colors.black,
-          focusedBorder: OutlineInputBorder(
+          enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
                 color: MyApp.themeNotifier.value == ThemeModeThird.light
                     ? Color(0xFFBD4BF7)
@@ -1546,7 +1598,7 @@ class _FindJobPageState extends State<FindJobPage> {
                 width: 1),
             borderRadius: BorderRadius.circular(10),
           ),
-          enabledBorder: OutlineInputBorder(
+          focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
                 color: MyApp.themeNotifier.value == ThemeModeThird.light
                     ? Color(0xFFBD4BF7)
@@ -1561,7 +1613,6 @@ class _FindJobPageState extends State<FindJobPage> {
             borderSide: BorderSide(color: Color(0XFFDDDDDD), width: 1),
           ),
           hintText: 'พิมพ์คำค้นหา',
-          contentPadding: EdgeInsets.symmetric(vertical: 12),
           hintStyle: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w400,
@@ -1586,12 +1637,14 @@ class _FindJobPageState extends State<FindJobPage> {
             child: Align(
               widthFactor: 1.0,
               heightFactor: 1.0,
-              child:
-                  Image.asset(MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? 'assets/images/filter.png'
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? "assets/images/2024/filter_w.png"
-                          : "assets/images/2024/filter_y.png"),
+              child: _typeSelected2 != 1
+                  ? Image.asset(
+                      MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? 'assets/images/filter.png'
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? "assets/images/2024/filter_w.png"
+                              : "assets/images/2024/filter_y.png")
+                  : SizedBox(),
             ),
           ),
         ),
@@ -1752,7 +1805,7 @@ class _FindJobPageState extends State<FindJobPage> {
                       ),
                       SizedBox(height: 12),
                       SizedBox(
-                        height: 50,
+                        height: 60,
                         child: TextField(
                           controller: _searchController,
                           style: TextStyle(
@@ -1768,8 +1821,6 @@ class _FindJobPageState extends State<FindJobPage> {
                             letterSpacing: 0.5,
                           ),
                           decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 8),
                             filled: true,
                             fillColor: MyApp.themeNotifier.value ==
                                     ThemeModeThird.light
@@ -1778,11 +1829,6 @@ class _FindJobPageState extends State<FindJobPage> {
                                         ThemeModeThird.dark
                                     ? Colors.black
                                     : Colors.black,
-                            // enabledBorder: OutlineInputBorder(
-                            //   borderSide: BorderSide(
-                            //       color: Color(0XFFDDDDDD), width: 1),
-                            //   borderRadius: BorderRadius.circular(10),
-                            // ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                   color: MyApp.themeNotifier.value ==
@@ -1845,13 +1891,16 @@ class _FindJobPageState extends State<FindJobPage> {
                             value: item['jobCateId'],
                             child: Container(
                               height: 50,
-                              child: Text(
-                                '${item['nameTh']}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Theme.of(context).custom.b_W_fffd57,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  '${item['nameTh']}',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Theme.of(context).custom.b_W_fffd57,
+                                  ),
+                                  maxLines: 1,
                                 ),
-                                maxLines: 1,
                               ),
                             ),
                           );
@@ -1876,14 +1925,18 @@ class _FindJobPageState extends State<FindJobPage> {
                                   value: item['value'],
                                   child: Container(
                                     height: 50,
-                                    child: Text(
-                                      '${item['label']}',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color:
-                                            Theme.of(context).custom.b_W_fffd57,
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        '${item['label']}',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Theme.of(context)
+                                              .custom
+                                              .b_W_fffd57,
+                                        ),
+                                        maxLines: 1,
                                       ),
-                                      maxLines: 1,
                                     ),
                                   ),
                                 );
@@ -1908,14 +1961,18 @@ class _FindJobPageState extends State<FindJobPage> {
                                   value: item['value'],
                                   child: Container(
                                     height: 50,
-                                    child: Text(
-                                      '${item['label']}',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color:
-                                            Theme.of(context).custom.b_W_fffd57,
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        '${item['label']}',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Theme.of(context)
+                                              .custom
+                                              .b_W_fffd57,
+                                        ),
+                                        maxLines: 1,
                                       ),
-                                      maxLines: 1,
                                     ),
                                   ),
                                 );
@@ -2323,41 +2380,6 @@ class _FindJobPageState extends State<FindJobPage> {
     // print(_model.toString());
   }
 
-  // _callReadByJobCategory(index, param) async {
-  //   Dio dio = new Dio();
-  //   setState(() {
-  //     _isLoading = true; // Start loading
-  //   });
-  //   try {
-  //     if (index == 0) {
-  //       var response = await dio.get(
-  //           'http://dcc-portal.webview.co/dcc-api/api/Job/GetSearchJob?CatId=$param');
-  //       setState(() {
-  //         _model = response.data['data'];
-  //       });
-  //     } else if (index == 1) {
-  //       var response = await dio.get(
-  //           'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?search=$param');
-  //       setState(() {
-  //         _modelExternal = response.data;
-  //       });
-  //     } else if (index == 2) {
-  //       var response = await dio.get(
-  //           'https://dcc.onde.go.th/dcc-api/api/Resume/resumes?keyword=$param');
-  //       setState(() {
-  //         _modelResume = response.data['data'];
-  //       });
-  //     }
-  //   } catch (e) {
-  //     print("Error fetching data: $e");
-  //   } finally {
-  //     setState(() {
-  //       _isLoading = false; // End loading
-  //     });
-  //   }
-
-  //   // print(_model.toString());
-  // }
   _callReadByJobCategory(index, param) async {
     Dio dio = Dio();
     setState(() {
@@ -2376,6 +2398,7 @@ class _FindJobPageState extends State<FindJobPage> {
             'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?search=$param');
         setState(() {
           _modelExternal = response.data;
+          print('-------------------1111-------${_modelExternal}');
         });
       } else if (index == 2) {
         var response = await dio.get(
@@ -2520,11 +2543,19 @@ class _FindJobPageState extends State<FindJobPage> {
         _model = response.data['data'];
       });
     } else if (_typeSelected == 0 && _typeSelected2 == 1) {
+      print('--------------------1121---------- ${_changwatRefLabel}-');
+
       var response = await dio.get(
-          'https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?${(_searchController.text ?? "") == "" ? 'search=' : 'search=${_searchController.text}'}${_typeRefNo == 0 ? '' : '&catId=$_typeRefNo'}${_changwatRefNo == 0 ? '' : '&provinceId=$_changwatRefNo'}${_amphoeRefNo == 0 ? '' : '&amphoeId=$_amphoeRefNo'} ${_selectedJobType.isEmpty ? '' : '&_selectedJobType=$_selectedJobType.join(",")'}  ${_selectedSalaty.isEmpty ? '' : '&_selectedSalaty=$_selectedSalaty.join(",")'}');
+          'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?${(_searchController.text ?? "") == "" ? 'searchText=' : 'searchText=${_searchController.text}'}${(_changwatRefLabel == '') ? '' : '&province=${_changwatRefLabel}'}${(_amphoeReLabel == '') ? '' : '&district=${_amphoeReLabel}'}');
+
+      print(
+          '---------------------------> ${'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?${(_searchController.text ?? "") == "" ? 'searchText=' : 'searchText=${_searchController.text}'}${(_changwatRefLabel == '') ? '' : '&province=${_changwatRefLabel}'}${(_amphoeReLabel == '') ? '' : '&district=${_amphoeReLabel}'}'}');
 
       setState(() {
-        _modelExternal = response.data['data'];
+        _modelExternal = response.data;
+
+        print('--------------------1122-----------${_modelExternal}');
+        // logWTF(_modelExternal);
       });
     } else if (_typeSelected == 2) {
       var response = await dio.get(
