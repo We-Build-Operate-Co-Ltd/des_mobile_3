@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
 import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_html/flutter_html.dart';
@@ -175,8 +178,15 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
       String welcome = 'ยินดีต้อนรับ'; // ยินดีต้อนรับ
       String message =
           'อยากให้ศูนย์ดิจิทัลช่วยเหลือ แจ้งได้เลยค่ะ'; // อยากให้ศูนย์ดิจิทัลช่วยเหลือ แจ้งได้เลยค่ะ
+
       var shortToken = await _getShortToken(token);
-      var html = '''<!DOCTYPE html lang="en">
+      var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
+      name = profileMe['firstnameTh'];
+      print('----------------------> ${shortToken}');
+      print('----------------------> ${name}');
+
+      var html = '''<!DOCTYPE html lang="en"> 
+      
 
 <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
@@ -196,6 +206,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                 const div = document.getElementsByClassName("bn-customerchat")[0];
                 div.setAttribute("name", "${name}");
                 div.setAttribute("session_id", "${shortToken}");
+
 
                 setTimeout(() => {
                     BN.init({ version: "1.0" });
@@ -219,6 +230,8 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
     </body>
 
 </html>''';
+
+      print('------------------------> Generated HTML: $html');
 
       final String contentBase64 =
           base64Encode(const Utf8Encoder().convert(html));
