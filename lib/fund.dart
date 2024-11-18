@@ -406,16 +406,15 @@ class _FundPageState extends State<FundPage> {
                                     child: Text(
                                       'ค้นหาแหล่งทุน',
                                       style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        color: MyApp.themeNotifier.value ==
-                                                ThemeModeThird.light
-                                            ? Color(0xFFBD4BF7)
-                                            : MyApp.themeNotifier.value ==
-                                                    ThemeModeThird.dark
-                                                ? Colors.black
-                                                : Colors.black,
-                                      ),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          color: MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.light
+                                              ? Colors.white
+                                              : MyApp.themeNotifier.value ==
+                                                      ThemeModeThird.dark
+                                                  ? Colors.black
+                                                  : Colors.black),
                                     ),
                                   ),
                                 ),
@@ -1106,26 +1105,43 @@ class _FundPageState extends State<FundPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-                child: Container(
-                  height: 180,
-                  width: 320,
-                  decoration: BoxDecoration(
-                    // color: Color(0xFFB325F8),
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: Image.asset('assets/images/03.png'),
-                ),
-              ),
+                  child: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.asset(
+                            'assets/images/03.png',
+                            height: 180,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : ColorFiltered(
+                          colorFilter: ColorFilter.mode(
+                              Colors.grey, BlendMode.saturation),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.asset(
+                              'assets/images/03.png',
+                              height: 180,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ))),
               SizedBox(
                 height: 12,
               ),
               Text(
                 data['annoucement'],
                 style: TextStyle(
-                    fontFamily: 'Kanit',
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFFB325F8)),
+                  fontFamily: 'Kanit',
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFBD4BF7)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                ),
               ),
               SizedBox(
                 height: 12,
@@ -1136,12 +1152,18 @@ class _FundPageState extends State<FundPage> {
                     width: 22,
                     height: 22,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(7.0),
-                      color: Color(0xFFB325F8),
-                    ),
+                        borderRadius: BorderRadius.circular(7.0),
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFFBD4BF7)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57)),
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
-                      child: Image.asset('assets/images/work.png'),
+                      child: Image.asset(
+                          MyApp.themeNotifier.value == ThemeModeThird.light
+                              ? 'assets/images/work.png'
+                              : 'assets/images/2024/work.png'),
                     ),
                   ),
                   SizedBox(
@@ -1154,7 +1176,11 @@ class _FundPageState extends State<FundPage> {
                         fontFamily: 'Kanit',
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
-                        color: Colors.black,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFFBD4BF7)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                         overflow: TextOverflow.ellipsis,
                       ),
                       maxLines: 2,
@@ -1176,12 +1202,20 @@ class _FundPageState extends State<FundPage> {
                           height: 22,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(7.0),
-                            color: Color(0xFFB325F8),
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFBD4BF7)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(6.0),
-                            child:
-                                Image.asset('assets/images/calendar_menu.png'),
+                            child: Image.asset(MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? 'assets/images/calendar_menu.png'
+                                : 'assets/images/2024/calendar-b.png'),
                           ),
                         ),
                         SizedBox(
@@ -1195,7 +1229,13 @@ class _FundPageState extends State<FundPage> {
                             fontFamily: 'Kanit',
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
-                            color: Colors.black,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFBD4BF7)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                           ),
                         ),
                       ],
@@ -1209,11 +1249,20 @@ class _FundPageState extends State<FundPage> {
                           height: 22,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(7.0),
-                            color: Color(0xFFB325F8),
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFBD4BF7)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(6.0),
-                            child: Image.asset('assets/images/eye.png'),
+                            child: Image.asset(MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? 'assets/images/eye.png'
+                                : 'assets/images/2024/eye_black.png'),
                           ),
                         ),
                         SizedBox(
@@ -1225,7 +1274,13 @@ class _FundPageState extends State<FundPage> {
                             fontFamily: 'Kanit',
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
-                            color: Colors.black,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFBD4BF7)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                           ),
                         ),
                       ],

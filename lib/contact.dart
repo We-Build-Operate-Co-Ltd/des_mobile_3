@@ -303,7 +303,7 @@ class _ContactPageState extends State<ContactPage> {
               padding: EdgeInsets.all(5),
               decoration: BoxDecoration(
                   color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFFBD4BF7)
+                      ? Colors.white
                       : MyApp.themeNotifier.value == ThemeModeThird.dark
                           ? Colors.white
                           : Color(0xFFFFFD57),
