@@ -177,42 +177,46 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
           'อยากให้ศูนย์ดิจิทัลช่วยเหลือ แจ้งได้เลยค่ะ'; // อยากให้ศูนย์ดิจิทัลช่วยเหลือ แจ้งได้เลยค่ะ
       var shortToken = await _getShortToken(token);
       var html = '''<!DOCTYPE html lang="en">
-	<head>
-		<title></title>
-		<meta charset="utf-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9, user-scalable=no, shrink-to-fit=no" />
-	</head>
 
-<body>
-	<div id="bn-root"></div>
-	<script>
-		window.onload = function () {
-      			BN.init({ version: "1.0" });
-  		};
-	</script>
-	<script>
-		(function (d, s, id) {
-      			var js,
-          		bjs = d.getElementsByTagName(s)[0];
-      			if (d.getElementById(id)) return;
-      			js = d.createElement(s);
-      			js.id = id;
-      			js.src = "https://console.dcc.onde.go.th/customerchat/index.js";
-      			bjs.parentNode.insertBefore(js, bjs);
-  		})(document, "script", "bn-jssdk");
-	</script>
+<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
+        <div id="bn-root"></div>
+        <script>
+            window.onload = function () {
+                (function (d, s, id) {
+                    var js,
+                        bjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) return;
+                    js = d.createElement(s);
+                    js.id = id;
+                    js.src = "https://console.dcc.onde.go.th/customerchat/index.js";
+                    bjs.parentNode.insertBefore(js, bjs);
+                })(document, "script", "bn-jssdk");
 
-	<div class="bn-customerchat"
-   bot_id="65239937afe8b816d30878b6"
-    theme_color="#7A4CB1" 
-    bot_logo="https://decms.dcc.onde.go.th/botnoi/mascot.png" 
-    bot_name="${name}" locale="th" 
-    logged_in_greeting="${welcome}" 
-    greeting_message="${message}" 
-    default_open="false" name="" 
-    session_id="${shortToken}"></div>
-</body>
+                const div = document.getElementsByClassName("bn-customerchat")[0];
+                div.setAttribute("name", "${name}");
+                div.setAttribute("session_id", "${shortToken}");
+
+                setTimeout(() => {
+                    BN.init({ version: "1.0" });
+                }, 100);
+            };
+        </script>
+    </head>
+
+    <body>
+        <div
+            class="bn-customerchat"
+            bot_id="65239937afe8b816d30878b6"
+            theme_color="#2F9E79"
+            bot_logo="https://decms.dcc.onde.go.th/botnoi/mascot.png"
+            bot_name=“น้องตาโต”
+            locale="th"
+            logged_in_greeting="ยินดีต้อนรับ"
+            greeting_message="อยากให้น้องตาโตช่วยเหลือ แจ้งได้เลยค่ะ"
+            default_open="false"
+        ></div>
+    </body>
 
 </html>''';
 
@@ -242,6 +246,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
         ),
       );
       if (response.statusCode == 200) {
+        print('_getShortToken: ' + response.data['data']);
         return response.data['data'];
       } else {
         logE(response.data);
