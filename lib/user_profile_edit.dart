@@ -705,21 +705,19 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
         ),
         Container(
           margin: EdgeInsets.all(5),
-          child: Flexible(
-            child: Text(
-              'แก้ไขข้อมูลส่วนตัว',
-              style: TextStyle(
-                fontSize: 18,
-                fontFamily: 'Kanit',
-                fontWeight: FontWeight.w500,
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFFB325F8)
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
-              ),
-              maxLines: 2,
+          child: Text(
+            'แก้ไขข้อมูลส่วนตัว',
+            style: TextStyle(
+              fontSize: 18,
+              fontFamily: 'Kanit',
+              fontWeight: FontWeight.w500,
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFFB325F8)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
             ),
+            maxLines: 2,
           ),
         ),
       ],

@@ -1272,7 +1272,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                         width: 24),
                     const SizedBox(width: 8),
                     Text(
-                      model?['duration'],
+                      model?['duration'] + ' นาที',
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w400,
@@ -1381,7 +1381,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                         width: 24),
                     const SizedBox(width: 8),
                     Text(
-                      model['period'].toString(),
+                      model['period'].toString() + ' นาที',
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w400,
