@@ -751,7 +751,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
       }
       setState(() => _loadingSubmit = true);
       var accessToken = await ManageStorage.read('accessToken') ?? '';
-      // final String baseUrl = 'http://dcc-portal.webview.co/dcc-api';
+      // final String baseUrl = 'https://dcc.onde.go.th/dcc-api';
       Response response = await Dio().put(
         '$ondeURL/api/Booking/Cancel?bookingNo=${widget.model['bookingno']}',
         options: Options(
@@ -1620,7 +1620,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
   _callReadType() async {
     try {
       setState(() => _loadingDropdownType = true);
-      final String baseUrl = 'http://dcc-portal.webview.co/dcc-api';
+      final String baseUrl = 'https://dcc.onde.go.th/dcc-api';
       dynamic response =
           await Dio().get('${baseUrl}/api/masterdata/book/slotType');
 

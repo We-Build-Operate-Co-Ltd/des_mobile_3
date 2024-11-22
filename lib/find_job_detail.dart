@@ -1212,7 +1212,7 @@ class _FindJobDetailPageState extends State<FindJobDetailPage> {
   _callRead() async {
     Dio dio = new Dio();
     var response = await dio.get(
-        'http://dcc-portal.webview.co/dcc-api/api/Job/GetJobPost/${widget.model['jobapplicationno']}');
+        'https://dcc.onde.go.th/dcc-api/api/Job/GetJobPost/${widget.model['jobapplicationno']}');
 
     setState(() {
       _detailModel = response.data['data'];

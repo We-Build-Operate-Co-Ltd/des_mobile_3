@@ -2368,8 +2368,8 @@ class _FindJobPageState extends State<FindJobPage> {
 
     var response = _typeSelected == 0
         ? await dio.get(
-            // 'http://dcc-portal.webview.co/dcc-api/api/Job/GetSearchJob?search=$aa&CatId=$param');
-            'http://dcc-portal.webview.co/dcc-api/api/Job/GetSearchJob?CatId=$param')
+            // 'https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?search=$aa&CatId=$param');
+            'https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?CatId=$param')
         : await dio.get(
             'https://dcc.onde.go.th/dcc-api/api/Resume/resumes?keyword=&catId=$param');
 
@@ -2389,7 +2389,7 @@ class _FindJobPageState extends State<FindJobPage> {
     try {
       if (index == 0) {
         var response = await dio.get(
-            'http://dcc-portal.webview.co/dcc-api/api/Job/GetSearchJob?CatId=$param');
+            'https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?CatId=$param');
         setState(() {
           _model = response.data['data'];
         });
@@ -2419,7 +2419,7 @@ class _FindJobPageState extends State<FindJobPage> {
   _callCategoryRead() async {
     Dio dio = new Dio();
     var response = await dio
-        .get('http://dcc-portal.webview.co/dcc-api/api/masterdata/jobcategory');
+        .get('https://dcc.onde.go.th/dcc-api/api/masterdata/jobcategory');
 
     setState(() {
       _categoryModel = response.data;

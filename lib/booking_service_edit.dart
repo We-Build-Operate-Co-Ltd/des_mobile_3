@@ -918,7 +918,7 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
   _callReadType() async {
     try {
       setState(() => _loadingDropdownType = true);
-      final String baseUrl = 'http://dcc-portal.webview.co/dcc-api';
+      final String baseUrl = 'https://dcc.onde.go.th/dcc-api';
       dynamic response =
           await Dio().get('${baseUrl}/api/masterdata/book/slotType');
 

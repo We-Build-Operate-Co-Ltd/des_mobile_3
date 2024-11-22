@@ -898,7 +898,7 @@ class _RegisterThaidPageState extends State<RegisterThaidPage> {
   Future<StatusDuplicate> _checkDuplicateEmail() async {
     try {
       Response<bool?> response = await Dio().get(
-        'http://dcc-portal.webview.co/dcc-api/api/user/verify/duplicate/${txtEmail.text}',
+        'https://dcc.onde.go.th/dcc-api/api/user/verify/duplicate/${txtEmail.text}',
       );
       print(response.data);
       return response.data! ? StatusDuplicate.fail : StatusDuplicate.pass;
