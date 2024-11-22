@@ -7,26 +7,21 @@ import 'package:des/booking_service.dart';
 import 'package:des/contact.dart';
 import 'package:des/detail.dart';
 import 'package:des/find_job.dart';
-import 'package:des/learning.dart';
 import 'package:des/login_first.dart';
 import 'package:des/my_class_all.dart';
-import 'package:des/notification_booking.dart';
 import 'package:des/notification_list.dart';
 import 'package:des/policy.dart';
-import 'package:des/shared/counterNotifier.dart';
 import 'package:des/shared/dcc.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/notification_service.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
-import 'package:des/user_profile_bk.dart';
 import 'package:des/user_profile.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:des/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'fund.dart';
@@ -49,7 +44,7 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   DateTime? currentBackPressTime;
   dynamic futureNotificationTire;
-  int notiCount = 0;
+
   int _currentPage = 0;
   String _profileCode = '';
   String _imageProfile = '';
@@ -64,6 +59,82 @@ class _MenuState extends State<Menu> {
   };
   var homePage;
   var profilePage;
+
+  // int notiCount = 0; เปลี่ยนมาใช้อันล่าง
+  late Future<int> notificationFuture;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      var pf = await ManageStorage.read('accessToken') ?? '';
+
+      //set color init.
+      var colorStorage = await storage.read(key: 'switchColor') ?? 'ปกติ';
+      if (colorStorage == "ปกติ") {
+        MyApp.themeNotifier.value = ThemeModeThird.light;
+      } else if (colorStorage == "ขาวดำ") {
+        MyApp.themeNotifier.value = ThemeModeThird.dark;
+      } else {
+        MyApp.themeNotifier.value = ThemeModeThird.blindness;
+      }
+
+      //set font size init.
+      var fontStorageValue =
+          await storage.read(key: 'switchSizeFont') ?? 'ปกติ';
+      if (fontStorageValue == "ปกติ") {
+        MyApp.fontKanit.value = FontKanit.small;
+      } else if (fontStorageValue == "ปานกลาง") {
+        MyApp.fontKanit.value = FontKanit.medium;
+      } else {
+        MyApp.fontKanit.value = FontKanit.large;
+      }
+
+      setState(() {
+        _profileCode = pf;
+      });
+
+      if (_profileCode.isEmpty) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const LoginFirstPage(),
+          ),
+          (Route<dynamic> route) => false,
+        );
+      }
+      // _callReadPolicy(pf);
+    });
+
+    homePage = HomePage(changePage: _changePage);
+    profilePage = UserProfilePage(changePage: _changePage);
+    _buildMainPopUp();
+    _callRead();
+    _logUsed();
+    pages = <Widget>[
+      // SizedBox(),
+      // SizedBox(),
+      // SizedBox(),
+      homePage,
+      BookingServicePage(
+        catSelectedWidget: '0',
+      ),
+      MyClassAllPage(changePage: _changePage),
+      // NotificationBookingPage(),
+      NotificationListPage(changePage: _changePage),
+      profilePage,
+      FundPage(changePage: _changePage),
+      ReportProblemPage(changePage: _changePage),
+      ContactPage(changePage: _changePage),
+      FindJobPage(changePage: _changePage),
+    ];
+    super.initState();
+
+    notificationFuture = fetchNotificationCount();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -215,6 +286,10 @@ class _MenuState extends State<Menu> {
                                     fit: BoxFit.cover,
                                     width: double.infinity,
                                     height: double.infinity,
+                                    placeholder: (context, url) =>
+                                        CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
                                   ),
                                 ),
                               );
@@ -356,59 +431,70 @@ class _MenuState extends State<Menu> {
       key: key,
       flex: 1,
       child: Center(
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            radius: 60,
-            splashColor: Theme.of(context).primaryColor.withOpacity(0.3),
-            onTap: () {
-              _onItemTapped(index);
-              // postTrackClick("แท็บ$title");
-            },
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.all(10),
-              decoration: _currentPage == index
-                  ? BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFFFFFFFF).withOpacity(0.50),
-                          // spreadRadius: 0,
-                          // blurRadius: 0,
-                          // offset:
-                          //     const Offset(0, 0), // changes position of shadow
+        child: InkWell(
+          radius: 60,
+          splashColor: Theme.of(context).primaryColor.withOpacity(0.3),
+          onTap: () {
+            _onItemTapped(index);
+            // postTrackClick("แท็บ$title");
+          },
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            padding: EdgeInsets.all(10),
+            margin: EdgeInsets.all(10),
+            decoration: _currentPage == index
+                ? BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFFFFFFFF).withOpacity(0.50),
+                        // spreadRadius: 0,
+                        // blurRadius: 0,
+                        // offset:
+                        //     const Offset(0, 0), // changes position of shadow
+                      ),
+                    ],
+                  )
+                : null,
+            // borderRadius: BorderRadius.circular(15),
+            child: isNetwork
+                ? pathImage != ''
+                    ? Image.memory(
+                        base64Decode(_imageProfile),
+                        fit: BoxFit.cover,
+                        height: 30,
+                        width: 30,
+                        errorBuilder: (_, __, ___) => Image.asset(
+                          "assets/images/profile_menu.png",
+                          fit: BoxFit.fill,
                         ),
-                      ],
-                    )
-                  : null,
-              // borderRadius: BorderRadius.circular(15),
-              child: isNetwork
-                  ? pathImage != ''
-                      ? Image.memory(
-                          base64Decode(_imageProfile),
-                          fit: BoxFit.cover,
-                          height: 30,
-                          width: 30,
-                          errorBuilder: (_, __, ___) => Image.asset(
-                            "assets/images/profile_menu.png",
-                            fit: BoxFit.fill,
-                          ),
-                        )
-                      : Image.asset(
-                          'assets/images/profile_menu.png',
-                          height: 30,
-                          width: 30,
-                          color: color,
-                        )
-                  : Consumer<CounterNotifier>(
-                      builder: (context, counterNotifier, child) {
-                        return title == "แจ้งเตือน" && notiCount > 0
+                      )
+                    : Image.asset(
+                        'assets/images/profile_menu.png',
+                        height: 30,
+                        width: 30,
+                        color: color,
+                      )
+                : FutureBuilder<int>(
+                    future: notificationFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child:
+                              CircularProgressIndicator(), // Loading Indicator
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text('Error: ${snapshot.error}'),
+                        );
+                      } else {
+                        print(
+                            '------------------------------------- ${snapshot.data!}');
+                        return title == "แจ้งเตือน" && snapshot.data! > 0
                             ? badges.Badge(
                                 badgeContent: Text(
-                                  counterNotifier.counter.toString(),
+                                  snapshot.data!.toString(),
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 child: Image.asset(
@@ -424,84 +510,13 @@ class _MenuState extends State<Menu> {
                                 width: 30,
                                 color: color,
                               );
-                      },
-                    ),
-            ),
+                      }
+                    },
+                  ),
           ),
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      var pf = await ManageStorage.read('accessToken') ?? '';
-
-      //set color init.
-      var colorStorage = await storage.read(key: 'switchColor') ?? 'ปกติ';
-      if (colorStorage == "ปกติ") {
-        MyApp.themeNotifier.value = ThemeModeThird.light;
-      } else if (colorStorage == "ขาวดำ") {
-        MyApp.themeNotifier.value = ThemeModeThird.dark;
-      } else {
-        MyApp.themeNotifier.value = ThemeModeThird.blindness;
-      }
-
-      //set font size init.
-      var fontStorageValue =
-          await storage.read(key: 'switchSizeFont') ?? 'ปกติ';
-      if (fontStorageValue == "ปกติ") {
-        MyApp.fontKanit.value = FontKanit.small;
-      } else if (fontStorageValue == "ปานกลาง") {
-        MyApp.fontKanit.value = FontKanit.medium;
-      } else {
-        MyApp.fontKanit.value = FontKanit.large;
-      }
-
-      setState(() {
-        _profileCode = pf;
-      });
-
-      if (_profileCode.isEmpty) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => const LoginFirstPage(),
-          ),
-          (Route<dynamic> route) => false,
-        );
-      }
-      // _callReadPolicy(pf);
-    });
-
-    homePage = HomePage(changePage: _changePage);
-    profilePage = UserProfilePage(changePage: _changePage);
-    _buildMainPopUp();
-    _callRead();
-    _logUsed();
-    pages = <Widget>[
-      // SizedBox(),
-      // SizedBox(),
-      // SizedBox(),
-      homePage,
-      BookingServicePage(
-        catSelectedWidget: '0',
-      ),
-      MyClassAllPage(changePage: _changePage),
-      // NotificationBookingPage(),
-      NotificationListPage(changePage: _changePage),
-      profilePage,
-      FundPage(changePage: _changePage),
-      ReportProblemPage(changePage: _changePage),
-      ContactPage(changePage: _changePage),
-      FindJobPage(changePage: _changePage),
-    ];
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   _logUsed() async {
@@ -566,7 +581,6 @@ class _MenuState extends State<Menu> {
 
   _callRead() async {
     var img = await DCCProvider.getImageProfile();
-    _readNotiCount();
     setState(() => _imageProfile = img);
     setState(() {
       if (_profileCode != '') {
@@ -652,29 +666,21 @@ class _MenuState extends State<Menu> {
     print(dataValue);
   }
 
-  Future<dynamic> _readNotiCount() async {
-    var profileMe = await ManageStorage.readDynamic('profileMe');
-    // Response<dynamic> response;
-    Dio dio = Dio();
+  Future<int> fetchNotificationCount() async {
     try {
-      Response response = await Dio().post(
+      var profileMe = await ManageStorage.readDynamic('profileMe');
+      var response = await Dio().post(
         '$server/dcc-api/m/v2/notificationbooking/read',
         data: {
           'email': profileMe['email'],
         },
       );
 
-      // if (response.statusCode == 200) {
-      if (response.data['status'] == 'S') {
-        var modelNotiCount = [...response.data['objectData']];
-        setState(() {
-          notiCount = modelNotiCount.where((x) => x['status'] == "N").length;
-        });
-      }
-      // }
+      var modelNotiCount = [...response.data['objectData']];
+      return modelNotiCount.where((x) => x['status'] == "N").length;
     } catch (e) {
-      logE(e);
+      debugPrint('Error fetching notifications: $e');
+      return 0; // หากมีข้อผิดพลาด ให้แสดงเป็น 0
     }
-    return [];
   }
 }

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:des/booking_service_detail.dart';
 import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
@@ -38,7 +37,6 @@ class BookingServiceSearchResultPage extends StatefulWidget {
 
 class _BookingServiceSearchResultPageState
     extends State<BookingServiceSearchResultPage> {
-  List<dynamic> _modelCenter = [];
   List<dynamic> _filterModelCenter = [];
   LoadingBookingStatus _loadingBookingStatus = LoadingBookingStatus.loading;
   String latitude = "";
