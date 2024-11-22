@@ -30,6 +30,8 @@ import 'shared/config.dart';
 import 'main.dart';
 import 'package:badges/badges.dart' as badges;
 
+import 'widget/blinking_icon.dart';
+
 class Menu extends StatefulWidget {
   const Menu({
     Key? key,
@@ -287,7 +289,7 @@ class _MenuState extends State<Menu> {
                                     width: double.infinity,
                                     height: double.infinity,
                                     placeholder: (context, url) =>
-                                        CircularProgressIndicator(),
+                                        BlinkingIcon(),
                                     errorWidget: (context, url, error) =>
                                         Icon(Icons.error),
                                   ),
@@ -297,12 +299,6 @@ class _MenuState extends State<Menu> {
                           ).toList(),
                         ),
                       ),
-                      // ClipRRect(
-                      //   borderRadius: BorderRadius.circular(15),
-                      //   child: CachedNetworkImage(
-                      //     imageUrl: result[0]['imageUrl'],
-                      //   ),
-                      // ),
                       const SizedBox(height: 5),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -480,10 +476,7 @@ class _MenuState extends State<Menu> {
                     future: notificationFuture,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child:
-                              CircularProgressIndicator(), // Loading Indicator
-                        );
+                        return BlinkingIcon();
                       } else if (snapshot.hasError) {
                         return Center(
                           child: Text('Error: ${snapshot.error}'),

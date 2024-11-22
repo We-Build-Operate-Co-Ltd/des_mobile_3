@@ -30,6 +30,7 @@ import 'course_detail.dart';
 import 'my_class_all_bk.dart';
 import 'my_class_all.dart';
 import 'notification_booking.dart';
+import 'widget/blinking_icon.dart';
 import 'shared/config.dart';
 import 'main.dart';
 import 'shared/notification_service.dart';
@@ -681,6 +682,12 @@ class _HomePageState extends State<HomePage> {
                                                       fit: BoxFit.cover,
                                                       width: double.infinity,
                                                       height: double.infinity,
+                                                      placeholder:
+                                                          (context, url) =>
+                                                              BlinkingIcon(),
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          Icon(Icons.error),
                                                     )
                                                   : ColorFiltered(
                                                       colorFilter:
@@ -694,6 +701,12 @@ class _HomePageState extends State<HomePage> {
                                                         fit: BoxFit.cover,
                                                         width: double.infinity,
                                                         height: double.infinity,
+                                                        placeholder: (context,
+                                                                url) =>
+                                                            BlinkingIcon(), // ใช้ widget กระพริบ,
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            Icon(Icons.error),
                                                       ),
                                                     ),
                                             ),
