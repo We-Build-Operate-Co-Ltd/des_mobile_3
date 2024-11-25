@@ -1399,7 +1399,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
 
       dynamic responseProfileMe = await _getProfileMe(accessToken);
       // logWTF('responseProfileMe');
-      // logWTF(responseProfileMe);
+      logE(responseProfileMe);
       if (responseProfileMe == null) {
         return;
       }
@@ -1480,10 +1480,10 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       logWTF('create');
       var data = {
         'username': txtEmail.text.trim(),
-        // 'password': txtPassword.text,
+        'password': txtPassword.text,
         'idcard': param['idcard'] ?? "",
         'category': 'guest',
-        'email': _username,
+        'email': txtEmail.text.trim(),
         // 'phone': param?['phonenumber'] ?? '',
         // 'gender': param?['gender'] ?? '',
         // 'uuid': param['uuid'],
@@ -1982,6 +1982,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
     } catch (e) {
+      print('----123------------${e.toString()}');
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       setState(() => _loadingSubmit = false);
     }

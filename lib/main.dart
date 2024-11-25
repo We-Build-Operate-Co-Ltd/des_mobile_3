@@ -139,6 +139,7 @@ class _MyAppState extends State<MyApp> {
                 const RegisterVerifyThaiIDPage(),
             '/verifyThaiId': (BuildContext context) => const VerifyThaiIDPage(),
             '/loginFirst': (BuildContext context) => const LoginFirstPage(),
+             '/verifyThaiIdNew': (BuildContext context) => const VerifyThaiIDNewPage(),
           },
           theme: FlexThemeData.light(
             fontFamily: 'kanit',

@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "949874182161",
     "project_id": "des-digital",
-    "storage_bucket": "des-digital.appspot.com"
+    "storage_bucket": "des-digital.firebasestorage.app"
   },
   "client": [
     {
@@ -43,6 +43,14 @@
           "android_info": {
             "package_name": "td.webuild.des",
             "certificate_hash": "aa20afa5517a7dbe38ec560a282f967c9c404f2b"
+          }
+        },
+        {
+          "client_id": "949874182161-srsvl71lfcadje7f6nojcu83ppmgpva6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "td.webuild.des",
+            "certificate_hash": "cc1a9cc6f2521885d577f995386a6c09200eb960"
           }
         },
         {

@@ -318,21 +318,44 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
           'xID': widget.model?['xID'] ?? '',
           'facebookID': widget.model?['facebookID'] ?? '',
 
-        //   'firstName': responseProfileMe?['data']?['firstnameTh'] ?? '',
-        //  'lastName': responseProfileMe?['data']?['lastnameTh'] ?? '',
-        //  'idcard': responseProfileMe?['data']?['idcard'] ?? '',
-        //  'email': responseProfileMe?['data']?['email'] ?? '',
-        //  'phone': responseProfileMe?['data']?['phonenumber'] ?? '',
-        //  'ageRange': responseProfileMe?['data']?['ageRange'] ?? '',
+          //   'firstName': responseProfileMe?['data']?['firstnameTh'] ?? '',
+          //  'lastName': responseProfileMe?['data']?['lastnameTh'] ?? '',
+          //  'idcard': responseProfileMe?['data']?['idcard'] ?? '',
+          //  'email': responseProfileMe?['data']?['email'] ?? '',
+          //  'phone': responseProfileMe?['data']?['phonenumber'] ?? '',
+          //  'ageRange': responseProfileMe?['data']?['ageRange'] ?? '',
         };
-        logWTF(param);
-        Response response = await Dio().post(
-          '$server/dcc-api/m/register/link/socialaccount',
-          data: param,
-        );
-        logWTF(response);
+        // logWTF(param);
+        // Response response = await Dio().post(
+        //   '$server/dcc-api/m/register/link/socialaccount',
+        //   data: param,
+        // );
+        // logE(response);
+
+        dynamic responseUser = await _getUserProfile();
+        // logWTF('responseUser');
+        // logWTF(responseUser);
+
+        if (responseUser?['message'] == 'code_not_found') {
+          // logWTF('create');
+          var create = await _createUserProfile(responseProfileMe['data']);
+          if (create == null) {
+            return;
+          }
+          responseUser = await _getUserProfile();
+        }
+
+        if (responseUser == null) {
+          Fluttertoast.showToast(msg: responseUser['message']);
+          return;
+        }
+        if (responseUser?['status'] == "F") {
+          Fluttertoast.showToast(msg: responseUser['message']);
+          return;
+        }
+
         setState(() => _loadingSubmit = false);
-        if (response.data['status'] == 'S') {
+        if (responseUser['status'] == 'S') {
           _callLoginSocial();
           // Navigator.of(context).pushAndRemoveUntil(
           //   MaterialPageRoute(
@@ -342,7 +365,7 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
           // );
         } else {
           setState(() => _loadingSubmit = false);
-          Fluttertoast.showToast(msg: response.data['message']);
+          Fluttertoast.showToast(msg: responseUser['message']);
           //error
         }
       } catch (e) {
@@ -355,13 +378,20 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
 
   void _callLoginSocial() async {
     setState(() => _loadingSubmit = true);
-    logWTF('_callLoginSocial');
+    // logWTF('_callLoginSocial \n ${widget.model}');
     try {
       Response response = await Dio().post(
         '$server/dcc-api/m/v2/register/social/login',
-        data: widget.model,
+        data: {
+          "username": widget.model['email'],
+          "imageUrl": widget.model['imageUrl'],
+          'lineID': widget.model?['lineID'] ?? '',
+          'googleID': widget.model?['googleID'] ?? '',
+          'xID': widget.model?['xID'] ?? '',
+          'facebookID': widget.model?['facebookID'] ?? '',
+        },
       );
-      // logWTF(response.data);
+      logWTF(response.data);
       if (response.data['status'] != 'S') {
         setState(() => _loadingSubmit = false);
         return null;
@@ -420,6 +450,69 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
       logE(e);
       setState(() => _loadingSubmit = false);
       Fluttertoast.showToast(msg: 'ยกเลิก');
+    }
+  }
+
+  _getUserProfile() async {
+    Response response = await Dio().post(
+      '$server/dcc-api/m/register/read',
+      data: {
+        'username': widget.email.trim(),
+
+        // 'category': 'guest',
+      },
+    );
+    print("----------_getUserProfile------------${response}");
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      logE(response.data);
+      Fluttertoast.showToast(msg: response.data['error_description']);
+      return null;
+    }
+  }
+
+  _createUserProfile(param) async {
+    logD(param);
+    try {
+      logWTF('create');
+      var data = {
+        'username': widget.email.trim(),
+        'password': _passwordController.text,
+        'idcard': param['idcard'] ?? "",
+        'category': 'guest',
+        'email': widget.email.trim(),
+        // 'phone': param?['phonenumber'] ?? '',
+        // 'gender': param?['gender'] ?? '',
+        // 'uuid': param['uuid'],
+        // 'firstName': param['firstnameTh'],
+        // 'lastName': param['lastnameTh'],
+        // 'age': param['ageRange'],
+        // 'career': param?['jobName'] ?? '',
+        // 'favorites': param?['lmsCat'] ?? '',
+        // 'centerCode': param['centerId'].toString(),
+        'status': 'N',
+        'hasThaiD': false,
+      };
+      logE(data);
+      Response response = await Dio()
+          .post('$server/dcc-api/m/register/link/account/create', data: data);
+
+      if (response.statusCode == 200) {
+        return response.data['objectData'];
+      } else {
+        Fluttertoast.showToast(msg: response.data['error_description']);
+        return null;
+      }
+    } on DioError catch (e) {
+      setState(() => _loadingSubmit = false);
+      String err = e.error.toString();
+      if (e.response != null) {
+        err = e.response!.data['title'].toString();
+      }
+      logE(err);
+      Fluttertoast.showToast(msg: err);
+      return null;
     }
   }
 
