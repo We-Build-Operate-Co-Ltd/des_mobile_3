@@ -290,29 +290,65 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       height: 168,
                       width: 168,
                       child: GestureDetector(
-                        child: _imageProfile != ''
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: Image.memory(
-                                  base64Decode(_imageProfile),
-                                  fit: BoxFit.cover,
-                                  height: 168,
-                                  width: 168,
-                                  errorBuilder: (_, __, ___) => Image.asset(
-                                    "assets/images/avatar_empty.png",
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              )
-                            : Padding(
-                                padding: EdgeInsets.all(10.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: Image.asset(
-                                    "assets/images/avatar_empty.png",
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
+                        child: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? _imageProfile != ''
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Image.memory(
+                                      base64Decode(_imageProfile),
+                                      fit: BoxFit.cover,
+                                      height: 168,
+                                      width: 168,
+                                      errorBuilder: (_, __, ___) => Image.asset(
+                                        "assets/images/avatar_empty.png",
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: EdgeInsets.all(10.0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(50),
+                                      child: Image.asset(
+                                        "assets/images/avatar_empty.png",
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                  )
+                            : ColorFiltered(
+                                colorFilter:  ColorFilter.matrix(<double>[
+                                  0.2126, 0.7152, 0.0722, 0, 0, // Red channel
+                                  0.2126, 0.7152, 0.0722, 0, 0, // Green channel
+                                  0.2126, 0.7152, 0.0722, 0, 0, // Blue channel
+                                  0, 0, 0, 1, 0, // Alpha channel
+                                ]),
+                                child: _imageProfile != ''
+                                    ? ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: Image.memory(
+                                          base64Decode(_imageProfile),
+                                          fit: BoxFit.cover,
+                                          height: 168,
+                                          width: 168,
+                                          errorBuilder: (_, __, ___) =>
+                                              Image.asset(
+                                            "assets/images/avatar_empty.png",
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                      )
+                                    : Padding(
+                                        padding: EdgeInsets.all(10.0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          child: Image.asset(
+                                            "assets/images/avatar_empty.png",
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                      ),
                               ),
                       ),
                     ),

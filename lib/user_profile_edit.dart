@@ -242,40 +242,93 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                             padding: EdgeInsets.zero,
                             child: Stack(
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(60),
-                                  child: _imageFile != null
-                                      ? Image.file(
-                                          File(_imageFile!.path),
-                                          fit: BoxFit.cover,
-                                          height: 120,
-                                          width: 120,
-                                        )
-                                      : Image.memory(
-                                          base64Decode(_imageProfile),
-                                          fit: BoxFit.cover,
-                                          height: 120,
-                                          width: 120,
-                                          errorBuilder: (_, __, ___) =>
-                                              Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(60),
-                                              border: Border.all(
-                                                width: 1,
-                                                color: Color(0xFFA924F0),
+                                MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(60),
+                                        child: _imageFile != null
+                                            ? Image.file(
+                                                File(_imageFile!.path),
+                                                fit: BoxFit.cover,
+                                                height: 120,
+                                                width: 120,
+                                              )
+                                            : Image.memory(
+                                                base64Decode(_imageProfile),
+                                                fit: BoxFit.cover,
+                                                height: 120,
+                                                width: 120,
+                                                errorBuilder: (_, __, ___) =>
+                                                    Container(
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            60),
+                                                    border: Border.all(
+                                                      width: 1,
+                                                      color: Color(0xFFA924F0),
+                                                    ),
+                                                  ),
+                                                  child: Text(
+                                                    'แก้ไขรูปภาพ',
+                                                    style: TextStyle(),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                            child: Text(
-                                              'แก้ไขรูปภาพ',
-                                              style: TextStyle(),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
+                                      )
+                                    : ColorFiltered(
+                                        colorFilter:
+                                            ColorFilter.matrix(<double>[
+                                          0.2126, 0.7152, 0.0722, 0,
+                                          0, // Red channel
+                                          0.2126, 0.7152, 0.0722, 0,
+                                          0, // Green channel
+                                          0.2126, 0.7152, 0.0722, 0,
+                                          0, // Blue channel
+                                          0, 0, 0, 1, 0, // Alpha channel
+                                        ]),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(60),
+                                          child: _imageFile != null
+                                              ? Image.file(
+                                                  File(_imageFile!.path),
+                                                  fit: BoxFit.cover,
+                                                  height: 120,
+                                                  width: 120,
+                                                )
+                                              : Image.memory(
+                                                  base64Decode(_imageProfile),
+                                                  fit: BoxFit.cover,
+                                                  height: 120,
+                                                  width: 120,
+                                                  errorBuilder: (_, __, ___) =>
+                                                      Container(
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              60),
+                                                      border: Border.all(
+                                                        width: 1,
+                                                        color:
+                                                            Color(0xFFA924F0),
+                                                      ),
+                                                    ),
+                                                    child: Text(
+                                                      'แก้ไขรูปภาพ',
+                                                      style: TextStyle(),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ),
+                                                ),
                                         ),
-                                ),
+                                      ),
                                 Positioned(
                                     bottom: 5,
                                     right: 5,

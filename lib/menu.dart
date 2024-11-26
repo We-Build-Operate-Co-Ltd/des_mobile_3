@@ -455,22 +455,51 @@ class _MenuState extends State<Menu> {
                 : null,
             // borderRadius: BorderRadius.circular(15),
             child: isNetwork
-                ? pathImage != ''
-                    ? Image.memory(
-                        base64Decode(_imageProfile),
-                        fit: BoxFit.cover,
-                        height: 30,
-                        width: 30,
-                        errorBuilder: (_, __, ___) => Image.asset(
-                          "assets/images/profile_menu.png",
-                          fit: BoxFit.fill,
-                        ),
-                      )
-                    : Image.asset(
-                        'assets/images/profile_menu.png',
-                        height: 30,
-                        width: 30,
-                        color: color,
+                ? MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? pathImage != ''
+                        ? Image.memory(
+                            base64Decode(_imageProfile),
+                            fit: BoxFit.cover,
+                            height: 30,
+                            width: 30,
+                            errorBuilder: (_, __, ___) => Image.asset(
+                              "assets/images/profile_menu.png",
+                              fit: BoxFit.fill,
+                            ),
+                          )
+                        : Image.asset(
+                            'assets/images/profile_menu.png',
+                            height: 30,
+                            width: 30,
+                            color: color,
+                          )
+                    : ColorFiltered(
+                        colorFilter: ColorFilter.matrix(<double>[
+                          0.2126, 0.7152, 0.0722, 0,
+                          0, // Red channel
+                          0.2126, 0.7152, 0.0722, 0,
+                          0, // Green channel
+                          0.2126, 0.7152, 0.0722, 0,
+                          0, // Blue channel
+                          0, 0, 0, 1, 0, // Alpha channel
+                        ]),
+                        child: pathImage != ''
+                            ? Image.memory(
+                                base64Decode(_imageProfile),
+                                fit: BoxFit.cover,
+                                height: 30,
+                                width: 30,
+                                errorBuilder: (_, __, ___) => Image.asset(
+                                  "assets/images/profile_menu.png",
+                                  fit: BoxFit.fill,
+                                ),
+                              )
+                            : Image.asset(
+                                'assets/images/profile_menu.png',
+                                height: 30,
+                                width: 30,
+                                color: color,
+                              ),
                       )
                 : FutureBuilder<int>(
                     future: notificationFuture,
