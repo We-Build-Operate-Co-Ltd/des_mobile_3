@@ -344,17 +344,17 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                                         onChanged: (text) {
                                           // print("First text field: $text");
                                           setState(() {
-                                            if (_cateTypeSelected == 0) {
+                                            // if (_cateTypeSelected == 0) {
                                               textSearch = text;
                                               _filter();
                                               // textEternalSearch = '';
                                               // _filterEternal();
-                                            } else {
+                                            // } else {
                                               textEternalSearch = text;
                                               _filterEternal();
                                               // textSearch = '';
                                               // _filter();
-                                            }
+                                            // }
                                           });
                                         },
                                         style: TextStyle(
@@ -1632,13 +1632,13 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
         itemBuilder: (_, __) => GestureDetector(
           onTap: () => setState(() {
             _cateTypeSelected = __;
-            if (_cateTypeSelected == 0) {
-              textEternalSearch = '';
+            // if (_cateTypeSelected == 0) {
+              // textEternalSearch = '';
               _filterEternal();
-            } else {
-              textSearch = '';
+            // } else {
+              // textSearch = '';
               _filter();
-            }
+            // }
           }),
           child: Container(
             alignment: Alignment.center,
