@@ -723,18 +723,41 @@ class _NotificationListState extends State<NotificationListPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        'assets/images/logo_noti_list.png',
-                        width: 180,
-                        height: 160,
-                      ),
+                      MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Image.asset(
+                              'assets/images/logo_noti_list.png',
+                              width: 180,
+                              height: 160,
+                            )
+                          : ColorFiltered(
+                              colorFilter: ColorFilter.matrix(<double>[
+                                0.2126, 0.7152, 0.0722, 0,
+                                0, // Red channel
+                                0.2126, 0.7152, 0.0722, 0,
+                                0, // Green channel
+                                0.2126, 0.7152, 0.0722, 0,
+                                0, // Blue channel
+                                0, 0, 0, 1,
+                                0, // Alpha channel
+                              ]),
+                              child: Image.asset(
+                                'assets/images/logo_noti_list.png',
+                                width: 180,
+                                height: 160,
+                              ),
+                            ),
                       SizedBox(height: 11),
                       Text(
                         // textNotiEmpty(selectedCategoryDays),
                         "ไม่มีการแจ้งเตือนในหมวดนี้",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Color(0XFFB325F8),
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFFB325F8)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
                           fontFamily: 'Kanit',
                           fontWeight: FontWeight.w400,
                           fontSize: 15,
