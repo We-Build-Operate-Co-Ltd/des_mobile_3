@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:des/shared/secure_storage.dart';
+import 'package:des/shared/theme_data.dart';
 import 'package:des/verify_complete.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'main.dart';
 import 'shared/config.dart';
 import 'shared/extension.dart';
 
@@ -65,6 +67,16 @@ class _VerifyThaiIDNewPageState extends State<VerifyThaiIDNewPage> {
             image: DecorationImage(
               image: AssetImage("assets/images/BG.png"),
               fit: BoxFit.cover,
+              colorFilter: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? null
+                  : ColorFilter.matrix(
+                      <double>[
+                        0.2126, 0.7152, 0.0722, 0, 0, // Red channel
+                        0.2126, 0.7152, 0.0722, 0, 0, // Green channel
+                        0.2126, 0.7152, 0.0722, 0, 0, // Blue channel
+                        0, 0, 0, 1, 0, // Alpha channel
+                      ],
+                    ),
             ),
           ),
           child: Stack(
@@ -72,18 +84,44 @@ class _VerifyThaiIDNewPageState extends State<VerifyThaiIDNewPage> {
               Positioned(
                 top: 130,
                 right: 30,
-                child: Image(
-                  image: AssetImage('assets/images/Owl-6 3.png'),
-                ),
+                child: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Image(
+                        image: AssetImage('assets/images/Owl-6 3.png'),
+                      )
+                    : ColorFiltered(
+                        colorFilter: ColorFilter.matrix(<double>[
+                          0.2126, 0.7152, 0.0722, 0, 0, // Red channel
+                          0.2126, 0.7152, 0.0722, 0, 0, // Green channel
+                          0.2126, 0.7152, 0.0722, 0, 0, // Blue channel
+                          0, 0, 0, 1, 0, // Alpha channel
+                        ]),
+                        child: Image(
+                          image: AssetImage('assets/images/Owl-6 3.png'),
+                        ),
+                      ),
               ),
               Positioned(
                 top: 80,
                 left: 60,
-                child: Image(
-                  image: AssetImage('assets/images/Rectangle 7803.png'),
-                  height: 149,
-                  width: 149,
-                ),
+                child: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Image(
+                        image: AssetImage('assets/images/Rectangle 7803.png'),
+                        height: 149,
+                        width: 149,
+                      )
+                    : ColorFiltered(
+                        colorFilter: ColorFilter.matrix(<double>[
+                          0.2126, 0.7152, 0.0722, 0, 0, // Red channel
+                          0.2126, 0.7152, 0.0722, 0, 0, // Green channel
+                          0.2126, 0.7152, 0.0722, 0, 0, // Blue channel
+                          0, 0, 0, 1, 0, // Alpha channel
+                        ]),
+                        child: Image(
+                          image: AssetImage('assets/images/Rectangle 7803.png'),
+                          height: 149,
+                          width: 149,
+                        ),
+                      ),
               ),
               Positioned(
                 child: Column(
@@ -92,13 +130,18 @@ class _VerifyThaiIDNewPageState extends State<VerifyThaiIDNewPage> {
                     Container(
                       height: MediaQuery.of(context).size.height * 0.6,
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.white
+                            : Colors.black,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(15),
                           topRight: Radius.circular(15),
                         ),
                       ),
                       child: Card(
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.white
+                            : Colors.black,
                         child: Padding(
                           padding: const EdgeInsets.all(25),
                           child: Column(
@@ -118,10 +161,27 @@ class _VerifyThaiIDNewPageState extends State<VerifyThaiIDNewPage> {
                                         onTap: () {
                                           Navigator.pop(context);
                                         },
-                                        child: Image.asset(
-                                          'assets/images/back_profile.png',
-                                          // color: Colors.white,
-                                        ),
+                                        child: MyApp.themeNotifier.value ==
+                                                ThemeModeThird.light
+                                            ? Image.asset(
+                                                'assets/images/back_profile.png',
+                                              )
+                                            : ColorFiltered(
+                                                colorFilter:
+                                                    ColorFilter.matrix(<double>[
+                                                  0.2126, 0.7152, 0.0722, 0,
+                                                  0, // Red channel
+                                                  0.2126, 0.7152, 0.0722, 0,
+                                                  0, // Green channel
+                                                  0.2126, 0.7152, 0.0722, 0,
+                                                  0, // Blue channel
+                                                  0, 0, 0, 1,
+                                                  0, // Alpha channel
+                                                ]),
+                                                child: Image.asset(
+                                                  'assets/images/back_profile.png',
+                                                ),
+                                              ),
                                       ),
                                     ),
                                   ),
@@ -134,7 +194,13 @@ class _VerifyThaiIDNewPageState extends State<VerifyThaiIDNewPage> {
                                     style: TextStyle(
                                         fontSize: 24,
                                         fontWeight: FontWeight.w500,
-                                        color: Color(0xFFB325F8)),
+                                        color: MyApp.themeNotifier.value ==
+                                                ThemeModeThird.light
+                                            ? Color(0xFFB325F8)
+                                            : MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.dark
+                                                ? Colors.white
+                                                : Color(0xFFFFFD57)),
                                   ),
                                 ],
                               ),
@@ -142,9 +208,16 @@ class _VerifyThaiIDNewPageState extends State<VerifyThaiIDNewPage> {
                               Text(
                                 'ขั้นตอนสุดท้าย\nเพิ่มความน่าเชื่อถือให้กับบัญชีของคุณ\nเพียงยืนยันตัวตนด้วยแอปพลิเคชัน ThaID\n\nหากคุณยังไม่เคยติดตั้งแอปพลิเคชัน ThaID\nไม่ต้องเป็นห่วง ระบบจะช่วยติดตั้งให้คุณอัตโนมัต',
                                 style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Colors.black
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
+                                ),
                               ),
                               Expanded(
                                 child: Column(
@@ -159,7 +232,19 @@ class _VerifyThaiIDNewPageState extends State<VerifyThaiIDNewPage> {
                                         width: double.infinity,
                                         alignment: Alignment.center,
                                         decoration: BoxDecoration(
-                                          color: Color(0xFFB325F8),
+                                          color: MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.light
+                                              ? Color(0xFFB325F8)
+                                              : Colors.black,
+                                          border: Border.all(
+                                            color: MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.light
+                                                ? Color(0xFFB325F8)
+                                                : MyApp.themeNotifier.value ==
+                                                        ThemeModeThird.dark
+                                                    ? Colors.white
+                                                    : Color(0xFFFFFD57),
+                                          ),
                                           borderRadius:
                                               BorderRadius.circular(23),
                                           boxShadow: const [
@@ -170,12 +255,18 @@ class _VerifyThaiIDNewPageState extends State<VerifyThaiIDNewPage> {
                                             )
                                           ],
                                         ),
-                                        child: const Text(
+                                        child: Text(
                                           'เริ่มยืนยันตัวตน',
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: Colors.white,
+                                            color: MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.light
+                                                ? Colors.white
+                                                : MyApp.themeNotifier.value ==
+                                                        ThemeModeThird.dark
+                                                    ? Colors.white
+                                                    : Color(0xFFFFFD57),
                                           ),
                                         ),
                                       ),
