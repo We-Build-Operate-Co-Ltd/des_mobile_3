@@ -2539,6 +2539,7 @@ class _BookingServicePageState extends State<BookingServicePage>
         // logWTF(profileMe['email']);
         var response = await Dio().get(
           '$ondeURL/api/Booking/GetBooking/mobile/${profileMe['email']}',
+          // '$ondeURL/api/Booking/GetBooking',
           options: Options(
             headers: {
               'Authorization': 'Bearer $accessToken',
@@ -2546,7 +2547,7 @@ class _BookingServicePageState extends State<BookingServicePage>
           ),
         );
 
-        // logWTF(response);
+        // logE(response);
         if (response.data.isEmpty) {
           setState(() {
             _loadingBookingStatus = LoadingBookingStatus.success;
@@ -2571,6 +2572,7 @@ class _BookingServicePageState extends State<BookingServicePage>
           .where((dynamic e) => (_checkCurrentDate(
                     dateStr: e?['bookingdate'] ?? '',
                     startTime: e?['startTime'] ?? '',
+                    endTime: e?['endTime'] ?? '',
                   ) >=
                   0 &&
               e['status'] == '1'))
@@ -2708,6 +2710,7 @@ class _BookingServicePageState extends State<BookingServicePage>
   int _checkCurrentDate({
     required String dateStr,
     required String startTime,
+    String endTime = "",
     bool onlyDay = false,
   }) {
     if (dateStr.isNotEmpty) {
@@ -2724,15 +2727,30 @@ class _BookingServicePageState extends State<BookingServicePage>
       int minute = int.parse(timeSpit[1]);
 
       final now = DateTime.now();
-      DateTime date = DateTime(year, month, day, hour, minute);
+      DateTime dateStart = DateTime(year, month, day, hour, minute);
       DateTime currentDate =
           DateTime(now.year, now.month, now.day, now.hour, now.minute);
       if (onlyDay) {
-        date = DateTime(year, month, day);
+        dateStart = DateTime(year, month, day);
         currentDate = DateTime(now.year, now.month, now.day);
       }
 
-      final difDate = date.compareTo(currentDate);
+      if (endTime != "") {
+        List<String> timeSpitEnd = endTime.split(':');
+        int hourEnd = int.parse(timeSpitEnd[0]);
+        int minuteEnd = int.parse(timeSpitEnd[1]);
+        DateTime dateEnd = DateTime(year, month, day, hourEnd, minuteEnd);
+        logE(dateEnd);
+        if (now.isAfter(dateStart) && now.isBefore(dateEnd)) {
+          return 1;
+        }
+        else {
+          return -1;
+        }
+      }
+
+      final difDate = dateStart.compareTo(currentDate);
+      logE(difDate);
       if (difDate == 0) {
         return 0;
       } else if (difDate > 0) {

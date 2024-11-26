@@ -5,7 +5,9 @@ import 'package:des/my_course.dart';
 import 'package:des/my_course_category_search.dart';
 import 'package:des/my_course_success.dart';
 import 'package:des/shared/extension.dart';
+import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
+import 'package:des/webview_inapp.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -134,24 +136,25 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     //     '=========fsdfsdfsdfdsfsd==========' + _tempModelRecommend.toString());
     // var res = await _model;
     // print('--1---$cateSearch');
-    var temp =
-        // _tempModel.where((item) => item['name'].contains(param)).toList();
+    var temp = _tempModelRecommend
+        .where((item) => item['course_Name'].contains(textSearch.toString()))
+        .toList();
 
-        _tempModelRecommend
-            .where((dynamic e) =>
-                e['name']
-                    .toString()
-                    .toUpperCase()
-                    .contains(textSearch.toString().toUpperCase()) &&
-                e['certificate']
-                    .toString()
-                    .toUpperCase()
-                    .contains(cateSearch.toString().toUpperCase()) &&
-                e['course_cat_id']
-                    .toString()
-                    .toUpperCase()
-                    .contains(cateCourseSearch.toString().toUpperCase()))
-            .toList();
+    // _tempModelRecommend
+    //     .where((dynamic e) =>
+    //         e['course_Name']
+    //             .toString()
+    //             .toUpperCase()
+    //             .contains(textSearch.toString().toUpperCase()) &&
+    //         e['certificate']
+    //             .toString()
+    //             .toUpperCase()
+    //             .contains(cateSearch.toString().toUpperCase()) &&
+    //         e['course_cat_id']
+    //             .toString()
+    //             .toUpperCase()
+    //             .contains(cateCourseSearch.toString().toUpperCase()))
+    //     .toList();
 
     // logWTF('=========fsdfsdfsdfdsfsd123==========' + temp.toString());
 
@@ -184,7 +187,9 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   }
 
   _callReadRecomment() async {
-    var response = await Dio().get('$server/py-api/dcc/lms/recomend');
+    // var response = await Dio().get('$server/py-api/dcc/lms/recomend');
+    var response =
+        await Dio().get('$serverPlatform/api/Lms/GetRecommendCourse');
 
     setState(() {
       _modelRecommend = Future.value(response.data);
@@ -869,32 +874,47 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
 
   Widget containerRecommendedClass(dynamic model) {
     return GestureDetector(
-      onTap: () {
-        var data = {
-          'course_id': model?['id'] ?? '',
-          "course_name": model?['name'] ?? '',
-          "course_cat_id": model?['course_cat_id'] ?? '',
-          "cover_image": model?['docs'] ?? '',
-          "description": model['details'] ?? '',
-          "created_at": model['created_at'] ?? '',
-          "category_name": model['cat_name'] ?? '',
-          "certificate": model['certificate'] ?? '',
-          "course_duration": model['course_duration'] ?? '',
-        };
-        logWTF(data);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CourseDetailPage(
-              model: data,
-            ),
-          ),
-        );
+      onTap: () async {
+           var loginData = await ManageStorage.readDynamic('loginData');
+            var accessToken = await ManageStorage.read('accessToken');
+            logWTF(
+                'https://lms.dcc.onde.go.th/user/user/lesson_details/${model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => WebViewInAppPage(
+                  url:
+                      'https://lms.dcc.onde.go.th/user/user/lesson_details/${model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}',
+                  title: model?['course_name'] ?? '',
+                ),
+              ),
+            );
+        // var data = {
+        //   'course_id': model?['id'] ?? '',
+        //   "course_name": model?['name'] ?? '',
+        //   "course_cat_id": model?['course_cat_id'] ?? '',
+        //   "cover_image": model?['docs'] ?? '',
+        //   "description": model['details'] ?? '',
+        //   "created_at": model['created_at'] ?? '',
+        //   "category_name": model['cat_name'] ?? '',
+        //   "certificate": model['certificate'] ?? '',
+        //   "course_duration": model['course_duration'] ?? '',
+        // };
+        // logWTF(data);
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => CourseDetailPage(
+        //       model: model,
+        //     ),
+        //   ),
+        // );
       },
       child: Container(
         // elevation: 4,
         color: Theme.of(context).custom.primary,
         child: Container(
+          padding: EdgeInsets.only(bottom: 5),
           decoration: BoxDecoration(
             color: Theme.of(context).custom.primary,
             // border: Border.all(
@@ -921,11 +941,9 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                   topRight: Radius.circular(10),
                 ),
                 child: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? (model?['docs'] ?? '') != ''
+                    ? (model?['course_Thumbnail_Url'] ?? '') != ''
                         ? CachedNetworkImage(
-                            imageUrl:
-                                'https://lms.dcc.onde.go.th/uploads/course/' +
-                                    model?['docs'],
+                            imageUrl: model?['course_Thumbnail_Url'],
                             height: 120,
                             width: double.infinity,
                             fit: BoxFit.cover,
@@ -942,9 +960,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                           BlendMode.saturation,
                         ),
                         child: CachedNetworkImage(
-                          imageUrl:
-                              'https://lms.dcc.onde.go.th/uploads/course/' +
-                                  model?['docs'],
+                          imageUrl: model?['course_Thumbnail_Url'],
                           height: 120,
                           width: double.infinity,
                           fit: BoxFit.cover,
@@ -957,7 +973,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                   alignment: Alignment.topLeft,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
-                    model?['name'] ?? '',
+                    model?['course_Name'] ?? '',
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
@@ -980,7 +996,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                         width: 24),
                     const SizedBox(width: 8),
                     Text(
-                      model?['course_duration'],
+                      model?['course_Duration'],
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w400,

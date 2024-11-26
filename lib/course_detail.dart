@@ -94,10 +94,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                 return MyApp.themeNotifier.value == ThemeModeThird.light
                     ? ImageViewer(
                         initialIndex: 0,
-                        imageProviders: [
-                          'https://lms.dcc.onde.go.th/uploads/course/' +
-                              widget.model['cover_image']
-                        ]
+                        imageProviders: [widget.model['course_Thumbnail_Url']]
                             .map<ImageProvider<Object>>((e) => NetworkImage(e))
                             .toList(),
                       )
@@ -108,10 +105,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                         ),
                         child: ImageViewer(
                           initialIndex: 0,
-                          imageProviders: [
-                            'https://lms.dcc.onde.go.th/uploads/course/' +
-                                widget.model['cover_image']
-                          ]
+                          imageProviders: [widget.model['course_Thumbnail_Url']]
                               .map<ImageProvider<Object>>(
                                   (e) => NetworkImage(e))
                               .toList(),
@@ -128,10 +122,10 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               borderRadius: BorderRadius.circular(17.5),
               child: MyApp.themeNotifier.value == ThemeModeThird.light
                   ? CachedNetworkImage(
-                      imageUrl: (widget.model?['cover_image'] ?? '') != ''
-                          ? 'https://lms.dcc.onde.go.th/uploads/course/' +
-                              widget.model['cover_image']
-                          : '',
+                      imageUrl:
+                          (widget.model?['course_Thumbnail_Url'] ?? '') != ''
+                              ? widget.model['course_Thumbnail_Url']
+                              : '',
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
                       errorWidget: (context, url, error) =>
@@ -143,10 +137,10 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                         BlendMode.saturation,
                       ),
                       child: CachedNetworkImage(
-                        imageUrl: (widget.model?['cover_image'] ?? '') != ''
-                            ? 'https://lms.dcc.onde.go.th/uploads/course/' +
-                                widget.model['cover_image']
-                            : '',
+                        imageUrl:
+                            (widget.model?['course_Thumbnail_Url'] ?? '') != ''
+                                ? widget.model['course_Thumbnail_Url']
+                                : '',
                         width: MediaQuery.of(context).size.width,
                         fit: BoxFit.cover,
                         errorWidget: (context, url, error) =>
