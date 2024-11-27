@@ -181,7 +181,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     // logWTF('=========fsdfsdfsdfdsfsd123==========' + temp.toString());
 
     setState(() {
-      _listFilterLenght = temp.length;
+      // _listFilterLenght = temp.length;
       _modelCouseEternal = Future.value(temp);
     });
   }
@@ -1530,21 +1530,21 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
         InkWell(
           onTap: () {
             widget.changePage!(0);
-            setState(() {
-              _searchController.clear();
-              textSearch = '';
-              textEternalSearch = '';
-              _cateTypeSelected = 0; // reset category selection if applicable
-              _listFilterLenght = 0; // reset the length of filtered list
+            // setState(() {
+            //   _searchController.clear();
+            //   textSearch = '';
+            //   textEternalSearch = '';
+            //   _cateTypeSelected = 0; // reset category selection if applicable
+            //   _listFilterLenght = 0; // reset the length of filtered list
 
-              // Clear current search results
-              _modelRecommend = Future.value([]);
-              _modelCouseEternal = Future.value([]);
-            });
+            //   // Clear current search results
+            //   _modelRecommend = Future.value([]);
+            //   _modelCouseEternal = Future.value([]);
+            // });
 
             // Reload initial data
-            _callReadRecomment();
-            _callReadCouseEternal();
+            // _callReadRecomment();
+            // _callReadCouseEternal();
           },
           child: Container(
             height: 40,

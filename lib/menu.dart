@@ -148,10 +148,11 @@ class _MenuState extends State<Menu> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: WillPopScope(
           onWillPop: confirmExit,
-          child: IndexedStack(
-            index: _currentPage,
-            children: pages,
-          ),
+          child: pages[_currentPage],
+          // child: IndexedStack(
+          //   index: _currentPage,
+          //   children: pages,
+          // ),
         ),
       ),
       bottomNavigationBar: _buildBottomNavBar(),
