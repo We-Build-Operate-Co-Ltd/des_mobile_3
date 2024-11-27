@@ -1982,7 +1982,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       }
     } catch (e) {
-      print('----123------------${e.toString()}');
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       setState(() => _loadingSubmit = false);
     }
