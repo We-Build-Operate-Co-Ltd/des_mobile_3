@@ -576,7 +576,7 @@ class _MenuState extends State<Menu> {
   }
 
   _changePage(index) async {
-    await Future.delayed(const Duration(milliseconds: 2000));
+    // await Future.delayed(const Duration(milliseconds: 2000));
     setState(() {
       _currentPage = index;
     });
