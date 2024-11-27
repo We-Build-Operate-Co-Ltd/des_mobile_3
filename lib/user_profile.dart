@@ -316,7 +316,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     ),
                                   )
                             : ColorFiltered(
-                                colorFilter:  ColorFilter.matrix(<double>[
+                                colorFilter: ColorFilter.matrix(<double>[
                                   0.2126, 0.7152, 0.0722, 0, 0, // Red channel
                                   0.2126, 0.7152, 0.0722, 0, 0, // Green channel
                                   0.2126, 0.7152, 0.0722, 0, 0, // Blue channel
@@ -532,8 +532,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   ),
                   SizedBox(height: 8),
                   Container(
-                    height: 32,
-                    width: 160,
+                    height: MyApp.fontKanit.value == FontKanit.small
+                        ? 35
+                        : MyApp.fontKanit.value == FontKanit.medium
+                            ? 40
+                            : 45,
+                    width: MyApp.fontKanit.value == FontKanit.small
+                        ? 160
+                        : MyApp.fontKanit.value == FontKanit.medium
+                            ? 170
+                            : 180,
                     decoration: BoxDecoration(
                       color: MyApp.themeNotifier.value == ThemeModeThird.light
                           ? Color(0xFFB325F8)

@@ -2743,8 +2743,7 @@ class _BookingServicePageState extends State<BookingServicePage>
         logE(dateEnd);
         if (now.isAfter(dateStart) && now.isBefore(dateEnd)) {
           return 1;
-        }
-        else {
+        } else {
           return -1;
         }
       }

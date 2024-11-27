@@ -570,7 +570,6 @@ class _HomePageState extends State<HomePage> {
                                     //     ).toList(),
                                     //   ),
                                     // ),
-
                                     SizedBox(
                                       height: 180,
                                       child: CarouselSlider(
@@ -760,6 +759,7 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(height: 15),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             // Row 1
                             Row(
@@ -829,7 +829,7 @@ class _HomePageState extends State<HomePage> {
 
                             // Row 2
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Expanded(
                                   child: columnButton(
@@ -859,8 +859,19 @@ class _HomePageState extends State<HomePage> {
                                     code: 'report',
                                   ),
                                 ),
-                                Spacer(), // ใช้เพื่อจัดระยะห่างให้ตรงกับ Row 1
-                                Spacer(), // ใช้เพื่อจัดระยะห่างให้ตรงกับ Row 1
+                                // Spacer(), // ใช้เพื่อจัดระยะห่างให้ตรงกับ Row 1
+                                // Spacer(), // ใช้เพื่อจัดระยะห่างให้ตรงกับ Row 1
+                                SizedBox(
+                                    width:
+                                        16), // ระยะห่างสำหรับให้ตรงกับปุ่มที่ 3 และ 4 ใน Row 1
+                                Expanded(
+                                  child:
+                                      SizedBox(), // พื้นที่ว่างสำหรับเติมใน Row 2
+                                ),
+                                Expanded(
+                                  child:
+                                      SizedBox(), // พื้นที่ว่างเพิ่มเติมใน Row 2
+                                ),
                               ],
                             ),
                           ],

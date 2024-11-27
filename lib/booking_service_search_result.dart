@@ -123,22 +123,36 @@ class _BookingServiceSearchResultPageState
               ),
             ),
           ),
-          widget.mode == '1'
-              ? widget.filter['provinceSelected'] != ''
-                  ? SizedBox(
-                      height: 5,
-                    )
-                  : Container()
-              : widget.filter['latitude'] != ''
-                  ? SizedBox(
-                      height: 5,
-                    )
-                  : Container(),
+          // widget.mode == '1'
+          //     ? widget.filter['provinceSelected'] != ''
+          //         ? SizedBox(
+          //             height: 5,
+          //           )
+          //         : Container()
+          //     : widget.filter['latitude'] != ''
+          //         ? SizedBox(
+          //             height: 5,
+          //           )
+          //         : Container(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
+            // child: Text(
+            //   widget.mode == '1'
+            //       ? '(${widget.filter['provinceTitleSelected']}, ${widget.filter['districtTitleSelected']})'
+            //       : 'รัศมีไม่เกิน 30 กิโลเมตร',
+            //   style: TextStyle(
+            //     fontWeight: FontWeight.w400,
+            //     fontSize: 15,
+            //     color: Theme.of(context).custom.b_w_y,
+            //     fontFamily: 'Kanit',
+            //   ),
+            // ),
             child: Text(
               widget.mode == '1'
-                  ? '(${widget.filter['provinceTitleSelected']}, ${widget.filter['districtTitleSelected']})'
+                  ? [
+                      widget.filter['provinceTitleSelected'],
+                      widget.filter['districtTitleSelected']
+                    ].where((value) => value?.isNotEmpty == true).join(', ')
                   : 'รัศมีไม่เกิน 30 กิโลเมตร',
               style: TextStyle(
                 fontWeight: FontWeight.w400,
@@ -610,7 +624,6 @@ class _BookingServiceSearchResultPageState
     if (widget.mode == '1') {
       url =
           'GetSearchCenterLocation?textSearch=${widget.search ?? ''}&chId=${widget.filter['provinceSelected'] == '0' ? '' : widget.filter['provinceSelected']}&assetType=${widget.filter['bookingType'] ?? ''}&amName=${widget.filter['districtTitleSelected'] ?? ''}';
-
       print('--------------mode-1---------');
     } else {
       print('--------------mode-2--------');
@@ -618,10 +631,9 @@ class _BookingServiceSearchResultPageState
       url = 'GetCenterLocation?latitude=$latitude&longitude=$longitude';
     }
 
-    print('=============================>>>>>>>>    url >>>>>> $url');
     try {
+      print('=============url================>    url : $url');
       Response response = await Dio().get('$ondeURL/api/DataManagement/$url');
-      print('======================222=======>>>>>>>>    url >>>>>> ');
       if (response.data != null && response.data['data'] != null) {
         setState(() {
           _filterModelCenter = response.data['data'];
@@ -647,7 +659,6 @@ class _BookingServiceSearchResultPageState
   //       '------------provinceSelected--------------${widget.filter['provinceSelected']}');
   //   print(
   //       '------------districtTitleSelected---------${widget.filter['districtTitleSelected']}');
-
   //   if (widget.mode == '1' &&
   //       (widget.search.isNotEmpty ||
   //           (widget.filter['provinceSelected'] != null &&
@@ -666,7 +677,6 @@ class _BookingServiceSearchResultPageState
   //   print('=============================>>>>>>>>    url >>>>>> $url');
   //   try {
   //     Response response = await Dio().get('$ondeURL/api/DataManagement/$url');
-
   //     if (response.data != null && response.data['data'] != null) {
   //       setState(() {
   //         _filterModelCenter = response.data['data'];

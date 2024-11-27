@@ -192,15 +192,17 @@ class _VerifyThaiIDNewPageState extends State<VerifyThaiIDNewPage> {
                                   Text(
                                     'ยืนยันตัวตน\nด้วยแอปพลิเคชัน ThaID',
                                     style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w500,
-                                        color: MyApp.themeNotifier.value ==
-                                                ThemeModeThird.light
-                                            ? Color(0xFFB325F8)
-                                            : MyApp.themeNotifier.value ==
-                                                    ThemeModeThird.dark
-                                                ? Colors.white
-                                                : Color(0xFFFFFD57)),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Color(0xFFB325F8)
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Color(0xFFFFFD57),
+                                    ),
+                                    maxLines: 3,
                                   ),
                                 ],
                               ),
@@ -208,7 +210,7 @@ class _VerifyThaiIDNewPageState extends State<VerifyThaiIDNewPage> {
                               Text(
                                 'ขั้นตอนสุดท้าย\nเพิ่มความน่าเชื่อถือให้กับบัญชีของคุณ\nเพียงยืนยันตัวตนด้วยแอปพลิเคชัน ThaID\n\nหากคุณยังไม่เคยติดตั้งแอปพลิเคชัน ThaID\nไม่ต้องเป็นห่วง ระบบจะช่วยติดตั้งให้คุณอัตโนมัต',
                                 style: TextStyle(
-                                  fontSize: 15,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w400,
                                   color: MyApp.themeNotifier.value ==
                                           ThemeModeThird.light

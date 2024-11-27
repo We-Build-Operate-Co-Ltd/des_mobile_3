@@ -112,6 +112,8 @@ class _AboutUsPageState extends State<AboutUsPage> {
                         SizedBox(height: 10),
                         Expanded(
                           child: ListView(
+                            shrinkWrap: true,
+                            physics: ClampingScrollPhysics(),
                             children: [
                               Column(
                                 children: [
