@@ -1459,7 +1459,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _callRead() async {
-    // fontStorageValue = await storage.read(key: 'switchSizeFont') ?? 'ปกติ';
+    fontStorageValue = await storage.read(key: 'switchSizeFont') ?? 'ปกติ';
     colorStorageValue = await storage.read(key: 'switchColor') ?? 'ปกติ';
     
    
