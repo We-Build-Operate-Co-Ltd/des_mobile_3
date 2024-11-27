@@ -1157,70 +1157,70 @@ class _FindJobPageState extends State<FindJobPage> {
         ),
         SizedBox(height: 15),
 
-        SizedBox(
-          height: 60,
-          child: TextField(
-            controller: _searchResumeController,
-            style: TextStyle(
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Colors.black
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              letterSpacing: 0.5,
+        TextField(
+          controller: _searchResumeController,
+          style: TextStyle(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.black
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            letterSpacing: 0.5,
+          ),
+          decoration: InputDecoration(
+            filled: true,
+            contentPadding:
+                EdgeInsets.symmetric(vertical: 10.0), // ปรับความสูงให้เหมาะสม
+            isDense: true,
+            fillColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Colors.white
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.black
+                    : Colors.black,
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFBD4BF7)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                  width: 1),
+              borderRadius: BorderRadius.circular(10),
             ),
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Colors.white
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.black
-                      : Colors.black,
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Color(0xFFBD4BF7)
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
-                    width: 1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? Color(0xFFBD4BF7)
-                        : MyApp.themeNotifier.value == ThemeModeThird.dark
-                            ? Colors.white
-                            : Color(0xFFFFFD57),
-                    width: 1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Color(0XFFDDDDDD), width: 1),
-              ),
-              hintText: 'พิมพ์คำค้นหา',
-              hintStyle: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                // letterSpacing: 0.5,
-                // decorationThickness: 6,
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFFBD4BF7)
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
-              ),
-              prefixIcon: const Icon(Icons.search),
-              prefixIconColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFBD4BF7)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                  width: 1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Color(0XFFDDDDDD), width: 1),
+            ),
+            hintText: 'พิมพ์คำค้นหา',
+            hintStyle: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              // letterSpacing: 0.5,
+              // decorationThickness: 6,
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
                   ? Color(0xFFBD4BF7)
                   : MyApp.themeNotifier.value == ThemeModeThird.dark
                       ? Colors.white
                       : Color(0xFFFFFD57),
             ),
+            prefixIcon: const Icon(Icons.search),
+            prefixIconColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFFBD4BF7)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
           ),
         ),
         // _buildSearch(
@@ -1567,85 +1567,84 @@ class _FindJobPageState extends State<FindJobPage> {
   }
 
   _buildSearch(TextEditingController textController, Function onTap) {
-    return SizedBox(
-      height: 60,
-      child: TextField(
-        controller: textController,
-        style: TextStyle(
-          color: MyApp.themeNotifier.value == ThemeModeThird.light
-              ? Colors.black
-              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                  ? Colors.white
-                  : Color(0xFFFFFD57),
-          fontSize: 14,
-          fontWeight: FontWeight.w400,
-          letterSpacing: 0.5,
+    return TextField(
+      controller: textController,
+      style: TextStyle(
+        color: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Colors.black
+            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                ? Colors.white
+                : Color(0xFFFFFD57),
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        letterSpacing: 0.5,
+      ),
+      decoration: InputDecoration(
+        filled: true,
+        contentPadding:
+            EdgeInsets.symmetric(vertical: 10.0), // ปรับความสูงให้เหมาะสม
+        isDense: true,
+        fillColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Colors.white
+            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                ? Colors.black
+                : Colors.black,
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFFBD4BF7)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
+              width: 1),
+          borderRadius: BorderRadius.circular(10),
         ),
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: MyApp.themeNotifier.value == ThemeModeThird.light
-              ? Colors.white
-              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                  ? Colors.black
-                  : Colors.black,
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFFBD4BF7)
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
-                width: 1),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFFBD4BF7)
-                    : MyApp.themeNotifier.value == ThemeModeThird.dark
-                        ? Colors.white
-                        : Color(0xFFFFFD57),
-                width: 1),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Color(0XFFDDDDDD), width: 1),
-          ),
-          hintText: 'พิมพ์คำค้นหา',
-          hintStyle: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w400,
-            // letterSpacing: 0.5,
-            // decorationThickness: 6,
-            color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Color(0xFFBD4BF7)
-                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                    ? Colors.white
-                    : Color(0xFFFFFD57),
-          ),
-          prefixIcon: const Icon(Icons.search),
-          prefixIconColor: MyApp.themeNotifier.value == ThemeModeThird.light
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFFBD4BF7)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
+              width: 1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Color(0XFFDDDDDD), width: 1),
+        ),
+        hintText: 'พิมพ์คำค้นหา',
+        hintStyle: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w400,
+          // letterSpacing: 0.5,
+          // decorationThickness: 6,
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
               ? Color(0xFFBD4BF7)
               : MyApp.themeNotifier.value == ThemeModeThird.dark
                   ? Colors.white
                   : Color(0xFFFFFD57),
-          suffixIcon: GestureDetector(
-            onTap: () {
-              onTap();
-            },
-            child: Align(
-              widthFactor: 1.0,
-              heightFactor: 1.0,
-              child: _typeSelected2 != 1
-                  ? Image.asset(
-                      MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? 'assets/images/filter.png'
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? "assets/images/2024/filter_w.png"
-                              : "assets/images/2024/filter_y.png")
-                  : SizedBox(),
-            ),
+        ),
+        prefixIcon: const Icon(Icons.search),
+        prefixIconColor: MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Color(0xFFBD4BF7)
+            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                ? Colors.white
+                : Color(0xFFFFFD57),
+        suffixIcon: GestureDetector(
+          onTap: () {
+            onTap();
+          },
+          child: Align(
+            widthFactor: 1.0,
+            heightFactor: 1.0,
+            child: _typeSelected2 != 1
+                ? Image.asset(MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? 'assets/images/filter.png'
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? "assets/images/2024/filter_w.png"
+                        : "assets/images/2024/filter_y.png")
+                : SizedBox(),
           ),
         ),
       ),
@@ -1804,76 +1803,66 @@ class _FindJobPageState extends State<FindJobPage> {
                         ),
                       ),
                       SizedBox(height: 12),
-                      SizedBox(
-                        height: 60,
-                        child: TextField(
-                          controller: _searchController,
-                          style: TextStyle(
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Colors.black
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            letterSpacing: 0.5,
+                      TextField(
+                        controller: _searchController,
+                        style: TextStyle(
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.black
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 0.5,
+                        ),
+                        decoration: InputDecoration(
+                          filled: true,
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0), // ปรับความสูงให้เหมาะสม
+                          isDense: true,
+                          fillColor: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Colors.white
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.black
+                                  : Colors.black,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFFBD4BF7)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                                width: 1),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Colors.white
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.black
-                                    : Colors.black,
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Color(0xFFBD4BF7)
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.white
-                                          : Color(0xFFFFFD57),
-                                  width: 1),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Color(0xFFBD4BF7)
-                                      : MyApp.themeNotifier.value ==
-                                              ThemeModeThird.dark
-                                          ? Colors.white
-                                          : Color(0xFFFFFD57),
-                                  width: 1),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                  color: Color(0XFFDDDDDD), width: 1),
-                            ),
-                            hintText: 'พิมพ์คำค้นหา',
-                            hintStyle: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w400,
-                              // letterSpacing: 0.5,
-                              // decorationThickness: 6,
-                              color: MyApp.themeNotifier.value ==
-                                      ThemeModeThird.light
-                                  ? Color(0xFFBD4BF7)
-                                  : MyApp.themeNotifier.value ==
-                                          ThemeModeThird.dark
-                                      ? Colors.white
-                                      : Color(0xFFFFFD57),
-                            ),
-                            prefixIcon: const Icon(Icons.search),
-                            prefixIconColor: MyApp.themeNotifier.value ==
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFFBD4BF7)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                                width: 1),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                BorderSide(color: Color(0XFFDDDDDD), width: 1),
+                          ),
+                          hintText: 'พิมพ์คำค้นหา',
+                          hintStyle: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                            // letterSpacing: 0.5,
+                            // decorationThickness: 6,
+                            color: MyApp.themeNotifier.value ==
                                     ThemeModeThird.light
                                 ? Color(0xFFBD4BF7)
                                 : MyApp.themeNotifier.value ==
@@ -1881,6 +1870,13 @@ class _FindJobPageState extends State<FindJobPage> {
                                     ? Colors.white
                                     : Color(0xFFFFFD57),
                           ),
+                          prefixIcon: const Icon(Icons.search),
+                          prefixIconColor: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFFBD4BF7)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
                         ),
                       ),
                       SizedBox(height: 15),
