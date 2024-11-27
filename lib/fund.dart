@@ -265,107 +265,108 @@ class _FundPageState extends State<FundPage> {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                SizedBox(
-                                  height: 50,
-                                  child: TextField(
-                                    controller: _searchController,
-                                    onChanged: (text) {
-                                      // print("First text field: $text");
-                                      // setState(() {
-                                      //   _filtter(text);
-                                      // });
-                                    },
-                                    style: TextStyle(
-                                      color: MyApp.themeNotifier.value ==
-                                              ThemeModeThird.light
-                                          ? Colors.black
-                                          : MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.dark
-                                              ? Colors.white
-                                              : Color(0xFFFFFD57),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      letterSpacing: 0.5,
-                                    ),
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: MyApp.themeNotifier.value ==
-                                              ThemeModeThird.light
-                                          ? Colors.white
-                                          : MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.dark
-                                              ? Colors.black
-                                              : Colors.black,
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: MyApp.themeNotifier.value ==
-                                                    ThemeModeThird.light
-                                                ? Color(0xFFBD4BF7)
-                                                : MyApp.themeNotifier.value ==
-                                                        ThemeModeThird.dark
-                                                    ? Colors.white
-                                                    : Color(0xFFFFFD57),
-                                            width: 1),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: MyApp.themeNotifier.value ==
-                                                    ThemeModeThird.light
-                                                ? Color(0xFFBD4BF7)
-                                                : MyApp.themeNotifier.value ==
-                                                        ThemeModeThird.dark
-                                                    ? Colors.white
-                                                    : Color(0xFFFFFD57),
-                                            width: 1),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        borderSide: BorderSide(
-                                            color: Color(
-                                                0xFFDDDDDD) // Default border color
-                                            ),
-                                      ),
-                                      hintText: 'พิมพ์คำค้นหา',
-                                      hintStyle: TextStyle(
-                                        color: MyApp.themeNotifier.value ==
-                                                ThemeModeThird.light
-                                            ? Color(0xFFBD4BF7)
-                                            : MyApp.themeNotifier.value ==
-                                                    ThemeModeThird.dark
-                                                ? Colors.white
-                                                : Color(0xFFFFFD57),
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w400,
-                                        letterSpacing: 0.5,
-                                        decorationThickness: 6,
-                                      ),
-                                      prefixIcon: const Icon(Icons.search),
-                                      prefixIconColor:
-                                          MyApp.themeNotifier.value ==
+                                TextField(
+                                  controller: _searchController,
+                                  onChanged: (text) {
+                                    // print("First text field: $text");
+                                    // setState(() {
+                                    //   _filtter(text);
+                                    // });
+                                  },
+                                  style: TextStyle(
+                                    color: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Colors.black
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.white
+                                            : Color(0xFFFFFD57),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    letterSpacing: 0.5,
+                                  ),
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical:
+                                            10.0), // ปรับความสูงให้เหมาะสม
+                                    isDense: true,
+                                    fillColor: MyApp.themeNotifier.value ==
+                                            ThemeModeThird.light
+                                        ? Colors.white
+                                        : MyApp.themeNotifier.value ==
+                                                ThemeModeThird.dark
+                                            ? Colors.black
+                                            : Colors.black,
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: MyApp.themeNotifier.value ==
                                                   ThemeModeThird.light
                                               ? Color(0xFFBD4BF7)
                                               : MyApp.themeNotifier.value ==
                                                       ThemeModeThird.dark
                                                   ? Colors.white
                                                   : Color(0xFFFFFD57),
-                                      suffixIcon: Align(
-                                        widthFactor: 1.0,
-                                        heightFactor: 1.0,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            _showModelBottonSheetFund(context);
-                                          },
-                                          child: Image.asset(MyApp
-                                                      .themeNotifier.value ==
+                                          width: 1),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: MyApp.themeNotifier.value ==
                                                   ThemeModeThird.light
-                                              ? 'assets/images/filter.png'
+                                              ? Color(0xFFBD4BF7)
                                               : MyApp.themeNotifier.value ==
                                                       ThemeModeThird.dark
-                                                  ? "assets/images/2024/filter_w.png"
-                                                  : "assets/images/2024/filter_y.png"),
-                                        ),
+                                                  ? Colors.white
+                                                  : Color(0xFFFFFD57),
+                                          width: 1),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                          color: Color(
+                                              0xFFDDDDDD) // Default border color
+                                          ),
+                                    ),
+                                    hintText: 'พิมพ์คำค้นหา',
+                                    hintStyle: TextStyle(
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Color(0xFFBD4BF7)
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Color(0xFFFFFD57),
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 0.5,
+                                      decorationThickness: 6,
+                                    ),
+                                    prefixIcon: const Icon(Icons.search),
+                                    prefixIconColor:
+                                        MyApp.themeNotifier.value ==
+                                                ThemeModeThird.light
+                                            ? Color(0xFFBD4BF7)
+                                            : MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.dark
+                                                ? Colors.white
+                                                : Color(0xFFFFFD57),
+                                    suffixIcon: Align(
+                                      widthFactor: 1.0,
+                                      heightFactor: 1.0,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          _showModelBottonSheetFund(context);
+                                        },
+                                        child: Image.asset(MyApp
+                                                    .themeNotifier.value ==
+                                                ThemeModeThird.light
+                                            ? 'assets/images/filter.png'
+                                            : MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.dark
+                                                ? "assets/images/2024/filter_w.png"
+                                                : "assets/images/2024/filter_y.png"),
                                       ),
                                     ),
                                   ),
@@ -607,80 +608,76 @@ class _FundPageState extends State<FundPage> {
                     ),
                   ),
                   SizedBox(height: 12),
-                  SizedBox(
-                    height: 50,
-                    child: TextField(
-                      onChanged: (value) {},
-                      controller: _searchFilterController,
-                      style: TextStyle(
+                  TextField(
+                    onChanged: (value) {},
+                    controller: _searchFilterController,
+                    style: TextStyle(
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.black
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 0.5,
+                    ),
+                    decoration: InputDecoration(
+                      filled: true,
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 10.0), // ปรับความสูงให้เหมาะสม
+                      isDense: true,
+                      fillColor:
+                          MyApp.themeNotifier.value == ThemeModeThird.light
+                              ? Colors.white
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.black
+                                  : Colors.black,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Color(0xFFDDDDDD)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 1.0,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFFBD4BF7)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFFBD4BF7)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        ),
+                      ),
+                      hintText: 'พิมพ์คำค้นหา',
+                      hintStyle: TextStyle(
                         color: MyApp.themeNotifier.value == ThemeModeThird.light
                             ? Colors.black
                             : MyApp.themeNotifier.value == ThemeModeThird.dark
                                 ? Colors.white
                                 : Color(0xFFFFFD57),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
                         letterSpacing: 0.5,
+                        decorationThickness: 6,
                       ),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: MyApp.themeNotifier.value ==
-                                ThemeModeThird.light
-                            ? Colors.white
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.black
                             : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? Colors.black
-                                : Colors.black,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: Color(0xFFDDDDDD)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            width: 1.0,
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFFBD4BF7)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFFBD4BF7)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                          ),
-                        ),
-                        hintText: 'พิมพ์คำค้นหา',
-                        hintStyle: TextStyle(
-                          color: MyApp.themeNotifier.value ==
-                                  ThemeModeThird.light
-                              ? Colors.black
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? Colors.white
-                                  : Color(0xFFFFFD57),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.5,
-                          decorationThickness: 6,
-                        ),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: MyApp.themeNotifier.value ==
-                                  ThemeModeThird.light
-                              ? Colors.black
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? Colors.white
-                                  : Color(0xFFFFFD57),
-                        ),
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       ),
                     ),
                   ),

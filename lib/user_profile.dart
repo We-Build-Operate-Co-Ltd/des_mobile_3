@@ -46,19 +46,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
   late String _imageProfile;
   late String _firstName;
   late String _lastName;
-  late bool _isVerify;
-
-  late List<dynamic> _modelCourse;
+  late bool _isVerify = false;
 
   @override
   void initState() {
     _imageProfile = '';
     _firstName = '';
     _lastName = '';
-    _isVerify = false;
-    _modelCourse = [];
     _getUser();
-    _callReadGetCourse();
+    _getImage();
     super.initState();
   }
 
@@ -613,23 +609,28 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   void _onRefresh() async {
+    
     _getUser();
-    _callReadGetCourse();
+    _getImage();
     _refreshController.refreshCompleted();
   }
 
   void _getUser() async {
-    var img = await DCCProvider.getImageProfile();
-
-    setState(() {
-      _imageProfile = img;
-    });
-
+    
     var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
     setState(() {
+
       _firstName = profileMe['firstnameTh'];
       _lastName = profileMe['lastnameTh'];
       _isVerify = profileMe['isVerify'] == 1 ? true : false;
+    });
+  }
+
+   void _getImage() async {
+    
+    var img = await DCCProvider.getImageProfile();
+    setState(() {
+      _imageProfile = img;
     });
   }
 
@@ -649,12 +650,4 @@ class _UserProfilePageState extends State<UserProfilePage> {
     return '$day/$month/$yearBuddhistStringShort';
   }
 
-  _callReadGetCourse() async {
-    dynamic response = await Dio().get('$server/py-api/dcc/lms/recomend');
-    // print(response.data.toString());
-
-    setState(() {
-      _modelCourse = response.data;
-    });
-  }
 }

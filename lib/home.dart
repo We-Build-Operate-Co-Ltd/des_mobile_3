@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
   String percentPrice = '';
   bool moreThen = false;
   List<dynamic> _listSwitchColors = [
-    {'code': '1', 'title': 'ปกติ', 'isSelected': true},
+    {'code': '1', 'title': 'ปกติ', 'isSelected': false},
     {'code': '2', 'title': 'ขาวดำ', 'isSelected': false},
     {'code': '3', 'title': 'ดำเหลือง', 'isSelected': false},
   ];
@@ -1472,12 +1472,15 @@ class _HomePageState extends State<HomePage> {
   void _callRead() async {
     fontStorageValue = await storage.read(key: 'switchSizeFont') ?? 'ปกติ';
     colorStorageValue = await storage.read(key: 'switchColor') ?? 'ปกติ';
+    
+   
     FirebaseMessaging.instance.getToken().then((token) async {
       print('token: $token');
     });
     _readNotiCount();
     setState(() {
       _futureBanner = _readBanner();
+      _listSwitchColors.firstWhere((e) => e['title'] == colorStorageValue)['isSelected'] = true;
       // _futureNews = _readGetCourse();
     });
     var sizeName = await storage.read(key: 'switchSize');
@@ -2038,31 +2041,25 @@ class _HomePageState extends State<HomePage> {
                 (item) => GestureDetector(
                   onTap: () {
                     setState(
-                      (() async {
-                        await storage.write(
+                      (() {
+                        storage.write(
                           key: 'switchColor',
                           value: item['title'],
                         );
-                        setState(
-                          () {
-                            if (item['title'] == "ปกติ") {
-                              MyApp.themeNotifier.value = ThemeModeThird.light;
-                            } else if (item['title'] == "ขาวดำ") {
-                              MyApp.themeNotifier.value = ThemeModeThird.dark;
-                            } else {
-                              MyApp.themeNotifier.value =
-                                  ThemeModeThird.blindness;
-                            }
-                            for (int i = 0; i < _listSwitchColors.length; i++) {
-                              if (_listSwitchColors[i]['code'] ==
-                                  item['code']) {
-                                item['isSelected'] = !item['isSelected'];
-                              } else {
-                                _listSwitchColors[i]['isSelected'] = false;
-                              }
-                            }
-                          },
-                        );
+                        if (item['title'] == "ปกติ") {
+                          MyApp.themeNotifier.value = ThemeModeThird.light;
+                        } else if (item['title'] == "ขาวดำ") {
+                          MyApp.themeNotifier.value = ThemeModeThird.dark;
+                        } else {
+                          MyApp.themeNotifier.value = ThemeModeThird.blindness;
+                        }
+                        for (int i = 0; i < _listSwitchColors.length; i++) {
+                          if (_listSwitchColors[i]['code'] == item['code']) {
+                            item['isSelected'] = !item['isSelected'];
+                          } else {
+                            _listSwitchColors[i]['isSelected'] = false;
+                          }
+                        }
                       }),
                     );
                     // _callRead();

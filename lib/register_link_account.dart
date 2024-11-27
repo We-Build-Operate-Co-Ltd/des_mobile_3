@@ -434,7 +434,7 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
       );
       await ManageStorage.createProfile(
         value: response.data['objectData'],
-        key: 'guest',
+        key: widget.category,
       );
 
       setState(() => _loadingSubmit = false);

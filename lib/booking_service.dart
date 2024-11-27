@@ -2740,7 +2740,6 @@ class _BookingServicePageState extends State<BookingServicePage>
         int hourEnd = int.parse(timeSpitEnd[0]);
         int minuteEnd = int.parse(timeSpitEnd[1]);
         DateTime dateEnd = DateTime(year, month, day, hourEnd, minuteEnd);
-        logE(dateEnd);
         if (now.isAfter(dateStart) && now.isBefore(dateEnd)) {
           return 1;
         } else {
@@ -2749,7 +2748,6 @@ class _BookingServicePageState extends State<BookingServicePage>
       }
 
       final difDate = dateStart.compareTo(currentDate);
-      logE(difDate);
       if (difDate == 0) {
         return 0;
       } else if (difDate > 0) {
