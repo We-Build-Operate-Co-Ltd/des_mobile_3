@@ -345,15 +345,15 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                                           // print("First text field: $text");
                                           setState(() {
                                             // if (_cateTypeSelected == 0) {
-                                              textSearch = text;
-                                              _filter();
-                                              // textEternalSearch = '';
-                                              // _filterEternal();
+                                            textSearch = text;
+                                            _filter();
+                                            // textEternalSearch = '';
+                                            // _filterEternal();
                                             // } else {
-                                              textEternalSearch = text;
-                                              _filterEternal();
-                                              // textSearch = '';
-                                              // _filter();
+                                            textEternalSearch = text;
+                                            _filterEternal();
+                                            // textSearch = '';
+                                            // _filter();
                                             // }
                                           });
                                         },
@@ -875,20 +875,20 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   Widget containerRecommendedClass(dynamic model) {
     return GestureDetector(
       onTap: () async {
-           var loginData = await ManageStorage.readDynamic('loginData');
-            var accessToken = await ManageStorage.read('accessToken');
-            logWTF(
-                'https://lms.dcc.onde.go.th/user/user/lesson_details/${model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}');
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => WebViewInAppPage(
-                  url:
-                      'https://lms.dcc.onde.go.th/user/user/lesson_details/${model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}',
-                  title: model?['course_name'] ?? '',
-                ),
-              ),
-            );
+        var loginData = await ManageStorage.readDynamic('loginData');
+        var accessToken = await ManageStorage.read('accessToken');
+        logWTF(
+            'https://lms.dcc.onde.go.th/user/user/lesson_details/${model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => WebViewInAppPage(
+              url:
+                  'https://lms.dcc.onde.go.th/user/user/lesson_details/${model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}',
+              title: model?['course_name'] ?? '',
+            ),
+          ),
+        );
         // var data = {
         //   'course_id': model?['id'] ?? '',
         //   "course_name": model?['name'] ?? '',
@@ -996,7 +996,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                         width: 24),
                     const SizedBox(width: 8),
                     Text(
-                      model?['course_Duration'],
+                      formatDuration(model?['course_Duration']),
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w400,
@@ -1633,11 +1633,11 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
           onTap: () => setState(() {
             _cateTypeSelected = __;
             // if (_cateTypeSelected == 0) {
-              // textEternalSearch = '';
-              _filterEternal();
+            // textEternalSearch = '';
+            _filterEternal();
             // } else {
-              // textSearch = '';
-              _filter();
+            // textSearch = '';
+            _filter();
             // }
           }),
           child: Container(
@@ -1828,5 +1828,27 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
         ),
       ),
     );
+  }
+
+  String formatDuration(String? duration) {
+    if (duration == null || duration.isEmpty)
+      return '0 นาที'; // ตรวจสอบค่าว่างหรือ null
+
+    // แยกเวลาโดยใช้ ':' เป็นตัวแบ่ง
+    final parts = duration.split(':');
+    if (parts.length != 3) return 'รูปแบบเวลาไม่ถูกต้อง'; // ตรวจสอบรูปแบบเวลา
+
+    // แปลงเวลาเป็นตัวเลข
+    final hours = int.tryParse(parts[0]) ?? 0;
+    final minutes = int.tryParse(parts[1]) ?? 0;
+    final seconds = int.tryParse(parts[2]) ?? 0;
+
+    // สร้างข้อความที่มีหน่วยเวลา
+    final buffer = StringBuffer();
+    if (hours >= 0) buffer.write('$hours ชั่วโมง ');
+    if (minutes > 0) buffer.write('$minutes นาที ');
+    // if (seconds > 0) buffer.write('$seconds วินาที');
+
+    return buffer.toString().trim(); // ลบช่องว่างส่วนเกิน
   }
 }

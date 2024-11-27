@@ -64,6 +64,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
 
   @override
   void initState() {
+    _callRead();
     super.initState();
   }
 
