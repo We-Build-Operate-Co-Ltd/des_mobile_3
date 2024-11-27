@@ -575,7 +575,8 @@ class _MenuState extends State<Menu> {
     return [];
   }
 
-  _changePage(index) {
+  _changePage(index) async {
+    await Future.delayed(const Duration(milliseconds: 2000));
     setState(() {
       _currentPage = index;
     });
@@ -604,8 +605,9 @@ class _MenuState extends State<Menu> {
 
   _callRead() async {
     var img = await DCCProvider.getImageProfile();
-    setState(() => _imageProfile = img);
+    // setState(() => _imageProfile = img);
     setState(() {
+      _imageProfile = img;
       if (_profileCode != '') {
         pages[4] = profilePage;
       }
