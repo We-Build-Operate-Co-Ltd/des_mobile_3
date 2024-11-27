@@ -818,7 +818,7 @@ class _NotificationListState extends State<NotificationListPage> {
                     SizedBox(width: 15),
                     Container(
                       // height: 22,
-                      width: 22,
+                      // width: 22,
                       padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
                           color: Color(0xFFDD2A00), shape: BoxShape.circle
