@@ -211,7 +211,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             // ),
                           ],
                         ),
-                        SizedBox(height: 80),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.065),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
