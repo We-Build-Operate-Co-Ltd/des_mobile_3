@@ -1,9 +1,8 @@
-const version = '1.1.8';
-const versionNumber = 118;
+const version = '1.2.0';
+const versionNumber = 120;
 // const server = 'https://des.we-builds.com';
 const server = 'https://decms.dcc.onde.go.th';
 const serverPlatform = 'https://dcc.onde.go.th/dcc-api';
-// const server = 'https://des.we-builds.com';
 
 const clientID = 'dcc-mobile';
 const clientSecret = 'TweWGTy31ptx0NzHUnXuPv4J0hP97lMH';
