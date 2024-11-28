@@ -211,7 +211,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             // ),
                           ],
                         ),
-                        SizedBox(height: 60),
+                        SizedBox(height: 80),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -609,25 +609,21 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   void _onRefresh() async {
-    
     _getUser();
     _getImage();
     _refreshController.refreshCompleted();
   }
 
   void _getUser() async {
-    
     var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
     setState(() {
-
       _firstName = profileMe['firstnameTh'];
       _lastName = profileMe['lastnameTh'];
       _isVerify = profileMe['isVerify'] == 1 ? true : false;
     });
   }
 
-   void _getImage() async {
-    
+  void _getImage() async {
     var img = await DCCProvider.getImageProfile();
     setState(() {
       _imageProfile = img;
@@ -649,5 +645,4 @@ class _UserProfilePageState extends State<UserProfilePage> {
     var yearBuddhistStringShort = yearBuddhistString.substring(2, 4);
     return '$day/$month/$yearBuddhistStringShort';
   }
-
 }
