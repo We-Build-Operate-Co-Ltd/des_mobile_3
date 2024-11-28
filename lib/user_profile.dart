@@ -212,7 +212,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           ],
                         ),
                         SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.065),
+                            height: MediaQuery.of(context).size.height * 0.05),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -282,7 +282,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 alignment: Alignment.topCenter,
                 children: [
                   Positioned(
-                    top: 100,
+                    top: MediaQuery.of(context).size.height * 0.10,
                     child: Container(
                       height: 168,
                       width: 168,

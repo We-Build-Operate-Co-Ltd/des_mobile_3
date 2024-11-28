@@ -182,7 +182,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
               alignment: Alignment.topCenter,
               children: <Widget>[
                 Positioned(
-                  top: 100,
+                  top: MediaQuery.of(context).size.height * 0.1,
                   child: Container(
                     height: 168,
                     width: 168,
@@ -204,6 +204,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
             ),
           ],
         ),
+     
       ),
     );
   }
