@@ -181,7 +181,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     // logWTF('=========fsdfsdfsdfdsfsd123==========' + temp.toString());
 
     setState(() {
-      // _listFilterLenght = temp.length;
+      _listFilterLenght = temp.length;
       _modelCouseEternal = Future.value(temp);
     });
   }
@@ -1017,6 +1017,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        textSearch != '' ? _test2() : Container(),
         Text(
           'สถาบันคุณวุฒิวิชาชีพ',
           textAlign: TextAlign.start,
@@ -1157,6 +1158,13 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
       child: FutureBuilder(
         future: _modelCouseEternal,
         builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child:
+                  CircularProgressIndicator(), // แสดง Loading ระหว่างรอข้อมูล
+            );
+          }
+
           if (snapshot.hasData) {
             return ListView.separated(
               padding: EdgeInsets.all(5),
@@ -1172,6 +1180,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
               child: CircularProgressIndicator(),
             );
           }
+          return SizedBox(); // ซ่อนทุกอย่างถ้าไม่มีข้อมูล
         },
       ),
     );

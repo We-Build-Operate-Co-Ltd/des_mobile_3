@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
   String percentPrice = '';
   bool moreThen = false;
   List<dynamic> _listSwitchColors = [
-    {'code': '1', 'title': 'ปกติ', 'isSelected': false},
+    {'code': '1', 'title': 'ปกติ', 'isSelected': true},
     {'code': '2', 'title': 'ขาวดำ', 'isSelected': false},
     {'code': '3', 'title': 'ดำเหลือง', 'isSelected': false},
   ];
@@ -150,10 +150,11 @@ class _HomePageState extends State<HomePage> {
               IntrinsicHeight(
                 child: Container(
                   // height: 125,
-                  height: MyApp.fontKanit.value != FontKanit.small &&
-                          MyApp.fontKanit.value != FontKanit.medium
-                      ? 150
-                      : 125,
+                  height: MyApp.fontKanit.value == FontKanit.small
+                      ? 125
+                      : MyApp.fontKanit.value == FontKanit.medium
+                          ? 150
+                          : 170,
                   padding: EdgeInsets.only(
                     top: MediaQuery.of(context).padding.top + 10,
                     right: 15,
@@ -167,8 +168,8 @@ class _HomePageState extends State<HomePage> {
                           MyApp.themeNotifier.value == ThemeModeThird.light
                               ? 'assets/images/Owl-10.png'
                               : "assets/images/2024/Owl-10_blackwhite.png",
-                          height: 39,
-                          width: 48,
+                          height: 40,
+                          width: 50,
                         ),
                       ),
                       const SizedBox(width: 5),
@@ -226,7 +227,7 @@ class _HomePageState extends State<HomePage> {
                           alignment: Alignment.centerRight,
                           child: Wrap(
                             direction: Axis.horizontal,
-                            spacing: 8.0, // ระยะห่างระหว่าง widget
+                            spacing: 10.0, // ระยะห่างระหว่าง widget
                             runSpacing: 4.0,
                             children: [
                               GestureDetector(
@@ -241,8 +242,20 @@ class _HomePageState extends State<HomePage> {
                                               ThemeModeThird.dark
                                           ? 'assets/images/icon_blind_d.png'
                                           : 'assets/images/icon_blind_d-y.png',
-                                  height: _hight,
-                                  width: _width,
+                                  height:
+                                      MyApp.fontKanit.value == FontKanit.small
+                                          ? 30
+                                          : MyApp.fontKanit.value ==
+                                                  FontKanit.medium
+                                              ? 35
+                                              : 40,
+                                  width:
+                                      MyApp.fontKanit.value == FontKanit.small
+                                          ? 30
+                                          : MyApp.fontKanit.value ==
+                                                  FontKanit.medium
+                                              ? 35
+                                              : 40,
                                 ),
                               ),
                               GestureDetector(
@@ -279,8 +292,20 @@ class _HomePageState extends State<HomePage> {
                                                         ThemeModeThird.dark
                                                     ? 'assets/images/notification_d.png'
                                                     : 'assets/images/notification_d-y.png',
-                                            height: _hight,
-                                            width: _width,
+                                            height: MyApp.fontKanit.value ==
+                                                    FontKanit.small
+                                                ? 30
+                                                : MyApp.fontKanit.value ==
+                                                        FontKanit.medium
+                                                    ? 35
+                                                    : 40,
+                                            width: MyApp.fontKanit.value ==
+                                                    FontKanit.small
+                                                ? 30
+                                                : MyApp.fontKanit.value ==
+                                                        FontKanit.medium
+                                                    ? 35
+                                                    : 40,
                                           );
                                   },
                                 ),
@@ -1257,16 +1282,13 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Image.asset(
                         MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? 'assets/images/time_home_page.png'
-                            : 'assets/images/2024/time_home_page_blackwhite.png',
+                            ? 'assets/images/course_time.png'
+                            : "assets/images/2024/time_home_page_blackwhite.png",
                         height: 24,
                         width: 24),
-
                     const SizedBox(width: 8),
-
-                    // assets/images/2024/time_home_page_blackwhite.png
                     Text(
-                      model?['course_duration'],
+                      formatDuration(model?['course_duration']),
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w400,
@@ -1404,12 +1426,16 @@ class _HomePageState extends State<HomePage> {
                   ? 8
                   : 6), // ระยะห่างระหว่างไอคอนกับข้อความ
           Container(
-            height: 40, // กำหนดความสูงคงที่ให้ข้อความ
+            height: MyApp.fontKanit.value == FontKanit.small
+                ? 40
+                : MyApp.fontKanit.value == FontKanit.medium
+                    ? 85
+                    : 120,
             alignment: Alignment.topCenter, // จัดข้อความให้อยู่ด้านบนเสมอ
             child: Text(
               title,
               style: TextStyle(
-                fontSize: type == 'serviceforyou' ? 15 : 11,
+                fontSize: type == 'serviceforyou' ? 14 : 11,
                 fontWeight: FontWeight.w400,
                 color: MyApp.themeNotifier.value == ThemeModeThird.light
                     ? Colors.black
@@ -1418,8 +1444,8 @@ class _HomePageState extends State<HomePage> {
                         : Color(0xFFFFFD57),
               ),
               textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis, // ตัดข้อความถ้ายาวเกิน
+              maxLines: 3,
+              // overflow: TextOverflow.ellipsis, // ตัดข้อความถ้ายาวเกิน
             ),
           ),
         ],
@@ -1469,18 +1495,37 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  String formatDuration(String? duration) {
+    if (duration == null || duration.isEmpty)
+      return '0 นาที'; // ตรวจสอบค่าว่างหรือ null
+
+    // แยกเวลาโดยใช้ ':' เป็นตัวแบ่ง
+    final parts = duration.split(':');
+    if (parts.length != 3) return 'รูปแบบเวลาไม่ถูกต้อง'; // ตรวจสอบรูปแบบเวลา
+
+    // แปลงเวลาเป็นตัวเลข
+    final hours = int.tryParse(parts[0]) ?? 0;
+    final minutes = int.tryParse(parts[1]) ?? 0;
+    final seconds = int.tryParse(parts[2]) ?? 0;
+
+    // สร้างข้อความที่มีหน่วยเวลา
+    final buffer = StringBuffer();
+    if (hours >= 0) buffer.write('$hours ชั่วโมง ');
+    if (minutes > 0) buffer.write('$minutes นาที ');
+    // if (seconds > 0) buffer.write('$seconds วินาที');
+
+    return buffer.toString().trim(); // ลบช่องว่างส่วนเกิน
+  }
+
   void _callRead() async {
     fontStorageValue = await storage.read(key: 'switchSizeFont') ?? 'ปกติ';
     colorStorageValue = await storage.read(key: 'switchColor') ?? 'ปกติ';
-    
-   
     FirebaseMessaging.instance.getToken().then((token) async {
       print('token: $token');
     });
     _readNotiCount();
     setState(() {
       _futureBanner = _readBanner();
-      _listSwitchColors.firstWhere((e) => e['title'] == colorStorageValue)['isSelected'] = true;
       // _futureNews = _readGetCourse();
     });
     var sizeName = await storage.read(key: 'switchSize');
@@ -2041,25 +2086,31 @@ class _HomePageState extends State<HomePage> {
                 (item) => GestureDetector(
                   onTap: () {
                     setState(
-                      (() {
-                        storage.write(
+                      (() async {
+                        await storage.write(
                           key: 'switchColor',
                           value: item['title'],
                         );
-                        if (item['title'] == "ปกติ") {
-                          MyApp.themeNotifier.value = ThemeModeThird.light;
-                        } else if (item['title'] == "ขาวดำ") {
-                          MyApp.themeNotifier.value = ThemeModeThird.dark;
-                        } else {
-                          MyApp.themeNotifier.value = ThemeModeThird.blindness;
-                        }
-                        for (int i = 0; i < _listSwitchColors.length; i++) {
-                          if (_listSwitchColors[i]['code'] == item['code']) {
-                            item['isSelected'] = !item['isSelected'];
-                          } else {
-                            _listSwitchColors[i]['isSelected'] = false;
-                          }
-                        }
+                        setState(
+                          () {
+                            if (item['title'] == "ปกติ") {
+                              MyApp.themeNotifier.value = ThemeModeThird.light;
+                            } else if (item['title'] == "ขาวดำ") {
+                              MyApp.themeNotifier.value = ThemeModeThird.dark;
+                            } else {
+                              MyApp.themeNotifier.value =
+                                  ThemeModeThird.blindness;
+                            }
+                            for (int i = 0; i < _listSwitchColors.length; i++) {
+                              if (_listSwitchColors[i]['code'] ==
+                                  item['code']) {
+                                item['isSelected'] = !item['isSelected'];
+                              } else {
+                                _listSwitchColors[i]['isSelected'] = false;
+                              }
+                            }
+                          },
+                        );
                       }),
                     );
                     // _callRead();
