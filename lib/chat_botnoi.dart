@@ -128,10 +128,53 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
           ),
         ),
       ),
+      // body: FutureBuilder<dynamic>(
+      //   future: _callRead(),
+      //   builder: (context, snapshot) {
+      //     if (snapshot.hasData) {
+      //       return WebView(
+      //         initialUrl: snapshot.data,
+      //         javascriptMode: JavascriptMode.unrestricted,
+      //         onWebViewCreated: (WebViewController webViewController) {
+      //           _controller.complete(webViewController);
+      //         },
+      //         onProgress: (int progress) {
+      //           print("WebView is loading (progress : $progress%)");
+      //         },
+      //         javascriptChannels: <JavascriptChannel>{
+      //           // _toasterJavascriptChannel(context),
+      //         },
+      //         navigationDelegate: (NavigationRequest request) {
+      //           // if (request.url.startsWith('https://www.youtube.com/')) {
+      //           //   print('blocking navigation to $request}');
+      //           //   return NavigationDecision.prevent;
+      //           // }
+      //           print('allowing navigation to $request');
+      //           return NavigationDecision.navigate;
+      //         },
+      //         onPageStarted: (String url) {
+      //           print('Page started loading: $url');
+      //         },
+      //         onPageFinished: (String url) {
+      //           print('Page finished loading: $url');
+      //         },
+      //         gestureNavigationEnabled: true,
+      //       );
+      //     } else if (snapshot.hasError) {
+      //       return Container();
+      //     } else {
+      //       return Center(
+      //         child: CircularProgressIndicator(
+      //         ),
+      //       );
+      //     }
+      //   },
+      // ),
       body: FutureBuilder<dynamic>(
         future: _callRead(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            // WebView will be loaded when the data is ready
             return WebView(
               initialUrl: snapshot.data,
               javascriptMode: JavascriptMode.unrestricted,
@@ -145,10 +188,6 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                 // _toasterJavascriptChannel(context),
               },
               navigationDelegate: (NavigationRequest request) {
-                // if (request.url.startsWith('https://www.youtube.com/')) {
-                //   print('blocking navigation to $request}');
-                //   return NavigationDecision.prevent;
-                // }
                 print('allowing navigation to $request');
                 return NavigationDecision.navigate;
               },
@@ -161,8 +200,12 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
               gestureNavigationEnabled: true,
             );
           } else if (snapshot.hasError) {
-            return Container();
+            // Show error message if there is an error fetching data
+            return Center(
+              child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'),
+            );
           } else {
+            // Show loading indicator while data is loading
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -192,28 +235,39 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
 <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
         <div id="bn-root"></div>
+   
         <script>
-            window.onload = function () {
-                (function (d, s, id) {
-                    var js,
-                        bjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id)) return;
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = "https://console.dcc.onde.go.th/customerchat/index.js";
-                    bjs.parentNode.insertBefore(js, bjs);
-                })(document, "script", "bn-jssdk");
+          window.onload = function () {
+            (function (d, s, id) {
+            var js,
+                bjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://console.dcc.onde.go.th/customerchat/index.js";
+            bjs.parentNode.insertBefore(js, bjs);
+             })(document, "script", "bn-jssdk");
 
-                const div = document.getElementsByClassName("bn-customerchat")[0];
-                div.setAttribute("name", "${name}");
-                div.setAttribute("session_id", "${shortToken}");
+        const initBot = () => {
+            const div = document.getElementsByClassName("bn-customerchat")[0];
+            if (!div) {
+                console.error("BN div not found");
+                return;
+            }
+            div.setAttribute("name", "${name}");
+            div.setAttribute("session_id", "${shortToken}");
 
+            if (typeof BN !== "undefined" && BN.init) {
+                BN.init({ version: "1.0" });
+            } else {
+                console.error("BN is not defined");
+            }
+        };
 
-                setTimeout(() => {
-                    BN.init({ version: "1.0" });
-                }, 100);
-            };
-        </script>
+        // Wait for 500ms to ensure DOM and BN script are ready
+        setTimeout(initBot, 500);
+    };
+</script>
     </head>
 
     <body>
@@ -244,35 +298,69 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
     }
   }
 
+  // _getShortToken(String token) async {
+  //   try {
+  //     // get token
+  //     Response response = await Dio().get(
+  //       '$ondeURL/api/user/SaveUserToken',
+  //       options: Options(
+  //         validateStatus: (_) => true,
+  //         contentType: 'application/x-www-form-urlencoded',
+  //         responseType: ResponseType.json,
+  //         headers: {
+  //           'Content-type': 'application/x-www-form-urlencoded',
+  //           'Authorization': 'Bearer $token',
+  //         },
+  //       ),
+  //     );
+  //     if (response.statusCode == 200) {
+  //       print('_getShortToken: ' + response.data['data']);
+  //       return response.data['data'];
+  //     } else {
+  //       logE(response.data);
+  //       Fluttertoast.showToast(msg: response.data['error_description']);
+  //     }
+  //   } on DioError catch (e) {
+  //     logE(e.error);
+  //     String err = e.error.toString();
+  //     if (e.response != null) {
+  //       err = e.response!.data.toString();
+  //     }
+  //     Fluttertoast.showToast(msg: err);
+  //   }
+  // }
   _getShortToken(String token) async {
-    try {
-      // get token
-      Response response = await Dio().get(
-        '$ondeURL/api/user/SaveUserToken',
-        options: Options(
-          validateStatus: (_) => true,
-          contentType: 'application/x-www-form-urlencoded',
-          responseType: ResponseType.json,
-          headers: {
-            'Content-type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Bearer $token',
-          },
-        ),
-      );
-      if (response.statusCode == 200) {
-        print('_getShortToken: ' + response.data['data']);
-        return response.data['data'];
-      } else {
-        logE(response.data);
-        Fluttertoast.showToast(msg: response.data['error_description']);
+    int retryCount = 3; // Retry 3 times
+    for (int i = 0; i < retryCount; i++) {
+      try {
+        Response response = await Dio().get(
+          '$ondeURL/api/user/SaveUserToken',
+          options: Options(
+            validateStatus: (_) => true,
+            contentType: 'application/x-www-form-urlencoded',
+            responseType: ResponseType.json,
+            headers: {
+              'Content-type': 'application/x-www-form-urlencoded',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+        );
+        if (response.statusCode == 200) {
+          print('_getShortToken: ' + response.data['data']);
+          return response.data['data'];
+        } else {
+          logE(response.data);
+          Fluttertoast.showToast(msg: response.data['error_description']);
+        }
+      } catch (e) {
+        logE(e.toString());
+        if (i == retryCount - 1) {
+          Fluttertoast.showToast(msg: "Cannot fetch short token");
+        } else {
+          await Future.delayed(Duration(seconds: 1)); // Wait before retrying
+        }
       }
-    } on DioError catch (e) {
-      logE(e.error);
-      String err = e.error.toString();
-      if (e.response != null) {
-        err = e.response!.data.toString();
-      }
-      Fluttertoast.showToast(msg: err);
     }
+    return '';
   }
 }
