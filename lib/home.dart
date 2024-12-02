@@ -756,7 +756,14 @@ class _HomePageState extends State<HomePage> {
                                             borderRadius:
                                                 BorderRadius.circular(15),
                                             color: _currentBanner == index
-                                                ? Color(0XFFBD4BF7)
+                                                ? MyApp.themeNotifier.value ==
+                                                        ThemeModeThird.light
+                                                    ? Color(0xFFBD4BF7)
+                                                    : MyApp.themeNotifier
+                                                                .value ==
+                                                            ThemeModeThird.dark
+                                                        ? Colors.white
+                                                        : Color(0xFFFFFD57)
                                                 : Color(0XFFDDDDDD),
                                           ),
                                         );
