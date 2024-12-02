@@ -144,7 +144,7 @@ class _VerifyThaiIDNewPageState extends State<VerifyThaiIDNewPage> {
                             : Colors.black,
                         child: Padding(
                           padding: const EdgeInsets.all(25),
-                          child: Column(
+                          child: ListView(
                             children: [
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,20 +189,22 @@ class _VerifyThaiIDNewPageState extends State<VerifyThaiIDNewPage> {
                                     width: 10,
                                     height: 10,
                                   ),
-                                  Text(
-                                    'ยืนยันตัวตน\nด้วยแอปพลิเคชัน ThaID',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                      color: MyApp.themeNotifier.value ==
-                                              ThemeModeThird.light
-                                          ? Color(0xFFB325F8)
-                                          : MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.dark
-                                              ? Colors.white
-                                              : Color(0xFFFFFD57),
+                                  Expanded(
+                                    child: Text(
+                                      'ยืนยันตัวตน\nด้วยแอปพลิเคชัน ThaID',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        color: MyApp.themeNotifier.value ==
+                                                ThemeModeThird.light
+                                            ? Color(0xFFB325F8)
+                                            : MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.dark
+                                                ? Colors.white
+                                                : Color(0xFFFFFD57),
+                                      ),
+                                      maxLines: 3,
                                     ),
-                                    maxLines: 3,
                                   ),
                                 ],
                               ),
@@ -221,6 +223,7 @@ class _VerifyThaiIDNewPageState extends State<VerifyThaiIDNewPage> {
                                           : Color(0xFFFFFD57),
                                 ),
                               ),
+                              SizedBox(height: 20),
                               Expanded(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.end,

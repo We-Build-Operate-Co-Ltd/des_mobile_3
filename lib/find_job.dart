@@ -1206,6 +1206,7 @@ class _FindJobPageState extends State<FindJobPage> {
             hintText: 'พิมพ์คำค้นหา',
             hintStyle: TextStyle(
               fontSize: 15,
+              fontFamily: 'Kanit',
               fontWeight: FontWeight.w400,
               // letterSpacing: 0.5,
               // decorationThickness: 6,
@@ -1617,6 +1618,7 @@ class _FindJobPageState extends State<FindJobPage> {
         hintStyle: TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w400,
+          fontFamily: 'Kanit',
           // letterSpacing: 0.5,
           // decorationThickness: 6,
           color: MyApp.themeNotifier.value == ThemeModeThird.light
@@ -1683,6 +1685,7 @@ class _FindJobPageState extends State<FindJobPage> {
           hintText,
           style: TextStyle(
             fontSize: 15,
+            fontFamily: 'Kanit',
             fontWeight: FontWeight.w400,
             // letterSpacing: 0.5,
             // decorationThickness: 6,
@@ -1697,6 +1700,7 @@ class _FindJobPageState extends State<FindJobPage> {
         ),
         style: TextStyle(
           fontSize: 14,
+          fontFamily: 'Kanit',
           color: Theme.of(context).custom.b_W_fffd57,
         ),
 
@@ -1860,6 +1864,7 @@ class _FindJobPageState extends State<FindJobPage> {
                           hintStyle: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w400,
+                            fontFamily: 'Kanit',
                             // letterSpacing: 0.5,
                             // decorationThickness: 6,
                             color: MyApp.themeNotifier.value ==

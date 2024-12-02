@@ -128,48 +128,6 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
           ),
         ),
       ),
-      // body: FutureBuilder<dynamic>(
-      //   future: _callRead(),
-      //   builder: (context, snapshot) {
-      //     if (snapshot.hasData) {
-      //       return WebView(
-      //         initialUrl: snapshot.data,
-      //         javascriptMode: JavascriptMode.unrestricted,
-      //         onWebViewCreated: (WebViewController webViewController) {
-      //           _controller.complete(webViewController);
-      //         },
-      //         onProgress: (int progress) {
-      //           print("WebView is loading (progress : $progress%)");
-      //         },
-      //         javascriptChannels: <JavascriptChannel>{
-      //           // _toasterJavascriptChannel(context),
-      //         },
-      //         navigationDelegate: (NavigationRequest request) {
-      //           // if (request.url.startsWith('https://www.youtube.com/')) {
-      //           //   print('blocking navigation to $request}');
-      //           //   return NavigationDecision.prevent;
-      //           // }
-      //           print('allowing navigation to $request');
-      //           return NavigationDecision.navigate;
-      //         },
-      //         onPageStarted: (String url) {
-      //           print('Page started loading: $url');
-      //         },
-      //         onPageFinished: (String url) {
-      //           print('Page finished loading: $url');
-      //         },
-      //         gestureNavigationEnabled: true,
-      //       );
-      //     } else if (snapshot.hasError) {
-      //       return Container();
-      //     } else {
-      //       return Center(
-      //         child: CircularProgressIndicator(
-      //         ),
-      //       );
-      //     }
-      //   },
-      // ),
       body: FutureBuilder<dynamic>(
         future: _callRead(),
         builder: (context, snapshot) {
@@ -207,7 +165,17 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
           } else {
             // Show loading indicator while data is loading
             return Center(
-              child: CircularProgressIndicator(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(), // Loading spinner
+                  SizedBox(height: 16), // Spacing between spinner and text
+                  Text(
+                    'กำลังเชื่อมต่อกับ Botnoi...',
+                    style: TextStyle(fontSize: 16, color: Color(0xFFB325F8)),
+                  ),
+                ],
+              ),
             );
           }
         },
@@ -298,37 +266,6 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
     }
   }
 
-  // _getShortToken(String token) async {
-  //   try {
-  //     // get token
-  //     Response response = await Dio().get(
-  //       '$ondeURL/api/user/SaveUserToken',
-  //       options: Options(
-  //         validateStatus: (_) => true,
-  //         contentType: 'application/x-www-form-urlencoded',
-  //         responseType: ResponseType.json,
-  //         headers: {
-  //           'Content-type': 'application/x-www-form-urlencoded',
-  //           'Authorization': 'Bearer $token',
-  //         },
-  //       ),
-  //     );
-  //     if (response.statusCode == 200) {
-  //       print('_getShortToken: ' + response.data['data']);
-  //       return response.data['data'];
-  //     } else {
-  //       logE(response.data);
-  //       Fluttertoast.showToast(msg: response.data['error_description']);
-  //     }
-  //   } on DioError catch (e) {
-  //     logE(e.error);
-  //     String err = e.error.toString();
-  //     if (e.response != null) {
-  //       err = e.response!.data.toString();
-  //     }
-  //     Fluttertoast.showToast(msg: err);
-  //   }
-  // }
   _getShortToken(String token) async {
     int retryCount = 3; // Retry 3 times
     for (int i = 0; i < retryCount; i++) {

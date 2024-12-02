@@ -985,7 +985,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: EdgeInsets.symmetric(horizontal: 5),
                 child: Row(
                   children: [
                     Image.asset(
@@ -994,7 +994,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                             : "assets/images/2024/time_home_page_blackwhite.png",
                         height: 24,
                         width: 24),
-                    const SizedBox(width: 8),
+                    SizedBox(width: MediaQuery.of(context).size.width * 0.005),
                     Text(
                       formatDuration(model?['course_Duration']),
                       style: TextStyle(
