@@ -229,9 +229,8 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
       future: getProfileCategory(),
       builder: (context, snapshot) {
         final profileCategory = snapshot.data ?? '';
-        final showChangePassword = profileCategory != 'facebook' &&
-            profileCategory != 'google' &&
-            profileCategory != 'line';
+        final showChangePassword = profileCategory == 'guest';
+        print('=========111111=======> ${profileCategory}');
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -706,6 +705,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
 
   void logout() async {
     String profileCategory = await ManageStorage.read('profileCategory') ?? '';
+
     switch (profileCategory) {
       case 'facebook':
         logoutFacebook();

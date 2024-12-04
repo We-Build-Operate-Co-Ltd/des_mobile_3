@@ -61,10 +61,11 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
       Completer<WebViewController>();
 
   late String _htmlStr;
-
+  late Future<dynamic> _futureHtml;
+  bool _isLoading = true;
   @override
   void initState() {
-    _callRead();
+    _futureHtml = _callRead();
     super.initState();
   }
 
@@ -128,48 +129,115 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
           ),
         ),
       ),
+      // body: FutureBuilder<dynamic>(
+      //   future: _callRead(),
+      //   builder: (context, snapshot) {
+      //     if (snapshot.hasData) {
+      //       // WebView will be loaded when the data is ready
+      //       return WebView(
+      //         initialUrl: snapshot.data,
+      //         javascriptMode: JavascriptMode.unrestricted,
+      //         onWebViewCreated: (WebViewController webViewController) {
+      //           _controller.complete(webViewController);
+      //         },
+      //         onProgress: (int progress) {
+      //           print("WebView is loading (progress : $progress%)");
+      //         },
+      //         javascriptChannels: <JavascriptChannel>{
+      //           // _toasterJavascriptChannel(context),
+      //         },
+      //         navigationDelegate: (NavigationRequest request) {
+      //           print('allowing navigation to $request');
+      //           return NavigationDecision.navigate;
+      //         },
+      //         onPageStarted: (String url) {
+      //           print('Page started loading: $url');
+      //         },
+      //         onPageFinished: (String url) {
+      //           print('Page finished loading: $url');
+      //         },
+      //         gestureNavigationEnabled: true,
+      //       );
+      //     } else if (snapshot.hasError) {
+      //       // Show error message if there is an error fetching data
+      //       return Center(
+      //         child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'),
+      //       );
+      //     } else {
+      //       // Show loading indicator while data is loading
+      //       return Center(
+      //         child: Column(
+      //           mainAxisAlignment: MainAxisAlignment.center,
+      //           children: [
+      //             CircularProgressIndicator(), // Loading spinner
+      //             SizedBox(height: 16), // Spacing between spinner and text
+      //             Text(
+      //               'กำลังเชื่อมต่อกับ Botnoi...',
+      //               style: TextStyle(fontSize: 16, color: Color(0xFFB325F8)),
+      //             ),
+      //           ],
+      //         ),
+      //       );
+      //     }
+      //   },
+      // ),
+
       body: FutureBuilder<dynamic>(
-        future: _callRead(),
+        future: _futureHtml,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            // WebView will be loaded when the data is ready
-            return WebView(
-              initialUrl: snapshot.data,
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (WebViewController webViewController) {
-                _controller.complete(webViewController);
-              },
-              onProgress: (int progress) {
-                print("WebView is loading (progress : $progress%)");
-              },
-              javascriptChannels: <JavascriptChannel>{
-                // _toasterJavascriptChannel(context),
-              },
-              navigationDelegate: (NavigationRequest request) {
-                print('allowing navigation to $request');
-                return NavigationDecision.navigate;
-              },
-              onPageStarted: (String url) {
-                print('Page started loading: $url');
-              },
-              onPageFinished: (String url) {
-                print('Page finished loading: $url');
-              },
-              gestureNavigationEnabled: true,
-            );
+            // ตรวจสอบประเภทของข้อมูล
+            if (snapshot.data is String) {
+              return Stack(
+                children: [
+                  WebView(
+                    initialUrl: snapshot.data,
+                    javascriptMode: JavascriptMode.unrestricted,
+                    onWebViewCreated: (WebViewController webViewController) {
+                      _controller.complete(webViewController);
+                    },
+                    onPageFinished: (String url) {
+                      setState(() {
+                        _isLoading = false; // ซ่อน Loader หลังโหลดหน้าเว็บเสร็จ
+                      });
+                    },
+                  ),
+                  if (_isLoading)
+                    Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 16),
+                          Text(
+                            'กำลังเชื่อมต่อกับ Botnoi...',
+                            style: TextStyle(
+                                fontSize: 16, color: Color(0xFFB325F8)),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              );
+            } else {
+              return Center(
+                child: Text(
+                  'เกิดข้อผิดพลาด: ข้อมูลที่ได้รับไม่ใช่ String',
+                  style: TextStyle(color: Colors.red),
+                ),
+              );
+            }
           } else if (snapshot.hasError) {
-            // Show error message if there is an error fetching data
             return Center(
               child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'),
             );
           } else {
-            // Show loading indicator while data is loading
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(), // Loading spinner
-                  SizedBox(height: 16), // Spacing between spinner and text
+                  CircularProgressIndicator(),
+                  SizedBox(height: 16),
                   Text(
                     'กำลังเชื่อมต่อกับ Botnoi...',
                     style: TextStyle(fontSize: 16, color: Color(0xFFB325F8)),

@@ -1687,7 +1687,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           // logWTF(responseUser);
           await ManageStorage.createProfile(
             value: responseUser['objectData'][0],
-            key: 'guest',
+            key: 'thaiid',
           );
 
           setState(() => _loadingSubmit = false);
@@ -1838,6 +1838,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       },
     );
     print("----------_getUserProfile------------${response}");
+    // logWTF(response.data);
     if (response.statusCode == 200) {
       return response.data;
     } else {
@@ -1861,6 +1862,12 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
         final userData = await fb.FacebookAuth.i.getUserData();
         print(userData['email'].toString());
 
+        if (userData['email'] == null || userData['email'].toString().isEmpty) {
+          Fluttertoast.showToast(msg: 'ไม่พบบัญชีของคุณ');
+          Navigator.of(context).pushReplacementNamed('/login');
+          return;
+        }
+
         try {
           setState(() => _loadingSubmit = true);
 
@@ -1882,6 +1889,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
             "facebookID": userData['id'].toString()
           };
           _callLoginSocial(model, 'facebook');
+          print('=====================> ${model}');
         } catch (e) {
           // setState(() => _loadingSubmit = false);
         }
@@ -2536,7 +2544,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   }
 
   void _callReadConfig() async {
-    // print('>>>>>>>>>123456>>>>>>>>');
+    print('>>>>>>>>>123456>>>>>>>>');
     var response = await Dio().get(
         '$server/py-api/dcc/config/login_social/' + versionNumber.toString());
     // print(response);
