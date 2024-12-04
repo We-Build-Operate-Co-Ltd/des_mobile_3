@@ -191,10 +191,12 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
               return Stack(
                 children: [
                   WebView(
-                    initialUrl: snapshot.data,
+                    // initialUrl: 'https://www.google.com/',
+                    // initialUrl: '',
                     javascriptMode: JavascriptMode.unrestricted,
                     onWebViewCreated: (WebViewController webViewController) {
                       _controller.complete(webViewController);
+                      webViewController.loadUrl(snapshot.data);
                     },
                     onPageFinished: (String url) {
                       setState(() {
@@ -210,7 +212,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                           CircularProgressIndicator(),
                           SizedBox(height: 16),
                           Text(
-                            'กำลังเชื่อมต่อกับ Botnoi...',
+                            'กำลังเชื่อมต่อกับน้องตาโต...',
                             style: TextStyle(
                                 fontSize: 16, color: Color(0xFFB325F8)),
                           ),
@@ -239,7 +241,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                   CircularProgressIndicator(),
                   SizedBox(height: 16),
                   Text(
-                    'กำลังเชื่อมต่อกับ Botnoi...',
+                    'กำลังเชื่อมต่อกับน้องตาโต...',
                     style: TextStyle(fontSize: 16, color: Color(0xFFB325F8)),
                   ),
                 ],
