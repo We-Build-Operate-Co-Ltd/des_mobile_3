@@ -41,12 +41,11 @@ class _ForgotPasswordOTPEmailPageState
           alignment: Alignment.center,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(
-                MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? "assets/images/BG.png"
-                    : "",
-              ),
+              image: AssetImage("assets/images/BG.png"),
               fit: BoxFit.cover,
+              colorFilter: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? null
+                  : ColorFilter.mode(Colors.grey, BlendMode.saturation),
             ),
           ),
           child: Align(

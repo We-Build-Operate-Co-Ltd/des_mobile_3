@@ -211,7 +211,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               height: 20,
                               width: 20,
                               child: CircularProgressIndicator(
-                                color: Color(0xFFB325F8),
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFFB325F8)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
                               ),
                             ),
                           ),
