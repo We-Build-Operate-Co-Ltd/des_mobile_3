@@ -30,12 +30,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(
-                MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? "assets/images/BG.png"
-                    : "",
-              ),
+              image: AssetImage("assets/images/BG.png"),
               fit: BoxFit.cover,
+              colorFilter: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? null
+                  : ColorFilter.mode(Colors.grey, BlendMode.saturation),
             ),
           ),
           child: Column(
@@ -74,8 +73,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                   Navigator.pop(context);
                                 },
                                 child: Image.asset(
-                                  'assets/images/back_profile.png',
-                                  // color: Colors.white,
+                                  MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? 'assets/images/back_profile.png'
+                                      : "assets/images/2024/back_balckwhite.png",
+                                  width: 35,
+                                  height: 35,
                                 ),
                               ),
                             ),

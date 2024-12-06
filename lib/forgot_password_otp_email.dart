@@ -85,8 +85,12 @@ class _ForgotPasswordOTPEmailPageState
                                 Navigator.pop(context);
                               },
                               child: Image.asset(
-                                'assets/images/back_profile.png',
-                                // color: Colors.white,
+                                MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? 'assets/images/back_profile.png'
+                                    : "assets/images/2024/back_balckwhite.png",
+                                width: 35,
+                                height: 35,
                               ),
                             ),
                           ),
@@ -149,7 +153,13 @@ class _ForgotPasswordOTPEmailPageState
                         activeColor:
                             Color(0xFFEEEEEE), //สีของเส้นขอบช่องที่กำลังใช้งาน
                         selectedColor:
-                            Color(0xFFB325F8), //สีพื้นหลังของช่องที่ถูกเลือก
+                            // Color(0xFFB325F8), //สีพื้นหลังของช่องที่ถูกเลือก
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? Color(0xFFB325F8)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                         // disabledColor: Colors.white,
                         activeFillColor: Color(
                             0xFFEEEEEE), // สีพื้นหลังของช่องที่กำลังใช้งาน
@@ -163,8 +173,13 @@ class _ForgotPasswordOTPEmailPageState
                         fieldWidth: 50.42,
                       ),
                       textStyle: TextStyle(
-                          color: Color(
-                              0xFF7A4CB1), // เปลี่ยนสีของข้อความที่กรอกเป็นสีน้ำเงิน
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFFB325F8)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.black
+                                  : Color.fromARGB(255, 239, 237,
+                                      84), // เปลี่ยนสีของข้อความที่กรอกเป็นสีน้ำเงิน
                           fontSize: 32, // ขนาดของข้อความ
                           fontWeight: FontWeight.w500,
                           fontFamily: 'Kanit' // ความหนาของข้อความ

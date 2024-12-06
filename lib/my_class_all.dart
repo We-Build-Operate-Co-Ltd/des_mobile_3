@@ -278,13 +278,12 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                 height: double.infinity,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(
-                      MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? "assets/images/BG.png"
-                          : "assets/images/2024/BG_Blackwhite.jpg",
-                    ),
-                    alignment: Alignment.topCenter,
+                    image: AssetImage("assets/images/BG.png"),
                     fit: BoxFit.cover,
+                    colorFilter: MyApp.themeNotifier.value ==
+                            ThemeModeThird.light
+                        ? null
+                        : ColorFilter.mode(Colors.grey, BlendMode.saturation),
                   ),
                 ),
               ),
@@ -1710,7 +1709,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
 
   _lmsCategory() {
     return Container(
-      height: 200,
+      height: 220,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Wrap(
@@ -1725,7 +1724,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                   //     ? 90
                   //     : 66,
                   height: MyApp.fontKanit.value == FontKanit.small
-                      ? 60
+                      ? 67
                       : MyApp.fontKanit.value == FontKanit.medium
                           ? 94
                           : 118,

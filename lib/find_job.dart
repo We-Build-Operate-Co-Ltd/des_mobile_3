@@ -141,14 +141,22 @@ class _FindJobPageState extends State<FindJobPage> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Image.asset(
-          MyApp.themeNotifier.value == ThemeModeThird.light
-              ? "assets/images/BG.png"
-              : "assets/images/2024/BG_Blackwhite.jpg",
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          fit: BoxFit.cover,
-        ),
+        MyApp.themeNotifier.value == ThemeModeThird.light
+            ? Image.asset(
+                "assets/images/BG.png",
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.cover,
+              )
+            : ColorFiltered(
+                colorFilter:
+                    ColorFilter.mode(Colors.grey, BlendMode.saturation),
+                child: Image.asset(
+                  "assets/images/BG.png",
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.cover,
+                )),
         Scaffold(
           // backgroundColor: Theme.of(context).custom.w_b_b,
           backgroundColor: Colors.transparent,

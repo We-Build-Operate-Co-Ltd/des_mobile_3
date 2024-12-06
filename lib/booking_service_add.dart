@@ -101,12 +101,11 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
             padding: EdgeInsets.only(top: 130),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
-                  MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? "assets/images/BG.png"
-                      : "assets/images/2024/BG_Blackwhite.jpg",
-                ),
+                image: AssetImage("assets/images/BG.png"),
                 fit: BoxFit.cover,
+                colorFilter: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? null
+                    : ColorFilter.mode(Colors.grey, BlendMode.saturation),
               ),
             ),
             child: Container(
@@ -249,38 +248,83 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     widget.mode == '1'
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
-                            child: (widget.model['photoBase64'] ?? '') != ''
-                                ? Image.memory(
-                                    base64Decode(widget.model['photoBase64']),
-                                    height: 180,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Image.asset(
-                                    'assets/images/banner_mock.jpg',
-                                    height: 180,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  ),
-                          )
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
-                            child: (widget.model['photo'] ?? '') != ''
-                                ? Image.memory(
-                                    base64Decode(widget.model['photo']),
-                                    height: 180,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Image.asset(
-                                    'assets/images/banner_mock.jpg',
-                                    height: 180,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  ),
-                          ),
+                        ? MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: (widget.model['photoBase64'] ?? '') != ''
+                                    ? Image.memory(
+                                        base64Decode(
+                                            widget.model['photoBase64']),
+                                        height: 180,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.asset(
+                                        'assets/images/banner_mock.jpg',
+                                        height: 180,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
+                              )
+                            : ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                    Colors.grey, BlendMode.saturation),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child:
+                                      (widget.model['photoBase64'] ?? '') != ''
+                                          ? Image.memory(
+                                              base64Decode(
+                                                  widget.model['photoBase64']),
+                                              height: 180,
+                                              width: double.infinity,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.asset(
+                                              'assets/images/banner_mock.jpg',
+                                              height: 180,
+                                              width: double.infinity,
+                                              fit: BoxFit.cover,
+                                            ),
+                                ),
+                              )
+                        : MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: (widget.model['photo'] ?? '') != ''
+                                    ? Image.memory(
+                                        base64Decode(widget.model['photo']),
+                                        height: 180,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.asset(
+                                        'assets/images/banner_mock.jpg',
+                                        height: 180,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
+                              )
+                            : ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                    Colors.grey, BlendMode.saturation),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: (widget.model['photo'] ?? '') != ''
+                                      ? Image.memory(
+                                          base64Decode(widget.model['photo']),
+                                          height: 180,
+                                          width: double.infinity,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.asset(
+                                          'assets/images/banner_mock.jpg',
+                                          height: 180,
+                                          width: double.infinity,
+                                          fit: BoxFit.cover,
+                                        ),
+                                ),
+                              ),
                     SizedBox(height: 16),
                     textForm(
                       label: 'คุณกำลังจอง:',

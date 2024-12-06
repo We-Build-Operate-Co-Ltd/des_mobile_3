@@ -128,13 +128,12 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                 // alignment: Alignment.topCenter,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(
-                      MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? "assets/images/BG.png"
-                          : "assets/images/2024/BG_Blackwhite.jpg",
-                    ),
-                    alignment: Alignment.topCenter,
-                    fit: BoxFit.fill,
+                    image: AssetImage("assets/images/BG.png"),
+                    fit: BoxFit.cover,
+                    colorFilter: MyApp.themeNotifier.value ==
+                            ThemeModeThird.light
+                        ? null
+                        : ColorFilter.mode(Colors.grey, BlendMode.saturation),
                   ),
                 ),
               ),

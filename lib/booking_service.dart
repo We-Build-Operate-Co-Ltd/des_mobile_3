@@ -106,12 +106,11 @@ class _BookingServicePageState extends State<BookingServicePage>
             padding: EdgeInsets.only(top: 130),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
-                  MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? "assets/images/BG.png"
-                      : "assets/images/2024/BG_Blackwhite.jpg",
-                ),
+                image: AssetImage("assets/images/BG.png"),
                 fit: BoxFit.cover,
+                colorFilter: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? null
+                    : ColorFilter.mode(Colors.grey, BlendMode.saturation),
               ),
             ),
             child: Container(
@@ -1106,7 +1105,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                           Image.asset(
                             MyApp.themeNotifier.value == ThemeModeThird.light
                                 ? 'assets/images/owl_3.png'
-                                : "",
+                                : "assets/images/owl-3-b.png",
                             height: 153,
                           ),
                           const SizedBox(
@@ -1252,7 +1251,7 @@ class _BookingServicePageState extends State<BookingServicePage>
                           Image.asset(
                             MyApp.themeNotifier.value == ThemeModeThird.light
                                 ? 'assets/images/owl_3.png'
-                                : " ",
+                                : "assets/images/owl-3-b.png",
                             height: 153,
                           ),
                           const SizedBox(

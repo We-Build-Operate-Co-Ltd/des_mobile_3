@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../main.dart';
+import '../shared/theme_data.dart';
+
 class CusInpuDecoration {
   static InputDecoration base(context, {String hintText = ''}) =>
       InputDecoration(
@@ -39,23 +42,45 @@ class CusInpuDecoration {
   }) =>
       InputDecoration(
         label: Text(hintText),
-        labelStyle: const TextStyle(
-          color: Color(0xFF707070),
+        labelStyle: TextStyle(
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFFB325F8)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
           fontSize: 12,
         ),
         alignLabelWithHint: true,
-        hintStyle: const TextStyle(
+        hintStyle: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w400,
-          color: Color(0xFFCEA8F3),
+          color: MyApp.themeNotifier.value == ThemeModeThird.light
+              ? Color(0xFFB325F8)
+              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                  ? Colors.white
+                  : Color(0xFFFFFD57),
         ),
         suffixIcon: GestureDetector(
           onTap: () {
             suffixTap!();
           },
           child: visibility
-              ? const Icon(Icons.visibility_off, size: 18)
-              : const Icon(Icons.visibility, size: 18),
+              ? Icon(Icons.visibility_off,
+                  size: 18,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFB325F8)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57))
+              : Icon(
+                  Icons.visibility,
+                  size: 18,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Color(0xFFB325F8)
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                ),
         ),
         filled: true,
         fillColor: Colors.transparent,
@@ -63,7 +88,13 @@ class CusInpuDecoration {
         border: InputBorder.none,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),
-          borderSide: BorderSide(color: Color(0xFFB325F8)),
+          borderSide: BorderSide(
+            color: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFFB325F8)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7.0),

@@ -57,13 +57,11 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
               height: 1000,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(
-                    MyApp.themeNotifier.value == ThemeModeThird.light
-                        ? "assets/images/BG.png"
-                        : "assets/images/2024/BG_Blackwhite.jpg",
-                  ),
-                  alignment: Alignment.topCenter,
+                  image: AssetImage("assets/images/BG.png"),
                   fit: BoxFit.cover,
+                  colorFilter: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? null
+                      : ColorFilter.mode(Colors.grey, BlendMode.saturation),
                 ),
               ),
             ),
@@ -230,7 +228,7 @@ class _UserProfileSettingPageState extends State<UserProfileSettingPage> {
       builder: (context, snapshot) {
         final profileCategory = snapshot.data ?? '';
         final showChangePassword = profileCategory == 'guest';
-        print('=========111111=======> ${profileCategory}');
+        // print('=========111111=======> ${profileCategory}');
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

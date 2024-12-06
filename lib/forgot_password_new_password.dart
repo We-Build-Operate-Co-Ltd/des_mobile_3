@@ -52,6 +52,8 @@ class _ForgotPasswordNewPasswordPageState
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          extendBody: true,
           backgroundColor: Colors.transparent,
           body: Container(
             decoration: BoxDecoration(
@@ -100,8 +102,12 @@ class _ForgotPasswordNewPasswordPageState
                                       Navigator.pop(context);
                                     },
                                     child: Image.asset(
-                                      'assets/images/back_profile.png',
-                                      // color: Colors.white,
+                                      MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? 'assets/images/back_profile.png'
+                                          : "assets/images/2024/back_balckwhite.png",
+                                      width: 35,
+                                      height: 35,
                                     ),
                                   ),
                                 ),
@@ -182,7 +188,13 @@ class _ForgotPasswordNewPasswordPageState
                                     width: double.infinity,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      color: Color(0xFFB325F8),
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Color(0xFFB325F8)
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Color(0xFFFFFD57),
                                       borderRadius: BorderRadius.circular(23),
                                       boxShadow: const [
                                         BoxShadow(
@@ -192,12 +204,15 @@ class _ForgotPasswordNewPasswordPageState
                                         )
                                       ],
                                     ),
-                                    child: const Text(
+                                    child: Text(
                                       'ยืนยัน',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
-                                        color: Colors.white,
+                                        color: MyApp.themeNotifier.value ==
+                                                ThemeModeThird.light
+                                            ? Colors.white
+                                            : Colors.black,
                                       ),
                                     ),
                                   ),
@@ -353,21 +368,33 @@ class _ForgotPasswordNewPasswordPageState
           height: 60,
           padding: const EdgeInsets.only(top: 12),
           alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(7),
-            boxShadow: const [
-              BoxShadow(
-                blurRadius: 4,
-                color: Color(0x40F3D2FF),
-                offset: Offset(0, 4),
-              )
-            ],
-          ),
+          // decoration: BoxDecoration(
+          //   color: Colors.white,
+          //   borderRadius: BorderRadius.circular(7),
+          //   boxShadow: const [
+          //     BoxShadow(
+          //       blurRadius: 4,
+          //       color: Color(0x40F3D2FF),
+          //       offset: Offset(0, 4),
+          //     )
+          //   ],
+          // ),
           child: TextFormField(
+            cursorColor: MyApp.themeNotifier.value == ThemeModeThird.light
+                ? Color(0xFFB325F8)
+                : MyApp.themeNotifier.value == ThemeModeThird.dark
+                    ? Colors.white
+                    : Color(0xFFFFFD57),
             obscureText: visibility,
             controller: controller,
-            style: const TextStyle(fontSize: 14),
+            style: TextStyle(
+              fontSize: 14,
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFFB325F8)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
+            ),
             onEditingComplete: () => FocusScope.of(context).unfocus(),
             decoration: CusInpuDecoration.password(
               context,
@@ -499,7 +526,11 @@ class _ForgotPasswordNewPasswordPageState
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(23),
-                    color: Color(0xFFB325F8),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFB325F8)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
                   ),
                   child: Text(
                     "ตกลง",

@@ -88,13 +88,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 height: 1000,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(
-                      MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? "assets/images/BG.png"
-                          : "assets/images/2024/BG_Blackwhite.jpg",
-                    ),
-                    alignment: Alignment.topCenter,
+                    image: AssetImage("assets/images/BG.png"),
                     fit: BoxFit.cover,
+                    colorFilter: MyApp.themeNotifier.value ==
+                            ThemeModeThird.light
+                        ? null
+                        : ColorFilter.mode(Colors.grey, BlendMode.saturation),
                   ),
                 ),
               ),
