@@ -63,7 +63,7 @@ class _ForgotPasswordNewPasswordPageState
               colorFilter: MyApp.themeNotifier.value == ThemeModeThird.light
                   ? null
                   : ColorFilter.mode(Colors.grey, BlendMode.saturation),
-            ),s
+            ),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -166,9 +166,9 @@ class _ForgotPasswordNewPasswordPageState
                               return result == null ? null : '';
                             },
                           ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.50,
-                          ),
+                          // SizedBox(
+                          //   height: MediaQuery.of(context).size.height * 0.50,
+                          // ),
                           Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
