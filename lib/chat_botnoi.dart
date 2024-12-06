@@ -210,26 +210,26 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CircularProgressIndicator(
-                            color: MyApp.themeNotifier.value == ThemeModeThird.light ? 
-                                Color(0xFFB325F8)
-                                
-                                : MyApp.themeNotifier.value == ThemeModeThird.dark ? 
-                                Colors.black : 
-                                Color(0xFFFFFD57),
-                          )
-                          ,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFB325F8)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.black
+                                    : Color(0xFFFFFD57),
+                          ),
                           SizedBox(height: 16),
                           Text(
                             'กำลังเชื่อมต่อกับน้องตาโต...',
                             style: TextStyle(
-                                fontSize: 16, color: 
-                                MyApp.themeNotifier.value == ThemeModeThird.light ? 
-                                Color(0xFFB325F8)
-                                
-                                : MyApp.themeNotifier.value == ThemeModeThird.dark ? 
-                                Colors.black : 
-                                Color(0xFFFFFD57)
-                                ),
+                                fontSize: 16,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFFB325F8)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.black
+                                        : Color(0xFFFFFD57)),
                           ),
                         ],
                       ),
@@ -253,11 +253,23 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(),
+                  CircularProgressIndicator(
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFB325F8)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.black
+                            : Color(0xFFFFFD57),
+                  ),
                   SizedBox(height: 16),
                   Text(
                     'กำลังเชื่อมต่อกับน้องตาโต...',
-                    style: TextStyle(fontSize: 16, color: Color(0xFFB325F8)),
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFFB325F8)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.black
+                                : Color(0xFFFFFD57)),
                   ),
                 ],
               ),
