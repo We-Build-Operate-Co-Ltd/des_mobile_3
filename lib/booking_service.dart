@@ -2546,7 +2546,8 @@ class _BookingServicePageState extends State<BookingServicePage>
           ),
         );
 
-        // logE(response);
+        // logE(response.data);
+        // print('-----------response------------${response}');
         if (response.data.isEmpty) {
           setState(() {
             _loadingBookingStatus = LoadingBookingStatus.success;

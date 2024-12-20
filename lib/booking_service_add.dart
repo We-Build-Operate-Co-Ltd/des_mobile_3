@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -66,12 +67,15 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
   TextEditingController txtStartTime = TextEditingController();
   TextEditingController txtEndTime = TextEditingController();
   TextEditingController txtPhone = TextEditingController();
+  TextEditingController txtOther = TextEditingController();
   late List<dynamic> _modelBookingCategory;
+  late List<dynamic> _modelBookingSubCategory;
 
   dynamic _model;
   String title = 'จองศูนย์';
   String titleSubmit = 'จองใช้บริการ';
   String _bookingTypeRefNo = '';
+  int _selectSubCategory = 99999;
   String _bookingTypeTitle = '';
   late List<dynamic> _modelType;
   bool _loadingDropdownType = false;
@@ -870,11 +874,17 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
           _dropdown(
             data: _modelType,
             value: _bookingTypeRefNo,
-            onChanged: (String value) {
+            id: 'refNo',
+            name: 'typeName',
+            onChanged: (dynamic value) {
               setState(() {
                 _bookingTypeRefNo = value;
                 _bookingTypeTitle = _modelType
                     .firstWhereOrNull((e) => e['refNo'] == value)['typeName'];
+                print(
+                    '--------------_bookingTypeRefNo--------------------> ${_bookingTypeRefNo}');
+                print(
+                    '--------------_bookingTypeTitle--------------------> ${_bookingTypeTitle}');
               });
             },
           ),
@@ -1179,7 +1189,9 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
                   _dropdown(
                     data: _modelType,
                     value: _bookingTypeRefNo,
-                    onChanged: (String value) {
+                    id: 'refNo',
+                    name: 'typeName',
+                    onChanged: (dynamic value) {
                       setState(() {
                         _bookingTypeRefNo = value;
                       });
@@ -1288,56 +1300,104 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 3),
-          child: Row(
+          child: Column(
             children: [
-              Container(
-                  height: 20,
-                  width: 20,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 1,
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Color(0xFFBD4BF7)
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
-                    ),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                  child: Icon(Icons.check,
-                      size: 16,
-                      color: _modelBookingCategory[__]['selected']
-                          ? MyApp.themeNotifier.value == ThemeModeThird.light
+              Row(
+                children: [
+                  Container(
+                      height: 20,
+                      width: 20,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
                               ? Color(0xFFBD4BF7)
                               : MyApp.themeNotifier.value == ThemeModeThird.dark
                                   ? Colors.white
-                                  : Color(0xFFFFFD57)
-                          : MyApp.themeNotifier.value == ThemeModeThird.light
-                              ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        ),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                      child: Icon(Icons.check,
+                          size: 16,
+                          color: _modelBookingCategory[__]['selected']
+                              ? MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFFBD4BF7)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57)
+                              : MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Colors.white
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.black
+                                      : Colors.black)
+                      // Container(
+                      //   margin: EdgeInsets.all(2),
+                      //   decoration: BoxDecoration(
+                      //       borderRadius: BorderRadius.circular(2),
+                      //       color: _modelBookingCategory[__]['selected']
+                      //           ? Color(0xFFA06CD5)
+                      //           : Color(0xFFFFFFFF)),
+                      // ),
+                      ),
+                  SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      '${_modelBookingCategory[__]['catNameTh']}',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Color(0xFF707070),
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+
+              // อื่นๆ
+              SizedBox(height: 6),
+              _modelBookingCategory[__]['selected'] == true &&
+                      _modelBookingCategory[__]['bookingCatId'] == 8
+                  ? TextFormField(
+                      controller: txtOther,
+                      decoration: _decorationBase(context, hintText: 'ระบุเอง'),
+                      style: TextStyle(
+                        color: Theme.of(context).custom.b325f8_w_fffd57,
+                      ),
+                      cursorColor:
+                          MyApp.themeNotifier.value == ThemeModeThird.light
+                              ? Color(0xFF7A4CB1)
                               : MyApp.themeNotifier.value == ThemeModeThird.dark
                                   ? Colors.black
-                                  : Colors.black)
-                  // Container(
-                  //   margin: EdgeInsets.all(2),
-                  //   decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(2),
-                  //       color: _modelBookingCategory[__]['selected']
-                  //           ? Color(0xFFA06CD5)
-                  //           : Color(0xFFFFFFFF)),
-                  // ),
-                  ),
-              SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  '${_modelBookingCategory[__]['catNameTh']}',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF707070),
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              )
+                                  : Color(0xFFFFFD57),
+                    )
+                  : SizedBox(),
+
+              // อบรม
+              _modelBookingCategory[__]['selected'] == true &&
+                      _modelBookingCategory[__]['bookingCatId'] == 3
+                  ? _dropdown(
+                      data: _modelBookingSubCategory,
+                      value: _selectSubCategory,
+                      id: 'bookingSubcatId',
+                      name: 'subcatNameTh',
+                      onChanged: (dynamic newValue) {
+                        setState(() {
+                          _selectSubCategory = newValue;
+
+                          print(
+                              '-------------------------> Selected SubCategory: $_selectSubCategory');
+                        });
+                      },
+                    )
+                  // ? Text('${_modelBookingSubCategory}')
+                  : SizedBox()
             ],
           ),
         ),
@@ -1347,8 +1407,10 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
 
   _dropdown({
     required List<dynamic> data,
-    required String value,
-    Function(String)? onChanged,
+    required dynamic value,
+    required String id,
+    required String name,
+    required Function(dynamic) onChanged,
   }) {
     return Stack(
       children: [
@@ -1383,13 +1445,13 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
             // validator: (value) =>
             //     value == '' || value == null ? 'กรุณาเลือก' : null,
             onChanged: (dynamic newValue) {
-              onChanged!(newValue);
+              onChanged(newValue);
             },
             items: data.map((item) {
               return DropdownMenuItem(
-                value: item['refNo'],
+                value: item[id],
                 child: Text(
-                  '${item['typeName']}',
+                  '${item[name]}',
                   style: TextStyle(
                     fontSize: 14,
                     color: Theme.of(context).custom.b325f8_w_fffd57,
@@ -1810,7 +1872,7 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
           ...response.data
         ];
       });
-      // logWTF(_modelType);
+      logWTF(_modelType);
     } catch (e) {
       logE(e);
       setState(() => _loadingDropdownType = false);
@@ -1827,7 +1889,18 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
       setState(() => _loadingDropdownType = false);
       setState(() {
         _modelBookingCategory = response.data;
-        // logWTF(_modelBookingCategory);
+        _modelBookingSubCategory = [
+          {
+            "bookingSubcatId": 99999,
+            "bookingCatId": null,
+            "subcatNameTh": "หมวดหมูการใช้งานย่อย",
+            "subcatNameEn": "SubCategories",
+            "isFreetext": false
+          },
+          ..._modelBookingCategory[0]['bookingSubCategories']
+        ];
+
+        logWTF(_modelBookingSubCategory);
 
         _modelBookingCategory.forEach((e) {
           e['selected'] = false;
@@ -1878,23 +1951,48 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
 
       var subDate = txtDate.text.replaceAll(' ', '').split('/');
       String yearStr = (int.parse(subDate[2]) - 543).toString();
-      String tempDate = '$yearStr-${subDate[1]}-${subDate[0]}T00:00:00';
 
+      String tempDate = '$yearStr-${subDate[1]}-${subDate[0]}T00:00:00';
       var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
       var accessToken = await ManageStorage.read('accessToken') ?? '';
-
       var recordId = _modelType
           .firstWhere((e) => e['refNo'] == _bookingTypeRefNo)['recordId'];
 
+      // var bookingCategory = '';
+      // _modelBookingCategory.forEach((e) {
+      //   if (e['selected']) {
+      //     if (bookingCategory.isEmpty) {
+      //       bookingCategory = bookingCategory + e['bookingCatId'].toString();
+      //     } else {
+      //       bookingCategory =
+      //           bookingCategory + ',' + e['bookingCatId'].toString();
+      //     }
+      //   }
+      // });
       var bookingCategory = '';
+      List<Map<String, dynamic>> bookingCat = []; // สำหรับเก็บข้อมูล bookingCat
+
       _modelBookingCategory.forEach((e) {
         if (e['selected']) {
+          // สร้าง bookingCategory เป็น String
           if (bookingCategory.isEmpty) {
             bookingCategory = bookingCategory + e['bookingCatId'].toString();
           } else {
             bookingCategory =
                 bookingCategory + ',' + e['bookingCatId'].toString();
           }
+
+          // เพิ่มข้อมูลใน bookingCat พร้อมตรวจสอบ bookingCatId
+          // เพิ่มข้อมูลใน bookingCat ตามเงื่อนไข
+          bookingCat.add({
+            "bookingCatId": e['bookingCatId'],
+            "bookingSubCatId": e['bookingCatId'] == 3
+                ? _selectSubCategory ?? null
+                : null, // เฉพาะ bookingCatId == 3
+            "freeTextValue": e['bookingCatId'] == 8
+                ? txtOther.text ?? ""
+                : "", // ใช้ "" เป็นค่าเริ่มต้น
+          });
         }
       });
 
@@ -1909,10 +2007,11 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
         "userid": 0, // for test = 0; waiting API.
         "phone": txtPhone.text,
         "desc": "",
-        "remark": bookingCategory
+        "remark": bookingCategory,
+        "bookingCat": bookingCat, // ใช้ข้อมูลที่สร้างจากลูปด้านบน
       };
+
       // logWTF(data);
-      print(data);
 
       var response = await Dio().post(
         '$ondeURL/api/Booking/Booking/mobile',

@@ -101,179 +101,180 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: SingleChildScrollView(
-                  child: Container(
-                    alignment: Alignment.bottomCenter,
-                    // height:  MediaQuery.of(context).size.height * .650,
-                    height: deviceHeight * 0.8,
-                    padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-                    decoration: BoxDecoration(
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Colors.white
-                          : Colors.black,
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(20)),
-                    ),
-                    child: ListView(
-                      padding: EdgeInsets.zero,
-                      physics: ClampingScrollPhysics(),
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                widget.changePage!(0);
-                              },
-                              child: Container(
-                                height: 40,
-                                width: 40,
-                                // padding: EdgeInsets.all(6),
-                                // decoration: BoxDecoration(
-                                //   borderRadius: BorderRadius.circular(8),
-                                //   color: MyApp.themeNotifier.value ==
-                                //           ThemeModeThird.light
-                                //       ? Color(0xFFB325F8)
-                                //       : Colors.black,
-                                //   border: Border.all(
-                                //     color: MyApp.themeNotifier.value ==
-                                //             ThemeModeThird.light
-                                //         ? Color(0xFFB325F8)
-                                //         : MyApp.themeNotifier.value ==
-                                //                 ThemeModeThird.dark
-                                //             ? Colors.white
-                                //             : Color(0xFFFFFD57),
-                                //   ),
-                                // ),
-                                child: Image.asset(
-                                  MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? 'assets/images/back_arrow.png'
-                                      : "assets/images/2024/back_balckwhite.png",
-                                ),
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  // height:  MediaQuery.of(context).size.height * .650,
+                  height: deviceHeight * 0.8,
+                  padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+                  decoration: BoxDecoration(
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.white
+                        : Colors.black,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20)),
+                  ),
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    physics: ClampingScrollPhysics(),
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              widget.changePage!(0);
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              // padding: EdgeInsets.all(6),
+                              // decoration: BoxDecoration(
+                              //   borderRadius: BorderRadius.circular(8),
+                              //   color: MyApp.themeNotifier.value ==
+                              //           ThemeModeThird.light
+                              //       ? Color(0xFFB325F8)
+                              //       : Colors.black,
+                              //   border: Border.all(
+                              //     color: MyApp.themeNotifier.value ==
+                              //             ThemeModeThird.light
+                              //         ? Color(0xFFB325F8)
+                              //         : MyApp.themeNotifier.value ==
+                              //                 ThemeModeThird.dark
+                              //             ? Colors.white
+                              //             : Color(0xFFFFFD57),
+                              //   ),
+                              // ),
+                              child: Image.asset(
+                                MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? 'assets/images/back_arrow.png'
+                                    : "assets/images/2024/back_balckwhite.png",
                               ),
                             ),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        UserProfileSettingPage(),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                height: 35,
-                                width: 35,
-                                padding: EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      UserProfileSettingPage(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              height: 35,
+                              width: 35,
+                              padding: EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFFB325F8)
+                                    : Colors.black,
+                                border: Border.all(
                                   color: MyApp.themeNotifier.value ==
                                           ThemeModeThird.light
                                       ? Color(0xFFB325F8)
-                                      : Colors.black,
-                                  border: Border.all(
-                                    color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color(0xFFB325F8)
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.white
-                                            : Color(0xFFFFFD57),
-                                  ),
-                                ),
-                                child: Image.asset(
-                                  'assets/images/setting_icon.png',
-                                ),
-                              ),
-                            ),
-                            // Container(
-                            //   width: 35.0,
-                            //   height: 35.0,
-                            //   margin: EdgeInsets.all(5),
-                            //   child: InkWell(
-                            //     onTap: () {
-                            //       Navigator.push(
-                            //         context,
-                            //         MaterialPageRoute(
-                            //           builder: (context) =>
-                            //               UserProfileSettingNewPage(),
-                            //         ),
-                            //       );
-                            //     },
-                            //     child: Image.asset(
-                            //       'assets/images/setting_profile.png',
-                            //       // color: Colors.white,
-                            //     ),
-                            //   ),
-                            // ),
-                          ],
-                        ),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.05),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              alignment: Alignment.center,
-                              child: Text(
-                                '${_firstName} ${_lastName}',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                  color: MyApp.themeNotifier.value ==
-                                          ThemeModeThird.light
-                                      ? Colors.black
                                       : MyApp.themeNotifier.value ==
                                               ThemeModeThird.dark
                                           ? Colors.white
                                           : Color(0xFFFFFD57),
                                 ),
-                                overflow: TextOverflow.ellipsis,
+                              ),
+                              child: Image.asset(
+                                'assets/images/setting_icon.png',
                               ),
                             ),
-                            SizedBox(height: 10),
-                            if (_isVerify)
-                              Container(
-                                alignment: Alignment.center,
-                                width: MyApp.fontKanit.value == FontKanit.small
-                                    ? 75
-                                    : MyApp.fontKanit.value == FontKanit.medium
-                                        ? 100
-                                        : 125,
-                                height: 20,
-                                decoration: BoxDecoration(
+                          ),
+                          // Container(
+                          //   width: 35.0,
+                          //   height: 35.0,
+                          //   margin: EdgeInsets.all(5),
+                          //   child: InkWell(
+                          //     onTap: () {
+                          //       Navigator.push(
+                          //         context,
+                          //         MaterialPageRoute(
+                          //           builder: (context) =>
+                          //               UserProfileSettingNewPage(),
+                          //         ),
+                          //       );
+                          //     },
+                          //     child: Image.asset(
+                          //       'assets/images/setting_profile.png',
+                          //       // color: Colors.white,
+                          //     ),
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.03),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              '${_firstName} ${_lastName}',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Colors.black
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          if (_isVerify)
+                            Container(
+                              alignment: Alignment.center,
+                              width: MyApp.fontKanit.value == FontKanit.small
+                                  ? 75
+                                  : MyApp.fontKanit.value == FontKanit.medium
+                                      ? 100
+                                      : 125,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color.fromARGB(255, 37, 248, 79)
+                                        .withOpacity(0.10)
+                                    : Color(0xFF292929),
+                                borderRadius: BorderRadius.circular(12.5),
+                              ),
+                              child: Text(
+                                'ยืนยันตัวตนแล้ว',
+                                style: TextStyle(
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w400,
                                   color: MyApp.themeNotifier.value ==
                                           ThemeModeThird.light
-                                      ? Color.fromARGB(255, 37, 248, 79)
-                                          .withOpacity(0.10)
-                                      : Color(0xFF292929),
-                                  borderRadius: BorderRadius.circular(12.5),
-                                ),
-                                child: Text(
-                                  'ยืนยันตัวตนแล้ว',
-                                  style: TextStyle(
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.w400,
-                                    color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color.fromARGB(255, 12, 168, 33)
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.white
-                                            : Color(0xFFFFFD57),
-                                  ),
+                                      ? Color.fromARGB(255, 12, 168, 33)
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
                                 ),
                               ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        if (!_isVerify) _buildVerifyYourIdentity(),
-                        const SizedBox(height: 30),
-                        _buildRowAboutAccount(),
-                      ],
-                    ),
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      if (!_isVerify) _buildVerifyYourIdentity(),
+                      const SizedBox(height: 30),
+                      _buildRowAboutAccount(),
+                      SizedBox(
+                        height: 60,
+                      )
+                    ],
                   ),
                 ),
               ),

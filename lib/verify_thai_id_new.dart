@@ -127,21 +127,23 @@ class _VerifyThaiIDNewPageState extends State<VerifyThaiIDNewPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.6,
-                      decoration: BoxDecoration(
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Colors.white
-                            : Colors.black,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
+                    Card(
+                      margin: EdgeInsets.zero,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Colors.white
+                          : Colors.black,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.6,
+                        decoration: BoxDecoration(
+                          color:
+                              MyApp.themeNotifier.value == ThemeModeThird.light
+                                  ? Colors.white
+                                  : Colors.black,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            topRight: Radius.circular(15),
+                          ),
                         ),
-                      ),
-                      child: Card(
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Colors.white
-                            : Colors.black,
                         child: Padding(
                           padding: const EdgeInsets.all(25),
                           child: ListView(
