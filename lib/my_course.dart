@@ -1,20 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/main.dart';
-import 'package:des/my_class_all.dart';
-import 'package:des/shared/config.dart';
-import 'package:des/shared/extension.dart';
-import 'package:des/shared/image_viewer.dart';
-import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
-import 'package:dio/dio.dart';
-import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:des/widget/blinking_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_share/flutter_share.dart';
-import 'dart:ui' as ui show ImageFilter;
-
-import 'webview_inapp.dart';
 
 // ignore: must_be_immutable
 class MyCoursePage extends StatefulWidget {
@@ -40,7 +28,6 @@ class _MyCoursePageState extends State<MyCoursePage> {
   Color backgroundTheme = Colors.transparent;
   Color buttonTheme = Colors.transparent;
   Color textTheme = Colors.transparent;
-  final _scController = ScrollController();
   final storage = const FlutterSecureStorage();
   int _listLenght = 0;
 
@@ -107,25 +94,18 @@ class _MyCoursePageState extends State<MyCoursePage> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: CachedNetworkImage(
-                  imageUrl: '${param['thumbnailLink']}',
+                child: Image.network(
+                  param['thumbnailLink'],
                   fit: BoxFit.cover,
                   height: 95,
                   width: 160,
-                  errorWidget: (context, url, error) => Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Theme.of(context).custom.A4CB1_w_fffd57,
-                      ),
-                    ),
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      height: 50,
-                      width: 50,
-                    ),
-                  ),
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return BlinkingIcon(); // Placeholder ขณะโหลด
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(Icons.error); // เมื่อโหลดรูปไม่สำเร็จ
+                  },
                 ),
               ),
               SizedBox(width: 9),
@@ -259,8 +239,8 @@ class _MyCoursePageState extends State<MyCoursePage> {
                   topRight: Radius.circular(10),
                 ),
                 child: (model?['thumbnailLink'] ?? '') != ''
-                    ? CachedNetworkImage(
-                        imageUrl: '${model['thumbnailLink']}',
+                    ? Image.network(
+                        model['thumbnailLink'],
                         height: 120,
                         width: double.infinity,
                         fit: BoxFit.cover,
@@ -434,25 +414,6 @@ class _MyCoursePageState extends State<MyCoursePage> {
     );
   }
 
-  Widget _backButton(BuildContext context) {
-    return InkWell(
-      onTap: () => Navigator.pop(context),
-      child: Container(
-        height: 40,
-        width: 40,
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: buttonTheme,
-          border: Border.all(color: colorTheme),
-        ),
-        child: Image.asset(
-          'assets/images/back_arrow.png',
-        ),
-      ),
-    );
-  }
-
   @override
   void initState() {
     if (MyApp.themeNotifier.value == ThemeModeThird.light) {
@@ -477,8 +438,6 @@ class _MyCoursePageState extends State<MyCoursePage> {
   }
 
   _callRead() async {
-    var response = await Dio().get('$ondeURL/api/Lms/GetCouseExternal');
-
     setState(() {
       // _modelMyCourse = Future.value(response.data);
 
@@ -504,60 +463,6 @@ class _MyCoursePageState extends State<MyCoursePage> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildHead() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            height: 35,
-            width: 35,
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Color(0xFFB325F8)
-                    : Colors.black,
-                border: Border.all(
-                  width: 1,
-                  style: BorderStyle.solid,
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFFB325F8)
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57),
-                )),
-            child: Image.asset(
-              MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? 'assets/images/back_arrow.png'
-                  : "assets/images/2024/back_balckwhite.png",
-            ),
-          ),
-        ),
-        SizedBox(width: 10),
-        Container(
-          margin: EdgeInsets.all(5),
-          child: Text(
-            'สถาบันคุณวุฒิวิชาชีพ',
-            style: TextStyle(
-              fontSize: 24,
-              fontFamily: 'Kanit',
-              fontWeight: FontWeight.w500,
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? Color(0xFFB325F8)
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

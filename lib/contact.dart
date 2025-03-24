@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/main.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:flutter/material.dart';
@@ -255,8 +254,8 @@ class _ContactPageState extends State<ContactPage> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(22.5),
-              child: CachedNetworkImage(
-                imageUrl: model['imageUrl'],
+              child: Image.network(
+                model['imageUrl'],
                 height: double.infinity,
                 width: 45,
                 fit: BoxFit.cover,

@@ -1,26 +1,12 @@
 import 'dart:convert';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:des/certificate_all.dart';
-import 'package:des/detail.dart';
-import 'package:des/models/mock_data.dart';
-import 'package:des/my_class_all_bk.dart';
-import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
-import 'package:des/user_profile_bk.dart';
-import 'package:des/user_profile_booking.dart';
 import 'package:des/user_profile_class.dart';
 import 'package:des/user_profile_edit.dart';
-import 'package:des/user_profile_edit_bk.dart';
 import 'package:des/user_profile_setting.dart';
-import 'package:des/verify_main.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'booking_service.dart';
-import 'shared/config.dart';
-import 'history_of_apply_job.dart';
 import 'main.dart';
 import 'shared/dcc.dart';
 import 'package:des/verify_thai_id_new.dart';

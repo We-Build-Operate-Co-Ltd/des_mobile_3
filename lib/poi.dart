@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/detail.dart';
+import 'package:des/widget/blinking_icon.dart';
 import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/foundation.dart';
@@ -483,11 +483,16 @@ class _PoiPage extends State<PoiPage> {
                           topLeft: const Radius.circular(5.0),
                           topRight: const Radius.circular(5.0),
                         ),
-                        child: CachedNetworkImage(
-                          imageUrl: '${model['imageUrl']}',
+                        child: Image.network(
+                          model['imageUrl'],
                           fit: BoxFit.contain,
-                          errorWidget: (context, url, error) =>
-                              Image.asset('assets/images/logo.png'),
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return BlinkingIcon(); // Placeholder ขณะโหลด
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return Icon(Icons.error); // เมื่อโหลดรูปไม่สำเร็จ
+                          },
                         ))
                     : Container(
                         height: 200,
@@ -666,11 +671,18 @@ class _PoiPage extends State<PoiPage> {
                                 color: Colors.white,
                               ),
                               alignment: Alignment.center,
-                              child: CachedNetworkImage(
-                                imageUrl: snapshot.data[index]['imageUrl'],
+                              child: Image.network(
+                                snapshot.data[index]['imageUrl'],
                                 fit: BoxFit.contain,
-                                errorWidget: (context, url, error) =>
-                                    Image.asset('assets/images/logo.png'),
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return BlinkingIcon(); // Placeholder ขณะโหลด
+                                },
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Icon(
+                                      Icons.error); // เมื่อโหลดรูปไม่สำเร็จ
+                                },
                               ),
                             ),
                           ),

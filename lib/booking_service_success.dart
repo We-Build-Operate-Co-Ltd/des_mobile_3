@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/detail.dart';
 import 'package:des/menu.dart';
 import 'package:dio/dio.dart';
@@ -55,42 +54,6 @@ class _BookingServiceSuccessPageState extends State<BookingServiceSuccessPage> {
                       if (widget.success) ..._buildSuccess(),
                       if (!widget.success) ..._buildFail(),
                       SizedBox(height: 45),
-                      // Align(
-                      //   alignment: Alignment.centerLeft,
-                      //   child: Text(
-                      //     'คอร์สแนะนำ',
-                      //     style: TextStyle(
-                      //       fontSize: 15,
-                      //       fontWeight: FontWeight.w500,
-                      //     ),
-                      //   ),
-                      // ),
-                      // SizedBox(height: 10),
-                      // FutureBuilder(
-                      //   future: _readNews(),
-                      //   builder: (context, snapshot) {
-                      //     if (snapshot.hasData) {
-                      //       if (snapshot.data!.length > 0) {
-                      //         return SizedBox(
-                      //           height: 240,
-                      //           width: double.infinity,
-                      //           child: ListView.separated(
-                      //             scrollDirection: Axis.horizontal,
-                      //             shrinkWrap: true,
-                      //             physics: const ClampingScrollPhysics(),
-                      //             itemCount: snapshot.data!.length,
-                      //             separatorBuilder: (_, __) =>
-                      //                 const SizedBox(width: 15),
-                      //             itemBuilder: (context, index) =>
-                      //                 containerRecommendedClass(
-                      //                     snapshot.data![index]),
-                      //           ),
-                      //         );
-                      //       }
-                      //     }
-                      //     return const SizedBox();
-                      //   },
-                      // ),
                       Expanded(child: SizedBox()),
                       GestureDetector(
                         onTap: () => Navigator.of(context).pushAndRemoveUntil(
@@ -245,8 +208,8 @@ class _BookingServiceSuccessPageState extends State<BookingServiceSuccessPage> {
                 topLeft: Radius.circular(10),
                 topRight: Radius.circular(10),
               ),
-              child: CachedNetworkImage(
-                imageUrl: model['imageUrl'],
+              child: Image.network(
+                model['imageUrl'],
                 height: 93,
                 width: double.infinity,
                 fit: BoxFit.cover,

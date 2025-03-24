@@ -419,7 +419,7 @@ class _NotificationListState extends State<NotificationListPage> {
           backgroundColor: Colors.transparent,
           body: NotificationListener<OverscrollIndicatorNotification>(
             onNotification: (OverscrollIndicatorNotification overScroll) {
-              overScroll.disallowGlow();
+              overScroll.disallowIndicator();
               return false;
             },
             child: Column(

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:des/detail.dart';
 import 'package:des/find_job.dart';
@@ -696,8 +695,8 @@ class _HomePageState extends State<HomePage> {
                                   borderRadius: _currentBanner == index
                                       ? BorderRadius.all(Radius.circular(20))
                                       : BorderRadius.circular(0),
-                                  child: CachedNetworkImage(
-                                    imageUrl: item['imageUrl'],
+                                  child: Image.network(
+                                    item['imageUrl'],
                                     fit: BoxFit.cover,
                                     width: double.infinity,
                                     height: double.infinity,
@@ -840,8 +839,8 @@ class _HomePageState extends State<HomePage> {
                   topRight: Radius.circular(10),
                 ),
                 child: (model?['docs'] ?? '') != ''
-                    ? CachedNetworkImage(
-                        imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
+                    ? Image.network(
+                        'https://lms.dcc.onde.go.th/uploads/course/' +
                             model?['docs'],
                         height: 120,
                         width: double.infinity,
@@ -914,8 +913,8 @@ class _HomePageState extends State<HomePage> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-                imageUrl: model['imageUrl'] ?? '',
+              child: Image.network(
+                model['imageUrl'] ?? '',
                 fit: BoxFit.fill,
                 height: 95,
                 width: 169,
@@ -1073,49 +1072,6 @@ class _HomePageState extends State<HomePage> {
     });
     var sizeName = await storage.read(key: 'switchSize');
     selectedSize = sizeName;
-  }
-
-  // Future<List<dynamic>> _readNews() async {
-  //   Dio dio = Dio();
-  //   Response<dynamic> response;
-  //   try {
-  //     response = await dio.post(
-  //         '$server/dcc-api/m/eventcalendar/read',
-  //         data: {'skip': 0, 'limit': 2});
-  //     if (response.statusCode == 200) {
-  //       if (response.data['status'] == 'S') {
-  //         return response.data['objectData'];
-  //       }
-  //     }
-  //   } catch (e) {}
-  //   return [];
-  // }
-
-  Future<List<dynamic>> _callReadGetCourseOld() async {
-    Dio dio = Dio();
-    var response;
-    // var map = new Map<String, dynamic>();
-    FormData formData = new FormData.fromMap({"apikey": apiKeyLMS});
-    // map['apikey'] = _api_key;
-    try {
-      //https://lms.dcc.onde.go.th/api/api/recomend/003138ecf4ad3c45f1b903d72a860181
-      //response = await dio.post('${service}api/popular_course', data: formData);
-      response =
-          await dio.post('$serverLMS/recomend/$apiKeyLMS', data: formData);
-      // logWTF(response.data);
-      if (response.data['status']) {
-        // logWTF('_get_course' + response.data['data']);
-        dynamic model = await response.data['data'].toList();
-        // model..sort((a, b) => a['name'].compareTo(b['name']));
-        print(model.toString());
-        return Future.value(model);
-        // print('xxx' + response.data['data'].toString());
-        // print(response.data['data']
-        //   ..sort((a, b) => a['name'].compareTo(b['name'])));
-        // return response.data['data'];
-      }
-    } catch (e) {}
-    return [];
   }
 
   void _callReadGetCourse() async {

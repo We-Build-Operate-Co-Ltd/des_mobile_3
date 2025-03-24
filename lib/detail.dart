@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/main.dart';
 import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/image_viewer.dart';
 import 'package:des/shared/theme_data.dart';
+import 'package:des/widget/blinking_icon.dart';
 import 'package:dio/dio.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/cupertino.dart';
@@ -155,12 +155,17 @@ class _DetailPageState extends State<DetailPage> {
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(17.5),
-              child: CachedNetworkImage(
-                imageUrl: _imageSelected,
+              child: Image.network(
+                _imageSelected,
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
-                errorWidget: (context, url, error) =>
-                    Image.asset('assets/images/logo.png'),
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return BlinkingIcon(); // Placeholder ขณะโหลด
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(Icons.error); // เมื่อโหลดรูปไม่สำเร็จ
+                },
               ),
             ),
           ),
@@ -437,14 +442,18 @@ class _DetailPageState extends State<DetailPage> {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(15),
-          child: CachedNetworkImage(
-            imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
-                '${model?['docs'] ?? ''}',
+          child: Image.network(
+            'https://lms.dcc.onde.go.th/uploads/course/${model?['docs'] ?? ''}',
             // height: 30,
             width: 30,
             fit: BoxFit.cover,
-            errorWidget: (context, url, error) =>
-                Image.asset('assets/images/logo.png'),
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return BlinkingIcon(); // Placeholder ขณะโหลด
+            },
+            errorBuilder: (context, error, stackTrace) {
+              return Icon(Icons.error); // เมื่อโหลดรูปไม่สำเร็จ
+            },
           ),
         ),
 

@@ -1,20 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/main.dart';
 import 'package:des/shared/config.dart';
-import 'package:des/shared/extension.dart';
-import 'package:des/shared/image_viewer.dart';
-import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
-import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_share/flutter_share.dart';
-import 'dart:ui' as ui show ImageFilter;
 
 import 'course_detail_new.dart';
-import 'webview_inapp.dart';
 
 // ignore: must_be_immutable
 class CourseEternalPage extends StatefulWidget {
@@ -36,7 +27,6 @@ class _CourseEternalPageState extends State<CourseEternalPage> {
   Color backgroundTheme = Colors.transparent;
   Color buttonTheme = Colors.transparent;
   Color textTheme = Colors.transparent;
-  final _scController = ScrollController();
   final storage = const FlutterSecureStorage();
 
   @override
@@ -136,8 +126,8 @@ class _CourseEternalPageState extends State<CourseEternalPage> {
                   ),
                   child: MyApp.themeNotifier.value == ThemeModeThird.light
                       ? (model?['thumbnailLink'] ?? '') != ''
-                          ? CachedNetworkImage(
-                              imageUrl: '${model['thumbnailLink']}',
+                          ? Image.network(
+                              model['thumbnailLink'],
                               height: 120,
                               width: double.infinity,
                               fit: BoxFit.cover,
@@ -154,8 +144,8 @@ class _CourseEternalPageState extends State<CourseEternalPage> {
                             BlendMode.saturation,
                           ),
                           child: (model?['thumbnailLink'] ?? '') != ''
-                              ? CachedNetworkImage(
-                                  imageUrl: '${model['thumbnailLink']}',
+                              ? Image.network(
+                                  model['thumbnailLink'],
                                   height: 120,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
@@ -263,17 +253,6 @@ class _CourseEternalPageState extends State<CourseEternalPage> {
     setState(() {
       _modelCouseEternal = Future.value(response.data);
     });
-  }
-
-  Future<void> _callShare(param) async {
-    await FlutterShare.share(
-        title: 'DCC Platform',
-        text:
-            '''📚🔖ขอเชิญชวนร่วม คอร์สเรียนเพื่อการเรียนรู้ ดิจิทัลชุมชน หัวข้อ
-"${param['title']}"
-🚩🚩 🚩🚩''',
-        linkUrl: param['imageUrl'],
-        chooserTitle: 'Example Chooser Title');
   }
 
   lineBottom() {

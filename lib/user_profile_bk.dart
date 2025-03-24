@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/certificate_all.dart';
 import 'package:des/detail.dart';
 import 'package:des/models/mock_data.dart';
 import 'package:des/my_class_all_bk.dart';
-import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/user_profile_edit_bk.dart';
@@ -621,8 +619,8 @@ class _UserProfileBkPageState extends State<UserProfileBkPage> {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: (model?['docs'] ?? '') != ''
-                  ? CachedNetworkImage(
-                      imageUrl: 'https://lms.dcc.onde.go.th/uploads/course/' +
+                  ? Image.network(
+                      'https://lms.dcc.onde.go.th/uploads/course/' +
                           model['docs'],
                       fit: BoxFit.fill,
                       height: 95,

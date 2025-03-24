@@ -634,61 +634,17 @@ class _BookingServiceSearchResultPageState
       if (response.data != null && response.data['data'] != null) {
         setState(() {
           _filterModelCenter = response.data['data'];
-          print('>>>>>>>>>>>>> response ${response.data['data']}');
           // logWTF(response.data['data']);
         });
       }
       setState(() => _loadingBookingStatus = LoadingBookingStatus.success);
     } on DioError catch (e) {
-      print('======================222333=======>>>>>>>>    url >>>>>> ');
       setState(() => _loadingBookingStatus = LoadingBookingStatus.fail);
       Fluttertoast.showToast(msg: e.response!.data['message']);
     } finally {
       setState(() => _loadingBookingStatus = LoadingBookingStatus.success);
     }
   }
-
-  // _callRead() async {
-  //   var url = '';
-  //   print('------------moade-------------------------${widget.mode}');
-  //   print('------------search------------------------${widget.search}');
-  //   print(
-  //       '------------provinceSelected--------------${widget.filter['provinceSelected']}');
-  //   print(
-  //       '------------districtTitleSelected---------${widget.filter['districtTitleSelected']}');
-  //   if (widget.mode == '1' &&
-  //       (widget.search.isNotEmpty ||
-  //           (widget.filter['provinceSelected'] != null &&
-  //               widget.filter['provinceSelected'] != '' &&
-  //               widget.filter['provinceSelected'] != '0') ||
-  //           (widget.filter['districtTitleSelected'] != null &&
-  //               widget.filter['districtTitleSelected'] != ''))) {
-  //     url =
-  //         'GetSearchCenterLocation?textSearch=${widget.search}&chId=${widget.filter['provinceSelected']}&assetType=${widget.filter['bookingType']}&amName=${widget.filter['districtTitleSelected']}';
-  //     print('---------------1------มีข้อมูล-----');
-  //   } else {
-  //     print('---------------2-----ไม่มีข้อมูล---');
-  //     await getLocation();
-  //     url = 'GetCenterLocation?latitude=$latitude&longitude=$longitude';
-  //   }
-  //   print('=============================>>>>>>>>    url >>>>>> $url');
-  //   try {
-  //     Response response = await Dio().get('$ondeURL/api/DataManagement/$url');
-  //     if (response.data != null && response.data['data'] != null) {
-  //       setState(() {
-  //         _filterModelCenter = response.data['data'];
-  //         print('>>>>>>>>>>>>> response ${response.data['data']}');
-  //         logWTF(response.data['data']);
-  //       });
-  //     }
-  //     setState(() => _loadingBookingStatus = LoadingBookingStatus.success);
-  //   } on DioError catch (e) {
-  //     setState(() => _loadingBookingStatus = LoadingBookingStatus.fail);
-  //     Fluttertoast.showToast(msg: e.response!.data['message']);
-  //   } finally {
-  //     setState(() => _loadingBookingStatus = LoadingBookingStatus.success);
-  //   }
-  // }
 
   getLocation() async {
     try {

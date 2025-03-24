@@ -87,8 +87,8 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
               Expanded(
                 child: Container(
                   child: InAppWebView(
-                    initialUrlRequest:
-                        URLRequest(url: Uri.parse(scanFaceWeb ?? '')),
+                    initialUrlRequest: URLRequest(
+                        url: WebUri.uri(Uri.parse(scanFaceWeb ?? ''))),
                     initialOptions: InAppWebViewGroupOptions(
                       crossPlatform: InAppWebViewOptions(
                         mediaPlaybackRequiresUserGesture: false,

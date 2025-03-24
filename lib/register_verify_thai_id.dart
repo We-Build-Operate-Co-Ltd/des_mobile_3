@@ -22,7 +22,6 @@ class RegisterVerifyThaiIDPage extends StatefulWidget {
 
 class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
   dynamic _userData = {};
-  bool _loadingSubmit = false;
   String _thiaDCode = '';
 
   @override
@@ -33,7 +32,6 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
       setState(() {
         _thiaDCode = prefs.getString('thaiDCode') ?? '';
         if (_thiaDCode.isNotEmpty) {
-          _loadingSubmit = true;
           _getToken();
         }
       });
@@ -419,22 +417,18 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
     } catch (e) {
       await prefs.remove('thaiDCode');
       await prefs.remove('thaiDState');
-      setState(() => _loadingSubmit = false);
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }
 
   _register() async {
-    setState(() => _loadingSubmit = true);
     try {
       var response = await Dio().post(
         '$server/dcc-api/m/Register/create',
         data: _userData,
       );
 
-      setState(() {
-        _loadingSubmit = false;
-      });
+      setState(() {});
 
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
@@ -457,9 +451,7 @@ class _RegisterVerifyThaiIDPageState extends State<RegisterVerifyThaiIDPage> {
       }
     } catch (e) {
       logE(e);
-      setState(() {
-        _loadingSubmit = false;
-      });
+      setState(() {});
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
     }
   }

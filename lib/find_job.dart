@@ -1,10 +1,8 @@
 import 'package:des/main.dart';
-import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -105,7 +103,6 @@ class _FindJobPageState extends State<FindJobPage> {
   late List<dynamic> _modelAmphoe = [];
 
   TextEditingController _searchController = TextEditingController();
-  TextEditingController _searchFilterController = TextEditingController();
   int _typeRefNo = 0;
   int _changwatRefNo = 0;
   String _changwatRefLabel = '';
@@ -114,7 +111,6 @@ class _FindJobPageState extends State<FindJobPage> {
 
   late List<dynamic> _modelAmphoeResume = [];
   TextEditingController _searchResumeController = TextEditingController();
-  TextEditingController _searchFilterResumeController = TextEditingController();
   int _typeRefNoResume = 0;
   int _changwatRefNoResume = 0;
 
@@ -162,7 +158,7 @@ class _FindJobPageState extends State<FindJobPage> {
           backgroundColor: Colors.transparent,
           body: NotificationListener<OverscrollIndicatorNotification>(
             onNotification: (OverscrollIndicatorNotification overScroll) {
-              overScroll.disallowGlow();
+              overScroll.disallowIndicator();
               return false;
             },
             child: Column(
@@ -407,36 +403,6 @@ class _FindJobPageState extends State<FindJobPage> {
         ),
         separatorBuilder: (_, __) => const SizedBox(width: 5),
         itemCount: catFindJob2.length,
-      ),
-    );
-  }
-
-  Widget _buildItemCategory(dynamic data) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _cateSelected = data['jobCateId'];
-        });
-        _callReadByCategory(data['jobCateId']);
-      },
-      borderRadius: BorderRadius.all(Radius.circular(8)),
-      child: Container(
-        alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(
-          color: data['jobCateId'] == _cateSelected
-              ? Color(0xFF7A4CB1)
-              : Colors.white,
-          borderRadius: BorderRadius.circular(17.5),
-        ),
-        child: Text(
-          data?['nameTh'] ?? "",
-          style: TextStyle(
-            color: data['jobCateId'] == _cateSelected
-                ? Colors.white
-                : Colors.black,
-          ),
-        ),
       ),
     );
   }
@@ -2372,23 +2338,6 @@ class _FindJobPageState extends State<FindJobPage> {
     } catch (e) {}
   }
 
-  _callReadByCategory(param) async {
-    Dio dio = new Dio();
-
-    var response = _typeSelected == 0
-        ? await dio.get(
-            // 'https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?search=$aa&CatId=$param');
-            'https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?CatId=$param')
-        : await dio.get(
-            'https://dcc.onde.go.th/dcc-api/api/Resume/resumes?keyword=&catId=$param');
-
-    setState(() {
-      _model = response.data['data'];
-    });
-
-    // print(_model.toString());
-  }
-
   _callReadByJobCategory(index, param) async {
     Dio dio = Dio();
     setState(() {
@@ -2407,7 +2356,6 @@ class _FindJobPageState extends State<FindJobPage> {
             'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?search=$param');
         setState(() {
           _modelExternal = response.data;
-          print('-------------------1111-------${_modelExternal}');
         });
       } else if (index == 2) {
         var response = await dio.get(
@@ -2491,42 +2439,6 @@ class _FindJobPageState extends State<FindJobPage> {
 
   // print(_model.toString());
 
-  _getJobCate(param) {
-    // logWTF(param);
-    var title = "";
-    if (param.length > 0) {
-      param.forEach((e) {
-        if (title.isEmpty) {
-          title = title + e['nameTh'].toString();
-        } else {
-          title = title + ' ' + e['nameTh'].toString();
-        }
-      });
-    } else {
-      title = '';
-    }
-
-    return title;
-  }
-
-  _getUserSkill(param) {
-    // logWTF(param);
-    var title = "";
-    if (param.length > 0) {
-      param.forEach((e) {
-        if (title.isEmpty) {
-          title = title + e['skill'].toString();
-        } else {
-          title = title + ' ' + e['skill'].toString();
-        }
-      });
-    } else {
-      title = '';
-    }
-
-    return title;
-  }
-
   _convertDate(String date) {
     DateTime dateTime = DateTime.parse(date);
     DateFormat formatter =
@@ -2546,7 +2458,7 @@ class _FindJobPageState extends State<FindJobPage> {
     Dio dio = new Dio();
     if (_typeSelected == 0 && _typeSelected2 == 0) {
       var response = await dio.get(
-          'https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?${(_searchController.text ?? "") == "" ? 'search=' : 'search=${_searchController.text}'}${_typeRefNo == 0 ? '' : '&catId=$_typeRefNo'}${_changwatRefNo == 0 ? '' : '&provinceId=$_changwatRefNo'}${_amphoeRefNo == 0 ? '' : '&amphoeId=$_amphoeRefNo'} ${_selectedJobType.isEmpty ? '' : '&_selectedJobType=$_selectedJobType.join(",")'}  ${_selectedSalaty.isEmpty ? '' : '&_selectedSalaty=$_selectedSalaty.join(",")'}');
+          'https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?${(_searchController.text) == "" ? 'search=' : 'search=${_searchController.text}'}${_typeRefNo == 0 ? '' : '&catId=$_typeRefNo'}${_changwatRefNo == 0 ? '' : '&provinceId=$_changwatRefNo'}${_amphoeRefNo == 0 ? '' : '&amphoeId=$_amphoeRefNo'} ${_selectedJobType.isEmpty ? '' : '&_selectedJobType=$_selectedJobType.join(",")'}  ${_selectedSalaty.isEmpty ? '' : '&_selectedSalaty=$_selectedSalaty.join(",")'}');
 
       setState(() {
         _model = response.data['data'];
@@ -2555,10 +2467,10 @@ class _FindJobPageState extends State<FindJobPage> {
       print('--------------------1121---------- ${_changwatRefLabel}-');
 
       var response = await dio.get(
-          'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?${(_searchController.text ?? "") == "" ? 'searchText=' : 'searchText=${_searchController.text}'}${(_changwatRefLabel == '') ? '' : '&province=${_changwatRefLabel}'}${(_amphoeReLabel == '') ? '' : '&district=${_amphoeReLabel}'}');
+          'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?${(_searchController.text) == "" ? 'searchText=' : 'searchText=${_searchController.text}'}${(_changwatRefLabel == '') ? '' : '&province=${_changwatRefLabel}'}${(_amphoeReLabel == '') ? '' : '&district=${_amphoeReLabel}'}');
 
       print(
-          '---------------------------> ${'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?${(_searchController.text ?? "") == "" ? 'searchText=' : 'searchText=${_searchController.text}'}${(_changwatRefLabel == '') ? '' : '&province=${_changwatRefLabel}'}${(_amphoeReLabel == '') ? '' : '&district=${_amphoeReLabel}'}'}');
+          '---------------------------> ${'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?${(_searchController.text) == "" ? 'searchText=' : 'searchText=${_searchController.text}'}${(_changwatRefLabel == '') ? '' : '&province=${_changwatRefLabel}'}${(_amphoeReLabel == '') ? '' : '&district=${_amphoeReLabel}'}'}');
 
       setState(() {
         _modelExternal = response.data;
@@ -2568,7 +2480,7 @@ class _FindJobPageState extends State<FindJobPage> {
       });
     } else if (_typeSelected == 2) {
       var response = await dio.get(
-          'https://dcc.onde.go.th/dcc-api/api/Resume/resumes?${(_searchResumeController.text ?? "") == "" ? 'keyword=' : 'keyword=${_searchResumeController.text}'}${_typeRefNoResume == 0 ? '' : '&catId=$_typeRefNoResume'}${_changwatRefNoResume == 0 ? '' : '&provinceId=$_changwatRefNoResume'}${_amphoeRefNoResume == 0 ? '' : '&amphoeId=$_amphoeRefNoResume'}');
+          'https://dcc.onde.go.th/dcc-api/api/Resume/resumes?${(_searchResumeController.text) == "" ? 'keyword=' : 'keyword=${_searchResumeController.text}'}${_typeRefNoResume == 0 ? '' : '&catId=$_typeRefNoResume'}${_changwatRefNoResume == 0 ? '' : '&provinceId=$_changwatRefNoResume'}${_amphoeRefNoResume == 0 ? '' : '&amphoeId=$_amphoeRefNoResume'}');
 
       setState(() {
         _modelResume = response.data['data'];

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:des/booking_service.dart';
 import 'package:des/contact.dart';
@@ -10,7 +9,6 @@ import 'package:des/find_job.dart';
 import 'package:des/login_first.dart';
 import 'package:des/my_class_all.dart';
 import 'package:des/notification_list.dart';
-import 'package:des/policy.dart';
 import 'package:des/shared/dcc.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/notification_service.dart';
@@ -66,61 +64,28 @@ class _MenuState extends State<Menu> {
   late Future<int> notificationFuture;
 
   @override
+  @override
   void initState() {
+    super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      var pf = await ManageStorage.read('accessToken') ?? '';
-
-      //set color init.
-      var colorStorage = await storage.read(key: 'switchColor') ?? 'ปกติ';
-      if (colorStorage == "ปกติ") {
-        MyApp.themeNotifier.value = ThemeModeThird.light;
-      } else if (colorStorage == "ขาวดำ") {
-        MyApp.themeNotifier.value = ThemeModeThird.dark;
-      } else {
-        MyApp.themeNotifier.value = ThemeModeThird.blindness;
-      }
-
-      //set font size init.
-      var fontStorageValue =
-          await storage.read(key: 'switchSizeFont') ?? 'ปกติ';
-      if (fontStorageValue == "ปกติ") {
-        MyApp.fontKanit.value = FontKanit.small;
-      } else if (fontStorageValue == "ปานกลาง") {
-        MyApp.fontKanit.value = FontKanit.medium;
-      } else {
-        MyApp.fontKanit.value = FontKanit.large;
-      }
-
-      setState(() {
-        _profileCode = pf;
-      });
+      await _initializeThemeAndFont();
+      _profileCode = await ManageStorage.read('accessToken') ?? '';
 
       if (_profileCode.isEmpty) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => const LoginFirstPage(),
-          ),
-          (Route<dynamic> route) => false,
-        );
+        _navigateToLogin();
+        return;
       }
-      // _callReadPolicy(pf);
+
+      _callRead();
     });
 
     homePage = HomePage(changePage: _changePage);
     profilePage = UserProfilePage(changePage: _changePage);
-    _buildMainPopUp();
-    _callRead();
-    _logUsed();
-    pages = <Widget>[
-      // SizedBox(),
-      // SizedBox(),
-      // SizedBox(),
+    pages = [
       homePage,
-      BookingServicePage(
-        catSelectedWidget: '0',
-      ),
+      BookingServicePage(catSelectedWidget: '0'),
       MyClassAllPage(changePage: _changePage),
-      // NotificationBookingPage(),
       NotificationListPage(changePage: _changePage),
       profilePage,
       FundPage(changePage: _changePage),
@@ -128,14 +93,41 @@ class _MenuState extends State<Menu> {
       ContactPage(changePage: _changePage),
       FindJobPage(changePage: _changePage),
     ];
-    super.initState();
 
+    _buildMainPopUp();
+    _logUsed();
     notificationFuture = fetchNotificationCount();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future<void> _initializeThemeAndFont() async {
+    final colorMode = await storage.read(key: 'switchColor') ?? 'ปกติ';
+    final fontMode = await storage.read(key: 'switchSizeFont') ?? 'ปกติ';
+
+    MyApp.themeNotifier.value = {
+          "ปกติ": ThemeModeThird.light,
+          "ขาวดำ": ThemeModeThird.dark,
+          "ตาบอดสี": ThemeModeThird.blindness,
+        }[colorMode] ??
+        ThemeModeThird.light;
+
+    MyApp.fontKanit.value = {
+          "ปกติ": FontKanit.small,
+          "ปานกลาง": FontKanit.medium,
+          "ใหญ่": FontKanit.large,
+        }[fontMode] ??
+        FontKanit.small;
+  }
+
+  void _navigateToLogin() {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const LoginFirstPage()),
+      (route) => false,
+    );
   }
 
   @override
@@ -284,15 +276,20 @@ class _MenuState extends State<Menu> {
                                   borderRadius: _currentBanner == index
                                       ? BorderRadius.all(Radius.circular(10))
                                       : BorderRadius.circular(0),
-                                  child: CachedNetworkImage(
-                                    imageUrl: item['imageUrl'],
+                                  child: Image.network(
+                                    item['imageUrl'],
                                     fit: BoxFit.cover,
                                     width: double.infinity,
                                     height: double.infinity,
-                                    placeholder: (context, url) =>
-                                        BlinkingIcon(),
-                                    errorWidget: (context, url, error) =>
-                                        Icon(Icons.error),
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return BlinkingIcon(); // Placeholder ขณะโหลด
+                                    },
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Icon(
+                                          Icons.error); // เมื่อโหลดรูปไม่สำเร็จ
+                                    },
                                   ),
                                 ),
                               );
@@ -364,182 +361,115 @@ class _MenuState extends State<Menu> {
   }
 
   Widget _buildBottomNavBar() {
-    return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-      child: Container(
-        height: 66 + MediaQuery.of(context).padding.bottom,
-        decoration: BoxDecoration(
-          // color: Theme.of(context).custom.primary,
-          gradient: LinearGradient(
-            colors: [
-              Theme.of(context).custom.f7cafce,
-              Theme.of(context).custom.f796dc3
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          // borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF000000).withOpacity(0.10),
-              spreadRadius: 0,
-              blurRadius: 4,
-              offset: const Offset(0, -3), // changes position of shadow
-            ),
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
+    return Container(
+      padding: EdgeInsets.only(bottom: bottomPadding),
+      height: 66 + bottomPadding,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Theme.of(context).custom.f7cafce,
+            Theme.of(context).custom.f796dc3,
           ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
-        child: Row(
-          children: [
-            _buildTap(0, 'หน้าหลัก', 'assets/images/home.png'),
-            _buildTap(1, 'จองใช้บริการ', 'assets/images/calendar_menu.png'),
-            _buildTap(2, 'Re-Skill', 'assets/images/re_skill.png'),
-            _buildTap(3, 'แจ้งเตือน', 'assets/images/noti_menu.png'),
-            _buildTap(4, 'สมาชิก', _imageProfile, isNetwork: true),
-          ],
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF000000).withOpacity(0.10),
+            spreadRadius: 0,
+            blurRadius: 4,
+            offset: const Offset(0, -3),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          _buildTap(0, 'หน้าหลัก', 'assets/images/home.png'),
+          _buildTap(1, 'จองใช้บริการ', 'assets/images/calendar_menu.png'),
+          _buildTap(2, 'Re-Skill', 'assets/images/re_skill.png'),
+          _buildTap(3, 'แจ้งเตือน', 'assets/images/noti_menu.png'),
+          _buildTap(4, 'สมาชิก', _imageProfile, isNetwork: true),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTap(int index, String title, String pathImage,
+      {bool isNetwork = false}) {
+    final isSelected = _currentPage == index;
+    final theme = Theme.of(context);
+    final color = isSelected
+        ? (MyApp.themeNotifier.value == ThemeModeThird.blindness
+            ? theme.custom.b_w_y
+            : Colors.white)
+        : (MyApp.themeNotifier.value == ThemeModeThird.light
+            ? theme.custom.w_w_y
+            : Colors.white);
+
+    return Expanded(
+      child: InkWell(
+        onTap: () => _onItemTapped(index),
+        child: Container(
+          padding: EdgeInsets.all(8),
+          margin: EdgeInsets.all(6),
+          decoration: isSelected
+              ? BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.white.withOpacity(0.5),
+                    ),
+                  ],
+                )
+              : null,
+          child: Center(
+            child: _buildTapIcon(title, pathImage, color, isNetwork),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildTap(
-    int index,
-    String title,
-    String pathImage, {
-    bool isNetwork = false,
-    Key? key,
-  }) {
-    Color color;
-    if (_currentPage == index) {
-      if ((MyApp.themeNotifier.value == ThemeModeThird.light) ||
-          (MyApp.themeNotifier.value == ThemeModeThird.dark)) {
-        color = Colors.white;
-      } else {
-        color = Theme.of(context).custom.b_w_y;
-      }
-    } else {
-      if (MyApp.themeNotifier.value == ThemeModeThird.light) {
-        color = Theme.of(context).custom.w_w_y;
-      } else {
-        color = Colors.white;
-      }
+  Widget _buildTapIcon(
+      String title, String pathImage, Color color, bool isNetwork) {
+    if (isNetwork) {
+      return Image.memory(
+        base64Decode(_imageProfile),
+        height: 30,
+        width: 30,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => Image.asset(
+          "assets/images/profile_menu.png",
+          height: 30,
+          width: 30,
+          color: color,
+        ),
+      );
     }
 
-    return Flexible(
-      key: key,
-      flex: 1,
-      child: Center(
-        child: InkWell(
-          radius: 60,
-          splashColor: Theme.of(context).primaryColor.withOpacity(0.3),
-          onTap: () {
-            _onItemTapped(index);
-            // postTrackClick("แท็บ$title");
-          },
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            padding: EdgeInsets.all(10),
-            margin: EdgeInsets.all(10),
-            decoration: _currentPage == index
-                ? BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFFFFFFFF).withOpacity(0.50),
-                        // spreadRadius: 0,
-                        // blurRadius: 0,
-                        // offset:
-                        //     const Offset(0, 0), // changes position of shadow
-                      ),
-                    ],
-                  )
-                : null,
-            // borderRadius: BorderRadius.circular(15),
-            child: isNetwork
-                ? MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? pathImage != ''
-                        ? Image.memory(
-                            base64Decode(_imageProfile),
-                            fit: BoxFit.cover,
-                            height: 30,
-                            width: 30,
-                            errorBuilder: (_, __, ___) => Image.asset(
-                              "assets/images/profile_menu.png",
-                              fit: BoxFit.fill,
-                            ),
-                          )
-                        : Image.asset(
-                            'assets/images/profile_menu.png',
-                            height: 30,
-                            width: 30,
-                            color: color,
-                          )
-                    : ColorFiltered(
-                        colorFilter: ColorFilter.matrix(<double>[
-                          0.2126, 0.7152, 0.0722, 0,
-                          0, // Red channel
-                          0.2126, 0.7152, 0.0722, 0,
-                          0, // Green channel
-                          0.2126, 0.7152, 0.0722, 0,
-                          0, // Blue channel
-                          0, 0, 0, 1, 0, // Alpha channel
-                        ]),
-                        child: pathImage != ''
-                            ? Image.memory(
-                                base64Decode(_imageProfile),
-                                fit: BoxFit.cover,
-                                height: 30,
-                                width: 30,
-                                errorBuilder: (_, __, ___) => Image.asset(
-                                  "assets/images/profile_menu.png",
-                                  fit: BoxFit.fill,
-                                ),
-                              )
-                            : Image.asset(
-                                'assets/images/profile_menu.png',
-                                height: 30,
-                                width: 30,
-                                color: color,
-                              ),
-                      )
-                : FutureBuilder<int>(
-                    future: notificationFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return BlinkingIcon();
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text('Error: ${snapshot.error}'),
-                        );
-                      } else {
-                        print(
-                            '------------------------------------- ${snapshot.data!}');
-                        return title == "แจ้งเตือน" && snapshot.data! > 0
-                            ? badges.Badge(
-                                badgeContent: Text(
-                                  snapshot.data!.toString(),
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                child: Image.asset(
-                                  pathImage,
-                                  height: 30,
-                                  width: 30,
-                                  color: color,
-                                ),
-                              )
-                            : Image.asset(
-                                pathImage,
-                                height: 30,
-                                width: 30,
-                                color: color,
-                              );
-                      }
-                    },
-                  ),
-          ),
-        ),
-      ),
-    );
+    if (title == "แจ้งเตือน") {
+      return FutureBuilder<int>(
+        future: notificationFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return BlinkingIcon();
+          }
+          final count = snapshot.data ?? 0;
+          return count > 0
+              ? badges.Badge(
+                  badgeContent:
+                      Text('$count', style: TextStyle(color: Colors.white)),
+                  child: Image.asset(pathImage,
+                      height: 30, width: 30, color: color),
+                )
+              : Image.asset(pathImage, height: 30, width: 30, color: color);
+        },
+      );
+    }
+
+    return Image.asset(pathImage, height: 30, width: 30, color: color);
   }
 
   _logUsed() async {
@@ -603,52 +533,10 @@ class _MenuState extends State<Menu> {
     });
   }
 
-  _callRead() async {
-    var img = await DCCProvider.getImageProfile();
-    // setState(() => _imageProfile = img);
-    setState(() {
-      _imageProfile = img;
-      if (_profileCode != '') {
-        pages[4] = profilePage;
-      }
-    });
-  }
-
-  Future<Null> _callReadPolicy(pf) async {
-    Dio dio = Dio();
-    Response<dynamic> response;
-    dynamic policy = [];
-    try {
-      response = await dio.post('$server/dcc-api/m/policy/read', data: {
-        "category": "application",
-        "profileCode": pf,
-      });
-      if (response.statusCode == 200) {
-        if (response.data['status'] == 'S') {
-          policy = response.data['objectData'];
-        } else {}
-      }
-    } catch (e) {
-      print(e);
-    }
-    if (policy.length > 0) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (context) => PolicyPage(
-            category: 'application',
-            navTo: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (context) => Menu(),
-                ),
-                (Route<dynamic> route) => false,
-              );
-            },
-          ),
-        ),
-        (Route<dynamic> route) => false,
-      );
-    }
+  Future<void> _callRead() async {
+    _imageProfile = await DCCProvider.getImageProfile();
+    if (_profileCode.isNotEmpty) pages[4] = profilePage;
+    setState(() {}); // อัปเดต UI
   }
 
   void setHiddenMainPopup() async {

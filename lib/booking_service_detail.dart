@@ -1,6 +1,3 @@
-import 'dart:math';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/booking_service_edit.dart';
 import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
@@ -9,16 +6,15 @@ import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as dtpp;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 import 'package:des/booking_service_confirm.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'booking_service.dart';
 import 'main.dart';
-import 'menu.dart';
 
 class BookingServiceDetailPage extends StatefulWidget {
   const BookingServiceDetailPage({
@@ -770,10 +766,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
     } on DioError catch (e) {
       setState(() => _loadingSubmit = false);
       var err = e.toString();
-      if (e.response!.statusCode != 200) {
-        // err = e.response!.data['message'];
-        print('----------1234 >>>>>>>> : ${e.response}');
-      }
+      if (e.response!.statusCode != 200) {}
       Fluttertoast.showToast(msg: err);
     }
   }
@@ -1357,7 +1350,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
         ),
       );
 
-  DatePickerTheme datepickerTheme = DatePickerTheme(
+  dtpp.DatePickerTheme datepickerTheme = dtpp.DatePickerTheme(
     containerHeight: 210.0,
     itemStyle: TextStyle(
       fontSize: 16.0,
@@ -1381,7 +1374,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
 
   dynamic dialogOpenPickerDate() {
     var now = DateTime.now();
-    DatePicker.showDatePicker(
+    dtpp.DatePicker.showDatePicker(
       context,
       theme: datepickerTheme,
       showTitleActions: true,
@@ -1427,7 +1420,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
         _selectedMonth,
         _selectedDay,
       ),
-      locale: LocaleType.th,
+      locale: dtpp.LocaleType.th,
     );
   }
 
@@ -1499,7 +1492,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
     late TimeOfDay timeEnd;
 
     DateTime initCurrentTime = DateTime.now();
-    DatePicker.showTimePicker(
+    dtpp.DatePicker.showTimePicker(
       context,
       theme: datepickerTheme,
       showTitleActions: true,
@@ -1576,7 +1569,7 @@ class _BookingServiceDetailPageState extends State<BookingServiceDetailPage> {
       },
       currentTime: initCurrentTime,
       showSecondsColumn: false,
-      locale: LocaleType.th,
+      locale: dtpp.LocaleType.th,
     );
   }
 

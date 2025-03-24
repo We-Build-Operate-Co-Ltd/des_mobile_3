@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +20,6 @@ class _CertificateAllPageState extends State<CertificateAllPage> {
   Dio dio = Dio();
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  final _controllerContant = ScrollController();
   Future<dynamic>? _futureModel;
 
   @override
@@ -103,8 +101,8 @@ class _CertificateAllPageState extends State<CertificateAllPage> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-                imageUrl: '${model['imageUrl']}',
+              child: Image.network(
+                model['imageUrl'],
                 fit: BoxFit.fill,
                 height: 95,
                 width: 169,

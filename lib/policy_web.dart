@@ -36,7 +36,6 @@ class InAppWebViewPage extends StatefulWidget {
 class _InAppWebViewPageState extends State<InAppWebViewPage> {
   _InAppWebViewPageState({this.scanFaceWeb});
   String? scanFaceWeb;
-  late InAppWebViewController _webViewController;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,17 +51,14 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
             Expanded(
               child: Container(
                 child: InAppWebView(
-                  initialUrlRequest:
-                      URLRequest(url: Uri.parse(scanFaceWeb ?? '')),
+                  initialUrlRequest: URLRequest(url: WebUri(scanFaceWeb ?? '')),
                   initialOptions: InAppWebViewGroupOptions(
                     crossPlatform: InAppWebViewOptions(
                       mediaPlaybackRequiresUserGesture: false,
                       // debuggingEnabled: true,
                     ),
                   ),
-                  onWebViewCreated: (InAppWebViewController controller) {
-                    _webViewController = controller;
-                  },
+                  onWebViewCreated: (InAppWebViewController controller) {},
                   androidOnPermissionRequest:
                       (InAppWebViewController controller, String origin,
                           List<String> resources) async {

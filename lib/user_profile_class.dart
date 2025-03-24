@@ -1,21 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:des/course_eternal.dart';
-import 'package:des/home.dart';
-import 'package:des/my_class_all.dart';
 import 'package:des/my_course.dart';
 import 'package:des/my_course_success.dart';
-import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:top_modal_sheet/top_modal_sheet.dart';
-import 'course_detail_new.dart';
-import 'course_dsd.dart';
-import 'my_class_all_bk.dart';
 import 'shared/config.dart';
-import 'course_detail.dart';
 import 'main.dart';
 
 class UserProfileClassPage extends StatefulWidget {

@@ -1,19 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/main.dart';
 import 'package:des/shared/config.dart';
-import 'package:des/shared/extension.dart';
-import 'package:des/shared/image_viewer.dart';
-import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
-import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_share/flutter_share.dart';
-import 'dart:ui' as ui show ImageFilter;
-
-import 'webview_inapp.dart';
 
 // ignore: must_be_immutable
 class MyCourseCategorySearchPage extends StatefulWidget {
@@ -38,7 +28,6 @@ class _MyCourseCategorySearchPageState
   Color backgroundTheme = Colors.transparent;
   Color buttonTheme = Colors.transparent;
   Color textTheme = Colors.transparent;
-  final _scController = ScrollController();
   final storage = const FlutterSecureStorage();
 
   @override
@@ -143,8 +132,8 @@ class _MyCourseCategorySearchPageState
                   topRight: Radius.circular(10),
                 ),
                 child: (model?['cover_image_url'] ?? '') != ''
-                    ? CachedNetworkImage(
-                        imageUrl: '${model['cover_image_url']}',
+                    ? Image.network(
+                        model['cover_image_url'],
                         height: 120,
                         width: double.infinity,
                         fit: BoxFit.cover,
@@ -197,25 +186,6 @@ class _MyCourseCategorySearchPageState
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _backButton(BuildContext context) {
-    return InkWell(
-      onTap: () => Navigator.pop(context),
-      child: Container(
-        height: 40,
-        width: 40,
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: buttonTheme,
-          border: Border.all(color: colorTheme),
-        ),
-        child: Image.asset(
-          'assets/images/back_arrow.png',
         ),
       ),
     );

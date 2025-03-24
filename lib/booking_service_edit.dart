@@ -1,6 +1,3 @@
-import 'dart:math';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/booking_service.dart';
 import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
@@ -9,12 +6,10 @@ import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as dtpp;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-
-import 'package:des/booking_service_confirm.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'main.dart';
 
@@ -384,19 +379,6 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
     );
   }
 
-  Widget _backButton(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Image.asset(
-        'assets/images/back.png',
-        height: 40,
-        width: 40,
-      ),
-    );
-  }
-
   Widget _buildBookingCategory() {
     return ListView.separated(
       shrinkWrap: true,
@@ -648,7 +630,7 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
         ),
       );
 
-  DatePickerTheme datepickerTheme = DatePickerTheme(
+  dtpp.DatePickerTheme datepickerTheme = dtpp.DatePickerTheme(
     containerHeight: 210.0,
     itemStyle: TextStyle(
       fontSize: 16.0,
@@ -672,7 +654,7 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
 
   dynamic dialogOpenPickerDate() {
     var now = DateTime.now();
-    DatePicker.showDatePicker(
+    dtpp.DatePicker.showDatePicker(
       context,
       theme: datepickerTheme,
       showTitleActions: true,
@@ -719,7 +701,7 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
         _selectedMonth,
         _selectedDay,
       ),
-      locale: LocaleType.th,
+      locale: dtpp.LocaleType.th,
     );
   }
 
@@ -791,7 +773,7 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
     late TimeOfDay timeEnd;
 
     DateTime initCurrentTime = DateTime.now();
-    DatePicker.showTimePicker(
+    dtpp.DatePicker.showTimePicker(
       context,
       theme: datepickerTheme,
       showTitleActions: true,
@@ -870,7 +852,7 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
       },
       currentTime: initCurrentTime,
       showSecondsColumn: false,
-      locale: LocaleType.th,
+      locale: dtpp.LocaleType.th,
     );
   }
 
@@ -1042,7 +1024,6 @@ class _BookingServiceEditPageState extends State<BookingServiceEditPage> {
           },
         ),
       );
-      print('>>>>>>>>>>> $response');
       if (response.data['status'] == 200) {
         _sendNotification(title: 'postpone', date: tempDate);
         // logWTF(response);

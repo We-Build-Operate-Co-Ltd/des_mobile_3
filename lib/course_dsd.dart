@@ -1,19 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/main.dart';
 import 'package:des/shared/config.dart';
-import 'package:des/shared/extension.dart';
-import 'package:des/shared/image_viewer.dart';
-import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
-import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_share/flutter_share.dart';
-import 'dart:ui' as ui show ImageFilter;
-
-import 'webview_inapp.dart';
 
 // ignore: must_be_immutable
 class CourseDsdPage extends StatefulWidget {

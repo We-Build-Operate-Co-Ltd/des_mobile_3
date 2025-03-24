@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/shared/config.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
@@ -101,8 +100,8 @@ class _FavoriteClassAllState extends State<FavoriteClassAllPage> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-                imageUrl: '${model['imageUrl']}',
+              child: Image.network(
+                model['imageUrl'],
                 fit: BoxFit.cover,
                 height: 95,
                 width: 169,

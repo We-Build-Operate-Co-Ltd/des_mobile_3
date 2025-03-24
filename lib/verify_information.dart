@@ -9,7 +9,8 @@ import 'package:des/verify_otp_phone.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as dtpp;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -699,39 +700,38 @@ class _VerifyInformationPageState extends State<VerifyInformationPage> {
           },
         if (page == 2)
           {
-            setStateModal(() => {
-                  selectedCodeLv2 = item['code'],
-                  selectedCodeLv3 = '',
-                  selectedCodeLv4 = '',
-                  titleCategoryLv2 = item['title'],
-                  getCategory(page, setStateModal),
-                  pageController!.animateToPage(page,
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.ease),
-                })
+            setStateModal(() {
+              selectedCodeLv2 = item['code'];
+              selectedCodeLv3 = '';
+              selectedCodeLv4 = '';
+              titleCategoryLv2 = item['title'];
+              getCategory(page, setStateModal);
+              pageController!.animateToPage(page,
+                  duration: Duration(milliseconds: 500), curve: Curves.ease);
+            })
           },
         if (page == 3)
           {
-            setStateModal(() => {
-                  selectedCodeLv3 = item['code'],
-                  titleCategoryLv3 = item['title'],
-                  selectedCodeLv4 = item['postCode'],
-                  titleCategoryLv4 = item['postCode'],
-                  getCategory(page, setStateModal),
-                  // pageController.animateToPage(page,
-                  //     duration: Duration(milliseconds: 500), curve: Curves.ease)
-                }),
+            setStateModal(() {
+              selectedCodeLv3 = item['code'];
+              titleCategoryLv3 = item['title'];
+              selectedCodeLv4 = item['postCode'];
+              titleCategoryLv4 = item['postCode'];
+              getCategory(page, setStateModal);
+              // pageController.animateToPage(page,
+              //     duration: Duration(milliseconds: 500), curve: Curves.ease)
+            }),
             Navigator.pop(context, 'success')
           },
         if (page == 4)
           {
-            setStateModal(() => {
-                  selectedCodeLv4 = item['postCode'],
-                  titleCategoryLv4 = item['postCode'],
-                  getCategory(page, setStateModal),
-                  // pageController.animateToPage(page,
-                  //     duration: Duration(milliseconds: 500), curve: Curves.ease)
-                }),
+            setStateModal(() {
+              selectedCodeLv4 = item['postCode'];
+              titleCategoryLv4 = item['postCode'];
+              getCategory(page, setStateModal);
+              // pageController.animateToPage(page,
+              //     duration: Duration(milliseconds: 500), curve: Curves.ease)
+            }),
             Navigator.pop(context, 'success')
           },
         setState(() {}),
@@ -1142,9 +1142,9 @@ class _VerifyInformationPageState extends State<VerifyInformationPage> {
       );
 
   dynamic dialogOpenPickerDate() {
-    DatePicker.showDatePicker(
+    dtpp.DatePicker.showDatePicker(
       context,
-      theme: DatePickerTheme(
+      theme: dtpp.DatePickerTheme(
         backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
             ? Colors.white
             : Color(0xFF292929),
@@ -1219,7 +1219,7 @@ class _VerifyInformationPageState extends State<VerifyInformationPage> {
         _selectedMonth,
         _selectedDay,
       ),
-      locale: LocaleType.th,
+      locale: dtpp.LocaleType.th,
     );
   }
 

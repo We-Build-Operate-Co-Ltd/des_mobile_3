@@ -4,8 +4,7 @@ import 'package:des/shared/theme_data.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutUsPage extends StatefulWidget {
@@ -18,7 +17,7 @@ class AboutUsPage extends StatefulWidget {
 }
 
 class _AboutUsPageState extends State<AboutUsPage> {
-  Completer<GoogleMapController> _mapController = Completer();
+  Completer<gmap.GoogleMapController> _mapController = Completer();
 
   Color colorTheme = Colors.transparent;
   Color backgroundTheme = Colors.transparent;
@@ -204,7 +203,6 @@ class _AboutUsPageState extends State<AboutUsPage> {
             ),
           ],
         ),
-     
       ),
     );
   }
@@ -229,13 +227,13 @@ class _AboutUsPageState extends State<AboutUsPage> {
   }
 
   Widget googleMap(double lat, double lng) {
-    return GoogleMap(
+    return gmap.GoogleMap(
       myLocationEnabled: true,
       compassEnabled: true,
       tiltGesturesEnabled: false,
-      mapType: MapType.normal,
-      initialCameraPosition: CameraPosition(
-        target: LatLng(lat, lng),
+      mapType: gmap.MapType.normal,
+      initialCameraPosition: gmap.CameraPosition(
+        target: gmap.LatLng(lat, lng),
         zoom: 15,
       ),
       gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
@@ -243,15 +241,16 @@ class _AboutUsPageState extends State<AboutUsPage> {
           () => new EagerGestureRecognizer(),
         ),
       ].toSet(),
-      onMapCreated: (GoogleMapController controller) {
+      onMapCreated: (gmap.GoogleMapController controller) {
         _mapController.complete(controller);
       },
       // onTap: _handleTap,
-      markers: <Marker>[
-        Marker(
-          markerId: MarkerId('1'),
-          position: LatLng(lat, lng),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+      markers: <gmap.Marker>[
+        gmap.Marker(
+          markerId: gmap.MarkerId('1'),
+          position: gmap.LatLng(lat, lng),
+          icon: gmap.BitmapDescriptor.defaultMarkerWithHue(
+              gmap.BitmapDescriptor.hueRed),
         ),
       ].toSet(),
     );

@@ -9,7 +9,8 @@ import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as dtpp;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -1023,17 +1024,17 @@ class _BookingServicePageState extends State<BookingServicePage>
         SizedBox(height: 16),
         GestureDetector(
           onTap: () async => {
-            setState(() => {
-                  filter = {
-                    "provinceSelected": '0',
-                    "provinceTitleSelected": '',
-                    "districtSelected": '0',
-                    "districtTitleSelected": '',
-                    "bookingType": '',
-                    "latitude": '',
-                    "longitude": ''
-                  }
-                }),
+            setState(() {
+              filter = {
+                "provinceSelected": '0',
+                "provinceTitleSelected": '',
+                "districtSelected": '0',
+                "districtTitleSelected": '',
+                "bookingType": '',
+                "latitude": '',
+                "longitude": ''
+              };
+            }),
             await Navigator.push(
               context,
               MaterialPageRoute(
@@ -1364,59 +1365,6 @@ class _BookingServicePageState extends State<BookingServicePage>
                   ),
         SizedBox(height: 36)
       ],
-    );
-  }
-
-  Widget _itemCategory(model) {
-    return GestureDetector(
-      onTap: () => setState(() {
-        catSelected = model['code'].toString();
-        _callRead(refresh: false);
-      }),
-      child: Container(
-        alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 15),
-        decoration: BoxDecoration(
-          color: MyApp.themeNotifier.value == ThemeModeThird.light
-              ? (catSelected == model['code']
-                  ? Color(0xFFB325F8)
-                  : Color(0xFFB325F8).withOpacity(.1))
-              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                  ? (catSelected == model['code'] ? Colors.white : Colors.black)
-                  : (catSelected == model['code']
-                      ? Color(0xFFFFFD57)
-                      : Colors.black),
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(
-              width: 1,
-              style: BorderStyle.solid,
-              color: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? (catSelected == model['code']
-                      ? Color(0xFFB325F8)
-                      : Color(0xFFB325F8).withOpacity(.1))
-                  : MyApp.themeNotifier.value == ThemeModeThird.dark
-                      ? Colors.white
-                      : Color(0xFFFFFD57)),
-        ),
-        child: Text(
-          '${model['title']}',
-          style: TextStyle(
-            color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? (catSelected == model['code']
-                    ? Colors.white
-                    : Color(0xFFB325F8).withOpacity(.4))
-                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                    ? (catSelected == model['code']
-                        ? Colors.black
-                        : Colors.white)
-                    : (catSelected == model['code']
-                        ? Colors.black
-                        : Color(0xFFFFFD57)),
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
     );
   }
 
@@ -1837,123 +1785,6 @@ class _BookingServicePageState extends State<BookingServicePage>
         ),
       );
 
-  static InputDecoration _decorationDate(context, {String hintText = ''}) =>
-      InputDecoration(
-        label: Text(hintText),
-        labelStyle: TextStyle(
-          color: MyApp.themeNotifier.value == ThemeModeThird.light
-              ? Color(0xFF707070)
-              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                  ? Colors.white
-                  : Color(0xFFFFFD57),
-          fontSize: 12,
-        ),
-        hintStyle: TextStyle(
-          color: MyApp.themeNotifier.value == ThemeModeThird.light
-              ? Color(0xFF707070)
-              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                  ? Colors.white
-                  : Color(0xFFFFFD57),
-          fontSize: 12,
-        ),
-        // hintText: hintText,
-        filled: true,
-        fillColor: Colors.transparent,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-        suffixIcon: const Icon(Icons.calendar_today, size: 17),
-        suffixIconColor: MyApp.themeNotifier.value == ThemeModeThird.light
-            ? Colors.black
-            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                ? Colors.white
-                : Color(0xFFFFFD57),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(7.0),
-          borderSide: BorderSide(
-            color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Color(0xFF7A4CB1)
-                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                    ? Colors.white
-                    : Color(0xFFFFFD57),
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(7.0),
-          borderSide: BorderSide(
-            color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Colors.black.withOpacity(0.2)
-                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                    ? Color(0xFF707070)
-                    : Color(0xFFFFFD57),
-          ),
-        ),
-        errorStyle: const TextStyle(
-          fontWeight: FontWeight.w300,
-          fontSize: 10.0,
-        ),
-      );
-  static InputDecoration _decorationTime(context, {String hintText = ''}) =>
-      InputDecoration(
-        label: Text(hintText),
-        labelStyle: TextStyle(
-          color: MyApp.themeNotifier.value == ThemeModeThird.light
-              ? Color(0xFF707070)
-              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                  ? Colors.white
-                  : Color(0xFFFFFD57),
-          fontSize: 12,
-        ),
-        hintStyle: TextStyle(
-          color: MyApp.themeNotifier.value == ThemeModeThird.light
-              ? Color(0xFF707070)
-              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                  ? Colors.white
-                  : Color(0xFFFFFD57),
-          fontSize: 12,
-        ),
-        // hintText: hintText,
-        filled: true,
-        fillColor: Colors.transparent,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
-        suffixIcon: const Icon(Icons.access_time_rounded, size: 17),
-        suffixIconColor: MyApp.themeNotifier.value == ThemeModeThird.light
-            ? Colors.black
-            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                ? Colors.white
-                : Color(0xFFFFFD57),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(7.0),
-          borderSide: BorderSide(
-            color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Color(0xFF7A4CB1)
-                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                    ? Colors.white
-                    : Color(0xFFFFFD57),
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(7.0),
-          borderSide: BorderSide(
-            color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Colors.black.withOpacity(0.2)
-                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                    ? Color(0xFF707070)
-                    : Color(0xFFFFFD57),
-          ),
-        ),
-        errorStyle: const TextStyle(
-          fontWeight: FontWeight.w300,
-          fontSize: 10.0,
-        ),
-      );
-
   static InputDecoration _decorationDropdown(context, {String hintText = ''}) =>
       InputDecoration(
         label: Text(hintText),
@@ -1995,9 +1826,9 @@ class _BookingServicePageState extends State<BookingServicePage>
 
   dynamic dialogOpenPickerDate() {
     var now = DateTime.now();
-    DatePicker.showDatePicker(
+    dtpp.DatePicker.showDatePicker(
       context,
-      theme: DatePickerTheme(
+      theme: dtpp.DatePickerTheme(
         backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
             ? Colors.white
             : Color(0xFF292929),
@@ -2076,7 +1907,7 @@ class _BookingServicePageState extends State<BookingServicePage>
         _selectedMonth,
         _selectedDay,
       ),
-      locale: LocaleType.th,
+      locale: dtpp.LocaleType.th,
     );
   }
 
@@ -2087,9 +1918,9 @@ class _BookingServicePageState extends State<BookingServicePage>
     late TimeOfDay timeEnd;
 
     DateTime initCurrentTime = DateTime.now();
-    DatePicker.showTimePicker(
+    dtpp.DatePicker.showTimePicker(
       context,
-      theme: DatePickerTheme(
+      theme: dtpp.DatePickerTheme(
         backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
             ? Colors.white
             : Color(0xFF292929),
@@ -2199,7 +2030,7 @@ class _BookingServicePageState extends State<BookingServicePage>
       },
       currentTime: initCurrentTime,
       showSecondsColumn: false,
-      locale: LocaleType.th,
+      locale: dtpp.LocaleType.th,
     );
   }
 
@@ -2371,7 +2202,6 @@ class _BookingServicePageState extends State<BookingServicePage>
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        bool loadingCheckIn = false;
         return StatefulBuilder(builder: (BuildContext context,
             StateSetter mSetState /*You can rename this!*/) {
           return Dialog(
@@ -2523,7 +2353,6 @@ class _BookingServicePageState extends State<BookingServicePage>
   }
 
   _callRead({required bool refresh}) async {
-    print('>>>>>>> ${refresh}');
     try {
       _modelBookingHistory.clear();
       _modelBookingFiltered.clear();
@@ -2646,53 +2475,6 @@ class _BookingServicePageState extends State<BookingServicePage>
     var month = date.substring(4, 6);
     var day = date.substring(6, 8);
     return day + '/' + month + '/' + yearIntTh.toString().substring(2, 4);
-  }
-
-  String _setDifferentTime({
-    required String dateStr,
-    required String startTime,
-  }) {
-    if (dateStr.isNotEmpty) {
-      try {
-        // จัด format date
-        DateFormat formatDate = DateFormat('yyyy-MM-dd');
-        DateTime bookingDate = formatDate.parse(dateStr);
-
-        List<String> timeSpit = startTime.split(':');
-
-        int year = bookingDate.year;
-        int month = bookingDate.month;
-        int day = bookingDate.day;
-        int hour = int.parse(timeSpit[0]);
-        int minute = int.parse(timeSpit[1]);
-
-        final now = DateTime.now();
-        DateTime date = DateTime(year, month, day);
-        DateTime currentDate = DateTime(now.year, now.month, now.day);
-
-        final difDate = currentDate.compareTo(date);
-        if (DateTime(year, month, day, hour, minute).compareTo(now) == -1) {
-          return '';
-        }
-
-        if (difDate == 0) {
-          if (hour > DateTime.now().hour) {
-            if (minute < DateTime.now().minute) {
-              return ((minute + 60) - DateTime.now().minute).toString() +
-                  ' นาที';
-            }
-
-            return (hour - DateTime.now().hour).toString() + ' ชั่วโมง';
-          } else if (hour == DateTime.now().hour) {
-            return (minute - DateTime.now().minute).toString() + ' นาที';
-          }
-        }
-      } catch (e) {
-        logE(e);
-        return '';
-      }
-    }
-    return '';
   }
 
   _dateFormat(dateStr) {
@@ -2820,7 +2602,6 @@ class _BookingServicePageState extends State<BookingServicePage>
   _callReadProvince() async {
     try {
       Dio dio = Dio();
-      var aaa = '$ondeURL/api/masterdata/changwat';
       await dio.get('$ondeURL/api/masterdata/changwat').then((value) => {
             setState(() {
               provinceList.addAll(value.data);

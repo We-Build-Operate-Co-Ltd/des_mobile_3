@@ -1,7 +1,3 @@
-import 'dart:convert';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:des/about_us_bk.dart';
-import 'package:des/change_password.dart';
 import 'package:des/login_first.dart';
 import 'package:des/shared/config.dart';
 import 'package:des/shared/dcc.dart';
@@ -12,8 +8,6 @@ import 'package:des/shared/line.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/user_profile_change_password.dart';
-import 'package:des/user_profile_edit_bk.dart';
-import 'package:des/verify_main.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

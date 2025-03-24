@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
 import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_html/flutter_html.dart';
@@ -60,7 +57,6 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
 
-  late String _htmlStr;
   late Future<dynamic> _futureHtml;
   bool _isLoading = true;
   @override
@@ -284,15 +280,12 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
     try {
       String token = await ManageStorage.read('accessToken');
       String name = 'ศูนย์ดิจิทัลชุมชน'; // ศูนย์ดิจิทัลชุมชน
-      String welcome = 'ยินดีต้อนรับ'; // ยินดีต้อนรับ
-      String message =
-          'อยากให้ศูนย์ดิจิทัลช่วยเหลือ แจ้งได้เลยค่ะ'; // อยากให้ศูนย์ดิจิทัลช่วยเหลือ แจ้งได้เลยค่ะ
+// ยินดีต้อนรับ
+// อยากให้ศูนย์ดิจิทัลช่วยเหลือ แจ้งได้เลยค่ะ
 
       var shortToken = await _getShortToken(token);
       var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
       name = profileMe['firstnameTh'];
-      print('----------------------> ${shortToken}');
-      print('----------------------> ${name}');
 
       var html = '''<!DOCTYPE html lang="en"> 
       

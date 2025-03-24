@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
+import 'package:des/widget/blinking_icon.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -476,25 +476,18 @@ class _MyClassAllBkPageState extends State<MyClassAllBkPage> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-                imageUrl: '${param['cover_image_url']}',
+              child: Image.network(
+                param['cover_image_url'],
                 fit: BoxFit.cover,
                 height: 95,
                 width: 160,
-                errorWidget: (context, url, error) => Container(
-                  padding: EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: Theme.of(context).custom.A4CB1_w_fffd57,
-                    ),
-                  ),
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    height: 50,
-                    width: 50,
-                  ),
-                ),
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return BlinkingIcon(); // Placeholder ขณะโหลด
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(Icons.error); // เมื่อโหลดรูปไม่สำเร็จ
+                },
               ),
             ),
             SizedBox(width: 9),

@@ -7,7 +7,8 @@ import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as dtpp;
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'main.dart';
@@ -802,7 +803,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
         ),
       );
 
-  DatePickerTheme datepickerTheme = DatePickerTheme(
+  dtpp.DatePickerTheme datepickerTheme = dtpp.DatePickerTheme(
     containerHeight: 210.0,
     itemStyle: TextStyle(
       fontSize: 16.0,

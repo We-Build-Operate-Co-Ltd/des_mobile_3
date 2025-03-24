@@ -1,27 +1,23 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/course_eternal.dart';
-import 'package:des/home.dart';
 import 'package:des/my_course.dart';
-import 'package:des/my_course_category_search.dart';
 import 'package:des/my_course_success.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/webview_inapp.dart';
+import 'package:des/widget/blinking_icon.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:top_modal_sheet/top_modal_sheet.dart';
 import 'course_detail_new.dart';
 import 'course_dsd.dart';
-import 'my_class_all_bk.dart';
 import 'shared/config.dart';
 import 'course_detail.dart';
 import 'main.dart';
 
 class MyClassAllPage extends StatefulWidget {
-  MyClassAllPage({Key? key, this.title, this.changePage}) : super(key: key);
+  MyClassAllPage({super.key, this.title, this.changePage});
 
   final title;
   Function? changePage;
@@ -54,10 +50,8 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   List<dynamic> _categoryList = [];
   List<dynamic> _lmsCategoryList = [];
 
-  int _categorySelected = 0;
   int _typeSelected = 0;
   int _cateTypeSelected = 0;
-  String _cateCourseSelected = '';
 
   String textSearch = '';
   String cateSearch = '';
@@ -228,30 +222,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     setState(() {
       _lmsCategoryList.addAll(response.data['data']);
     });
-  }
-
-  _loading() async {
-    Response<dynamic> response =
-        await dio.post('$server/dcc-api/m/eventcalendar/read', data: {});
-
-    if (response.statusCode == 200) {
-      if (response.data['status'] == 'S') {
-        List<dynamic> data = response.data['objectData'];
-        List<dynamic> lerning = [];
-        List<dynamic> lerned = [];
-        for (int i = 0; i < data.length; i++) {
-          if (i % 2 == 0) {
-            lerned.add(data[i]);
-          } else {
-            lerning.add(data[i]);
-          }
-        }
-        setState(() {});
-      }
-    }
-
-    await Future.delayed(Duration(milliseconds: 1000));
-    _refreshController.loadComplete();
   }
 
   @override
@@ -507,17 +477,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                 : '0';
         _filter();
       });
-  }
-
-  _test1() {
-    return Column(
-      children: [
-        const SizedBox(height: 20),
-        _cateTypeCategory(),
-        SizedBox(height: 20),
-        _cateTypeSelected == 0 ? _buildRecomment() : _buildEternal(),
-      ],
-    );
   }
 
   _test2() {
@@ -827,50 +786,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     );
   }
 
-  _buildFilter() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 40),
-        _buildListFilterModel(),
-        const SizedBox(height: 50),
-      ],
-    );
-  }
-
-  _buildListFilterModel() {
-    return FutureBuilder(
-      future: _modelFilter,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data!.length > 0) {
-            return GridView.builder(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                // childAspectRatio: 10 / 11.5,
-                childAspectRatio: MyApp.fontKanit.value == FontKanit.small
-                    ? 10 / 12.5
-                    : MyApp.fontKanit.value == FontKanit.medium
-                        ? 10 / 13
-                        : 10 / 14,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              physics: const ClampingScrollPhysics(),
-              // itemCount: snapshot.data!.length,
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) =>
-                  containerRecommendedClass(snapshot.data![index]),
-            );
-          }
-        }
-        return const SizedBox();
-      },
-    );
-  }
-
   Widget containerRecommendedClass(dynamic model) {
     return GestureDetector(
       onTap: () async {
@@ -941,8 +856,8 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                 ),
                 child: MyApp.themeNotifier.value == ThemeModeThird.light
                     ? (model?['course_Thumbnail_Url'] ?? '') != ''
-                        ? CachedNetworkImage(
-                            imageUrl: model?['course_Thumbnail_Url'],
+                        ? Image.network(
+                            model?['course_Thumbnail_Url'],
                             height: 120,
                             width: double.infinity,
                             fit: BoxFit.cover,
@@ -958,8 +873,8 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                           Colors.grey,
                           BlendMode.saturation,
                         ),
-                        child: CachedNetworkImage(
-                          imageUrl: model?['course_Thumbnail_Url'],
+                        child: Image.network(
+                          model?['course_Thumbnail_Url'],
                           height: 120,
                           width: double.infinity,
                           fit: BoxFit.cover,
@@ -1237,8 +1152,8 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                 ),
                 child: MyApp.themeNotifier.value == ThemeModeThird.light
                     ? (model?['thumbnailLink'] ?? '') != ''
-                        ? CachedNetworkImage(
-                            imageUrl: '${model['thumbnailLink']}',
+                        ? Image.network(
+                            model['thumbnailLink'],
                             height: 120,
                             width: double.infinity,
                             fit: BoxFit.cover,
@@ -1253,8 +1168,8 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                         colorFilter:
                             ColorFilter.mode(Colors.grey, BlendMode.saturation),
                         child: (model?['thumbnailLink'] ?? '') != ''
-                            ? CachedNetworkImage(
-                                imageUrl: '${model['thumbnailLink']}',
+                            ? Image.network(
+                                model['thumbnailLink'],
                                 height: 120,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
@@ -1422,45 +1337,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     );
   }
 
-  _list(dynamic param) {
-    var data = param;
-    return ListView.separated(
-      itemBuilder: (_, __) => _buildContant(data[__]),
-      separatorBuilder: (_, __) => const SizedBox(height: 10),
-      itemCount: data.length,
-    );
-  }
-
-  _listLoading() {
-    return Expanded(
-      child: ListView(
-        children: [1, 1, 1, 1, 1, 1, 1, 1, 1]
-            .map((e) => Container(
-                  height: 95,
-                  margin: EdgeInsets.only(bottom: 20),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          height: 95,
-                          width: 160,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 9),
-                    ],
-                  ),
-                ))
-            .toList(),
-      ),
-    );
-  }
-
   Widget _buildContant(dynamic param) {
     return Container(
       width: 150,
@@ -1482,25 +1358,18 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             Expanded(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: CachedNetworkImage(
-                  imageUrl: '${param['course_Thumbnail_Url']}',
+                child: Image.network(
+                  param['course_Thumbnail_Url'],
                   fit: BoxFit.fill,
                   height: 95,
                   width: 150,
-                  errorWidget: (context, url, error) => Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Theme.of(context).custom.A4CB1_w_fffd57,
-                      ),
-                    ),
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      height: 50,
-                      width: 50,
-                    ),
-                  ),
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return BlinkingIcon(); // Placeholder ขณะโหลด
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(Icons.error); // เมื่อโหลดรูปไม่สำเร็จ
+                  },
                 ),
               ),
             ),
@@ -1771,8 +1640,8 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
         MyApp.themeNotifier.value == ThemeModeThird.light
             ? ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child: CachedNetworkImage(
-                  imageUrl: image,
+                child: Image.network(
+                  image,
                   height: 50,
                   width: 50,
                   fit: BoxFit.cover,
@@ -1781,8 +1650,8 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             : ColorFiltered(
                 colorFilter:
                     ColorFilter.mode(Colors.grey, BlendMode.saturation),
-                child: CachedNetworkImage(
-                  imageUrl: image,
+                child: Image.network(
+                  image,
                   height: 50,
                   width: 50,
                   fit: BoxFit.cover,

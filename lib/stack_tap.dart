@@ -33,7 +33,7 @@ class _StackTapState extends State<StackTap> {
               hoverColor: Colors.white.withOpacity(0.3),
               splashColor: widget.splashColor != null
                   ? widget.splashColor
-                  : Theme.of(context).accentColor.withOpacity(0.3),
+                  : Theme.of(context).colorScheme.secondary.withOpacity(0.3),
               highlightColor: Colors.white.withOpacity(0.3),
             ),
           ),

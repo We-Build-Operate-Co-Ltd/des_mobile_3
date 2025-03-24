@@ -280,7 +280,7 @@ class _NotificationListState extends State<NotificationListPage> {
             : Colors.black,
         body: NotificationListener<OverscrollIndicatorNotification>(
           onNotification: (OverscrollIndicatorNotification overScroll) {
-            overScroll.disallowGlow();
+            overScroll.disallowIndicator();
             return false;
           },
           child: GestureDetector(

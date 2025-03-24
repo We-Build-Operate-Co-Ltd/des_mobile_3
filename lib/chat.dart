@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +34,6 @@ class _ChatPageState extends State<ChatPage> {
 
   bool _isSendRate = false;
   bool _isShowRate = false;
-  bool _isCheck = false;
   int _countChat = 0;
   int _selectedIndex = 0;
 
@@ -552,11 +550,12 @@ class _ChatPageState extends State<ChatPage> {
                                                 bottomRight:
                                                     Radius.circular(10),
                                               ),
-                                              color: MyApp.themeNotifier.value ==
-                                                    ThemeModeThird.light
-                                                ? Color(0xFF7F34EE)
-                                                    .withOpacity(0.15)
-                                                : Color(0xFF7D7D7D),
+                                              color:
+                                                  MyApp.themeNotifier.value ==
+                                                          ThemeModeThird.light
+                                                      ? Color(0xFF7F34EE)
+                                                          .withOpacity(0.15)
+                                                      : Color(0xFF7D7D7D),
                                               // shape: BoxShape.circle,
                                             ),
                                             child: Padding(
@@ -567,14 +566,15 @@ class _ChatPageState extends State<ChatPage> {
                                                 style: TextStyle(
                                                   fontSize: 11,
                                                   color: MyApp.themeNotifier
-                                                            .value ==
-                                                        ThemeModeThird.light
-                                                    ? Colors.black
-                                                    : MyApp.themeNotifier
-                                                                .value ==
-                                                            ThemeModeThird.dark
-                                                        ? Colors.white
-                                                        : Color(0xFFFFFD57),
+                                                              .value ==
+                                                          ThemeModeThird.light
+                                                      ? Colors.black
+                                                      : MyApp.themeNotifier
+                                                                  .value ==
+                                                              ThemeModeThird
+                                                                  .dark
+                                                          ? Colors.white
+                                                          : Color(0xFFFFFD57),
                                                 ),
                                               ),
                                             ),
@@ -585,8 +585,8 @@ class _ChatPageState extends State<ChatPage> {
                                           ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(50),
-                                            child: CachedNetworkImage(
-                                              imageUrl: _imageUrl,
+                                            child: Image.network(
+                                              _imageUrl,
                                               height: 70,
                                               width: 70,
                                               fit: BoxFit.cover,

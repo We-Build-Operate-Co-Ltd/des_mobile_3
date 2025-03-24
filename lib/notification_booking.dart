@@ -366,7 +366,7 @@ class _NotificationBookingPage extends State<NotificationBookingPage> {
             : Colors.black,
         body: NotificationListener<OverscrollIndicatorNotification>(
           onNotification: (OverscrollIndicatorNotification overScroll) {
-            overScroll.disallowGlow();
+            overScroll.disallowIndicator();
             return false;
           },
           child: GestureDetector(

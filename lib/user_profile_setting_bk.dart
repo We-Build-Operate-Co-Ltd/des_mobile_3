@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/about_us_bk.dart';
 import 'package:des/change_password.dart';
 import 'package:des/login_first.dart';
@@ -176,31 +175,6 @@ class _UserProfileSettingBkPageState extends State<UserProfileSettingBkPage> {
           ),
           child: _buildRow('นโยบาย'),
         ),
-      ],
-    );
-  }
-
-  Widget _buildRowNotifications() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'การแจ้งเตือน',
-          style: TextStyle(
-            fontSize: 17,
-            fontFamily: 'Kanit',
-            fontWeight: FontWeight.bold,
-            color: MyApp.themeNotifier.value == ThemeModeThird.light
-                ? Colors.black
-                : MyApp.themeNotifier.value == ThemeModeThird.dark
-                    ? Colors.white
-                    : Color(0xFFFFFD57),
-          ),
-        ),
-        const SizedBox(height: 5),
-        _buildRow('ตั้งค่าการแจ้งเตือน'),
-        // const SizedBox(height: 10),
-        _buildRow('ตั้งค่าความเป็นส่วนตัว'),
       ],
     );
   }
@@ -384,7 +358,7 @@ class _UserProfileSettingBkPageState extends State<UserProfileSettingBkPage> {
                     Row(
                       children: [
                         Text(
-                          _firstName ?? '',
+                          _firstName,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w400,
@@ -401,7 +375,7 @@ class _UserProfileSettingBkPageState extends State<UserProfileSettingBkPage> {
                           width: 5,
                         ),
                         Text(
-                          _lastName ?? '',
+                          _lastName,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w400,

@@ -1,13 +1,7 @@
 import 'dart:async';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:des/detail.dart';
-import 'package:des/find_job.dart';
-import 'package:des/fund.dart';
-import 'package:des/menu.dart';
-import 'package:des/models/mock_data.dart';
 import 'package:des/notification_list.dart';
-import 'package:des/report_problem.dart';
 import 'package:des/shared/counterNotifier.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
@@ -27,9 +21,6 @@ import 'dart:ui' as ui show ImageFilter;
 
 import 'chat_botnoi.dart';
 import 'course_detail.dart';
-import 'my_class_all_bk.dart';
-import 'my_class_all.dart';
-import 'notification_booking.dart';
 import 'widget/blinking_icon.dart';
 import 'shared/config.dart';
 import 'main.dart';
@@ -85,7 +76,6 @@ class _HomePageState extends State<HomePage> {
   String? $imageUrl = '';
   String? priceToday = '';
   String? selectedSize = "";
-  late StreamSubscription<Map> _notificationSubscription;
 
   bool hiddenMainPopUp = false;
   String percentPrice = '';
@@ -708,18 +698,23 @@ class _HomePageState extends State<HomePage> {
                                               child: MyApp.themeNotifier
                                                           .value ==
                                                       ThemeModeThird.light
-                                                  ? CachedNetworkImage(
-                                                      imageUrl:
-                                                          item['imageUrl'],
+                                                  ? Image.network(
+                                                      item['imageUrl'],
                                                       fit: BoxFit.cover,
                                                       width: double.infinity,
                                                       height: double.infinity,
-                                                      placeholder:
-                                                          (context, url) =>
-                                                              BlinkingIcon(),
-                                                      errorWidget: (context,
-                                                              url, error) =>
-                                                          Icon(Icons.error),
+                                                      loadingBuilder: (context,
+                                                          child,
+                                                          loadingProgress) {
+                                                        if (loadingProgress ==
+                                                            null) return child;
+                                                        return BlinkingIcon(); // Placeholder ขณะโหลด
+                                                      },
+                                                      errorBuilder: (context,
+                                                          error, stackTrace) {
+                                                        return Icon(Icons
+                                                            .error); // เมื่อโหลดรูปไม่สำเร็จ
+                                                      },
                                                     )
                                                   : ColorFiltered(
                                                       colorFilter:
@@ -727,18 +722,24 @@ class _HomePageState extends State<HomePage> {
                                                         Colors.grey,
                                                         BlendMode.saturation,
                                                       ),
-                                                      child: CachedNetworkImage(
-                                                        imageUrl:
-                                                            item['imageUrl'],
+                                                      child: Image.network(
+                                                        item['imageUrl'],
                                                         fit: BoxFit.cover,
                                                         width: double.infinity,
                                                         height: double.infinity,
-                                                        placeholder: (context,
-                                                                url) =>
-                                                            BlinkingIcon(), // ใช้ widget กระพริบ,
-                                                        errorWidget: (context,
-                                                                url, error) =>
-                                                            Icon(Icons.error),
+                                                        loadingBuilder: (context,
+                                                            child,
+                                                            loadingProgress) {
+                                                          if (loadingProgress ==
+                                                              null)
+                                                            return child;
+                                                          return BlinkingIcon(); // Placeholder ขณะโหลด
+                                                        },
+                                                        errorBuilder: (context,
+                                                            error, stackTrace) {
+                                                          return Icon(Icons
+                                                              .error); // เมื่อโหลดรูปไม่สำเร็จ
+                                                        },
                                                       ),
                                                     ),
                                             ),
@@ -1248,10 +1249,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                   child: MyApp.themeNotifier.value == ThemeModeThird.light
                       ? (model?['docs'] ?? '') != ''
-                          ? CachedNetworkImage(
-                              imageUrl:
-                                  'https://lms.dcc.onde.go.th/uploads/course/' +
-                                      model?['docs'],
+                          ? Image.network(
+                              'https://lms.dcc.onde.go.th/uploads/course/${model?['docs']}',
                               height: 120,
                               width: double.infinity,
                               fit: BoxFit.cover,
@@ -1265,10 +1264,8 @@ class _HomePageState extends State<HomePage> {
                       : ColorFiltered(
                           colorFilter: ColorFilter.mode(
                               Colors.grey, BlendMode.saturation),
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                'https://lms.dcc.onde.go.th/uploads/course/' +
-                                    model?['docs'],
+                          child: Image.network(
+                            'https://lms.dcc.onde.go.th/uploads/course/${model?['docs']}',
                             height: 120,
                             width: double.infinity,
                             fit: BoxFit.cover,
@@ -1338,8 +1335,8 @@ class _HomePageState extends State<HomePage> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-                imageUrl: model['imageUrl'] ?? '',
+              child: Image.network(
+                model['imageUrl'] ?? '',
                 fit: BoxFit.fill,
                 height: 95,
                 width: 169,
@@ -1521,7 +1518,6 @@ class _HomePageState extends State<HomePage> {
     // แปลงเวลาเป็นตัวเลข
     final hours = int.tryParse(parts[0]) ?? 0;
     final minutes = int.tryParse(parts[1]) ?? 0;
-    final seconds = int.tryParse(parts[2]) ?? 0;
 
     // สร้างข้อความที่มีหน่วยเวลา
     final buffer = StringBuffer();
@@ -1547,53 +1543,8 @@ class _HomePageState extends State<HomePage> {
     selectedSize = sizeName;
   }
 
-  // Future<List<dynamic>> _readNews() async {
-  //   Dio dio = Dio();
-  //   Response<dynamic> response;
-  //   try {
-  //     response = await dio.post(
-  //         '$server/dcc-api/m/eventcalendar/read',
-  //         data: {'skip': 0, 'limit': 2});
-  //     if (response.statusCode == 200) {
-  //       if (response.data['status'] == 'S') {
-  //         return response.data['objectData'];
-  //       }
-  //     }
-  //   } catch (e) {}
-  //   return [];
-  // }
-
-  Future<List<dynamic>> _callReadGetCourseOld() async {
-    Dio dio = Dio();
-    var response;
-    // var map = new Map<String, dynamic>();
-    FormData formData = new FormData.fromMap({"apikey": apiKeyLMS});
-    // map['apikey'] = _api_key;
-    try {
-      //https://lms.dcc.onde.go.th/api/api/recomend/003138ecf4ad3c45f1b903d72a860181
-      //response = await dio.post('${service}api/popular_course', data: formData);
-      response =
-          await dio.post('$serverLMS/recomend/$apiKeyLMS', data: formData);
-      // logWTF(response.data);
-      if (response.data['status']) {
-        // logWTF('_get_course' + response.data['data']);
-        dynamic model = await response.data['data'].toList();
-        // model..sort((a, b) => a['name'].compareTo(b['name']));
-        print(model.toString());
-        return Future.value(model);
-        // print('xxx' + response.data['data'].toString());
-        // print(response.data['data']
-        //   ..sort((a, b) => a['name'].compareTo(b['name'])));
-        // return response.data['data'];
-      }
-    } catch (e) {}
-    return [];
-  }
-
   void _callReadGetCourse() async {
-    // print('------------hello');
     dynamic response = await Dio().get('$server/py-api/dcc/lms/recomend');
-    // print(response.data.toString());
 
     setState(() {
       _futureNews = Future.value(response.data);
@@ -1604,11 +1555,6 @@ class _HomePageState extends State<HomePage> {
 
   Future<dynamic> _readNotiCount() async {
     var profileMe = await ManageStorage.readDynamic('profileMe');
-    // setState(() {
-    //   notiCount = int.parse(ManageStorage.read("notiCount") ?? 0);
-    // });
-    Response<dynamic> response;
-    Dio dio = Dio();
     try {
       Response response = await Dio().post(
         '$server/dcc-api/m/v2/notificationbooking/read',
@@ -1650,11 +1596,6 @@ class _HomePageState extends State<HomePage> {
     _callRead();
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
-  }
-
-  void _onLoading() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
-    _refreshController.loadComplete();
   }
 
   // Future<Null> _callReadPolicy() async {

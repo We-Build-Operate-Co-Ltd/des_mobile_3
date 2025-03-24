@@ -1,22 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/main.dart';
-import 'package:des/my_class_all.dart';
 import 'package:des/shared/config.dart';
-import 'package:des/shared/extension.dart';
-import 'package:des/shared/image_viewer.dart';
-import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
+import 'package:des/widget/blinking_icon.dart';
 import 'package:dio/dio.dart';
-import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_share/flutter_share.dart';
-import 'dart:ui' as ui show ImageFilter;
 
-import 'webview_inapp.dart';
-
-// ignore: must_be_immutable
 class MyCourseSuccessPage extends StatefulWidget {
   const MyCourseSuccessPage({
     Key? key,
@@ -106,25 +95,18 @@ class _MyCourseSuccessPageState extends State<MyCourseSuccessPage> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: CachedNetworkImage(
-                  imageUrl: '${param['thumbnailLink']}',
+                child: Image.network(
+                  param['thumbnailLink'],
                   fit: BoxFit.cover,
                   height: 95,
                   width: 160,
-                  errorWidget: (context, url, error) => Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Theme.of(context).custom.A4CB1_w_fffd57,
-                      ),
-                    ),
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      height: 50,
-                      width: 50,
-                    ),
-                  ),
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return BlinkingIcon(); // Placeholder ขณะโหลด
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(Icons.error); // เมื่อโหลดรูปไม่สำเร็จ
+                  },
                 ),
               ),
               SizedBox(width: 9),
@@ -322,8 +304,8 @@ class _MyCourseSuccessPageState extends State<MyCourseSuccessPage> {
                   topRight: Radius.circular(10),
                 ),
                 child: (model?['thumbnailLink'] ?? '') != ''
-                    ? CachedNetworkImage(
-                        imageUrl: '${model['thumbnailLink']}',
+                    ? Image.network(
+                        model['thumbnailLink'],
                         height: 120,
                         width: double.infinity,
                         fit: BoxFit.cover,

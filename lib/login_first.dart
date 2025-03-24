@@ -107,9 +107,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
 
   @override
   Widget build(BuildContext context) {
-    double deviceWidth = MediaQuery.of(context).size.width;
-    double deviceHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
@@ -336,14 +333,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                                   _callLogin();
                                 }
                               }
-                              /*------------------------------------------------*/
-                              // final form = _formKey.currentState;
-                              // if (form!.validate()) {
-                              //   form.save();
-
-                              //   print('_callUser');
-                              //   _callUser();
-                              // }
                             },
                             child: _buildButtonLogin(
                               '',
@@ -1115,9 +1104,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
 
   Widget _buildButtonLoginSocial(String image,
       {Color colorBorder = Colors.transparent,
-      Color colorTitle = const Color(0xFF000000),
-      Color color = Colors.transparent,
-      double fontSize = 13}) {
+      Color color = Colors.transparent}) {
     return Container(
       height: 50,
       width: 50,
@@ -2543,7 +2530,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   }
 
   void _callReadConfig() async {
-    print('>>>>>>>>>123456>>>>>>>>');
     var response = await Dio().get(
         '$server/py-api/dcc/config/login_social/' + versionNumber.toString());
     // print(response);

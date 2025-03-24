@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'forgot_password_complete.dart';
 import 'login_first.dart';
 import 'main.dart';
 
@@ -56,14 +55,14 @@ class _ForgotPasswordNewPasswordPageState
           extendBody: true,
           backgroundColor: Colors.transparent,
           body: Container(
-             decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/BG.png"),
-              fit: BoxFit.cover,
-              colorFilter: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? null
-                  : ColorFilter.mode(Colors.grey, BlendMode.saturation),
-            ),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/BG.png"),
+                fit: BoxFit.cover,
+                colorFilter: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? null
+                    : ColorFilter.mode(Colors.grey, BlendMode.saturation),
+              ),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,

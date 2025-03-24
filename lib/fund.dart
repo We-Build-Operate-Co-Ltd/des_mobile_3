@@ -1,19 +1,12 @@
-import 'dart:ffi';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/fund_detail.dart';
-import 'package:des/menu.dart';
-import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'main.dart';
-import 'shared/config.dart';
 
 class FundPage extends StatefulWidget {
   FundPage({super.key, this.changePage});
@@ -923,8 +916,8 @@ class _FundPageState extends State<FundPage> {
                       borderRadius: BorderRadius.circular(10),
                       // color: Color(0xFFDDDDDD),
                     ),
-                    child: CachedNetworkImage(
-                      imageUrl: data['imageUrl'],
+                    child: Image.network(
+                      data['imageUrl'],
                       width: 120,
                       height: 120,
                       fit: BoxFit.contain,

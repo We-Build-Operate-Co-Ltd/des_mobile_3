@@ -103,7 +103,7 @@ class _PolicyPage extends State<PolicyPage> {
       body: WillPopScope(
         child: NotificationListener<OverscrollIndicatorNotification>(
           onNotification: (OverscrollIndicatorNotification overScroll) {
-            overScroll.disallowGlow();
+            overScroll.disallowIndicator();
             return false;
           },
           child: Container(

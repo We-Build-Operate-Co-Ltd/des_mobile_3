@@ -1,10 +1,6 @@
 import 'dart:convert';
-import 'dart:ffi';
-import 'dart:math';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/booking_service.dart';
-import 'package:des/booking_service_edit.dart';
 import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
@@ -12,16 +8,15 @@ import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as dtpp;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import 'package:des/booking_service_confirm.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'main.dart';
-import 'menu.dart';
 
 class BookingServiceAddPage extends StatefulWidget {
   const BookingServiceAddPage({
@@ -1597,7 +1592,7 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
         ),
       );
 
-  DatePickerTheme datepickerTheme = DatePickerTheme(
+  dtpp.DatePickerTheme datepickerTheme = dtpp.DatePickerTheme(
     containerHeight: 210.0,
     itemStyle: TextStyle(
       fontSize: 16.0,
@@ -1621,7 +1616,7 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
 
   dynamic dialogOpenPickerDate() {
     var now = DateTime.now();
-    DatePicker.showDatePicker(
+    dtpp.DatePicker.showDatePicker(
       context,
       theme: datepickerTheme,
       showTitleActions: true,
@@ -1667,7 +1662,7 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
         _selectedMonth,
         _selectedDay,
       ),
-      locale: LocaleType.th,
+      locale: dtpp.LocaleType.th,
     );
   }
 
@@ -1735,7 +1730,7 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
     late TimeOfDay timeEnd;
 
     DateTime initCurrentTime = DateTime.now();
-    DatePicker.showTimePicker(
+    dtpp.DatePicker.showTimePicker(
       context,
       theme: datepickerTheme,
       showTitleActions: true,
@@ -1812,7 +1807,7 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
       },
       currentTime: initCurrentTime,
       showSecondsColumn: false,
-      locale: LocaleType.th,
+      locale: dtpp.LocaleType.th,
     );
   }
 
@@ -1856,7 +1851,6 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
   _callReadType() async {
     try {
       setState(() => _loadingDropdownType = true);
-      final String baseUrl = 'https://dcc.onde.go.th/dcc-api';
       dynamic response =
           await Dio().get('${ondeURL}/api/masterdata/book/slotType');
 
@@ -1987,7 +1981,7 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
           bookingCat.add({
             "bookingCatId": e['bookingCatId'],
             "bookingSubCatId": e['bookingCatId'] == 3
-                ? _selectSubCategory ?? null
+                ? _selectSubCategory
                 : null, // เฉพาะ bookingCatId == 3
             "freeTextValue": e['bookingCatId'] == 8
                 ? txtOther.text ?? ""

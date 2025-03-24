@@ -1,15 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/main.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/image_viewer.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
-import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
+import 'package:des/widget/blinking_icon.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_share/flutter_share.dart';
-import 'dart:ui' as ui show ImageFilter;
 
 import 'webview_inapp.dart';
 
@@ -31,7 +29,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
   Color backgroundTheme = Colors.transparent;
   Color buttonTheme = Colors.transparent;
   Color textTheme = Colors.transparent;
-  final _scController = ScrollController();
   final storage = const FlutterSecureStorage();
 
   @override
@@ -121,30 +118,38 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(17.5),
               child: MyApp.themeNotifier.value == ThemeModeThird.light
-                  ? CachedNetworkImage(
-                      imageUrl:
-                          (widget.model?['course_Thumbnail_Url'] ?? '') != ''
-                              ? widget.model['course_Thumbnail_Url']
-                              : '',
+                  ? Image.network(
+                      (widget.model?['course_Thumbnail_Url'] ?? '') != ''
+                          ? widget.model['course_Thumbnail_Url']
+                          : '',
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
-                      errorWidget: (context, url, error) =>
-                          Image.asset('assets/images/logo.png'),
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return BlinkingIcon(); // Placeholder ขณะโหลด
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(Icons.error); // เมื่อโหลดรูปไม่สำเร็จ
+                      },
                     )
                   : ColorFiltered(
                       colorFilter: ColorFilter.mode(
                         Colors.grey,
                         BlendMode.saturation,
                       ),
-                      child: CachedNetworkImage(
-                        imageUrl:
-                            (widget.model?['course_Thumbnail_Url'] ?? '') != ''
-                                ? widget.model['course_Thumbnail_Url']
-                                : '',
+                      child: Image.network(
+                        (widget.model?['course_Thumbnail_Url'] ?? '') != ''
+                            ? widget.model['course_Thumbnail_Url']
+                            : '',
                         width: MediaQuery.of(context).size.width,
                         fit: BoxFit.cover,
-                        errorWidget: (context, url, error) =>
-                            Image.asset('assets/images/logo.png'),
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return BlinkingIcon(); // Placeholder ขณะโหลด
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(Icons.error); // เมื่อโหลดรูปไม่สำเร็จ
+                        },
                       )),
             ),
           ),
@@ -323,109 +328,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             ],
           ),
         ),
-        // GestureDetector(
-        //   onTap: () => showDialog(
-        //     context: context,
-        //     useSafeArea: false,
-        //     barrierColor: Colors.transparent,
-        //     builder: (_) => Material(
-        //       color: Color.fromARGB(0, 255, 255, 255),
-        //       child: BackdropFilter(
-        //         filter: ui.ImageFilter.blur(
-        //           sigmaX: 5.0,
-        //           sigmaY: 5.0,
-        //         ),
-        //         child: Container(
-        //           color: MyApp.themeNotifier.value == ThemeModeThird.light
-        //               ? Color(0xFFB325F8).withOpacity(0.75)
-        //               : Colors.black,
-        //           padding: EdgeInsets.only(
-        //             top: MediaQuery.of(context).padding.top + 10,
-        //             right: 10,
-        //             bottom: 5,
-        //             left: 10,
-        //           ),
-        //           child: Column(
-        //             children: [
-        //               Expanded(
-        //                 child: FadingEdgeScrollView.fromScrollView(
-        //                   child: ListView(
-        //                     controller: _scController,
-        //                     padding: EdgeInsets.zero,
-        //                     children: [
-        //                       SizedBox(height: 40),
-        //                       Center(
-        //                         child: Text(
-        //                           'รายละเอียด',
-        //                           style: TextStyle(
-        //                             fontSize: 17,
-        //                             fontWeight: FontWeight.w500,
-        //                             color: MyApp.themeNotifier.value ==
-        //                                     ThemeModeThird.light
-        //                                 ? Colors.white
-        //                                 : textTheme,
-        //                           ),
-        //                         ),
-        //                       ),
-        //                       SizedBox(height: 10),
-        //                       Text(
-        //                         widget.model['description'],
-        //                         style: TextStyle(
-        //                           color: Colors.white.withOpacity(0.8),
-        //                         ),
-        //                       ),
-        //                       const SizedBox(height: 40),
-        //                     ],
-        //                   ),
-        //                 ),
-        //               ),
-        //               Center(
-        //                 child: GestureDetector(
-        //                   onTap: () => Navigator.pop(context),
-        //                   child: Container(
-        //                     height: 40,
-        //                     width: 40,
-        //                     alignment: Alignment.center,
-        //                     decoration: BoxDecoration(
-        //                       color: buttonTheme,
-        //                       borderRadius: BorderRadius.circular(10),
-        //                       border: Border.all(color: colorTheme),
-        //                     ),
-        //                     child: Image.asset(
-        //                       'assets/images/close_noti_list.png',
-        //                       color: Colors.white,
-        //                       height: 23.15,
-        //                       width: 23.15,
-        //                     ),
-        //                   ),
-        //                 ),
-        //               ),
-        //               const SizedBox(height: 38),
-        //             ],
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        //   child: Column(
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     children: [
-        //       Padding(
-        //         padding: const EdgeInsets.symmetric(horizontal: 10),
-        //         child: Text(
-        //           'อ่านทั้งหมด',
-        //           style: TextStyle(
-        //             fontSize: 13,
-        //             color: colorTheme,
-        //             overflow: TextOverflow.ellipsis,
-        //           ),
-        //           maxLines: 4,
-        //         ),
-        //       ),
-        //       SizedBox(height: 5),
-        //     ],
-        //   ),
-        // ),
 
         const SizedBox(height: 85),
         InkWell(

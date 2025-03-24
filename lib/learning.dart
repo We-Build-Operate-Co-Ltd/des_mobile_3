@@ -1,5 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -169,47 +167,6 @@ class _LearningPageState extends State<LearningPage> {
         ],
       ),
     );
-  }
-
-  _dateStringToDateSlashBuddhistShort(String date) {
-    if (date.isEmpty) return '';
-    var year = date.substring(0, 4);
-    var month = date.substring(4, 6);
-    var day = date.substring(6, 8);
-    var yearBuddhist = int.parse(year) + 543;
-    var yearBuddhistString = yearBuddhist.toString();
-    var yearBuddhistStringShort = yearBuddhistString.substring(2, 4);
-    return '$day/$month/$yearBuddhistStringShort';
-  }
-
-  _get_course() async {
-    // logWTF('==========rerwerwerwerw=========');
-    Dio dio = Dio();
-    var response;
-    var map = new Map<String, dynamic>();
-    FormData formData = new FormData.fromMap({"apikey": apiKeyLMS});
-    // map['apikey'] = _api_key;
-    try {
-      //https://lms.dcc.onde.go.th/api/api/recomend/003138ecf4ad3c45f1b903d72a860181
-      //response = await dio.post('${service}api/popular_course', data: formData);
-      response =
-          await dio.post('$serverLMS/recomend/$apiKeyLMS', data: formData);
-      // logWTF(response.data);
-      if (response.data['status']) {
-        setState(() {
-          _model = response.data['data'];
-
-          // logWTF('==========trtrgdfgdfgdfgdf=========');
-          // logWTF(_model.toString());
-        });
-
-        // logWTF('_get_course' + response.data['data']);
-        // return response.data['data'];
-      }
-    } catch (e) {
-      logWTF(e);
-    }
-    return [];
   }
 
   void _callReadGetCourse() async {

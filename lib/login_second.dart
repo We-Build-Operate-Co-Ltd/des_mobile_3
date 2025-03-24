@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/forgot_password.dart';
 import 'package:des/menu.dart';
 import 'package:des/register.dart';
@@ -188,8 +187,8 @@ class _LoginSecondPageState extends State<LoginSecondPage>
                                     if (_imageUrl!.isNotEmpty)
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(25),
-                                        child: CachedNetworkImage(
-                                          imageUrl: _imageUrl!,
+                                        child: Image.network(
+                                          _imageUrl,
                                           width: 45,
                                           height: 45,
                                           fit: BoxFit.cover,
