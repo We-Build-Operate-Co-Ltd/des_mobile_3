@@ -1,14 +1,11 @@
 import 'dart:convert';
 
-import 'package:des/shared/extension.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/verify_otp_email_input.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// ignore: library_prefixes
-import 'package:flutter_face_api/face_api.dart' as Regula;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -32,9 +29,6 @@ class _VerifyOTPPhonePageState extends State<VerifyOTPPhonePage> {
   final _formKey = GlobalKey<FormState>();
   late dynamic _userData;
 
-  // face recognition start
-  var image1 = Regula.MatchFacesImage();
-  var image2 = Regula.MatchFacesImage();
   var img1 = Image.asset('logo.png');
   var img2 = Image.asset('logo.png');
   // ignore: unused_field

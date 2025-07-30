@@ -51,15 +51,14 @@ dependencies:
   flutter_clean_calendar: ^1.1.0
   flutter_datetime_picker_plus: ^2.2.0
   flutter_downloader: ^1.7.1
-  flutter_face_api: ^4.1.1
-  flutter_facebook_auth: ^4.4.1+1
+  flutter_facebook_auth: ^7.1.1
   flutter_html: ^3.0.0-beta.2
   flutter_inappwebview: ^6.1.5
   flutter_line_sdk: ^2.3.6
   flutter_local_notifications: ^19.0.0
   flutter_picker: ^2.0.2
   flutter_pretty_dio_logger: ^2.0.3
-  flutter_secure_storage: ^7.0.1
+  flutter_secure_storage: ^9.2.4
   flutter_slidable: ^2.0.0
   flutter_share: ^2.0.0
   flutter_svg: ^2.0.17

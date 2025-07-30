@@ -9,7 +9,7 @@ signInWithFacebook() async {
   if (loginResult.status == LoginStatus.success) {
     final AccessToken accessToken = loginResult.accessToken!;
     final OAuthCredential credential =
-        FacebookAuthProvider.credential(accessToken.token);
+        FacebookAuthProvider.credential(accessToken.tokenString);
     try {
       return await FirebaseAuth.instance.signInWithCredential(credential);
     } on FirebaseAuthException {

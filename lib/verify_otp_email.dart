@@ -1,20 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
-
-import 'package:camera/camera.dart';
-import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/verify_last_step.dart';
-import 'package:des/verify_thai_id.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// ignore: library_prefixes
-import 'package:flutter_face_api/face_api.dart' as Regula;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,8 +26,6 @@ class _VerifyOTPEmailPageState extends State<VerifyOTPEmailPage> {
   String _email = '';
 
   // face recognition start
-  var image1 = Regula.MatchFacesImage();
-  var image2 = Regula.MatchFacesImage();
   var img1 = Image.asset('logo.png');
   var img2 = Image.asset('logo.png');
   // ignore: unused_field
@@ -406,42 +393,5 @@ class _VerifyOTPEmailPageState extends State<VerifyOTPEmailPage> {
       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
       return false;
     }
-  }
-
-  _faceRecognition() {
-    Regula.FaceSDK.presentFaceCaptureActivityWithConfig(
-      {
-        "cameraId": Regula.CameraPosition.Front,
-        "cameraSwitchEnabled": true,
-      },
-    ).then((result) async {
-      Uint8List imageFile = await setImage(
-        true,
-        base64Decode(Regula.FaceCaptureResponse.fromJson(json.decode(result))!
-            .image!
-            .bitmap!
-            .replaceAll("\n", "")),
-        Regula.ImageType.LIVE,
-      );
-      // await updateSaveBase64(imageFile);
-
-      //save image on device.
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String s = String.fromCharCodes(imageFile);
-      await prefs.setString('imageTemp', s);
-
-      // _register();
-    });
-  }
-
-  setImage(bool first, Uint8List imageFile, int type) {
-    image1.bitmap = base64Encode(imageFile);
-    image1.imageType = type;
-    setState(() {
-      img1 = Image.memory(imageFile);
-      _liveness = "nil";
-      loading = true;
-    });
-    return imageFile;
   }
 }
