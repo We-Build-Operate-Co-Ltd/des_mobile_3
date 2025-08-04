@@ -7,7 +7,7 @@ import 'package:des/widget/blinking_icon.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_share/flutter_share.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'webview_inapp.dart';
 
@@ -302,15 +302,19 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
     super.initState();
   }
 
-  Future<void> _callShare(param) async {
-    await FlutterShare.share(
-        title: 'DCC Platform',
-        text:
-            '''📚🔖ขอเชิญชวนร่วม คอร์สเรียนเพื่อการเรียนรู้ ดิจิทัลชุมชน หัวข้อ
+  Future<void> _callShare(Map<String, dynamic> param) async {
+    final String message =
+        '''📚🔖ขอเชิญชวนร่วม คอร์สเรียนเพื่อการเรียนรู้ ดิจิทัลชุมชน หัวข้อ
 "${param['title']}"
-🚩🚩 🚩🚩''',
-        linkUrl: param['imageUrl'],
-        chooserTitle: 'Example Chooser Title');
+🚩🚩 🚩🚩
+${param['imageUrl']}
+''';
+
+    // ignore: deprecated_member_use
+    await Share.share(
+      message,
+      subject: 'DCC Platform',
+    );
   }
 
   lineBottom() {

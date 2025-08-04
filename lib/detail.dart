@@ -10,8 +10,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_share/flutter_share.dart';
+
 import 'package:html/parser.dart' show parse;
+import 'package:share_plus/share_plus.dart';
 import 'dart:ui' as ui show ImageFilter;
 import 'build_modal_connection_in_progress.dart';
 
@@ -712,14 +713,17 @@ class _DetailPageState extends State<DetailPage> {
     return parsedString;
   }
 
-  Future<void> _callShare(param) async {
-    await FlutterShare.share(
-        title: 'DCC',
-        text:
-            '''📚🔖ขอเชิญชวนร่วม คอร์สเรียนเพื่อการเรียนรู้ ดิจิทัลชุมชน หัวข้อ
+  Future<void> _callShare(Map<String, dynamic> param) async {
+    final String message =
+        '''📚🔖ขอเชิญชวนร่วม คอร์สเรียนเพื่อการเรียนรู้ ดิจิทัลชุมชน หัวข้อ
 "${param['title']}"
-🚩🚩 🚩🚩''',
-        linkUrl: param['imageUrl'],
-        chooserTitle: 'Example Chooser Title');
+🚩🚩 🚩🚩
+${param['imageUrl']}
+''';
+
+    await Share.share(
+      message,
+      subject: 'DCC Platform',
+    );
   }
 }

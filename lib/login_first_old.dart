@@ -25,7 +25,7 @@ import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:twitter_login/twitter_login.dart';
+// import 'package:twitter_login/twitter_login.dart';
 
 import 'shared/config.dart';
 import 'main.dart';
@@ -392,31 +392,31 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                                         : Color(0xFFFFFD57),
                               ),
                             ),
-                          if (configLoginSocial.toString() == "1")
-                            SizedBox(height: 10),
-                          if (configLoginSocial.toString() == "1")
-                            InkWell(
-                              onTap: () => _callLoginX(),
-                              child: _buildButtonLogin(
-                                'assets/images/logo_x_twitter.png',
-                                'เข้าใช้งานผ่าน X',
-                                colorTitle: MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? Colors.black
-                                    : MyApp.themeNotifier.value ==
-                                            ThemeModeThird.dark
-                                        ? Colors.white
-                                        : Color(0xFFFFFD57),
-                                colorBorder: MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? Color(0xFFE4E4E4)
-                                    : MyApp.themeNotifier.value ==
-                                            ThemeModeThird.dark
-                                        ? Colors.white
-                                        : Color(0xFFFFFD57),
-                              ),
-                            ),
-                          SizedBox(height: 35),
+                          // if (configLoginSocial.toString() == "1")
+                          // SizedBox(height: 10),
+                          // if (configLoginSocial.toString() == "1")
+                          // InkWell(
+                          //   onTap: () => _callLoginX(),
+                          //   child: _buildButtonLogin(
+                          //     'assets/images/logo_x_twitter.png',
+                          //     'เข้าใช้งานผ่าน X',
+                          //     colorTitle: MyApp.themeNotifier.value ==
+                          //             ThemeModeThird.light
+                          //         ? Colors.black
+                          //         : MyApp.themeNotifier.value ==
+                          //                 ThemeModeThird.dark
+                          //             ? Colors.white
+                          //             : Color(0xFFFFFD57),
+                          //     colorBorder: MyApp.themeNotifier.value ==
+                          //             ThemeModeThird.light
+                          //         ? Color(0xFFE4E4E4)
+                          //         : MyApp.themeNotifier.value ==
+                          //                 ThemeModeThird.dark
+                          //             ? Colors.white
+                          //             : Color(0xFFFFFD57),
+                          //   ),
+                          // ),
+                          // SizedBox(height: 35),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -1321,55 +1321,55 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     // }
   }
 
-  void _callLoginX() async {
-    try {
-      final twitterLogin = TwitterLogin(
-        // Consumer API keys
-        apiKey: 'VZWc4305qtisGTva2z52ue5A3',
-        // Consumer API Secret keys
-        apiSecretKey: 'WlBAmdIiGgUsDRJ0w2JuoFKrvh34CAwlC4l3ChzQhkHlt6Qd1W',
-        // Registered Callback URLs in TwitterApp
-        // Android is a deeplink
-        // iOS is a URLScheme
-        redirectURI: 'dccadmin://thaid',
-      );
-      final obj = await twitterLogin.login();
-      switch (obj.status) {
-        case TwitterLoginStatus.loggedIn:
-          // success
-          logWTF(obj.user!.id);
-          logWTF(obj.user!.name);
-          break;
-        case TwitterLoginStatus.cancelledByUser:
-          // cancel
-          break;
-        case TwitterLoginStatus.error:
-          // error
-          break;
-        case null:
-          break;
-      }
+  // void _callLoginX() async {
+  //   try {
+  //     final twitterLogin = TwitterLogin(
+  //       // Consumer API keys
+  //       apiKey: 'VZWc4305qtisGTva2z52ue5A3',
+  //       // Consumer API Secret keys
+  //       apiSecretKey: 'WlBAmdIiGgUsDRJ0w2JuoFKrvh34CAwlC4l3ChzQhkHlt6Qd1W',
+  //       // Registered Callback URLs in TwitterApp
+  //       // Android is a deeplink
+  //       // iOS is a URLScheme
+  //       redirectURI: 'dccadmin://thaid',
+  //     );
+  //     final obj = await twitterLogin.login();
+  //     switch (obj.status) {
+  //       case TwitterLoginStatus.loggedIn:
+  //         // success
+  //         logWTF(obj.user!.id);
+  //         logWTF(obj.user!.name);
+  //         break;
+  //       case TwitterLoginStatus.cancelledByUser:
+  //         // cancel
+  //         break;
+  //       case TwitterLoginStatus.error:
+  //         // error
+  //         break;
+  //       case null:
+  //         break;
+  //     }
 
-      if (obj != null) {
-        var model = {
-          "username": obj.user!.id.toString(),
-          "email": obj.user!.email.toLowerCase(),
-          "imageUrl": obj.user!.thumbnailImage,
-          "firstName": obj.user!.name,
-          "lastName": '',
-          "xID": obj.user!.id.toString()
-        };
-        _callLoginSocial(model, 'x');
-      } else {
-        logE('obj :: ');
-        logE(obj);
-        // setState(() => _loadingSubmit = false);
-        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
-      }
-    } catch (e) {
-      Fluttertoast.showToast(msg: 'ยกเลิก');
-    }
-  }
+  //     if (obj != null) {
+  //       var model = {
+  //         "username": obj.user!.id.toString(),
+  //         "email": obj.user!.email.toLowerCase(),
+  //         "imageUrl": obj.user!.thumbnailImage,
+  //         "firstName": obj.user!.name,
+  //         "lastName": '',
+  //         "xID": obj.user!.id.toString()
+  //       };
+  //       _callLoginSocial(model, 'x');
+  //     } else {
+  //       logE('obj :: ');
+  //       logE(obj);
+  //       // setState(() => _loadingSubmit = false);
+  //       Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
+  //     }
+  //   } catch (e) {
+  //     Fluttertoast.showToast(msg: 'ยกเลิก');
+  //   }
+  // }
 
   void _callLoginGoogle() async {
     try {

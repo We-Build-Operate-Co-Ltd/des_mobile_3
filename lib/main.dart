@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_links/app_links.dart';
 import 'package:des/login_first.dart';
 import 'package:des/shared/counterNotifier.dart';
 import 'package:des/shared/extension.dart';
@@ -19,7 +20,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uni_links/uni_links.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -79,37 +79,83 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
+  // void _handleIncomingLinks() {
+  //   if (!kIsWeb) {
+  //     try {
+  //       uriLinkStream.listen((Uri? uri) async {
+  //         SharedPreferences prefs = await SharedPreferences.getInstance();
+  //         String? state = prefs.getString('thaiDState') ?? '';
+  //         String? action = prefs.getString('thaiDAction') ?? '';
+
+  //         // logWTF('got uri: $uri');
+
+  //         if (state == uri!.queryParameters['state']) {
+  //           await prefs.setString(
+  //             'thaiDCode',
+  //             uri.queryParameters['code'].toString(),
+  //           );
+  //           if (action == 'login') {
+  //             navigatorKey.currentState!.pushReplacementNamed('/loginFirst');
+  //           }
+  //           if (action == 'create') {
+  //             navigatorKey.currentState!
+  //                 .pushReplacementNamed('/registerVerifyThaiId');
+  //           }
+  //           if (action == 'update') {
+  //             navigatorKey.currentState!.pushReplacementNamed('/verifyThaiId');
+  //           }
+  //           if (action == 'updateNew') {
+  //             navigatorKey.currentState!
+  //                 .pushReplacementNamed('/verifyThaiIdNew');
+  //           }
+  //         } else {
+  //           // clear data.
+  //           await prefs.remove('thaiDCode');
+  //           await prefs.remove('thaiDState');
+  //           await prefs.remove('thaiDAction');
+  //         }
+  //       }, onError: (Object err) {
+  //         logD('got err: $err');
+  //       });
+  //     } catch (e) {
+  //       logE(e);
+  //     }
+  //   }
+  // }
   void _handleIncomingLinks() {
     if (!kIsWeb) {
+      final appLinks = AppLinks();
+
       try {
-        uriLinkStream.listen((Uri? uri) async {
+        appLinks.uriLinkStream.listen((Uri uri) async {
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          String? state = prefs.getString('thaiDState') ?? '';
-          String? action = prefs.getString('thaiDAction') ?? '';
+          String state = prefs.getString('thaiDState') ?? '';
+          String action = prefs.getString('thaiDAction') ?? '';
 
           // logWTF('got uri: $uri');
 
-          if (state == uri!.queryParameters['state']) {
+          if (state == uri.queryParameters['state']) {
             await prefs.setString(
-              'thaiDCode',
-              uri.queryParameters['code'].toString(),
-            );
-            if (action == 'login') {
-              navigatorKey.currentState!.pushReplacementNamed('/loginFirst');
-            }
-            if (action == 'create') {
-              navigatorKey.currentState!
-                  .pushReplacementNamed('/registerVerifyThaiId');
-            }
-            if (action == 'update') {
-              navigatorKey.currentState!.pushReplacementNamed('/verifyThaiId');
-            }
-            if (action == 'updateNew') {
-              navigatorKey.currentState!
-                  .pushReplacementNamed('/verifyThaiIdNew');
+                'thaiDCode', uri.queryParameters['code'] ?? '');
+
+            switch (action) {
+              case 'login':
+                navigatorKey.currentState!.pushReplacementNamed('/loginFirst');
+                break;
+              case 'create':
+                navigatorKey.currentState!
+                    .pushReplacementNamed('/registerVerifyThaiId');
+                break;
+              case 'update':
+                navigatorKey.currentState!
+                    .pushReplacementNamed('/verifyThaiId');
+                break;
+              case 'updateNew':
+                navigatorKey.currentState!
+                    .pushReplacementNamed('/verifyThaiIdNew');
+                break;
             }
           } else {
-            // clear data.
             await prefs.remove('thaiDCode');
             await prefs.remove('thaiDState');
             await prefs.remove('thaiDAction');
@@ -139,7 +185,8 @@ class _MyAppState extends State<MyApp> {
                 const RegisterVerifyThaiIDPage(),
             '/verifyThaiId': (BuildContext context) => const VerifyThaiIDPage(),
             '/loginFirst': (BuildContext context) => const LoginFirstPage(),
-             '/verifyThaiIdNew': (BuildContext context) => const VerifyThaiIDNewPage(),
+            '/verifyThaiIdNew': (BuildContext context) =>
+                const VerifyThaiIDNewPage(),
           },
           theme: FlexThemeData.light(
             fontFamily: 'kanit',
