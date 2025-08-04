@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>FlutterDeepLinkingEnabled</key>
-	<true/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -38,7 +36,6 @@
 				<string>com.googleusercontent.apps.949874182161-5jgngor16524p76qlckqhdk4l8hkgvih</string>
 			</array>
 		</dict>
-		<!-- เพิ่มรายการสำหรับ dcc:thaid deeplink -->
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -46,18 +43,22 @@
 			<string>DccThaID</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>dcc</string> <!-- นี่คือ scheme ของ deeplink (dcc) -->
+				<string>dcc</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>EnableBackgroundLocationUpdates</key>
+	<true/>
 	<key>FacebookAppID</key>
 	<string>438886872641770</string>
 	<key>FacebookClientToken</key>
 	<string>dea564b10c59f68b0a7d69ccb44041b5</string>
 	<key>FacebookDisplayName</key>
 	<string>DCC Platform</string>
+	<key>FlutterDeepLinkingEnabled</key>
+	<true/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -119,6 +120,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
+		<string>processing</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
@@ -145,7 +147,5 @@
 	<true/>
 	<key>kTCCServiceMediaLibrary</key>
 	<string>DCC Platform MediaLibrary Usage</string>
-	<key>EnableBackgroundLocationUpdates</key>
-  	<true/>
 </dict>
 </plist>

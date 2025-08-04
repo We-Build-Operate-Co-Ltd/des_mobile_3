@@ -2530,6 +2530,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   }
 
   void _callReadConfig() async {
+    print('---------->>> callReadConfig');
     var response = await Dio().get(
         '$server/py-api/dcc/config/login_social/' + versionNumber.toString());
     // print(response);
