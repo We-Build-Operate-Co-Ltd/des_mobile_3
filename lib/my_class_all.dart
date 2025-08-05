@@ -283,12 +283,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                                       child: TextField(
                                         controller: _searchController,
                                         onChanged: (text) {
-                                          // setState(() {
-                                          //   textSearch = text;
-                                          //   _filter();
-                                          //   textEternalSearch = text;
-                                          //   _filterEternal();
-                                          // });
                                           setState(() {
                                             if (_cateTypeSelected == 0) {
                                               textSearch = text;
@@ -754,7 +748,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
               child: Text(
                 'ไม่พบคอร์สเรียนที่ตรงกับการค้นหา',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
                   color: MyApp.themeNotifier.value == ThemeModeThird.light
                       ? Colors.black
                       : MyApp.themeNotifier.value == ThemeModeThird.dark
@@ -1577,14 +1571,18 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                   fit: BoxFit.cover,
                 ),
               )
-            : ColorFiltered(
-                colorFilter:
-                    ColorFilter.mode(Colors.grey, BlendMode.saturation),
-                child: Image.network(
-                  image,
-                  height: 50,
-                  width: 50,
-                  fit: BoxFit.cover,
+            : ClipRRect(
+                // เพิ่ม ClipRRect ตรงนี้
+                borderRadius: BorderRadius.circular(15),
+                child: ColorFiltered(
+                  colorFilter:
+                      ColorFilter.mode(Colors.grey, BlendMode.saturation),
+                  child: Image.network(
+                    image,
+                    height: 50,
+                    width: 50,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
         SizedBox(width: 15),
