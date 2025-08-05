@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:des/course_eternal.dart';
 import 'package:des/my_course.dart';
 import 'package:des/my_course_success.dart';
@@ -58,8 +60,8 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   String cateCourseSearch = '';
   String textEternalSearch = '';
 
-  Future<dynamic>? _modelFilter;
-  dynamic _tempModel;
+  // Future<dynamic>? _modelFilter;
+  // dynamic _tempModel;
   Future<dynamic>? _modelRecommend;
   Future<dynamic>? _modelCouseEternal;
   Future<dynamic>? _modelDSDCouse;
@@ -126,33 +128,11 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   }
 
   _filter() async {
-    // logWTF(
-    //     '=========fsdfsdfsdfdsfsd==========' + _tempModelRecommend.toString());
-    // var res = await _model;
-    // print('--1---$cateSearch');
-    var temp = _tempModelRecommend
-        .where((item) => item['course_Cat_Id'].contains(textSearch.toString()))
-        .toList();
-    print('-------------temp------------------' + temp.toString());
-
-    // _tempModelRecommend
-    //     .where((dynamic e) =>
-    //         e['course_Name']
-    //             .toString()
-    //             .toUpperCase()
-    //             .contains(textSearch.toString().toUpperCase()) &&
-    //         e['certificate']
-    //             .toString()
-    //             .toUpperCase()
-    //             .contains(cateSearch.toString().toUpperCase()) &&
-    //         e['course_cat_id']
-    //             .toString()
-    //             .toUpperCase()
-    //             .contains(cateCourseSearch.toString().toUpperCase()))
-    //     .toList();
-
-    // logWTF('=========fsdfsdfsdfdsfsd123==========' + temp.toString());
-
+    var temp = _tempModelRecommend.where((item) {
+      return item['course_Name'].contains(textSearch.toString()) &&
+          (cateCourseSearch.isEmpty ||
+              item['course_Cat_Id'] == cateCourseSearch);
+    }).toList();
     setState(() {
       _listFilterLenght = temp.length;
       _modelRecommend = Future.value(temp);
@@ -160,20 +140,12 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   }
 
   _filterEternal() async {
-    // logWTF(
-    // '=========fsdfsdfsdfdsfsd==========' + _tempModelEternal.toString());
-    // var res = await _model;
-    var temp =
-        // _tempModel.where((item) => item['name'].contains(param)).toList();
-
-        _tempModelEternal
-            .where((dynamic e) => e['title']
-                .toString()
-                .toUpperCase()
-                .contains(textEternalSearch.toString().toUpperCase()))
-            .toList();
-
-    // logWTF('=========filterEternal==========' + temp.toString());
+    var temp = _tempModelEternal
+        .where((dynamic e) => e['title']
+            .toString()
+            .toUpperCase()
+            .contains(textEternalSearch.toString().toUpperCase()))
+        .toList();
 
     setState(() {
       _listFilterLenght = temp.length;
@@ -188,7 +160,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
 
     setState(() {
       _modelRecommend = Future.value(response.data);
-      // _tempModel.addAll(response.data);
       _tempModelRecommend.addAll(response.data);
     });
   }
@@ -266,7 +237,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                 child: SingleChildScrollView(
                   child: Container(
                     alignment: Alignment.bottomCenter,
-                    // height: MediaQuery.of(context).size.height * 0.8,
                     width: 350,
                     height: deviceHeight * 0.8,
                     padding: EdgeInsets.only(top: 20, left: 20, right: 20),
@@ -287,8 +257,8 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                                 height: deviceHeight * 0.6,
                                 child: ListView(
                                   padding: EdgeInsets.zero,
-                                  shrinkWrap: true, // 1st add
-                                  physics: const ClampingScrollPhysics(), // 2nd
+                                  shrinkWrap: true,
+                                  physics: const ClampingScrollPhysics(),
                                   children: [
                                     SizedBox(height: 20),
                                     Text(
@@ -313,19 +283,20 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                                       child: TextField(
                                         controller: _searchController,
                                         onChanged: (text) {
-                                          // print("First text field: $text");
+                                          // setState(() {
+                                          //   textSearch = text;
+                                          //   _filter();
+                                          //   textEternalSearch = text;
+                                          //   _filterEternal();
+                                          // });
                                           setState(() {
-                                            // if (_cateTypeSelected == 0) {
-                                            textSearch = text;
-                                            _filter();
-                                            // textEternalSearch = '';
-                                            // _filterEternal();
-                                            // } else {
-                                            textEternalSearch = text;
-                                            _filterEternal();
-                                            // textSearch = '';
-                                            // _filter();
-                                            // }
+                                            if (_cateTypeSelected == 0) {
+                                              textSearch = text;
+                                              _filter();
+                                            } else {
+                                              textEternalSearch = text;
+                                              _filterEternal();
+                                            }
                                           });
                                         },
                                         style: TextStyle(
@@ -414,7 +385,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                                     _cateTypeSelected == 0
                                         ? _buildRecomment()
                                         : _buildEternal(),
-                                    // textSearch == '' ? _test1() : _test2(),
                                   ],
                                 ),
                               )
@@ -534,7 +504,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                       padding: EdgeInsets.only(left: 50),
                       alignment: Alignment.center,
                       child: Text(
-                        'กรองการค้นหา', // Title in Thai
+                        'กรองการค้นหา',
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w500,
@@ -767,7 +737,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  // childAspectRatio: 10 / 14,
                   childAspectRatio: MyApp.fontKanit.value == FontKanit.small
                       ? 10 / 12.5
                       : MyApp.fontKanit.value == FontKanit.medium
@@ -776,10 +745,23 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                   crossAxisSpacing: 15,
                   mainAxisSpacing: 15),
               physics: const ClampingScrollPhysics(),
-              // itemCount: snapshot.data!.length,
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) =>
                   containerRecommendedClass(snapshot.data![index]),
+            );
+          } else {
+            return Center(
+              child: Text(
+                'ไม่พบคอร์สเรียนที่ตรงกับการค้นหา',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? Colors.black
+                      : MyApp.themeNotifier.value == ThemeModeThird.dark
+                          ? Colors.white
+                          : Color(0xFFFFFD57),
+                ),
+              ),
             );
           }
         }
@@ -801,6 +783,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             builder: (_) => WebViewInAppPage(
               url:
                   'https://lms.dcc.onde.go.th/user/user/lesson_details/${model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}',
+              // 'https://dcc.onde.go.th/_next/image?url=https%3A%2F%2Flms.dcc.onde.go.th%2Fuploads%2Fcourse%2Fcourse_thumbnail_1751530641.jpg&w=1920&q=75',
               title: model?['course_name'] ?? '',
             ),
           ),
@@ -827,15 +810,11 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
         // );
       },
       child: Container(
-        // elevation: 4,
         color: Theme.of(context).custom.primary,
         child: Container(
           padding: EdgeInsets.only(bottom: 5),
           decoration: BoxDecoration(
             color: Theme.of(context).custom.primary,
-            // border: Border.all(
-            //   color: Theme.of(context).custom.b_w_y,
-            // ),
             boxShadow: [
               BoxShadow(
                 color: Color.fromARGB(0, 0, 0, 0).withOpacity(0.15),
@@ -1085,7 +1064,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             return ListView.separated(
               padding: EdgeInsets.all(5),
               scrollDirection: Axis.horizontal,
-              // physics: const ClampingScrollPhysics(),
               itemBuilder: (_, index) =>
                   containerCouseEternal(snapshot.data![index]),
               separatorBuilder: (_, index) => const SizedBox(width: 15),
@@ -1096,7 +1074,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
               child: CircularProgressIndicator(),
             );
           }
-          return SizedBox(); // ซ่อนทุกอย่างถ้าไม่มีข้อมูล
         },
       ),
     );
@@ -1105,17 +1082,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   containerCouseEternal(dynamic model) {
     return GestureDetector(
       onTap: () {
-        // var data = {
-        //   'course_id': model?['id'] ?? '',
-        //   "course_name": model?['name'] ?? '',
-        //   "course_cat_id": model?['course_cat_id'] ?? '',
-        //   "cover_image": model?['docs'] ?? '',
-        //   "description": model['details'] ?? '',
-        //   "created_at": model['created_at'] ?? '',
-        //   "category_name": model['cat_name'] ?? '',
-        //   "certificate": model['certificate'] ?? '',
-        // };
-        // logWTF(data);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -1522,16 +1488,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
           child: Container(
             alignment: Alignment.center,
             padding: EdgeInsets.symmetric(horizontal: 10),
-            // decoration: BoxDecoration(
-            //   borderRadius: BorderRadius.circular(17.5),
-            //   color: __ == _cateTypeSelected
-            //       ? MyApp.themeNotifier.value == ThemeModeThird.light
-            //           ? Color(0xFFBD4BF7)
-            //           : MyApp.themeNotifier.value == ThemeModeThird.dark
-            //               ? Colors.white
-            //               : Color(0xFFFFFD57)
-            //       : Colors.white,
-            // ),
             decoration: BoxDecoration(
               color: __ == _cateTypeSelected
                   // ? Color(0xFFB325F8)
@@ -1547,15 +1503,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             ),
             child: Text(
               _cateTypeList[__],
-              // style: TextStyle(
-              //   color: __ == _cateTypeSelected
-              //       ? MyApp.themeNotifier.value == ThemeModeThird.light
-              //           ? Colors.white
-              //           : MyApp.themeNotifier.value == ThemeModeThird.dark
-              //               ? Colors.black
-              //               : Colors.black
-              //       : Colors.black,
-              // ),
               style: TextStyle(
                   color: __ == _cateTypeSelected
                       ? MyApp.themeNotifier.value == ThemeModeThird.light
@@ -1563,7 +1510,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                           : MyApp.themeNotifier.value == ThemeModeThird.dark
                               ? Colors.black
                               : Colors.black
-                      // : Color(0xFFB325F8).withOpacity(0.5),
                       : MyApp.themeNotifier.value == ThemeModeThird.light
                           ? Color(0xFFB325F8).withOpacity(0.5)
                           : MyApp.themeNotifier.value == ThemeModeThird.dark
@@ -1590,41 +1536,22 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
               .map(
                 (element) => Container(
                   width: 250,
-                  // height: MyApp.fontKanit.value != FontKanit.small &&
-                  //         MyApp.fontKanit.value != FontKanit.medium
-                  //     ? 90
-                  //     : 66,
                   height: MyApp.fontKanit.value == FontKanit.small
                       ? 67
                       : MyApp.fontKanit.value == FontKanit.medium
                           ? 94
                           : 118,
-
                   padding: EdgeInsets.all(5),
                   child: InkWell(
                     onTap: () {
                       setState(() {
                         if (cateCourseSearch != element['id']) {
                           cateCourseSearch = element['id'];
-                          print(
-                              '-------cat_Thai--------- > ${element['cat_Thai']}');
-                          print(
-                              '----------cateCourseSearch------> ${cateCourseSearch}');
                         } else {
                           cateCourseSearch = '';
                         }
                         _filter();
                       });
-                      // _cateCourseSelected =
-                      // _filter();
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => MyCourseCategorySearchPage(
-                      //       model: element,
-                      //     ),
-                      //   ),
-                      // );
                     },
                     child: rowContactInformation(
                         element['cat_Thai'], element['img_Url'], element['id']),
@@ -1686,7 +1613,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                               ? Colors.white
                               : Color(0xFFFFFD57),
                 ),
-                // overflow: TextOverflow.ellipsis,
                 maxLines: 3,
               ),
             ],
