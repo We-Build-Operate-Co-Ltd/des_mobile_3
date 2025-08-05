@@ -3,8 +3,6 @@
 import 'dart:convert';
 
 import 'package:des/forgot_password.dart';
-import 'package:des/home.dart';
-import 'package:des/login_second.dart';
 import 'package:des/menu.dart';
 import 'package:des/register.dart';
 import 'package:des/register_link_account.dart';
@@ -13,13 +11,11 @@ import 'package:des/shared/apple_firebase.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/line.dart';
 import 'package:des/shared/secure_storage.dart';
-import 'package:des/shared/facebook_firebase.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/widget/input_decoration.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart' as fb;
@@ -2281,7 +2277,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
 
   static InputDecoration _decorationPasswordMember(
     context, {
-    String labelText = '',
     String hintText = '',
     bool visibility = false,
     Function? suffixTap,
@@ -2297,12 +2292,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           fontSize: 15,
           fontWeight: FontWeight.normal,
         ),
-        // hintStyle: TextStyle(
-        //   color: Theme.of(context).custom.f70f70_w_fffd57,
-        //   fontSize: 12,
-        //   fontWeight: FontWeight.normal,
-        // ),
-        // hintText: hintText,
         hintStyle: TextStyle(
           color: MyApp.themeNotifier.value == ThemeModeThird.light
               ? Colors.black
@@ -2532,7 +2521,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     var response = await Dio().get(
         '$server/py-api/dcc/config/login_social/' + versionNumber.toString());
 
-    // print(response);
     setState(() {
       configLoginSocial = response;
     });
@@ -2543,12 +2531,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       Response<String> response = await Dio().get(
         '$server/dcc-api/m/register/guest/duplicate/${txtEmail.text}/${txtEmail.text}',
       );
-      // if (response.data == 'username') {
-      //   return 'ชื่อผู้ใช้งานนี้ถูกใช้งานไปแล้ว';
-      // }
-      // if (response.data == 'idcard') {
-      //   return 'เลขบัตรประชาชนนี้ถูกใช้งานไปแล้ว';
-      // }
       if (response.data == 'email') {
         return 'อีเมลนี้ถูกใช้งานไปแล้ว';
       }

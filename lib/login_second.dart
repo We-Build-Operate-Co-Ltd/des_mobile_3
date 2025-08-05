@@ -1269,33 +1269,20 @@ class _LoginSecondPageState extends State<LoginSecondPage>
 
       // logWTF('key cloak');
       dynamic responseKeyCloak = await _getUserInfoKeycloak(accessToken);
-      // logWTF('responseKeyCloak');
-      // logWTF(responseKeyCloak);
 
       if (responseKeyCloak == null) {
         return;
       }
 
       dynamic responseProfileMe = await _getProfileMe(accessToken);
-      // logWTF('responseProfileMe');
-      // logWTF(responseProfileMe);
+
       if (responseProfileMe == null) {
         return;
       }
 
-      // check isStaff
-      // if (responseProfileMe['data']['isMember'] == 0) {
-      //   Fluttertoast.showToast(msg: 'บัญชีนี้ไม่ได้เป็นสมาชิก');
-      //   setState(() => _loadingSubmit = false);
-      //   return;
-      // }
-
       dynamic responseUser = await _getUserProfile();
-      // logWTF('responseUser');
-      // logWTF(responseUser);
 
       if (responseUser?['message'] == 'code_not_found') {
-        // logWTF('create');
         var create = await _createUserProfile(responseProfileMe['data']);
         if (create == null) {
           return;

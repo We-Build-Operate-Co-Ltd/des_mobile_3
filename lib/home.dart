@@ -28,7 +28,6 @@ import 'shared/notification_service.dart';
 import 'webview_inapp.dart';
 import 'package:badges/badges.dart' as badges;
 
-// ignore: must_be_immutable
 class HomePage extends StatefulWidget {
   HomePage({
     super.key,
@@ -43,18 +42,7 @@ class HomePage extends StatefulWidget {
   getState() => homeCentralPageState;
 }
 
-// class MyClassAllPage extends StatefulWidget {
-//   MyClassAllPage({Key? key, this.title, this.changePage}) : super(key: key);
-
-//   final title;
-//   Function? changePage;
-
-//   @override
-//   _MyClassAllPageState createState() => _MyClassAllPageState();
-// }
-
 class _HomePageState extends State<HomePage> {
-  // final _counter = CounterModel(0);
   final storage = const FlutterSecureStorage();
   DateTime? currentBackPressTime;
   final RefreshController _refreshController =
@@ -141,7 +129,6 @@ class _HomePageState extends State<HomePage> {
                   fit: BoxFit.cover,
                 )),
         Scaffold(
-          // backgroundColor: Theme.of(context).custom.primary,
           backgroundColor: Colors.transparent,
           body: Column(
             children: [
@@ -439,8 +426,7 @@ class _HomePageState extends State<HomePage> {
                         color: const Color(0xFF000000).withOpacity(0.10),
                         spreadRadius: 0,
                         blurRadius: 10,
-                        offset:
-                            const Offset(0, 0), // changes position of shadow
+                        offset: const Offset(0, 0),
                       ),
                     ],
                   ),
@@ -449,7 +435,6 @@ class _HomePageState extends State<HomePage> {
                     enablePullUp: false,
                     controller: _refreshController,
                     onRefresh: onRefresh,
-                    // onLoading: _onLoading,
                     child: ListView(
                       padding: EdgeInsets.only(
                         top: MediaQuery.of(context).padding.top + 5,
@@ -919,7 +904,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(height: 20),
                         Text(
-                          'หลักสูตรฝึกอบรม',
+                          'หลักสูตรฝึกอบรม ',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w600,

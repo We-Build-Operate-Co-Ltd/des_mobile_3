@@ -131,8 +131,9 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
     // var res = await _model;
     // print('--1---$cateSearch');
     var temp = _tempModelRecommend
-        .where((item) => item['course_Name'].contains(textSearch.toString()))
+        .where((item) => item['course_Cat_Id'].contains(textSearch.toString()))
         .toList();
+    print('-------------temp------------------' + temp.toString());
 
     // _tempModelRecommend
     //     .where((dynamic e) =>
@@ -172,7 +173,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                 .contains(textEternalSearch.toString().toUpperCase()))
             .toList();
 
-    // logWTF('=========fsdfsdfsdfdsfsd123==========' + temp.toString());
+    // logWTF('=========filterEternal==========' + temp.toString());
 
     setState(() {
       _listFilterLenght = temp.length;
@@ -193,6 +194,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   }
 
   _callReadCouseEternal() async {
+    //คอร์สภายนอก
     var response = await Dio().get('$ondeURL/api/Lms/GetCouseExternal');
 
     setState(() {
@@ -1604,9 +1606,10 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                       setState(() {
                         if (cateCourseSearch != element['id']) {
                           cateCourseSearch = element['id'];
-                          print('----------------${element['id']}');
                           print(
-                              '----------cateCourseSearch------${cateCourseSearch}');
+                              '-------cat_Thai--------- > ${element['cat_Thai']}');
+                          print(
+                              '----------cateCourseSearch------> ${cateCourseSearch}');
                         } else {
                           cateCourseSearch = '';
                         }
@@ -1695,7 +1698,6 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
 
   lineBottom() {
     return Container(
-      // padding: EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -1708,24 +1710,19 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   }
 
   String formatDuration(String? duration) {
-    if (duration == null || duration.isEmpty)
-      return '0 นาที'; // ตรวจสอบค่าว่างหรือ null
+    if (duration == null || duration.isEmpty) return '0 นาที';
 
-    // แยกเวลาโดยใช้ ':' เป็นตัวแบ่ง
     final parts = duration.split(':');
-    if (parts.length != 3) return 'รูปแบบเวลาไม่ถูกต้อง'; // ตรวจสอบรูปแบบเวลา
+    if (parts.length != 3) return 'รูปแบบเวลาไม่ถูกต้อง';
 
-    // แปลงเวลาเป็นตัวเลข
     final hours = int.tryParse(parts[0]) ?? 0;
     final minutes = int.tryParse(parts[1]) ?? 0;
     final seconds = int.tryParse(parts[2]) ?? 0;
 
-    // สร้างข้อความที่มีหน่วยเวลา
     final buffer = StringBuffer();
     if (hours >= 0) buffer.write('$hours ชั่วโมง ');
     if (minutes > 0) buffer.write('$minutes นาที ');
-    // if (seconds > 0) buffer.write('$seconds วินาที');
 
-    return buffer.toString().trim(); // ลบช่องว่างส่วนเกิน
+    return buffer.toString().trim();
   }
 }
