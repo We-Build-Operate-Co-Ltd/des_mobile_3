@@ -117,7 +117,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                               Column(
                                 children: [
                                   rowContactInformation(
-                                      'อาคารรัฐประศาสนภักดี ศูนย์ราชการเฉลิมพระเกียรติ 80 พรรษา ถนนแจ้งวัฒนะ แขวงทุ่งสองห้อง เขตหลักสี่ กรุงเทพฯ 10210',
+                                      'เลขที่ 120 หมู่ 3 ชั้น 3 และ 5 ศูนย์ราชการฯ แจ้งวัฒนะ (อาคาร ซี) ซอยแจ้งวัฒนะ 7 ถนนแจ้งวัฒนะ แขวงทุ่งสองห้อง เขตหลักสี่ กรุงเทพฯ 10210',
                                       'assets/images/about_us_mark.png'),
                                   SizedBox(height: 15),
                                   rowContactInformation('02-114-8592',
@@ -273,6 +273,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
               Text(
                 title,
                 style: TextStyle(
+                  fontFamily: 'Kanit',
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                   color: textTheme,

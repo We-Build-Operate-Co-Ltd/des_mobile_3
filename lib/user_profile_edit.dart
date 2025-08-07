@@ -791,7 +791,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: SizedBox(
-                  height: 210,
+                  height: 220,
                   width: MediaQuery.of(context).size.width,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -812,6 +812,7 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
                       ),
                       Text(
                         'บันทึกข้อมูลส่วนตัวที่คุณแก้ไขเรียบร้อยแล้ว',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Color(0xFF000000),
                           fontSize: 15,

@@ -365,7 +365,7 @@ class _MenuState extends State<Menu> {
 
     return Container(
       padding: EdgeInsets.only(bottom: bottomPadding),
-      height: 66 + bottomPadding,
+      height: 75 + bottomPadding,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -387,7 +387,7 @@ class _MenuState extends State<Menu> {
       child: Row(
         children: [
           _buildTap(0, 'หน้าหลัก', 'assets/images/home.png'),
-          _buildTap(1, 'จองใช้บริการ', 'assets/images/calendar_menu.png'),
+          _buildTap(1, 'การจอง', 'assets/images/calendar_menu.png'),
           _buildTap(2, 'Re-Skill', 'assets/images/re_skill.png'),
           _buildTap(3, 'แจ้งเตือน', 'assets/images/noti_menu.png'),
           _buildTap(4, 'สมาชิก', _imageProfile, isNetwork: true),
@@ -412,8 +412,8 @@ class _MenuState extends State<Menu> {
       child: InkWell(
         onTap: () => _onItemTapped(index),
         child: Container(
-          padding: EdgeInsets.all(8),
-          margin: EdgeInsets.all(6),
+          padding: EdgeInsets.all(6),
+          margin: EdgeInsets.all(4),
           decoration: isSelected
               ? BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -424,8 +424,25 @@ class _MenuState extends State<Menu> {
                   ],
                 )
               : null,
-          child: Center(
-            child: _buildTapIcon(title, pathImage, color, isNetwork),
+          child: Column(
+            children: [
+              Center(
+                child: _buildTapIcon(title, pathImage, color, isNetwork),
+              ),
+              SizedBox(height: 4),
+              Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Kanit',
+                  fontSize: 10,
+                  color: color,
+                  // fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+            ],
           ),
         ),
       ),

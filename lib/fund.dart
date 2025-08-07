@@ -279,9 +279,8 @@ class _FundPageState extends State<FundPage> {
                                   ),
                                   decoration: InputDecoration(
                                     filled: true,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical:
-                                            10.0), // ปรับความสูงให้เหมาะสม
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 10.0),
                                     isDense: true,
                                     fillColor: MyApp.themeNotifier.value ==
                                             ThemeModeThird.light
@@ -366,7 +365,7 @@ class _FundPageState extends State<FundPage> {
                                 SizedBox(
                                   height: 20,
                                 ),
-                                GestureDetector(
+                                InkWell(
                                   onTap: () {
                                     setState(() {
                                       _handleSearch(_searchController.text);
@@ -445,23 +444,13 @@ class _FundPageState extends State<FundPage> {
                                   )
                                 else
                                   _investor.length != 0
-                                      ? _buildListInvestor() // แสดงรายการนักลงทุนถ้ามีข้อมูล
+                                      ? _buildListInvestor()
                                       : Center(
                                           child: Text(
                                             'ไม่พบข้อมูล',
                                           ),
                                         ),
                                 SizedBox(height: 20),
-                                // _investor.length != 0
-                                //     ? _buildListInvestor()
-                                //     : Text(
-                                //         ' ไม่พบข้อมูล ',
-                                //         textAlign: TextAlign.center,
-                                //         style: TextStyle(
-                                //           fontSize: 20,
-                                //         ),
-                                //       ),
-                                // SizedBox(height: 20),
                                 GestureDetector(
                                   onTap: () {
                                     setState(() {
@@ -508,9 +497,8 @@ class _FundPageState extends State<FundPage> {
                                     ),
                                   ),
                                 ),
-
                                 SizedBox(
-                                  height: 60,
+                                  height: 100,
                                 ),
                               ],
                             ),
@@ -719,11 +707,6 @@ class _FundPageState extends State<FundPage> {
                       });
                       Navigator.pop(context);
                       _searchFilterController.clear();
-                      // print(
-                      //     '----------------23------------${listCat.where((e) => e['selected']).map((m) => m['cateId'])}');
-                      // print('----------------24------------${[
-                      //   ..._investor
-                      // ].length}');
                     },
                     child: Container(
                       height: 50,
@@ -902,7 +885,6 @@ class _FundPageState extends State<FundPage> {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
@@ -914,7 +896,6 @@ class _FundPageState extends State<FundPage> {
                         color: Color(0xFFDDDDDD),
                       ),
                       borderRadius: BorderRadius.circular(10),
-                      // color: Color(0xFFDDDDDD),
                     ),
                     child: Image.network(
                       data['imageUrl'],
@@ -1013,7 +994,6 @@ class _FundPageState extends State<FundPage> {
       itemBuilder: (_, __) => GestureDetector(
         onTap: () {
           MysetState(() {
-            // print('----cateId------${listCat[__]['cateId']}');
             listCat[__]['selected'] = !(listCat[__]['selected']);
           });
         },
@@ -1098,7 +1078,7 @@ class _FundPageState extends State<FundPage> {
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Image.asset(
-                            'assets/images/03.png',
+                            'assets/images/2024/fund-img.avif',
                             height: 180,
                             width: double.infinity,
                             fit: BoxFit.cover,
@@ -1110,7 +1090,7 @@ class _FundPageState extends State<FundPage> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(16),
                             child: Image.asset(
-                              'assets/images/03.png',
+                              'assets/images/2024/fund-img.avif',
                               height: 180,
                               width: double.infinity,
                               fit: BoxFit.cover,
@@ -1304,17 +1284,26 @@ class _FundPageState extends State<FundPage> {
 
   _callReadInvestor() async {
     setState(() {
-      _loadingWidget = true; // เริ่มโหลดข้อมูล
+      _loadingWidget = true;
     });
 
-    Dio dio = new Dio();
+    Dio dio = Dio();
     var response = await dio
         .get('https://dcc.onde.go.th/dcc-api/api/InvestorAnnoucement/portal');
 
+    List<dynamic> data = response.data;
+
+    // เรียงลำดับจากวันที่ใหม่ไปเก่า
+    data.sort((a, b) {
+      DateTime dateA = DateTime.parse(a['announceDate']);
+      DateTime dateB = DateTime.parse(b['announceDate']);
+      return dateB.compareTo(dateA);
+    });
+
     setState(() {
-      _investor = response.data;
-      _investorTemp = response.data;
-      _loadingWidget = false; // โหลดข้อมูลเสร็จแล้ว
+      _investor = data;
+      _investorTemp = data;
+      _loadingWidget = false;
     });
   }
 

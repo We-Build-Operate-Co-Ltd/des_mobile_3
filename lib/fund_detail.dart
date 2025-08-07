@@ -80,7 +80,7 @@ class _FundDetailPageState extends State<FundDetailPage> {
                             // border: Border.all(),
                           ),
                           child: Image.asset(
-                            'assets/images/03.png',
+                            'assets/images/2024/fund-img.avif',
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -245,6 +245,14 @@ class _FundDetailPageState extends State<FundDetailPage> {
                         ),
                         Text(
                           widget.model['target'],
+                          style: TextStyle(
+                              fontFamily: "Kanit",
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12,
+                              color: Color(0xFF707070)),
+                        ),
+                        Text(
+                          widget.model['detail'],
                           style: TextStyle(
                               fontFamily: "Kanit",
                               fontWeight: FontWeight.w400,
