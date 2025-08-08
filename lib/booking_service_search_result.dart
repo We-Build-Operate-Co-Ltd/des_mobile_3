@@ -606,18 +606,7 @@ class _BookingServiceSearchResultPageState
 
   _callRead() async {
     var url = '';
-    // print('------------moade-------------------------${widget.mode}');
-    // print('------------search------------------------${widget.search}');
-    // print(
-    //     '------------provinceSelected--------------${widget.filter['provinceSelected']}');
-    // print(
-    //     '------------districtTitleSelected---------${widget.filter['districtTitleSelected']}');
-    // print(
-    //     '------------bookingType-------------------${widget.filter['bookingType']}');
-    // print(
-    //     '=======filter provinceSelected===== 1 ======> ${widget.filter['provinceSelected']}');
-    // print(
-    //     '=======filter provinceSelected===== 2 ======> ${widget.filter['provinceSelected']}');
+    
     if (widget.mode == '1') {
       url =
           'GetSearchCenterLocation?textSearch=${widget.search ?? ''}&chId=${widget.filter['provinceSelected'] == '0' ? '' : widget.filter['provinceSelected']}&assetType=${widget.filter['bookingType'] ?? ''}&amName=${widget.filter['districtTitleSelected'] ?? ''}';
@@ -634,7 +623,7 @@ class _BookingServiceSearchResultPageState
       if (response.data != null && response.data['data'] != null) {
         setState(() {
           _filterModelCenter = response.data['data'];
-          // logWTF(response.data['data']);
+
         });
       }
       setState(() => _loadingBookingStatus = LoadingBookingStatus.success);

@@ -108,111 +108,118 @@ const mockFAQ = [
 
 class MockContact {
   static mockContactCategoryList() {
-    String img = 'http://122.155.223.63/td-doc/images/des/des_hall.png';
     dynamic data = [
       {
         'code': '',
-        'title': 'เบอร์ศูนย์ทั่วประเทศ',
-        'imageUrl': img,
-        'description': 'ศูนยฯ์ใหญ่,ศูนย์ฯกทม.,ศูนย์ฯนนทบุรี,...',
-        'total': '7',
+        'title': 'เบอร์ศูนย์ดิจิทัลชุมชน',
       },
       {
-        'code': '01',
-        'title': 'เบอร์ติดต่อทั่วไป',
-        'imageUrl': img,
-        'description': 'กระทรวงดิจิตอลฯ,สำนักงานดิจิทัลเพื่อเศรษฐกิจ',
-        'total': '2',
+        'code': '1',
+        'title': 'เบอร์กระทรวงดิจิทัลฯ(DE)',
       },
       {
-        'code': '02',
+        'code': '2',
         'title': 'เบอร์ฉุกเฉิน',
-        'imageUrl': img,
-        'description': 'เจ็บป่วยฉุกเฉิน,สายด่วนการแพทย์,...',
-        'total': '2',
       },
     ];
     return data;
   }
 
-  static mockContactList() {
-    const _chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    Random _rnd = Random();
-    String ranCode = String.fromCharCodes(Iterable.generate(
-        12, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-    String img = 'http://122.155.223.63/td-doc/images/des/des_hall.png';
+  static List<Map<String, dynamic>> emergency = [
+    {"center_Name": "เจ็บป่วยฉุกเฉิน", "center_Tel": "1669"},
+    {"center_Name": "สายด่วนการแพทย์", "center_Tel": "1668"},
+    {"center_Name": "เหตุด่วนเหตุร้าย แจ้งเหตุ", "center_Tel": "191"},
+    {"center_Name": "แจ้งอัคคีภัย", "center_Tel": "199"},
+    {"center_Name": "ตำรวจท่องเที่ยว", "center_Tel": "1155"},
+    {"center_Name": "กรมทางหลวง", "center_Tel": "1586"},
+    {"center_Name": "สายด่วนจิตแพทย์", "center_Tel": "1323"}
+  ];
 
-    List<dynamic> cat01 = [
-      {
-        'code': ranCode,
-        'title': 'ศูนย์ฯใหญ่',
-        'phone': '02 123 4568',
-        'imageUrl': img,
-        'category': '',
-        'description': '',
-      },
-      {
-        'code': ranCode,
-        'title': 'ศูนย์ฯกทม.',
-        'phone': '02 123 4568',
-        'imageUrl': img,
-        'category': '',
-        'description': '',
-      },
-      {
-        'code': ranCode,
-        'title': 'ศูนย์ฯนนทบุรี',
-        'phone': '02 123 4568',
-        'imageUrl': img,
-        'category': '',
-        'description': '',
-      },
-    ];
+  static List<Map<String, dynamic>> DE = [
+    {
+      "center_Name": "กระทรวงดิจิทัลเพื่อเศรษฐกิจและสังคม",
+      "center_Tel": " 064-2086657"
+    },
+  ];
 
-    List<dynamic> cat02 = [
-      {
-        'code': ranCode,
-        'title': 'กระทรวงดิจิตอลฯ',
-        'phone': '02 123 4568',
-        'imageUrl': img,
-        'category': '01',
-        'description': '',
-      },
-      {
-        'code': ranCode,
-        'title': 'สำนักงานดิจิทัลเพื่อเศรษฐกิจ.',
-        'phone': '02 123 4568',
-        'imageUrl': img,
-        'category': '01',
-        'description': '',
-      },
-    ];
+  // static mockContactList() {
+  //   const _chars =
+  //       'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  //   Random _rnd = Random();
+  //   String ranCode = String.fromCharCodes(Iterable.generate(
+  //       12, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+  //   String img = 'http://122.155.223.63/td-doc/images/des/des_hall.png';
 
-    List<dynamic> cat03 = [
-      {
-        'code': ranCode,
-        'title': 'เจ็บป่วยฉุกเฉิน',
-        'phone': '02 123 4568',
-        'imageUrl': img,
-        'category': '02',
-        'description': '',
-      },
-      {
-        'code': ranCode,
-        'title': 'สายด่วนการแพทย์.',
-        'phone': '02 123 4568',
-        'imageUrl': img,
-        'category': '02',
-        'description': '',
-      },
-    ];
+  //   List<dynamic> cat01 = [
+  //     {
+  //       'code': ranCode,
+  //       'title': 'ศูนย์ฯใหญ่',
+  //       'phone': '02 123 4568',
+  //       'imageUrl': img,
+  //       'category': '',
+  //       'description': '',
+  //     },
+  //     {
+  //       'code': ranCode,
+  //       'title': 'ศูนย์ฯกทม.',
+  //       'phone': '02 123 4568',
+  //       'imageUrl': img,
+  //       'category': '',
+  //       'description': '',
+  //     },
+  //     {
+  //       'code': ranCode,
+  //       'title': 'ศูนย์ฯนนทบุรี',
+  //       'phone': '02 123 4568',
+  //       'imageUrl': img,
+  //       'category': '',
+  //       'description': '',
+  //     },
+  //   ];
 
-    cat01.addAll(cat02);
-    cat01.addAll(cat03);
+  //   List<dynamic> cat02 = [
+  //     {
+  //       'code': ranCode,
+  //       'title': 'กระทรวงดิจิตอลฯ',
+  //       'phone': '02 123 4568',
+  //       'imageUrl': img,
+  //       'category': '01',
+  //       'description': '',
+  //     },
+  //     {
+  //       'code': ranCode,
+  //       'title': 'สำนักงานดิจิทัลเพื่อเศรษฐกิจ.',
+  //       'phone': '02 123 4568',
+  //       'imageUrl': img,
+  //       'category': '01',
+  //       'description': '',
+  //     },
+  //   ];
 
-    return cat01;
-  }
+  //   List<dynamic> cat03 = [
+  //     {
+  //       'code': ranCode,
+  //       'title': 'เจ็บป่วยฉุกเฉิน',
+  //       'phone': '02 123 4568',
+  //       'imageUrl': img,
+  //       'category': '02',
+  //       'description': '',
+  //     },
+  //     {
+  //       'code': ranCode,
+  //       'title': 'สายด่วนการแพทย์.',
+  //       'phone': '02 123 4568',
+  //       'imageUrl': img,
+  //       'category': '02',
+  //       'description': '',
+  //     },
+  //   ];
+
+  //   cat01.addAll(cat02);
+  //   cat01.addAll(cat03);
+
+  //   return cat01;
+  // }
 }
 
 class MockBookingData {

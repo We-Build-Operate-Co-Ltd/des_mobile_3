@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:des/main.dart';
 import 'package:des/models/mock_data.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -56,134 +59,131 @@ class _ContactPageState extends State<ContactPage> {
                   child: Container(
                     alignment: Alignment.bottomCenter,
                     child: Container(
-                        padding: EdgeInsets.only(
-                            top: 20, left: 20, right: 20, bottom: 60),
-                        decoration: BoxDecoration(
-                          color:
-                              MyApp.themeNotifier.value == ThemeModeThird.light
-                                  ? Colors.white
-                                  : Colors.black,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20)),
-                        ),
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.8,
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      widget.changePage!(6);
-                                      // Navigator.pop(context);
-                                    },
-                                    child: Container(
-                                      width: 35.0,
-                                      height: 35.0,
-                                      margin: EdgeInsets.all(5),
-                                      child: Image.asset(
-                                          MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.light
-                                              ? 'assets/images/back_profile.png'
-                                              : "assets/images/2024/back_balckwhite.png"
-                                          // color: Colors.white,
-                                          ),
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    'เบอร์ติดต่อ',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w500,
-                                      color: MyApp.themeNotifier.value ==
-                                              ThemeModeThird.light
-                                          ? Color(0xFFB325F8)
-                                          : MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.dark
-                                              ? Colors.white
-                                              : Color(0xFFFFFD57),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 12),
-                              SizedBox(
-                                height: MyApp.fontKanit.value == FontKanit.small
-                                    ? 25
-                                    : MyApp.fontKanit.value == FontKanit.medium
-                                        ? 35
-                                        : 45,
-                                width: double.infinity,
-                                child: FutureBuilder(
-                                  future: _futureCategoryModel,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return ListView.separated(
-                                        scrollDirection: Axis.horizontal,
-                                        physics: ClampingScrollPhysics(),
-                                        itemBuilder: (_, index) =>
-                                            _builditemCategory(
-                                                snapshot.data[index]),
-                                        separatorBuilder: (_, __) =>
-                                            const SizedBox(width: 10),
-                                        itemCount: snapshot.data.length,
-                                      );
-                                    } else {
-                                      return const SizedBox();
-                                    }
+                      padding: EdgeInsets.only(
+                          top: 20, left: 20, right: 20, bottom: 85),
+                      decoration: BoxDecoration(
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Colors.white
+                            : Colors.black,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20)),
+                      ),
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.8,
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    widget.changePage!(6);
+                                    // Navigator.pop(context);
                                   },
+                                  child: Container(
+                                    width: 35.0,
+                                    height: 35.0,
+                                    margin: EdgeInsets.all(5),
+                                    child: Image.asset(
+                                        MyApp.themeNotifier.value ==
+                                                ThemeModeThird.light
+                                            ? 'assets/images/back_profile.png'
+                                            : "assets/images/2024/back_balckwhite.png"
+                                        // color: Colors.white,
+                                        ),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 12),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  ' ${selectedCategory['title']} (${selectedCategory['total']})',
+                                SizedBox(width: 10),
+                                Text(
+                                  'เบอร์ติดต่อ',
                                   style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w500,
                                     color: MyApp.themeNotifier.value ==
                                             ThemeModeThird.light
-                                        ? Color(0xFFBD4BF7)
+                                        ? Color(0xFFB325F8)
                                         : MyApp.themeNotifier.value ==
                                                 ThemeModeThird.dark
                                             ? Colors.white
                                             : Color(0xFFFFFD57),
                                   ),
                                 ),
+                              ],
+                            ),
+                            SizedBox(height: 12),
+                            SizedBox(
+                              height: MyApp.fontKanit.value == FontKanit.small
+                                  ? 25
+                                  : MyApp.fontKanit.value == FontKanit.medium
+                                      ? 35
+                                      : 45,
+                              width: double.infinity,
+                              child: FutureBuilder(
+                                future: _futureCategoryModel,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return ListView.separated(
+                                      scrollDirection: Axis.horizontal,
+                                      physics: ClampingScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        return _builditemCategory(
+                                            snapshot.data[index]);
+                                      },
+                                      separatorBuilder: (_, __) =>
+                                          const SizedBox(width: 10),
+                                      itemCount: snapshot.data.length,
+                                    );
+                                  } else {
+                                    return const SizedBox();
+                                  }
+                                },
                               ),
-                              Expanded(
-                                child: FutureBuilder<dynamic>(
-                                  future: _futureModel,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return ListView.separated(
-                                        padding: EdgeInsets.only(top: 15),
-                                        itemBuilder: (_, index) =>
-                                            _buildItem(snapshot.data[index]),
-                                        separatorBuilder: (_, __) =>
-                                            const SizedBox(height: 10),
-                                        itemCount: snapshot.data.length,
-                                      );
-                                    } else {
-                                      return Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    }
-                                  },
-                                ),
-                              )
-                            ],
-                          ),
-                        )),
+                            ),
+                            Expanded(
+                              child: _isLoading
+                                  ? Center(
+                                      child:
+                                          CircularProgressIndicator()) // แสดง loading เมื่อ _isLoading = true
+                                  : FutureBuilder<dynamic>(
+                                      future: _futureModel,
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          return ListView.separated(
+                                            padding: EdgeInsets.only(top: 15),
+                                            itemBuilder: (_, index) =>
+                                                _buildItem(
+                                                    snapshot.data[index]),
+                                            separatorBuilder: (_, __) =>
+                                                const SizedBox(height: 10),
+                                            itemCount: snapshot.data.length,
+                                          );
+                                        } else {
+                                          return Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        }
+                                      },
+                                    ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
             )),
       ),
     );
+  }
+
+  bool _isLoading = false;
+
+  void onCategoryChanged(String newCategoryCode) {
+    setState(() {
+      _categoryCode = newCategoryCode;
+    });
+    _callRead();
   }
 
   Widget _builditemCategory(dynamic model) {
@@ -193,6 +193,7 @@ class _ContactPageState extends State<ContactPage> {
         GestureDetector(
           onTap: () => setState(() {
             _categoryCode = model['code'];
+            print('======== >>Category Code: $_categoryCode');
             _callRead();
           }),
           child: Container(
@@ -241,7 +242,7 @@ class _ContactPageState extends State<ContactPage> {
 
   Widget _buildItem(dynamic model) {
     return GestureDetector(
-      onTap: () => launchUrl(Uri.parse('tel:${model['phone']}'),
+      onTap: () => launchUrl(Uri.parse('tel:${model['center_Tel']}'),
           mode: LaunchMode.externalApplication),
       child: SizedBox(
         height: MyApp.fontKanit.value == FontKanit.small
@@ -252,23 +253,13 @@ class _ContactPageState extends State<ContactPage> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(22.5),
-              child: Image.network(
-                model['imageUrl'],
-                height: double.infinity,
-                width: 45,
-                fit: BoxFit.cover,
-              ),
-            ),
-            const SizedBox(width: 10),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    model['title'],
+                    model['center_Name'],
                     style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
@@ -281,7 +272,7 @@ class _ContactPageState extends State<ContactPage> {
                     maxLines: 1,
                   ),
                   Text(
-                    model['phone'],
+                    model['center_Tel'] ?? 'ไม่มีข้อมูล',
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w500,
@@ -303,23 +294,24 @@ class _ContactPageState extends State<ContactPage> {
               alignment: Alignment.center,
               padding: EdgeInsets.all(5),
               decoration: BoxDecoration(
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Colors.white
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 4,
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Color(0xFFBD4BF7)
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
-                      offset: Offset(0, 3),
-                    ),
-                  ]),
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Colors.white
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 4,
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFBD4BF7)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
               child: Image.asset(
                 MyApp.themeNotifier.value == ThemeModeThird.light
                     ? 'assets/images/Icon zocial-call.png'
@@ -399,20 +391,46 @@ class _ContactPageState extends State<ContactPage> {
   }
 
   void _callRead() async {
-    List<dynamic> data = await MockContact.mockContactList();
-    var result = data;
-    if (_categoryCode.isNotEmpty)
-      result = await data
-          .where((dynamic e) => e['category'] == _categoryCode)
-          .toList();
-    // if (_searchController.text.isNotEmpty) {
-    //   result = await result
-    //       .where((dynamic e) => e['title'] == _searchController.text)
-    //       .toList();
-    // }
-
+    // เริ่มแสดง loading
     setState(() {
-      _futureModel = Future.value(result);
+      _isLoading = true;
     });
+
+    try {
+      List<dynamic> data = await MockContact.mockContactCategoryList();
+
+      var dio = Dio();
+      var response = await dio.request(
+        'https://dcc.onde.go.th/dcc-api/api/DataManagement/GetCenterLocation?latitude=13.7981919&longitude=100.5602958',
+        options: Options(
+          method: 'GET',
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        print(json.encode(response.data));
+        setState(() {
+          _futureModel = _categoryCode == ''
+              ? Future.value(response.data['data'])
+              : _categoryCode == '2'
+                  ? Future.value(MockContact.emergency)
+                  : _categoryCode == '1'
+                      ? Future.value(MockContact.DE)
+                      : Future.value(response.data['data']);
+          _isLoading = false; // หยุดแสดง loading
+        });
+      } else {
+        print(response.statusMessage);
+        setState(() {
+          _isLoading = false; // หยุดแสดง loading แม้จะเกิด error
+        });
+      }
+    } catch (e) {
+      // จัดการ error
+      print('Error: $e');
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

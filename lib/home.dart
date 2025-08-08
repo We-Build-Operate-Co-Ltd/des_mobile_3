@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
     // var response = await Dio().get('$server/py-api/dcc/lms/recomend');
     var response =
         await Dio().get('$serverPlatform/api/Lms/GetRecommendCourse');
-
+    if (!mounted) return;
     setState(() {
       _modelRecommend = Future.value(response.data);
       _tempModelRecommend.addAll(response.data);
@@ -638,66 +638,185 @@ class _HomePageState extends State<HomePage> {
                                           int index =
                                               snapshot.data.indexOf(item);
                                           return GestureDetector(
+                                            // onTap: () {
+                                            //   print(
+                                            //       '=============================');
+                                            //   if (snapshot.data[_currentBanner]
+                                            //           ['action'] ==
+                                            //       'out') {
+                                            //     if (snapshot
+                                            //             .data[_currentBanner]
+                                            //         ['isPostHeader']) {
+                                            //       var path = snapshot
+                                            //               .data[_currentBanner]
+                                            //           ['linkUrl'];
+                                            //       if (profileCode != '') {
+                                            //         var splitCheck = path
+                                            //             .split('')
+                                            //             .reversed
+                                            //             .join();
+                                            //         if (splitCheck[0] != "/") {
+                                            //           path = path + "/";
+                                            //         }
+                                            //         var codeReplae = "B" +
+                                            //             profileCode!.replaceAll(
+                                            //                 '-', '') +
+                                            //             snapshot.data[
+                                            //                     _currentBanner]
+                                            //                     ['code']
+                                            //                 .replaceAll(
+                                            //                     '-', '');
+                                            //         Navigator.push(
+                                            //           context,
+                                            //           MaterialPageRoute(
+                                            //             builder: (_) =>
+                                            //                 WebViewInAppPage(
+                                            //               url:
+                                            //                   "$path$codeReplae",
+                                            //               title: snapshot.data[
+                                            //                       _currentBanner]
+                                            //                   ['title'],
+                                            //             ),
+                                            //           ),
+                                            //         );
+                                            //       }
+                                            //     } else {
+                                            //       Navigator.push(
+                                            //         context,
+                                            //         MaterialPageRoute(
+                                            //           builder: (_) =>
+                                            //               WebViewInAppPage(
+                                            //             url: snapshot.data[
+                                            //                     _currentBanner]
+                                            //                 ['linkUrl'],
+                                            //             title: snapshot.data[
+                                            //                     _currentBanner]
+                                            //                 ['title'],
+                                            //           ),
+                                            //         ),
+                                            //       );
+                                            //     }
+                                            //   } else if (snapshot
+                                            //               .data[_currentBanner]
+                                            //           ['action'] ==
+                                            //       'in') {
+                                            //     Navigator.push(
+                                            //       context,
+                                            //       MaterialPageRoute(
+                                            //         builder: (context) =>
+                                            //             DetailPage(
+                                            //           slug: 'mock',
+                                            //           model: snapshot
+                                            //               .data[_currentBanner],
+                                            //         ),
+                                            //       ),
+                                            //     );
+                                            //   }
+                                            // },
                                             onTap: () {
-                                              if (snapshot.data[_currentBanner]
-                                                      ['action'] ==
-                                                  'out') {
-                                                if (snapshot
+                                              print(
+                                                  '=============================');
+
+                                              // ตรวจสอบ action ถ้าเป็นค่าว่างหรือ null ให้ถือว่าเป็น 'out' (เปิดลิ้งภายนอก)
+                                              String action =
+                                                  snapshot.data[_currentBanner]
+                                                          ['action'] ??
+                                                      '';
+
+                                              // ถ้า action เป็นค่าว่าง ให้ default เป็น 'out'
+                                              if (action.isEmpty) {
+                                                action = 'out';
+                                              }
+
+                                              if (action == 'out') {
+                                                // ตรวจสอบว่ามี linkUrl หรือไม่
+                                                String? linkUrl = snapshot
                                                         .data[_currentBanner]
-                                                    ['isPostHeader']) {
-                                                  var path = snapshot
-                                                          .data[_currentBanner]
-                                                      ['linkUrl'];
-                                                  if (profileCode != '') {
-                                                    var splitCheck = path
-                                                        .split('')
-                                                        .reversed
-                                                        .join();
-                                                    if (splitCheck[0] != "/") {
-                                                      path = path + "/";
+                                                    ['linkUrl'];
+
+                                                if (linkUrl != null &&
+                                                    linkUrl.isNotEmpty) {
+                                                  if (snapshot.data[
+                                                              _currentBanner]
+                                                          ['isPostHeader'] ==
+                                                      true) {
+                                                    var path = linkUrl;
+                                                    if (profileCode != null &&
+                                                        profileCode!
+                                                            .isNotEmpty) {
+                                                      var splitCheck = path
+                                                          .split('')
+                                                          .reversed
+                                                          .join();
+                                                      if (splitCheck[0] !=
+                                                          "/") {
+                                                        path = path + "/";
+                                                      }
+                                                      var codeReplace = "B" +
+                                                          profileCode!
+                                                              .replaceAll(
+                                                                  '-', '') +
+                                                          snapshot.data[
+                                                                  _currentBanner]
+                                                                  ['code']
+                                                              .replaceAll(
+                                                                  '-', '');
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (_) =>
+                                                              WebViewInAppPage(
+                                                            url:
+                                                                "$path$codeReplace",
+                                                            title: snapshot.data[
+                                                                        _currentBanner]
+                                                                    ['title'] ??
+                                                                '',
+                                                          ),
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      // ถ้าไม่มี profileCode ให้เปิดลิ้งตรงๆ
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (_) =>
+                                                              WebViewInAppPage(
+                                                            url: linkUrl,
+                                                            title: snapshot.data[
+                                                                        _currentBanner]
+                                                                    ['title'] ??
+                                                                '',
+                                                          ),
+                                                        ),
+                                                      );
                                                     }
-                                                    var codeReplae = "B" +
-                                                        profileCode!.replaceAll(
-                                                            '-', '') +
-                                                        snapshot.data[
-                                                                _currentBanner]
-                                                                ['code']
-                                                            .replaceAll(
-                                                                '-', '');
+                                                  } else {
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
                                                         builder: (_) =>
                                                             WebViewInAppPage(
-                                                          url:
-                                                              "$path$codeReplae",
+                                                          url: linkUrl,
                                                           title: snapshot.data[
-                                                                  _currentBanner]
-                                                              ['title'],
+                                                                      _currentBanner]
+                                                                  ['title'] ??
+                                                              '',
                                                         ),
                                                       ),
                                                     );
                                                   }
                                                 } else {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (_) =>
-                                                          WebViewInAppPage(
-                                                        url: snapshot.data[
-                                                                _currentBanner]
-                                                            ['linkUrl'],
-                                                        title: snapshot.data[
-                                                                _currentBanner]
-                                                            ['title'],
-                                                      ),
-                                                    ),
+                                                  print('No linkUrl provided');
+                                                  // อาจจะแสดง Snackbar หรือ Alert บอกผู้ใช้
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                        content: Text(
+                                                            'ไม่พบลิงก์ที่จะเปิด')),
                                                   );
                                                 }
-                                              } else if (snapshot
-                                                          .data[_currentBanner]
-                                                      ['action'] ==
-                                                  'in') {
+                                              } else if (action == 'in') {
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -708,6 +827,16 @@ class _HomePageState extends State<HomePage> {
                                                           .data[_currentBanner],
                                                     ),
                                                   ),
+                                                );
+                                              } else {
+                                                print(
+                                                    'Unknown action: $action');
+                                                // Handle unknown action types
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'ประเภทการทำงานไม่รองรับ: $action')),
                                                 );
                                               }
                                             },
@@ -1661,13 +1790,26 @@ class _HomePageState extends State<HomePage> {
     Dio dio = Dio();
     Response<dynamic> response;
     try {
-      response = await dio.post('$server/dcc-api/m/Banner/main/read', data: {});
+      response = await dio.post(
+        'https://decms.dcc.onde.go.th/dcc-api/m/eventCalendar/read',
+        data: {},
+      );
+
       if (response.statusCode == 200) {
         if (response.data['status'] == 'S') {
-          return response.data['objectData'];
+          List<dynamic> allData = response.data['objectData'];
+
+          // กรองเฉพาะรายการที่ linkUrl มีค่า (ไม่ null และไม่ว่าง)
+          return allData
+              .where((item) =>
+                  item['linkUrl'] != null &&
+                  item['linkUrl'].toString().trim().isNotEmpty)
+              .toList();
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      print("Error: $e");
+    }
     return [];
   }
 
