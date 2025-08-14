@@ -1,5 +1,6 @@
 import 'package:des/main.dart';
 import 'package:des/shared/config.dart';
+import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/widget/blinking_icon.dart';
 import 'package:dio/dio.dart';
@@ -37,48 +38,59 @@ class _MyCourseSuccessPageState extends State<MyCourseSuccessPage> {
     return FutureBuilder<dynamic>(
       future: _modelMyCourseSuccess, // function where you call your api
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data!.length > 0) {
-            return Container(
-                color: Colors.transparent,
-                alignment: Alignment.center,
-                padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                child: Column(
-                  children: [
-                    Container(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'คอร์สสำเร็จ (${_listLenght})',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'Kanit',
-                          fontWeight: FontWeight.w600,
-                          color: MyApp.themeNotifier.value ==
-                                  ThemeModeThird.light
-                              ? Color(0xFFB325F8)
-                              : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                  ? Colors.white
-                                  : Color(0xFFFFFD57),
-                        ),
+        if (_isLoading) {
+          return Container(
+            color: Colors.transparent,
+            alignment: Alignment.center,
+            child: CircularProgressIndicator(
+              color: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? Color(0xFFB325F8)
+                  : MyApp.themeNotifier.value == ThemeModeThird.dark
+                      ? Colors.white
+                      : Color(0xFFFFFD57),
+            ),
+          );
+        }
+
+        if (snapshot.hasData &&
+            snapshot.data is List &&
+            (snapshot.data as List).isNotEmpty) {
+          return Container(
+              color: Colors.transparent,
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(left: 10.0, right: 10.0),
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'คอร์สสำเร็จ (${_listLenght})',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'Kanit',
+                        fontWeight: FontWeight.w600,
+                        color: MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? Color(0xFFB325F8)
+                            : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                ? Colors.white
+                                : Color(0xFFFFFD57),
                       ),
                     ),
-                    const SizedBox(height: 30),
-                    ListView.builder(
-                        physics: ScrollPhysics(),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        padding: EdgeInsets.zero,
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (context, index) {
-                          return _buildContant(snapshot.data[index]);
-                        }),
-                  ],
-                ));
-          } else {
-            return blankListData(context);
-          }
+                  ),
+                  const SizedBox(height: 30),
+                  ListView.builder(
+                      physics: ScrollPhysics(),
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      padding: EdgeInsets.zero,
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        return _buildContant(snapshot.data[index]);
+                      }),
+                ],
+              ));
         } else {
-          return Container();
+          return blankListData(context);
         }
       },
     );
@@ -93,21 +105,44 @@ class _MyCourseSuccessPageState extends State<MyCourseSuccessPage> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  param['thumbnailLink'],
-                  fit: BoxFit.cover,
-                  height: 95,
-                  width: 160,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return BlinkingIcon(); // Placeholder ขณะโหลด
-                  },
-                  errorBuilder: (context, error, stackTrace) {
-                    return Icon(Icons.error); // เมื่อโหลดรูปไม่สำเร็จ
-                  },
-                ),
+              Expanded(
+                child: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          param['course_Thumbnail_Url'],
+                          fit: BoxFit.cover,
+                          height: 95,
+                          width: 160,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return BlinkingIcon(); // Placeholder ขณะโหลด
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return Icon(Icons.error); // เมื่อโหลดรูปไม่สำเร็จ
+                          },
+                        ),
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: ColorFiltered(
+                          colorFilter: ColorFilter.mode(
+                              Colors.grey, BlendMode.saturation),
+                          child: Image.network(
+                            param['course_Thumbnail_Url'],
+                            fit: BoxFit.cover,
+                            height: 95,
+                            width: 160,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return BlinkingIcon(); // Placeholder ขณะโหลด
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return Icon(Icons.error); // เมื่อโหลดรูปไม่สำเร็จ
+                            },
+                          ),
+                        ),
+                      ),
               ),
               SizedBox(width: 9),
               Column(
@@ -118,7 +153,7 @@ class _MyCourseSuccessPageState extends State<MyCourseSuccessPage> {
                     child: Container(
                       width: 160,
                       child: Text(
-                        '${param['title']}',
+                        '${param['course_Name']}',
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
@@ -136,46 +171,74 @@ class _MyCourseSuccessPageState extends State<MyCourseSuccessPage> {
                   ),
                   Expanded(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: Container(
-                            width: 160,
-                            child: Text(
-                              'สำเร็จแล้ว',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? Color(0xFF19AA6A)
-                                    : MyApp.themeNotifier.value ==
-                                            ThemeModeThird.dark
-                                        ? Colors.white
-                                        : Color(0xFFFFFD57),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                  MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? 'assets/images/course_time.png'
+                                      : "assets/images/2024/time_home_page_blackwhite.png",
+                                  height: 24,
+                                  width: 24),
+                              SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.005),
+                              Text(
+                                (param?['course_Duration']),
+                                style: TextStyle(
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w400,
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Color(0xFFB325F8)
+                                      : MyApp.themeNotifier.value ==
+                                              ThemeModeThird.dark
+                                          ? Colors.white
+                                          : Color(0xFFFFFD57),
+                                ),
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                            ),
+                            ],
                           ),
                         ),
+                        SizedBox(height: 5),
                         Expanded(
-                          child: Container(
-                            width: 160,
-                            child: Text(
-                              'ผลการเรียน: ระดับดีมาก',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
+                          child: GestureDetector(
+                            onTap: () {
+                              print(
+                                  '-------------->> Handle certificate tap <<--------------');
+                            },
+                            child: Container(
+                              width: 160,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
                                 color: MyApp.themeNotifier.value ==
                                         ThemeModeThird.light
-                                    ? Colors.black
+                                    ? Color(0xFFB325F8)
                                     : MyApp.themeNotifier.value ==
                                             ThemeModeThird.dark
                                         ? Colors.white
                                         : Color(0xFFFFFD57),
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
+                              child: Center(
+                                child: Text(
+                                  'Certificate',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Colors.white
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.black
+                                              : Colors.black),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -186,83 +249,6 @@ class _MyCourseSuccessPageState extends State<MyCourseSuccessPage> {
               )
             ],
           ),
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () {},
-                child: Container(
-                  width: double.infinity,
-                  height: 25,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Colors.white
-                          : Colors.black,
-                      border: Border.all(
-                        width: 1,
-                        style: BorderStyle.solid,
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Color(0xFFB325F8).withOpacity(0.5)
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? Colors.white
-                                : Color(0xFFFFFD57),
-                      )),
-                  child: Text(
-                    'ดูทั้งหมด',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Color(0xFFB325F8)
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 15),
-            Expanded(
-              child: GestureDetector(
-                onTap: () {},
-                child: Container(
-                  width: double.infinity,
-                  height: 25,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Colors.white
-                          : Colors.black,
-                      border: Border.all(
-                        width: 1,
-                        style: BorderStyle.solid,
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Color(0xFFB325F8).withOpacity(0.5)
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? Colors.white
-                                : Color(0xFFFFFD57),
-                      )),
-                  child: Text(
-                    'ดูทั้งหมด',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Color(0xFFB325F8)
-                          : MyApp.themeNotifier.value == ThemeModeThird.dark
-                              ? Colors.white
-                              : Color(0xFFFFFD57),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
         ),
         const SizedBox(height: 15),
         lineBottom(),
@@ -553,15 +539,52 @@ class _MyCourseSuccessPageState extends State<MyCourseSuccessPage> {
     super.initState();
   }
 
+  bool _isLoading = false;
   _callRead() async {
-    var response = await Dio().get('$ondeURL/api/Lms/GetCouseExternal');
+    try {
+      var dio = Dio();
+      var profileMe = await ManageStorage.readDynamic('profileMe') ?? {};
+      var accessToken = await ManageStorage.read('accessToken') ?? '';
+      var headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      };
+      setState(() {
+        _isLoading = true;
+      });
 
-    setState(() {
-      _modelMyCourseSuccess = Future.value({});
-    });
+      if (profileMe['lmsUserId'] == null ||
+          profileMe['lmsUserId'].toString().isEmpty) {
+        setState(() {
+          _modelMyCourseSuccess = Future.value([]);
+          _listLenght = 0;
+          _isLoading = false;
+        });
+        return;
+      }
 
-    var model = await _modelMyCourseSuccess;
-    _listLenght = model.length;
+      var response = await dio.get(
+        'https://dcc.onde.go.th/dcc-api/api/Lms/GetCompleteCourse?studentId=${profileMe['lmsUserId']}',
+        options: Options(headers: headers),
+      );
+
+      if (response.statusCode == 200) {
+        var model = response.data ?? [];
+
+        setState(() {
+          _modelMyCourseSuccess = Future.value(model);
+          _listLenght = model.length;
+
+          _isLoading = false;
+        });
+      } else {
+        print('Error: ${response.statusMessage}');
+        _isLoading = false;
+      }
+    } catch (e) {
+      print('Exception: $e');
+      _isLoading = false;
+    }
   }
 
   lineBottom() {
