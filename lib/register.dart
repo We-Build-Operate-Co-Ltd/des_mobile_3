@@ -336,7 +336,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
                                 RegExp regex = new RegExp(pattern);
                                 if (model!.isEmpty) {
-                                  return 'กรุณากรอกชื่อ.';
+                                  return 'กรุณากรอกอีเมล';
                                 } else if (!regex.hasMatch(model)) {
                                   return 'กรุณากรอกรูปแบบอีเมลให้ถูกต้อง.';
                                 } else {

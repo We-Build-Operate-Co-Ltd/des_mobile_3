@@ -18,6 +18,7 @@ import 'package:des/user_profile.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:des/home.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -364,8 +365,7 @@ class _MenuState extends State<Menu> {
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Container(
-      padding: EdgeInsets.only(bottom: bottomPadding),
-      height: 75 + bottomPadding,
+      height: 45 + bottomPadding,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -425,6 +425,7 @@ class _MenuState extends State<Menu> {
                 )
               : null,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Center(
                 child: _buildTapIcon(title, pathImage, color, isNetwork),

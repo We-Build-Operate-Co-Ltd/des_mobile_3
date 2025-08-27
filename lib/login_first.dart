@@ -55,7 +55,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
   bool openLine = false;
   DateTime? currentBackPressTime;
   final storage = const FlutterSecureStorage();
-  String? fontStorageValue;
+  String fontStorageValue = "ปกติ";
   List<dynamic> _listSwitchColors = [
     {'code': '1', 'title': 'ปกติ', 'isSelected': true},
     {'code': '2', 'title': 'ขาวดำ', 'isSelected': false},
@@ -212,16 +212,11 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                                   width: 35,
                                   right: 0,
                                   top: 0,
-                                  // bottom: 0,
-                                  // left: 0,
                                   child: GestureDetector(
                                     onTap: () {
                                       buildModalSwitch(context);
                                     },
                                     child: Container(
-                                      // height: 35,
-                                      // width: 35,
-                                      // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 7),
                                       decoration: BoxDecoration(
                                           color: Colors.black,
                                           borderRadius:
@@ -666,7 +661,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
     var a = storage.read(key: 'switchSizeFont');
     a.then((value) async => {
           setState(() {
-            fontStorageValue = value;
+            fontStorageValue = value!;
           })
         });
     return InkWell(
@@ -677,6 +672,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
               key: 'switchSizeFont',
               value: title,
             );
+
             if (title == "ปกติ") {
               // MyApp.themeNotifier.value = ThemeModeThird.light;
               MyApp.fontKanit.value = FontKanit.small;
@@ -688,7 +684,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
             var a = storage.read(key: 'switchSizeFont');
             a.then((value) => {
                   setState(() {
-                    fontStorageValue = value;
+                    fontStorageValue = value!;
                   })
                 });
           }),
@@ -699,21 +695,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
           padding: EdgeInsets.symmetric(horizontal: 20),
           alignment: Alignment.center,
           height: 45,
-          // width: 145,
           decoration: BoxDecoration(
-            // border: Border.all(
-            //   width: 1,
-            //   style: BorderStyle.solid,
-            //   color: MyApp.themeNotifier.value == ThemeModeThird.light
-            //       ? (title == fontStorageValue ? Colors.white : Colors.black)
-            //       : MyApp.themeNotifier.value == ThemeModeThird.dark
-            //           ? (title == fontStorageValue
-            //               ? Colors.black
-            //               : Colors.white)
-            //           : (title == fontStorageValue
-            //               ? Colors.black
-            //               : Color(0xFFFFFD57)),
-            // ),
             color: MyApp.themeNotifier.value == ThemeModeThird.light
                 ? (title == fontStorageValue ? Color(0xFF7A4CB1) : Colors.white)
                 : MyApp.themeNotifier.value == ThemeModeThird.dark
@@ -738,7 +720,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                                   ? 'assets/images/icon_wb.png'
                                   : "assets/images/icon_yb.png",
                           height: 35,
-                          // width: 35,
                         )
                       : Container(),
                   SizedBox(width: 5),
@@ -796,9 +777,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                               : Colors.black),
                 ),
                 child: Container(
-                  // height: 15,
-                  // width: 15,
-                  // padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: MyApp.themeNotifier.value == ThemeModeThird.light
@@ -829,13 +807,6 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
                                 : Colors.black),
                   ),
                 ),
-                //   child:
-                //   Image.asset(
-                //   item['isSelected'] == true
-                //       ? 'assets/images/icon_check.png'
-                //       : "assets/images/icon_nocheck.png",
-
-                // )
               ),
             ],
           )),
@@ -1448,10 +1419,11 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       );
     } catch (e) {
       setState(() => _loadingSubmit = false);
-      // logE(e);
-      Fluttertoast.showToast(msg: e.toString());
-      // Fluttertoast.showToast(
-      //     msg: 'รหัสผ่านหรืออีเมลไม่ถูกต้อง', gravity: ToastGravity.CENTER);
+      logE(e);
+      // Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
+      );
     }
   }
 
@@ -1484,7 +1456,7 @@ class _LoginFirstPageState extends State<LoginFirstPage> {
       if (response.statusCode == 200) {
         return response.data['objectData'];
       } else {
-        Fluttertoast.showToast(msg: response.data['error_description']);
+        // Fluttertoast.showToast(msg: response.data['error_description']);
         return null;
       }
     } on DioError catch (e) {
