@@ -1,4 +1,5 @@
 import 'package:des/main.dart';
+import 'package:des/shared/config.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:des/webview_inapp.dart';
@@ -111,8 +112,8 @@ class _MyCoursePageState extends State<MyCoursePage> {
           MaterialPageRoute(
             builder: (_) => WebViewInAppPage(
               url:
-                  'https://lms.dcc.onde.go.th/user/user/lesson_details/${param['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}',
-              title: param['course_name'] ?? '',
+                  'https://lms.dcc.onde.go.th/user/user/lesson_details/${param['course_Id']}?sso_key=${loginData['sub']}&access_token=${accessToken}',
+              title: param['course_Name'] ?? '',
             ),
           ),
         );
@@ -459,9 +460,6 @@ class _MyCoursePageState extends State<MyCoursePage> {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $accessToken',
       };
-      print('-------------------------------');
-      print('profileMe: ${profileMe['lmsUserId']}');
-      print('-------------------------------');
 
       if (profileMe['lmsUserId'] == null ||
           profileMe['lmsUserId'].toString().isEmpty) {
@@ -474,7 +472,7 @@ class _MyCoursePageState extends State<MyCoursePage> {
       }
 
       var response = await dio.get(
-        'https://dcc.onde.go.th/dcc-api/api/Lms/GetEnrolledCourse?studentId=${profileMe['lmsUserId']}',
+        '$ondeURL/api/Lms/GetEnrolledCourse?studentId=${profileMe['lmsUserId']}',
         options: Options(headers: headers),
       );
 

@@ -99,6 +99,8 @@
 	<string>เพื่อแสดงตำแหน่งปัจจุบันของคุณ และแนะนำสถานที่น่าสนใจให้กับคุณ</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>เพื่อแสดงตำแหน่งปัจจุบันของคุณ และแนะนำสถานที่น่าสนใจให้กับคุณ</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>	
+	<string>แอปต้องการใช้ตำแหน่งของคุณเพื่อแสดงแผนที่</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>DCC Platform Microphone Usage</string>
 	<key>NSMotionUsageDescription</key>
@@ -117,6 +119,9 @@
 	<string>DCC Platform Video Subscribe Usage</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

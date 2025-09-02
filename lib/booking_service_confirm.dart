@@ -1057,7 +1057,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
 
       setState(() => _loadingSubmit = true);
       logWTF('model');
-      final String baseUrl = 'https://dcc.onde.go.th/dcc-api';
+      final String baseUrl = '$ondeURL';
       // ignore: unused_local_variable
       Response response =
           await Dio().put('${baseUrl}/api/Booking/PostponeBooking', data: data);
@@ -1112,7 +1112,7 @@ class _BookingServiceConfirmPageState extends State<BookingServiceConfirmPage> {
         return;
       }
       setState(() => _loadingSubmit = true);
-      final String baseUrl = 'https://dcc.onde.go.th/dcc-api';
+      final String baseUrl = '$ondeURL';
       Response response = await Dio()
           .put('${baseUrl}/api/Booking/Cancel?bookingNo=${widget.bookingno}');
       setState(() => _loadingSubmit = false);

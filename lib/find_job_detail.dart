@@ -1,4 +1,5 @@
 import 'package:des/main.dart';
+import 'package:des/shared/config.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -683,8 +684,8 @@ class _FindJobDetailPageState extends State<FindJobDetailPage> {
 
   _callRead() async {
     Dio dio = new Dio();
-    var response = await dio.get(
-        'https://dcc.onde.go.th/dcc-api/api/Job/GetJobPost/${widget.model['jobapplicationno']}');
+    var response = await dio
+        .get('$ondeURL/api/Job/GetJobPost/${widget.model['jobapplicationno']}');
 
     setState(() {
       _detailModel = response.data['data'];

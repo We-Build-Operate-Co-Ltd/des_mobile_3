@@ -142,7 +142,7 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
                   ),
                   _buildStep(),
                   const SizedBox(
-                    height: 16,
+                    height: 8,
                   ),
                   Expanded(
                     child: _detailContent(),
@@ -764,6 +764,7 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
       shrinkWrap: true,
       padding: EdgeInsets.only(bottom: 100),
       children: [
+        SizedBox(height: 8),
         GestureDetector(
           onTap: () => dialogOpenPickerDate(),
           child: AbsorbPointer(
@@ -781,7 +782,7 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
               ),
               validator: (model) {
                 if (model!.isEmpty) {
-                  return 'กรุณากรอกวันเดือนปีเกิด.';
+                  return 'กรุณากรอกวันที่ใช้บริการ';
                 }
                 return null;
               },
@@ -1526,6 +1527,7 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
         // hintText: hintText,
         filled: true,
         fillColor: Colors.transparent,
+
         contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
         suffixIcon: const Icon(Icons.calendar_today, size: 17),
         border: OutlineInputBorder(

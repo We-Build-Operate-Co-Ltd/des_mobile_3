@@ -1,4 +1,5 @@
 import 'package:des/fund_detail.dart';
+import 'package:des/shared/config.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -150,15 +151,9 @@ class _FundPageState extends State<FundPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.transparent,
-      extendBody: true,
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Container(
+    return Stack(
+      children: [
+        Container(
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/images/BG.png"),
@@ -168,356 +163,369 @@ class _FundPageState extends State<FundPage> {
                   : ColorFilter.mode(Colors.grey, BlendMode.saturation),
             ),
           ),
-          child: Container(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: MyApp.themeNotifier.value == ThemeModeThird.light
-                    ? Colors.white
-                    : Colors.black,
-                borderRadius: BorderRadius.circular(20),
+        ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height * 0.12,
               ),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.8,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      child: Column(
-                        children: [
-                          Row(
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.white
+                        : Colors.black,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(24.0),
+                      topRight: Radius.circular(24.0),
+                    ),
+                  ),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          child: Column(
                             children: [
-                              GestureDetector(
-                                onTap: () => {
-                                  widget.changePage!(0),
-                                  // Navigator.pop(context),
-                                },
-                                child: Container(
-                                  width: 35.0,
-                                  height: 35.0,
-                                  margin: EdgeInsets.all(5),
-                                  child: Image.asset(
-                                      MyApp.themeNotifier.value ==
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () => {
+                                      widget.changePage!(0),
+                                    },
+                                    child: Container(
+                                      width: 35.0,
+                                      height: 35.0,
+                                      margin: EdgeInsets.all(5),
+                                      child: Image.asset(MyApp
+                                                  .themeNotifier.value ==
                                               ThemeModeThird.light
                                           ? 'assets/images/back_profile.png'
-                                          : "assets/images/2024/back_balckwhite.png"
-                                      // color: Colors.white,
-                                      ),
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              Flexible(
-                                child: Text(
-                                  'สรรหาแหล่งทุน',
-                                  style: TextStyle(
-                                    fontSize:
-                                        MyApp.fontKanit.value == FontKanit.small
+                                          : "assets/images/2024/back_balckwhite.png"),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Flexible(
+                                    child: Text(
+                                      'สรรหาแหล่งทุน',
+                                      style: TextStyle(
+                                        fontSize: MyApp.fontKanit.value ==
+                                                FontKanit.small
                                             ? 24
                                             : 22,
-                                    fontWeight: FontWeight.w500,
-                                    color: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Color(0xFFB325F8)
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
-                                            ? Colors.white
-                                            : Color(0xFFFFFD57),
+                                        fontWeight: FontWeight.w500,
+                                        color: MyApp.themeNotifier.value ==
+                                                ThemeModeThird.light
+                                            ? Color(0xFFB325F8)
+                                            : MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.dark
+                                                ? Colors.white
+                                                : Color(0xFFFFFD57),
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
+                              SizedBox(height: 20),
+                              _buildListFundCategory(),
                             ],
                           ),
-                          SizedBox(height: 20),
-                          _buildListFundCategory(),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 12),
-                    Expanded(
-                      child: ListView(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.zero,
-                        physics: ClampingScrollPhysics(),
-                        children: [
-                          Text(
-                            cateFund[_typeSelected],
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15,
-                                color: MyApp.themeNotifier.value ==
-                                        ThemeModeThird.light
-                                    ? Color(0xFFBD4BF7)
-                                    : MyApp.themeNotifier.value ==
-                                            ThemeModeThird.dark
-                                        ? Colors.white
-                                        : Color(0xFFFFFD57)),
-                          ),
-                          SizedBox(height: 20),
-                          if (_typeSelected == 0)
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                TextField(
-                                  controller: _searchController,
-                                  onChanged: (text) {
-                                    // print("First text field: $text");
-                                    // setState(() {
-                                    //   _filtter(text);
-                                    // });
-                                  },
-                                  style: TextStyle(
+                        ),
+                        SizedBox(height: 12),
+                        Expanded(
+                          child: ListView(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            physics: ClampingScrollPhysics(),
+                            children: [
+                              Text(
+                                cateFund[_typeSelected],
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15,
                                     color: MyApp.themeNotifier.value ==
                                             ThemeModeThird.light
-                                        ? Colors.black
+                                        ? Color(0xFFBD4BF7)
                                         : MyApp.themeNotifier.value ==
                                                 ThemeModeThird.dark
                                             ? Colors.white
-                                            : Color(0xFFFFFD57),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: 0.5,
-                                  ),
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 10.0),
-                                    isDense: true,
-                                    fillColor: MyApp.themeNotifier.value ==
-                                            ThemeModeThird.light
-                                        ? Colors.white
-                                        : MyApp.themeNotifier.value ==
-                                                ThemeModeThird.dark
+                                            : Color(0xFFFFFD57)),
+                              ),
+                              SizedBox(height: 20),
+                              if (_typeSelected == 0)
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    TextField(
+                                      controller: _searchController,
+                                      onChanged: (text) {},
+                                      style: TextStyle(
+                                        color: MyApp.themeNotifier.value ==
+                                                ThemeModeThird.light
                                             ? Colors.black
-                                            : Colors.black,
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.light
-                                              ? Color(0xFFBD4BF7)
-                                              : MyApp.themeNotifier.value ==
-                                                      ThemeModeThird.dark
-                                                  ? Colors.white
-                                                  : Color(0xFFFFFD57),
-                                          width: 1),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.light
-                                              ? Color(0xFFBD4BF7)
-                                              : MyApp.themeNotifier.value ==
-                                                      ThemeModeThird.dark
-                                                  ? Colors.white
-                                                  : Color(0xFFFFFD57),
-                                          width: 1),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide(
-                                          color: Color(
-                                              0xFFDDDDDD) // Default border color
-                                          ),
-                                    ),
-                                    hintText: 'พิมพ์คำค้นหา',
-                                    hintStyle: TextStyle(
-                                      color: MyApp.themeNotifier.value ==
-                                              ThemeModeThird.light
-                                          ? Color(0xFFBD4BF7)
-                                          : MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.dark
-                                              ? Colors.white
-                                              : Color(0xFFFFFD57),
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
-                                      letterSpacing: 0.5,
-                                      decorationThickness: 6,
-                                    ),
-                                    prefixIcon: const Icon(Icons.search),
-                                    prefixIconColor:
-                                        MyApp.themeNotifier.value ==
-                                                ThemeModeThird.light
-                                            ? Color(0xFFBD4BF7)
                                             : MyApp.themeNotifier.value ==
                                                     ThemeModeThird.dark
                                                 ? Colors.white
                                                 : Color(0xFFFFFD57),
-                                    suffixIcon: Align(
-                                      widthFactor: 1.0,
-                                      heightFactor: 1.0,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          _showModelBottonSheetFund(context);
-                                        },
-                                        child: Image.asset(MyApp
-                                                    .themeNotifier.value ==
-                                                ThemeModeThird.light
-                                            ? 'assets/images/filter.png'
-                                            : MyApp.themeNotifier.value ==
-                                                    ThemeModeThird.dark
-                                                ? "assets/images/2024/filter_w.png"
-                                                : "assets/images/2024/filter_y.png"),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      _handleSearch(_searchController.text);
-                                      _searchController.clear();
-                                    });
-                                  },
-                                  child: Container(
-                                    height: 50,
-                                    width: double.infinity,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          // ? Color(0xFFB325F8)
-                                          MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.light
-                                              ? Color(0xFFBD4BF7)
-                                              : MyApp.themeNotifier.value ==
-                                                      ThemeModeThird.dark
-                                                  ? Colors.white
-                                                  : Color(0xFFFFFD57),
-                                      borderRadius: BorderRadius.circular(24),
-                                      boxShadow: const [
-                                        BoxShadow(
-                                          blurRadius: 4,
-                                          color: Color(0x40F3D2FF),
-                                          offset: Offset(0, 4),
-                                        )
-                                      ],
-                                    ),
-                                    child: Text(
-                                      'ค้นหาแหล่งทุน',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          color: MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.light
-                                              ? Colors.white
-                                              : MyApp.themeNotifier.value ==
-                                                      ThemeModeThird.dark
-                                                  ? Colors.black
-                                                  : Colors.black),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 30),
-                                Container(height: 2, color: Color(0xFFDDDDDD)),
-                                SizedBox(height: 20),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'แหล่งทุนทั้งหมด ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 15,
-                                      color: MyApp.themeNotifier.value ==
-                                              ThemeModeThird.light
-                                          ? Color(0xFFBD4BF7)
-                                          : MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.dark
-                                              ? Colors.white
-                                              : Color(0xFFFFFD57),
-                                    ),
-                                  ),
-                                ),
-                                if (_loadingWidget)
-                                  Center(
-                                    child: CircularProgressIndicator(
-                                      color: MyApp.themeNotifier.value ==
-                                              ThemeModeThird.light
-                                          ? Color(0xFFBD4BF7)
-                                          : MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.dark
-                                              ? Colors.white
-                                              : Color(0xFFFFFD57),
-                                    ),
-                                  )
-                                else
-                                  _investor.length != 0
-                                      ? _buildListInvestor()
-                                      : Center(
-                                          child: Text(
-                                            'ไม่พบข้อมูล',
-                                          ),
-                                        ),
-                                SizedBox(height: 20),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      i += 5;
-                                    });
-                                  },
-                                  child: Container(
-                                    height: 50,
-                                    width: double.infinity,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: MyApp.themeNotifier.value ==
-                                              ThemeModeThird.light
-                                          ? Color(0xFFBD4BF7)
-                                          : MyApp.themeNotifier.value ==
-                                                  ThemeModeThird.dark
-                                              ? Colors.white
-                                              : Colors.black,
-                                      borderRadius: BorderRadius.circular(24),
-                                      border: Border.all(
-                                        width: 1.0,
-                                        color: MyApp.themeNotifier.value ==
-                                                ThemeModeThird.light
-                                            ? Color(0xFFBD4BF7)
-                                            : MyApp.themeNotifier.value ==
-                                                    ThemeModeThird.dark
-                                                ? Colors.white
-                                                : Color(0xFFFFFD57),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      'ดูเพิ่มเติม',
-                                      style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.w400,
-                                        color: MyApp.themeNotifier.value ==
+                                        letterSpacing: 0.5,
+                                      ),
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 10.0),
+                                        isDense: true,
+                                        fillColor: MyApp.themeNotifier.value ==
                                                 ThemeModeThird.light
                                             ? Colors.white
                                             : MyApp.themeNotifier.value ==
                                                     ThemeModeThird.dark
                                                 ? Colors.black
-                                                : Color(0xFFFFFD57),
+                                                : Colors.black,
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: MyApp.themeNotifier
+                                                          .value ==
+                                                      ThemeModeThird.light
+                                                  ? Color(0xFFBD4BF7)
+                                                  : MyApp.themeNotifier.value ==
+                                                          ThemeModeThird.dark
+                                                      ? Colors.white
+                                                      : Color(0xFFFFFD57),
+                                              width: 1),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: MyApp.themeNotifier
+                                                          .value ==
+                                                      ThemeModeThird.light
+                                                  ? Color(0xFFBD4BF7)
+                                                  : MyApp.themeNotifier.value ==
+                                                          ThemeModeThird.dark
+                                                      ? Colors.white
+                                                      : Color(0xFFFFFD57),
+                                              width: 1),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          borderSide: BorderSide(
+                                              color: Color(0xFFDDDDDD)),
+                                        ),
+                                        hintText: 'พิมพ์คำค้นหา',
+                                        hintStyle: TextStyle(
+                                          color: MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.light
+                                              ? Color(0xFFBD4BF7)
+                                              : MyApp.themeNotifier.value ==
+                                                      ThemeModeThird.dark
+                                                  ? Colors.white
+                                                  : Color(0xFFFFFD57),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w400,
+                                          letterSpacing: 0.5,
+                                          decorationThickness: 6,
+                                        ),
+                                        prefixIcon: const Icon(Icons.search),
+                                        prefixIconColor:
+                                            MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.light
+                                                ? Color(0xFFBD4BF7)
+                                                : MyApp.themeNotifier.value ==
+                                                        ThemeModeThird.dark
+                                                    ? Colors.white
+                                                    : Color(0xFFFFFD57),
+                                        suffixIcon: Align(
+                                          widthFactor: 1.0,
+                                          heightFactor: 1.0,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              _showModelBottonSheetFund(
+                                                  context);
+                                            },
+                                            child: Image.asset(MyApp
+                                                        .themeNotifier.value ==
+                                                    ThemeModeThird.light
+                                                ? 'assets/images/filter.png'
+                                                : MyApp.themeNotifier.value ==
+                                                        ThemeModeThird.dark
+                                                    ? "assets/images/2024/filter_w.png"
+                                                    : "assets/images/2024/filter_y.png"),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    InkWell(
+                                      splashColor: Colors.red,
+                                      onTap: () {
+                                        setState(() {
+                                          _handleSearch(_searchController.text);
+                                        });
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        width: double.infinity,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color:
+                                              // ? Color(0xFFB325F8)
+                                              MyApp.themeNotifier.value ==
+                                                      ThemeModeThird.light
+                                                  ? Color(0xFFBD4BF7)
+                                                  : MyApp.themeNotifier.value ==
+                                                          ThemeModeThird.dark
+                                                      ? Colors.white
+                                                      : Color(0xFFFFFD57),
+                                          borderRadius:
+                                              BorderRadius.circular(24),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              blurRadius: 4,
+                                              color: Color(0x40F3D2FF),
+                                              offset: Offset(0, 4),
+                                            )
+                                          ],
+                                        ),
+                                        child: Text(
+                                          'ค้นหาแหล่งทุน ',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                              color: MyApp.themeNotifier
+                                                          .value ==
+                                                      ThemeModeThird.light
+                                                  ? Colors.white
+                                                  : MyApp.themeNotifier.value ==
+                                                          ThemeModeThird.dark
+                                                      ? Colors.black
+                                                      : Colors.black),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 30),
+                                    Container(
+                                        height: 2, color: Color(0xFFDDDDDD)),
+                                    SizedBox(height: 20),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'แหล่งทุนทั้งหมด ',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 15,
+                                          color: MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.light
+                                              ? Color(0xFFBD4BF7)
+                                              : MyApp.themeNotifier.value ==
+                                                      ThemeModeThird.dark
+                                                  ? Colors.white
+                                                  : Color(0xFFFFFD57),
+                                        ),
+                                      ),
+                                    ),
+                                    if (_loadingWidget)
+                                      Center(
+                                        child: CircularProgressIndicator(
+                                          color: MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.light
+                                              ? Color(0xFFBD4BF7)
+                                              : MyApp.themeNotifier.value ==
+                                                      ThemeModeThird.dark
+                                                  ? Colors.white
+                                                  : Color(0xFFFFFD57),
+                                        ),
+                                      )
+                                    else
+                                      _investor.length != 0
+                                          ? _buildListInvestor()
+                                          : Center(
+                                              child: Text(
+                                                'ไม่พบข้อมูล',
+                                              ),
+                                            ),
+                                    SizedBox(height: 20),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          i += 5;
+                                        });
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        width: double.infinity,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.light
+                                              ? Color(0xFFBD4BF7)
+                                              : MyApp.themeNotifier.value ==
+                                                      ThemeModeThird.dark
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                          borderRadius:
+                                              BorderRadius.circular(24),
+                                          border: Border.all(
+                                            width: 1.0,
+                                            color: MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.light
+                                                ? Color(0xFFBD4BF7)
+                                                : MyApp.themeNotifier.value ==
+                                                        ThemeModeThird.dark
+                                                    ? Colors.white
+                                                    : Color(0xFFFFFD57),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          'ดูเพิ่มเติม',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: MyApp.themeNotifier.value ==
+                                                    ThemeModeThird.light
+                                                ? Colors.white
+                                                : MyApp.themeNotifier.value ==
+                                                        ThemeModeThird.dark
+                                                    ? Colors.black
+                                                    : Color(0xFFFFFD57),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 100,
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(
-                                  height: 100,
-                                ),
-                              ],
-                            ),
-                          if (_typeSelected == 1)
-                            // _buildListExternal(),
-                            Center(child: Text("ไม่พบการค้นหา")),
-                          if (_typeSelected == 2)
-                            // _buildListFinancial(),
-                            Center(child: Text("ไม่พบการค้นหา"))
-                        ],
-                      ),
+                              if (_typeSelected == 1)
+                                // _buildListExternal(),
+                                Center(child: Text("ไม่พบการค้นหา")),
+                              if (_typeSelected == 2)
+                                // _buildListFinancial(),
+                                Center(child: Text("ไม่พบการค้นหา"))
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         ),
-      ),
+      ],
     );
   }
 
@@ -1264,8 +1272,8 @@ class _FundPageState extends State<FundPage> {
 
   _category() async {
     Dio dio = new Dio();
-    var response = await dio.get(
-        'https://dcc.onde.go.th/dcc-api/api/masterdata/announcement/category');
+    var response =
+        await dio.get('$ondeURL/api/masterdata/announcement/category');
 
     setState(() {
       _loadingWidget = true;
@@ -1288,8 +1296,7 @@ class _FundPageState extends State<FundPage> {
     });
 
     Dio dio = Dio();
-    var response = await dio
-        .get('https://dcc.onde.go.th/dcc-api/api/InvestorAnnoucement/portal');
+    var response = await dio.get('$ondeURL/api/InvestorAnnoucement/portal');
 
     List<dynamic> data = response.data;
 

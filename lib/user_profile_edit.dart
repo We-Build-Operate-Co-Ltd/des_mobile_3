@@ -647,11 +647,14 @@ class _UserProfileEditPageState extends State<UserProfileEditPage> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext bc) {
+        final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
         return StatefulBuilder(builder: (BuildContext context,
             StateSetter mSetState /*You can rename this!*/) {
           return SafeArea(
             child: SizedBox(
-              height: 120 + MediaQuery.of(context).padding.bottom,
+              height: isIOS
+                  ? 78 + MediaQuery.of(context).padding.bottom
+                  : 120 + MediaQuery.of(context).padding.bottom,
               child: Stack(
                 children: [
                   Column(

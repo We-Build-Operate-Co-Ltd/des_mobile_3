@@ -474,7 +474,7 @@ class _CourseDsdPageState extends State<CourseDsdPage> {
           child: Container(
             margin: EdgeInsets.all(5),
             child: Text(
-              'สถาบันคุณวุฒิวิชาชีพ',
+              'กรมพัฒนาฝีมือแรงงาน',
               style: TextStyle(
                 fontSize: 20,
                 fontFamily: 'Kanit',

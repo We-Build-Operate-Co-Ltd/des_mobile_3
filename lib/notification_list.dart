@@ -704,7 +704,7 @@ class _NotificationListState extends State<NotificationListPage> {
     var data;
     var dio = Dio();
     var response = await dio.request(
-      'https://dcc.onde.go.th/dcc-api/api/notify/read/${model['id']}',
+      '$ondeURL/api/notify/read/${model['id']}',
       options: Options(
         method: 'PUT',
         headers: headers,

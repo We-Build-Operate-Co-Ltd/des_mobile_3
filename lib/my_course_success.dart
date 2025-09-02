@@ -562,9 +562,10 @@ class _MyCourseSuccessPageState extends State<MyCourseSuccessPage> {
         });
         return;
       }
+      print('---------->> ${profileMe['lmsUserId']} <<----------');
 
       var response = await dio.get(
-        'https://dcc.onde.go.th/dcc-api/api/Lms/GetCompleteCourse?studentId=${profileMe['lmsUserId']}',
+        '$ondeURL/api/Lms/GetCompleteCourse?studentId=${profileMe['lmsUserId']}',
         options: Options(headers: headers),
       );
 

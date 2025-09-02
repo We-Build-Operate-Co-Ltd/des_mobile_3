@@ -373,12 +373,6 @@ class _AboutUsPageState extends State<AboutUsPage> {
             image: 'assets/images/about_us_x.png'),
         _socialButton(
             onTap: () async {
-              launchUrl(Uri.parse('https://www.instagram.com/onde_go_th/'),
-                  mode: LaunchMode.externalApplication);
-            },
-            image: 'assets/images/about_us_ig.png'),
-        _socialButton(
-            onTap: () async {
               launchUrl(Uri.parse('https://line.me/R/ti/p/@223hnckq'),
                   mode: LaunchMode.externalApplication);
             },

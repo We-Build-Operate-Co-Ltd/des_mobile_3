@@ -363,9 +363,11 @@ class _MenuState extends State<Menu> {
 
   Widget _buildBottomNavBar() {
     final bottomPadding = MediaQuery.of(context).padding.bottom;
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     return Container(
-      height: 45 + bottomPadding,
+      height: isIOS ? 45 + bottomPadding : 65 + bottomPadding,
+      // height: 65 + bottomPadding,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -412,7 +414,7 @@ class _MenuState extends State<Menu> {
       child: InkWell(
         onTap: () => _onItemTapped(index),
         child: Container(
-          padding: EdgeInsets.all(6),
+          // padding: EdgeInsets.all(4),
           margin: EdgeInsets.all(4),
           decoration: isSelected
               ? BoxDecoration(

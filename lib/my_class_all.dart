@@ -10,6 +10,7 @@ import 'package:des/webview_inapp.dart';
 import 'package:des/widget/blinking_icon.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/state_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:top_modal_sheet/top_modal_sheet.dart';
 import 'course_detail_new.dart';
@@ -104,7 +105,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
       },
     );
 
-    myCourseSuccess = new MyCourseSuccessPage(
+    myCourseSuccess = MyCourseSuccessPage(
       callBack: (value) {
         setState(() {
           _onLoading();
@@ -128,13 +129,34 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   }
 
   _filter() async {
+    print('------------_>> $cateSearch');
     var temp = _tempModelRecommend.where((item) {
-      return item['course_Name'].contains(textSearch.toString()) &&
+      final courseName = item['course_Name'].toString().toLowerCase();
+      final searchText = textSearch.toString().toLowerCase();
+
+      // เงื่อนไขพื้นฐาน: ชื่อคอร์สและหมวดหมู่
+      bool basicCondition = courseName.contains(searchText) &&
           (cateCourseSearch.isEmpty ||
               item['course_Cat_Id'] == cateCourseSearch);
+
+      // ถ้า cateSearch ว่าง ให้ใช้เงื่อนไขพื้นฐานอย่างเดียว
+      if (cateSearch.isEmpty) {
+        return basicCondition;
+      }
+
+      // ถ้า cateSearch มีค่า ให้เพิ่มเงื่อนไข certificate
+      if (cateSearch == '1') {
+        return basicCondition && item['certificate'] == '1';
+      } else if (cateSearch == '0') {
+        return basicCondition && item['certificate'] == '0';
+      }
+
+      return basicCondition;
     }).toList();
+
     setState(() {
       _listFilterLenght = temp.length;
+
       _modelRecommend = Future.value(temp);
     });
   }
@@ -200,64 +222,52 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
-    return GestureDetector(
-      onHorizontalDragUpdate: (details) {
-        if (details.delta.dx > 10) {
-          Navigator.pop(context);
-        }
-      },
-      child: Scaffold(
-        backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
-            ? Colors.white
-            : Colors.black,
-        body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Stack(
+    return Stack(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 25),
+          height: double.infinity,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/BG.png"),
+              fit: BoxFit.cover,
+              colorFilter: MyApp.themeNotifier.value == ThemeModeThird.light
+                  ? null
+                  : ColorFilter.mode(Colors.grey, BlendMode.saturation),
+            ),
+          ),
+        ),
+        Scaffold(
+          // resizeToAvoidBottomInset: false, // ป้องกันการเลื่อนเมื่อมีแป้นพิมพ์
+          // extendBody: true,
+          backgroundColor: Colors.transparent,
+          body: Column(
             children: [
               Container(
-                padding: EdgeInsets.symmetric(vertical: 25),
-                height: double.infinity,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/BG.png"),
-                    fit: BoxFit.cover,
-                    colorFilter: MyApp.themeNotifier.value ==
-                            ThemeModeThird.light
-                        ? null
-                        : ColorFilter.mode(Colors.grey, BlendMode.saturation),
-                  ),
-                ),
+                height: deviceHeight * 0.12,
               ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: SingleChildScrollView(
-                  child: Container(
-                    alignment: Alignment.bottomCenter,
-                    width: 350,
-                    height: deviceHeight * 0.8,
+              Expanded(
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  decoration: BoxDecoration(
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Colors.white
+                        : Colors.black,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20)),
+                  ),
+                  child: Padding(
                     padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-                    decoration: BoxDecoration(
-                      color: MyApp.themeNotifier.value == ThemeModeThird.light
-                          ? Colors.white
-                          : Colors.black,
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(20)),
-                    ),
                     child: Column(
                       children: [
                         _buildHead(),
                         SizedBox(height: 20),
                         _typeCategory(),
                         _typeSelected == 0
-                            ? SizedBox(
-                                height: deviceHeight * 0.6,
+                            ? Expanded(
                                 child: ListView(
                                   padding: EdgeInsets.zero,
-                                  shrinkWrap: true,
+                                  shrinkWrap: false,
                                   physics: const ClampingScrollPhysics(),
                                   children: [
                                     SizedBox(height: 20),
@@ -383,29 +393,27 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
                                 ),
                               )
                             : _typeSelected == 1
-                                ? SizedBox(
-                                    height: deviceHeight * 0.6,
+                                ? Expanded(
                                     child: ListView(
                                       padding: EdgeInsets.zero,
-                                      shrinkWrap: true, // 1st add
-                                      physics:
-                                          const ClampingScrollPhysics(), // 2nd
+                                      shrinkWrap: false,
+                                      physics: const ClampingScrollPhysics(),
                                       children: [
                                         const SizedBox(height: 20),
                                         myCourse,
+                                        const SizedBox(height: 30),
                                       ],
                                     ),
                                   )
-                                : SizedBox(
-                                    height: deviceHeight * 0.6,
+                                : Expanded(
                                     child: ListView(
                                       padding: EdgeInsets.zero,
-                                      shrinkWrap: true, // 1st add
-                                      physics:
-                                          const ClampingScrollPhysics(), // 2nd
+                                      shrinkWrap: false,
+                                      physics: const ClampingScrollPhysics(),
                                       children: [
                                         const SizedBox(height: 20),
                                         myCourseSuccess,
+                                        const SizedBox(height: 30),
                                       ],
                                     ),
                                   ),
@@ -417,7 +425,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             ],
           ),
         ),
-      ),
+      ],
     );
   }
 
@@ -441,6 +449,7 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             : _topModalData == 'มีใบประกาศนียบัตร'
                 ? '1'
                 : '0';
+
         _filter();
       });
   }
@@ -769,39 +778,16 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
       onTap: () async {
         var loginData = await ManageStorage.readDynamic('loginData');
         var accessToken = await ManageStorage.read('accessToken');
-        logWTF(
-            'https://lms.dcc.onde.go.th/user/user/lesson_details/${model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}');
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => WebViewInAppPage(
               url:
-                  'https://lms.dcc.onde.go.th/user/user/lesson_details/${model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}',
-              // 'https://dcc.onde.go.th/_next/image?url=https%3A%2F%2Flms.dcc.onde.go.th%2Fuploads%2Fcourse%2Fcourse_thumbnail_1751530641.jpg&w=1920&q=75',
-              title: model?['course_name'] ?? '',
+                  'https://lms.dcc.onde.go.th/user/user/lesson_details/${model['course_Id']}?sso_key=${loginData['sub']}&access_token=${accessToken}',
+              title: model?['course_Name'] ?? '',
             ),
           ),
         );
-        // var data = {
-        //   'course_id': model?['id'] ?? '',
-        //   "course_name": model?['name'] ?? '',
-        //   "course_cat_id": model?['course_cat_id'] ?? '',
-        //   "cover_image": model?['docs'] ?? '',
-        //   "description": model['details'] ?? '',
-        //   "created_at": model['created_at'] ?? '',
-        //   "category_name": model['cat_name'] ?? '',
-        //   "certificate": model['certificate'] ?? '',
-        //   "course_duration": model['course_duration'] ?? '',
-        // };
-        // logWTF(data);
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => CourseDetailPage(
-        //       model: model,
-        //     ),
-        //   ),
-        // );
       },
       child: Container(
         color: Theme.of(context).custom.primary,
@@ -1386,8 +1372,8 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             // _callReadCouseEternal();
           },
           child: Container(
-            height: 40,
-            width: 40,
+            height: 50,
+            width: 50,
             padding: EdgeInsets.all(5),
             child: Image.asset(
               MyApp.themeNotifier.value == ThemeModeThird.light
@@ -1396,11 +1382,14 @@ class _MyClassAllPageState extends State<MyClassAllPage> {
             ),
           ),
         ),
+        const SizedBox(
+          width: 16,
+        ),
         Flexible(
           child: Text(
             'ระบบส่งเสริม Re-skill',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 20,
               fontFamily: 'Kanit',
               fontWeight: FontWeight.w500,
               color: MyApp.themeNotifier.value == ThemeModeThird.light

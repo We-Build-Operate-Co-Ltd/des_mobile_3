@@ -1,3 +1,4 @@
+import 'package:des/shared/config.dart';
 import 'package:des/shared/extension.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
@@ -620,8 +621,7 @@ class _FindJobPageState extends State<FindJobPage> {
 
   _callRead() async {
     Dio dio = new Dio();
-    var response = await dio
-        .get('https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?search=');
+    var response = await dio.get('$ondeURL/api/Job/GetSearchJob?search=');
 
     setState(() {
       _model = response.data['data'];
@@ -636,10 +636,9 @@ class _FindJobPageState extends State<FindJobPage> {
 
     var response = _typeSelected == 0
         ? await dio.get(
-            // 'https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?search=$aa&CatId=$param');
-            'https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?CatId=$param')
-        : await dio.get(
-            'https://dcc.onde.go.th/dcc-api/api/Resume/resumes?keyword=&catId=$param');
+            // '$ondeURL/api/Job/GetSearchJob?search=$aa&CatId=$param');
+            '$ondeURL/api/Job/GetSearchJob?CatId=$param')
+        : await dio.get('$ondeURL/api/Resume/resumes?keyword=&catId=$param');
 
     setState(() {
       _model = response.data['data'];
@@ -651,22 +650,22 @@ class _FindJobPageState extends State<FindJobPage> {
   _callReadByJobCategory(index, param) async {
     Dio dio = new Dio();
     if (index == 0) {
-      var response = await dio.get(
-          'https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?CatId=$param');
+      var response =
+          await dio.get('$ondeURL/api/Job/GetSearchJob?CatId=$param');
       setState(() {
         _model = response.data['data'];
         _tempModel = response.data['data'];
       });
     } else if (index == 1) {
-      var response = await dio.get(
-          'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?search=$param');
+      var response =
+          await dio.get('$ondeURL/api/Job/GetJobSearchExternal?search=$param');
       setState(() {
         _model = response.data;
         _tempModel = response.data;
       });
     } else if (index == 2) {
-      var response = await dio.get(
-          'https://dcc.onde.go.th/dcc-api/api/Resume/resumes?keyword=$param');
+      var response =
+          await dio.get('$ondeURL/api/Resume/resumes?keyword=$param');
       setState(() {
         _model = response.data['data'];
         _tempModel = response.data['data'];
@@ -680,8 +679,7 @@ class _FindJobPageState extends State<FindJobPage> {
 
   _callCategoryRead() async {
     Dio dio = new Dio();
-    var response = await dio
-        .get('https://dcc.onde.go.th/dcc-api/api/masterdata/jobcategory');
+    var response = await dio.get('$ondeURL/api/masterdata/jobcategory');
 
     setState(() {
       _categoryModel = response.data;

@@ -1,4 +1,5 @@
 import 'package:des/main.dart';
+import 'package:des/shared/config.dart';
 import 'package:des/shared/secure_storage.dart';
 import 'package:des/shared/theme_data.dart';
 import 'package:dio/dio.dart';
@@ -2221,14 +2222,12 @@ class _FindJobPageState extends State<FindJobPage> {
 
   _callRead() async {
     Dio dio = new Dio();
-    var response = await dio
-        .get('https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?search=');
+    var response = await dio.get('$ondeURL/api/Job/GetSearchJob?search=');
 
-    var responseExternal = await dio.get(
-        'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?search=');
+    var responseExternal =
+        await dio.get('$ondeURL/api/Job/GetJobSearchExternal?search=');
 
-    var responseResume = await dio
-        .get('https://dcc.onde.go.th/dcc-api/api/Resume/resumes?keyword=');
+    var responseResume = await dio.get('$ondeURL/api/Resume/resumes?keyword=');
     setState(() {
       _model = response.data['data'];
       _modelExternal = responseExternal.data;
@@ -2240,8 +2239,7 @@ class _FindJobPageState extends State<FindJobPage> {
 
   _callReadJobType() async {
     Dio dio = new Dio();
-    var response = await dio
-        .get('https://dcc.onde.go.th/dcc-api/api/masterdata/jobcategory');
+    var response = await dio.get('$ondeURL/api/masterdata/jobcategory');
 
     setState(() {
       _modelType = [
@@ -2256,8 +2254,7 @@ class _FindJobPageState extends State<FindJobPage> {
 
   _callReadChangwat() async {
     Dio dio = new Dio();
-    var response =
-        await dio.get('https://dcc.onde.go.th/dcc-api/api/masterdata/changwat');
+    var response = await dio.get('$ondeURL/api/masterdata/changwat');
 
     setState(() {
       _modelChangwat = [
@@ -2274,7 +2271,7 @@ class _FindJobPageState extends State<FindJobPage> {
     var accessToken = await ManageStorage.read('accessToken') ?? '';
     Dio dio = new Dio();
     var response = await dio.post(
-      'https://dcc.onde.go.th/dcc-api/api/masterdata/amphoe',
+      '$ondeURL/api/masterdata/amphoe',
       data: {
         "filters": [value]
       },
@@ -2309,7 +2306,7 @@ class _FindJobPageState extends State<FindJobPage> {
     var accessToken = await ManageStorage.read('accessToken') ?? '';
     Dio dio = new Dio();
     var response = await dio.post(
-      'https://dcc.onde.go.th/dcc-api/api/masterdata/amphoe',
+      '$ondeURL/api/masterdata/amphoe',
       data: {
         "filters": [value]
       },
@@ -2346,20 +2343,20 @@ class _FindJobPageState extends State<FindJobPage> {
 
     try {
       if (index == 0) {
-        var response = await dio.get(
-            'https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?CatId=$param');
+        var response =
+            await dio.get('$ondeURL/api/Job/GetSearchJob?CatId=$param');
         setState(() {
           _model = response.data['data'];
         });
       } else if (index == 1) {
-        var response = await dio.get(
-            'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?search=$param');
+        var response = await dio
+            .get('$ondeURL/api/Job/GetJobSearchExternal?search=$param');
         setState(() {
           _modelExternal = response.data;
         });
       } else if (index == 2) {
-        var response = await dio.get(
-            'https://dcc.onde.go.th/dcc-api/api/Resume/resumes?keyword=$param');
+        var response =
+            await dio.get('$ondeURL/api/Resume/resumes?keyword=$param');
         setState(() {
           _modelResume = response.data['data'];
         });
@@ -2375,8 +2372,7 @@ class _FindJobPageState extends State<FindJobPage> {
 
   _callCategoryRead() async {
     Dio dio = new Dio();
-    var response = await dio
-        .get('https://dcc.onde.go.th/dcc-api/api/masterdata/jobcategory');
+    var response = await dio.get('$ondeURL/api/masterdata/jobcategory');
 
     setState(() {
       _categoryModel = response.data;
@@ -2387,8 +2383,7 @@ class _FindJobPageState extends State<FindJobPage> {
 
   _callCategorySalary() async {
     Dio dio = Dio();
-    var response =
-        await dio.get('https://dcc.onde.go.th/dcc-api/api/Job/GetJobSalaryMS');
+    var response = await dio.get('$ondeURL/api/Job/GetJobSalaryMS');
 
     // print('---------_callCategorySalary------------${response.data}');
 
@@ -2413,8 +2408,7 @@ class _FindJobPageState extends State<FindJobPage> {
 
   _callCategorJobTypy() async {
     Dio dio = Dio();
-    var response =
-        await dio.get('https://dcc.onde.go.th/dcc-api/api/Job/GetJobTypeMS');
+    var response = await dio.get('$ondeURL/api/Job/GetJobTypeMS');
 
     // print('---------_callCategorJobTypy------------${response.data}');
 
@@ -2458,7 +2452,7 @@ class _FindJobPageState extends State<FindJobPage> {
     Dio dio = new Dio();
     if (_typeSelected == 0 && _typeSelected2 == 0) {
       var response = await dio.get(
-          'https://dcc.onde.go.th/dcc-api/api/Job/GetSearchJob?${(_searchController.text) == "" ? 'search=' : 'search=${_searchController.text}'}${_typeRefNo == 0 ? '' : '&catId=$_typeRefNo'}${_changwatRefNo == 0 ? '' : '&provinceId=$_changwatRefNo'}${_amphoeRefNo == 0 ? '' : '&amphoeId=$_amphoeRefNo'} ${_selectedJobType.isEmpty ? '' : '&_selectedJobType=$_selectedJobType.join(",")'}  ${_selectedSalaty.isEmpty ? '' : '&_selectedSalaty=$_selectedSalaty.join(",")'}');
+          '$ondeURL/api/Job/GetSearchJob?${(_searchController.text) == "" ? 'search=' : 'search=${_searchController.text}'}${_typeRefNo == 0 ? '' : '&catId=$_typeRefNo'}${_changwatRefNo == 0 ? '' : '&provinceId=$_changwatRefNo'}${_amphoeRefNo == 0 ? '' : '&amphoeId=$_amphoeRefNo'} ${_selectedJobType.isEmpty ? '' : '&_selectedJobType=$_selectedJobType.join(",")'}  ${_selectedSalaty.isEmpty ? '' : '&_selectedSalaty=$_selectedSalaty.join(",")'}');
 
       setState(() {
         _model = response.data['data'];
@@ -2467,10 +2461,10 @@ class _FindJobPageState extends State<FindJobPage> {
       print('--------------------1121---------- ${_changwatRefLabel}-');
 
       var response = await dio.get(
-          'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?${(_searchController.text) == "" ? 'searchText=' : 'searchText=${_searchController.text}'}${(_changwatRefLabel == '') ? '' : '&province=${_changwatRefLabel}'}${(_amphoeReLabel == '') ? '' : '&district=${_amphoeReLabel}'}');
+          '$ondeURL/api/Job/GetJobSearchExternal?${(_searchController.text) == "" ? 'searchText=' : 'searchText=${_searchController.text}'}${(_changwatRefLabel == '') ? '' : '&province=${_changwatRefLabel}'}${(_amphoeReLabel == '') ? '' : '&district=${_amphoeReLabel}'}');
 
       print(
-          '---------------------------> ${'https://dcc.onde.go.th/dcc-api/api/Job/GetJobSearchExternal?${(_searchController.text) == "" ? 'searchText=' : 'searchText=${_searchController.text}'}${(_changwatRefLabel == '') ? '' : '&province=${_changwatRefLabel}'}${(_amphoeReLabel == '') ? '' : '&district=${_amphoeReLabel}'}'}');
+          '---------------------------> ${'$ondeURL/api/Job/GetJobSearchExternal?${(_searchController.text) == "" ? 'searchText=' : 'searchText=${_searchController.text}'}${(_changwatRefLabel == '') ? '' : '&province=${_changwatRefLabel}'}${(_amphoeReLabel == '') ? '' : '&district=${_amphoeReLabel}'}'}');
 
       setState(() {
         _modelExternal = response.data;
@@ -2480,7 +2474,7 @@ class _FindJobPageState extends State<FindJobPage> {
       });
     } else if (_typeSelected == 2) {
       var response = await dio.get(
-          'https://dcc.onde.go.th/dcc-api/api/Resume/resumes?${(_searchResumeController.text) == "" ? 'keyword=' : 'keyword=${_searchResumeController.text}'}${_typeRefNoResume == 0 ? '' : '&catId=$_typeRefNoResume'}${_changwatRefNoResume == 0 ? '' : '&provinceId=$_changwatRefNoResume'}${_amphoeRefNoResume == 0 ? '' : '&amphoeId=$_amphoeRefNoResume'}');
+          '$ondeURL/api/Resume/resumes?${(_searchResumeController.text) == "" ? 'keyword=' : 'keyword=${_searchResumeController.text}'}${_typeRefNoResume == 0 ? '' : '&catId=$_typeRefNoResume'}${_changwatRefNoResume == 0 ? '' : '&provinceId=$_changwatRefNoResume'}${_amphoeRefNoResume == 0 ? '' : '&amphoeId=$_amphoeRefNoResume'}');
 
       setState(() {
         _modelResume = response.data['data'];

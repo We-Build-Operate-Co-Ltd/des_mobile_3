@@ -209,26 +209,19 @@ class _CourseDetailNewPageState extends State<CourseDetailNewPage> {
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: InkWell(
             onTap: () async {
-              var loginData = await ManageStorage.readDynamic('loginData');
-              var accessToken = await ManageStorage.read('accessToken');
-              logWTF(
-                  'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}');
+              // var loginData = await ManageStorage.readDynamic('loginData');
+              // var accessToken = await ManageStorage.read('accessToken');
+              // logWTF(widget.model['url']);
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (_) => WebViewInAppPage(
-                    url:
-                        'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['course_id']}?sso_key=${loginData['sub']}&access_token=${accessToken}',
+                    url: '${widget.model['url']}',
+                    // 'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['courseExtId']}?sso_key=${loginData['sub']}&access_token=${accessToken}',
                     title: widget.model?['subject'] ?? '',
                   ),
                 ),
               );
-
-              // launchUrl(
-              //   Uri.parse(
-              //       'https://lms.dcc.onde.go.th/user/user/lesson_details/${widget.model['id']}'),
-              //   mode: LaunchMode.externalApplication,
-              // );
             },
             child: Container(
               height: 45,
