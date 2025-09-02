@@ -1628,8 +1628,7 @@ class _BookingServicePageState extends State<BookingServicePage>
 
   @override
   void initState() {
-    print('------initState------');
-    widget.catSelectedWidget != null
+    widget.catSelectedWidget.isNotEmpty
         ? catSelected = widget.catSelectedWidget
         : catSelected = '0';
     _callReadProvince();

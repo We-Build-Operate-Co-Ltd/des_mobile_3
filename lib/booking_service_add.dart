@@ -700,10 +700,11 @@ class _BookingServiceAddPageState extends State<BookingServiceAddPage> {
                         context,
                         MaterialPageRoute(
                           builder: (_) => BookingServicePage(
-                            catSelectedWidget: '2',
+                            catSelectedWidget: '1',
                           ),
                         ),
                       ),
+                      print('---------------catSelectedWidget-----------------')
                       // BookingServicePage(catSelectedWidget: '0',)._callRead()
                     },
                     child: Container(

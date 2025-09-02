@@ -122,10 +122,16 @@
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
 
+
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
 		<string>processing</string>
+	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+    <string>td.webuild.des.refresh</string>
+    <string>td.webuild.des.processing</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
