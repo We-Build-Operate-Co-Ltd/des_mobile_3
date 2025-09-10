@@ -100,6 +100,7 @@ dependencies:
   package_info_plus: ^8.3.0
   app_links: ^6.4.0
   flutter_new_badger: ^1.1.1
+  flutter_widget_from_html: ^0.16.1
 
 dev_dependencies:
   flutter_test:

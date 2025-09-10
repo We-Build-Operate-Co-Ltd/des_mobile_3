@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:des/detail.dart';
+import 'package:des/new-detail.dart';
 import 'package:des/notification_list.dart';
 import 'package:des/shared/counterNotifier.dart';
 import 'package:des/shared/extension.dart';
@@ -645,65 +646,108 @@ class _HomePageState extends State<HomePage> {
                                             // onTap: () {
                                             //   print(
                                             //       '=============================');
-                                            //   if (snapshot.data[_currentBanner]
-                                            //           ['action'] ==
-                                            //       'out') {
-                                            //     if (snapshot
+                                            //   // ตรวจสอบ action ถ้าเป็นค่าว่างหรือ null ให้ถือว่าเป็น 'out' (เปิดลิ้งภายนอก)
+                                            //   String action =
+                                            //       snapshot.data[_currentBanner]
+                                            //               ['action'] ??
+                                            //           '';
+                                            //   // ถ้า action เป็นค่าว่าง ให้ default เป็น 'out'
+                                            //   if (action.isEmpty) {
+                                            //     action = 'out';
+                                            //   }
+                                            //   if (action == 'out') {
+                                            //     // ตรวจสอบว่ามี linkUrl หรือไม่
+                                            //     String? linkUrl = snapshot
                                             //             .data[_currentBanner]
-                                            //         ['isPostHeader']) {
-                                            //       var path = snapshot
-                                            //               .data[_currentBanner]
-                                            //           ['linkUrl'];
-                                            //       if (profileCode != '') {
-                                            //         var splitCheck = path
-                                            //             .split('')
-                                            //             .reversed
-                                            //             .join();
-                                            //         if (splitCheck[0] != "/") {
-                                            //           path = path + "/";
+                                            //         ['linkUrl'];
+                                            //     if (linkUrl != null &&
+                                            //         linkUrl.isNotEmpty) {
+                                            //       if (snapshot.data[
+                                            //                   _currentBanner]
+                                            //               ['isPostHeader'] ==
+                                            //           true) {
+                                            //         var path = linkUrl;
+                                            //         if (profileCode != null &&
+                                            //             profileCode!
+                                            //                 .isNotEmpty) {
+                                            //           var splitCheck = path
+                                            //               .split('')
+                                            //               .reversed
+                                            //               .join();
+                                            //           if (splitCheck[0] !=
+                                            //               "/") {
+                                            //             path = path + "/";
+                                            //           }
+                                            //           var codeReplace = "B" +
+                                            //               profileCode!
+                                            //                   .replaceAll(
+                                            //                       '-', '') +
+                                            //               snapshot.data[
+                                            //                       _currentBanner]
+                                            //                       ['ç']
+                                            //                   .replaceAll(
+                                            //                       '-', '');
+                                            //           Navigator.push(
+                                            //             context,
+                                            //             MaterialPageRoute(
+                                            //               builder: (_) =>
+                                            //                   WebViewInAppPage(
+                                            //                 url:
+                                            //                     "$path$codeReplace",
+                                            //                 title: snapshot.data[
+                                            //                             _currentBanner]
+                                            //                         ['title'] ??
+                                            //                     '',
+                                            //               ),
+                                            //             ),
+                                            //           );
+                                            //         } else {
+                                            //           // ถ้าไม่มี profileCode ให้เปิดลิ้งตรงๆ
+                                            //           Navigator.push(
+                                            //             context,
+                                            //             MaterialPageRoute(
+                                            //               builder: (_) =>
+                                            //                   WebViewInAppPage(
+                                            //                 url: linkUrl,
+                                            //                 title: snapshot.data[
+                                            //                             _currentBanner]
+                                            //                         ['title'] ??
+                                            //                     '',
+                                            //               ),
+                                            //             ),
+                                            //           );
                                             //         }
-                                            //         var codeReplae = "B" +
-                                            //             profileCode!.replaceAll(
-                                            //                 '-', '') +
-                                            //             snapshot.data[
-                                            //                     _currentBanner]
-                                            //                     ['code']
-                                            //                 .replaceAll(
-                                            //                     '-', '');
+                                            //       } else {
                                             //         Navigator.push(
                                             //           context,
                                             //           MaterialPageRoute(
                                             //             builder: (_) =>
                                             //                 WebViewInAppPage(
-                                            //               url:
-                                            //                   "$path$codeReplae",
+                                            //               url: linkUrl,
                                             //               title: snapshot.data[
-                                            //                       _currentBanner]
-                                            //                   ['title'],
+                                            //                           _currentBanner]
+                                            //                       ['title'] ??
+                                            //                   '',
                                             //             ),
                                             //           ),
                                             //         );
                                             //       }
                                             //     } else {
-                                            //       Navigator.push(
-                                            //         context,
-                                            //         MaterialPageRoute(
-                                            //           builder: (_) =>
-                                            //               WebViewInAppPage(
-                                            //             url: snapshot.data[
-                                            //                     _currentBanner]
-                                            //                 ['linkUrl'],
-                                            //             title: snapshot.data[
-                                            //                     _currentBanner]
-                                            //                 ['title'],
-                                            //           ),
+                                            //       print('No linkUrl provided');
+                                            //       // อาจจะแสดง Snackbar หรือ Alert บอกผู้ใช้
+                                            //       ScaffoldMessenger.of(context)
+                                            //           .showSnackBar(
+                                            //         SnackBar(
+                                            //           backgroundColor:
+                                            //               Theme.of(context)
+                                            //                   .custom
+                                            //                   .b325f8_w_fffd57,
+                                            //           content: Text(
+                                            //               'ไม่พบลิงก์ที่จะเปิด'),
                                             //         ),
                                             //       );
                                             //     }
-                                            //   } else if (snapshot
-                                            //               .data[_currentBanner]
-                                            //           ['action'] ==
-                                            //       'in') {
+                                            //   } else if (action == 'in') {
                                             //     Navigator.push(
                                             //       context,
                                             //       MaterialPageRoute(
@@ -715,140 +759,29 @@ class _HomePageState extends State<HomePage> {
                                             //         ),
                                             //       ),
                                             //     );
+                                            //   } else {
+                                            //     print(
+                                            //         'Unknown action: $action');
+                                            //     ScaffoldMessenger.of(context)
+                                            //         .showSnackBar(
+                                            //       SnackBar(
+                                            //           content: Text(
+                                            //               'ประเภทการทำงานไม่รองรับ: $action')),
+                                            //     );
                                             //   }
                                             // },
                                             onTap: () {
-                                              print(
-                                                  '=============================');
-
-                                              // ตรวจสอบ action ถ้าเป็นค่าว่างหรือ null ให้ถือว่าเป็น 'out' (เปิดลิ้งภายนอก)
-                                              String action =
-                                                  snapshot.data[_currentBanner]
-                                                          ['action'] ??
-                                                      '';
-
-                                              // ถ้า action เป็นค่าว่าง ให้ default เป็น 'out'
-                                              if (action.isEmpty) {
-                                                action = 'out';
-                                              }
-
-                                              if (action == 'out') {
-                                                // ตรวจสอบว่ามี linkUrl หรือไม่
-                                                String? linkUrl = snapshot
-                                                        .data[_currentBanner]
-                                                    ['linkUrl'];
-
-                                                if (linkUrl != null &&
-                                                    linkUrl.isNotEmpty) {
-                                                  if (snapshot.data[
-                                                              _currentBanner]
-                                                          ['isPostHeader'] ==
-                                                      true) {
-                                                    var path = linkUrl;
-                                                    if (profileCode != null &&
-                                                        profileCode!
-                                                            .isNotEmpty) {
-                                                      var splitCheck = path
-                                                          .split('')
-                                                          .reversed
-                                                          .join();
-                                                      if (splitCheck[0] !=
-                                                          "/") {
-                                                        path = path + "/";
-                                                      }
-                                                      var codeReplace = "B" +
-                                                          profileCode!
-                                                              .replaceAll(
-                                                                  '-', '') +
-                                                          snapshot.data[
-                                                                  _currentBanner]
-                                                                  ['ç']
-                                                              .replaceAll(
-                                                                  '-', '');
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (_) =>
-                                                              WebViewInAppPage(
-                                                            url:
-                                                                "$path$codeReplace",
-                                                            title: snapshot.data[
-                                                                        _currentBanner]
-                                                                    ['title'] ??
-                                                                '',
-                                                          ),
-                                                        ),
-                                                      );
-                                                    } else {
-                                                      // ถ้าไม่มี profileCode ให้เปิดลิ้งตรงๆ
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (_) =>
-                                                              WebViewInAppPage(
-                                                            url: linkUrl,
-                                                            title: snapshot.data[
-                                                                        _currentBanner]
-                                                                    ['title'] ??
-                                                                '',
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }
-                                                  } else {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (_) =>
-                                                            WebViewInAppPage(
-                                                          url: linkUrl,
-                                                          title: snapshot.data[
-                                                                      _currentBanner]
-                                                                  ['title'] ??
-                                                              '',
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }
-                                                } else {
-                                                  print('No linkUrl provided');
-                                                  // อาจจะแสดง Snackbar หรือ Alert บอกผู้ใช้
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      backgroundColor:
-                                                          Theme.of(context)
-                                                              .custom
-                                                              .b325f8_w_fffd57,
-                                                      content: Text(
-                                                          'ไม่พบลิงก์ที่จะเปิด'),
-                                                    ),
-                                                  );
-                                                }
-                                              } else if (action == 'in') {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        DetailPage(
-                                                      slug: 'mock',
-                                                      model: snapshot
-                                                          .data[_currentBanner],
-                                                    ),
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      NewsDetailPage(
+                                                    model: item,
                                                   ),
-                                                );
-                                              } else {
-                                                print(
-                                                    'Unknown action: $action');
-                                                // Handle unknown action types
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  SnackBar(
-                                                      content: Text(
-                                                          'ประเภทการทำงานไม่รองรับ: $action')),
-                                                );
-                                              }
+                                                ),
+                                              );
                                             },
+
                                             child: ClipRRect(
                                               borderRadius: _currentBanner ==
                                                       index
@@ -868,17 +801,12 @@ class _HomePageState extends State<HomePage> {
                                                           loadingProgress) {
                                                         if (loadingProgress ==
                                                             null) return child;
-                                                        return BlinkingIcon(); // Placeholder ขณะโหลด
+                                                        return BlinkingIcon();
                                                       },
                                                       errorBuilder: (context,
                                                           error, stackTrace) {
                                                         return Image.asset(
                                                             'assets/icon.png');
-                                                        // return Icon(
-                                                        //   Icons
-                                                        //       .error_outline_outlined,
-                                                        //   size: 60,
-                                                        // ); // เมื่อโหลดรูปไม่สำเร็จ
                                                       },
                                                     )
                                                   : ColorFiltered(
@@ -898,12 +826,12 @@ class _HomePageState extends State<HomePage> {
                                                           if (loadingProgress ==
                                                               null)
                                                             return child;
-                                                          return BlinkingIcon(); // Placeholder ขณะโหลด
+                                                          return BlinkingIcon();
                                                         },
                                                         errorBuilder: (context,
                                                             error, stackTrace) {
-                                                          return Icon(Icons
-                                                              .error); // เมื่อโหลดรูปไม่สำเร็จ
+                                                          return Icon(
+                                                              Icons.error);
                                                         },
                                                       ),
                                                     ),
@@ -1526,7 +1454,7 @@ class _HomePageState extends State<HomePage> {
 
     // แยกเวลาโดยใช้ ':' เป็นตัวแบ่ง
     final parts = duration.split(':');
-    if (parts.length != 3) return 'รูปแบบเวลาไม่ถูกต้อง'; // ตรวจสอบรูปแบบเวลา
+    if (parts.length != 3) return 'รูปแบบเวลาไม่ถูกต้อง';
 
     // แปลงเวลาเป็นตัวเลข
     final hours = int.tryParse(parts[0]) ?? 0;
@@ -1536,9 +1464,8 @@ class _HomePageState extends State<HomePage> {
     final buffer = StringBuffer();
     if (hours >= 0) buffer.write('$hours ชั่วโมง ');
     if (minutes > 0) buffer.write('$minutes นาที ');
-    // if (seconds > 0) buffer.write('$seconds วินาที');
 
-    return buffer.toString().trim(); // ลบช่องว่างส่วนเกิน
+    return buffer.toString().trim();
   }
 
   void _callRead() async {
