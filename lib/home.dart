@@ -294,10 +294,10 @@ class _HomePageState extends State<HomePage> {
                                     return notiCount > 0
                                         ? badges.Badge(
                                             badgeContent: Text(
-                                              counterNotifier.counter
-                                                  .toString(),
+                                              notiCount.toString(),
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                color: Colors.white,
+                                              ),
                                             ),
                                             child: Image.asset(
                                               MyApp.themeNotifier.value ==
@@ -1494,20 +1494,22 @@ class _HomePageState extends State<HomePage> {
   // }
 
   Future<dynamic> _readNotiCount() async {
-    var profileMe = await ManageStorage.readDynamic('profileMe');
+    var accessToken = await ManageStorage.read('accessToken') ?? '';
+    var headers = {'Authorization': 'Bearer $accessToken'};
     try {
-      Response response = await Dio().post(
-        '$server/dcc-api/m/v2/notificationbooking/read',
-        data: {
-          'email': profileMe['email'],
-        },
+      var dio = Dio();
+      var response = await dio.request(
+        '$serverPlatform/api/Notify/me?take=10&onlyNotRead=false&IsPortal=true',
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
       );
 
-      // if (response.statusCode == 200) {
-      if (response.data['status'] == 'S') {
-        var modelNotiCount = [...response.data['objectData']];
+      if (response.statusCode == 200) {
+        var modelNotiCount = response.data['objectData'] ?? [];
         setState(() {
-          notiCount = modelNotiCount.where((x) => x['status'] == "N").length;
+          notiCount = modelNotiCount.where((x) => x['isRead'] == "0").length;
         });
       }
       // }
@@ -1700,6 +1702,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         );
+
         // var data = {
         //   'course_id': model?['id'] ?? '',
         //   "course_name": model?['name'] ?? '',

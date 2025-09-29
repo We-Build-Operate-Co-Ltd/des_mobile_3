@@ -166,18 +166,30 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
               ],
             ),
           const SizedBox(height: 50),
-          if (model['textButton'] != '' && model['linkUrl'] != '')
+          if ((model['linkUrl'] != null &&
+                  model['linkUrl'].toString().isNotEmpty) ||
+              (model['fileUrl'] != null &&
+                  model['fileUrl'].toString().isNotEmpty))
             InkWell(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => WebViewInAppPage(
-                      url: model['linkUrl'],
-                      title: model['title'],
+                if (model['linkUrl'] != null &&
+                    model['linkUrl'].toString().isNotEmpty) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => WebViewInAppPage(
+                        url: model['linkUrl'],
+                        title: model['title'] ?? '',
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else if (model['fileUrl'] != null &&
+                    model['fileUrl'].toString().isNotEmpty) {
+                  launchUrl(
+                    Uri.parse(model['fileUrl']),
+                    mode: LaunchMode.externalApplication,
+                  );
+                }
               },
               child: Container(
                 height: 50,
@@ -193,7 +205,10 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                 ),
                 child: Center(
                   child: Text(
-                    model['textButton'],
+                    (model['textButton'] != null &&
+                            model['textButton'].toString().isNotEmpty)
+                        ? model['textButton']
+                        : 'ดูเพิ่มเติม',
                     style: TextStyle(
                       color: MyApp.themeNotifier.value == ThemeModeThird.dark
                           ? Color(0xFFB325F8)

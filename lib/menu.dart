@@ -601,19 +601,29 @@ class _MenuState extends State<Menu> {
 
   Future<int> fetchNotificationCount() async {
     try {
-      var profileMe = await ManageStorage.readDynamic('profileMe');
-      var response = await Dio().post(
-        '$server/dcc-api/m/v2/notificationbooking/read',
-        data: {
-          'email': profileMe['email'],
-        },
+      var accessToken = await ManageStorage.read('accessToken') ?? '';
+      var headers = {'Authorization': 'Bearer $accessToken'};
+
+      var dio = Dio();
+      var response = await dio.request(
+        '$serverPlatform/api/Notify/me?take=10&onlyNotRead=false&IsPortal=true',
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
       );
 
-      var modelNotiCount = [...response.data['objectData']];
-      return modelNotiCount.where((x) => x['status'] == "N").length;
+      if (response.statusCode == 200) {
+        var notifications = response.data['objectData'] ?? [];
+
+        return notifications.where((x) => x['isRead'] == 0).length;
+      } else {
+        print(response.statusMessage);
+        return 0;
+      }
     } catch (e) {
       debugPrint('Error fetching notifications: $e');
-      return 0; // หากมีข้อผิดพลาด ให้แสดงเป็น 0
+      return 0;
     }
   }
 }

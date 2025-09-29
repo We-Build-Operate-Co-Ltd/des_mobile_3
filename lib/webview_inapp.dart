@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:des/shared/theme_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -67,15 +69,18 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                   width: 40,
                 ),
               ),
+              SizedBox(width: 12),
               Expanded(
                 child: Text(
                   title!,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.w500,
                     color: Theme.of(context).custom.b_w_y,
                   ),
                   textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               SizedBox(width: 40),
@@ -121,7 +126,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                   ),
                   initialOptions: InAppWebViewGroupOptions(
                     crossPlatform: InAppWebViewOptions(
-                      mediaPlaybackRequiresUserGesture: false,
+                      mediaPlaybackRequiresUserGesture: true,
                       useShouldOverrideUrlLoading: true, // บังคับเช็ค url
                     ),
                     android: AndroidInAppWebViewOptions(

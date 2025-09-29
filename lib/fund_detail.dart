@@ -21,6 +21,9 @@ class _FundDetailPageState extends State<FundDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyApp.themeNotifier.value == ThemeModeThird.light
+          ? Colors.white
+          : Colors.black,
       body: SafeArea(
         child: Column(
           children: [
@@ -42,8 +45,9 @@ class _FundDetailPageState extends State<FundDetailPage> {
                           Navigator.pop(context);
                         },
                         child: Image.asset(
-                          'assets/images/back_profile.png',
-                        ),
+                            MyApp.themeNotifier.value == ThemeModeThird.light
+                                ? 'assets/images/back_profile.png'
+                                : "assets/images/2024/back_balckwhite.png"),
                       ),
                     ),
                   ),
@@ -71,17 +75,29 @@ class _FundDetailPageState extends State<FundDetailPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          height: 195,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            // color: Color(0xFFB325F8),
-                            borderRadius: BorderRadius.circular(24),
-                            // border: Border.all(),
-                          ),
-                          child: Image.asset(
-                            'assets/images/2024/fund-img.avif',
-                            fit: BoxFit.contain,
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: ColorFiltered(
+                            key: ValueKey(MyApp.themeNotifier.value),
+                            colorFilter: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? const ColorFilter.mode(
+                                    Colors.transparent, BlendMode.multiply)
+                                : const ColorFilter.mode(
+                                    Colors.grey, BlendMode.saturation),
+                            child: Image.network(
+                              'https://images.unsplash.com/photo-1498050108023-c5249f4df085',
+                              height: 180,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Image.asset(
+                                'assets/images/Owl-10.png',
+                                width: 120,
+                                height: 120,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -93,6 +109,13 @@ class _FundDetailPageState extends State<FundDetailPage> {
                             fontFamily: 'Kanit',
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFFB325F8)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
                           ),
                         ),
                         SizedBox(
@@ -105,12 +128,23 @@ class _FundDetailPageState extends State<FundDetailPage> {
                               height: 24,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(7.0),
-                                color: Color(0xFF00B4C5),
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFF00B4C5)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Image.asset(
-                                    'assets/images/Frame 11489.png'),
+                                  'assets/images/Frame 11489.png',
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -118,12 +152,17 @@ class _FundDetailPageState extends State<FundDetailPage> {
                             ),
                             Text(
                               widget.model['catName'],
-                              // widget.model['category'].toString(),
                               style: TextStyle(
                                 fontFamily: 'Kanit',
                                 fontSize: 13,
                                 fontWeight: FontWeight.w400,
-                                color: Colors.black,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFFB325F8)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
                               ),
                             ),
                           ],
@@ -138,12 +177,23 @@ class _FundDetailPageState extends State<FundDetailPage> {
                               height: 24,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(7.0),
-                                color: Color(0xFFB325F8),
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFFBD4BF7)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Image.asset(
-                                    'assets/images/clock_white.png'),
+                                  'assets/images/clock_white.png',
+                                  color: MyApp.themeNotifier.value ==
+                                          ThemeModeThird.light
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -155,7 +205,13 @@ class _FundDetailPageState extends State<FundDetailPage> {
                                 fontFamily: 'Kanit',
                                 fontSize: 13,
                                 fontWeight: FontWeight.w400,
-                                color: Colors.black,
+                                color: MyApp.themeNotifier.value ==
+                                        ThemeModeThird.light
+                                    ? Color(0xFFB325F8)
+                                    : MyApp.themeNotifier.value ==
+                                            ThemeModeThird.dark
+                                        ? Colors.white
+                                        : Color(0xFFFFFD57),
                               ),
                             ),
                           ],
@@ -174,12 +230,23 @@ class _FundDetailPageState extends State<FundDetailPage> {
                                     height: 24,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(7.0),
-                                      color: Color(0xFFB325F8),
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Color(0xFFBD4BF7)
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Color(0xFFFFFD57),
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(4.0),
                                       child: Image.asset(
-                                          'assets/images/calendar_menu.png'),
+                                        'assets/images/calendar_menu.png',
+                                        color: MyApp.themeNotifier.value ==
+                                                ThemeModeThird.light
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
                                     ),
                                   ),
                                   SizedBox(
@@ -194,7 +261,13 @@ class _FundDetailPageState extends State<FundDetailPage> {
                                       fontFamily: 'Kanit',
                                       fontSize: 13,
                                       fontWeight: FontWeight.w400,
-                                      color: Colors.black,
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Color(0xFFB325F8)
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Color(0xFFFFFD57),
                                     ),
                                   ),
                                 ],
@@ -208,12 +281,23 @@ class _FundDetailPageState extends State<FundDetailPage> {
                                     height: 24,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(7.0),
-                                      color: Color(0xFFB325F8),
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Color(0xFFBD4BF7)
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Color(0xFFFFFD57),
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(4.0),
-                                      child:
-                                          Image.asset('assets/images/eye.png'),
+                                      child: Image.asset(
+                                        'assets/images/eye.png',
+                                        color: MyApp.themeNotifier.value ==
+                                                ThemeModeThird.light
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
                                     ),
                                   ),
                                   SizedBox(
@@ -225,7 +309,13 @@ class _FundDetailPageState extends State<FundDetailPage> {
                                       fontFamily: 'Kanit',
                                       fontSize: 13,
                                       fontWeight: FontWeight.w400,
-                                      color: Colors.black,
+                                      color: MyApp.themeNotifier.value ==
+                                              ThemeModeThird.light
+                                          ? Color(0xFFB325F8)
+                                          : MyApp.themeNotifier.value ==
+                                                  ThemeModeThird.dark
+                                              ? Colors.white
+                                              : Color(0xFFFFFD57),
                                     ),
                                   ),
                                 ],
@@ -246,18 +336,33 @@ class _FundDetailPageState extends State<FundDetailPage> {
                         Text(
                           widget.model['target'],
                           style: TextStyle(
-                              fontFamily: "Kanit",
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              color: Color(0xFF707070)),
+                            fontFamily: "Kanit",
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            // color: Color(0xFF707070),
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF707070)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                          ),
                         ),
                         Text(
                           widget.model['detail'],
                           style: TextStyle(
-                              fontFamily: "Kanit",
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              color: Color(0xFF707070)),
+                            fontFamily: "Kanit",
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF707070)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                          ),
                         ),
                         SizedBox(
                           height: 20,
@@ -273,7 +378,13 @@ class _FundDetailPageState extends State<FundDetailPage> {
                           'ข้อมูลบริษัท',
                           style: TextStyle(
                               fontSize: 15,
-                              color: Color(0xFFB325F8),
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFFB325F8)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                               fontWeight: FontWeight.w600,
                               fontFamily: "Kanit"),
                         ),
@@ -281,28 +392,49 @@ class _FundDetailPageState extends State<FundDetailPage> {
                         Text(
                           widget.model['companyName'],
                           style: TextStyle(
-                              fontFamily: "Kanit",
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              color: Color(0xFF707070)),
+                            fontFamily: "Kanit",
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF707070)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                          ),
                         ),
                         SizedBox(height: 4),
                         Text(
                           widget.model['investTel'],
                           style: TextStyle(
-                              fontFamily: "Kanit",
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              color: Color(0xFF707070)),
+                            fontFamily: "Kanit",
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF707070)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                          ),
                         ),
                         SizedBox(height: 4),
                         Text(
                           widget.model['investEmail'],
                           style: TextStyle(
-                              fontFamily: "Kanit",
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              color: Color(0xFF707070)),
+                            fontFamily: "Kanit",
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF707070)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                          ),
                         ),
                         SizedBox(
                           height: 20,
@@ -311,7 +443,13 @@ class _FundDetailPageState extends State<FundDetailPage> {
                           'ข้อมูลงบประมาณของโครงการ',
                           style: TextStyle(
                               fontSize: 15,
-                              color: Color(0xFFB325F8),
+                              color: MyApp.themeNotifier.value ==
+                                      ThemeModeThird.light
+                                  ? Color(0xFFB325F8)
+                                  : MyApp.themeNotifier.value ==
+                                          ThemeModeThird.dark
+                                      ? Colors.white
+                                      : Color(0xFFFFFD57),
                               fontWeight: FontWeight.w600,
                               fontFamily: "Kanit"),
                         ),
@@ -320,10 +458,17 @@ class _FundDetailPageState extends State<FundDetailPage> {
                           'ไม่ได้ระบุ',
                           // widget.model['investTel'],
                           style: TextStyle(
-                              fontFamily: "Kanit",
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              color: Color(0xFF707070)),
+                            fontFamily: "Kanit",
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            color: MyApp.themeNotifier.value ==
+                                    ThemeModeThird.light
+                                ? Color(0xFF707070)
+                                : MyApp.themeNotifier.value ==
+                                        ThemeModeThird.dark
+                                    ? Colors.white
+                                    : Color(0xFFFFFD57),
+                          ),
                         ),
                       ],
                     ),

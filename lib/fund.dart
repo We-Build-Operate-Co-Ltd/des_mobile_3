@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/fund_detail.dart';
 import 'package:des/shared/config.dart';
 import 'package:des/shared/theme_data.dart';
@@ -34,101 +35,12 @@ class _FundPageState extends State<FundPage> {
   int _typeSelected = 0;
   bool _loadingWidget = true;
   int i = 2;
-
+  List<dynamic> _fundExternal = [];
+  List<dynamic> _fundFinancial = [];
   List<dynamic> cateFund = [
     'ค้นหาแหล่งทุน',
     'แหล่งทุนภายนอก',
     'ความรู้ด้านการเงินและการลงทุน',
-  ];
-  List<dynamic> _fundExternal = [
-    {
-      'code': '0',
-      'imageUrl':
-          'https://dcc.onde.go.th/_next/static/media/fund1.6ebd50eb.png',
-      'title': 'สถาบันวัคซีนแห่งชาติ (NVI)',
-      'linkUrl': 'https://nvi.go.th/funding-announce/',
-    },
-    {
-      'code': '1',
-      'imageUrl':
-          'https://dcc.onde.go.th/_next/static/media/fund2.fdd45b33.png',
-      'title': 'สำนักงานส่งเสริมเศรษฐกิจดิจิมัล (DEPA)',
-      'linkUrl': 'https://www.depa.or.th/th/funds',
-    },
-    {
-      'code': '2',
-      'imageUrl':
-          'https://dcc.onde.go.th/_next/static/media/fund3.763d9bd0.png',
-      'title': 'สำนักงานวัตกรรมแห่งชาติ (องค์การมหาชน) (NIA)',
-      'linkUrl': 'https://www.nia.or.th/service/financial-support',
-    },
-    {
-      'code': '3',
-      'imageUrl':
-          'https://dcc.onde.go.th/_next/static/media/fund4.31286789.png',
-      'title': 'สำนักงานพัฒนาการวิจัยการเกษตร (องค์การมหาชน) (ARDA)',
-      'linkUrl': 'https://www.arda.or.th/',
-    },
-    {
-      'code': '4',
-      'imageUrl':
-          'https://dcc.onde.go.th/_next/static/media/fund5.84504eb7.png',
-      'title': 'สำนักงานการวิจัยแห่งชาติ (NRCT)',
-      'linkUrl': 'https://www.arda.or.th/',
-    },
-    {
-      'code': '5',
-      'imageUrl':
-          'https://dcc.onde.go.th/_next/static/media/fund6.3ef385b6.png',
-      'title':
-          'กองทุนพัฒนาผู้ประกอบการเทคโนฌลยีและนวัตกรรม กระทรวงอุดมศึกษา วิทยาศาสตร์ วิจัยและนวัตกรรม',
-      'linkUrl': 'https://tedfund.mhesi.go.th/index.php#',
-    },
-  ];
-  List<dynamic> _fundFinancial = [
-    {
-      'code': '0',
-      'imageUrl':
-          'https://dcc.onde.go.th/_next/static/media/knowledge1.b7467469.png',
-      'title': 'SET',
-      'linkUrl': 'https://www.set.or.th/th/education-research/education/main',
-    },
-    {
-      'code': '1',
-      'imageUrl':
-          'https://dcc.onde.go.th/_next/static/media/knowledge2.c0b4bbcd.png',
-      'title': 'กระทรวงพาณิชย์',
-      'linkUrl': 'https://www.moc.go.th/th',
-    },
-    {
-      'code': '2',
-      'imageUrl':
-          'https://dcc.onde.go.th/_next/static/media/knowledge3.7de4d4a3.png',
-      'title': 'ธนาคารแห่งประเทศไทย',
-      'linkUrl':
-          'https://www.bot.or.th/th/satang-story/fin-d-we-can-do/teachingtool.bot-responsive.html',
-    },
-    {
-      'code': '3',
-      'imageUrl':
-          'https://dcc.onde.go.th/_next/static/media/knowledge4.55b0beb0.png',
-      'title': 'SMART TO INVEST',
-      'linkUrl': 'https://www.smarttoinvest.com/pages/home.aspx',
-    },
-    {
-      'code': '4',
-      'imageUrl':
-          'https://dcc.onde.go.th/_next/static/media/knowledge5.4b263873.png',
-      'title': 'รู้เรื่องเงิน.com',
-      'linkUrl': 'https://www.รู้เรื่องเงิน.com/home',
-    },
-    {
-      'code': '5',
-      'imageUrl':
-          'https://dcc.onde.go.th/_next/static/media/knowledge6.fdfcdbf5.png',
-      'title': 'กองทุนการออมแห่งชาติ',
-      'linkUrl': 'https://www.nsf.or.th/',
-    },
   ];
 
   void _handleSearch(String input) {
@@ -141,6 +53,7 @@ class _FundPageState extends State<FundPage> {
   void initState() {
     _category();
     _callReadInvestor();
+    _callReadExternalLink();
     super.initState();
   }
 
@@ -453,6 +366,18 @@ class _FundPageState extends State<FundPage> {
                                           : Center(
                                               child: Text(
                                                 'ไม่พบข้อมูล',
+                                                style: TextStyle(
+                                                  color: MyApp.themeNotifier
+                                                              .value ==
+                                                          ThemeModeThird.light
+                                                      ? Color(0xFFBD4BF7)
+                                                      : MyApp.themeNotifier
+                                                                  .value ==
+                                                              ThemeModeThird
+                                                                  .dark
+                                                          ? Colors.white
+                                                          : Color(0xFFFFFD57),
+                                                ),
                                               ),
                                             ),
                                     SizedBox(height: 20),
@@ -508,15 +433,16 @@ class _FundPageState extends State<FundPage> {
                                     ),
                                   ],
                                 ),
-                              if (_typeSelected == 1)
-                                // _buildListExternal(),
-                                Center(child: Text("ไม่พบการค้นหา")),
-                              if (_typeSelected == 2)
-                                // _buildListFinancial(),
-                                Center(child: Text("ไม่พบการค้นหา"))
+                              if (_typeSelected == 1) _buildListExternal(),
+                              // Center(child: Text("ไม่พบการค้นหา")),
+                              if (_typeSelected == 2) _buildListFinancial(),
+                              // Center(child: Text("ไม่พบการค้นหา"))
                             ],
                           ),
                         ),
+                        SizedBox(
+                          height: 60,
+                        )
                       ],
                     ),
                   ),
@@ -768,6 +694,229 @@ class _FundPageState extends State<FundPage> {
     );
   }
 
+  _buildListInvestor() {
+    return ListView.separated(
+      padding: EdgeInsets.zero,
+      shrinkWrap: true,
+      physics: BouncingScrollPhysics(),
+      itemBuilder: (context, index) =>
+          _buildItemInvestor(_investor[index], index),
+      itemCount: i > _investor.length ? _investor.length : i,
+      separatorBuilder: (_, __) => const Divider(
+        color: Color(0xFFDDDDDD),
+      ),
+    );
+  }
+
+  _buildItemInvestor(dynamic data, index) {
+    return InkWell(
+      onTap: () async {
+        setState(() {
+          // _indexRank = data;
+          data['catName'] = listCat.firstWhereOrNull(
+              (x) => x['cateId'] == data['category'])['nameTh'];
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => FundDetailPage(model: data!),
+          ),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: ColorFiltered(
+                  key: ValueKey(MyApp.themeNotifier.value),
+                  colorFilter: MyApp.themeNotifier.value == ThemeModeThird.light
+                      ? const ColorFilter.mode(
+                          Colors.transparent, BlendMode.multiply)
+                      : const ColorFilter.mode(
+                          Colors.grey, BlendMode.saturation),
+                  child: Image.network(
+                    'https://images.unsplash.com/photo-1498050108023-c5249f4df085',
+                    height: 180,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Image.asset(
+                      'assets/images/Owl-10.png',
+                      width: 120,
+                      height: 120,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Text(
+              data['annoucement'],
+              style: TextStyle(
+                fontFamily: 'Kanit',
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: MyApp.themeNotifier.value == ThemeModeThird.light
+                    ? Color(0xFFBD4BF7)
+                    : MyApp.themeNotifier.value == ThemeModeThird.dark
+                        ? Colors.white
+                        : Color(0xFFFFFD57),
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Row(
+              children: [
+                Container(
+                  width: 22,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(7.0),
+                    color: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? Color(0xFFBD4BF7)
+                        : MyApp.themeNotifier.value == ThemeModeThird.dark
+                            ? Colors.white
+                            : Color(0xFFFFFD57),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Image.asset(
+                        MyApp.themeNotifier.value == ThemeModeThird.light
+                            ? 'assets/images/work.png'
+                            : 'assets/images/2024/work.png'),
+                  ),
+                ),
+                SizedBox(
+                  width: 6,
+                ),
+                Expanded(
+                  child: Text(
+                    data['companyName'],
+                    style: TextStyle(
+                      fontFamily: 'Kanit',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: MyApp.themeNotifier.value == ThemeModeThird.light
+                          ? Color(0xFFBD4BF7)
+                          : MyApp.themeNotifier.value == ThemeModeThird.dark
+                              ? Colors.white
+                              : Color(0xFFFFFD57),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    maxLines: 2,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 6,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 22,
+                        height: 22,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7.0),
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFFBD4BF7)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: Image.asset(
+                              MyApp.themeNotifier.value == ThemeModeThird.light
+                                  ? 'assets/images/calendar_menu.png'
+                                  : 'assets/images/2024/calendar-b.png'),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 6,
+                      ),
+                      Text(
+                        DateFormat('dd/MM/yyyy').format(
+                          DateTime.parse(data['announceDate']),
+                        ),
+                        style: TextStyle(
+                          fontFamily: 'Kanit',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFFBD4BF7)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 22,
+                        height: 22,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7.0),
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFFBD4BF7)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: Image.asset(
+                              MyApp.themeNotifier.value == ThemeModeThird.light
+                                  ? 'assets/images/eye.png'
+                                  : 'assets/images/2024/eye_black.png'),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        '120',
+                        style: TextStyle(
+                          fontFamily: 'Kanit',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                          color: MyApp.themeNotifier.value ==
+                                  ThemeModeThird.light
+                              ? Color(0xFFBD4BF7)
+                              : MyApp.themeNotifier.value == ThemeModeThird.dark
+                                  ? Colors.white
+                                  : Color(0xFFFFFD57),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   _buildListExternal() {
     return ListView.separated(
       shrinkWrap: true,
@@ -783,84 +932,97 @@ class _FundPageState extends State<FundPage> {
 
   _buildItemExternal(dynamic data) {
     return InkWell(
-        // onTap: () {
-        //   launchUrl(Uri.parse(data['linkUrl'] ?? ''),
-        //       mode: LaunchMode.externalApplication);
-        // },
-        // child: Container(
-        //   height: MyApp.fontKanit.value == FontKanit.small
-        //       ? 120
-        //       : MyApp.fontKanit.value == FontKanit.medium
-        //           ? 150
-        //           : 180,
-        //   decoration: BoxDecoration(
-        //     color: Theme.of(context).custom.w_b_b,
-        //     borderRadius: BorderRadius.circular(10),
-        //   ),
-        //   child: Stack(
-        //     children: [
-        //       Row(
-        //         mainAxisAlignment: MainAxisAlignment.start,
-        //         // crossAxisAlignment: CrossAxisAlignment.start,
-        //         children: [
-        //           ClipRRect(
-        //             borderRadius: BorderRadius.circular(10),
-        //             child: Container(
-        //                 width: 160.8,
-        //                 height: 95,
-        //                 decoration: BoxDecoration(
-        //                   border: Border.all(
-        //                     color: Color(0xFFDDDDDD),
-        //                   ),
-        //                   borderRadius: BorderRadius.circular(10),
-        //                   // color: Color(0xFFDDDDDD),
-        //                 ),
-        //                 child: MyApp.themeNotifier.value == ThemeModeThird.light
-        //                     ? CachedNetworkImage(
-        //                         imageUrl: data['imageUrl'],
-        //                         width: 120,
-        //                         height: 120,
-        //                         fit: BoxFit.contain,
-        //                       )
-        //                     : ColorFiltered(
-        //                         colorFilter: ColorFilter.mode(
-        //                             Colors.grey, BlendMode.saturation),
-        //                         child: CachedNetworkImage(
-        //                           imageUrl: data['imageUrl'],
-        //                           width: 120,
-        //                           height: 120,
-        //                           fit: BoxFit.contain,
-        //                         ),
-        //                       )),
-        //           ),
-        //           const SizedBox(width: 10),
-        //           Expanded(
-        //             child: Padding(
-        //               padding: const EdgeInsets.all(8.0),
-        //               child: Column(
-        //                 crossAxisAlignment: CrossAxisAlignment.start,
-        //                 children: [
-        //                   Flexible(
-        //                     child: Text(
-        //                       data['title'],
-        //                       style: TextStyle(
-        //                         fontSize: 14,
-        //                         color: Theme.of(context).custom.b_w_y,
-        //                       ),
-        //                       overflow: TextOverflow.ellipsis,
-        //                       maxLines: 4,
-        //                     ),
-        //                   ),
-        //                 ],
-        //               ),
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        );
+      onTap: () {
+        launchUrl(Uri.parse(data['linkUrl'] ?? ''),
+            mode: LaunchMode.externalApplication);
+      },
+      child: Container(
+        height: MyApp.fontKanit.value == FontKanit.small
+            ? 120
+            : MyApp.fontKanit.value == FontKanit.medium
+                ? 150
+                : 180,
+        decoration: BoxDecoration(
+          color: Theme.of(context).custom.w_b_b,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Stack(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    width: 160.8,
+                    height: 95,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Color(0xFFDDDDDD),
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                      // color: Color(0xFFDDDDDD),
+                    ),
+                    child: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? CachedNetworkImage(
+                            imageUrl: data['imageUrl'],
+                            width: 120,
+                            height: 120,
+                            fit: BoxFit.contain,
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/images/Owl-10.png',
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.contain,
+                            ),
+                          )
+                        : ColorFiltered(
+                            colorFilter: const ColorFilter.mode(
+                                Colors.grey, BlendMode.saturation),
+                            child: CachedNetworkImage(
+                              imageUrl: data['imageUrl'],
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.contain,
+                              errorWidget: (context, url, error) => Image.asset(
+                                'assets/images/Owl-10.png',
+                                width: 120,
+                                height: 120,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            data['linkName'],
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).custom.b_w_y,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 4,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   _buildListFinancial() {
@@ -905,12 +1067,35 @@ class _FundPageState extends State<FundPage> {
                       ),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Image.network(
-                      data['imageUrl'],
-                      width: 120,
-                      height: 120,
-                      fit: BoxFit.contain,
-                    ),
+                    child: MyApp.themeNotifier.value == ThemeModeThird.light
+                        ? CachedNetworkImage(
+                            imageUrl: data['imageUrl'],
+                            width: 120,
+                            height: 120,
+                            fit: BoxFit.contain,
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/images/Owl-10.png',
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.contain,
+                            ),
+                          )
+                        : ColorFiltered(
+                            colorFilter: const ColorFilter.mode(
+                                Colors.grey, BlendMode.saturation),
+                            child: CachedNetworkImage(
+                              imageUrl: data['imageUrl'],
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.contain,
+                              errorWidget: (context, url, error) => Image.asset(
+                                'assets/images/Owl-10.png',
+                                width: 120,
+                                height: 120,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -921,7 +1106,7 @@ class _FundPageState extends State<FundPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          data['title'],
+                          data['linkName'],
                           style: TextStyle(
                             fontSize: 16,
                             color: Theme.of(context).custom.b_w_y,
@@ -1047,227 +1232,35 @@ class _FundPageState extends State<FundPage> {
     );
   }
 
-  _buildListInvestor() {
-    return ListView.separated(
-      padding: EdgeInsets.zero,
-      shrinkWrap: true,
-      physics: BouncingScrollPhysics(),
-      itemBuilder: (context, index) =>
-          _buildItemInvestor(_investor[index], index),
-      itemCount: i > _investor.length ? _investor.length : i,
-      separatorBuilder: (_, __) => const Divider(
-        color: Color(0xFFDDDDDD),
+  _callReadExternalLink() async {
+    var dio = Dio();
+    var response = await dio.request(
+      '$ondeURL/api/ExternalLink',
+      options: Options(
+        method: 'GET',
       ),
     );
-  }
 
-  _buildItemInvestor(dynamic data, index) {
-    return InkWell(
-        onTap: () async {
-          setState(() {
-            // _indexRank = data;
-            data['catName'] = listCat.firstWhereOrNull(
-                (x) => x['cateId'] == data['category'])['nameTh'];
-          });
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => FundDetailPage(model: data!),
-            ),
-          );
-        },
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                  child: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.asset(
-                            'assets/images/2024/fund-img.avif',
-                            height: 180,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : ColorFiltered(
-                          colorFilter: ColorFilter.mode(
-                              Colors.grey, BlendMode.saturation),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
-                            child: Image.asset(
-                              'assets/images/2024/fund-img.avif',
-                              height: 180,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          ))),
-              SizedBox(
-                height: 12,
-              ),
-              Text(
-                data['annoucement'],
-                style: TextStyle(
-                  fontFamily: 'Kanit',
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: MyApp.themeNotifier.value == ThemeModeThird.light
-                      ? Color(0xFFBD4BF7)
-                      : MyApp.themeNotifier.value == ThemeModeThird.dark
-                          ? Colors.white
-                          : Color(0xFFFFFD57),
-                ),
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              Row(
-                children: [
-                  Container(
-                    width: 22,
-                    height: 22,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(7.0),
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Color(0xFFBD4BF7)
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? Colors.white
-                                : Color(0xFFFFFD57)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Image.asset(
-                          MyApp.themeNotifier.value == ThemeModeThird.light
-                              ? 'assets/images/work.png'
-                              : 'assets/images/2024/work.png'),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 6,
-                  ),
-                  Expanded(
-                    child: Text(
-                      data['companyName'],
-                      style: TextStyle(
-                        fontFamily: 'Kanit',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
-                        color: MyApp.themeNotifier.value == ThemeModeThird.light
-                            ? Color(0xFFBD4BF7)
-                            : MyApp.themeNotifier.value == ThemeModeThird.dark
-                                ? Colors.white
-                                : Color(0xFFFFFD57),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      maxLines: 2,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 6,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 22,
-                          height: 22,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(7.0),
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFFBD4BF7)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: Image.asset(MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? 'assets/images/calendar_menu.png'
-                                : 'assets/images/2024/calendar-b.png'),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 6,
-                        ),
-                        Text(
-                          DateFormat('dd/MM/yyyy').format(
-                            DateTime.parse(data['announceDate']),
-                          ),
-                          style: TextStyle(
-                            fontFamily: 'Kanit',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFFBD4BF7)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 22,
-                          height: 22,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(7.0),
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFFBD4BF7)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: Image.asset(MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? 'assets/images/eye.png'
-                                : 'assets/images/2024/eye_black.png'),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          '120',
-                          style: TextStyle(
-                            fontFamily: 'Kanit',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            color: MyApp.themeNotifier.value ==
-                                    ThemeModeThird.light
-                                ? Color(0xFFBD4BF7)
-                                : MyApp.themeNotifier.value ==
-                                        ThemeModeThird.dark
-                                    ? Colors.white
-                                    : Color(0xFFFFFD57),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
-        ));
+    if (response.statusCode == 200) {
+      print('-------_callReadExternalLink-------');
+      print(response.data);
+      print('-----------------------------------');
+
+      _fundExternal.clear();
+      _fundFinancial.clear();
+
+      for (var item in response.data['data']) {
+        if (item['linkCategory'] == 1) {
+          _fundExternal.add(item);
+        } else if (item['linkCategory'] == 2) {
+          _fundFinancial.add(item);
+        }
+      }
+
+      // print(json.encode(response.data));
+    } else {
+      print(response.statusMessage);
+    }
   }
 
   _category() async {
