@@ -25,29 +25,6 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFFCF9FF),
-      // appBar: AppBar(
-      //   backgroundColor: Colors.white,
-      //   automaticallyImplyLeading: false,
-      //   elevation: 0.0,
-      //   flexibleSpace: Container(
-      //     decoration: const BoxDecoration(color: Color(0xFFFCF9FF)),
-      //   ),
-      //   leading: GestureDetector(
-      //     onTap: () => Navigator.pop(context),
-      //     child: Container(
-      //       height: 50,
-      //       width: 50,
-      //       color: const Color(0xFFFCF9FF),
-      //       alignment: Alignment.centerLeft,
-      //       padding: const EdgeInsets.only(left: 20),
-      //       child: Image.asset(
-      //         'assets/images/arrow_back.png',
-      //         width: 10,
-      //         height: 18,
-      //       ),
-      //     ),
-      //   ),
-      // ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
@@ -158,7 +135,9 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                   height: 98,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (_, __) => _itemGallery(_gallery[__]),
+                    // itemBuilder: (_, __) => _itemGallery(_gallery[__]),
+                    itemBuilder: (context, index) =>
+                        _itemGallery(_gallery[index], index, context, _gallery),
                     separatorBuilder: (_, __) => const SizedBox(width: 10),
                     itemCount: _gallery.length,
                   ),
@@ -226,13 +205,55 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
     );
   }
 
-  Widget _itemGallery(model) {
+  Widget _itemGallery(
+      String imageUrl, int index, BuildContext context, List<String> gallery) {
     return GestureDetector(
-      onTap: () => setState(() {}),
+      onTap: () {
+        PageController controller = PageController(initialPage: index);
+
+        showGeneralDialog(
+          context: context,
+          barrierDismissible: true,
+          barrierLabel: '',
+          barrierColor: Colors.transparent,
+          pageBuilder: (_, __, ___) {
+            return Scaffold(
+              backgroundColor: Colors.black,
+              body: Stack(
+                children: [
+                  PageView.builder(
+                    controller: controller,
+                    itemCount: gallery.length,
+                    itemBuilder: (context, i) {
+                      return InteractiveViewer(
+                        child: Center(
+                          child: Image.network(
+                            gallery[i],
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  Positioned(
+                    top: 40,
+                    right: 20,
+                    child: IconButton(
+                      icon: const Icon(Icons.close,
+                          color: Colors.white, size: 30),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(4),
-        child: CachedImageWidget(
-          imageUrl: model,
+        borderRadius: BorderRadius.circular(8),
+        child: Image.network(
+          imageUrl,
           height: 98,
           width: 98,
           fit: BoxFit.cover,

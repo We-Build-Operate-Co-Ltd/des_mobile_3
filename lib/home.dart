@@ -1547,7 +1547,7 @@ class _HomePageState extends State<HomePage> {
     Response<dynamic> response;
     try {
       response = await dio.post(
-        'https://decms.dcc.onde.go.th/dcc-api/m/eventCalendar/read',
+        '$server/dcc-api/m/eventCalendar/read',
         data: {
           "permission": "all",
         },
